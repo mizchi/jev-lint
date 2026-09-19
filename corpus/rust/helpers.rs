@@ -1,6 +1,4 @@
 // Corpus file.
-// DEFECT (module-name-describes-contents): every public item here
-// is about formatting and parsing currency, and the module is called `helpers`.
 
 pub fn format_yen(cents: i64) -> String {
     format!("¥{}", cents / 100)

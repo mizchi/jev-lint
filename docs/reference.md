@@ -217,13 +217,19 @@ which error you would rather have. The rule that works:
 
 > Give the question the least context that still contains the answer.
 
-Measured, and load-bearing: `var-name-describes-value` is **not separable at any
-cutoff** on `bare` and fully separable on `located`, because `const
-timeoutSeconds = 5000` is only wrong if you know 5000 is milliseconds, and that
-is visible where the binding is *used*. So forcing `--arm bare` to save money
-destroys the rules the shipped packs were calibrated on. `tools/arms.ts`
-measures this per rule — four arms, two passes, about two cents. The full
-evidence is in [docs/deepdive.md](deepdive.md#2-state-the-arm-is-not-a-quality-knob).
+Measured, with a correction: `var-name-describes-value` was not separable on
+`bare` and was on `located`, and the story told was that `const
+timeoutSeconds = 5000` is only wrong where the binding is *used*. The corpus
+then carried a `// DEFECT: named seconds, holds milliseconds` line above that
+declaration, inside the file `located` sends; with the markers gone the case
+answers 0.22 whether or not the binding is passed to `setTimeout` — that 5000
+is milliseconds is API knowledge, which this model is measured to lack. The
+defects visible in the code itself (a boolean name on a string, a plural on
+one item) still answer 0.84–0.97 with the file and lower without it, so the
+arm choice stands; the example does not. `tools/arms.ts` measures this per
+rule — four arms, two passes, about two cents; its recorded run predates the
+marker removal. The evidence is in
+[docs/deepdive.md](deepdive.md#2-state-the-arm-is-not-a-quality-knob).
 
 ### Matcher captures are the sharpest state available
 
@@ -464,17 +470,37 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 On a TypeScript-only repository the seven Rust variants and
 `comment-describes-declaration-js` report "matched nothing": 8 of the 23.
 
-Of the 23, **22 reach precision 1.00 and recall 1.00 on the corpus**
-(`docs/data/calibration.json`, 988 subjects, three passes). Read that with
+Of the 23, **17 reach precision 1.00 and recall 1.00 at their shipped cutoffs
+on the corpus** (`docs/data/calibration.json`, 988 subjects, three passes,
+decisions on the mean). Read that with
 the positive counts beside them, because they are small: per rule, 14, 9, 7,
 6, 6, 6, 6, 6, 5, 5, 5, 4, 4, 4, 4, 3, 2, 2, 2, 1, 1 labelled defects. The
 two `module-name-describes-contents` rules have one each and ship at
 `severity: info` for that reason; `comment-describes-declaration-js` has two
 and the gap report calls it `thin`.
 
-One does not separate: `test-name-describes-code-rust`, precision 0.5–0.67
-across records by inversion — a clean test answers higher than the genuine defect — shipped
-at `warning` with a note.
+Six do not, and each pack says what its rule misses:
+
+| rule | at the shipped cutoff | why |
+| --- | --- | --- |
+| `var-name-describes-value` | recall 0.67 | `timeoutSeconds = 5000` needs API knowledge; one more sits in the wobble band |
+| `fn-name-promises-rust` | recall 0.83 | one defect at 0.62–0.70 across a 0.68 cutoff |
+| `test-name-describes-code` | precision 0.67 | one clean test at the cutoff |
+| `test-name-describes-code-rust` | precision 0.67 | by inversion: a clean test answers higher than the genuine defect |
+| `comment-describes-block` | recall 0.50 | parked at 0.94 over the preamble band on real code; one defect answers 0.49 |
+| `comment-describes-block-rust` | recall 0.50 | likewise, at 0.90 |
+
+**The corpus is marker-free, and was not.** Until 2026-09-20 every labelled
+defect in the original thirteen files sat under a comment of the form
+`// DEFECT (rule-id): named seconds, holds milliseconds`, from which
+`corpus/labels.json` was generated. Those lines were inside the files the
+`located` arm sends, and for a `subject: enclosing` rule inside the subject.
+Stripping them (the labels now live in `corpus/labels.hand.json`) moved the
+fits: `comment-describes-declaration` from 0.74 to 0.54, `comment-describes-block`
+from a clean 1.00/1.00 to one defect under the real-code clean band,
+`var-name-describes-value` from 1.00/1.00 to recall 0.67. The four packs built
+later were marker-free from the start, by a brief that said so, and did not
+move. The count above is the count after.
 
 `test-name-verifies-claim` briefly joined it. On its original four defects
 the rule separated at 0.53 with room to spare; the tests pack added eleven
@@ -500,7 +526,7 @@ and the merge of the four new packs' corpora. Between the two, `fn-name-promises
 moved 0.76 → 0.86 as its clean band rose with 45 more named functions in the
 corpus, and no other shipped rule moved by more than 0.08. The measurements
 below that quote a cutoff were made at the earlier values, and say which.
-Read the 22 as "these rules separate the classes in a corpus the author and
+Read the 17 as "these rules separate the classes in a corpus the author and
 five agents wrote", against the baseline that **a tool reporting nothing at
 all scores about 89% accuracy on that corpus** — most of its 988 subjects are
 clean — at zero recall.

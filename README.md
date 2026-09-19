@@ -27,8 +27,8 @@ Conventional lint decides things a parser can decide. The conventions teams
 actually argue about in review are not like that:
 
 - **A name that drifted from its implementation.** `applyDiscount` that also
-  saves the cart; `timeoutSeconds = 5000`; a test called `rejects an expired
-  token` that never passes one.
+  saves the cart; `isAdmin` bound to a string; a test called `rejects an
+  expired token` that never passes one.
 - **A comment that became a lie.** A doc comment separated from its function
   by a later refactor, still claiming a `null` return the function no longer
   makes.
@@ -303,11 +303,14 @@ general question does not.
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On the corpus the cutoffs were fitted to, 22 of the 23 rules reach precision
-and recall 1.00; the one that does not ships with a note in the pack saying
-what it misses. The counts behind those numbers are small — under ten
-labelled defects per rule — and the full table, with what the packs found on
-this repository's own code and on an unseen one, is in
+On the corpus the cutoffs were fitted to, 17 of the 23 rules reach precision
+and recall 1.00 at their shipped cutoffs; the six that do not ship with a
+note in the pack saying what they miss. The counts behind those numbers are
+small — under ten labelled defects per rule — and the corpus is marker-free:
+an earlier version carried `// DEFECT: named seconds, holds milliseconds`
+above each defect, inside the file the model was shown, and the fits it
+produced were better than the rules. The full table, with what the packs
+found on this repository's own code and on an unseen one, is in
 [docs/reference.md](docs/reference.md#the-shipped-packs). Seven more rules
 were built and measured the same way and not shipped; their reports are in
 `experiments/rule-candidates/`.
@@ -351,10 +354,11 @@ jev-lint check src --at catch-hides-failure=2 --retry 3   # a score runs 0-3
 
 ### Calibrating
 
-A cutoff is fitted, not chosen. Label a handful of defects as comments next
-to the code (`// DEFECT (catch-hides-failure): reason`) and derive a labels
-file from them — this repository's `corpus/build-labels.ts` does that, so line
-numbers cannot drift — then:
+A cutoff is fitted, not chosen. Label a handful of defects in a JSON file
+beside the code — file, line, `bad` or `clean`, and the reason — and not as
+comments in the code: a `// DEFECT: named seconds, holds milliseconds` above
+the case is inside the file the model is shown, and the fit then measures
+the label instead of the rule. Then:
 
 ```bash
 jev-lint gaps corpus                    # does the rule separate the classes at all?

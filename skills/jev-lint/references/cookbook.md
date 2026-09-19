@@ -312,9 +312,12 @@ need it, sharing the sentence by anchor.
 
 Why the `not:` — function-valued bindings are recipe 1's subject, and asking
 both rules about the same node produces two findings for one defect. Why
-`located` and not `bare`: `const timeoutSeconds = 5000` is only wrong if you
-can see that 5000 is passed somewhere expecting milliseconds. Measured: this
-rule does not separate at any cutoff on `bare`.
+`located` and not `bare`: whether `items` bound to one item or `isAdmin`
+bound to a string is a mismatch reads differently once the file shows how
+the binding is used. Measured: this rule does not separate on `bare`. Do not
+expect it to find `const timeoutSeconds = 5000` passed to `setTimeout`: that
+5000 is milliseconds is API knowledge, which the model is measured to lack,
+and the corpus case for it is a labelled defect the rule does not find.
 
 ## 5. A test's title versus what it does, and whether it proves it
 

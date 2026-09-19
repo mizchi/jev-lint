@@ -23,12 +23,15 @@ node --experimental-strip-types src/cli.ts review --base main --retry 3
 
 ## Rules and corpus
 
-- Labels are comments in `corpus/` (`// DEFECT (rule-id): reason`,
-  `// CLEAN: reason`); `corpus/build-labels.ts` derives `corpus/labels.json`
-  and `--check` fails CI if it is stale. Never edit that JSON by hand. Files
-  that must stay marker-free — a rule reads the text around the match, or the
-  file is JSON — are labelled in `corpus/**/labels.hand.json`, which the
-  builder merges in; the four newer packs' corpora are labelled that way.
+- Labels live in `corpus/labels.hand.json` (file, line, `bad`/`clean`,
+  rule, window, reason); `corpus/build-labels.ts` merges every
+  `corpus/**/labels.hand.json` into the generated `corpus/labels.json`, and
+  `--check` fails CI if that is stale. Never edit the generated JSON by hand.
+  The corpus files carry NO `// DEFECT` / `// CLEAN` markers any more: those
+  sat inside the file the model was shown, and the fits they produced were
+  better than the rules (six fell when they came out). The builder still
+  reads markers if it finds any; do not add them. Editing a corpus file
+  means shifting the hand labels below the edit.
 - A fixture file named for the rule it exercises carries
   `// jev-lint-ignore-file module-name-describes-contents` on line 1, above
   its imports, so the module rule does not judge a name that was never a

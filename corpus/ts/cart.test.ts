@@ -21,44 +21,30 @@ const items: Item[] = [
 ];
 
 describe("cart", () => {
-  // DEFECT (test-name-describes-code, test-name-verifies-claim): the title
-  // names the empty case; the body
-  // exercises the non-empty one. Wrong THING, not a weak assertion.
   it("returns zero for an empty item list", () => {
     expect(sumPrices(items)).toBe(250);
   });
 
-  // DEFECT (test-name-describes-code, test-name-verifies-claim): the title
-  // says it throws; the body
-  // expects an ordinary value. Wrong THING.
   it("throws when the item list is empty", () => {
     expect(sumPrices([])).toBe(0);
   });
 
-  // DEFECT (test-name-verifies-claim): the title claims an ordering guarantee
-  // and the body counts the results, so the named behaviour could be broken and
-  // this would still pass. Right thing, assertion too WEAK.
   it("returns items sorted by price", () => {
     expect(items.length).toBe(2);
   });
 
-  // DEFECT (test-name-verifies-claim): asserts nothing at all, so nothing it
-  // claims is established.
   it("rejects a negative quantity", () => {
     sumPrices([{ id: 3, price: 10, qty: -1 }]);
   });
 
-  // CLEAN: the body asserts exactly the named behaviour.
   it("returns null for an unknown id", () => {
     expect(findItemById(items, 999)).toBeNull();
   });
 
-  // CLEAN: title and assertion agree, including the arithmetic.
   it("sums price times quantity across items", () => {
     expect(sumPrices(items)).toBe(250);
   });
 
-  // CLEAN: finds the item the title names.
   it("finds an item by its id", () => {
     expect(findItemById(items, 2)).toEqual({ id: 2, price: 50, qty: 1 });
   });
@@ -69,7 +55,6 @@ describe("cart", () => {
   // code read preambles at 0.81-0.91 -- above the corpus's clean band, which
   // had none. They are the hard clean case for that rule.
 
-  // CLEAN (comment-describes-block): the preamble describes the whole test, not
   // the line under it. Judged against the body, every claim holds.
   it("keeps the input list untouched", () => {
     // Summing must not sort or mutate the caller's array: a later test relies
@@ -79,7 +64,6 @@ describe("cart", () => {
     expect(items.map((i) => i.id)).toEqual(before);
   });
 
-  // CLEAN (comment-describes-block): a preamble stating the reason for the
   // test, above a setup line that has nothing to do with the reason.
   it("treats a zero quantity as contributing nothing", () => {
     // A zero-quantity line is how the cart represents "removed but kept for the
@@ -88,7 +72,6 @@ describe("cart", () => {
     expect(sumPrices(withZero)).toBe(250);
   });
 
-  // CLEAN (comment-describes-block): a preamble that names the bug the test
   // guards against, above an ordinary first statement.
   it("does not double-count an item listed twice", () => {
     // Found in production: a duplicated line item was summed once per

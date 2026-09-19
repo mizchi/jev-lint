@@ -107,6 +107,17 @@ binding is *used*, not where it is declared. The question was being asked about
 a subject that could not contain its own answer. No threshold repairs that; the
 answers all land mid-scale and it looks like a calibration problem.
 
+**Correction, 2026-09-20.** The corpus then carried a `// DEFECT (...):
+named seconds, holds milliseconds` line directly above that declaration, and
+`located` sends the file, so the "answer visible where the binding is used"
+was the label. With the markers stripped the case answers 0.22 on every arm,
+with or without a `setTimeout(..., timeoutSeconds)` call beside it: that
+5000 is milliseconds is API knowledge, which §1 already says this model
+lacks. The arm finding survives on the defects that are visible in the code
+(a boolean name on a string, a plural on one item: 0.84–0.97 with the file,
+lower without), the example does not, and the rule ships at recall 0.67 with
+that case still labelled. `docs/data/arms.json` predates the removal.
+
 So the rule for choosing an arm is **not** "more context is better":
 
 > Give the question the least context that still contains the answer.

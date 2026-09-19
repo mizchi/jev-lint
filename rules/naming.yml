@@ -53,7 +53,7 @@
   # reviewer-action score is a judgment the file can dilute, while "does this
   # name describe this body" is one the file can supply evidence for.
   state: located
-  at: 0.86
+  at: 0.82
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -97,7 +97,7 @@
   kind: noul
   subject: node
   state: located
-  at: 0.66
+  at: 0.68
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -123,18 +123,25 @@
   languages: [TypeScript, Tsx, JavaScript, Jsx]
   kind: noul
   subject: node
-  # `located`, not `bare`, and this one was MEASURED rather than chosen.
+  # `located`, not `bare`, and this one was MEASURED rather than chosen -- with
+  # a correction. On `bare` the rule was not separable (precision 0.75); with
+  # the file it was, and the story told was that `const timeoutSeconds = 5000`
+  # is only wrong where the binding is USED. The corpus then carried a
+  # `// DEFECT (...): named seconds, holds milliseconds` line above that
+  # declaration, and `located` carries the file, so what the model had been
+  # given was the label. With the markers gone from the corpus that case
+  # answers 0.22 whether or not the binding is passed to setTimeout -- that
+  # 5000 is milliseconds is API knowledge, which this model is measured to
+  # lack. The three defects that are visible in the code itself (a boolean
+  # name on a string, a plural on one item, a name on a spy) answer 0.84-0.97
+  # and the file still helps on those. The unit case stays in the corpus as
+  # a labelled defect this rule does not find, and the cutoff is a best
+  # trade-off rather than a midpoint.
   #
-  # On `bare` this rule is not separable at any cutoff (precision 0.75): the
-  # subject is the declaration alone, and `const timeoutSeconds = 5000` is only
-  # wrong if you know 5000 is milliseconds -- which is visible where the binding
-  # is USED, not where it is declared. Giving the question the file moved the
-  # class means from 0.54 apart to 0.87 apart and made it separable.
-  #
-  # This is the general rule, and it is not "more context is better": it is that
-  # a question must be able to see its own answer. See docs/findings.md.
+  # The general rule stands, sharpened: a question must be able to see its
+  # own answer, and the corpus must not hand it the answer either.
   state: located
-  at: 0.62
+  at: 0.6
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -173,7 +180,7 @@
   # separable on `located`, and on `bare` it was also the one rule whose
   # decision FLIPPED between two runs of the same corpus.
   state: located
-  at: 0.59
+  at: 0.47
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -237,7 +244,7 @@
   # same file cannot change this one's answer, and cannot invalidate its cached
   # verdict either.
   state: bare
-  at: 0.94
+  at: 0.95
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -399,7 +406,7 @@
   # top answer being the same file in every self-lint record. Raise it to
   # `warning` once you have several labelled cases of your own.
   state: graph
-  at: 0.62
+  at: 0.65
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: info
@@ -428,7 +435,7 @@
   kind: noul
   subject: file
   state: graph
-  at: 0.52
+  at: 0.55
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: info

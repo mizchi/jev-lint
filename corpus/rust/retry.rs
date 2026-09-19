@@ -1,6 +1,4 @@
 // Corpus file.
-// CLEAN (module-name-describes-contents): the module is called
-// `retry` and every public item is about retrying.
 
 use std::time::Duration;
 

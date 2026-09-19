@@ -94,11 +94,14 @@ which error you would rather have. The rule that works:
 
 > Give the question the least context that still contains the answer.
 
-Measured, and load-bearing: `var-name-describes-value` is **not separable at any
-cutoff** on `bare` and fully separable on `located`, because `const
-timeoutSeconds = 5000` is only wrong if you know 5000 is milliseconds, and that
-is visible where the binding is *used*. So forcing `--arm bare` to save money
-destroys the rules the shipped packs were calibrated on. When you cannot tell
+Measured: `var-name-describes-value` is not separable on `bare` and is
+closer on `located`, because a boolean name on a string or a plural on one
+item reads differently once the file shows how the binding is used. (An
+earlier version of this paragraph used `const timeoutSeconds = 5000` as the
+example; the corpus was then handing the model a label, and without it that
+case is not found at any arm — 5000 being milliseconds is API knowledge.)
+So forcing `--arm bare` to save money weakens the rules the shipped packs
+were calibrated on. When you cannot tell
 which arm a new rule needs, measure: run `calibrate` once per arm with
 `--arm <name>` on your labelled corpus and compare the gap reports. The
 evidence behind the shipped choices is in the jev-lint repository's

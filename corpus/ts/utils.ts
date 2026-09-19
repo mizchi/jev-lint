@@ -1,7 +1,4 @@
 // Corpus file.
-// DEFECT (module-name-describes-contents): every item here is
-// about one nameable concern -- discounts -- and the file is called `utils`.
-// A reader looking for the discount logic has no reason to open this.
 
 export function percentOff(amount: number, percent: number): number {
   return Math.round(amount * (1 - percent / 100));

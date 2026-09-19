@@ -69,11 +69,12 @@ Keep the reasons. "Code quality" has no referee, so a label is an argument;
 carrying the argument lets someone disagree with one label instead of with
 the aggregate, and the fitted cutoffs are fitted to these opinions.
 
-The jev-lint repository derives its labels from comments in the corpus
-(`// DEFECT (rule-id): reason`, `// CLEAN: reason`) with
-`corpus/build-labels.ts`, so line numbers cannot drift when a file is edited.
-Copy that script if your corpus will live long; write the JSON by hand for a
-first fit.
+Write the JSON by hand, and keep it out of the code. The jev-lint repository
+once derived its labels from `// DEFECT (rule-id): reason` comments above
+each case, which kept line numbers from drifting — and handed the model the
+answer, since the comment sat inside the file it was shown (see the trap
+below). Its labels now live in `corpus/labels.hand.json`; the line numbers
+are a maintenance cost worth paying.
 
 ## Building the corpus
 
@@ -89,11 +90,13 @@ of them learned by getting it wrong:
   the corpus does not contain is invisible from inside the corpus. The
   vague-but-true comment, the conventional counter name, the entry point named
   for its directory — those go in.
-- **Do not let markers contaminate the subject.** A `// CLEAN:` comment
-  sitting directly above a declaration is read as its doc comment by a
-  comment rule. Any rule whose subject includes comments can only be
-  calibrated on files where the marker sits above a *real* comment, or the
-  labels live in JSON.
+- **Keep the labels out of the files.** A `// DEFECT: named seconds, holds
+  milliseconds` line above a defect is inside the file that `located` sends
+  and inside the subject of an `enclosing` rule: the model is handed the
+  answer, and the fit measures the label, not the rule. The shipped corpus
+  learned this the expensive way — six rules' fits fell when the markers
+  came out, one of them the README's own example. Labels live in JSON, and a
+  corpus file reads like real code.
 - **When a change makes the numbers worse, suspect the labels before the
   sentence.** Splitting one test rule into two made precision and recall drop
   from 1.0/1.0 to 0.5/0.5. The wording was fine; the two failure modes were
