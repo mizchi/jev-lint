@@ -17,7 +17,7 @@
 import { readFileSync } from "node:fs";
 import { Jev, JevError, mapLimit, type AskClient } from "./jev.ts";
 import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.ts";
-import { resolveSubject } from "./state.ts";
+import { resolveSubject, widenCommentCapture } from "./state.ts";
 import { questionId, readAnswer } from "./questions.ts";
 import { planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { schedule, planMixed, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
@@ -137,13 +137,19 @@ export async function collectSubjects({
       ignoredSubjects += 1;
       continue;
     }
-    readSource(m.file);
+    const source = readSource(m.file);
+    // A captured comment is one tree-sitter node, which for `//` comments is
+    // one line: widen it to the run it ends, so `$DOC` is the whole comment.
+    const captured = Object.fromEntries(
+      Object.entries(resolved.captured ?? {}).map(([k, v]) => [k, widenCommentCapture(source, resolved.line, v).slice(0, 600)]),
+    );
     subjects.push({
       rule,
       file: m.file,
       language: m.language ?? rule.language,
       arm: arm ?? rule.state,
       ...resolved,
+      captured,
     });
   }
 

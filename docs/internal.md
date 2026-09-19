@@ -101,7 +101,12 @@ Three things here are easy to break:
 
 The probes are how the `graph` arm gets built without a second tool: reserved
 ids under `PROBE_PREFIX` match containers, imports and exports, and
-`buildSymbols()` turns them into a per-file symbol table. `computeCalls()` then
+`buildSymbols()` turns them into a per-file symbol table. A container is
+usually a `kind` plus the field its name lives in; a probe can also carry a
+whole rule with `$JEVNAME` in it, which is how a `test("title", () => {...})`
+call is a container named by its title — without that, a statement inside a
+test body had nothing to promote to under `subject: enclosing`, and the
+comment rules judged one line and its comment. `computeCalls()` then
 adds edges **by name occurrence inside each symbol's own text** — deliberately
 approximate, and only ever shown to the model, never used to decide anything.
 Symbols with `role: "module"` are excluded from the edge graph and still carry

@@ -62,19 +62,19 @@
   # comment is (the run of statements to the next comment), what a preamble
   # is, and that a trailing comment belongs to the line before it. On the
   # evals the cleans top out at 0.39 and the defects start at 0.53 (fitted
-  # midpoint 0.46). But `located` steps down to `local` on a test file over
-  # the state budget -- this repository's test/test.ts, agent-cluster's
-  # worker.test.ts -- and `local` carries nothing for a callback either, so
-  # on a big test file the model is back to the lone statement. There the
-  # preambles answer up to 0.63 (four of 99 over 0.50 on test/test.ts). The
-  # cutoff is parked at 0.75: over that band with 0.12 to spare, under
-  # eleven of the twelve defects with 0.08 to spare (the lowest caught, a
-  # unit mismatch, answers 0.83). The one it misses is stated in the evals:
-  # `session_store.ts:69` (0.52), where the comment is true of the sort it
-  # sits above and false only together with the loop after it. Set `at:
-  # 0.45` if your test files fit the state budget; the fix that makes 0.45
-  # right everywhere is in src/state.ts, where a callback passed to `test()`
-  # is not a container.
+  # midpoint 0.46). The tool-side cause is fixed since: a callback passed to
+  # `test()` / `it()` is a container now, named by its title, so a statement
+  # inside one promotes to the test on every arm, and a captured `//` comment
+  # is the whole run of lines, not its last. On this repository's test/test.ts
+  # (104 subjects, big enough to step `located` down to `local`) the preambles
+  # went from a median of 0.57 with 60 over 0.50, to a median of 0.11 with one
+  # over 0.50 -- a "why" paragraph at 0.70. The cutoff stays parked at 0.75:
+  # over that one with 0.05 to spare, under eleven of the twelve defects with
+  # 0.08 to spare (the lowest caught, a unit mismatch, answers 0.83). The one
+  # it misses is stated in the evals: `session_store.ts:69` (0.51), where the
+  # comment is true of the sort it sits above and false only together with
+  # the loop after it. Set `at: 0.5` on a codebase whose inline comments are
+  # claims rather than rationale.
   at: 0.75
   severity: info
   rule:

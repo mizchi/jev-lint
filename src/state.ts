@@ -548,3 +548,41 @@ export function renderOutline(file: string, entry: FileSymbols | null): string {
   if (symbols.length === 0) lines.push("this module declares no named items");
   return lines.join("\n");
 }
+
+/**
+ * Widen a captured line comment to the run of comment lines it ends.
+ *
+ * tree-sitter makes every `//` (or `#`, `///`, `--`) line its own node, so a
+ * matcher that captures "the comment above" captures one line of a
+ * three-line comment -- the last one -- and the model is asked whether that
+ * fragment is true of the code. Given the source and the line the match
+ * starts on, this finds the captured line just above it and walks up while
+ * the lines are comments of the same style, stopping at a blank line, code,
+ * or a different comment style (`//` above a `///` doc block is a note about
+ * the doc, not part of it). A capture that is not a line comment, or that is
+ * not found above the match, is returned as it was.
+ */
+export function widenCommentCapture(source: string, matchLine: number, captured: string): string {
+  const style = /^\s*(\/\/\/?|#|--)/.exec(captured)?.[1];
+  if (!style || captured.includes("\n")) return captured;
+  const lines = source.split("\n");
+  // The captured line sits above the match; look a few lines up for it.
+  let at = -1;
+  for (let i = Math.min(matchLine - 1, lines.length) - 1; i >= 0 && i >= matchLine - 6; i -= 1) {
+    if (lines[i]!.trim() === captured.trim()) {
+      at = i;
+      break;
+    }
+  }
+  if (at < 0) return captured;
+  const sameStyle = (line: string) => {
+    const m = /^\s*(\/\/\/?|#|--)/.exec(line);
+    return m !== null && m[1] === style;
+  };
+  let top = at;
+  while (top - 1 >= 0 && sameStyle(lines[top - 1]!)) top -= 1;
+  return lines
+    .slice(top, at + 1)
+    .map((l) => l.trim())
+    .join("\n");
+}

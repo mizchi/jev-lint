@@ -73,6 +73,15 @@ interface ContainerProbe {
   nameField: string | null;
   /** For a container named by a parent, e.g. an arrow function's declarator. */
   via?: Record<string, unknown>;
+  /**
+   * A whole ast-grep rule, for a container the `kind` + `nameField` shape
+   * cannot express. It must capture the name as `$JEVNAME`. A test call is
+   * the case: `test("title", () => {...})` is a `call_expression` whose name
+   * is its first argument and whose body is an arrow nobody declared.
+   */
+  rule?: Record<string, unknown>;
+  /** Mark every match of this probe as a test, whatever the text says. */
+  isTest?: boolean;
 }
 
 interface LanguageStructure {
@@ -151,6 +160,40 @@ function tsStructure({ typed }: { typed: boolean }): LanguageStructure {
         nameField: "name",
         via: { any: [{ kind: "arrow_function" }, { kind: "function_expression" }] },
       },
+      // A test body is an arrow passed to `test(...)` / `it(...)`, named by the
+      // title. Without this, a statement inside a test had no container: a
+      // `subject: enclosing` rule promoted it to nothing, and the model judged
+      // one line and its comment. That is what read every test preamble in
+      // this repository as a false claim about the first `const` under it.
+      {
+        kind: "call_expression",
+        role: "test",
+        nameField: null,
+        isTest: true,
+        rule: {
+          kind: "call_expression",
+          all: [
+            { has: { field: "function", regex: "^(it|test)(\\.(only|skip|todo|concurrent|each\\(.*\\)))?$" } },
+            { has: { field: "arguments", has: { nthChild: 1, any: [{ kind: "string" }, { kind: "template_string" }], pattern: "$JEVNAME" } } },
+            { has: { field: "arguments", has: { any: [{ kind: "arrow_function" }, { kind: "function_expression" }] } } },
+          ],
+        },
+      },
+      // And a `describe(...)` block is a suite, so a test inside one has a
+      // named container above it and an outline can group them.
+      {
+        kind: "call_expression",
+        role: "suite",
+        nameField: null,
+        rule: {
+          kind: "call_expression",
+          all: [
+            { has: { field: "function", regex: "^(describe|suite|context)(\\.(only|skip))?$" } },
+            { has: { field: "arguments", has: { nthChild: 1, any: [{ kind: "string" }, { kind: "template_string" }], pattern: "$JEVNAME" } } },
+            { has: { field: "arguments", has: { any: [{ kind: "arrow_function" }, { kind: "function_expression" }] } } },
+          ],
+        },
+      },
     ],
     imports: ["import_statement"],
     // A TypeScript declaration does not carry its own visibility: `export`
@@ -167,6 +210,7 @@ interface ProbeMeta {
   type: "container" | "import" | "export";
   role?: string;
   language: Language;
+  isTest?: boolean;
 }
 
 interface ProbeRule {
@@ -183,17 +227,22 @@ function probeRules(languages: Language[]): ProbeRule[] {
     const s = STRUCTURE[language];
     if (!s) continue;
     s.containers.forEach((c, i) => {
-      const rule: Record<string, unknown> = { kind: c.kind };
-      const inner: Array<Record<string, unknown>> = [];
-      if (c.nameField) inner.push({ field: c.nameField, pattern: "$JEVNAME" });
-      if (c.via) inner.push(c.via);
-      if (inner.length === 1) rule.has = inner[0];
-      else if (inner.length > 1) rule.all = inner.map((h) => ({ has: h }));
+      let rule: Record<string, unknown>;
+      if (c.rule) {
+        rule = c.rule;
+      } else {
+        rule = { kind: c.kind };
+        const inner: Array<Record<string, unknown>> = [];
+        if (c.nameField) inner.push({ field: c.nameField, pattern: "$JEVNAME" });
+        if (c.via) inner.push(c.via);
+        if (inner.length === 1) rule.has = inner[0];
+        else if (inner.length > 1) rule.all = inner.map((h) => ({ has: h }));
+      }
       out.push({
         id: `${PROBE_PREFIX}c${i}_${language}`,
         language,
         rule,
-        __probe: { type: "container", role: c.role, language },
+        __probe: { type: "container", role: c.role, language, isTest: c.isTest ?? false },
       });
     });
     (s.imports ?? []).forEach((kind, i) => {
@@ -404,7 +453,12 @@ const byteEnd = (m: AstGrepMatch) => m.range.byteOffset.end;
 
 function metaName(m: AstGrepMatch): string | null {
   const t = m.metaVariables?.single?.JEVNAME?.text;
-  return typeof t === "string" && t.trim() !== "" ? t.trim() : null;
+  if (typeof t !== "string" || t.trim() === "") return null;
+  const name = t.trim();
+  // A container named by a string literal -- a test by its title -- carries
+  // the literal's quotes in the capture. The name is what is inside them.
+  const quoted = /^(["'`])([\s\S]*)\1$/.exec(name);
+  return quoted ? quoted[2]! : name;
 }
 
 /**
@@ -443,7 +497,7 @@ export function buildSymbols(probes: AstGrepMatch[], languages: Language[]): Sym
       endLine: p.range.end.line + 1,
       text: p.text,
       exported: struct?.exportedIf ? struct.exportedIf(p.text) : false,
-      isTest: struct?.testMarker ? struct.testMarker.test(p.text) : false,
+      isTest: meta.isTest || (struct?.testMarker ? struct.testMarker.test(p.text) : false),
       // Filled in by computeCalls once the whole file's symbols are known.
       calls: [],
       calledBy: [],

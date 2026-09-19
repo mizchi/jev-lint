@@ -27,7 +27,7 @@ import {
   DEFAULT_SCORE_AT,
 } from "../src/rules.ts";
 import { buildQuestion, questionId, readAnswer } from "../src/questions.ts";
-import { buildState, resolveSubject, renderOutline, capturedMetavariables } from "../src/state.ts";
+import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture } from "../src/state.ts";
 import {
   planBatches,
   planRuleBatches,
@@ -718,6 +718,36 @@ test("state: moduleIdentity resolves conventional entry points to their director
   assert.equal(moduleIdentity("src/api/index.ts").named_by_directory, "api");
   assert.equal(moduleIdentity("src/api/user.ts").named_by_directory, null);
   assert.equal(moduleIdentity("src/api/user.ts").stem, "user");
+});
+
+test("state: a captured line comment is widened to the run of comment lines it ends", () => {
+  // tree-sitter makes every `//` line its own comment node, so `follows:
+  // { kind: comment, pattern: $DOC }` captures only the LAST line of a
+  // three-line comment -- the model was shown "// the loop after it." and
+  // asked whether it was true of the code. The capture is widened to the
+  // contiguous run of same-style comment lines above it, from the source.
+  const src = [
+    "function f() {",
+    "  // Sort so the newest sessions are kept, because the eviction",
+    "  // below drops from the front and must drop",
+    "  // the oldest.",
+    "  const ordered = sort(sessions);",
+    "",
+    "  // A lone line.",
+    "  return ordered;",
+    "}",
+  ].join("\n");
+  assert.equal(
+    widenCommentCapture(src, 5, "// the oldest."),
+    "// Sort so the newest sessions are kept, because the eviction\n// below drops from the front and must drop\n// the oldest.",
+  );
+  assert.equal(widenCommentCapture(src, 8, "// A lone line."), "// A lone line.", "a single line stays as it is");
+  assert.equal(widenCommentCapture(src, 5, "const ordered"), "const ordered", "not a comment: untouched");
+  // A blank line ends the run, and so does a line of code.
+  assert.equal(widenCommentCapture(src, 8, "// A lone line."), "// A lone line.");
+  // Rust doc comments are their own style; a `//` above a `///` run is not part of it.
+  const rs = ["// a note", "/// Doc line one", "/// Doc line two", "pub fn f() {}"].join("\n");
+  assert.equal(widenCommentCapture(rs, 4, "/// Doc line two"), "/// Doc line one\n/// Doc line two");
 });
 
 test("state: reserved captures are hidden and long ones truncated", () => {
@@ -2193,6 +2223,62 @@ await testAsync("end to end: every cookbook recipe loads and matches its fixture
     for (const r of rules) {
       assert.ok((byRule.get(r.id) ?? 0) > 0, `cookbook recipe ${r.id} matched nothing in the fixture`);
     }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("end to end: a statement inside a test callback promotes to the test, named by its title", async () => {
+  // A `test("...", () => { ... })` body is an arrow function passed to a call:
+  // no declarator names it, so it was not a container, and a `subject:
+  // enclosing` rule matching a statement inside it could promote to nothing.
+  // The model then judged one line and its comment -- which is why the
+  // comment-describes-block rule read every test preamble in this repository
+  // as a false claim about the first `const` under it. The test call is a
+  // container now, named by its title, with role `test`.
+  const { collectSubjects } = await import("../src/run.ts");
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
+  try {
+    writeFileSync(
+      join(dir, "a.test.ts"),
+      [
+        'import { test, expect } from "vitest";',
+        "",
+        'test("keeps the order", () => {',
+        "  // Sorting must not touch the input: a later test",
+        "  // relies on the original order.",
+        "  const before = [3, 1, 2];",
+        "  expect(sort(before)).toEqual([1, 2, 3]);",
+        "});",
+        "",
+        'describe("group", () => {',
+        '  it("nested", async () => {',
+        "    // Nested too.",
+        "    const x = await load();",
+        "    expect(x).toBe(1);",
+        "  });",
+        "});",
+      ].join("\n"),
+    );
+    const rule = scoreRule({
+      id: "b",
+      subject: "enclosing",
+      rule: { kind: "lexical_declaration", follows: { kind: "comment", pattern: "$DOC" } },
+    });
+    const { subjects, symbols } = await collectSubjects({ rules: [rule], paths: [dir] });
+    assert.equal(subjects.length, 2);
+    const [outer, inner] = subjects.sort((a, b) => a.line - b.line);
+    assert.equal(outer!.promoted, true);
+    assert.equal(outer!.nodeKind, "test");
+    assert.ok(outer!.text.startsWith('test("keeps the order"'), "promoted to the whole test call, title included");
+    assert.ok(outer!.text.includes("expect(sort(before))"), "the whole body, not the one statement");
+    assert.ok(inner!.text.startsWith('it("nested"'), "the narrowest container wins: the it, not the describe");
+    assert.ok(!inner!.text.includes("keeps the order"));
+    // And the captured comment is the whole comment, not its last line.
+    assert.equal(outer!.captured.DOC, "// Sorting must not touch the input: a later test\n// relies on the original order.");
+    const entry = [...symbols.values()][0]!;
+    assert.ok(entry.symbols.some((s) => s.role === "test" && s.name === "keeps the order" && s.isTest));
+    assert.ok(entry.symbols.some((s) => s.role === "suite" && s.name === "group"));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
