@@ -122,7 +122,7 @@ is used.
   kind: noul
   subject: node
   state: located
-  at: 0.83
+  at: 0.86
   rule:
     any:
       - all:

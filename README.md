@@ -71,7 +71,7 @@ This is the shipped `fn-name-promises`, abridged:
     "false": >-
       The name and parameter list describe what the body actually does.
   state: located
-  at: 0.83
+  at: 0.86
 ```
 
 The matcher is exact, free and runs locally; it decides **which code is looked
@@ -81,7 +81,7 @@ model built to score a statement about a piece of text rather than to chat.
 No parser can say whether `applyDiscount` also saves the cart; a reader who
 sees the name and the body can, and so can the model, with the file for
 context. `state: located` is that file, `kind: noul` says the answer is a
-probability that the statement holds, and `at: 0.83` is the cutoff fitted to
+probability that the statement holds, and `at: 0.86` is the cutoff fitted to
 a labelled corpus.
 
 What makes that affordable is batching. The matches in a file travel together
