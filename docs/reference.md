@@ -444,28 +444,27 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 On a TypeScript-only repository the seven Rust variants and
 `comment-describes-declaration-js` report "matched nothing": 8 of the 21.
 
-Of the 21, **19 reach precision 1.00 and recall 1.00 on the corpus**
-(`docs/data/calibration.json`, 625 subjects, three passes). Read that with
+Of the 21, **20 reach precision 1.00 and recall 1.00 on the corpus**
+(`docs/data/calibration.json`, 631 subjects, three passes). Read that with
 the positive counts beside them, because they are small: per rule, 14, 9, 7,
 6, 6, 6, 6, 6, 5, 5, 5, 4, 4, 4, 4, 3, 2, 2, 2, 1, 1 labelled defects. The
 two `module-name-describes-contents` rules have one each and ship at
 `severity: info` for that reason; `comment-describes-declaration-js` has two
 and the gap report calls it `thin`.
 
-Two do not separate:
+One does not separate: `test-name-describes-code-rust`, precision 0.67 by
+inversion — a clean test answers higher than the genuine defect — shipped
+at `warning` with a note.
 
-| rule | measured | ships |
-| --- | --- | --- |
-| `test-name-describes-code-rust` | precision 0.67, by inversion: a clean test answers higher than the genuine defect | `warning`, with a note |
-| `test-name-verifies-claim` | precision 0.93, recall 1.00 at 0.73 | `warning` at 0.75, with a note |
-
-The second is new, and is the honest result of a bigger corpus: on its
-original four defects the rule separated at 0.53 with room to spare; the
-tests pack added eleven defects and three hard cleans whose titles claim
-nothing ("matches the snapshot", "renders") over a snapshot assertion, and
-the rule reads those at 0.69–0.77, inside its defect band. The cutoff moved
-to 0.75 to trade one quiet defect for three findings on titles that promise
-nothing; the fix belongs in the criteria's false branch, and the pack says so.
+`test-name-verifies-claim` briefly joined it. On its original four defects
+the rule separated at 0.53 with room to spare; the tests pack added eleven
+defects and three hard cleans whose titles claim nothing ("matches the
+snapshot", "renders") over a snapshot assertion, and the rule read those at
+0.69–0.77, inside its defect band: precision 0.93 at any cutoff. The fix was
+in the criteria, not the cutoff. Telling the false branch that a snapshot
+establishes a snapshot claim, and a call assertion an interaction claim, put
+the three cleans at 0.40 and under and the fourteen defects at 0.53 and
+over. It ships at 0.52.
 
 Two rules that did not separate before do now. `comment-describes-block` and
 its Rust twin shipped "NOT CALIBRATED" because a clean case tied a defect in
@@ -481,7 +480,7 @@ and the merge of the four new packs' corpora. Between the two, `fn-name-promises
 moved 0.76 → 0.86 as its clean band rose with 45 more named functions in the
 corpus, and no other shipped rule moved by more than 0.08. The measurements
 below that quote a cutoff were made at the earlier values, and say which.
-Read the 19 as "these rules separate the classes in a corpus the author and
+Read the 20 as "these rules separate the classes in a corpus the author and
 five agents wrote", against the baseline that **a tool reporting nothing at
 all scores about 85% accuracy on that corpus** — most of its 625 subjects are
 clean — at zero recall.

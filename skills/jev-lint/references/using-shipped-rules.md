@@ -162,15 +162,11 @@ the rules, use a suppression comment:
 ## What the shipped cutoffs are worth
 
 Fitted to a corpus of 625 subjects (Rust, TypeScript, JavaScript, JSON), three
-passes. Of the 21 rules, 19 reach precision and recall 1.00 on it — resting
+passes. Of the 21 rules, 20 reach precision and recall 1.00 on it — resting
 on fewer than ten labelled defects each, all but one, so read that as
-"separates the classes in a small corpus", not as a guarantee. Two do not separate and ship
-with a note in the pack saying what they miss:
-
-| rule | measured | ships as |
-| --- | --- | --- |
-| `test-name-describes-code-rust` | precision 0.67, by inversion | `warning`, with a note |
-| `test-name-verifies-claim` | precision 0.93 at 0.73; titles that claim nothing over a snapshot read as defects | `warning` at 0.75, with a note |
+"separates the classes in a small corpus", not as a guarantee. One does not
+separate and ships with a note in the pack saying what it misses:
+`test-name-describes-code-rust`, precision 0.67 by inversion.
 
 The four newer packs were also run once over an unseen repository of 1,391
 subjects before shipping; their findings there are in the pack headers.

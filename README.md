@@ -282,9 +282,9 @@ general question does not.
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On the corpus the cutoffs were fitted to, 19 of the 21 rules reach precision
-and recall 1.00; the two that do not ship with a note in the pack saying
-what they miss. The counts behind those numbers are small — under ten
+On the corpus the cutoffs were fitted to, 20 of the 21 rules reach precision
+and recall 1.00; the one that does not ships with a note in the pack saying
+what it misses. The counts behind those numbers are small — under ten
 labelled defects per rule — and the full table, with what the packs found on
 this repository's own code and on an unseen one, is in
 [docs/reference.md](docs/reference.md#the-shipped-packs). Nine more rules
