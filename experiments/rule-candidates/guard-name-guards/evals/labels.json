@@ -1,0 +1,112 @@
+{
+  "$default": "clean",
+  "guards.ts": [
+    {
+      "line": 7,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "reason": "validateEmail returns true for the empty string without examining it: the empty path is accepted as valid, and '' is not an email",
+      "window": 0
+    },
+    {
+      "line": 12,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean for THIS rule, out of scope: sanitizeHtml strips only <script> and is an incomplete sanitiser, but that is a completeness defect needing knowledge of what HTML sanitisation must cover, not a path that skips the check. Asked as a path question it scores 0.39-0.40 (attempt 1); asked 'in full' (attempt 2) it rose to 0.57 but dragged ensureIndex/ensureBucket to 0.55 and the rule stopped separating. Known miss.",
+      "window": 0
+    },
+    {
+      "line": 16,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "reason": "ensureDir swallows every mkdir error, so on EACCES/ENOTDIR it returns normally with the directory not ensured",
+      "window": 0
+    },
+    {
+      "line": 24,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "reason": "verifyWebhookSignature returns true when no signature header is present: an attacker omits the header and the payload is accepted as verified",
+      "window": 0
+    },
+    {
+      "line": 46,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: the body shows no check of its own, it delegates entirely to a zod schema",
+      "window": 0
+    },
+    {
+      "line": 55,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: a check* that returns a boolean rather than throwing, and reads a module-level map",
+      "window": 0
+    },
+    {
+      "line": 66,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: terse assertOk, one condition, throws on failure",
+      "window": 0
+    },
+    {
+      "line": 70,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: ensure* that is a pure conversion, nothing to check",
+      "window": 0
+    },
+    {
+      "line": 79,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: verify* reports failure as null rather than throwing; every path that returns claims has checked shape, signature and expiry",
+      "window": 0
+    },
+    {
+      "line": 91,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "sanitizeFilename uses an allowlist so nothing outside it survives",
+      "window": 0
+    },
+    {
+      "line": 96,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "checkAgeGate computes and returns the answer on its only path",
+      "window": 0
+    },
+    {
+      "line": 106,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "reason": "checkRateLimit returns true (allowed) when the counter store throws: the caller reads that as 'checked and under the limit', but on that path the limit was never checked -- it fails open",
+      "window": 0
+    }
+  ],
+  "idempotent.ts": [
+    {
+      "line": 5,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean for guard-name-guards: the index is created on the only path; what is wrong is the repeat, not a skipped check",
+      "window": 0
+    },
+    {
+      "line": 50,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: rethrows any error other than NotFound, so the bucket is ensured on every normal path",
+      "window": 0
+    },
+    {
+      "line": 99,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: ensure* that is a pure conversion, nothing to check",
+      "window": 0
+    }
+  ]
+}

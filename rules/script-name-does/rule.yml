@@ -9,7 +9,7 @@
 # per line). On an unseen repository's 38 scripts it fired 0, highest 0.14.
 # Two siblings from the same family, workflow-step-name (GitHub Actions
 # `name:` versus `run:`) and openapi-summary-matches-schema, are in
-# experiments/rule-candidates/a-config-names/ with their measurements: the
+# experiments/reports/a-config-names/ with their measurements: the
 # first separates by one subject's width, the second had no unseen code to
 # meet.
 

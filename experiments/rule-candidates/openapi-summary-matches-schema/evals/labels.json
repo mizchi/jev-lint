@@ -1,0 +1,135 @@
+{
+  "$default": "clean",
+  "openapi/users.yaml": [
+    {
+      "line": 13,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says it returns an array of users; the 200 schema is a single user object",
+      "window": 0
+    },
+    {
+      "line": 34,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says idempotent and safe with no side effects; POST that creates, returns 201 + Location and 409 on duplicate",
+      "window": 0
+    },
+    {
+      "line": 64,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: vague 'Fetches a user', true",
+      "window": 0
+    },
+    {
+      "line": 82,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: idempotent claim on a PUT that replaces, true",
+      "window": 0
+    },
+    {
+      "line": 106,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says requires the orgId query parameter; only id in path is declared",
+      "window": 0
+    },
+    {
+      "line": 125,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says returns 204 with no body; responses declare 200 with a JSON body",
+      "window": 0
+    }
+  ],
+  "openapi/billing.yaml": [
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: summary says less than the paginated envelope schema",
+      "window": 0
+    },
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says format accepts csv or json; enum is pdf, xlsx",
+      "window": 0
+    },
+    {
+      "line": 66,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: scope claim is not checkable here; 404 and 409 claims match responses",
+      "window": 0
+    },
+    {
+      "line": 91,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: read-only POST search returning an array; POST is the transport for the query body",
+      "window": 0
+    },
+    {
+      "line": 119,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: rate-limit claim is not checkable; the rest holds",
+      "window": 0
+    },
+    {
+      "line": 149,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says the response has a refunds array and an expand query parameter; neither is declared",
+      "window": 0
+    },
+    {
+      "line": 175,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: admits a side effect, which the POST/202 shape supports",
+      "window": 0
+    }
+  ],
+  "openapi/catalog.yaml": [
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: cache-lifetime claim is not checkable; q param and array response hold",
+      "window": 0
+    },
+    {
+      "line": 29,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says body must include sku and price; only sku is required and price is not a property (amountCents is)",
+      "window": 0
+    },
+    {
+      "line": 55,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says 404 if no product has that SKU; responses declare only 200 and 410",
+      "window": 0
+    },
+    {
+      "line": 73,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: vague, cannot-be-undone claim is not checkable; 204/404 hold",
+      "window": 0
+    },
+    {
+      "line": 89,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says the response is a flat array; the 200 schema is an object wrapping a categories array",
+      "window": 0
+    }
+  ]
+}

@@ -14,7 +14,7 @@
 # subjects, where neither rule fired and the highest answer was 0.26.
 #
 # Not shipped from the same family, both in
-# experiments/rule-candidates/b-guarantee-names/REPORT.md: guard-name-guards
+# experiments/reports/b-guarantee-names/REPORT.md: guard-name-guards
 # (validate*/sanitize*/ensure*; separates, but on four defects) and
 # pure-name-is-pure (compute*/format*/parse*; separates on the corpus, and on
 # unseen code half its findings were one pattern, a lazily loaded module

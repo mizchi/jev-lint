@@ -1,0 +1,838 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-19T17:25:51.156Z",
+  "model": "jev-1.13.0",
+  "suite": "assertion-message-matches",
+  "rules": [
+    {
+      "id": "assertion-message-matches",
+      "draft": "ecb7577f9575",
+      "at": 0.65
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 37,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 69,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 117,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.48,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 136,
+        "endLine": 138,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 20,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 32,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 59,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 29,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 40,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.45,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 58,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 64,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 70,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 76,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 86,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 92,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 97,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 103,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 108,
+        "endLine": 110,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 115,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 124,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 129,
+        "endLine": 129,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 20,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 32,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 59,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 37,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 69,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 117,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.48,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 136,
+        "endLine": 138,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 29,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 40,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.61,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 58,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 64,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 70,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 76,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 86,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 92,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 97,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 103,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 108,
+        "endLine": 110,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 115,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 124,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 129,
+        "endLine": 129,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 29,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 40,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 58,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 64,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 70,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 76,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 86,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 92,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 97,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 103,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 108,
+        "endLine": 110,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 115,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 124,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
+        "line": 129,
+        "endLine": 129,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 37,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 69,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 117,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 136,
+        "endLine": 138,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 20,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 32,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 59,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 88137,
+    "usd": 0.0037017540000000002,
+    "ms": 3965
+  }
+}

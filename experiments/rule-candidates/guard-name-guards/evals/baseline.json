@@ -1,0 +1,433 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-19T17:25:52.009Z",
+  "model": "jev-1.13.0",
+  "suite": "guard-name-guards",
+  "rules": [
+    {
+      "id": "guard-name-guards",
+      "draft": "51d2aa605f19",
+      "at": 0.63
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 7,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 16,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 24,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 46,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 55,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 66,
+        "endLine": 68,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 70,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 79,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 91,
+        "endLine": 94,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 96,
+        "endLine": 100,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 106,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/idempotent.ts",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/idempotent.ts",
+        "line": 50,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.51,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/idempotent.ts",
+        "line": 99,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/idempotent.ts",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/idempotent.ts",
+        "line": 50,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.46,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/idempotent.ts",
+        "line": 99,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 7,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 16,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 24,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 46,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 55,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 66,
+        "endLine": 68,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 70,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 79,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 91,
+        "endLine": 94,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 96,
+        "endLine": 100,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 106,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/idempotent.ts",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/idempotent.ts",
+        "line": 50,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.52,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/idempotent.ts",
+        "line": 99,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 7,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 16,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 24,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 46,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 55,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 66,
+        "endLine": 68,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 70,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 79,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 91,
+        "endLine": 94,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 96,
+        "endLine": 100,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "guard-name-guards",
+        "file": "experiments/rule-candidates/guard-name-guards/evals/cases/guards.ts",
+        "line": 106,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 26226,
+    "usd": 0.001101492,
+    "ms": 1542
+  }
+}

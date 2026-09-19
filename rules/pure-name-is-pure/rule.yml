@@ -11,7 +11,7 @@
 # randomUUID(). The cutoff is 0.55, above the 0.46 midpoint, because the
 # unseen clean band tops at 0.50 -- 0.05 of headroom, which is why this
 # ships at `severity: info`. Full account in
-# experiments/rule-candidates/b-guarantee-names/REPORT.md.
+# experiments/reports/b-guarantee-names/REPORT.md.
 - id: pure-name-is-pure
   languages:
     - TypeScript

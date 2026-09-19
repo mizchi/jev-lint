@@ -1,0 +1,38 @@
+
+- id: test-asserts-on-mock
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  # `bare` separates identically (records/family-d-bare.json); kept on
+  # `located` so the file's mock setup is in view, as the brief asked.
+  state: located
+  # Fitted 0.51 on records/family-d-located.json (4 bad, 29 clean, 3 passes,
+  # 0 flips): clean top 0.19, lowest bad 0.84.
+  at: 0.50
+  rule:
+    any:
+      - pattern: it($TITLE, $BODY)
+      - pattern: test($TITLE, $BODY)
+      - pattern: it($TITLE, $BODY, $TIMEOUT)
+      - pattern: test($TITLE, $BODY, $TIMEOUT)
+      - pattern: it.each($CASES)($TITLE, $BODY)
+  ask: >-
+    This test's name claims an outcome, but its assertions only check that a
+    mock was called.
+  criteria:
+    "true": >-
+      The title states a result or property of what the code under test
+      produces -- content sent, data stored in a certain form, a rejection, a
+      state change -- and every assertion is toHaveBeenCalled,
+      toHaveBeenCalledTimes, or a toHaveBeenCalledWith whose arguments do not
+      include the thing the title claims, so the named outcome could be wrong
+      or absent and the test would pass.
+    "false": >-
+      The title itself claims the interaction -- that something is called,
+      how many times, or not at all -- or the code under test is an adapter
+      whose whole job is that call, or an assertion checks a return value, a
+      thrown error, or call arguments that carry the outcome the title names.
+  note: >-
+    A toHaveBeenCalledWith whose arguments contain the claimed content is a
+    check of the outcome, not a violation. Whether the subject is itself
+    mocked is a separate question.

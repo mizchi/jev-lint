@@ -77,6 +77,7 @@ interface Options {
   accept: boolean;
   acceptLast: boolean;
   replay: boolean;
+  compare: boolean;
   base: string | null;
   staged: boolean;
   format: "pretty" | "json" | "github";
@@ -108,6 +109,7 @@ usage:
   jev-lint rules                   list loaded rules and validation errors
   jev-lint replay <record.json>    re-score a recorded run, no requests
   jev-lint eval [dirs...]          run every rule's evals/ suite against its baseline
+  jev-lint eval --compare a.json b.json   two records of one suite, case by case, no requests
   jev-lint init                   write a .jev-lint.yaml to start from
   jev-lint init --pre-commit      write a pre-commit hook that reviews the staged diff
 
@@ -142,6 +144,7 @@ options:
       --accept             eval: run, then make that run the baseline
       --accept-last        eval: make the previous run (evals/last.json) the baseline, no requests
       --replay             eval: re-score each baseline at the current cutoffs, no requests
+      --compare            eval: the two positional records, scored at their own cutoffs
       --dry-run            plan and price the run without asking anything
       --show-missing       list subjects that got no verdict
       --show-subjects      with --dry-run: list every subject the matchers found,
@@ -213,6 +216,7 @@ function parseArgs(argv: string[]): Options {
     accept: false,
     acceptLast: false,
     replay: false,
+    compare: false,
     base: null,
     staged: false,
     format: "pretty",
@@ -313,6 +317,9 @@ function parseArgs(argv: string[]): Options {
         break;
       case "--replay":
         opts.replay = true;
+        break;
+      case "--compare":
+        opts.compare = true;
         break;
       case "--base":
         opts.base = need(i, a);
@@ -685,6 +692,7 @@ async function main(argv: string[]): Promise<number> {
  * stale baseline, so the gate can fail a build.
  */
 async function cmdEval(opts: Options, out: Log, log: Log): Promise<number> {
+  if (opts.compare) return cmdEvalCompare(opts, out, log);
   const roots = opts.paths.length > 0 ? opts.paths : opts.rules;
   const suites = discoverEvals(roots);
   if (suites.length === 0) {
@@ -767,6 +775,70 @@ async function cmdEval(opts: Options, out: Log, log: Log): Promise<number> {
   if (opts.format === "json") out(JSON.stringify({ suites: results, failed }, null, 2));
   else out(failed === 0 ? `${suites.length} suite(s), all as shipped` : `${failed} of ${suites.length} suite(s) failed`);
   return failed === 0 ? 0 : 1;
+}
+
+/**
+ * `eval --compare a.json b.json`: two records of one suite -- two models,
+ * two days, two revisions -- scored each at the cutoffs it was taken with
+ * and compared case by case. Neither is the contract, so a changed question
+ * between them is said, not refused. The suite is found from the records'
+ * `suite` name under the rule sources, for its labels and its rule.
+ */
+function cmdEvalCompare(opts: Options, out: Log, log: Log): number {
+  const [a, b] = opts.paths;
+  if (!a || !b) {
+    log("eval --compare needs two record paths");
+    return 2;
+  }
+  const left = readEvalRecord(a);
+  const right = readEvalRecord(b);
+  if (!left || !right) {
+    log(`${!left ? a : b} is not an eval record`);
+    return 2;
+  }
+  if (left.suite !== right.suite) {
+    log(`the records are of different suites: ${left.suite} and ${right.suite}`);
+    return 2;
+  }
+  const suite = discoverEvals(opts.rules).find((s) => s.name === left.suite);
+  if (!suite) {
+    log(`no suite named ${left.suite} under ${opts.rules.join(", ")}; pass -R <dir> to say where it is`);
+    return 2;
+  }
+  const { rules, labels, errors } = loadSuite(suite);
+  for (const e of errors) log(`${suite.name}: ${e}`);
+  if (errors.length > 0) return 2;
+  const scoreL = scoreEval(left.passes, labels, rules, {}, recordedAts(left));
+  const scoreR = scoreEval(right.passes, labels, rules, {}, recordedAts(right));
+  const drafts = new Map(left.rules.map((r) => [r.id, r.draft]));
+  const changed = right.rules.filter((r) => drafts.has(r.id) && drafts.get(r.id) !== r.draft).map((r) => r.id);
+  const diff = compareEvals(scoreL, scoreR, { draftChanged: false });
+  const rel = (f: string) => relative(suite.cases, f);
+  const side = (name: string, rec: EvalRecord, sc: EvalScore) => {
+    out(`${name}: ${rec.recorded.slice(0, 19)}  model ${rec.model ?? "?"}  ${rec.passes.length} pass(es)`);
+    for (const r of sc.rules) {
+      const fmt = (n: number | null) => (n === null ? "-" : n.toFixed(2));
+      out(`  ${r.rule.padEnd(36)} at ${String(r.at).padEnd(5)} tp ${r.tp} fp ${r.fp} fn ${r.fn}  P ${fmt(r.precision)} R ${fmt(r.recall)}  flips ${r.flips}`);
+    }
+  };
+  side(`A ${a}`, left, scoreL);
+  side(`B ${b}`, right, scoreR);
+  if (changed.length) out(`the question changed between A and B for: ${changed.join(", ")}`);
+  out(`B against A: ${diff.regressions.length} worse, ${diff.improvements.length} better, ${diff.added.length} new, ${diff.removed.length} gone`);
+  for (const c of diff.regressions) out(`  - ${rel(c.file)}:${c.line}  ${c.rule}  ${c.label}: A ${c.was}, B ${c.now} (${c.mean.toFixed(2)})`);
+  for (const c of diff.improvements) out(`  + ${rel(c.file)}:${c.line}  ${c.rule}  ${c.label}: A ${c.was}, B ${c.now} (${c.mean.toFixed(2)})`);
+  // Per case, both means side by side, for the eye.
+  const keyOf = (c: CaseScore) => `${c.rule}\u0000${c.file}\u0000${c.line}`;
+  const byKey = new Map(scoreL.cases.map((c) => [keyOf(c), c]));
+  const moved = scoreR.cases
+    .map((c) => ({ c, l: byKey.get(keyOf(c)) }))
+    .filter((x) => x.l && Math.abs(x.l.mean - x.c.mean) >= 0.1)
+    .sort((x, y) => Math.abs(y.c.mean - y.l!.mean) - Math.abs(x.c.mean - x.l!.mean));
+  if (moved.length) {
+    out(`moved by 0.10 or more:`);
+    for (const { c, l } of moved.slice(0, 20)) out(`  ${rel(c.file)}:${c.line}  ${c.rule}  ${c.label}  ${l!.mean.toFixed(2)} -> ${c.mean.toFixed(2)}`);
+  }
+  return diff.regressions.length > 0 ? 1 : 0;
 }
 
 function formatEvalSuite(

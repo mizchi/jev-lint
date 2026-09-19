@@ -1,0 +1,96 @@
+
+# --------------------------------------------------------------------------
+# 2. Does a message shown to the user say what the code actually did?
+# --------------------------------------------------------------------------
+- id: ui-message-honest
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  # `enclosing`, unlike the other two: whether "Saved" is honest is a fact
+  # about the whole flow, and judging the function with the message as the
+  # matched piece kept the enqueue-then-"Saved" case at 0.88 where `node`
+  # dropped it to 0.53. Caveat: jev-lint keys twin subjects on the enclosing
+  # function's text, so two messages in one function currently share one
+  # verdict; keep one user-facing message per function until that is fixed.
+  subject: enclosing
+  state: local
+  at: 0.62
+  rule:
+    any:
+      # toast("..."), notify("..."), alert("..."), showMessage("..."),
+      # setStatus("..."), setMessage("...")
+      - all:
+          - any:
+              - pattern: $FN($MSG, $$$REST)
+              - pattern: $FN($MSG)
+          - has:
+              field: function
+              regex: "^(toast|notify|alert|showMessage|showToast|showNotification|showAlert|enqueueSnackbar|setStatus|setMessage|setError|setSuccess|setFeedback)$"
+      # toast.success("..."), message.error("..."), notification.open("...")
+      - all:
+          - any:
+              - pattern: $UI.$KIND($MSG, $$$REST)
+              - pattern: $UI.$KIND($MSG)
+          - has:
+              field: function
+              regex: "^(toast|notify|message|notification|notifications|snackbar|Alert)\\."
+      # res.send("...")
+      - all:
+          - pattern: $RES.send($MSG)
+          - has:
+              field: function
+              regex: "^(res|reply|response|ctx)\\b"
+      # res.json({ message: "..." }), res.status(n).json({ ..., message: "..." })
+      - all:
+          - kind: call_expression
+          - has:
+              field: function
+              regex: "^(res|reply|response|ctx)\\b.*\\.(json|send|render)$"
+          - has:
+              field: arguments
+              has:
+                kind: object
+                has:
+                  kind: pair
+                  all:
+                    - has: { field: key, regex: "^(message|msg|error|detail|status)$" }
+                    - has: { field: value, pattern: $MSG }
+  ask: >-
+    This message ($MSG), shown to the user, tells them something other than
+    what the surrounding code actually did.
+  criteria:
+    "true": >-
+      The message states an outcome the code in front of it did not establish:
+      it reports an operation as done or successful when the code only
+      enqueued, scheduled or started it; it reports it as done when the code
+      did not wait for it, so the message is shown before the outcome is
+      known; it reports success when the code holds a result that can
+      express failure and did not look at it; it claims a specific, stronger
+      fact than what was done, such as "permanently deleted" when the code
+      only marks a record; it reports an action the code never performed at
+      all; or, in a catch, it names one specific cause such as a network
+      failure or an expired link when the block also receives failures of
+      another kind that the code above visibly raises.
+    "false": >-
+      The message matches what the code did and knows. An awaited call that
+      either completed or threw counts as done, whether or not its return
+      value is inspected. Saying received, started, queued or scheduled after
+      enqueuing is honest. Naming a soft action by its usual word, such as
+      archived, closed or cancelled for a record that was flagged rather than
+      destroyed, is honest unless the message adds a claim the code does not
+      make. A generic failure message in a generic catch is honest. A
+      progress message such as "Saving" before the operation is honest. A
+      message that is vague, terse or could be more specific is not a
+      violation, and a message that restates the intent of the call it
+      follows, such as "invitation sent" after a successful call to an
+      invitations endpoint, is honest.
+  note: >-
+    Judge only what the enclosing function shows. A claim about what a
+    server, a job or another system will do later, such as data being
+    removed after a retention period, is not checkable here and is not a
+    violation. A call whose argument is not a message for a human, such as a
+    body, a buffer, a health-check string or an empty string, is not a
+    violation.
+
+# --------------------------------------------------------------------------
+# 3. Does an assertion's message describe the condition it checks?
+# --------------------------------------------------------------------------

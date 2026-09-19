@@ -10,7 +10,7 @@
 # warn -- arguable either way, which is where a 0.60-0.66 answer belongs.
 #
 # Two siblings from the same family are in
-# experiments/rule-candidates/c-human-messages/: assertion-message-matches,
+# experiments/reports/c-human-messages/: assertion-message-matches,
 # which on unseen code flagged four test stubs throwing a simulated failure on
 # a call counter, and ui-message-honest, which needs `subject: enclosing` and
 # was measured before the promoted-subject key was fixed.

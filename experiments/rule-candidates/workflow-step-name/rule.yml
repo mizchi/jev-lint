@@ -1,0 +1,51 @@
+# Family A: claims in non-code files. A `name:` in a workflow, a script key in
+# package.json, a `summary:` in an OpenAPI operation -- each is a claim about
+# the thing beside it, and no linter has ever read it as one.
+
+- id: workflow-step-name
+  language: Yaml
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.44
+  rule:
+    # A step: the mapping directly under a sequence item, holding a `name:`
+    # and a `run:` or `uses:`. The mapping is the subject, so the claim and
+    # the evidence are both in it.
+    kind: block_mapping
+    inside:
+      kind: block_node
+      inside: { kind: block_sequence_item }
+    all:
+      - has:
+          kind: block_mapping_pair
+          all:
+            - has: { field: key, regex: "^name$" }
+            - has: { field: value, pattern: $NAME }
+      - has:
+          kind: block_mapping_pair
+          has: { field: key, regex: "^(run|uses)$" }
+  ask: >-
+    This workflow step's name ($NAME) misdescribes what the step runs.
+  criteria:
+    "true": >-
+      Someone who read only the name would be wrong about what the step
+      does: the command or action performs a different operation than the
+      name states (builds when the name says test, formats when the name says
+      lint, checks out when the name says cache, downloads when the name says
+      upload), it rewrites files when the name promises only a check or a
+      verification, or the step also does something consequential --
+      publishes, pushes, deploys, deletes, commits -- that is not part of
+      what the name names.
+    "false": >-
+      The command or action does what the name says. A terse name ("Test",
+      "Install"), a conventional name for a well-known action ("Checkout"
+      for actions/checkout, "Setup Node" for actions/setup-node), or a name
+      that summarises a multi-line script as one operation is not a
+      mismatch, even when that operation conventionally ends in a commit,
+      push or deploy -- a version bump that pushes its tag, a release that
+      publishes, a preview that deploys to a preview environment.
+  note: >-
+    Judge the name against the `run:` script or the `uses:` action and its
+    `with:` inputs only. Whether the step is placed well, or whether it
+    should exist, is not the question.

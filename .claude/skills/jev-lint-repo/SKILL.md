@@ -45,7 +45,7 @@ labelled defects.
   `// jev-lint-ignore-file module-name-describes-contents` on line 1, above
   its imports, so the module rule does not judge a name that was never a
   claim about the exports.
-- A new rule goes through `experiments/rule-candidates/BRIEF.md`: its own
+- A new rule goes through `experiments/BRIEF.md`: its own
   cases with hard cleans, `gaps`, `calibrate --repeat 3 --record`, a report
   with a verdict, and one pass over an unseen repository before it enters
   `rules/<id>/` with its evals and an accepted baseline.

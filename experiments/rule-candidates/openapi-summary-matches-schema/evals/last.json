@@ -1,0 +1,514 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-19T17:25:52.982Z",
+  "model": "jev-1.13.0",
+  "suite": "openapi-summary-matches-schema",
+  "rules": [
+    {
+      "id": "openapi-summary-matches-schema",
+      "draft": "a94796c1875e",
+      "at": 0.58
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 9,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 39,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 66,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 91,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 119,
+        "endLine": 145,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 149,
+        "endLine": 171,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 175,
+        "endLine": 190,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 13,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 34,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 64,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 82,
+        "endLine": 104,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 106,
+        "endLine": 121,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 125,
+        "endLine": 142,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 9,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 29,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 55,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 73,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 89,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 9,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 39,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 66,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 91,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 119,
+        "endLine": 145,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 149,
+        "endLine": 171,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 175,
+        "endLine": 190,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 9,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 29,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 55,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 73,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 89,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 13,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 34,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 64,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 82,
+        "endLine": 104,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 106,
+        "endLine": 121,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 125,
+        "endLine": 142,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 9,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 29,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 55,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.44,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 73,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/catalog.yaml",
+        "line": 89,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 13,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 34,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 64,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 82,
+        "endLine": 104,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 106,
+        "endLine": 121,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/users.yaml",
+        "line": 125,
+        "endLine": 142,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 9,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 39,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 66,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 91,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 119,
+        "endLine": 145,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 149,
+        "endLine": 171,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "openapi-summary-matches-schema",
+        "file": "experiments/rule-candidates/openapi-summary-matches-schema/evals/cases/openapi/billing.yaml",
+        "line": 175,
+        "endLine": 190,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 37911,
+    "usd": 0.001592262,
+    "ms": 2355
+  }
+}

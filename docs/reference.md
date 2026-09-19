@@ -387,7 +387,7 @@ so four synonyms for one lookup are visible in one state, and a sync `get`
 beside an async `fetch` is not a mismatch because the signatures say why.
 It ships at `severity: info`. Its sibling `sibling-deviates` — one export
 breaks a pattern the rest follow — separates only as a `score` and only for
-signature-level deviations, and stays in `experiments/rule-candidates/e-file-consistency/`.
+signature-level deviations, and stays in `experiments/reports/e-file-consistency/`.
 
 The two test rules are **nested, not orthogonal** — a test that exercises the
 wrong case also fails to establish its name — which is why both fire on the
@@ -427,7 +427,7 @@ field to `new Date()`, `process.env` or `randomUUID()`. It ships at
 `severity: info` because its unseen clean band tops 0.05 under the cutoff.
 The family also built `guard-name-guards` (`validate*`/`sanitize*`), which
 separates on four defects and is not shipped on that count. Reports in
-`experiments/rule-candidates/b-guarantee-names/`.
+`experiments/reports/b-guarantee-names/`.
 
 **Tests** — tests that cannot verify their name, by construction
 
@@ -449,7 +449,7 @@ quiet (0.42–0.64): a mocked subject reads as a mild claim. A third candidate,
 | --- | --- |
 | `log-level-matches-event` | does the level of this `logger.<level>(...)` call match the severity of the code path it sits on? |
 
-Siblings not shipped, in `experiments/rule-candidates/c-human-messages/`:
+Siblings not shipped, in `experiments/reports/c-human-messages/`:
 `assertion-message-matches` — its first revision's four unseen findings were
 all test stubs throwing a simulated failure on a call counter; the second
 keeps those out by matcher and by criteria and produces zero unseen
@@ -468,7 +468,7 @@ The matcher is the whole `"name": "command"` pair under `scripts`, so the
 claim and the evidence are one node and `bare` is the arm. Siblings not
 shipped: `workflow-step-name` (GitHub Actions `name:` versus `run:`, separates
 by one subject's width) and `openapi-summary-matches-schema` (no unseen code
-to meet); both in `experiments/rule-candidates/a-config-names/`, with nine
+to meet); both in `experiments/reports/a-config-names/`, with nine
 things about matching YAML and JSON in ast-grep that the skill now states.
 
 ### What the cutoffs are worth

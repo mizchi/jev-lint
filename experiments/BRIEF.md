@@ -1,9 +1,10 @@
 # Rule candidate brief
 
-You are building and measuring candidate jev-lint rules in ONE family, in your
-own directory under `experiments/rule-candidates/<family>/`. Other agents are
-doing the same for other families in parallel. Write only inside your
-directory. Do not commit. Do not touch `src/`, `rules/`, `docs/`.
+You are building and measuring candidate jev-lint rules in ONE family. Each
+candidate is its own directory under `experiments/rule-candidates/<rule-id>/`;
+the family's report goes under `experiments/reports/<family>/`. Other agents
+are doing the same for other families in parallel. Write only in those
+places. Do not commit. Do not touch `src/`, `rules/`, `docs/`.
 
 ## Setup
 
@@ -22,14 +23,20 @@ directory. Do not commit. Do not touch `src/`, `rules/`, `docs/`.
 
 ## Layout you produce
 
+A candidate is a rule directory, the same shape a shipped rule has, so that
+promoting it is a `git mv`:
+
 ```
-experiments/rule-candidates/<family>/
-  rules.yml            every candidate rule of the family, one file
-  corpus/              the labelled corpus, one or more files per language
-  labels.json          hand-written, format below
-  records/<rule>.json  or one record for the family, from --record
-  REPORT.md            the report, format below
+experiments/rule-candidates/<rule-id>/
+  rule.yml             the candidate rule (every language variant)
+  evals/cases/         the labelled cases, one or more files per language
+  evals/labels.json    hand-written, paths relative to cases/, format below
+  evals/baseline.json  written by `jev-lint eval <dir> --accept`
+experiments/reports/<family>/REPORT.md   the report, format below
 ```
+
+One directory per rule. A family of several candidates is several
+directories and one report.
 
 ## Corpus rules (these are where candidates die, so read them)
 
@@ -46,38 +53,39 @@ experiments/rule-candidates/<family>/
 - Realistic code, not toy. Names and bodies of the kind found in a real
   service or CLI. 10-40 lines per case is fine.
 
-labels.json:
+evals/labels.json:
 
 ```json
 {
   "$default": "clean",
-  "experiments/rule-candidates/<family>/corpus/a.ts": [
-    { "line": 12, "label": "bad", "rule": "<rule-id>", "reason": "..." },
-    { "line": 30, "label": "clean", "rule": "<rule-id>", "reason": "hard clean: ..." }
+  "a.ts": [
+    { "line": 12, "label": "bad", "rule": "<rule-id>", "window": 0, "reason": "..." },
+    { "line": 30, "label": "clean", "rule": "<rule-id>", "window": 0, "reason": "hard clean: ..." }
   ]
 }
 ```
 
-Paths are relative to the repository root. `line` matches within a window of
-3; a rule with `subject: enclosing` reports at the top of the function.
+Paths are relative to `evals/cases/`. `window: 0` for subjects that sit one
+per line; a rule with `subject: enclosing` reports at the top of the
+function, so give it the distance to the statement you labelled.
 
 ## Procedure per rule
 
-1. Write the rule (cookbook shape). Over-match in the matcher; capture what
+1. Write `rule.yml` (cookbook shape). Over-match in the matcher; capture what
    the sentence compares; criteria in terms of what the code shows; `note:`
    for exceptions; `at: 0.7  # uncalibrated`.
-2. `rules -R <rules.yml> --no-config` -> loads, 0 errors.
-3. `check <corpus dir> -R <rules.yml> --no-config --cache none --dry-run
-   --show-subjects` -> every intended subject found, captures right, nothing
-   unintended. Fix the matcher until this is true. This costs nothing.
-4. `gaps <corpus dir> -R <rules.yml> --no-config --cache none` -> read the
-   verdict. `rewrite` means go back to subject/state/criteria, not to the
-   thesaurus. You may iterate the sentence up to 3 times per rule; record
-   each attempt's gap in the report.
-5. `calibrate <corpus dir> -R <rules.yml> --labels <labels.json> --repeat 3
-   --no-config --cache none --record <records/...json>` -> fitted cutoff,
-   precision, recall, decision flips.
-6. Write the fitted `at:` into rules.yml and remove the `# uncalibrated`.
+2. `rules -R <dir> --no-config` -> loads, 0 errors.
+3. `check <dir>/evals/cases -R <dir>/rule.yml --no-config --cache none
+   --dry-run --show-subjects` -> every intended subject found, captures
+   right, nothing unintended. Fix the matcher until this is true. Free.
+4. `gaps <dir>/evals/cases -R <dir>/rule.yml --no-config --cache none` ->
+   read the verdict. `rewrite` means go back to subject/state/criteria, not
+   to the thesaurus. Up to 3 attempts at the sentence per rule; record each
+   attempt's gap in the report.
+5. `eval <dir> --repeat 3 --no-config` -> precision, recall and flips at the
+   rule's `at:`, the fitted cutoff beside them. Write the fitted `at:` into
+   rule.yml, remove `# uncalibrated`, and `eval <dir> --repeat 3 --accept
+   --no-config` to take the baseline.
 
 ## REPORT.md format
 
@@ -99,10 +107,8 @@ Per rule, a section with exactly these headings:
   the one sentence of why
 - **What I would change**: matcher, subject, state, or corpus, if anything
 
-A candidate that ships moves to `rules/<id>/rule.yml` with its corpus as
-`rules/<id>/evals/cases/` and its labels as `evals/labels.json` (paths
-relative to `cases/`), and `jev-lint eval rules/<id> --repeat 3 --accept`
-takes its baseline.
+A candidate that ships is `git mv experiments/rule-candidates/<id> rules/<id>`;
+its baseline comes with it.
 
 Then: **Cost**: total requests, tokens and dollars spent, from the tool's
 own summaries.

@@ -1,0 +1,156 @@
+openapi: 3.1.0
+info:
+  title: Accounts API
+  version: 2.3.0
+servers:
+  - url: https://api.acme.example/v2
+security:
+  - bearerAuth: []
+
+paths:
+  /users:
+    get:
+      operationId: listUsers
+      summary: List users
+      description: >-
+        Returns all users in the organization as an array, newest first.
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, default: 50, maximum: 200 }
+      responses:
+        "200":
+          description: A single user record
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [id, email]
+                properties:
+                  id: { type: string, format: uuid }
+                  email: { type: string, format: email }
+                  createdAt: { type: string, format: date-time }
+    post:
+      operationId: createUser
+      summary: Create a user
+      description: >-
+        Idempotent and safe: calling this endpoint has no side effects and it
+        can be retried freely.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+                displayName: { type: string }
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              schema: { type: string }
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "409":
+          description: A user with this email already exists
+
+  /users/{id}:
+    get:
+      operationId: getUser
+      summary: Get user
+      description: Fetches a user.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: The user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Not found
+    put:
+      operationId: replaceUser
+      summary: Replace a user
+      description: >-
+        Idempotent: sending the same body twice leaves the user in the same
+        state. Returns the stored representation.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: The user as stored
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      operationId: deleteUser
+      summary: Delete a user
+      description: >-
+        Requires the `orgId` query parameter so that a user can only be removed
+        from the caller's own organization. Returns 404 if the user does not
+        exist.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /sessions/{id}:
+    delete:
+      operationId: revokeSession
+      summary: Revoke a session
+      description: Returns 204 with no body once the session is revoked.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The revoked session
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  revokedAt: { type: string, format: date-time }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    User:
+      type: object
+      required: [id, email]
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        displayName: { type: string }

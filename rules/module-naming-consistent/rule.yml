@@ -6,7 +6,7 @@
 # fetchOrder / loadCart / retrieveInvoice for four identical lookups is
 # visible in one state, and a sync get beside an async fetch is not a
 # mismatch because the signatures say why. Built and measured in
-# experiments/rule-candidates/e-file-consistency/: precision 1, recall 1 on
+# experiments/reports/e-file-consistency/: precision 1, recall 1 on
 # 19 modules (6 defective), first on `full` because the outline had no
 # signatures, then on `graph` once it did -- gap 0.31, midpoint 0.60, at a
 # quarter of the tokens. `severity: info`: on an unseen repository it fired

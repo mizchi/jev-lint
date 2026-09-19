@@ -1,0 +1,98 @@
+{
+  "$default": "clean",
+  "checkout.test.ts": [
+    {
+      "line": 56,
+      "label": "clean",
+      "rule": "test-asserts-on-mock",
+      "reason": "hard clean: title claims the call count itself ('once per checkout'), and a value assertion sits beside it",
+      "window": 0
+    },
+    {
+      "line": 120,
+      "label": "clean",
+      "rule": "test-asserts-on-mock",
+      "reason": "hard clean: title claims the interaction ('retries once'), and the call count is that claim; a value assertion follows",
+      "window": 0
+    },
+    {
+      "line": 131,
+      "label": "clean",
+      "rule": "test-asserts-on-mock",
+      "reason": "hard clean: title claims the call to the API and toHaveBeenCalledWith carries the payload the title names",
+      "window": 0
+    }
+  ],
+  "signup.test.ts": [
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "test-asserts-on-mock",
+      "reason": "title claims the email carries the display name; the only assertion is toHaveBeenCalled, so an email with no name or the wrong template passes",
+      "window": 0
+    },
+    {
+      "line": 44,
+      "label": "bad",
+      "rule": "test-asserts-on-mock",
+      "reason": "title claims the stored password is hashed; the only assertion is insert toHaveBeenCalledTimes(1), which holds with the plaintext stored",
+      "window": 0
+    },
+    {
+      "line": 49,
+      "label": "bad",
+      "rule": "test-asserts-on-mock",
+      "reason": "title claims a rejection; the rejection is swallowed by .catch and the only assertion is that findByEmail was called with the email",
+      "window": 0
+    },
+    {
+      "line": 55,
+      "label": "clean",
+      "rule": "test-asserts-on-mock",
+      "reason": "hard clean: the assertion is on a mock, but toHaveBeenCalledWith carries the recipient and template the title claims",
+      "window": 0
+    },
+    {
+      "line": 62,
+      "label": "clean",
+      "rule": "test-asserts-on-mock",
+      "reason": "hard clean: the title claims no email is sent; not.toHaveBeenCalled is that claim, and the rejection is asserted too",
+      "window": 0
+    },
+    {
+      "line": 67,
+      "label": "clean",
+      "rule": "test-asserts-on-mock",
+      "reason": "hard clean: toHaveBeenCalledWith checks the event name and the id the title names",
+      "window": 0
+    },
+    {
+      "line": 72,
+      "label": "clean",
+      "rule": "test-asserts-on-mock",
+      "reason": "hard clean: the title claims an ordering of two calls, and the assertions check exactly that ordering",
+      "window": 0
+    },
+    {
+      "line": 87,
+      "label": "bad",
+      "rule": "test-asserts-on-mock",
+      "reason": "title claims the invitation ends up accepted; the only assertion is update toHaveBeenCalled, with no check of what status was written",
+      "window": 0
+    },
+    {
+      "line": 98,
+      "label": "clean",
+      "rule": "test-asserts-on-mock",
+      "reason": "hard clean: the title claims the call count ('exactly once') and that is what is asserted",
+      "window": 0
+    },
+    {
+      "line": 109,
+      "label": "clean",
+      "rule": "test-asserts-on-mock",
+      "reason": "hard clean: SendGridMailer is an adapter whose whole job is the client call; the args assertion carries recipient and subject",
+      "window": 0
+    }
+  ]
+}

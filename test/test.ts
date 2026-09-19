@@ -2105,6 +2105,23 @@ await testAsync("evals: a suite runs its rule over its cases, records every pass
   }
 });
 
+test("evals: two records of one suite compare case by case, whatever produced them", () => {
+  // Two models, two days, two revisions of a sentence: the comparison is the
+  // same as against a baseline, except that neither side is the contract, so
+  // a changed question is reported rather than refused.
+  const rules = [evalRule("a", 0.5)];
+  const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "bad" as const, rule: "a", window: 0 },
+    { line: 2, label: "clean" as const, rule: "a", window: 0 },
+  ] };
+  const left = scoreEval([[answer("a", 1, 0.9), answer("a", 2, 0.2)]], labels, rules);
+  const right = scoreEval([[answer("a", 1, 0.3), answer("a", 2, 0.2)]], labels, rules);
+  const diff = compareEvals(left, right, { draftChanged: false });
+  assert.equal(diff.regressions.length, 1);
+  assert.equal(diff.regressions[0]!.line, 1);
+  assert.equal(diff.improvements.length, 0);
+});
+
 // ----------------------------------------------------------------- wiring
 
 await testAsync("end to end: every shipped rule finds subjects in its own evals, and every labelled case is one", async () => {
