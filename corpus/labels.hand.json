@@ -2584,6 +2584,20 @@
       "rule": "comment-describes-block-js",
       "window": 2,
       "reason": "says three attempts, loop runs five. Try up to three times before giving up."
+    },
+    {
+      "line": 88,
+      "label": "clean",
+      "rule": "comment-describes-declaration",
+      "window": 1,
+      "reason": "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"
+    },
+    {
+      "line": 94,
+      "label": "clean",
+      "rule": "comment-describes-declaration",
+      "window": 1,
+      "reason": "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"
     }
   ],
   "corpus/ts/shipping.ts": [

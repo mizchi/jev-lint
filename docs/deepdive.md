@@ -116,7 +116,12 @@ with or without a `setTimeout(..., timeoutSeconds)` call beside it: that
 lacks. The arm finding survives on the defects that are visible in the code
 (a boolean name on a string, a plural on one item: 0.84–0.97 with the file,
 lower without), the example does not, and the rule ships at recall 0.67 with
-that case still labelled. `docs/data/arms.json` predates the removal.
+that case still labelled. `docs/data/arms.json` was re-recorded on the
+marker-free corpus the same day: five arms, two passes, 23 rules. The arm
+changes what a reader can see for one rule, `test-mocks-subject` (recall
+0.8 on `bare`, 0.6 on `graph`, 1.0 on `located`); for the other 22 the
+arms land within 0.05 of each other in separation. The tables in this
+section are the earlier run, kept as recorded.
 
 So the rule for choosing an arm is **not** "more context is better":
 

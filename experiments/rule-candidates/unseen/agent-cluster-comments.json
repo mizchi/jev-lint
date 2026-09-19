@@ -1,0 +1,491 @@
+{
+  "schema": "jev-lint-run-1",
+  "recorded": "2026-09-19T16:54:07.791Z",
+  "model": "jev-1.13.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 6,
+    "inputTokens": 27611,
+    "outputTokens": 824,
+    "ms": 3303,
+    "retried": 0,
+    "splits": 0,
+    "usd": 0.001159662
+  },
+  "rules": [
+    {
+      "id": "comment-describes-declaration",
+      "kind": "noul",
+      "ask": "The comment above this code claims something that is not true of the code.",
+      "note": "Judge only claims the code in front of you can confirm or contradict. A comment about a caller's obligations, about performance, or about history is not checkable here and is not a violation.",
+      "draft": "aad66bce95ff",
+      "at": 0.54,
+      "state": "located",
+      "subject": "node",
+      "severity": "warning",
+      "language": "TypeScript"
+    },
+    {
+      "id": "comment-describes-declaration-rust",
+      "kind": "noul",
+      "ask": "The comment above this code claims something that is not true of the code.",
+      "note": "Judge only claims the code in front of you can confirm or contradict. A comment about a caller's obligations, about performance, or about history is not checkable here and is not a violation.",
+      "draft": "a70d91a2ba9f",
+      "at": 0.55,
+      "state": "located",
+      "subject": "node",
+      "severity": "warning",
+      "language": "Rust"
+    },
+    {
+      "id": "comment-describes-declaration-js",
+      "kind": "noul",
+      "ask": "The comment above this code claims something that is not true of the code.",
+      "note": "Judge only claims the code in front of you can confirm or contradict. A comment about a caller's obligations, about performance, or about history is not checkable here and is not a violation.",
+      "draft": "98b47054b8fd",
+      "at": 0.57,
+      "state": "located",
+      "subject": "node",
+      "severity": "warning",
+      "language": "JavaScript"
+    },
+    {
+      "id": "comment-describes-block",
+      "kind": "noul",
+      "ask": "The comment marked as matched claims something that is not true of the code it sits above.",
+      "note": "The comment under test is the one captured as DOC. Other comments in the same function are not your concern, and a comment explaining a reason rather than an action has nothing to contradict.",
+      "draft": "465ffbbc5f98",
+      "at": 0.94,
+      "state": "bare",
+      "subject": "enclosing",
+      "severity": "info",
+      "language": "TypeScript"
+    },
+    {
+      "id": "comment-describes-block-rust",
+      "kind": "noul",
+      "ask": "The comment marked as matched claims something that is not true of the code it sits above.",
+      "note": "The comment under test is the one captured as DOC. Other comments in the same function are not your concern, and a comment explaining a reason rather than an action has nothing to contradict.",
+      "draft": "36e5f8c84c58",
+      "at": 0.9,
+      "state": "bare",
+      "subject": "enclosing",
+      "severity": "info",
+      "language": "Rust"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 16995,
+      "endLine": 17011,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17399,
+      "endLine": 17399,
+      "kind": "noul",
+      "value": 0.32,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/control-plane-room.ts",
+      "line": 107,
+      "endLine": 107,
+      "kind": "noul",
+      "value": 0.61,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/control-plane-room.ts",
+      "line": 184,
+      "endLine": 185,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/control-plane-room.ts",
+      "line": 189,
+      "endLine": 193,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/control-plane-room.ts",
+      "line": 195,
+      "endLine": 195,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2548,
+      "endLine": 2548,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 6702,
+      "endLine": 6702,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 8326,
+      "endLine": 8326,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 11918,
+      "endLine": 11920,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 11923,
+      "endLine": 11923,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 17933,
+      "endLine": 17933,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 18825,
+      "endLine": 18825,
+      "kind": "noul",
+      "value": 0.32,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 2513,
+      "endLine": 2523,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 2533,
+      "endLine": 2535,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 15453,
+      "endLine": 15456,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 16757,
+      "endLine": 16764,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 16778,
+      "endLine": 16796,
+      "kind": "noul",
+      "value": 0.84,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 16799,
+      "endLine": 16818,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17068,
+      "endLine": 17078,
+      "kind": "noul",
+      "value": 0.87,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17091,
+      "endLine": 17095,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17102,
+      "endLine": 17107,
+      "kind": "noul",
+      "value": 0.73,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17334,
+      "endLine": 17339,
+      "kind": "noul",
+      "value": 0.73,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17274,
+      "endLine": 17284,
+      "kind": "noul",
+      "value": 0.36,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17344,
+      "endLine": 17344,
+      "kind": "noul",
+      "value": 0.73,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17353,
+      "endLine": 17353,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17447,
+      "endLine": 17447,
+      "kind": "noul",
+      "value": 0.71,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17534,
+      "endLine": 17534,
+      "kind": "noul",
+      "value": 0.57,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17646,
+      "endLine": 17648,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 17651,
+      "endLine": 17657,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/bit-relay/worker.ts",
+      "line": 282,
+      "endLine": 292,
+      "kind": "noul",
+      "value": 0.37,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-block",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/bit-relay/worker.ts",
+      "line": 304,
+      "endLine": 304,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 11882,
+      "endLine": 11882,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 12057,
+      "endLine": 12059,
+      "kind": "noul",
+      "value": 0.59,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 12798,
+      "endLine": 12813,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 12936,
+      "endLine": 12966,
+      "kind": "noul",
+      "value": 0.29,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 13223,
+      "endLine": 13233,
+      "kind": "noul",
+      "value": 0.41,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 13929,
+      "endLine": 14000,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14004,
+      "endLine": 14012,
+      "kind": "noul",
+      "value": 0.6,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14146,
+      "endLine": 14161,
+      "kind": "noul",
+      "value": 0.29,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "comment-describes-declaration",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 16454,
+      "endLine": 16482,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    }
+  ]
+}

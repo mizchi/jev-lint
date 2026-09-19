@@ -82,3 +82,19 @@ export function retryLookup(id: string): StoredSession | null {
   }
   return null;
 }
+
+// --- Maintenance ---
+
+export function sessionCount(): number {
+  return sessions.size;
+}
+
+// ===== Exports for the admin dashboard =====
+
+export function oldestSession(): StoredSession | null {
+  let oldest: StoredSession | null = null;
+  for (const s of sessions.values()) {
+    if (!oldest || s.expiresAt < oldest.expiresAt) oldest = s;
+  }
+  return oldest;
+}

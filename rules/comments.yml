@@ -45,7 +45,7 @@
   # its callers or about a type declared elsewhere in the file, so the file is
   # where the confirmation lives. `tools/arms.ts` settles it.
   state: located
-  at: 0.54
+  at: 0.56
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -90,11 +90,14 @@
       Every specific claim the comment makes holds for the code below it. A
       comment that is vague, redundant, restates the obvious, or says less than
       it could is not a false comment -- only a claim that is actually wrong
-      counts here.
+      counts here. A section heading or divider ("--- Orchestrator: Budget
+      Planning ---", "// Helpers") names the part of the file that starts here,
+      not the declaration under it, and makes no claim about it.
   note: &decl_note >-
     Judge only claims the code in front of you can confirm or contradict. A
     comment about a caller's obligations, about performance, or about history is
-    not checkable here and is not a violation.
+    not checkable here and is not a violation. A heading that labels a section
+    of the file is not a claim about the first declaration in that section.
 
 - id: comment-describes-declaration-rust
   language: Rust

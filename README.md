@@ -215,34 +215,34 @@ Every flag, and the config file's precedence, is in
 
 This repository lints itself: `.jev-lint.yaml` points the shipped packs at
 `src`, `tools`, `test/test.ts` and `package.json`, and leaves out `corpus/`
-and the cookbook fixtures, which hold planted defects. One full pass, all 21
+and the cookbook fixtures, which hold planted defects. One full pass, all 23
 rules, nothing cached, on a laptop over a home connection, recorded in
 `docs/data/self-lint-2026-09-20.json`:
 
 | | |
 | --- | --- |
-| subjects judged | 1,950 |
-| requests | 71, at concurrency 4 |
-| input tokens | 1,316,775 |
-| output tokens | 37,444 |
-| price | $0.0553 |
-| wall clock | 7.7 s (29.2 s of request time, summed) |
+| subjects judged | 1,996 |
+| requests | 78, at concurrency 4 |
+| input tokens | 1,383,662 |
+| output tokens | 38,372 |
+| price | $0.0581 |
+| wall clock | 8.4 s (32.1 s of request time, summed) |
 | model | `jev-1.13.0`, 2026-09-20 |
-| findings | 3 |
+| findings | 7 |
 
-That is 2.8 cents per 1,000 subjects. `--dry-run` on the same tree estimated
-1,462,466 input tokens, 11.1% above what the server billed, so a dry run is a
+That is 2.9 cents per 1,000 subjects. `--dry-run` on the same tree estimated
+1,540,697 input tokens, 11.3% above what the server billed, so a dry run is a
 bound to budget against rather than a quote. A `review` of one commit's diff
 is a different order: the commits behind this README's last rewrite plan to
 44,059 tokens, $0.002.
 
-The three findings are all `var-name-describes-value` on test bindings
-within 0.16 of its cutoff, and all three are arguable. Earlier passes over
-the same tree caught a test whose name promised "exactly one batch" while
-its body only counted placements — fixed — and a counter named `passed`
-holding a number, renamed; and the first pass with the comment pack's block
-rule at its fitted cutoff flagged eleven test preambles, which is why that
-rule now ships above its midpoint. `jev-lint replay
+Of the seven findings, one is what the rule says it is: `computeCalls`,
+named as a computation, assigns `calls` and `calledBy` onto every symbol of
+the entry it is given. The other six sit within 0.08 of their cutoffs — two
+doc comments, three test bindings, one test title — and are arguable.
+Earlier passes over the same tree caught a test whose name promised
+"exactly one batch" while its body only counted placements, and a counter
+named `passed` holding a number; both fixed. `jev-lint replay
 docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules

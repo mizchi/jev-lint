@@ -217,18 +217,20 @@ which error you would rather have. The rule that works:
 
 > Give the question the least context that still contains the answer.
 
-Measured, with a correction: `var-name-describes-value` was not separable on
-`bare` and was on `located`, and the story told was that `const
-timeoutSeconds = 5000` is only wrong where the binding is *used*. The corpus
-then carried a `// DEFECT: named seconds, holds milliseconds` line above that
-declaration, inside the file `located` sends; with the markers gone the case
-answers 0.22 whether or not the binding is passed to `setTimeout` — that 5000
-is milliseconds is API knowledge, which this model is measured to lack. The
-defects visible in the code itself (a boolean name on a string, a plural on
-one item) still answer 0.84–0.97 with the file and lower without it, so the
-arm choice stands; the example does not. `tools/arms.ts` measures this per
-rule — four arms, two passes, about two cents; its recorded run predates the
-marker removal. The evidence is in
+Measured twice, and the second measurement corrects the first. On the
+marker-free corpus (`docs/data/arms.json`, 2026-09-20, five arms, two
+passes, $0.21) the arm makes a difference a reader can see for **one** rule:
+`test-mocks-subject`, whose evidence is a `vi.mock` at the top of the file,
+loses recall on `bare` (0.8) and `graph` (0.6) and separates on `located`.
+For every other rule the five arms land within 0.05 of each other in class
+separation, and the declared arm is within noise of the best. The earlier
+story — that `var-name-describes-value` needed the file because `const
+timeoutSeconds = 5000` is only wrong where the binding is used — was the
+corpus marker talking: with it gone that case answers 0.22 at every arm, and
+the rule does not separate at any. So the choice of arm is not a quality
+knob, and it is also, on this evidence, rarely a separation knob: pick the
+cheapest arm whose state holds the evidence, and measure when the evidence
+lives outside the node. The evidence and the numbers are in
 [docs/deepdive.md](deepdive.md#2-state-the-arm-is-not-a-quality-knob).
 
 ### Matcher captures are the sharpest state available
@@ -485,7 +487,7 @@ Six do not, and each pack says what its rule misses:
 | --- | --- | --- |
 | `var-name-describes-value` | recall 0.67 | `timeoutSeconds = 5000` needs API knowledge; one more sits in the wobble band |
 | `fn-name-promises-rust` | recall 0.83 | one defect at 0.62–0.70 across a 0.68 cutoff |
-| `test-name-describes-code` | precision 0.67 | one clean test at the cutoff |
+| `test-name-verifies-claim` | flips | one defect at 0.50–0.53 across a 0.52 cutoff, in or out by the pass |
 | `test-name-describes-code-rust` | precision 0.67 | by inversion: a clean test answers higher than the genuine defect |
 | `comment-describes-block` | recall 0.50 | parked at 0.94 over the preamble band on real code; one defect answers 0.49 |
 | `comment-describes-block-rust` | recall 0.50 | likewise, at 0.90 |
