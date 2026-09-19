@@ -247,11 +247,12 @@ docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules
 
-Six packs ship in `rules/`, 23 rules, used when the project has no `rules/`
-directory of its own. The naming and comment rules exist in an ECMAScript
-and a Rust variant sharing one sentence; the rest are ECMAScript or JSON.
+23 rules ship in `rules/`, one directory each with the cases that prove it,
+used when the project has no `rules/` directory of its own. The naming and
+comment rules exist in an ECMAScript and a Rust variant sharing one sentence;
+the rest are ECMAScript or JSON. Grouped here by what they ask:
 
-**`naming.yml`** — does the code do what it calls itself?
+**Naming** — does the code do what it calls itself?
 
 | rule | asks |
 | --- | --- |
@@ -262,7 +263,7 @@ and a Rust variant sharing one sentence; the rest are ECMAScript or JSON.
 | `module-name-describes-contents` | is this module named for what it contains? |
 | `module-naming-consistent` | do this module's exports name the same kind of operation with the same words? |
 
-**`guarantees.yml`** — the name makes a specific promise; does the body keep it?
+**Guarantees** — the name makes a specific promise; does the body keep it?
 
 | rule | asks |
 | --- | --- |
@@ -274,27 +275,27 @@ On the corpus behind this pack, `fn-name-promises` flags none of the 22
 labelled defects at its cutoff — the narrower promise separates where the
 general question does not.
 
-**`tests.yml`** — tests that cannot verify their name, by construction
+**Tests** — tests that cannot verify their name, by construction
 
 | rule | asks |
 | --- | --- |
 | `test-mocks-subject` | is the behaviour the title claims performed by a stub, with the assertion reading the stub back? |
 | `snapshot-only-behaviour-claim` | does the title claim a property that a whole-render snapshot does not isolate? |
 
-**`comments.yml`** — is the comment still true?
+**Comments** — is the comment still true?
 
 | rule | asks |
 | --- | --- |
 | `comment-describes-declaration` | does the comment above this declaration still hold? |
 | `comment-describes-block` | does a comment inside a body describe the lines under it? |
 
-**`messages.yml`** — messages for a human, versus what the code does
+**Messages** — messages for a human, versus what the code does
 
 | rule | asks |
 | --- | --- |
 | `log-level-matches-event` | does this log call's level match the severity of the path it sits on? |
 
-**`config.yml`** — names in configuration files (ast-grep parses JSON and YAML)
+**Config** — names in configuration files (ast-grep parses JSON and YAML)
 
 | rule | asks |
 | --- | --- |
@@ -317,7 +318,8 @@ were built and measured the same way and not shipped; their reports are in
 
 ## Adding your rule
 
-Put a YAML file in `rules/`. Everything ast-grep understands works in `rule:`
+A rule is a directory: `rules/<id>/rule.yml`, and beside it the cases that
+prove it. Put the YAML there. Everything ast-grep understands works in `rule:`
 unchanged — `pattern`, `kind`, `regex`, `all`/`any`/`not`, `inside`/`has`,
 `utils`, `constraints`:
 
@@ -352,27 +354,40 @@ jev-lint check src --dry-run --show-subjects        # which nodes it found, with
 jev-lint check src --at catch-hides-failure=2 --retry 3   # a score runs 0-3
 ```
 
-### Calibrating
+### Evals: the cases a rule ships with
 
-A cutoff is fitted, not chosen. Label a handful of defects in a JSON file
-beside the code — file, line, `bad` or `clean`, and the reason — and not as
-comments in the code: a `// DEFECT: named seconds, holds milliseconds` above
-the case is inside the file the model is shown, and the fit then measures
-the label instead of the rule. Then:
+A cutoff is fitted, not chosen, and a rule is only as good as the cases it
+is measured on. Each rule directory carries them:
 
-```bash
-jev-lint gaps corpus                    # does the rule separate the classes at all?
-jev-lint calibrate corpus --labels corpus/labels.json --repeat 3 --record run.json
-jev-lint replay run.json --labels corpus/labels.json    # refit later, free
+```
+rules/catch-hides-failure/
+  rule.yml
+  evals/
+    cases/handlers.ts        code that reads like real code -- no markers in it
+    labels.json              { "handlers.ts": [{ "line": 12, "label": "bad", "rule": "catch-hides-failure", "window": 0, "reason": "..." }] }
+    baseline.json            the accepted run: answers, cutoffs, the rule's draft hash
 ```
 
-`gaps` answers the question to ask first. `works` means any cutoff inside the
-gap gives the same answers; `move` means the rule discriminates and the
-threshold is misplaced; `rewrite` means the answers are not separated and no
-cutoff helps — rewrite the sentence, or check whether the subject can show
-what it is being asked. Write the fitted number into the rule as `at:`, and
-record anything you will quote: a cutoff is a claim about a specific set of
-answers, and `replay` lets anyone re-derive it without an API key.
+Labels live in the JSON and never in the code: a `// DEFECT: named seconds,
+holds milliseconds` above a case is inside the file the model is shown, and
+the fit then measures the label instead of the rule — which is how this
+repository's own corpus once claimed 22 rules at 1.00/1.00 and had 17.
+Put in the hard clean cases, the ones a lazy rule would flag.
+
+```bash
+jev-lint eval rules/catch-hides-failure --repeat 3     # ask 3 times, score at the shipped cutoff
+jev-lint eval rules/catch-hides-failure --accept       # ...and make that run the baseline
+jev-lint eval --replay                                 # every rule, no requests: the CI gate
+```
+
+The score is at the rule's **shipped** cutoff on the mean of the passes —
+does the rule as it ships still get its cases right — with the fitted cutoff
+printed beside it, not used. `--replay` re-scores every baseline at the
+current cutoffs without a request and fails on a case that was right when
+the baseline was accepted and is wrong now, or on a rule whose sentence,
+criteria, matcher, subject or state changed since: those answers were to a
+different question, and the eval has to be run and accepted again. This
+repository's `npm run ci` ends in it.
 
 Every field, `score` versus `noul`, the state arms with their measurements,
 and sharing one sentence across grammars are in

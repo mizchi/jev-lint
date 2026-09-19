@@ -1,0 +1,160 @@
+{
+  "$default": "clean",
+  "checkout.test.ts": [
+    {
+      "line": 50,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the total is mocked to 100 and the assertion reads 100 back; a broken total() still passes"
+    },
+    {
+      "line": 74,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "reserveStock is mocked; the result asserted is the mock's value, so a reserveLineItems that reserved nothing still passes"
+    },
+    {
+      "line": 108,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "fetch is stubbed with the ETA; the assertion reads the stub back"
+    }
+  ],
+  "signup.test.ts": [
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "title claims the display name is in the email; the assertion is toHaveBeenCalled with no arguments checked"
+    },
+    {
+      "line": 44,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "title claims the hash is stored and the plaintext is not; the assertion is a call count"
+    },
+    {
+      "line": 49,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "title claims rejection; the rejection is swallowed with .catch and only the lookup call is asserted"
+    },
+    {
+      "line": 87,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "title claims the invitation is marked accepted; the assertion is that update was called, with anything"
+    }
+  ],
+  "order-summary.test.ts": [
+    {
+      "line": 18,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the only assertion is a whole-render snapshot, which holds whatever was recorded, error state or not"
+    },
+    {
+      "line": 43,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "snapshot only; a discount row that is not hidden would be recorded and pass"
+    },
+    {
+      "line": 85,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "snapshot only; a wrong currency format would be recorded and pass"
+    },
+    {
+      "line": 48,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: the title claims only that the snapshot matches, which the assertion verifies exactly"
+    },
+    {
+      "line": 53,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: \"renders\" claims nothing a snapshot does not establish"
+    },
+    {
+      "line": 90,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: \"renders the receipt for a single-item order\" labels the input of the snapshot and asserts no property"
+    }
+  ],
+  "store_test.rs": [
+    {
+      "line": 14,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "the title names the empty case; the body exercises the non-empty one. Wrong THING. [test]"
+    },
+    {
+      "line": 19,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "the title claims it panics; the body expects an ordinary value. Wrong THING. [test]"
+    },
+    {
+      "line": 24,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "the title claims an ordering guarantee and the body checks the length, so the named behaviour could be broken and this would still pass. Right thing, assertion too WEAK. [test]"
+    },
+    {
+      "line": 30,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "asserts nothing, so nothing it claims is established. [test]"
+    }
+  ],
+  "cart.test.ts": [
+    {
+      "line": 24,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title names the empty case; the body exercises the non-empty one. Wrong THING, not a weak assertion."
+    },
+    {
+      "line": 28,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title says it throws; the body expects an ordinary value. Wrong THING."
+    },
+    {
+      "line": 32,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims an ordering guarantee and the body counts the results, so the named behaviour could be broken and this would still pass. Right thing, assertion too WEAK."
+    },
+    {
+      "line": 36,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "asserts nothing at all, so nothing it claims is established."
+    }
+  ]
+}

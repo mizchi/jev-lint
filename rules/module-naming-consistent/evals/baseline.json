@@ -1,0 +1,541 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-19T17:13:14.056Z",
+  "model": "jev-1.13.0",
+  "suite": "module-naming-consistent",
+  "rules": [
+    {
+      "id": "module-naming-consistent",
+      "draft": "3b93b6610647",
+      "at": 0.6
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/auth_routes.ts",
+        "line": 1,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/codec.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/commands.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/factories.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/handlers.ts",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/jobs.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/lookups.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/middleware.ts",
+        "line": 1,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/order_service.ts",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/notifications.ts",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/permissions.ts",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/preferences.ts",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/project_files.ts",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/product_source.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/rate_limiter.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/settings.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/user_repository.ts",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/sync.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.46,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/validators.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/auth_routes.ts",
+        "line": 1,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/factories.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/codec.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/commands.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/handlers.ts",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/jobs.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/middleware.ts",
+        "line": 1,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/lookups.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/order_service.ts",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/notifications.ts",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/permissions.ts",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/preferences.ts",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/project_files.ts",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/product_source.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/settings.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/rate_limiter.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/user_repository.ts",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/sync.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/validators.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/auth_routes.ts",
+        "line": 1,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/commands.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/codec.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/factories.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/jobs.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/handlers.ts",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/lookups.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/middleware.ts",
+        "line": 1,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/notifications.ts",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/permissions.ts",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/preferences.ts",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/order_service.ts",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/product_source.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/project_files.ts",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/settings.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/sync.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/rate_limiter.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/user_repository.ts",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/module-naming-consistent/evals/cases/validators.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 57,
+    "inputTokens": 73431,
+    "usd": 0.003084102,
+    "ms": 13846
+  }
+}

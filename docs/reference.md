@@ -50,6 +50,7 @@ failed and nothing was reported.
 | `--base <ref>` / `--staged` | what `review` diffs against: the merge base with `ref`, or the index (what a commit will contain: no untracked files, no unstaged edits) |
 | `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any finding |
 | `init --pre-commit` | write a hook running `review --staged --fail-on error`; refuses to overwrite an existing hook without `--force` |
+| `eval [dirs...]` | run every `rules/<id>/evals/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression or a changed question |
 | `--repeat <n>` / `--labels <path>` | `calibrate`: re-ask n times, fit against labels |
 | `--record <path>` | write a replayable run record — do this for anything you will quote |
 | `--force` | ignore cached verdicts |
@@ -363,10 +364,13 @@ refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
 
 ## The shipped packs
 
-Six packs, 23 rules. The two below carry an ECMAScript and a Rust variant
-sharing one sentence; the other four are ECMAScript or JSON only.
+23 rules, one directory each under `rules/` with its evals beside it,
+grouped here by what they ask. The naming and comment rules carry an
+ECMAScript and a Rust variant sharing one sentence; the rest are ECMAScript
+or JSON only. The notes the former packs shipped with are in
+`rules/README.md`.
 
-**`rules/naming.yml`** — does the code do what it calls itself?
+**Naming** — does the code do what it calls itself?
 
 | rule | asks |
 | --- | --- |
@@ -389,7 +393,7 @@ The two test rules are **nested, not orthogonal** — a test that exercises the
 wrong case also fails to establish its name — which is why both fire on the
 wrong-case class and only one fires on weak assertions.
 
-**`rules/comments.yml`** — is the comment still true?
+**Comments** — is the comment still true?
 
 | rule | asks |
 | --- | --- |
@@ -400,7 +404,7 @@ A comment is a claim in the one notation nothing checks. Deliberately *not*
 asked: style, redundancy, whether a comment should exist. One axis only — is the
 claim false. A vague or redundant comment is not a defect.
 
-**`rules/guarantees.yml`** — a name that makes a specific promise
+**Guarantees** — a name that makes a specific promise
 
 | rule | names | asks |
 | --- | --- | --- |
@@ -425,7 +429,7 @@ The family also built `guard-name-guards` (`validate*`/`sanitize*`), which
 separates on four defects and is not shipped on that count. Reports in
 `experiments/rule-candidates/b-guarantee-names/`.
 
-**`rules/tests.yml`** — tests that cannot verify their name, by construction
+**Tests** — tests that cannot verify their name, by construction
 
 | rule | asks |
 | --- | --- |
@@ -439,7 +443,7 @@ quiet (0.42–0.64): a mocked subject reads as a mild claim. A third candidate,
 `test-asserts-on-mock`, separated as well and was dropped because
 `test-name-verifies-claim` already reports every one of its cases.
 
-**`rules/messages.yml`** — messages for a human reader
+**Messages** — messages for a human reader
 
 | rule | asks |
 | --- | --- |
@@ -454,7 +458,7 @@ three, so it stays a recipe — and `ui-message-honest` (needs `subject:
 enclosing`; measured before the promoted-subject key was fixed, so worth
 re-measuring).
 
-**`rules/config.yml`** — names in configuration files
+**Config** — names in configuration files
 
 | rule | asks |
 | --- | --- |
@@ -473,8 +477,9 @@ On a TypeScript-only repository the seven Rust variants and
 `comment-describes-declaration-js` report "matched nothing": 8 of the 23.
 
 Of the 23, **17 reach precision 1.00 and recall 1.00 at their shipped cutoffs
-on the corpus** (`docs/data/calibration.json`, 988 subjects, three passes,
-decisions on the mean). Read that with
+on their own evals** (`rules/*/evals/baseline.json`, three passes each,
+decisions on the mean; `jev-lint eval --replay` re-derives every number below
+with no request). Read that with
 the positive counts beside them, because they are small: per rule, 14, 9, 7,
 6, 6, 6, 6, 6, 5, 5, 5, 4, 4, 4, 4, 3, 2, 2, 2, 1, 1 labelled defects. The
 two `module-name-describes-contents` rules have one each and ship at

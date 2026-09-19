@@ -1,0 +1,93 @@
+{
+  "$default": "clean",
+  "user_repository.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-name-describes-contents",
+      "window": 1000000,
+      "reason": "named for users, holds lookups for users, orders, carts and invoices alike; a cross-rule defect the naming-consistency corpus happened to contain"
+    }
+  ],
+  "legacy_cart.js": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-name-describes-contents",
+      "window": 1000000,
+      "reason": "named for what it holds. This file exists so the `-js` rule variants are exercised rather than merely shipped. The naming and comment packs each have a JavaScript variant whose matcher omits the TypeScript-only node kinds, and a variant no corpus covers is a variant nobody has measured. The end-to-end test asserts every shipped rule matches something here or elsewhere in the corpus, which is what caught this gap. whole units."
+    }
+  ],
+  "backoff.rs": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-name-describes-contents-rust",
+      "window": 1000000,
+      "reason": "named `backoff` and every public item is about backoff. The Rust half of the hard-clean class described at the top of corpus/ts/session.ts. Names here are defensible rather than obvious: a predicate that needs an inference, a mutation that announces itself, a parse that can fail, a `get` that computes. The corpus had none of these and a cutoff fitted without them sat too close to the boundary."
+    }
+  ],
+  "budget.rs": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-name-describes-contents-rust",
+      "window": 1000000,
+      "reason": "named for the budget it tracks. The Rust half of the comment-drift corpus. See corpus/ts/session_store.ts for what the CLEAN cases are doing there: a vague, redundant or why-not-what comment is accurate and must not be flagged, because the axis is whether the claim is false, not whether the comment is worth having."
+    }
+  ],
+  "helpers.rs": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-name-describes-contents-rust",
+      "window": 1000000,
+      "reason": "every public item here is about formatting and parsing currency, and the module is called `helpers`."
+    }
+  ],
+  "retry.rs": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-name-describes-contents-rust",
+      "window": 1000000,
+      "reason": "the module is called `retry` and every public item is about retrying."
+    }
+  ],
+  "session.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-name-describes-contents",
+      "window": 1000000,
+      "reason": "named `session` and every public item is about sessions. This file exists because of a false positive. The corpus's original clean cases were all TRIVIALLY clean -- `sumPrices` sums prices -- and they scored between 0.04 and 0.36, which made a cutoff at 0.61 look safe by a wide margin. The first function outside the corpus that this pack judged was `isDeliverableToday`, a perfectly well named predicate, and it came back at 0.69: over the cutoff. The cutoff was not the problem. The corpus was missing a whole class -- names that are DEFENSIBLE rather than obvious -- and a hole for a class the corpus does not contain is invisible from inside the corpus. Every function below is one of those: a predicate that needs an inference to verify, a mutation whose name announces it, a parse that can fail, a lookup that computes. They are labelled clean because they are clean, and whatever they score is what the cutoff has to clear."
+    }
+  ],
+  "session_store.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-name-describes-contents",
+      "window": 1000000,
+      "reason": "named for the store it holds. Comment drift. Every DEFECT here is a comment that was true once and is not true now; every CLEAN one is a comment that is accurate, including the ones that are vague, redundant or say less than they could. That distinction is the whole axis: `comment-describes-declaration` asks whether the claim is FALSE, not whether the comment is good."
+    }
+  ],
+  "shipping.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-name-describes-contents",
+      "window": 1000000,
+      "reason": "the file is called `shipping` and every public item is about shipping. Someone looking for this logic would look here."
+    }
+  ],
+  "utils.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-name-describes-contents",
+      "window": 1000000,
+      "reason": "every item here is about one nameable concern -- discounts -- and the file is called `utils`. A reader looking for the discount logic has no reason to open this."
+    }
+  ]
+}

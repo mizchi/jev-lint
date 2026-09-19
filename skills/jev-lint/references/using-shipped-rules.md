@@ -1,6 +1,7 @@
 # Using the shipped rules
 
-jev-lint ships six packs, 23 rules, in the npm package's `rules/` directory.
+jev-lint ships 23 rules in the npm package's `rules/` directory, one
+directory per rule (family) with `rule.yml` and the `evals/` that prove it.
 They are the rules to start from: each one has a cutoff fitted to a labelled
 corpus, a `state` arm chosen by measurement, and a `criteria` block that took
 several rounds to get right. Write your own only for a convention they do not
@@ -8,7 +9,7 @@ cover — see [cookbook.md](cookbook.md).
 
 ## What ships
 
-**`naming.yml`** — does the code do what it calls itself?
+**Naming** — does the code do what it calls itself?
 
 | rule | asks | subject | state |
 | --- | --- | --- | --- |
@@ -19,14 +20,14 @@ cover — see [cookbook.md](cookbook.md).
 | `module-name-describes-contents` | is this module named for what it contains? | the file, as an outline | `graph` |
 | `module-naming-consistent` | do the exports name the same kind of operation with the same words? | the file, as an outline with signatures | `graph` |
 
-**`comments.yml`** — is the comment still true?
+**Comments** — is the comment still true?
 
 | rule | asks | subject | state |
 | --- | --- | --- | --- |
 | `comment-describes-declaration` | does the comment above this declaration still hold? | a declaration with a comment directly above it | `located` |
 | `comment-describes-block` | does a comment inside a body describe the lines under it? | a statement with a comment directly above it, inside a block; judged with its enclosing function | `bare` |
 
-**`guarantees.yml`** — a name that makes a specific promise
+**Guarantees** — a name that makes a specific promise
 
 | rule | names | asks | state |
 | --- | --- | --- | --- |
@@ -38,18 +39,18 @@ Narrower cousins of `fn-name-promises`, which flags none of their labelled
 defects at its own cutoff: a specific promise separates where "does the body
 match the name" does not.
 
-**`tests.yml`** — tests that cannot verify their name, by construction
+**Tests** — tests that cannot verify their name, by construction
 
 | rule | asks | state |
 | --- | --- | --- |
 | `test-mocks-subject` | is the claimed behaviour performed by a stub, with the assertion reading the stub back? | `located` (the `vi.mock` at the top of the file is the evidence) |
 | `snapshot-only-behaviour-claim` | does the title claim a property a whole-render snapshot does not isolate? | `located` |
 
-**`messages.yml`** — `log-level-matches-event`: does the level of a
+**Messages** — `log-level-matches-event`: does the level of a
 `logger.<level>(...)` call match the severity of the path it sits on?
 `local`.
 
-**`config.yml`** — `script-name-does`: does a `package.json` script's name
+**Config** — `script-name-does`: does a `package.json` script's name
 describe the command it runs? JSON, `bare`.
 
 Not asked, deliberately: style, redundancy, whether a comment should exist.
@@ -111,7 +112,7 @@ first to refit.
 
 ```bash
 mkdir -p rules
-cp node_modules/jev-lint/rules/*.yml rules/       # or from the repository
+cp -R node_modules/jev-lint/rules/fn-name-promises rules/   # one rule, with its evals; or all of them
 ```
 
 Now `./rules` exists and the packaged copies are ignored entirely. Delete the
@@ -148,10 +149,10 @@ reports.
 
 ## Picking a subset
 
-There is no per-rule enable flag. Pick a file:
+There is no per-rule enable flag. Pick directories:
 
 ```bash
-jev-lint check src -R node_modules/jev-lint/rules/naming.yml     # just naming
+jev-lint check src -R node_modules/jev-lint/rules/fn-name-promises -R node_modules/jev-lint/rules/test-name-verifies-claim
 ```
 
 or copy (way 2) and delete. To silence a rule in one file without changing

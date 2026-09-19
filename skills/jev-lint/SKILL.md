@@ -48,7 +48,7 @@ Knowing which half you are working on is most of the job.
 | use the rules that ship with it, pick some, adjust a cutoff | [references/using-shipped-rules.md](references/using-shipped-rules.md) |
 | write a rule for a convention of your own | [references/cookbook.md](references/cookbook.md), then validate as below |
 | know what every field means, `score` vs `noul`, the `state` arms | [references/rule-fields.md](references/rule-fields.md) |
-| fit a cutoff, build a labelled corpus, judge whether a rule works | [references/calibration.md](references/calibration.md) |
+| fit a cutoff, build a rule's evals, judge whether a rule works | [references/calibration.md](references/calibration.md) |
 
 ## Running it
 
@@ -184,10 +184,11 @@ Work in this order, and do not skip a step because the rule "looks right":
    kind means that kind does not exist in that grammar — one rejected rule
    fails the whole scan.
 5. **Ask, on a few files, with `--retry 3` and an `--at` you guess**, and read
-   every finding against the code. Then, if the rule will be kept, calibrate:
-   label a handful of defects and clean cases and follow
-   [references/calibration.md](references/calibration.md). A rule ships with a
-   fitted `at:`, not a guessed one.
+   every finding against the code. Then, if the rule will be kept, give it
+   evals: `rules/<id>/evals/cases/` with a handful of defects and the hard
+   clean cases, `labels.json` beside them, and `jev-lint eval rules/<id>
+   --repeat 3 --accept` — see [references/calibration.md](references/calibration.md).
+   A rule ships with a fitted `at:` and an accepted baseline, not a guess.
 
 Two grammars, one sentence: Rust and TypeScript spell the same idea with
 different node kinds, so write two rules and share `ask`/`criteria` with a YAML
@@ -203,8 +204,9 @@ means the tool is wrong:
 2. **The rule is right and the *name* is wrong.** A test called "no batch
    exceeds the ceiling" whose body legitimately exempts one-subject batches is
    a name that overclaims. Fix the name.
-3. **The rule is wrong.** Add the case to the corpus as a labelled clean
-   example and refit. A false positive that is not in the corpus comes back.
+3. **The rule is wrong.** Add the case to the rule's `evals/cases` as a
+   labelled clean example, run the eval, and refit. A false positive that
+   is not in the evals comes back.
 
 Do not chase the tail: editing a file moves the `located` state for every
 subject in it, so a fix can move unrelated verdicts. Fix what you agree with,

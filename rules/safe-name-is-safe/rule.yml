@@ -1,0 +1,67 @@
+# Guarantee names: a name that promises something specific, and a body that
+# does not keep the promise.
+#
+# The shipped fn-name-promises asks whether a body does what its name says in
+# general, and on the corpus behind these rules it flags 0 of the 22 labelled
+# defects at its cutoff -- 16 of them sit under 0.30, inside its clean band. A
+# name that says *safe* or *ensure* makes a narrower claim than "describes the
+# body", and the narrower question separates where the general one does not.
+# The naming is the matcher's job (a regex on the captured $NAME); only the
+# promise is the model's.
+#
+# Cutoffs fitted on corpus/ts/guarantees/ (hand-labelled: see
+# corpus/labels.hand.json), then run once over an unseen repository of 1,391
+# subjects, where neither rule fired and the highest answer was 0.26.
+#
+# Not shipped from the same family, both in
+# experiments/rule-candidates/b-guarantee-names/REPORT.md: guard-name-guards
+# (validate*/sanitize*/ensure*; separates, but on four defects) and
+# pure-name-is-pure (compute*/format*/parse*; separates on the corpus, and on
+# unseen code half its findings were one pattern, a lazily loaded module
+# counted as I/O).
+
+- id: safe-name-is-safe
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: local
+  at: 0.53
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &a1
+              field: name
+              pattern: $NAME
+              regex: ^(safe|try)([A-Z0-9_]|$)|(OrNull|OrDefault|OrUndefined)$
+      - all:
+          - kind: method_definition
+          - has: *a1
+      - all:
+          - kind: variable_declarator
+          - has: *a1
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: This function's name ($NAME) says that failure is absorbed and reported as a value, but its
+    body has a path on which a failure escapes as a throw or a rejection.
+  criteria:
+    "true": "A failure of the kind the name promises to absorb can reach the caller as an exception or a
+      rejected promise: the operation that can fail is outside any try, the catch rethrows or throws
+      a new error, a failing case is detected and answered with a throw instead of the null,
+      undefined, default, false or result value the name promises, or the fallback itself is
+      computed by something that can fail."
+    "false": "Every failure of the kind the name refers to is turned into the value the name promises:
+      null, undefined, a default, a boolean, or a result object the caller can inspect. A body that
+      cannot fail at all, and so has nothing to catch, honours the name."
+  note: "A throw on a programmer error -- an argument of the wrong type, a misuse of the function's
+    own API -- is not the failure such a name promises to absorb and does not count. Logging before
+    returning the fallback is fine. The failure that counts is the one the name and the parameters
+    are about: parsing, lookup, I/O, connection, conversion."
+  axis: file

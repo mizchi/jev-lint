@@ -1,0 +1,89 @@
+{
+  "$default": "clean",
+  "safe.ts": [
+    {
+      "line": 5,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "tryParseDate throws RangeError on the exact failure (unparseable date) its name promises to report as null",
+      "window": 0
+    },
+    {
+      "line": 13,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "safeReadJson catches the read but JSON.parse is outside the try, so a malformed file throws",
+      "window": 0
+    },
+    {
+      "line": 34,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "getUserOrNull throws NotFoundError on the missing-row case that OrNull promises to return null for",
+      "window": 0
+    },
+    {
+      "line": 40,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "parsePortOrDefault returns the default only for an absent value and throws RangeError for an invalid one; OrDefault promises the fallback on bad input",
+      "window": 0
+    },
+    {
+      "line": 49,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: the only throw is a TypeError on a non-string argument, a programmer error, not the parse failure the name absorbs; parse failure returns null",
+      "window": 0
+    },
+    {
+      "line": 59,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: no try/catch at all, but no path can throw; missing segments return undefined",
+      "window": 0
+    },
+    {
+      "line": 73,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: logs in the catch, then returns the fallback; both read and parse are inside the try",
+      "window": 0
+    },
+    {
+      "line": 85,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: try* reporting the failure as false, nothing to catch",
+      "window": 0
+    },
+    {
+      "line": 92,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "safeDivide returns null on the division failure",
+      "window": 0
+    },
+    {
+      "line": 99,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "tryRun converts every throw into a result object",
+      "window": 0
+    },
+    {
+      "line": 107,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "firstOrUndefined cannot fail",
+      "window": 0
+    },
+    {
+      "line": 111,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "tryConnect rethrows on the last attempt, so the connection failure it promises to report as null reaches the caller as a rejection",
+      "window": 0
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+# --------------------------------------------------------------------------
+# 3. Tests: two rules, because there are two ways a test can lie
+# --------------------------------------------------------------------------
+#
+# These are the sharpest rules in the pack, because the matcher hands the
+# question both halves of the comparison by name: the title string and the
+# body. A question whose two subjects are named explicitly is answerable;
+# "is this test good" is not.
+#
+# There are two rules and not one because a test can fail its name in two
+# unrelated ways, and a rubric answers the axis it was written on and nothing
+# else -- mixing axes into one question stops it being monotone:
+#
+#   test-name-describes-code   the code does something OTHER than the name says.
+#                              A title about the empty case exercising the
+#                              non-empty one. A title promising a throw whose
+#                              body expects a value.
+#   test-name-verifies-claim   the code is ABOUT the right thing but does not
+#                              actually establish it. An assertion so weak the
+#                              named behaviour could be broken and still pass.
+#                              No assertion at all.
+#
+# The first version of this pack asked both in one question, whose criteria
+# listed "a different case ... or asserts nothing at all" together. That caught
+# the corpus's defects, but it could not say WHICH kind a finding was, and a
+# finding that cannot name its kind is one a reader has to re-derive. Whether
+# splitting also changes recall is measured in docs/findings.md.
+#
+# They overlap, and that is expected rather than a problem: an atomic rule is an
+# addition to a broader one, not a replacement, and each carries its own cutoff.
+
+# 3a. Does the code do what the name says?
+- id: test-name-describes-code
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  # `bare` -- the cheapest arm, because this subject already contains both
+  # things being compared: the matcher captures the title and the body, so the
+  # file adds no evidence.
+  #
+  # INHERITED, not measured for this rule. The arm sweep in docs/data/arms.json
+  # covers the PRE-SPLIT pack, where `test-name-matches-body` scored precision
+  # 1.0 and recall 1.0 on every arm and the file widened its class separation
+  # from 0.82 to 0.90 without changing a decision. That rule no longer exists;
+  # it became this one and `test-name-verifies-claim`, and neither successor has
+  # been re-measured across arms. Re-run `tools/arms.ts` before relying on it.
+  #
+  # Staying on `bare` buys something the wider margin does not: a verdict that
+  # depends on nothing outside the test itself. Editing an unrelated test in the
+  # same file cannot change this one's answer, and cannot invalidate its cached
+  # verdict either.
+  state: bare
+  at: 0.95
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule:
+    any:
+      - pattern: it($TITLE, $BODY)
+      - pattern: test($TITLE, $BODY)
+      - pattern: it($TITLE, $BODY, $TIMEOUT)
+      - pattern: test($TITLE, $BODY, $TIMEOUT)
+      - pattern: it.each($CASES)($TITLE, $BODY)
+  ask: &describes_ask >-
+    The code in this test does something other than what its name says it does.
+  criteria: &describes_criteria
+    # Deliberately silent about assertion STRENGTH. A weak assertion about the
+    # right thing is the other rule's business, and a criterion that mentioned
+    # both would be answering two axes at once.
+    "true": >-
+      Reading the name and then the code, they are about different things: the
+      code exercises a different operation, input or case than the name states,
+      it expects the opposite outcome to the one the name implies, the name
+      promises an error or a rejection where the code expects an ordinary value,
+      or the name refers to something the code never touches at all.
+    "false": >-
+      The code is about the thing the name says: the operation it calls, the
+      input it sets up and the outcome it expects are the ones the name
+      describes. It may or may not establish that thing convincingly, which is
+      a separate question.
+- id: test-name-describes-code-rust
+  language: Rust
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.93
+  # DOES NOT SEPARATE, and ships at `warning` anyway -- so read its findings
+  # rather than acting on them.
+  #
+  # Measured precision 0.67, recall 1.00 (2 true, 1 false, 0 missed) on both
+  # batching axes, from docs/data/calibration.json and
+  # calibration-rule-axis.json. The mechanism is an inversion, not a threshold:
+  # corpus/rust/store_test.rs:33 is clean FOR THIS RULE -- it is the
+  # weak-assertion defect belonging to `test-name-verifies-claim` -- and answers
+  # 0.95, HIGHER than the genuine wrong-case defect at :25, which answers 0.93.
+  # No cutoff separates an inverted pair.
+  #
+  # Kept at `warning` rather than dropped to `info` because its two true
+  # positives are the defect class this pack exists for, and its one false
+  # positive is a test that really is weak, just weak in the other rule's sense.
+  # The TypeScript variant is the same question and clears by only 0.035 on 7
+  # subjects, so treat that one as unproven too rather than as a separate
+  # result.
+  #
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule:
+    all:
+      - kind: function_item
+      - has: { field: name, pattern: $NAME }
+      - follows:
+          kind: attribute_item
+          regex: "test"
+  ask: *describes_ask
+  criteria: *describes_criteria

@@ -1,0 +1,303 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-19T17:13:10.216Z",
+  "model": "jev-1.13.0",
+  "suite": "module-name-describes-contents",
+  "rules": [
+    {
+      "id": "module-name-describes-contents",
+      "draft": "b2cd5b5edc87",
+      "at": 0.65
+    },
+    {
+      "id": "module-name-describes-contents-rust",
+      "draft": "6f59fdaefc20",
+      "at": 0.55
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/backoff.rs",
+        "line": 1,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/legacy_cart.js",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/helpers.rs",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/budget.rs",
+        "line": 1,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/shipping.ts",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/session_store.ts",
+        "line": 1,
+        "endLine": 101,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/retry.rs",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/session.ts",
+        "line": 1,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/utils.ts",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/user_repository.ts",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/backoff.rs",
+        "line": 1,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/budget.rs",
+        "line": 1,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/helpers.rs",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/legacy_cart.js",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/retry.rs",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/session_store.ts",
+        "line": 1,
+        "endLine": 101,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/session.ts",
+        "line": 1,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/shipping.ts",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/utils.ts",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/user_repository.ts",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/backoff.rs",
+        "line": 1,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/budget.rs",
+        "line": 1,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/legacy_cart.js",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/helpers.rs",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/session_store.ts",
+        "line": 1,
+        "endLine": 101,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents-rust",
+        "file": "rules/module-name-describes-contents/evals/cases/retry.rs",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/session.ts",
+        "line": 1,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/shipping.ts",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/user_repository.ts",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/module-name-describes-contents/evals/cases/utils.ts",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 30,
+    "inputTokens": 38223,
+    "usd": 0.0016053660000000002,
+    "ms": 7172
+  }
+}

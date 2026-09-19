@@ -70,6 +70,7 @@ right.
 | `report.ts` | the three output formats and the two report tables |
 | `schedule.ts` | the per-rule axis decision for `--group auto` |
 | `config.ts` | `.jev-lint.yaml`: discovery, validation, and the flag-beats-file merge |
+| `evals.ts` | per-rule evals: suite discovery, scoring at the shipped cutoff, baseline comparison, the record |
 | `jev.ts` | the API client: retry, split-on-too-big, spend accounting |
 | `gate.ts` | answers + cutoffs → findings. Pure. |
 | `cache.ts` | the verdict cache and `verdictKey` |
@@ -361,14 +362,17 @@ installed:
   error here, so the stripped-types run and the compiled run cannot diverge.
 
 `package.json` ships `dist`, `rules`, `README.md` and `LICENSE`. **`rules` has
-to stay in that list**, or a fresh install has no packs to fall back to.
+to stay in that list**, or a fresh install has no packs to fall back to. It
+ships the evals with them — `rules/<id>/evals/` is under `rules/` — which is
+a few hundred kilobytes of cases and baselines a user can replay.
 
-`npm run ci` is `labels:check && typecheck && test && build && replay:ci`. The
-replay step is a full offline re-score *and re-fit* of a recorded run, so a
-change that breaks gating or fitting fails CI without an API key. `replay:ci`
-accepts exit 1 and nothing else: the corpus holds deliberate violations, so a
-replay that finds them exits 1 by design, and `ci` ran plain `replay` — and so
-failed on every commit — until an audit ran it. Exit 2 and 3 still fail it.
+`npm run ci` is `typecheck && test && build && eval --replay`. The last step
+re-scores every rule's accepted baseline at the cutoffs as they are now,
+with no request, and fails on a case that was right when the baseline was
+accepted and is wrong now, or on a rule whose question changed since. It
+replaced a `replay` of one whole-corpus record, which had to accept exit 1
+because the corpus held deliberate violations; the eval gate compares
+decisions to decisions, so its exit code means what it says.
 
 ## Testing
 
@@ -388,5 +392,7 @@ Two conventions to keep:
   names for promising more than the bodies checked.
 
 For anything involving verdicts, record and replay rather than mocking the API:
-`--record` writes a run, `replay` re-scores and re-fits it, and the records in
-`docs/data/` are the regression corpus.
+a rule's `evals/baseline.json` is its regression record, `jev-lint eval
+--replay` re-scores it, and `run()` takes a `client` so a test can hand in a
+fake that answers without a network. The records in `docs/data/` are the
+measurements the docs quote, each replayable.

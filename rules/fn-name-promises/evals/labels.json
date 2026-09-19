@@ -1,0 +1,97 @@
+{
+  "$default": "clean",
+  "backoff.rs": [
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "fn-name-promises-rust",
+      "window": 0,
+      "reason": "`summarize` promises a summary; it returns an arbitrary sum of three unrelated numbers. Same accidental defect as `summarize` in corpus/ts/session.ts and `configure` in corpus/ts/cart.ts, and flagged the same way. See docs/findings.md."
+    }
+  ],
+  "budget.rs": [
+    {
+      "line": 21,
+      "label": "bad",
+      "rule": "fn-name-promises-rust",
+      "window": 0,
+      "reason": "the comment claims it leaves the budget untouched and it increments `checks` -- which makes it a false comment AND a predicate name on a mutating function. Both rules are right about it; flagged by fn-name-promises at 0.82 while this marker named only the comment rule. / Reports whether the budget is exhausted, without changing it."
+    }
+  ],
+  "cache.rs": [
+    {
+      "line": 18,
+      "label": "bad",
+      "rule": "fn-name-promises-rust",
+      "window": 0,
+      "reason": "`is_empty` reads as a predicate but returns a count."
+    },
+    {
+      "line": 22,
+      "label": "bad",
+      "rule": "fn-name-promises-rust",
+      "window": 0,
+      "reason": "`get` promises a read; this mutates `hits` and removes the entry."
+    },
+    {
+      "line": 27,
+      "label": "bad",
+      "rule": "fn-name-promises-rust",
+      "window": 0,
+      "reason": "named for all keys, returns one."
+    },
+    {
+      "line": 43,
+      "label": "bad",
+      "rule": "fn-name-promises-rust",
+      "window": 0,
+      "reason": "nothing here configures anything -- it returns the sum of five unrelated numbers. Labelled after the first run flagged it at 0.87 against a clean label; see the note in corpus/ts/cart.ts and docs/findings.md."
+    }
+  ],
+  "cart.ts": [
+    {
+      "line": 20,
+      "label": "bad",
+      "rule": "fn-name-promises",
+      "window": 0,
+      "reason": "reads as a predicate, returns a string."
+    },
+    {
+      "line": 24,
+      "label": "bad",
+      "rule": "fn-name-promises",
+      "window": 0,
+      "reason": "`get` promises a read; this deletes."
+    },
+    {
+      "line": 28,
+      "label": "bad",
+      "rule": "fn-name-promises",
+      "window": 0,
+      "reason": "`calculate` promises a pure computation; this writes to module state as a side effect."
+    },
+    {
+      "line": 35,
+      "label": "bad",
+      "rule": "fn-name-promises",
+      "window": 0,
+      "reason": "named for all items, handles only the first."
+    },
+    {
+      "line": 51,
+      "label": "bad",
+      "rule": "fn-name-promises",
+      "window": 0,
+      "reason": "nothing here configures anything -- it takes a cart and returns the sum of five unrelated numbers. This label was added AFTER the first run, which flagged this function at 0.83 while the corpus called it clean. It is a defect I wrote by accident while building a container for the variable cases below, and the honest reading is that the rule found it and I had not. Relabelling to agree with a model is how a corpus stops being evidence, so the justification has to stand on its own -- and it does: a reader of this signature learns nothing true about the body. The false positive that prompted it is recorded in docs/findings.md."
+    }
+  ],
+  "session.ts": [
+    {
+      "line": 45,
+      "label": "bad",
+      "rule": "fn-name-promises",
+      "window": 0,
+      "reason": "`summarize` promises a summary of the session it is given; it returns an arbitrary sum of three unrelated numbers, one of which ignores the session entirely. This is the THIRD time a container function written to host the variable cases below turned out to be a naming defect itself (see `configure` in cart.ts and `summarize` in backoff.rs). Each one was flagged by the rule and labelled clean by me, and each time the rule was right. The pattern is worth naming: a function written only to hold other code has no job to be named after, so it cannot be named honestly -- which is exactly the defect. It also shows up in the numbers: with this mislabelled, the fitted cutoff was 0.87 and the clean band appeared to reach 0.81; corrected, the highest clean answer is 0.44. See docs/findings.md."
+    }
+  ]
+}

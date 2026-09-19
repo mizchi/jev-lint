@@ -3,7 +3,7 @@
 You are building and measuring candidate jev-lint rules in ONE family, in your
 own directory under `experiments/rule-candidates/<family>/`. Other agents are
 doing the same for other families in parallel. Write only inside your
-directory. Do not commit. Do not touch `src/`, `rules/`, `corpus/`, `docs/`.
+directory. Do not commit. Do not touch `src/`, `rules/`, `docs/`.
 
 ## Setup
 
@@ -98,6 +98,11 @@ Per rule, a section with exactly these headings:
   not a shipped cutoff), DROP (does not separate after 3 attempts) -- and
   the one sentence of why
 - **What I would change**: matcher, subject, state, or corpus, if anything
+
+A candidate that ships moves to `rules/<id>/rule.yml` with its corpus as
+`rules/<id>/evals/cases/` and its labels as `evals/labels.json` (paths
+relative to `cases/`), and `jev-lint eval rules/<id> --repeat 3 --accept`
+takes its baseline.
 
 Then: **Cost**: total requests, tokens and dollars spent, from the tool's
 own summaries.

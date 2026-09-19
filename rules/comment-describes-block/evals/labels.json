@@ -1,0 +1,58 @@
+{
+  "$default": "clean",
+  "budget.rs": [
+    {
+      "line": 53,
+      "label": "bad",
+      "rule": "comment-describes-block-rust",
+      "window": 3,
+      "reason": "says it halves the limit, and it divides by the factor it was given. Halve the limit."
+    },
+    {
+      "line": 61,
+      "label": "bad",
+      "rule": "comment-describes-block-rust",
+      "window": 3,
+      "reason": "says it rounds up, and it truncates. Round the outstanding amount up to whole units."
+    }
+  ],
+  "cart.test.ts": [
+    {
+      "line": 59,
+      "label": "clean",
+      "rule": "comment-describes-block",
+      "window": 3,
+      "reason": "the preamble describes the whole test, not the line under it. Judged against the body, every claim holds."
+    },
+    {
+      "line": 68,
+      "label": "clean",
+      "rule": "comment-describes-block",
+      "window": 3,
+      "reason": "a preamble stating the reason for the test, above a setup line that has nothing to do with the reason."
+    },
+    {
+      "line": 76,
+      "label": "clean",
+      "rule": "comment-describes-block",
+      "window": 3,
+      "reason": "a preamble that names the bug the test guards against, above an ordinary first statement."
+    }
+  ],
+  "session_store.ts": [
+    {
+      "line": 69,
+      "label": "bad",
+      "rule": "comment-describes-block",
+      "window": 3,
+      "reason": "says it keeps the newest, and the comparison keeps the oldest. Sort so the newest sessions are kept."
+    },
+    {
+      "line": 79,
+      "label": "bad",
+      "rule": "comment-describes-block",
+      "window": 3,
+      "reason": "says three attempts, loop runs five. Try up to three times before giving up."
+    }
+  ]
+}

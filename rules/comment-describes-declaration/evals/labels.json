@@ -1,0 +1,100 @@
+{
+  "$default": "clean",
+  "legacy_cart.js": [
+    {
+      "line": 4,
+      "label": "bad",
+      "rule": "comment-describes-declaration-js",
+      "window": 0,
+      "reason": "says it returns cents, returns whole units."
+    },
+    {
+      "line": 9,
+      "label": "bad",
+      "rule": "comment-describes-declaration-js",
+      "window": 0,
+      "reason": "claims it leaves the input alone, and it sorts in place."
+    }
+  ],
+  "budget.rs": [
+    {
+      "line": 16,
+      "label": "bad",
+      "rule": "comment-describes-declaration-rust",
+      "window": 0,
+      "reason": "says cents, returns whole units. / Returns the amount still available, in cents."
+    },
+    {
+      "line": 21,
+      "label": "bad",
+      "rule": "comment-describes-declaration-rust",
+      "window": 0,
+      "reason": "the comment claims it leaves the budget untouched and it increments `checks` -- which makes it a false comment AND a predicate name on a mutating function. Both rules are right about it; flagged by fn-name-promises at 0.82 while this marker named only the comment rule. / Reports whether the budget is exhausted, without changing it."
+    },
+    {
+      "line": 27,
+      "label": "bad",
+      "rule": "comment-describes-declaration-rust",
+      "window": 0,
+      "reason": "says it saturates at the limit, and it does not clamp at all. / Adds to the amount spent, stopping at the limit."
+    },
+    {
+      "line": 32,
+      "label": "bad",
+      "rule": "comment-describes-declaration-rust",
+      "window": 0,
+      "reason": "documents a `reason` parameter the function no longer takes. / Resets the budget, recording `reason` for the audit log."
+    }
+  ],
+  "session_store.ts": [
+    {
+      "line": 12,
+      "label": "bad",
+      "rule": "comment-describes-declaration",
+      "window": 0,
+      "reason": "says milliseconds, returns seconds."
+    },
+    {
+      "line": 17,
+      "label": "bad",
+      "rule": "comment-describes-declaration",
+      "window": 0,
+      "reason": "says it does not mutate, and it increments `hits`."
+    },
+    {
+      "line": 24,
+      "label": "bad",
+      "rule": "comment-describes-declaration",
+      "window": 0,
+      "reason": "says newest first, sorts oldest first."
+    },
+    {
+      "line": 29,
+      "label": "bad",
+      "rule": "comment-describes-declaration",
+      "window": 0,
+      "reason": "the comment documents a `ttlSeconds` parameter that no longer exists."
+    },
+    {
+      "line": 34,
+      "label": "bad",
+      "rule": "comment-describes-declaration",
+      "window": 0,
+      "reason": "says it throws on an unknown id, and it returns false."
+    },
+    {
+      "line": 88,
+      "label": "clean",
+      "rule": "comment-describes-declaration",
+      "window": 0,
+      "reason": "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"
+    },
+    {
+      "line": 94,
+      "label": "clean",
+      "rule": "comment-describes-declaration",
+      "window": 0,
+      "reason": "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"
+    }
+  ]
+}

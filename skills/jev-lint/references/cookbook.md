@@ -75,7 +75,7 @@ day to find:
 - Subjects are one per line, so labels need `"window": 0`; the default window
   of 3 lets a `bad` label claim its neighbours.
 
-The shipped `script-name-does` in `rules/config.yml` is the worked example.
+The shipped `script-name-does` in `rules/script-name-does/rule.yml` is the worked example.
 
 ### Narrowing a capture by its text
 

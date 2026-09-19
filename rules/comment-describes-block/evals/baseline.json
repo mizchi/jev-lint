@@ -1,0 +1,303 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-19T17:13:03.498Z",
+  "model": "jev-1.13.0",
+  "suite": "comment-describes-block",
+  "rules": [
+    {
+      "id": "comment-describes-block",
+      "draft": "465ffbbc5f98",
+      "at": 0.94
+    },
+    {
+      "id": "comment-describes-block-rust",
+      "draft": "36e5f8c84c58",
+      "at": 0.9
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "comment-describes-block-rust",
+        "file": "rules/comment-describes-block/evals/cases/budget.rs",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.48,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block-rust",
+        "file": "rules/comment-describes-block/evals/cases/budget.rs",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/session_store.ts",
+        "line": 69,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/session_store.ts",
+        "line": 79,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 59,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 62,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 68,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 71,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 76,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 80,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/session_store.ts",
+        "line": 69,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/session_store.ts",
+        "line": 79,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block-rust",
+        "file": "rules/comment-describes-block/evals/cases/budget.rs",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block-rust",
+        "file": "rules/comment-describes-block/evals/cases/budget.rs",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 59,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 62,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 68,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 71,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 76,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 80,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-block-rust",
+        "file": "rules/comment-describes-block/evals/cases/budget.rs",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.48,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block-rust",
+        "file": "rules/comment-describes-block/evals/cases/budget.rs",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/session_store.ts",
+        "line": 69,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/session_store.ts",
+        "line": 79,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 59,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 62,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.52,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 68,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 71,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 76,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/comment-describes-block/evals/cases/cart.test.ts",
+        "line": 80,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 18312,
+    "usd": 0.0007691040000000001,
+    "ms": 3291
+  }
+}

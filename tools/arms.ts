@@ -23,10 +23,11 @@
  *
  * Usage:
  *   node tools/arms.ts [--repeat 1] [--arms bare,located,graph,full]
- *                       [--rules rules] [--paths corpus] [--out path.json]
+ *                       [--rules rules] [--paths dir,...] [--out path.json]
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { loadRules } from "../src/rules.ts";
+import { evalCorpus } from "../src/evals.ts";
 import { run } from "../src/run.ts";
 import { labelFor } from "../src/calibrate.ts";
 import { widestGap } from "../src/calibrate.ts";
@@ -50,9 +51,9 @@ const arms = arg("arms", ARMS.join(","))
   .map((s) => s.trim())
   .filter(Boolean) as StateArm[];
 const rulePaths = arg("rules", "rules").split(",");
-const paths = arg("paths", "corpus").split(",");
+const paths = arg("paths", "").split(",").filter(Boolean);
 const outPath = arg("out", null);
-const labelPath = arg("labels", "corpus/labels.json");
+const labelPath = arg("labels", "");
 
 const { rules, errors } = loadRules(rulePaths);
 for (const e of errors) process.stderr.write(`rule error: ${e}\n`);
@@ -60,7 +61,10 @@ if (rules.length === 0) {
   process.stderr.write("no rules\n");
   process.exit(2);
 }
-const labels = JSON.parse(readFileSync(labelPath, "utf8")) as Labels;
+// With no --paths/--labels, every rule's evals/ suite is the corpus.
+const fromEvals = evalCorpus(rulePaths);
+if (paths.length === 0) paths.push(...fromEvals.paths);
+const labels = labelPath ? (JSON.parse(readFileSync(labelPath, "utf8")) as Labels) : fromEvals.labels;
 
 /**
  * Score one arm's answers against the labels.

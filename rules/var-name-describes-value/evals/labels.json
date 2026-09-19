@@ -1,0 +1,67 @@
+{
+  "$default": "clean",
+  "checkout.test.ts": [
+    {
+      "line": 58,
+      "label": "bad",
+      "rule": "var-name-describes-value",
+      "window": 0,
+      "reason": "`total` is bound to a spy on cart.total, not to a total"
+    }
+  ],
+  "jobs.ts": [
+    {
+      "line": 13,
+      "label": "bad",
+      "rule": "var-name-describes-value",
+      "window": 0,
+      "reason": "`users` is bound to a query result whose .rows are the users, not to users"
+    }
+  ],
+  "cache.rs": [
+    {
+      "line": 44,
+      "label": "bad",
+      "rule": "var-name-describes-value-rust",
+      "window": 0,
+      "reason": "named seconds, holds milliseconds."
+    },
+    {
+      "line": 46,
+      "label": "bad",
+      "rule": "var-name-describes-value-rust",
+      "window": 0,
+      "reason": "reads as a boolean, holds a count."
+    },
+    {
+      "line": 48,
+      "label": "bad",
+      "rule": "var-name-describes-value-rust",
+      "window": 0,
+      "reason": "plural name, single value."
+    }
+  ],
+  "cart.ts": [
+    {
+      "line": 52,
+      "label": "bad",
+      "rule": "var-name-describes-value",
+      "window": 0,
+      "reason": "named seconds, holds milliseconds."
+    },
+    {
+      "line": 55,
+      "label": "bad",
+      "rule": "var-name-describes-value",
+      "window": 0,
+      "reason": "reads as a boolean, holds a string."
+    },
+    {
+      "line": 57,
+      "label": "bad",
+      "rule": "var-name-describes-value",
+      "window": 0,
+      "reason": "plural name, single value."
+    }
+  ]
+}

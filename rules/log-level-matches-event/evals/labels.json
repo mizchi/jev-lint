@@ -1,0 +1,103 @@
+{
+  "$default": "clean",
+  "logging.ts": [
+    {
+      "line": 16,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "info for a failed save inside a catch that rethrows: the operation failed and the caller is left to deal with it, which is error"
+    },
+    {
+      "line": 42,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "error on the ordinary success path of opening a session: a user logging in is a routine event, info at most"
+    },
+    {
+      "line": 52,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "debug for a payment refusal that is returned to the caller as a failure and counted in metrics: an operator-visible outcome hidden at a level that is off in production"
+    },
+    {
+      "line": 70,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "warn for an unrecoverable startup failure followed by process.exit(1): nothing is degraded, the process is gone, which is error or fatal"
+    },
+    {
+      "line": 85,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "error for a cache miss on the normal path that then just fetches and fills the cache: routine, debug at most"
+    },
+    {
+      "line": 170,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "info for a delivery failure after which the message is discarded: data is lost and an operator would want to know, which is warn or error"
+    },
+    {
+      "line": 95,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: error in a catch that recovers by rebuilding, but a snapshot in an unexpected format is genuinely unexpected and an operator should see it"
+    },
+    {
+      "line": 107,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: info for an expired coupon is a routine business rejection returned as a value, not a fault"
+    },
+    {
+      "line": 120,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: debug for per-chunk progress inside the indexing loop; the hot-loop case"
+    },
+    {
+      "line": 132,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: warn for a single failed attempt inside a retry loop that goes on to retry; the word 'failed' in a catch tempts a lazy rule to want error"
+    },
+    {
+      "line": 142,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: warn for a missing config file that the function handles by using defaults; degraded, not failed"
+    },
+    {
+      "line": 150,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: console.error for a usage error in a CLI entry point that returns exit code 2; stderr at error is the convention"
+    },
+    {
+      "line": 34,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: info for a rejected login is a routine outcome returned as null, not a fault"
+    },
+    {
+      "line": 159,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "clean: info for a routine, intentional deletion; destructive-sounding but not a fault"
+    }
+  ]
+}

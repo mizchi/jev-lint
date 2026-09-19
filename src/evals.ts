@@ -1,0 +1,380 @@
+/**
+ * Per-rule evals: the regression suite a rule ships with.
+ *
+ * A rule lives in its own directory beside the cases that prove it:
+ *
+ *     rules/<rule>/rule.yml               the rule, every language variant
+ *     rules/<rule>/evals/cases/           fixture code, marker-free
+ *     rules/<rule>/evals/labels.json      what each case is, and why
+ *     rules/<rule>/evals/baseline.json    the last accepted run, replayable
+ *     rules/<rule>/evals/last.json        the last run, accepted or not
+ *
+ * `jev-lint eval` runs each suite's rule over its cases, scores the answers at
+ * the SHIPPED cutoff on the mean of N passes, and compares with the baseline.
+ * The question an eval answers is "does the rule as shipped still get its
+ * cases right" -- so the shipped cutoff, not a fitted one, which would move
+ * the goalposts to wherever the answers landed. The fit is reported beside it.
+ *
+ * A baseline is a record of answers to a specific question. When the
+ * question changes -- the sentence, the criteria, the note, the matcher, the
+ * subject or the state, which is what `ruleTextHash` covers -- the baseline
+ * cannot say anything about the rule as it is now, and the comparison says so
+ * rather than comparing two different questions.
+ *
+ * Labels are keyed relative to `cases/`, so an eval directory is portable;
+ * they are resolved to the paths a run reports before scoring.
+ */
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { join, relative } from "node:path";
+import { fitCutoffs, labelFor } from "./calibrate.ts";
+import { cutoffFor, loadRules, ruleTextHash } from "./rules.ts";
+import { run } from "./run.ts";
+import type { AskClient } from "./jev.ts";
+import type { Label, Labels, Rule } from "./types.ts";
+
+export interface EvalSuite {
+  /** The directory's name: the rule (family) it holds. */
+  name: string;
+  dir: string;
+  ruleFile: string;
+  cases: string;
+  labels: string;
+  baseline: string;
+  last: string;
+}
+
+/** One answered subject, as a run reports it. The subset an eval scores. */
+export interface EvalAnswer {
+  rule: string;
+  file: string;
+  line: number;
+  endLine?: number;
+  kind?: string | null;
+  value: number | null;
+  confidence?: number | null;
+}
+
+export interface CaseScore {
+  rule: string;
+  file: string;
+  line: number;
+  label: "bad" | "clean" | "unlabeled";
+  values: number[];
+  mean: number;
+  decision: "flag" | "pass";
+  right: boolean;
+  /** Decided differently on different passes. */
+  flip: boolean;
+}
+
+export interface RuleScore {
+  rule: string;
+  at: number;
+  subjects: number;
+  tp: number;
+  fp: number;
+  fn: number;
+  precision: number | null;
+  recall: number | null;
+  flips: number;
+  fitted: number | null;
+  fitReason: string;
+}
+
+export interface EvalScore {
+  rules: RuleScore[];
+  cases: CaseScore[];
+}
+
+export interface EvalDiff {
+  ok: boolean;
+  reasons: string[];
+  regressions: Array<CaseScore & { was: "flag" | "pass"; now: "flag" | "pass" }>;
+  improvements: Array<CaseScore & { was: "flag" | "pass"; now: "flag" | "pass" }>;
+  added: CaseScore[];
+  removed: CaseScore[];
+}
+
+/** The rule directories under `roots` that carry an eval. */
+export function discoverEvals(roots: string[]): EvalSuite[] {
+  const out: EvalSuite[] = [];
+  const visit = (dir: string) => {
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
+    } catch {
+      return;
+    }
+    const labels = join(dir, "evals", "labels.json");
+    if (existsSync(labels)) {
+      const ruleFile = ["rule.yml", "rule.yaml"].map((n) => join(dir, n)).find((p) => existsSync(p)) ?? join(dir, "rule.yml");
+      out.push({
+        name: relative(join(dir, ".."), dir) || dir,
+        dir,
+        ruleFile,
+        cases: join(dir, "evals", "cases"),
+        labels,
+        baseline: join(dir, "evals", "baseline.json"),
+        last: join(dir, "evals", "last.json"),
+      });
+    }
+    for (const e of entries) {
+      if (e.isDirectory() && e.name !== "evals" && !e.name.startsWith(".")) visit(join(dir, e.name));
+    }
+  };
+  for (const r of roots) {
+    try {
+      if (statSync(r).isDirectory()) visit(r);
+    } catch {
+      /* a missing root is the loader's error to report, not this one's */
+    }
+  }
+  return out;
+}
+
+/** Labels keyed relative to `cases/`, re-keyed to the paths a run reports. */
+export function relocateLabels(labels: Labels, cases: string): Labels {
+  const out: Labels = {};
+  for (const [k, v] of Object.entries(labels)) {
+    if (k.startsWith("$")) out[k] = v;
+    else out[join(cases, k)] = v as Label[];
+  }
+  return out;
+}
+
+/**
+ * Score answers at each rule's shipped cutoff, on the mean over passes.
+ *
+ * A subject the labels do not mention is clean, as in a corpus: the clean
+ * cases are most of any file and enumerating them is busywork. `flips` counts
+ * subjects whose decision differed between passes -- the band the model
+ * itself moves in, where a cutoff should not be trusted either way.
+ */
+export function scoreEval(
+  passes: EvalAnswer[][],
+  labels: Labels,
+  rules: Rule[],
+  cutoffs: Record<string, number> = {},
+  /** Score at these cutoffs instead of the rules' own: the ones a baseline was accepted at. */
+  ats: Record<string, number> | null = null,
+): EvalScore {
+  const atFor = new Map(rules.map((r) => [r.id, ats?.[r.id] ?? cutoffFor(r, cutoffs)]));
+  const bySubject = new Map<string, { rule: string; file: string; line: number; values: number[] }>();
+  for (const pass of passes) {
+    for (const a of pass) {
+      if (typeof a.value !== "number") continue;
+      const key = `${a.rule}\u0000${a.file}\u0000${a.line}`;
+      const s = bySubject.get(key) ?? { rule: a.rule, file: a.file, line: a.line, values: [] };
+      s.values.push(a.value);
+      bySubject.set(key, s);
+    }
+  }
+  const cases: CaseScore[] = [];
+  for (const s of bySubject.values()) {
+    const at = atFor.get(s.rule);
+    if (at === undefined) continue;
+    const mean = s.values.reduce((x, y) => x + y, 0) / s.values.length;
+    const decision = mean >= at ? "flag" : "pass";
+    const label = labelFor(labels, s.file, s.line, s.rule);
+    const right = label === "bad" ? decision === "flag" : decision === "pass";
+    const flip = s.values.some((v) => v >= at) && s.values.some((v) => v < at);
+    cases.push({ rule: s.rule, file: s.file, line: s.line, label, values: s.values, mean, decision, right, flip });
+  }
+  cases.sort((a, b) => a.rule.localeCompare(b.rule) || a.file.localeCompare(b.file) || a.line - b.line);
+
+  // The fit beside the score: what the cutoff WOULD be, for the human reading
+  // the report, never for the verdict.
+  const meanAnswers = cases.map((c) => ({
+    rule: c.rule, file: c.file, line: c.line, endLine: c.line, value: c.mean, confidence: null,
+    messageId: null, kind: "noul" as const, ask: "", severity: "warning" as const, message: null, cutoff: 0, margin: 0,
+  }));
+  const fits = new Map(fitCutoffs(meanAnswers as never, labels, rules).map((f) => [f.rule, f]));
+
+  const ruleScores: RuleScore[] = rules.map((r) => {
+    const mine = cases.filter((c) => c.rule === r.id);
+    const tp = mine.filter((c) => c.label === "bad" && c.decision === "flag").length;
+    const fp = mine.filter((c) => c.label !== "bad" && c.decision === "flag").length;
+    const fn = mine.filter((c) => c.label === "bad" && c.decision === "pass").length;
+    const fit = fits.get(r.id);
+    return {
+      rule: r.id,
+      at: atFor.get(r.id)!,
+      subjects: mine.length,
+      tp, fp, fn,
+      precision: tp + fp > 0 ? round(tp / (tp + fp)) : null,
+      recall: tp + fn > 0 ? round(tp / (tp + fn)) : null,
+      flips: mine.filter((c) => c.flip).length,
+      fitted: fit?.fitted ?? null,
+      fitReason: fit?.reason ?? "no labelled cases",
+    };
+  });
+  return { rules: ruleScores, cases };
+}
+
+const round = (n: number): number => Math.round(n * 100) / 100;
+
+/**
+ * What changed since the baseline, case by case.
+ *
+ * A regression is a case that was decided rightly and now is not; an
+ * improvement the reverse. A case only one side has is reported, not judged.
+ * With `draftChanged` the baseline answered a different question, and the
+ * comparison is refused rather than made.
+ */
+export function compareEvals(
+  baseline: EvalScore,
+  current: EvalScore,
+  { draftChanged }: { draftChanged: boolean },
+): EvalDiff {
+  const key = (c: CaseScore) => `${c.rule}\u0000${c.file}\u0000${c.line}`;
+  const before = new Map(baseline.cases.map((c) => [key(c), c]));
+  const after = new Map(current.cases.map((c) => [key(c), c]));
+  const regressions: EvalDiff["regressions"] = [];
+  const improvements: EvalDiff["improvements"] = [];
+  const added: CaseScore[] = [];
+  const removed: CaseScore[] = [];
+  for (const [k, now] of after) {
+    const was = before.get(k);
+    if (!was) {
+      added.push(now);
+      continue;
+    }
+    if (was.right && !now.right) regressions.push({ ...now, was: was.decision, now: now.decision });
+    else if (!was.right && now.right) improvements.push({ ...now, was: was.decision, now: now.decision });
+  }
+  for (const [k, was] of before) if (!after.has(k)) removed.push(was);
+  const reasons: string[] = [];
+  if (draftChanged) {
+    reasons.push("the rule's question changed since the baseline (sentence, criteria, note, matcher, subject or state); its answers cannot be compared. Run the eval and accept a new baseline.");
+  }
+  if (regressions.length > 0) reasons.push(`${regressions.length} case(s) decided rightly in the baseline are decided wrongly now`);
+  return { ok: reasons.length === 0, reasons, regressions, improvements, added, removed };
+}
+
+/** The cutoffs a record was scored at when it was taken. */
+export function recordedAts(record: EvalRecord): Record<string, number> {
+  return Object.fromEntries(record.rules.map((r) => [r.id, r.at]));
+}
+
+/** The record an eval writes: replayable, and carrying every rule's draft. */
+export interface EvalRecord {
+  schema: "jev-lint-eval-1";
+  recorded: string;
+  model: string | null;
+  suite: string;
+  rules: Array<{ id: string; draft: string; at: number }>;
+  cutoffs: Record<string, number>;
+  passes: EvalAnswer[][];
+  spent: { calls: number; inputTokens: number; usd: number; ms: number };
+}
+
+export function readEvalRecord(path: string): EvalRecord | null {
+  try {
+    const r = JSON.parse(readFileSync(path, "utf8")) as EvalRecord;
+    return r?.schema === "jev-lint-eval-1" && Array.isArray(r.passes) ? r : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Has any rule's question changed since this record was taken? */
+export function draftsChanged(record: EvalRecord, rules: Rule[]): string[] {
+  const now = new Map(rules.map((r) => [r.id, ruleTextHash(r)]));
+  return record.rules.filter((r) => now.has(r.id) && now.get(r.id) !== r.draft).map((r) => r.id);
+}
+
+export interface RunEvalOptions {
+  repeat?: number;
+  cutoffs?: Record<string, number>;
+  concurrency?: number;
+  model?: string | null;
+  client?: AskClient | null;
+  log?: (line: string) => void;
+}
+
+/** Load a suite's rule file and labels. Errors are the caller's to print. */
+export function loadSuite(suite: EvalSuite): { rules: Rule[]; labels: Labels; errors: string[] } {
+  const { rules, errors } = loadRules([suite.ruleFile]);
+  let labels: Labels = { $default: "clean" };
+  try {
+    labels = relocateLabels(JSON.parse(readFileSync(suite.labels, "utf8")) as Labels, suite.cases);
+  } catch (err: unknown) {
+    errors.push(`${suite.labels}: ${String(err).slice(0, 160)}`);
+  }
+  return { rules, labels, errors };
+}
+
+/** Ask the suite's rule about its cases, `repeat` times, and record it. */
+export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Promise<EvalRecord> {
+  const repeat = Math.max(1, opts.repeat ?? 1);
+  const { rules, errors } = loadSuite(suite);
+  if (errors.length) throw new Error(errors.join("\n"));
+  const passes: EvalAnswer[][] = [];
+  let spent = { calls: 0, inputTokens: 0, usd: 0, ms: 0 };
+  let model: string | null = null;
+  for (let i = 0; i < repeat; i += 1) {
+    const r = await run({
+      rules,
+      paths: [suite.cases],
+      cutoffs: opts.cutoffs ?? {},
+      cachePath: null,
+      force: true,
+      concurrency: opts.concurrency ?? 4,
+      model: opts.model ?? null,
+      client: opts.client ?? null,
+    });
+    passes.push(
+      r.all.map((f) => ({ rule: f.rule, file: f.file, line: f.line, endLine: f.endLine, kind: f.kind ?? null, value: f.value, confidence: f.confidence ?? null })),
+    );
+    spent = {
+      calls: spent.calls + r.spent.calls,
+      inputTokens: spent.inputTokens + r.spent.inputTokens,
+      usd: spent.usd + r.spent.usd,
+      ms: spent.ms + r.spent.ms,
+    };
+    model = r.servedModel ?? model;
+    opts.log?.(`${suite.name}: pass ${i + 1}/${repeat}, ${r.stats.subjects} subject(s), ${r.spent.calls} request(s), $${r.spent.usd.toFixed(5)}`);
+  }
+  const record: EvalRecord = {
+    schema: "jev-lint-eval-1",
+    recorded: new Date().toISOString(),
+    model,
+    suite: suite.name,
+    rules: rules.map((r) => ({ id: r.id, draft: ruleTextHash(r), at: cutoffFor(r, opts.cutoffs ?? {}) })),
+    cutoffs: opts.cutoffs ?? {},
+    passes,
+    spent,
+  };
+  writeFileSync(suite.last, `${JSON.stringify(record, null, 2)}\n`);
+  return record;
+}
+
+/**
+ * Every suite's cases and labels under `roots`, as one corpus.
+ *
+ * For the experiments (`tools/arms.ts`, `tools/grouping.ts`) that run every
+ * rule over every case: the cases directories to scan, and the labels keyed
+ * by the paths a run will report. Each suite labels only its own rule, so
+ * another rule's answer on a suite's file is scored as clean by default --
+ * the same convention the single corpus had, and the same caveat: a defect
+ * for rule A sitting in rule B's cases is B's false positive until labelled.
+ */
+export function evalCorpus(roots: string[]): { paths: string[]; labels: Labels } {
+  const labels: Labels = { $default: "clean" };
+  const paths: string[] = [];
+  for (const suite of discoverEvals(roots)) {
+    if (!existsSync(suite.cases)) continue;
+    paths.push(suite.cases);
+    let own: Labels;
+    try {
+      own = relocateLabels(JSON.parse(readFileSync(suite.labels, "utf8")) as Labels, suite.cases);
+    } catch {
+      continue;
+    }
+    for (const [k, v] of Object.entries(own)) {
+      if (k.startsWith("$")) continue;
+      labels[k] = [...((labels[k] as Label[] | undefined) ?? []), ...(v as Label[])];
+    }
+  }
+  return { paths, labels };
+}

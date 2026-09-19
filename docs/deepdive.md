@@ -26,7 +26,7 @@ jev-lint replay docs/data/<record>.json --labels corpus/labels.json
 
 | record | replays | what it holds |
 | --- | --- | --- |
-| `calibration.json` | yes | the shipped 15-rule fit, file axis — re-recorded 2026-09-19 14:24 UTC after the `secondary` capture fix, at the refit cutoffs; see the note below |
+| `rules/*/evals/baseline.json` | `jev-lint eval --replay` | the shipped fit, one record per rule directory, taken 2026-09-20 on the marker-free cases; superseded the single `calibration.json`, whose last version is in git history at `30013c5` |
 | `calibration-rule-axis.json` | yes | the naming pack refitted on the rule axis |
 | `calibration-rule-axis-comments.json` | yes | the comment pack, likewise |
 | `self-lint-before.json` | yes | this repository before the fixes of §6 |
@@ -179,9 +179,10 @@ On the 13-file corpus, **12 of the 15 rules reach precision 1.00 and recall
 1.00** with no decision flips across passes, and **3 have no separating cutoff
 at all**: both `comment-describes-block` rules, which ship saying so, and
 `test-name-describes-code-rust`, which sits at precision 0.67. (An earlier
-write-up said 13 of 15; recounting from `calibration.json` gives 12, and the
-count is reproducible with `jev-lint replay docs/data/calibration.json --labels
-corpus/labels.json`.) Read the 12 as "the rules separate the classes in a
+write-up said 13 of 15; recounting from the record of the time gives 12. That
+record, `calibration.json`, and the corpus it was fitted to are in git
+history; the live numbers are per rule under `rules/*/evals/` and §"The
+refit of 2026-09-19" below says how they moved.) Read the 12 as "the rules separate the classes in a
 corpus I wrote", not as a generalisation, and note the baseline it has to be
 read against: on an imbalanced set, **a tool that reports nothing at
 all scores 83.0% accuracy** here — 229 of the corpus's 276 subjects are clean —

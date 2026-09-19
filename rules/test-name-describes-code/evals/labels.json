@@ -1,0 +1,35 @@
+{
+  "$default": "clean",
+  "store_test.rs": [
+    {
+      "line": 14,
+      "label": "bad",
+      "rule": "test-name-describes-code-rust",
+      "window": 0,
+      "reason": "the title names the empty case; the body exercises the non-empty one. Wrong THING. [test]"
+    },
+    {
+      "line": 19,
+      "label": "bad",
+      "rule": "test-name-describes-code-rust",
+      "window": 0,
+      "reason": "the title claims it panics; the body expects an ordinary value. Wrong THING. [test]"
+    }
+  ],
+  "cart.test.ts": [
+    {
+      "line": 24,
+      "label": "bad",
+      "rule": "test-name-describes-code",
+      "window": 0,
+      "reason": "the title names the empty case; the body exercises the non-empty one. Wrong THING, not a weak assertion."
+    },
+    {
+      "line": 28,
+      "label": "bad",
+      "rule": "test-name-describes-code",
+      "window": 0,
+      "reason": "the title says it throws; the body expects an ordinary value. Wrong THING."
+    }
+  ]
+}

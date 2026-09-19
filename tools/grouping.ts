@@ -27,11 +27,12 @@
  * its own solo baseline, with context held constant.
  *
  * Usage:
- *   node tools/grouping.ts [--repeat 2] [--paths corpus] [--out path.json]
+ *   node tools/grouping.ts [--repeat 2] [--paths dir,...] [--out path.json]
  *                           [--skip-solo]
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { loadRules, cutoffFor } from "../src/rules.ts";
+import { evalCorpus } from "../src/evals.ts";
 import { run } from "../src/run.ts";
 import { fitCutoffs, labelFor, widestGap } from "../src/calibrate.ts";
 import type { Finding, GroupMode, Labels, Rule } from "../src/types.ts";
@@ -53,9 +54,9 @@ const flag = (name: string): boolean => process.argv.includes(`--${name}`);
 const fitPerConfig = flag("fit-per-config");
 
 const repeat = Number(arg("repeat", "2"));
-const paths = arg("paths", "corpus").split(",");
+const paths = arg("paths", "").split(",").filter(Boolean);
 const rulePaths = arg("rules", "rules").split(",");
-const labelPath = arg("labels", "corpus/labels.json");
+const labelPath = arg("labels", "");
 const outPath = arg("out", null);
 const concurrency = Number(arg("concurrency", "4"));
 
@@ -65,7 +66,10 @@ if (rules.length === 0) {
   process.stderr.write("no rules\n");
   process.exit(2);
 }
-const labels = JSON.parse(readFileSync(labelPath, "utf8")) as Labels;
+// With no --paths/--labels, every rule's evals/ suite is the corpus.
+const fromEvals = evalCorpus(rulePaths);
+if (paths.length === 0) paths.push(...fromEvals.paths);
+const labels = labelPath ? (JSON.parse(readFileSync(labelPath, "utf8")) as Labels) : fromEvals.labels;
 const cutoffs = new Map(rules.map((r) => [r.id, cutoffFor(r)]));
 
 /**

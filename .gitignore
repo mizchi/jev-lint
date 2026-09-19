@@ -8,3 +8,5 @@ node_modules/
 .jev-lint-self.json
 dist/
 *.tgz
+# The last eval run, accepted or not; the accepted one is baseline.json.
+rules/*/evals/last.json

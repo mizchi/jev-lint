@@ -1,0 +1,77 @@
+# 3b. Granted it is about the right thing -- does it actually establish it?
+- id: test-name-verifies-claim
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  # `bare` -- the cheapest arm, because this subject already contains both
+  # things being compared: the matcher captures the title and the body, so the
+  # file adds no evidence.
+  #
+  # INHERITED, not measured for this rule -- see the same note on
+  # `test-name-describes-code` above. docs/data/arms.json covers the pre-split
+  # `test-name-matches-body`, not this rule, and this is the rule holding most
+  # of the residue on real code, so the inheritance is worth closing.
+  #
+  # Staying on `bare` buys something the wider margin does not: a verdict that
+  # depends on nothing outside the test itself. Editing an unrelated test in the
+  # same file cannot change this one's answer, and cannot invalidate its cached
+  # verdict either.
+  state: bare
+  # The false branch names what a title does NOT claim, and it has to. On the
+  # original four defects this rule separated at 0.53; the tests pack's corpus
+  # added eleven defects and three hard cleans whose titles claim nothing
+  # ("matches the snapshot", "renders", "renders the receipt for a single-item
+  # order") over a snapshot assertion, and the rule read those at 0.69-0.77,
+  # inside its defect band -- precision 0.93 at any cutoff. Telling the
+  # criteria that a snapshot establishes a snapshot claim, and a call
+  # assertion an interaction claim, put the three at 0.4 and under and the
+  # fourteen defects at 0.53 and over: precision 1, recall 1, midpoint 0.51.
+  # 0.52 rather than the midpoint: the quietest defect ("hides the discount
+  # row when no discount applies", snapshot only) answers 0.53-0.56 across
+  # passes, and the cutoff has to sit under its band.
+  at: 0.52
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule:
+    any:
+      - pattern: it($TITLE, $BODY)
+      - pattern: test($TITLE, $BODY)
+      - pattern: it($TITLE, $BODY, $TIMEOUT)
+      - pattern: test($TITLE, $BODY, $TIMEOUT)
+      - pattern: it.each($CASES)($TITLE, $BODY)
+  ask: &verifies_ask >-
+    This test would still pass if the behaviour its name claims were broken.
+  criteria: &verifies_criteria
+    "true": >-
+      The body does not establish what the name claims: it asserts nothing at
+      all, it asserts something that would hold whether or not the named
+      behaviour worked, it checks an incidental property such as a length or a
+      type instead of the named behaviour itself, or it never sets up the case
+      the name is about so the assertion never exercises it.
+    "false": >-
+      The body contains at least one assertion that would fail if the named
+      behaviour were broken. Read the name for what it actually claims: a name
+      that claims only that something renders, or that the output matches a
+      snapshot, or that only labels the input the snapshot was taken of, is
+      established by the snapshot; a name that claims an interaction with a
+      collaborator -- that something was called, once, with these arguments --
+      is established by an assertion on that call.
+- id: test-name-verifies-claim-rust
+  language: Rust
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.53
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule:
+    all:
+      - kind: function_item
+      - has: { field: name, pattern: $NAME }
+      - follows:
+          kind: attribute_item
+          regex: "test"
+  ask: *verifies_ask
+  criteria: *verifies_criteria

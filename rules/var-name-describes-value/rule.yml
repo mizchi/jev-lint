@@ -1,0 +1,74 @@
+# --------------------------------------------------------------------------
+# 2. Does a variable's name describe the value bound to it?
+# --------------------------------------------------------------------------
+- id: var-name-describes-value
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  # `located`, not `bare`, and this one was MEASURED rather than chosen -- with
+  # a correction. On `bare` the rule was not separable (precision 0.75); with
+  # the file it was, and the story told was that `const timeoutSeconds = 5000`
+  # is only wrong where the binding is USED. The corpus then carried a
+  # `// DEFECT (...): named seconds, holds milliseconds` line above that
+  # declaration, and `located` carries the file, so what the model had been
+  # given was the label. With the markers gone from the corpus that case
+  # answers 0.22 whether or not the binding is passed to setTimeout -- that
+  # 5000 is milliseconds is API knowledge, which this model is measured to
+  # lack. The three defects that are visible in the code itself (a boolean
+  # name on a string, a plural on one item, a name on a spy) answer 0.84-0.97
+  # and the file still helps on those. The unit case stays in the corpus as
+  # a labelled defect this rule does not find, and the cutoff is a best
+  # trade-off rather than a midpoint.
+  #
+  # The general rule stands, sharpened: a question must be able to see its
+  # own answer, and the corpus must not hand it the answer either.
+  state: located
+  at: 0.6
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule:
+    all:
+      - kind: variable_declarator
+      - has: { field: name, pattern: $NAME }
+      - has: { field: value, pattern: $VALUE }
+      # Functions are judged by `fn-name-promises`; this rule is about values.
+      - not:
+          has:
+            any:
+              - kind: arrow_function
+              - kind: function_expression
+  ask: &var_ask >-
+    This binding's name misdescribes the value it is bound to.
+  criteria: &var_criteria
+    "true": >-
+      The name states a type, unit, shape, quantity or meaning that the
+      initializer does not produce: a plural name bound to a single item or a
+      singular name bound to a collection, a name that reads as a boolean bound
+      to something that is not one, a name naming one unit while the value is in
+      another, a name saying it holds a value while it holds a function or a
+      promise, or a name describing a different thing entirely from what the
+      initializer computes.
+    "false": >-
+      The name is an accurate description of what the initializer produces, even
+      if it is terse or a clearer name could be imagined. Being short or generic
+      is not a mismatch.
+- id: var-name-describes-value-rust
+  language: Rust
+  kind: noul
+  subject: node
+  # Same measurement as the TypeScript variant above: not separable on `bare`,
+  # separable on `located`, and on `bare` it was also the one rule whose
+  # decision FLIPPED between two runs of the same corpus.
+  state: located
+  at: 0.47
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule:
+    all:
+      - kind: let_declaration
+      - has: { field: pattern, pattern: $NAME }
+      - has: { field: value, pattern: $VALUE }
+  ask: *var_ask
+  criteria: *var_criteria

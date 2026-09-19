@@ -6,19 +6,49 @@ defects and its answers for clean code are separated by a gap, and the cutoff
 sits in that gap with headroom. This file is how to establish that, and what
 to do when it fails.
 
-## The three commands
+## Where the cases live
 
-```bash
-jev-lint gaps corpus                                          # does the rule separate at all?
-jev-lint calibrate corpus --labels labels.json --repeat 3 --record run.json
-jev-lint replay run.json --labels labels.json                 # re-score and re-fit, free, forever
+A rule is a directory, and its cases live beside it:
+
+```
+rules/<id>/
+  rule.yml                 the rule, every language variant
+  evals/
+    cases/                 fixture code that reads like real code -- no markers
+    labels.json            {"$default":"clean","cart.ts":[{"line":12,"label":"bad","rule":"<id>","window":0,"reason":"..."}]}
+    baseline.json          the accepted run: answers, cutoffs, the rule's draft hash
+    last.json              the last run, accepted or not
 ```
 
-`gaps` needs no labels and asks the first question. `calibrate` fits a cutoff
-per rule against labels and, with `--repeat`, reports which subjects changed
-*decision* between passes. `replay` re-derives everything from the record
-with no API key, so a cutoff stays a checkable claim rather than a number
-someone once saw.
+Paths in `labels.json` are relative to `cases/`. `window` says how loosely
+the line is matched; `0` for one-per-line subjects, larger for a
+`subject: enclosing` rule that reports at the top of the function.
+
+## The commands
+
+```bash
+jev-lint eval rules/<id> --repeat 3        # ask 3 times; score at the SHIPPED cutoff; compare with the baseline
+jev-lint eval rules/<id> --accept          # ...and make that run the baseline
+jev-lint eval --replay                     # every rule, no requests: re-score baselines at current cutoffs
+jev-lint gaps <dir>                        # a rule with no labels yet: does it separate at all?
+jev-lint calibrate <dir> --labels <json> --repeat 3 --record run.json   # a fit outside the evals layout
+jev-lint replay run.json --labels <json>   # re-score and re-fit a record, free
+```
+
+`eval` is the loop. It scores every case at the rule's shipped cutoff on the
+mean of the passes — the question is "does the rule as shipped still get its
+cases right", and a fitted cutoff would move the goalposts to wherever the
+answers landed — and prints the fitted cutoff beside it for you to consider.
+Against the baseline it names every case that was right and is now wrong.
+`--replay` is the free regression gate: it re-scores each baseline at the
+cutoffs as they are now and fails on a case that was right when the baseline
+was accepted, or on a rule whose sentence, criteria, note, matcher, subject
+or state changed since — those answers were to a different question. A
+changed question means: run, read, accept.
+
+`gaps` and `calibrate` are the same measurements over any directory and any
+labels file, for a rule that has no evals yet; `replay` re-derives a
+calibrate record with no key.
 
 ## Read the gap before you touch a threshold
 

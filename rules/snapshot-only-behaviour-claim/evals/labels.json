@@ -1,0 +1,75 @@
+{
+  "$default": "clean",
+  "order-summary.test.ts": [
+    {
+      "line": 18,
+      "label": "bad",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "title claims the error state is rendered on failure; the only assertion is a snapshot of the whole rendering, which would also pass with a recorded loading state",
+      "window": 0
+    },
+    {
+      "line": 23,
+      "label": "bad",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "title claims a price ordering; the only assertion is an inline snapshot of the whole section, in which the order is one detail among many and would be re-recorded if wrong",
+      "window": 0
+    },
+    {
+      "line": 43,
+      "label": "bad",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "title claims a row is hidden; the only assertion is a whole-output snapshot, which passes whether or not the discount row is there",
+      "window": 0
+    },
+    {
+      "line": 48,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: the title claims only that the output matches the snapshot",
+      "window": 0
+    },
+    {
+      "line": 53,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: 'renders' claims nothing specific",
+      "window": 0
+    },
+    {
+      "line": 57,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: a snapshot plus toContain of the error message, which targets the claim",
+      "window": 0
+    },
+    {
+      "line": 63,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: a snapshot plus an assertion on the sku order, which targets the claim",
+      "window": 0
+    },
+    {
+      "line": 70,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: the inline snapshot is a one-line literal that is itself the empty-cart message the title claims",
+      "window": 0
+    },
+    {
+      "line": 85,
+      "label": "bad",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "title claims currency formatting; the only assertion is a snapshot of the whole receipt, which passes with the amounts in EUR",
+      "window": 0
+    },
+    {
+      "line": 90,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: 'renders the receipt for a single-item order' names a scenario, not a behaviour the snapshot would have to isolate",
+      "window": 0
+    }
+  ]
+}

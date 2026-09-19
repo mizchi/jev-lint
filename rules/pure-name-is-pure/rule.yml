@@ -1,0 +1,74 @@
+# pure-name-is-pure: compute*/calculate*/derive*/format*/to*/parse* with a body
+# that reaches outside itself. Revision 2 of the family's rule: revision 1
+# counted a lazily loaded module as I/O and was wrong on all six of its
+# findings on an unseen repository. The criteria now separate acquiring a
+# dependency (a memoised loader, a require-once cache, a registry lookup:
+# not an effect) from caching this function's own result (an effect), and
+# say that one read on any path is enough -- a default taken from the clock,
+# the environment or a random source is the read. Precision 1, recall 1 on
+# 28 subjects (12 defective); on the unseen repository, six findings, all
+# real: parse* functions defaulting a field to new Date(), process.env or
+# randomUUID(). The cutoff is 0.55, above the 0.46 midpoint, because the
+# unseen clean band tops at 0.50 -- 0.05 of headroom, which is why this
+# ships at `severity: info`. Full account in
+# experiments/rule-candidates/b-guarantee-names/REPORT.md.
+- id: pure-name-is-pure
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: local
+  at: 0.55
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &a1
+              field: name
+              pattern: $NAME
+              regex: ^(compute|calculate|derive|format|to|parse)([A-Z0-9_]|$)
+      - all:
+          - kind: method_definition
+          - has: *a1
+      - all:
+          - kind: variable_declarator
+          - has: *a1
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: This function's name ($NAME) presents it as a computation of a result from its inputs, but its
+    body changes state outside itself or performs I/O.
+  criteria:
+    "true": "The body mutates an argument or something reachable through one, assigns to a module-level
+      binding, a field of `this` or an object it did not create, stores something it computed into a
+      cache, Map, Set or other store that outlives the call, logs, emits or increments a metric, or
+      reads or writes a file, network, database, environment, clock or random source -- directly, or
+      through a call whose name or arguments show it does so (fetch, a path, a URL, a query, send,
+      save). One such read or write on any path is enough: a default taken from the clock, the
+      environment or a random source when a field is missing, or an effect in a fallback branch,
+      makes the body impure even though its common path is not."
+    "false": The body derives its result from its parameters, from `this`, from module-level values it
+      only reads, and from dependencies it obtains -- a module, binding, table, formatter, parser or
+      backend handed back by a loader, resolver or registry lookup -- and returns it. A mutable
+      local accumulator, a copy of an argument that is then modified, and a local object built up
+      and returned are not effects outside the function.
+  note: "Obtaining a dependency is not an effect. Calling or awaiting a helper that hands back a
+    module, native binding, compiled table, backend or client (get*Module, load*, require, resolve*,
+    a dynamic import) acquires something the body needs; that the helper memoises what it loaded is
+    the helper's business, not this body's. What is judged is what the body then does with its
+    inputs: calling a pure function of an acquired module is a computation, using an acquired client
+    to fetch, read, write or send is I/O. The line is what gets written: a body that puts its own
+    result -- a value it computed, a key it generated, a formatter it built -- into a cache, Map or
+    Set that outlives the call changes what later calls observe and is an effect even when it is
+    only memoisation; a body that only takes a dependency out of such a store is not. A helper that
+    receives its input from a parameter (readEnvInt(raw.count, ...)) reads that argument, not the
+    environment, whatever its name says. Reading `this` in a toJSON, toString or similar method is
+    reading, not writing. Sorting or mutating a copy the body made itself is not mutating the
+    argument."
+  axis: file
+  severity: info

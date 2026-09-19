@@ -65,6 +65,7 @@ import {
 } from "../src/config.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules } from "../src/ignore.ts";
 import { mergePasses } from "../src/run.ts";
+import { discoverEvals, scoreEval, compareEvals, relocateLabels, runEval, readEvalRecord, draftsChanged, loadSuite, evalCorpus } from "../src/evals.ts";
 import type {
   Answer,
   AstGrepMatch,
@@ -1886,13 +1887,13 @@ await testAsync("run: an auth error stops the run instead of failing every batch
   };
   const result = await run({
     rules: [rule],
-    paths: ["corpus/ts"],
+    paths: ["rules/fn-name-promises/evals/cases"],
     cachePath: null,
     retry: 3,
     concurrency: 1,
     client,
   });
-  assert.ok(result.subjects.length > 3, "the corpus must produce several batches");
+  assert.ok(result.subjects.length > 3, "the cases must produce several batches");
   assert.equal(calls, 1, "one refusal is enough; nothing after it should be sent");
   assert.equal(result.errors?.length, 1, "and reported once, not once per batch");
   assert.match(result.errors![0]!.error, /402/);
@@ -1957,23 +1958,190 @@ await testAsync("jev: usage is priced at the published input rate", async () => 
   assert.ok(Math.abs(jev.usd - 0.042) < 1e-9);
 });
 
+// ------------------------------------------------------------------ evals
+
+test("evals: a rule directory with evals/labels.json is an eval suite, and its yml is not a rule", () => {
+  // The layout: rules/<rule>/rule.yml beside rules/<rule>/evals/{cases,
+  // labels.json, baseline.json}. The loader walks rules/ recursively, so
+  // anything under evals/ that ends in .yml would be read as a rule file and
+  // fail validation -- the loader has to skip evals/, and discovery has to
+  // find exactly the directories that carry labels.
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-evals-"));
+  try {
+    mkdirSync(join(dir, "a", "evals", "cases"), { recursive: true });
+    writeFileSync(join(dir, "a", "rule.yml"), "- id: a\n  language: TypeScript\n  rule: { kind: function_declaration }\n  ask: q\n");
+    writeFileSync(join(dir, "a", "evals", "labels.json"), JSON.stringify({ $default: "clean", "x.ts": [] }));
+    writeFileSync(join(dir, "a", "evals", "notes.yml"), "not: a rule\n");
+    mkdirSync(join(dir, "b"), { recursive: true });
+    writeFileSync(join(dir, "b", "rule.yml"), "- id: b\n  language: TypeScript\n  rule: { kind: function_declaration }\n  ask: q\n");
+    const { rules, errors } = loadRules([dir]);
+    assert.deepEqual(errors, [], "evals/ must be invisible to the rule loader");
+    assert.deepEqual(rules.map((r) => r.id), ["a", "b"]);
+    const suites = discoverEvals([dir]);
+    assert.equal(suites.length, 1, "only the directory with evals/labels.json is a suite");
+    assert.equal(suites[0]!.name, "a");
+    assert.equal(suites[0]!.ruleFile, join(dir, "a", "rule.yml"));
+    assert.equal(suites[0]!.cases, join(dir, "a", "evals", "cases"));
+    assert.equal(suites[0]!.baseline, join(dir, "a", "evals", "baseline.json"));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("evals: labels are written relative to cases/ and resolved to the paths a run reports", () => {
+  const labels = relocateLabels({ $default: "clean", "cart.ts": [{ line: 3, label: "bad", rule: "a" }] }, "rules/a/evals/cases");
+  assert.equal(labels.$default, "clean");
+  assert.deepEqual(labels["rules/a/evals/cases/cart.ts"], [{ line: 3, label: "bad", rule: "a" }]);
+  assert.equal(labels["cart.ts"], undefined);
+});
+
+const evalRule = (id: string, at: number) => noulRule({ id, at });
+const answer = (rule: string, line: number, value: number) => ({
+  rule, file: "rules/a/evals/cases/x.ts", line, endLine: line, kind: "noul" as const, value, confidence: null,
+});
+
+test("evals: a suite is scored at the SHIPPED cutoff on the mean of its passes, with flips named", () => {
+  // Not at a fitted cutoff: the question an eval answers is "does the rule as
+  // shipped still get its cases right", and a fit would move the goalposts
+  // to wherever the answers landed. The fit is reported beside it.
+  const rules = [evalRule("a", 0.5)];
+  const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "bad" as const, rule: "a", window: 0 },
+    { line: 2, label: "bad" as const, rule: "a", window: 0 },
+    { line: 3, label: "clean" as const, rule: "a", window: 0, reason: "hard clean" },
+  ] };
+  const passes = [
+    [answer("a", 1, 0.9), answer("a", 2, 0.45), answer("a", 3, 0.2), answer("a", 4, 0.1)],
+    [answer("a", 1, 0.9), answer("a", 2, 0.55), answer("a", 3, 0.2), answer("a", 4, 0.1)],
+    [answer("a", 1, 0.9), answer("a", 2, 0.56), answer("a", 3, 0.2), answer("a", 4, 0.1)],
+  ];
+  const score = scoreEval(passes, labels, rules);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.at, 0.5);
+  assert.equal(a.tp, 2, "the 0.45/0.55/0.56 defect has a mean of 0.52, over 0.5");
+  assert.equal(a.fp, 0);
+  assert.equal(a.fn, 0);
+  assert.equal(a.precision, 1);
+  assert.equal(a.recall, 1);
+  assert.equal(a.flips, 1, "and it is a flip: in on two passes, out on one");
+  assert.equal(a.subjects, 4, "unlabelled subjects count as clean, as in a corpus");
+  assert.ok(typeof a.fitted === "number", "the fit is reported beside the shipped cutoff");
+  const c = score.cases.find((c) => c.line === 2)!;
+  assert.equal(c.label, "bad");
+  assert.equal(c.decision, "flag");
+  assert.equal(c.right, true);
+  assert.ok(Math.abs(c.mean - 0.52) < 0.001);
+  assert.deepEqual(c.values, [0.45, 0.55, 0.56]);
+});
+
+test("evals: comparing with a baseline names the cases that got worse, and a changed question", () => {
+  const rules = [evalRule("a", 0.5)];
+  const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "bad" as const, rule: "a", window: 0 },
+    { line: 2, label: "bad" as const, rule: "a", window: 0 },
+    { line: 3, label: "clean" as const, rule: "a", window: 0 },
+  ] };
+  const before = scoreEval([[answer("a", 1, 0.9), answer("a", 2, 0.8), answer("a", 3, 0.2)]], labels, rules);
+  const after = scoreEval([[answer("a", 1, 0.9), answer("a", 2, 0.3), answer("a", 3, 0.7), answer("a", 5, 0.9)]], labels, rules);
+  const diff = compareEvals(before, after, { draftChanged: false });
+  assert.deepEqual(diff.regressions.map((c) => `${c.line}:${c.was}->${c.now}`).sort(), ["2:flag->pass", "3:pass->flag"]);
+  assert.deepEqual(diff.improvements, []);
+  assert.deepEqual(diff.added.map((c) => c.line), [5], "a new subject the baseline never saw is reported, not judged");
+  assert.equal(diff.ok, false);
+  const same = compareEvals(before, before, { draftChanged: false });
+  assert.equal(same.ok, true);
+  // A rule whose sentence, criteria or matcher changed since the baseline is
+  // a different question; its baseline answers cannot say anything about it.
+  const stale = compareEvals(before, before, { draftChanged: true });
+  assert.equal(stale.ok, false);
+  assert.match(stale.reasons.join(" "), /question/i);
+});
+
+await testAsync("evals: a suite runs its rule over its cases, records every pass, and knows when its question changed", async () => {
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-lint-evals-")));
+  const ruleDir = join(dir, "fn-name-promises");
+  try {
+    mkdirSync(join(ruleDir, "evals", "cases"), { recursive: true });
+    writeFileSync(
+      join(ruleDir, "rule.yml"),
+      ["- id: fn-name-promises", "  language: TypeScript", "  kind: noul", "  at: 0.5",
+       "  rule: { kind: function_declaration, has: { field: name, pattern: $NAME } }",
+       "  ask: The body of this function does something other than what its name promises.",
+       "  criteria: { 'true': it does, 'false': it does not }"].join("\n"),
+    );
+    writeFileSync(join(ruleDir, "evals", "cases", "a.ts"), "export function isValid(x: string): string { return x; }\nexport function count(xs: string[]): number { return xs.length; }\n");
+    writeFileSync(join(ruleDir, "evals", "labels.json"), JSON.stringify({
+      $default: "clean",
+      "a.ts": [{ line: 1, label: "bad", rule: "fn-name-promises", window: 0, reason: "reads as a predicate, returns a string" }],
+    }));
+    const [suite] = discoverEvals([dir]);
+    assert.ok(suite);
+    // A fake model: 0.9 for the first question, 0.1 for the second, on every pass.
+    let calls = 0;
+    const client = {
+      model: "fake", servedModel: "fake-1", spent: { calls: 0, inputTokens: 0, outputTokens: 0, usd: 0, ms: 0, retried: 0, splits: 0 },
+      askSplitting: async (_state: unknown, questions: Record<string, unknown>) => {
+        calls += 1;
+        const names = Object.keys(questions);
+        return { answers: Object.fromEntries(names.map((n, i) => [n, { type: "noul", noul: i === 0 ? 0.9 : 0.1 }])), usage: { input_tokens: 10 } };
+      },
+    };
+    const record = await runEval(suite!, { repeat: 2, client });
+    assert.equal(record.passes.length, 2);
+    assert.equal(calls, 2, "one request per pass for a one-file suite");
+    assert.equal(record.rules[0]!.draft.length, 12, "the record carries the rule's draft hash");
+    assert.ok(existsSync(suite!.last), "the run is written to evals/last.json");
+    const { rules, labels } = loadSuite(suite!);
+    const score = scoreEval(record.passes, labels, rules);
+    assert.equal(score.rules[0]!.tp, 1);
+    assert.equal(score.rules[0]!.fp, 0);
+    assert.equal(score.rules[0]!.fn, 0);
+    assert.deepEqual(draftsChanged(readEvalRecord(suite!.last)!, rules), [], "same question, same draft");
+    // Reword the rule: the record is now an answer to a different question.
+    writeFileSync(join(ruleDir, "rule.yml"), readFileSync(join(ruleDir, "rule.yml"), "utf8").replace("other than", "different from"));
+    assert.deepEqual(draftsChanged(readEvalRecord(suite!.last)!, loadSuite(suite!).rules), ["fn-name-promises"]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 // ----------------------------------------------------------------- wiring
 
-await testAsync("end to end: the shipped pack finds the corpus defects it is fitted to", async () => {
-  // The one test that touches ast-grep. It asserts the MATCHING and the
-  // plumbing, never a verdict: no request is made, so there is no answer to
-  // assert. That the rules separate their classes is measured by
-  // `jev-lint calibrate`, and recorded in docs/data/calibration.json.
+await testAsync("end to end: every shipped rule finds subjects in its own evals, and every labelled case is one", async () => {
+  // The one test that touches ast-grep over the shipped rules. It asserts
+  // the MATCHING and the plumbing, never a verdict: no request is made, so
+  // there is no answer to assert. That the rules separate their classes is
+  // what `jev-lint eval` measures, against each rule's evals/baseline.json.
   const { collectSubjects } = await import("../src/run.ts");
   const { rules } = loadRules(["rules"]);
-  const { subjects } = await collectSubjects({ rules, paths: ["corpus"] });
-  assert.ok(subjects.length > 50, `expected the corpus to produce subjects, got ${subjects.length}`);
+  const { paths, labels } = evalCorpus(["rules"]);
+  assert.ok(paths.length >= 15, `expected a cases directory per rule, got ${paths.length}`);
+  const { subjects } = await collectSubjects({ rules, paths });
+  assert.ok(subjects.length > 50, `expected the evals to produce subjects, got ${subjects.length}`);
 
   const byRule = new Map();
   for (const s of subjects) byRule.set(s.rule.id, (byRule.get(s.rule.id) ?? 0) + 1);
   for (const r of rules) {
-    assert.ok(byRule.get(r.id) > 0, `${r.id} matched nothing in the corpus`);
+    assert.ok(byRule.get(r.id) > 0, `${r.id} matched nothing in its evals`);
   }
+  // A label that no subject sits on is a label about nothing -- a line that
+  // moved, or a case the matcher does not reach -- and it would silently
+  // count as a miss or as nothing at all.
+  const at = new Set(subjects.map((s) => `${s.rule.id}\u0000${s.file}\u0000${s.line}`));
+  const orphans: string[] = [];
+  for (const [file, list] of Object.entries(labels)) {
+    if (file.startsWith("$") || !Array.isArray(list)) continue;
+    for (const l of list) {
+      if (!l.rule) continue;
+      const w = l.window ?? 3;
+      const hit = [...at].some((k) => {
+        const [rule, f, line] = k.split("\u0000");
+        return rule === l.rule && f === file && Math.abs(Number(line) - l.line) <= w;
+      });
+      if (!hit) orphans.push(`${file}:${l.line} ${l.rule}`);
+    }
+  }
+  assert.deepEqual(orphans, [], "every label must sit on a subject its rule produces");
 
   // The naming rules only work if the matcher hands over the captured name.
   const named = subjects.filter((s) => Object.keys(s.captured ?? {}).length > 0);
