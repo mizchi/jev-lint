@@ -262,7 +262,7 @@ export async function run({
 
   const keyed = subjects.map((s) => ({
     ...s,
-    key: verdictKey(s.rule, s.arm, s.text, effectiveAxis(s)),
+    key: verdictKey(s.rule, s.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null),
   }));
 
   // Identical subject text under the same rule draft is one question however
@@ -366,7 +366,9 @@ export async function run({
           // time the file was small enough not to degrade. A miss is the right
           // outcome there -- that question has never been asked.
           const storeKey =
-            batch.arm === s.arm ? s.key! : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s));
+            batch.arm === s.arm
+              ? s.key!
+              : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null);
           cache.set(storeKey, answer, {
             rule: s.rule.id,
             draft: ruleTextHash(s.rule),

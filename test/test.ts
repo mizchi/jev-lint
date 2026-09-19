@@ -1258,6 +1258,21 @@ test("cache: a key covers the draft, the arm and the axis, but not the threshold
   // `located` key served it, later, as the answer to a question nobody asked.
   // Distinct keys are what make that a miss instead.
   assert.notEqual(verdictKey(r, "located", "TEXT"), verdictKey(r, "local", "TEXT"));
+
+  // A promoted subject (`subject: enclosing`) has the enclosing function as
+  // its text and the match as `matchText`, and the question carries BOTH. Two
+  // `catch` clauses in one function are two questions; keyed on the text
+  // alone they were one, and the second was never asked -- it was handed the
+  // first one's verdict as a twin. Found by the family-C candidate rules:
+  // every same-function pair had byte-identical scores over three passes,
+  // one of them a labelled defect nobody had been asked about.
+  assert.notEqual(
+    verdictKey(r, "located", "function f() { … }", "file", "catch (a) { return null }"),
+    verdictKey(r, "located", "function f() { … }", "file", "catch (b) { throw b }"),
+  );
+  // And an unpromoted subject, with no match of its own, keys as before, so
+  // duplicated code across files still costs one question.
+  assert.equal(verdictKey(r, "located", "TEXT", "file", null), verdictKey(r, "located", "TEXT"));
 });
 
 test("cache: a missing, unreadable, malformed or stale file means no verdict, never a throw", () => {

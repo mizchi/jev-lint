@@ -47,13 +47,21 @@ export function verdictKey(
   arm: StateArm,
   subjectText: string,
   group: Grouping = "file",
+  matchText: string | null = null,
 ): string {
   // `group` is in the key because it changes what the model saw. The same
   // subject at the same arm sits next to its own file's other matches under
   // file grouping and next to unrelated matches from other files under rule
   // grouping, and those are not the same question.
+  //
+  // `matchText` is in it for a promoted subject (`subject: enclosing`), whose
+  // text is the enclosing function and whose question also names the match
+  // inside it. Two matches in one function share the text and are two
+  // questions; keyed on the text alone, the second was never asked and took
+  // the first one's verdict as a twin. Null for an unpromoted subject, so
+  // duplicated code across files still costs one question.
   return createHash("sha256")
-    .update([SCHEMA, rule.id, ruleTextHash(rule), arm, group, subjectText].join("\n"))
+    .update([SCHEMA, rule.id, ruleTextHash(rule), arm, group, subjectText, matchText ?? ""].join("\n"))
     .digest("hex")
     .slice(0, 24);
 }
