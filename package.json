@@ -60,6 +60,7 @@
   "files": [
     "dist",
     "rules",
+    "!rules/**/evals/last.json",
     "README.md",
     "LICENSE"
   ],
