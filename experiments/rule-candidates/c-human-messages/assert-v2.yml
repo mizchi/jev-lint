@@ -1,0 +1,100 @@
+# The single-rule copy of assertion-message-matches used for the unseen run
+# (records/assert-v2-unseen.json); byte-identical to the rule in rules.yml.
+# --------------------------------------------------------------------------
+# 3. Does an assertion's message describe the condition it checks?
+# --------------------------------------------------------------------------
+- id: assertion-message-matches
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  # `node`: the check and its message are both in the match; `local` adds the
+  # function for the copied-message case. Measured: node lowered every clean
+  # answer (max 0.29 vs 0.44) with the bad band unchanged.
+  #
+  # Revision 2 (REPORT.md, "assertion-message-matches, revision 2"): on an
+  # unseen repository the rule flagged three test doubles throwing a simulated
+  # failure on a call counter or a route. The matcher now drops a bare counter
+  # compared to a positive integer and any throw inside a mock factory's
+  # callback; the criteria say a throw in a test double describes the
+  # scenario, not the condition. `at` stays 0.65: fitted trade-off 0.56, and
+  # the stub band tops out at 0.55.
+  subject: node
+  state: local
+  at: 0.65
+  rule:
+    all:
+      - any:
+          - pattern: assert($COND, $MSG)
+          - pattern: assert($COND, $MSG, $$$REST)
+          - pattern: invariant($COND, $MSG)
+          - pattern: console.assert($COND, $MSG)
+          - pattern: console.assert($COND, $MSG, $$$REST)
+          - pattern: if ($COND) throw new $TYPE($MSG)
+          - pattern: if ($COND) throw new $TYPE($MSG, $$$REST)
+          - pattern: if ($COND) { throw new $TYPE($MSG) }
+          - pattern: if ($COND) { throw new $TYPE($MSG, $$$REST) }
+      # A throw inside a mock factory's callback is a scripted failure, never
+      # a check on the program's state. Excluded by structure, not by asking.
+      - not:
+          inside:
+            stopBy: end
+            any:
+              - pattern: vi.fn($$$)
+              - pattern: jest.fn($$$)
+              - pattern: mock.fn($$$)
+              - pattern: mock.method($$$)
+              - pattern: sinon.stub($$$)
+              - pattern: $X.mockImplementation($$$)
+              - pattern: $X.mockImplementationOnce($$$)
+  constraints:
+    # `if (calls === 2) throw` -- a bare counter compared to a positive
+    # integer literal is a sequence position, the shape of a stub that fails
+    # on the n-th call, not a precondition. `=== 0` is kept: it is the real
+    # divide-by-zero and empty-input guard.
+    COND:
+      not:
+        regex: "^[A-Za-z_$][\\w$]*\\s*===?\\s*[1-9]\\d*$"
+  ask: >-
+    When this check fails, its message ($MSG) tells the reader something
+    untrue about what was wrong, judged against the condition ($COND) that
+    was actually tested.
+  criteria:
+    "true": >-
+      The message and the condition disagree about what is being required:
+      the message names a different thing than the one the condition
+      examines, such as an order when the condition tests a user; it states a
+      different bound, direction or sign than the condition, such as
+      non-negative for a check that rejects zero, too many for a check that
+      fires on none, or a term for one direction of overrun when the
+      condition detects the other; it names a different failure than the one
+      the condition detects, such as expired for a check that fires on
+      absence; it is about a different quantity than the one compared, such
+      as a size being positive when the condition compares a position to a
+      length; or it is a copy of another check's message in the same
+      function and describes that check's condition rather than this one.
+    "false": >-
+      The message is about the condition being checked, whether it states the
+      requirement, its negation, the consequence of failing it, or the cause
+      the condition implies: "duplicate ids" for a set that is smaller than
+      the list it was built from is a match, as is "forbidden" for a role
+      check. A message that is terse or generic, that says the same thing
+      from the other side, or that names what cannot proceed rather than the
+      value that failed, is not a mismatch. A throw that is part of a test
+      double is not a mismatch: a fake, stub, mock, replaced global or
+      scripted dependency in a test throws to simulate a failure, its
+      condition only picks when the simulated failure happens, such as a call
+      counter, a request route or an input id, and its message names the
+      failure being injected, so the message describes the scenario the test
+      sets up, not the condition. A message whose wording is chosen by an
+      inner guard inside an outer one is judged against both conditions
+      together, and is a match when it describes the outer failure.
+  note: >-
+    The check fires when the guard is true for if-throw shapes and when the
+    condition is false for assert and invariant shapes; judge the message
+    against the case in which it is shown. Only the condition and the message
+    are compared; whether the check itself is correct is not the question.
+    A throw inside a test double is not a check on the program's state and is
+    out of scope, whether or not the double has a name; in a test file, a
+    throw whose condition is a call count, a route or an input value and
+    whose message is a failure being simulated is one. A nested guard is
+    judged as one check whose condition is the outer and inner conditions
+    combined.

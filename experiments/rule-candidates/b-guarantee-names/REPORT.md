@@ -608,3 +608,297 @@ records carry the last pass's `spent`):
 Output tokens were ~1,100-1,200 per calibrate pass and 6,816 for the
 comparison run. Well under the $0.50 budget; the largest single run was
 $0.0075.
+
+---
+
+## pure-name-is-pure, revision 2
+
+Revision 1 (above) was run over an unseen repository, mizchi/agent-cluster
+(`../unseen/agent-cluster.json`, 182 subjects for this rule), and produced 6
+findings. All 6 were one pattern at one or two removes: a `parse*`/`compute*`
+whose body begins `const mod = await getXModule()` -- a lazily loaded,
+memoised wasm module -- and then calls a pure function on `mod`. The rule
+counted the load as I/O (0.56-0.72). This revision draws the line the
+revision-1 note left undrawn: *caching this function's own result* is an
+effect; *obtaining a dependency the function needs* is not. It then hit a
+second hole the corpus did not contain and the unseen code did, and fixed
+that too. Three attempts, every number from `records/pure-v2*.json`.
+
+The six revision-1 findings, judged (all under
+`/Users/mz/ghq/github.com/mizchi/agent-cluster/`):
+
+| finding | rev 1 | what the body does | real impurity? |
+| --- | --- | --- | --- |
+| `apps/agent-worker/loop-contract.ts:116 parseLoopBootstrapRequest` | 0.71 | awaits `getLoopContractModule()`, calls `mod.loop_parse_bootstrap_request` | **no** -- the loader memoises an `import()`; the body converts its arguments |
+| `apps/agent-worker/loop-contract.ts:129 parseLoopIterateRequest` | 0.72 | same loader, `mod.loop_parse_iterate_request` | **no** |
+| `packages/agent-cluster/hub-pr-review.ts:214 parseHubPrReviewItem` | 0.70 | awaits `getHubPrReviewModule()`, calls `mod.hub_pr_parse_review_item` | **no** |
+| `apps/agent-worker/worker.ts:3463 parseTodoSeedTaskDraft` | 0.58 | awaits `sanitizeLoopObjectivePrefix()` (itself the same loader pattern, in `loop-domain.ts:115`) and calls `readEnvString(raw.x)`/`readEnvInt(raw.y, ...)` -- helpers that receive the value as an argument | **no** -- the `Env` in the helper names is misleading, nothing reads the environment |
+| `apps/agent-worker/worker.ts:13138 computeOrchestratorReactionStep` | 0.56 | awaits `getOrchestratorCoreModule()`, calls `mod.orchestrator_reaction_step`, falls back to a pure TS implementation | **no** |
+| `packages/agent-cluster/run-collector.ts:224 parseCycleEventsBody` | 0.57 | awaits `getRunCollectorModule()`, calls `mod.run_collector_parse_cycle_events` | **no** |
+
+Six findings, zero real. Revision 1's precision on unseen code was 0.
+
+### Rule
+
+```yaml
+- id: pure-name-is-pure
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: local
+  at: 0.55
+  # Fitted on records/pure-v2.json: clean tops at 0.31 (parseWorkerLimits), defects
+  # start at 0.60 (parseCliOptions); midpoint 0.46. Set at 0.55 for the unseen
+  # band (records/pure-v2-unseen.json): its top clean is 0.50, its lowest real
+  # finding 0.68, so 0.55 leaves 0.05 under the corpus defects and 0.05 over
+  # the unseen cleans. Thin on both sides; see REPORT.md.
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &pure_name
+              field: name
+              pattern: $NAME
+              regex: "^(compute|calculate|derive|format|to|parse)([A-Z0-9_]|$)"
+      - all:
+          - kind: method_definition
+          - has: *pure_name
+      - all:
+          - kind: variable_declarator
+          - has: *pure_name
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: >-
+    This function's name ($NAME) presents it as a computation of a result
+    from its inputs, but its body changes state outside itself or performs
+    I/O.
+  criteria:
+    "true": >-
+      The body mutates an argument or something reachable through one,
+      assigns to a module-level binding, a field of `this` or an object it did
+      not create, stores something it computed into a cache, Map, Set or
+      other store that outlives the call, logs, emits or increments a metric,
+      or reads or writes a file, network, database, environment, clock or
+      random source -- directly, or through a call whose name or arguments
+      show it does so (fetch, a path, a URL, a query, send, save). One such
+      read or write on any path is enough: a default taken from the clock,
+      the environment or a random source when a field is missing, or an
+      effect in a fallback branch, makes the body impure even though its
+      common path is not.
+    "false": >-
+      The body derives its result from its parameters, from `this`, from
+      module-level values it only reads, and from dependencies it obtains --
+      a module, binding, table, formatter, parser or backend handed back by a
+      loader, resolver or registry lookup -- and returns it. A mutable local
+      accumulator, a copy of an argument that is then modified, and a local
+      object built up and returned are not effects outside the function.
+  note: >-
+    Obtaining a dependency is not an effect. Calling or awaiting a helper
+    that hands back a module, native binding, compiled table, backend or
+    client (get*Module, load*, require, resolve*, a dynamic import) acquires
+    something the body needs; that the helper memoises what it loaded is the
+    helper's business, not this body's. What is judged is what the body then
+    does with its inputs: calling a pure function of an acquired module is a
+    computation, using an acquired client to fetch, read, write or send is
+    I/O. The line is what gets written: a body that puts its own result -- a
+    value it computed, a key it generated, a formatter it built -- into a
+    cache, Map or Set that outlives the call changes what later calls observe
+    and is an effect even when it is only memoisation; a body that only takes
+    a dependency out of such a store is not. A helper that receives its input
+    from a parameter (readEnvInt(raw.count, ...)) reads that argument, not
+    the environment, whatever its name says. Reading `this` in a toJSON,
+    toString or similar method is reading, not writing. Sorting or mutating a
+    copy the body made itself is not mutating the argument.
+```
+
+### Corpus
+
+`corpus/pure.ts` grew from 16 to 28 subjects for this rule (with
+`parsePortOrDefault` in `safe.ts`): 12 bad, 16 clean (13 hard). Existing
+cases and labels untouched; everything new is appended.
+
+Attempt 1 added the lazy-dependency shapes, six hard cleans and two bads
+that hold the boundary from the other side:
+
+- `pure.ts:185 parseIcuMessage` -- clean: awaits a memoised module loader
+  (`getIcuCoreModule`, the agent-cluster shape) and calls a pure parse on it.
+- `pure.ts:195 formatPluralLabel` -- clean: same loader after an early return.
+- `pure.ts:215 computeContentHash` -- clean: a synchronous `require`-once
+  cache (`loadNativeHasher`) for a native binding, then a hash of the bytes.
+- `pure.ts:235 toCountryName` -- clean: reads a constant table a helper builds
+  lazily on first use.
+- `pure.ts:251 derivePublicKey` -- clean: resolves a backend from a
+  module-level registry, derives from the seed; the registry is only read.
+- `pure.ts:273 parseWorkerLimits` -- clean: calls `readEnvInt`/`readEnvString`
+  on fields of its argument (the `worker.ts:3463` shape).
+- `pure.ts:300 parseRemoteManifest` -- **bad**: acquires a lazily initialised
+  client (fine) and then uses it to GET a URL. The I/O is the fetch, not the
+  acquisition.
+- `pure.ts:323 computeRoute` -- **bad**: acquires the router module (fine),
+  then writes the route it computed into a module-level `routeCache`. Caching
+  its own result is the effect the note still counts -- the same decision as
+  `formatMoney` and `toSlug`.
+
+Attempt 2 added the class the unseen run exposed (see Attempts), three bads
+and one hard clean:
+
+- `pure.ts:346 parseCheckpoint` -- **bad**: `new Date().toISOString()` as the
+  default for a missing `started_at`/`updated_at`; the common path is pure,
+  the fallback path reads the clock (the `worker.ts:7586/16594/5308` shape).
+- `pure.ts:360 toCheckpoint` -- clean: the same function with the timestamp
+  injected as a `now` parameter; the fix shape.
+- `pure.ts:379 parseCliOptions` -- **bad**: reads `process.env.CLUSTER_API_TOKEN`
+  as the default token in an argv parser (the `self-improve-loop.ts:1875`
+  shape).
+- `pure.ts:400 toReviewRecord` -- **bad**: mints `rev_${crypto.randomUUID()}`
+  when there is no current record; a random source on the fallback path (the
+  `worker.ts:5133` shape).
+
+### Attempts
+
+1. Criteria `"false"` adds "and from dependencies it obtains -- a module,
+   binding, table, formatter, parser or backend handed back by a loader,
+   resolver or registry lookup"; `"true"` says "stores something it computed
+   into a cache" instead of "records into a store"; `note:` rewritten to say
+   obtaining a dependency is not an effect, the memoising loader is the
+   helper's business, and "the line is what gets written: a body that puts its
+   own result into a cache ... is an effect even when it is only memoisation;
+   a body that only takes a dependency out of such a store is not". Corpus 24
+   subjects. `gaps`: **works**, gap 0.76, head +0.32, top<at 0.16, suggest
+   0.54. Calibrate (`records/pure-v2-attempt1.json`): clean tops at 0.20
+   (`parseWorkerLimits` 0.17-0.20), the six new hard cleans at 0.06-0.14,
+   defects start at 0.90 (`parseRemoteManifest`); `formatMoney` 0.93-0.94,
+   `toSlug` 0.96, `computeRoute` 0.96 -- the memoisation decision held. Fit
+   0.55, precision 1, recall 1 (tp 9), 0 flips, max spread 0.03. On unseen
+   (`records/pure-v2-attempt1-unseen.json`, at 0.55): the three lazy-module
+   findings fell to 0.14-0.25, `worker.ts:3463` to 0.35, `:13138` to 0.27.
+   Two findings: `worker.ts:7586` 0.56 and `:5133` 0.55 -- both **real**
+   (a clock read and a `randomUUID()`, each on a fallback path), and both
+   0.01 above the cutoff, with four more of the same kind at 0.43-0.47 under
+   it. The corpus had no "impure only on the fallback path" case, so its
+   0.70 gap was measuring a class the unseen code does not have.
+2. Criteria `"true"` adds "One such read or write on any path is enough: a
+   default taken from the clock, the environment or a random source when a
+   field is missing, or an effect in a fallback branch, makes the body impure
+   even though its common path is not." Corpus +4 (above), 28 subjects.
+   `gaps`: **works**, gap 0.33, head +0.30, top<at 0.25. Calibrate
+   (`records/pure-v2.json`): the three fallback defects 0.84-0.85
+   (`parseCheckpoint`), 0.80-0.83 (`toReviewRecord`), 0.60-0.66
+   (`parseCliOptions` -- the model half-accepts `process.env` in an argv
+   parser as convention); clean tops at 0.31 (`parseWorkerLimits`, up from
+   0.20: the word "environment" in the clause pulled the `readEnv*`-named
+   helper up). Fit 0.46, precision 1, recall 1 (tp 12), 0 flips, max spread
+   0.06. On unseen (`records/pure-v2-unseen.json`): the six fallback-path
+   impurities at 0.68-0.83; top clean 0.50 (`worker.ts:3463`); gap 0.18.
+3. `note:` makes the environment concrete ("process.env, Deno.env,
+   import.meta.env, or a settings object read from module scope"), restates
+   that a value arriving through a parameter is an input whatever the helper
+   is called, and adds "an argv parser that also reads process.env is reading
+   the environment, however conventional that is for a CLI"
+   (`pure-v2-attempt3.yml`). `gaps`: **works**, gap 0.35, head +0.09, top<at
+   0.46. Calibrate (`records/pure-v2-attempt3.json`): `parseCliOptions` rose
+   to 0.78-0.82 as intended, but `parseWorkerLimits` rose to 0.43-0.52 (max
+   spread 0.09, the wobbliest subject): naming the environment made the model
+   warier of the `readEnv` name, the explicit example notwithstanding. Fit
+   0.63, tp 12, 0 flips. On unseen (`records/pure-v2-attempt3-unseen.json`):
+   the six real findings 0.72-0.87, but the whole `readEnvString`-using clean
+   band lifted from 0.10-0.20 to 0.40-0.48 and `worker.ts:8025
+   toBillingUserSummary` -- a pure field mapping whose only suspicious token
+   is `readEnvString(ledger.events[0]?.at)` -- reached 0.65: one false
+   positive, and a gap of 0.07 between the top clean and the lowest real
+   finding, against attempt 2's 0.18. **Attempt 2 is the final.**
+
+### Fit
+
+`records/pure-v2.json` (attempt 2), 3 passes, `state: local`. Corpus:
+clean tops at 0.31 (`parseWorkerLimits`), defects start at 0.60
+(`parseCliOptions`); fitted midpoint **0.46**, precision 1, recall 1 (tp 12,
+fp 0, fn 0), decision flips 0, max spread 0.06. Unseen
+(`records/pure-v2-unseen.json`, 182 subjects): top clean 0.50, lowest real
+finding 0.68.
+
+Cutoff written as **0.55**, not the midpoint, for the unseen band
+(calibration.md step 6): `replay` at 0.55 gives 12/12 on the corpus with no
+flip (`parseCliOptions` 0.60/0.60/0.66) and 6 findings on unseen, all real.
+Headroom: 0.24 above the corpus cleans, 0.05 below the corpus defects, 0.05
+above the unseen cleans, 0.13 below the unseen findings. The two 0.05s are
+the honest number.
+
+### Unseen findings, revision 2 (attempt 2 at 0.55)
+
+Values are rev 1 / attempt 1 / attempt 2 / attempt 3.
+
+| subject | values | judgement |
+| --- | --- | --- |
+| `apps/agent-worker/worker.ts:16594 parseOrchestratorDialogueSession` | 0.23 / 0.47 / **0.83** / 0.85 | **real**: `new Date().toISOString()` as the default for `at`, `created_at`, `updated_at`; the same input parses differently at a different time |
+| `apps/agent-worker/worker.ts:5308 parseVirtualFsPrCheckpoint` | 0.26 / 0.46 / **0.83** / 0.82 | **real**: `new Date().toISOString()` as the default `started_at`/`updated_at` |
+| `apps/agent-worker/worker.ts:7586 parseAuthD1PrincipalRecord` | 0.29 / 0.56 / **0.82** / 0.87 | **real**: `const nowIso = new Date().toISOString()` used as the default for both timestamps |
+| `apps/agent-worker/worker.ts:5133 toHubPrRecordFromGitPrContract` | 0.45 / 0.55 / **0.73** / 0.78 | **real**: `pr_id: current?.pr_id ?? \`hpr_${crypto.randomUUID()}\`` -- a random source when there is no current record |
+| `packages/agent-cluster/self-improve-loop.ts:1875 parseSelfImproveArgs` | 0.41 / 0.47 / **0.73** / 0.77 | **real**: reads `process.env.CLUSTER_API_TOKEN`, `AGENT_CLUSTER_TOKEN`, `BILLING_USER_ID` as defaults in an argv parser |
+| `packages/agent-cluster/autonomous-self-improve.ts:1675 parseAutonomousSelfImproveArgs` | 0.38 / 0.43 / **0.68** / 0.72 | **real**: same, `process.env` at lines 1678 and 1708 |
+
+Six findings, six real, all of one kind: a `parse*`/`to*` that is pure on
+its main path and consults the clock, the environment or a random source
+when a field is missing. Revision 1 scored all six 0.23-0.45 and flagged
+none of them. Whether a team wants them flagged is a decision -- the fix is
+`toCheckpoint`'s shape, inject `now` -- but each is exactly what the sentence
+asks, and a `parse*` whose output depends on the wall clock is a real
+testing hazard.
+
+Under the cutoff, worth naming:
+
+| subject | values | judgement |
+| --- | --- | --- |
+| `apps/agent-worker/worker.ts:3463 parseTodoSeedTaskDraft` | 0.58 / 0.35 / 0.50 / 0.48 | **clean** (rev-1 finding); 0.05 under. The `await sanitizeLoopObjectivePrefix()` is an async helper the body cannot see into, and the `readEnv*` names. The next false positive lives here. |
+| `apps/cloudflare-debug/worker.ts:32 parseJsonBody` | 0.32 / 0.42 / 0.47 / 0.40 | **arguable**: `await request.text()` consumes the request's body stream. The `Request` is the input; reading it is reading the input, but it is also the network. The model's 0.47 is a fair answer. |
+| `apps/agent-worker/worker.ts:7937 parseBillingLedger` | 0.16 / 0.19 / 0.37 / 0.52 | **real but invisible on `local`**: `defaultBillingLedger()` reads the clock (`worker.ts:7932`), and neither its name nor the body shows it. A `located` arm would see it; not measured. |
+| `apps/agent-worker/worker.ts:8025 toBillingUserSummary` | 0.28 / 0.25 / 0.25 / 0.65 | **clean**; attempt 3's false positive, 0.25 under attempt 2. |
+| lazy-module rev-1 findings (`loop-contract.ts:116/:129`, `hub-pr-review.ts:214`, `run-collector.ts:224`, `worker.ts:13138`) | 0.56-0.72 / 0.14-0.27 / 0.15-0.37 / 0.15-0.36 | **clean**; the pattern this revision was for, now 0.18+ under the cutoff on every attempt. |
+
+### Verdict
+
+**COOKBOOK.** The dependency distinction works (the pattern that was 100%
+of revision 1's unseen findings is now 0.15-0.37, and the memoisation
+decision survived it untouched), and the revision found a second class the
+corpus lacked and now catches it on unseen code with precision 6/6 -- but
+the cutoff that does both has 0.05 of headroom on each side, under the
+brief's 0.10 for SHIP, and the class that sits at 0.50 (`readEnv*`-named
+helpers plus an opaque `await`) is common in real code. Ship the criteria
+and note as the recipe; a cutoff needs a corpus with a dozen
+`readEnv`-shaped cleans before anyone trusts 0.55.
+
+### What I would change
+
+Corpus: the `readEnvString(raw.x)` shape is the whole remaining risk and it
+has one case; it needs five or six, including one that also awaits an
+opaque helper, so the clean top on the corpus matches the clean top on real
+code (0.31 vs 0.50 now). State: `parseBillingLedger` says the clock read one
+helper down is invisible on `local`; a `located` run would say whether the
+file buys it without lifting the `readEnv` cleans further, and was not
+measured. Note: attempt 3 showed that any sentence mentioning the
+environment by name raises the `readEnv`-named cleans by 0.2; the wording
+that separates is the one that does not name it.
+
+### Cost, revision 2
+
+From the records' `spent` (per pass for calibrates; `gaps` priced from its
+own summary line):
+
+| run | requests | input tokens | USD |
+| --- | --- | --- | --- |
+| attempt 1 `gaps` | 2 | ~19,600 | 0.00082 |
+| attempt 1 `calibrate --repeat 3` | 6 | 58,764 | 0.00247 |
+| attempt 1 unseen `check` | 26 | 177,490 | 0.00745 |
+| attempt 2 `gaps` | 2 | ~24,400 | 0.00103 |
+| attempt 2 `calibrate --repeat 3` (final) | 6 | 73,332 | 0.00308 |
+| attempt 3 `gaps` | 2 | ~25,900 | 0.00109 |
+| attempt 3 `calibrate --repeat 3` | 6 | 77,784 | 0.00327 |
+| attempt 3 unseen `check` | 26 | 195,482 | 0.00821 |
+| attempt 2 unseen `check` (final) | 26 | 186,313 | 0.00783 |
+| **total** | **102** | **~839,000** | **~$0.035** |
+
+Output tokens: ~490-570 per calibrate pass, 3,564 per unseen run. Largest
+single run $0.0082. Family total with revision 1: ~$0.065 of the $0.50.

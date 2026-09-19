@@ -228,7 +228,7 @@ docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules
 
-Six packs ship in `rules/`, 22 rules, used when the project has no `rules/`
+Six packs ship in `rules/`, 23 rules, used when the project has no `rules/`
 directory of its own. The naming and comment rules exist in an ECMAScript
 and a Rust variant sharing one sentence; the rest are ECMAScript or JSON.
 
@@ -249,6 +249,7 @@ and a Rust variant sharing one sentence; the rest are ECMAScript or JSON.
 | --- | --- |
 | `safe-name-is-safe` | `safe*` / `try*` / `*OrNull`: does a failure still escape as a throw? |
 | `idempotent-name` | `ensure*` / `upsert*` / `register*`: does a second call do something different from the first? |
+| `pure-name-is-pure` | `compute*` / `format*` / `parse*` / `to*`: does the body reach outside itself — mutate an argument, write a cache, read the clock or the environment? |
 
 On the corpus behind this pack, `fn-name-promises` flags none of the 22
 labelled defects at its cutoff — the narrower promise separates where the
@@ -283,12 +284,12 @@ general question does not.
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On the corpus the cutoffs were fitted to, 21 of the 22 rules reach precision
+On the corpus the cutoffs were fitted to, 22 of the 23 rules reach precision
 and recall 1.00; the one that does not ships with a note in the pack saying
 what it misses. The counts behind those numbers are small — under ten
 labelled defects per rule — and the full table, with what the packs found on
 this repository's own code and on an unseen one, is in
-[docs/reference.md](docs/reference.md#the-shipped-packs). Eight more rules
+[docs/reference.md](docs/reference.md#the-shipped-packs). Seven more rules
 were built and measured the same way and not shipped; their reports are in
 `experiments/rule-candidates/`.
 

@@ -27,7 +27,7 @@ export function getCart(id: string): boolean {
   return cache.delete(id);
 }
 
-// DEFECT (fn-name-promises): `calculate` promises a pure computation; this
+// DEFECT (fn-name-promises, pure-name-is-pure): `calculate` promises a pure computation; this
 // writes to module state as a side effect.
 export function calculateSubtotal(cart: Cart): number {
   let sum = 0;

@@ -383,3 +383,242 @@ From the tool's own per-pass summaries (4 requests per pass; each record's
 
 Every run was priced with `--dry-run` first; the largest single run was
 $0.0068. Output tokens were ~1,400 per pass.
+
+---
+
+## assertion-message-matches, revision 2
+
+Why: on the unseen repository mizchi/agent-cluster (`../unseen/agent-cluster.json`,
+75 subjects) the rule as shipped above produced four findings, all wrong. Three
+were test doubles throwing a simulated failure -- `if (agentCalls === 2) { throw
+new Error('temporary upstream failure') }` at `apps/agent-worker/worker.test.ts:10203`
+(0.85), `if (fetchAttempts === 1) { throw new Error('temporary network failure') }`
+at `packages/agent-cluster/bit-fetch-collector.test.ts:335` (0.72), and a
+route-keyed one, `if (url.includes('/prs?') && ...) { throw new Error('This
+operation was aborted') }` inside a `fetchImpl:` callback at
+`packages/agent-cluster/hub-pr-review.test.ts:345` (0.70). The fourth,
+`apps/agent-worker/moonbit.ts:487` (0.66 against 0.65), is the inner guard of a
+nested check: `if (baseRaw.length === 0) { if (adapter === 'base_url') throw new
+Error('missing env: ...BASE_URL (adapter=base_url)') ... }` -- the matched
+condition only chooses the wording, the outer one is what failed, and the
+message is right. Two mechanisms were on the table: (a) the matcher, since a
+counter compared to a sequence number or a throw inside a mock factory's
+callback is never a check on the program's state; (b) the criteria, since a
+message that names an injected failure inside a test double describes the
+scenario, not the condition. Both were measured; the rule now carries both.
+Since the previous report the promoted-subject key was fixed, so `enclosing`
+was available; it was not needed here, and under `local` the stubs have no
+named container anyway (an arrow assigned to `globalThis.fetch` or sitting in
+an object literal is not a symbol), so the model sees only the if-throw and the
+file name for exactly the cases that failed.
+
+**Rule** (final, as in `rules.yml`; `assert-v2.yml` is the byte-identical
+single-rule copy the unseen run used)
+
+```yaml
+- id: assertion-message-matches
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  # `node`: the check and its message are both in the match; `local` adds the
+  # function for the copied-message case. Measured: node lowered every clean
+  # answer (max 0.29 vs 0.44) with the bad band unchanged.
+  #
+  # Revision 2 (REPORT.md, "assertion-message-matches, revision 2"): on an
+  # unseen repository the rule flagged three test doubles throwing a simulated
+  # failure on a call counter or a route. The matcher now drops a bare counter
+  # compared to a positive integer and any throw inside a mock factory's
+  # callback; the criteria say a throw in a test double describes the
+  # scenario, not the condition. `at` stays 0.65: fitted trade-off 0.56, and
+  # the stub band tops out at 0.55.
+  subject: node
+  state: local
+  at: 0.65
+  rule:
+    all:
+      - any:
+          - pattern: assert($COND, $MSG)
+          - pattern: assert($COND, $MSG, $$$REST)
+          - pattern: invariant($COND, $MSG)
+          - pattern: console.assert($COND, $MSG)
+          - pattern: console.assert($COND, $MSG, $$$REST)
+          - pattern: if ($COND) throw new $TYPE($MSG)
+          - pattern: if ($COND) throw new $TYPE($MSG, $$$REST)
+          - pattern: if ($COND) { throw new $TYPE($MSG) }
+          - pattern: if ($COND) { throw new $TYPE($MSG, $$$REST) }
+      # A throw inside a mock factory's callback is a scripted failure, never
+      # a check on the program's state. Excluded by structure, not by asking.
+      - not:
+          inside:
+            stopBy: end
+            any:
+              - pattern: vi.fn($$$)
+              - pattern: jest.fn($$$)
+              - pattern: mock.fn($$$)
+              - pattern: mock.method($$$)
+              - pattern: sinon.stub($$$)
+              - pattern: $X.mockImplementation($$$)
+              - pattern: $X.mockImplementationOnce($$$)
+  constraints:
+    # `if (calls === 2) throw` -- a bare counter compared to a positive
+    # integer literal is a sequence position, the shape of a stub that fails
+    # on the n-th call, not a precondition. `=== 0` is kept: it is the real
+    # divide-by-zero and empty-input guard.
+    COND:
+      not:
+        regex: "^[A-Za-z_$][\\w$]*\\s*===?\\s*[1-9]\\d*$"
+  ask: >-
+    When this check fails, its message ($MSG) tells the reader something
+    untrue about what was wrong, judged against the condition ($COND) that
+    was actually tested.
+  criteria:
+    "true": >-
+      The message and the condition disagree about what is being required:
+      the message names a different thing than the one the condition
+      examines, such as an order when the condition tests a user; it states a
+      different bound, direction or sign than the condition, such as
+      non-negative for a check that rejects zero, too many for a check that
+      fires on none, or a term for one direction of overrun when the
+      condition detects the other; it names a different failure than the one
+      the condition detects, such as expired for a check that fires on
+      absence; it is about a different quantity than the one compared, such
+      as a size being positive when the condition compares a position to a
+      length; or it is a copy of another check's message in the same
+      function and describes that check's condition rather than this one.
+    "false": >-
+      The message is about the condition being checked, whether it states the
+      requirement, its negation, the consequence of failing it, or the cause
+      the condition implies: "duplicate ids" for a set that is smaller than
+      the list it was built from is a match, as is "forbidden" for a role
+      check. A message that is terse or generic, that says the same thing
+      from the other side, or that names what cannot proceed rather than the
+      value that failed, is not a mismatch. A throw that is part of a test
+      double is not a mismatch: a fake, stub, mock, replaced global or
+      scripted dependency in a test throws to simulate a failure, its
+      condition only picks when the simulated failure happens, such as a call
+      counter, a request route or an input id, and its message names the
+      failure being injected, so the message describes the scenario the test
+      sets up, not the condition. A message whose wording is chosen by an
+      inner guard inside an outer one is judged against both conditions
+      together, and is a match when it describes the outer failure.
+  note: >-
+    The check fires when the guard is true for if-throw shapes and when the
+    condition is false for assert and invariant shapes; judge the message
+    against the case in which it is shown. Only the condition and the message
+    are compared; whether the check itself is correct is not the question.
+    A throw inside a test double is not a check on the program's state and is
+    out of scope, whether or not the double has a name; in a test file, a
+    throw whose condition is a call count, a route or an input value and
+    whose message is a failure being simulated is one. A nested guard is
+    judged as one check whose condition is the outer and inner conditions
+    combined.
+```
+
+**Corpus additions** (labels appended to `labels.json`; the 21 existing
+`assertions.ts` labels are untouched)
+
+`corpus/fakes.test.ts`, 8 subjects under the original matcher, 4 under the
+final one:
+
+- `:25` hard clean -- fake `globalThis.fetch` throwing "temporary upstream failure" on `agentCalls === 2`. Dropped by the counter constraint.
+- `:50` hard clean -- `fetchImpl` stub throwing "temporary network failure" on `fetchAttempts === 1`. Dropped by the counter constraint.
+- `:69` hard clean -- `fetchImpl` stub throwing "This operation was aborted" for one route (the hub-pr-review shape, no counter). Still a subject.
+- `:91` hard clean -- `vi.fn().mockImplementation` throwing ECONNRESET on `writes === 1`. Dropped by both exclusions.
+- `:104` hard clean -- `jest.fn` throwing EACCES for `jobId === "job-locked"`. Dropped by the mock-factory exclusion.
+- `:117` hard clean -- a hand-written `class FakeQueue` whose `send` throws "payload too large" for a body containing "poison". Still a subject; under `local` the context is the method body alone, so the class name is not visible.
+- `:136` hard clean -- a scripted `readFileText` in a plain `runtime` object throwing EBUSY for `path.endsWith(".lock")`. Still a subject.
+- `:37` bad -- `assert(retried.length > 0, "message must be retried at most once")`: at-least-one checked, at-most-one claimed. A real assertion in the test file, so the file name alone cannot be the tell.
+
+`corpus/runner-config.ts`, 5 subjects:
+
+- `:20` hard clean -- the moonbit nested guard, verbatim shape: inner `adapter === "base_url"` selects the wording, outer `baseRaw.length === 0` is the failure.
+- `:49` hard clean -- `normalized === null` with "invalid materialized path": the cause `normalizeAbsPath` returning null implies (the `apps/sandbox/worker.ts:370` shape, 0.63 on the unseen run).
+- `:32` bad -- `if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) throw new Error("missing env: MOONBIT_RUNNER_TIMEOUT_MS")`: a value check that says absence, with a default of 30000 so the variable cannot even be absent.
+- `:11`, `:59` clean -- `!env.MOONBIT_RUNNER_SERVICE` / "missing env", `content === null` / "invalid utf-8 content".
+
+Final corpus for this rule: 31 subjects found, 9 bad, 22 clean (12 hard, of
+which 3 are test doubles the matcher still sees).
+
+**Attempts** (one pass each unless noted; `records/assert-v2-attempt*.json`)
+
+0. Rule as shipped, on the extended corpus (`assert-v2-attempt0.json`): `rewrite`, gap 0.21, head +0.02, 14 reported. The corpus reproduces the failure and harder than the repository did: all six stubs at 0.71-0.93 (vi.fn 0.93, FakeQueue 0.91, jest.fn 0.85, route 0.81, counters 0.73/0.71), nested guard 0.61, the two new defects 0.85/0.72, underflow 0.63.
+1. Mechanism (b) in `note:` only -- "a throw inside a test double ... is not a check on the program's state and is out of scope: its condition picks when the scripted failure happens ... its message names the failure the test is simulating"; nested guards judged against the outer condition (`assert-v2-attempt1.json`): `rewrite`, gap 0.21, head +0.09, 8 reported. Stubs fell to 0.24-0.51 (route 0.51, vi.fn 0.40, counters 0.33/0.24, jest.fn 0.32, FakeQueue 0.30), nested guard 0.51, underflow 0.56. A second pass of the same wording (`assert-v2-attempt1-pass2.json`, run by mistake, kept as evidence): nested guard 0.72, underflow 0.65, route 0.53, "duplicate ids" 0.44 -- the note alone leaves the nested guard inside the wobble.
+2. Mechanism (b) moved into `criteria."false"` ("A throw that is part of a test double is not a mismatch: ... its message names the failure being injected, so the message describes the scenario the test sets up, not the condition"), nested guard stated as one check over both conditions, note shortened to the scoping sentence (`assert-v2-attempt2.json`): `rewrite`, gap 0.20, head +0.08, 8 reported. Route 0.32, FakeQueue 0.48, nested guard 0.48, vi.fn 0.38, underflow 0.57. Clean max 0.48.
+3. Mechanism (a) added to the matcher, wording unchanged, plus the `:136` stub (`assert-v2-attempt3.json`): 31 subjects, `rewrite`, gap 0.21, head +0.11, 8 reported. FakeQueue 0.54, nested guard 0.49, route 0.34, EBUSY 0.25, underflow 0.46. The `gaps` verdict stays `rewrite` on every attempt because the largest step is always between the 0.73-0.76 defect and the 0.46-0.57 underflow miss, which is the known miss from revision 1, not the class this revision is about.
+
+What (a) bought, measured: the counter constraint and the mock-factory
+exclusion remove four of seven corpus stubs and two of three repository stubs
+without asking, at the price of `if (n === 1) throw` shapes (a bare
+identifier against a positive integer; `=== 0` is kept). What (b) bought: the
+three stubs (a) cannot see -- route-keyed, input-keyed and a fake class --
+moved from 0.81-0.93 to 0.25-0.54, and the repository's route stub from 0.70
+to 0.49. Neither alone is enough: (a) misses the route shape by construction,
+and (b) alone left the nested guard flipping across 0.65 (attempt 1, two
+passes: 0.51 and 0.72).
+
+**Fit** (`records/assert-v2.json`, 3 passes, at 0.65)
+
+Fitted trade-off 0.56, precision 0.89, recall 0.89 (tp 8, fp 1, fn 1) on pass
+means -- the fp is the nested guard (mean 0.58), the fn is underflow (0.56).
+At `at: 0.65`, on means: precision 1, recall 0.89 (tp 8, fp 0, fn 1). Bad
+band 0.73-0.98 with underflow at 0.56; clean band 0.03-0.58. 2 decision flips
+across the 3 passes, both at the cutoff's edge: the nested guard ran 0.49,
+0.55, 0.70 and the underflow miss 0.49, 0.55, 0.65. Max spread 0.21, mean
+0.05. The stub band across all passes: FakeQueue 0.46-0.55, route 0.30-0.38,
+EBUSY 0.20-0.25 -- headroom 0.10 from the highest stub pass to the cutoff. The
+next hard clean, "duplicate ids", 0.12-0.30. No cutoff removes both flips:
+0.72 clears the nested guard's worst pass but sits on the "missing env for a
+value check" defect at 0.71-0.76.
+
+**Unseen findings** (`records/assert-v2-unseen.json`: 73 subjects, 21
+requests, $0.00335; the two counter stubs are no longer subjects)
+
+0 findings at 0.65. Every answer, judged, from the top:
+
+- 0.59 `apps/agent-worker/moonbit.ts:487` -- the nested guard; correct message. Was 0.66. Clean, and the closest thing to the next false positive: 0.06 of headroom.
+- 0.51 x7 `normalizeBaseUrl` copied into `autonomous-self-improve.ts:432`, `hub-pr-review.ts:136`, `hub-pr-watch.ts:117`, `orchestrator-participant.ts:99`, `run-collector.ts:130`, `self-improve-collector.ts:95`, `self-improve-loop.ts:750` -- `if (trimmed.length === 0) throw new Error('missing required option: --base-url')`: an empty-after-trim string called "missing". Clean by convention; the function cannot show that the value came from an option. Was 0.40: the new wording raised this class by 0.11.
+- 0.49 `apps/sandbox/worker.ts:370` -- `normalized === null` / "invalid materialized path". Clean, inferred cause. Was 0.63.
+- 0.49 `packages/agent-cluster/hub-pr-review.test.ts:345` -- the route-keyed stub. Clean. Was 0.70.
+- 0.44 `packages/agent-cluster/cli.ts:317` -- `typeof text !== 'string' || text.trim().length === 0` / "missing required option". Clean. Was 0.55.
+- 0.41 `apps/agent-worker/worker.ts:14195` -- `status !== 'complete' && output.trim().length === 0` / "workflow did not produce complete output: ${status}". Clean; the message covers both conjuncts.
+- 0.41 `packages/agent-cluster/bit-fetch-collector.ts:113` -- another `normalizeBaseUrl`. Clean.
+- 0.40 `apps/bit-relay/worker.test.ts:944` -- `typeof input === 'string'` / "invalid rate limit options": a real check in a test helper, message names the consequence. Clean.
+- 0.36 and below: 63 subjects. The nine I read are clean: `cli.ts:289` `readRequiredOption` (0.36), `hub-pr-review.ts:753` "invalid value for --adopt-mode" for a normalisation mismatch (0.34), `bit-fetch-collector.test.ts:424` the "simulated timeout for large batch" stub keyed on `batchRefs.length > 2` (0.34, unchanged), `cli.ts:306` "use one of" for `inline && filePath` (0.27), `cli.ts:455` "missing token" for an empty trimmed token (0.23), `worker.ts:18498` "fanout launch failed: no worker job enqueued" for `launched_count === 0` (0.22), `worker.test.ts:13757` the `alwaysFail` / "queue unavailable" stub flag (0.24 under revision 1), `hub-pr-watch.test.ts:227` "unexpected extra page request" for `calls > 1` inside a stub -- a real guard in a test double, and the message matches (0.12), and the `sandbox/worker.ts:360` sibling of `:370` (0.13). None was a defect under revision 1 either; the remaining 54 sit at 0.32 and below and were not read.
+
+No true positive exists in this repository under either revision, so the run
+measures precision only; the recall evidence is the corpus.
+
+**Cost** (this revision only; the tool's own summaries)
+
+| run | passes | requests | input tokens | USD |
+| --- | --- | --- | --- | --- |
+| gaps, attempt 0 (no record; `gaps` does not write one) | 1 | 4 | ~26,700 | 0.00112 |
+| calibrate x1, attempt 0 | 1 | 4 | 26,671 | 0.00112 |
+| calibrate x1, attempt 1 | 1 | 4 | 31,125 | 0.00131 |
+| calibrate x1, attempt 1 second pass | 1 | 4 | 31,125 | 0.00131 |
+| calibrate x1, attempt 2 | 1 | 4 | 33,267 | 0.00140 |
+| calibrate x1, attempt 3 | 1 | 4 | 30,689 | 0.00129 |
+| calibrate x3, final | 3 | 12 | 92,067 | 0.00387 |
+| check, unseen repository | 1 | 21 | 79,851 | 0.00335 |
+| **total** | 10 | **57** | **~351,500** | **~$0.0148** |
+
+Family total including revision 1: ~$0.061.
+
+**Verdict**: COOKBOOK -- the class this revision was for is out (seven corpus
+stubs and three repository stubs all under 0.55, four of them by the matcher
+and so not subject to the model at all, and zero findings on 73 unseen
+subjects), but the cutoff has 0.06 of headroom over the nested-guard clean
+that flips once in three passes, the underflow defect is still a miss, and the
+new wording raised the ordinary "missing" -for-empty clean band from 0.40 to
+0.51, so on the next repository the false positive will be a nested guard or
+a value-vs-absence message, not a test double.
+
+**What I would change**: the nested guard should be handled in the matcher,
+not the sentence -- either exclude an if-throw whose parent block belongs to
+another `if` (losing the inner check, which the rule cannot judge alone
+anyway), or capture the outer condition through `inside: { pattern: "if
+($OUTER) $BODY" }` so the ask can name both; the model half-applies the
+"both conditions together" clause and that is the whole wobble. Add two more
+value-vs-absence defects to learn whether the "missing" convention band at
+0.51 is stable or drifting toward the cutoff. Keep `FakeQueue` in the corpus:
+a fake class whose method looks like production code is the residual stub
+class, and 0.46-0.55 is where it honestly belongs given what `local` shows.

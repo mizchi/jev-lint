@@ -1,3 +1,4 @@
+// jev-lint-ignore-file module-name-describes-contents -- a fixture named for the rule it exercises, not for its exports
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 

@@ -1,0 +1,763 @@
+{
+  "schema": "jev-lint-run-1",
+  "recorded": "2026-09-19T15:22:55.078Z",
+  "model": "jev-1.13.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 21,
+    "inputTokens": 79851,
+    "outputTokens": 1224,
+    "ms": 7681,
+    "retried": 0,
+    "splits": 0,
+    "usd": 0.0033537420000000003
+  },
+  "rules": [
+    {
+      "id": "assertion-message-matches",
+      "kind": "noul",
+      "ask": "When this check fails, its message ($MSG) tells the reader something untrue about what was wrong, judged against the condition ($COND) that was actually tested.",
+      "note": "The check fires when the guard is true for if-throw shapes and when the condition is false for assert and invariant shapes; judge the message against the case in which it is shown. Only the condition and the message are compared; whether the check itself is correct is not the question. A throw inside a test double is not a check on the program's state and is out of scope, whether or not the double has a name; in a test file, a throw whose condition is a call count, a route or an input value and whose message is a failure being simulated is one. A nested guard is judged as one check whose condition is the outer and inner conditions combined.",
+      "draft": "ecb7577f9575",
+      "at": 0.65,
+      "state": "local",
+      "subject": "node",
+      "severity": "warning",
+      "language": "TypeScript"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 13757,
+      "endLine": 13757,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/bit-relay/worker.test.ts",
+      "line": 327,
+      "endLine": 329,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/bit-relay/worker.test.ts",
+      "line": 944,
+      "endLine": 946,
+      "kind": "noul",
+      "value": 0.4,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/moonbit.ts",
+      "line": 475,
+      "endLine": 477,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/moonbit.ts",
+      "line": 487,
+      "endLine": 489,
+      "kind": "noul",
+      "value": 0.59,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/acceptance.ts",
+      "line": 70,
+      "endLine": 70,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/acceptance.ts",
+      "line": 85,
+      "endLine": 87,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2436,
+      "endLine": 2438,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 6246,
+      "endLine": 6248,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7260,
+      "endLine": 7262,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7264,
+      "endLine": 7273,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7651,
+      "endLine": 7653,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7668,
+      "endLine": 7670,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 9237,
+      "endLine": 9239,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 13968,
+      "endLine": 13970,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14177,
+      "endLine": 14179,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14195,
+      "endLine": 14197,
+      "kind": "noul",
+      "value": 0.41,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14206,
+      "endLine": 14208,
+      "kind": "noul",
+      "value": 0.32,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 15485,
+      "endLine": 15487,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 18498,
+      "endLine": 18500,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/sandbox/worker.ts",
+      "line": 360,
+      "endLine": 362,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/sandbox/worker.ts",
+      "line": 370,
+      "endLine": 372,
+      "kind": "noul",
+      "value": 0.49,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/sandbox/worker.ts",
+      "line": 480,
+      "endLine": 482,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/bit-relay/worker.ts",
+      "line": 420,
+      "endLine": 422,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/autonomous-self-improve.ts",
+      "line": 432,
+      "endLine": 434,
+      "kind": "noul",
+      "value": 0.51,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.ts",
+      "line": 136,
+      "endLine": 138,
+      "kind": "noul",
+      "value": 0.51,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-watch.ts",
+      "line": 117,
+      "endLine": 119,
+      "kind": "noul",
+      "value": 0.51,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/orchestrator-participant.ts",
+      "line": 99,
+      "endLine": 101,
+      "kind": "noul",
+      "value": 0.51,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/run-collector.ts",
+      "line": 130,
+      "endLine": 132,
+      "kind": "noul",
+      "value": 0.51,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-collector.ts",
+      "line": 95,
+      "endLine": 97,
+      "kind": "noul",
+      "value": 0.51,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-loop.ts",
+      "line": 750,
+      "endLine": 752,
+      "kind": "noul",
+      "value": 0.51,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/autonomous-self-improve.ts",
+      "line": 1979,
+      "endLine": 1981,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 439,
+      "endLine": 441,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.ts",
+      "line": 785,
+      "endLine": 787,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-watch.ts",
+      "line": 507,
+      "endLine": 509,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/orchestrator-participant.ts",
+      "line": 286,
+      "endLine": 288,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/run-collector.ts",
+      "line": 535,
+      "endLine": 537,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-collector.ts",
+      "line": 445,
+      "endLine": 447,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-loop.ts",
+      "line": 2126,
+      "endLine": 2128,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 113,
+      "endLine": 115,
+      "kind": "noul",
+      "value": 0.41,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 380,
+      "endLine": 382,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.ts",
+      "line": 698,
+      "endLine": 700,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/run-collector.ts",
+      "line": 499,
+      "endLine": 501,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-collector.ts",
+      "line": 409,
+      "endLine": 411,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 389,
+      "endLine": 391,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 398,
+      "endLine": 400,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 448,
+      "endLine": 450,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.test.ts",
+      "line": 424,
+      "endLine": 426,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/cli.ts",
+      "line": 203,
+      "endLine": 205,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/cli.ts",
+      "line": 289,
+      "endLine": 291,
+      "kind": "noul",
+      "value": 0.36,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/cli.ts",
+      "line": 306,
+      "endLine": 308,
+      "kind": "noul",
+      "value": 0.27,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/cli.ts",
+      "line": 317,
+      "endLine": 319,
+      "kind": "noul",
+      "value": 0.44,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/cli.ts",
+      "line": 418,
+      "endLine": 420,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/cli.ts",
+      "line": 455,
+      "endLine": 457,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.ts",
+      "line": 727,
+      "endLine": 729,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.ts",
+      "line": 753,
+      "endLine": 755,
+      "kind": "noul",
+      "value": 0.34,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.ts",
+      "line": 794,
+      "endLine": 796,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.test.ts",
+      "line": 345,
+      "endLine": 347,
+      "kind": "noul",
+      "value": 0.49,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/client.ts",
+      "line": 137,
+      "endLine": 139,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/client.ts",
+      "line": 284,
+      "endLine": 291,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/client.ts",
+      "line": 391,
+      "endLine": 393,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/client.ts",
+      "line": 434,
+      "endLine": 436,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/client.ts",
+      "line": 437,
+      "endLine": 439,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/client.ts",
+      "line": 472,
+      "endLine": 474,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-watch.test.ts",
+      "line": 227,
+      "endLine": 229,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-watch.ts",
+      "line": 422,
+      "endLine": 422,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/queue-bench.ts",
+      "line": 224,
+      "endLine": 240,
+      "kind": "noul",
+      "value": 0.28,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/queue-bench.ts",
+      "line": 522,
+      "endLine": 524,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/queue-bench.ts",
+      "line": 526,
+      "endLine": 528,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/loop-iterate-bench.ts",
+      "line": 253,
+      "endLine": 268,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-collector.ts",
+      "line": 451,
+      "endLine": 453,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/run-collector.ts",
+      "line": 541,
+      "endLine": 543,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "assertion-message-matches",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-loop.ts",
+      "line": 2076,
+      "endLine": 2078,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    }
+  ]
+}

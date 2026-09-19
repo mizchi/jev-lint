@@ -1,0 +1,1853 @@
+{
+  "schema": "jev-lint-run-1",
+  "recorded": "2026-09-19T15:22:31.883Z",
+  "model": "jev-1.13.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 26,
+    "inputTokens": 186313,
+    "outputTokens": 3564,
+    "ms": 9754,
+    "retried": 0,
+    "splits": 0,
+    "usd": 0.007825146000000002
+  },
+  "rules": [
+    {
+      "id": "pure-name-is-pure",
+      "kind": "noul",
+      "ask": "This function's name ($NAME) presents it as a computation of a result from its inputs, but its body changes state outside itself or performs I/O.",
+      "note": "Obtaining a dependency is not an effect. Calling or awaiting a helper that hands back a module, native binding, compiled table, backend or client (get*Module, load*, require, resolve*, a dynamic import) acquires something the body needs; that the helper memoises what it loaded is the helper's business, not this body's. What is judged is what the body then does with its inputs: calling a pure function of an acquired module is a computation, using an acquired client to fetch, read, write or send is I/O. The line is what gets written: a body that puts its own result -- a value it computed, a key it generated, a formatter it built -- into a cache, Map or Set that outlives the call changes what later calls observe and is an effect even when it is only memoisation; a body that only takes a dependency out of such a store is not. A helper that receives its input from a parameter (readEnvInt(raw.count, ...)) reads that argument, not the environment, whatever its name says. Reading `this` in a toJSON, toString or similar method is reading, not writing. Sorting or mutating a copy the body made itself is not mutating the argument.",
+      "draft": "d3ff4a1754fc",
+      "at": 0.46,
+      "state": "local",
+      "subject": "node",
+      "severity": "warning",
+      "language": "TypeScript"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/loop-domain.ts",
+      "line": 33,
+      "endLine": 68,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/loop-domain.ts",
+      "line": 70,
+      "endLine": 79,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/loop-domain.ts",
+      "line": 81,
+      "endLine": 101,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/loop-service.ts",
+      "line": 907,
+      "endLine": 928,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/control-plane-room.ts",
+      "line": 59,
+      "endLine": 67,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/control-plane-room.ts",
+      "line": 182,
+      "endLine": 200,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/loop-contract.ts",
+      "line": 78,
+      "endLine": 114,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/loop-contract.ts",
+      "line": 116,
+      "endLine": 127,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/loop-contract.ts",
+      "line": 129,
+      "endLine": 139,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.test.ts",
+      "line": 404,
+      "endLine": 406,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/moonbit.ts",
+      "line": 92,
+      "endLine": 96,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/moonbit.ts",
+      "line": 98,
+      "endLine": 118,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/moonbit.ts",
+      "line": 360,
+      "endLine": 392,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/moonbit.ts",
+      "line": 416,
+      "endLine": 428,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/bit-relay/worker.ts",
+      "line": 119,
+      "endLine": 122,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/bit-relay/worker.ts",
+      "line": 124,
+      "endLine": 130,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/bit-relay/worker.ts",
+      "line": 315,
+      "endLine": 332,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/bit-relay/worker.ts",
+      "line": 341,
+      "endLine": 344,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 12292,
+      "endLine": 12305,
+      "kind": "noul",
+      "value": 0.36,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 13138,
+      "endLine": 13152,
+      "kind": "noul",
+      "value": 0.37,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 13154,
+      "endLine": 13204,
+      "kind": "noul",
+      "value": 0.35,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14004,
+      "endLine": 14012,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14014,
+      "endLine": 14022,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14024,
+      "endLine": 14032,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14477,
+      "endLine": 14501,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14634,
+      "endLine": 14636,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14638,
+      "endLine": 14649,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 14651,
+      "endLine": 14684,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 15566,
+      "endLine": 15579,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 16507,
+      "endLine": 16542,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 16564,
+      "endLine": 16588,
+      "kind": "noul",
+      "value": 0.4,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 16594,
+      "endLine": 16636,
+      "kind": "noul",
+      "value": 0.83,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 16765,
+      "endLine": 16804,
+      "kind": "noul",
+      "value": 0.35,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 18728,
+      "endLine": 18732,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4867,
+      "endLine": 4876,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4915,
+      "endLine": 4924,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4987,
+      "endLine": 4998,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5000,
+      "endLine": 5010,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5012,
+      "endLine": 5121,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5133,
+      "endLine": 5263,
+      "kind": "noul",
+      "value": 0.73,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5280,
+      "endLine": 5306,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5308,
+      "endLine": 5344,
+      "kind": "noul",
+      "value": 0.83,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5743,
+      "endLine": 5804,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5817,
+      "endLine": 5835,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5837,
+      "endLine": 5846,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5848,
+      "endLine": 5869,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 5979,
+      "endLine": 6024,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 6026,
+      "endLine": 6036,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 6126,
+      "endLine": 6140,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 6302,
+      "endLine": 6321,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 6323,
+      "endLine": 6332,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 6977,
+      "endLine": 6989,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7054,
+      "endLine": 7066,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7106,
+      "endLine": 7120,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7410,
+      "endLine": 7418,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7586,
+      "endLine": 7606,
+      "kind": "noul",
+      "value": 0.82,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7608,
+      "endLine": 7614,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7838,
+      "endLine": 7843,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7937,
+      "endLine": 7980,
+      "kind": "noul",
+      "value": 0.37,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 7982,
+      "endLine": 7999,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 8025,
+      "endLine": 8037,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 8039,
+      "endLine": 8052,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 8232,
+      "endLine": 8308,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 8405,
+      "endLine": 8415,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 8586,
+      "endLine": 8604,
+      "kind": "noul",
+      "value": 0.27,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 8844,
+      "endLine": 8848,
+      "kind": "noul",
+      "value": 0.02,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 8862,
+      "endLine": 8886,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 8911,
+      "endLine": 8917,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10169,
+      "endLine": 10191,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10193,
+      "endLine": 10214,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10216,
+      "endLine": 10241,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10253,
+      "endLine": 10255,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10257,
+      "endLine": 10259,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10261,
+      "endLine": 10263,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10265,
+      "endLine": 10286,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10536,
+      "endLine": 10596,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10598,
+      "endLine": 10610,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 10721,
+      "endLine": 10777,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 11094,
+      "endLine": 11116,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 11118,
+      "endLine": 11123,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 11526,
+      "endLine": 11538,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 11958,
+      "endLine": 11978,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/sandbox/worker.ts",
+      "line": 188,
+      "endLine": 190,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/sandbox/worker.ts",
+      "line": 301,
+      "endLine": 329,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/sandbox/worker.ts",
+      "line": 402,
+      "endLine": 443,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1601,
+      "endLine": 1615,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1641,
+      "endLine": 1649,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1651,
+      "endLine": 1695,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1697,
+      "endLine": 1707,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1709,
+      "endLine": 1719,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1721,
+      "endLine": 1731,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1733,
+      "endLine": 1743,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1745,
+      "endLine": 1755,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1757,
+      "endLine": 1767,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1769,
+      "endLine": 1779,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1781,
+      "endLine": 1791,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1793,
+      "endLine": 1803,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1805,
+      "endLine": 1815,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1817,
+      "endLine": 1827,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1829,
+      "endLine": 1839,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1841,
+      "endLine": 1851,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1853,
+      "endLine": 1863,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1865,
+      "endLine": 1894,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1896,
+      "endLine": 1906,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1908,
+      "endLine": 1918,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1920,
+      "endLine": 1936,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1938,
+      "endLine": 1948,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1950,
+      "endLine": 1960,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 1962,
+      "endLine": 1972,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2510,
+      "endLine": 2519,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2641,
+      "endLine": 2662,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2674,
+      "endLine": 2694,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2696,
+      "endLine": 2716,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2820,
+      "endLine": 2840,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2944,
+      "endLine": 2964,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2972,
+      "endLine": 2979,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 2983,
+      "endLine": 2993,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3101,
+      "endLine": 3124,
+      "kind": "noul",
+      "value": 0.29,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3126,
+      "endLine": 3152,
+      "kind": "noul",
+      "value": 0.38,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3154,
+      "endLine": 3170,
+      "kind": "noul",
+      "value": 0.39,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3260,
+      "endLine": 3323,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3396,
+      "endLine": 3401,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3422,
+      "endLine": 3434,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3463,
+      "endLine": 3505,
+      "kind": "noul",
+      "value": 0.5,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3507,
+      "endLine": 3517,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3649,
+      "endLine": 3696,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 3951,
+      "endLine": 3961,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4027,
+      "endLine": 4059,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4417,
+      "endLine": 4458,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4559,
+      "endLine": 4603,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4664,
+      "endLine": 4687,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4689,
+      "endLine": 4698,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4718,
+      "endLine": 4744,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4746,
+      "endLine": 4755,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4844,
+      "endLine": 4846,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/agent-worker/worker.ts",
+      "line": 4848,
+      "endLine": 4865,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/cloudflare-debug/worker.ts",
+      "line": 32,
+      "endLine": 43,
+      "kind": "noul",
+      "value": 0.47,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/shared/json-utils.ts",
+      "line": 34,
+      "endLine": 37,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/shared/observability.ts",
+      "line": 43,
+      "endLine": 50,
+      "kind": "noul",
+      "value": 0.02,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/apps/shared/observability.ts",
+      "line": 114,
+      "endLine": 118,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 104,
+      "endLine": 109,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/orchestrator-participant.ts",
+      "line": 90,
+      "endLine": 95,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 194,
+      "endLine": 211,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 213,
+      "endLine": 234,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 348,
+      "endLine": 466,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/autonomous-self-improve.ts",
+      "line": 278,
+      "endLine": 284,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/autonomous-self-improve.ts",
+      "line": 286,
+      "endLine": 291,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/bit-fetch-collector.ts",
+      "line": 97,
+      "endLine": 102,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.ts",
+      "line": 114,
+      "endLine": 119,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-watch.ts",
+      "line": 108,
+      "endLine": 113,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/orchestrator-participant.ts",
+      "line": 83,
+      "endLine": 88,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/run-collector.ts",
+      "line": 121,
+      "endLine": 126,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-collector.ts",
+      "line": 86,
+      "endLine": 91,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-loop.ts",
+      "line": 757,
+      "endLine": 762,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/autonomous-self-improve.ts",
+      "line": 293,
+      "endLine": 299,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/autonomous-self-improve.ts",
+      "line": 333,
+      "endLine": 350,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/autonomous-self-improve.ts",
+      "line": 590,
+      "endLine": 610,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/autonomous-self-improve.ts",
+      "line": 1653,
+      "endLine": 1673,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/autonomous-self-improve.ts",
+      "line": 1675,
+      "endLine": 2035,
+      "kind": "noul",
+      "value": 0.68,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/client.ts",
+      "line": 144,
+      "endLine": 153,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/cli.ts",
+      "line": 42,
+      "endLine": 72,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/cli.ts",
+      "line": 100,
+      "endLine": 107,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/cli.ts",
+      "line": 196,
+      "endLine": 207,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.ts",
+      "line": 214,
+      "endLine": 224,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-review.ts",
+      "line": 656,
+      "endLine": 817,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/hub-pr-watch.ts",
+      "line": 385,
+      "endLine": 532,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/orchestrator-participant.ts",
+      "line": 173,
+      "endLine": 180,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/orchestrator-participant.ts",
+      "line": 202,
+      "endLine": 308,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/loop-iterate-bench.ts",
+      "line": 115,
+      "endLine": 117,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/loop-iterate-bench.ts",
+      "line": 164,
+      "endLine": 169,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/queue-bench.ts",
+      "line": 139,
+      "endLine": 144,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/loop-iterate-bench.ts",
+      "line": 171,
+      "endLine": 176,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/loop-iterate-bench.ts",
+      "line": 178,
+      "endLine": 185,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/loop-iterate-bench.ts",
+      "line": 194,
+      "endLine": 283,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/queue-bench.ts",
+      "line": 146,
+      "endLine": 153,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/queue-bench.ts",
+      "line": 162,
+      "endLine": 256,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/run-collector.ts",
+      "line": 224,
+      "endLine": 228,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/run-collector.ts",
+      "line": 452,
+      "endLine": 559,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-collector.ts",
+      "line": 368,
+      "endLine": 468,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-loop.ts",
+      "line": 795,
+      "endLine": 802,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-loop.ts",
+      "line": 1201,
+      "endLine": 1207,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "pure-name-is-pure",
+      "file": "/Users/mz/ghq/github.com/mizchi/agent-cluster/packages/agent-cluster/self-improve-loop.ts",
+      "line": 1875,
+      "endLine": 2187,
+      "kind": "noul",
+      "value": 0.73,
+      "confidence": null,
+      "arm": "local"
+    }
+  ]
+}

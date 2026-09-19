@@ -355,7 +355,7 @@ refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
 
 ## The shipped packs
 
-Six packs, 22 rules. The two below carry an ECMAScript and a Rust variant
+Six packs, 23 rules. The two below carry an ECMAScript and a Rust variant
 sharing one sentence; the other four are ECMAScript or JSON only.
 
 **`rules/naming.yml`** — does the code do what it calls itself?
@@ -398,16 +398,24 @@ claim false. A vague or redundant comment is not a defect.
 | --- | --- | --- |
 | `safe-name-is-safe` | `safe*`, `try*`, `*OrNull`, `*OrDefault`, `*OrUndefined` | does a failure of the kind the name absorbs still escape as a throw or rejection? |
 | `idempotent-name` | `ensure*`, `upsert*`, `setup*`, `install*`, `register*` | does a second call leave a different result from the first? |
+| `pure-name-is-pure` | `compute*`, `calculate*`, `derive*`, `format*`, `to*`, `parse*` | does the body reach outside itself: mutate an argument, write its own result into a cache that outlives the call, read the clock, the environment or a random source, even only on a fallback path? |
 
 These are narrower cousins of `fn-name-promises`, and the narrowing is the
 point: on the corpus behind this pack, `fn-name-promises` at its cutoff flags
 0 of the 22 labelled defects, 16 of which sit under 0.30 inside its clean
-band. The family they came from also built `guard-name-guards`
-(`validate*`/`sanitize*`/`ensure*`) and `pure-name-is-pure`
-(`compute*`/`format*`/`parse*`); both separate on their corpus and neither
-ships — the first has four defects behind it, the second produced one false
-positive pattern (a lazily loaded module counted as I/O) on half its findings
-on unseen code. Reports in `experiments/rule-candidates/b-guarantee-names/`.
+band.
+
+`pure-name-is-pure` is the one that needed a second revision. Its first
+counted a lazily loaded wasm module as I/O and was wrong on all six of its
+findings on an unseen repository. The criteria now separate acquiring a
+dependency (not an effect) from caching the function's own result (an
+effect), and say one read on any path is enough; on the same repository the
+revision found six impurities, all real — `parse*` functions defaulting a
+field to `new Date()`, `process.env` or `randomUUID()`. It ships at
+`severity: info` because its unseen clean band tops 0.05 under the cutoff.
+The family also built `guard-name-guards` (`validate*`/`sanitize*`), which
+separates on four defects and is not shipped on that count. Reports in
+`experiments/rule-candidates/b-guarantee-names/`.
 
 **`rules/tests.yml`** — tests that cannot verify their name, by construction
 
@@ -430,10 +438,13 @@ quiet (0.42–0.64): a mocked subject reads as a mild claim. A third candidate,
 | `log-level-matches-event` | does the level of this `logger.<level>(...)` call match the severity of the code path it sits on? |
 
 Siblings not shipped, in `experiments/rule-candidates/c-human-messages/`:
-`assertion-message-matches` (on unseen code its four findings were all test
-stubs throwing a simulated failure on a call counter) and `ui-message-honest`
-(needs `subject: enclosing`; measured before the promoted-subject key was
-fixed, so worth re-measuring).
+`assertion-message-matches` — its first revision's four unseen findings were
+all test stubs throwing a simulated failure on a call counter; the second
+keeps those out by matcher and by criteria and produces zero unseen
+findings, but sits 0.06 over a nested-guard clean that flips one pass in
+three, so it stays a recipe — and `ui-message-honest` (needs `subject:
+enclosing`; measured before the promoted-subject key was fixed, so worth
+re-measuring).
 
 **`rules/config.yml`** — names in configuration files
 
@@ -451,18 +462,18 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 ### What the cutoffs are worth
 
 On a TypeScript-only repository the seven Rust variants and
-`comment-describes-declaration-js` report "matched nothing": 8 of the 22.
+`comment-describes-declaration-js` report "matched nothing": 8 of the 23.
 
-Of the 22, **21 reach precision 1.00 and recall 1.00 on the corpus**
-(`docs/data/calibration.json`, 857 subjects, three passes). Read that with
+Of the 23, **22 reach precision 1.00 and recall 1.00 on the corpus**
+(`docs/data/calibration.json`, 988 subjects, three passes). Read that with
 the positive counts beside them, because they are small: per rule, 14, 9, 7,
 6, 6, 6, 6, 6, 5, 5, 5, 4, 4, 4, 4, 3, 2, 2, 2, 1, 1 labelled defects. The
 two `module-name-describes-contents` rules have one each and ship at
 `severity: info` for that reason; `comment-describes-declaration-js` has two
 and the gap report calls it `thin`.
 
-One does not separate: `test-name-describes-code-rust`, precision 0.67 by
-inversion — a clean test answers higher than the genuine defect — shipped
+One does not separate: `test-name-describes-code-rust`, precision 0.5–0.67
+across records by inversion — a clean test answers higher than the genuine defect — shipped
 at `warning` with a note.
 
 `test-name-verifies-claim` briefly joined it. On its original four defects
@@ -489,9 +500,9 @@ and the merge of the four new packs' corpora. Between the two, `fn-name-promises
 moved 0.76 → 0.86 as its clean band rose with 45 more named functions in the
 corpus, and no other shipped rule moved by more than 0.08. The measurements
 below that quote a cutoff were made at the earlier values, and say which.
-Read the 21 as "these rules separate the classes in a corpus the author and
+Read the 22 as "these rules separate the classes in a corpus the author and
 five agents wrote", against the baseline that **a tool reporting nothing at
-all scores about 88% accuracy on that corpus** — most of its 857 subjects are
+all scores about 89% accuracy on that corpus** — most of its 988 subjects are
 clean — at zero recall.
 Accuracy is the wrong number on a set that imbalanced; the precision and recall
 pair with the raw counts is the honest one.

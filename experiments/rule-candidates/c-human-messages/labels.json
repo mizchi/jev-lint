@@ -141,7 +141,7 @@
       "window": 0,
       "label": "clean",
       "rule": "ui-message-honest",
-      "reason": "hard clean: 'Saving\u2026' as a progress message before the await"
+      "reason": "hard clean: 'Saving…' as a progress message before the await"
     },
     {
       "line": 76,
@@ -454,6 +454,101 @@
       "label": "clean",
       "rule": "assertion-message-matches",
       "reason": "hard clean: 'forbidden' names the consequence of role !== admin, terse but about the check"
+    }
+  ],
+  "experiments/rule-candidates/c-human-messages/corpus/fakes.test.ts": [
+    {
+      "line": 25,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: a fake fetch throwing 'temporary upstream failure' on the second call; the condition is a call counter and the message names the failure the test simulates, by design"
+    },
+    {
+      "line": 37,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "checks that the message was retried at least once (length > 0) but says 'at most once': the opposite bound"
+    },
+    {
+      "line": 50,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: fetchImpl stub throwing 'temporary network failure' on the first attempt; counter condition, simulated failure"
+    },
+    {
+      "line": 69,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: fetchImpl stub throwing 'This operation was aborted' for one route; the condition selects the request, the message is the injected failure, no counter involved"
+    },
+    {
+      "line": 91,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: vi.fn mockImplementation throwing ECONNRESET on the first write; counter condition, simulated failure"
+    },
+    {
+      "line": 104,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: jest.fn throwing EACCES for one job id; the condition selects the input, the message is the injected failure"
+    },
+    {
+      "line": 117,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: a hand-written fake class throwing 'payload too large' for a payload containing 'poison'; the condition is the test's trigger, the message is the scenario"
+    },
+    {
+      "line": 136,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: a scripted readFileText in a plain runtime object throwing EBUSY for one path; no counter, no mock factory, the condition selects the input and the message is the injected failure"
+    }
+  ],
+  "experiments/rule-candidates/c-human-messages/corpus/runner-config.ts": [
+    {
+      "line": 11,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: !env.MOONBIT_RUNNER_SERVICE and 'missing env: MOONBIT_RUNNER_SERVICE' agree"
+    },
+    {
+      "line": 20,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: the matched inner guard (adapter === 'base_url') only chooses the wording; the outer guard baseRaw.length === 0 is what failed and 'missing env: ...BASE_URL (adapter=base_url)' is correct for that case"
+    },
+    {
+      "line": 32,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires when the timeout value is present but not a positive finite number, and says 'missing env': names absence for a value check, and a default of 30000 means it cannot even be absent"
+    },
+    {
+      "line": 49,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: 'invalid materialized path' names the cause that normalizeAbsPath returning null implies; the condition itself only says null"
+    },
+    {
+      "line": 59,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: decodeBase64Utf8 returning null and 'invalid utf-8 content' agree"
     }
   ]
 }
