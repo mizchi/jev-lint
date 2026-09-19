@@ -16,7 +16,7 @@
 # were fitted to, and linting it only re-finds them.
 # test/fixtures holds planted defects for the cookbook test, so it is named
 # out too: test/test.ts is the suite.
-paths: [src, tools, test/test.ts]
+paths: [src, tools, test/test.ts, package.json]
 
 # The verdict cache. `none` disables it. Treat it as trusted input: anything
 # that can edit it can silence a rule or invent a finding.

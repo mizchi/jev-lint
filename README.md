@@ -195,36 +195,36 @@ Every flag, and the config file's precedence, is in
 ## What a full run costs
 
 This repository lints itself: `.jev-lint.yaml` points the shipped packs at
-`src`, `tools` and `test/test.ts`, and leaves out `corpus/` and the cookbook
-fixtures, which hold planted defects. One full pass, every rule, nothing
-cached, on a laptop over a home connection, recorded in
-`docs/data/self-lint-2026-09-19.json`:
+`src`, `tools`, `test/test.ts` and `package.json`, and leaves out `corpus/`
+and the cookbook fixtures, which hold planted defects. One full pass, all 21
+rules, nothing cached, on a laptop over a home connection, recorded in
+`docs/data/self-lint-2026-09-20.json`:
 
 | | |
 | --- | --- |
-| subjects judged | 1,681 |
-| requests | 65, at concurrency 4 |
-| input tokens | 964,513 |
-| output tokens | 30,960 |
-| price | $0.0405 |
-| wall clock | 6.9 s (26.1 s of request time, summed) |
-| model | `jev-1.13.0`, 2026-09-19 |
-| findings | 5 |
+| subjects judged | 1,950 |
+| requests | 71, at concurrency 4 |
+| input tokens | 1,316,775 |
+| output tokens | 37,444 |
+| price | $0.0553 |
+| wall clock | 7.7 s (29.2 s of request time, summed) |
+| model | `jev-1.13.0`, 2026-09-20 |
+| findings | 3 |
 
-That is 2.4 cents per 1,000 subjects. `--dry-run` on the same tree estimated
-1,076,545 input tokens, 11.6% above what the server billed, so a dry run is a
+That is 2.8 cents per 1,000 subjects. `--dry-run` on the same tree estimated
+1,462,466 input tokens, 11.1% above what the server billed, so a dry run is a
 bound to budget against rather than a quote. A `review` of one commit's diff
 is a different order: the commits behind this README's last rewrite plan to
 44,059 tokens, $0.002.
 
-The five findings are what to expect from a tool tuned on a corpus and run
-on real code: three bindings and one test within 0.05 of their cutoffs, left
-alone, and one test the tool is wrong about, stable at 0.65–0.69 across three
-passes. Two earlier passes the same day found a test whose name promised
-"exactly one batch" while its body only counted placements — fixed, and off
-the cutoff since — and a counter named `passed` holding a number, renamed.
-`jev-lint replay docs/data/self-lint-2026-09-19.json` reproduces the table
-with no API key.
+The three findings are all `var-name-describes-value` on test bindings
+within 0.16 of its cutoff, and all three are arguable. Earlier passes over
+the same tree caught a test whose name promised "exactly one batch" while
+its body only counted placements — fixed — and a counter named `passed`
+holding a number, renamed; and the first pass with the comment pack's block
+rule at its fitted cutoff flagged eleven test preambles, which is why that
+rule now ships above its midpoint. `jev-lint replay
+docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules
 

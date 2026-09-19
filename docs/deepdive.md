@@ -31,7 +31,7 @@ jev-lint replay docs/data/<record>.json --labels corpus/labels.json
 | `calibration-rule-axis-comments.json` | yes | the comment pack, likewise |
 | `self-lint-before.json` | yes | this repository before the fixes of §6 |
 | `self-lint-after.json` | yes | and after them |
-| `self-lint-2026-09-19.json` | yes | a later full pass over `src`, `tools`, `test/test.ts`, the one the README's cost table quotes |
+| `self-lint-2026-09-20.json` | yes | a later full pass over `src`, `tools`, `test/test.ts`, the one the README's cost table quotes |
 | `grouping.json` | no | the file-vs-rule axis comparison, as `tools/grouping.ts` writes it |
 | `grouping-refit.json` | no | the same comparison with each axis at its own cutoffs |
 | `arms.json` | no | four state arms over the whole corpus, as `tools/arms.ts` writes it |

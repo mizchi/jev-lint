@@ -885,6 +885,69 @@
       "label": "clean",
       "window": 2,
       "reason": "finds the item the title names."
+    },
+    {
+      "line": 74,
+      "label": "clean",
+      "rule": "comment-describes-block",
+      "window": 2,
+      "reason": "the preamble describes the whole test, not the line under it. Judged against the body, every claim holds."
+    },
+    {
+      "line": 74,
+      "label": "clean",
+      "rule": "comment-describes-block-rust",
+      "window": 2,
+      "reason": "the preamble describes the whole test, not the line under it. Judged against the body, every claim holds."
+    },
+    {
+      "line": 74,
+      "label": "clean",
+      "rule": "comment-describes-block-js",
+      "window": 2,
+      "reason": "the preamble describes the whole test, not the line under it. Judged against the body, every claim holds."
+    },
+    {
+      "line": 84,
+      "label": "clean",
+      "rule": "comment-describes-block",
+      "window": 2,
+      "reason": "a preamble stating the reason for the test, above a setup line that has nothing to do with the reason."
+    },
+    {
+      "line": 84,
+      "label": "clean",
+      "rule": "comment-describes-block-rust",
+      "window": 2,
+      "reason": "a preamble stating the reason for the test, above a setup line that has nothing to do with the reason."
+    },
+    {
+      "line": 84,
+      "label": "clean",
+      "rule": "comment-describes-block-js",
+      "window": 2,
+      "reason": "a preamble stating the reason for the test, above a setup line that has nothing to do with the reason."
+    },
+    {
+      "line": 93,
+      "label": "clean",
+      "rule": "comment-describes-block",
+      "window": 2,
+      "reason": "a preamble that names the bug the test guards against, above an ordinary first statement."
+    },
+    {
+      "line": 93,
+      "label": "clean",
+      "rule": "comment-describes-block-rust",
+      "window": 2,
+      "reason": "a preamble that names the bug the test guards against, above an ordinary first statement."
+    },
+    {
+      "line": 93,
+      "label": "clean",
+      "rule": "comment-describes-block-js",
+      "window": 2,
+      "reason": "a preamble that names the bug the test guards against, above an ordinary first statement."
     }
   ],
   "corpus/ts/cart.ts": [

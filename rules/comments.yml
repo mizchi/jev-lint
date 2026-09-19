@@ -193,9 +193,19 @@
   # recall 1, midpoint 0.80, on both variants.
   #
   # Two labelled defects per variant is thin, so it stays at `severity: info`
-  # until the corpus has more inline-comment cases. Lower `at` once you have
-  # measured it on your own comments.
-  at: 0.8
+  # until the corpus has more inline-comment cases.
+  #
+  # The cutoff is above the fitted midpoint of 0.85, on purpose. Run on this
+  # repository's own tests at 0.80, the rule flagged eleven PREAMBLES -- the
+  # comment that opens a test and says what the whole test is for, sitting
+  # above whatever its first statement happens to be -- at 0.81-0.91. Three
+  # preamble cases added to the corpus answered 0.57-0.74, milder than the
+  # real ones; a rewording that named the preamble case did not move the real
+  # ones at all. So the cutoff sits at 0.94, under the corpus defects (0.96,
+  # 0.98) and over the real clean band, and the rule reports what it can
+  # separate rather than what it cannot. Lower `at` once you have measured it
+  # on your own comments.
+  at: 0.94
   severity: info
   rule:
     all:
@@ -249,8 +259,10 @@
   subject: enclosing
   state: bare
   # Calibrated with `comment-describes-block`, and for the same reason late:
-  # see the note there. Precision 1, recall 1 on two defects; thin.
-  at: 0.79
+  # see the note there. Precision 1, recall 1 on two defects (0.93, 0.97);
+  # thin. Held above its 0.79 midpoint for the reason given there, as far as
+  # the lower defect allows.
+  at: 0.9
   severity: info
   rule:
     all:
