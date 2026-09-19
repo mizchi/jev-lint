@@ -316,7 +316,8 @@ Measured against `jev-1.13.0`, not read off documentation.
   the file. Binary-searching a real state with one question attached puts the
   largest accepted request at 32,978 server-counted tokens, consistent with the
   state ceiling.
-- **Question count is not a limit.** 1,220 questions in one request work.
+- **Question count is not a limit.** Over a thousand questions in one request
+  work.
   **255 is the cap on the number of options in a single `choice` question**,
   which this tool never uses — the "256 questions" premise it was designed
   around was simply wrong.
@@ -366,7 +367,7 @@ Both packs over this repository's own TypeScript (`src`, `tools`, `test`,
 $0.043, 18s of request time, under 5 seconds of wall clock.** Seven of the
 fifteen rules fire; the eight Rust-only rules match nothing and say so.
 
-It found **nine real defects in about 13,000 lines** and got two of eleven
+It found **nine real defects in 8,132 lines of TypeScript** and got two of eleven
 findings wrong:
 
 | what it caught | how many |

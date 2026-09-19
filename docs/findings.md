@@ -333,6 +333,12 @@ Confirmed against the live service while building this.
 - **Don't predict the ceiling, react to it.** `max_tokens_exceeded` is the one
   400 a caller can fix, and halving the question set on it means the token
   estimator only has to be roughly right. It is deliberately pessimistic.
+  **Half-wrong, and section 13 says which half.** Halving the questions rescues
+  a request over budget and does nothing for a STATE over budget, since every
+  half still carries the same state. That case loses its verdicts outright, so
+  the estimator's accuracy on a state is a correctness property rather than a
+  cost optimisation. An implementer following this bullet alone would build
+  exactly the wrong thing.
 - **A `noul`'s criteria must be nested under `criteria`.** A flat
   `{true, false}` returns 200 with the criteria silently discarded; the only
   visible symptom is a smaller input-token count. `rules.ts` rejects the shape
@@ -848,7 +854,7 @@ five scans, the fixes, and the API probes below — cost about $0.34.
 | 4 | 3 | 3 | after fixing the nine |
 | 5+ | 1–3 | ~1 | converged; the tail flickers |
 
-**9 real defects in about 13,000 lines, for four cents a pass.** Two of them are
+**9 real defects in 8,132 lines of TypeScript, for four cents a pass.** Two of them are
 comments that had become false — the class nothing else can check. Six were
 tests that did not verify the behaviour their own names claimed. One was a
 binding named for its input rather than its value, six times over.

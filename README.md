@@ -5,25 +5,30 @@ A linter whose rules are sentences.
 ```
 corpus/ts/cart.ts
      21  flag       The body of this function does something materially different from what its name promises.
-             fn-name-promises  0.95  cutoff 0.76  arm located
+         fn-name-promises  0.93  cutoff 0.76  arm located
      72  flag       This binding's name misdescribes the value it is bound to.
-             var-name-describes-value  0.93  cutoff 0.61  arm located
+         var-name-describes-value  0.94  cutoff 0.61  arm located
 
 corpus/ts/cart.test.ts
      27  flag       This test would still pass if the behaviour its name claims were broken.
-             test-name-verifies-claim  0.93  cutoff 0.54  arm bare
+         test-name-verifies-claim  0.95  cutoff 0.54  arm bare
+     27  flag       The code in this test does something other than what its name says it does.
+         test-name-describes-code  0.96  cutoff 0.95  arm bare
 
 corpus/ts/session_store.ts
      20  flag       The comment above this code claims something that is not true of the code.
-             comment-describes-declaration  0.97  cutoff 0.83  arm located
+         comment-describes-declaration  0.97  cutoff 0.83  arm located
 
 corpus/ts/utils.ts
       1  flag       This module's name does not describe what the module contains.
-             module-name-describes-contents  0.86  cutoff 0.62  arm graph
+         module-name-describes-contents  0.88  cutoff 0.62  arm graph
 
-44 finding(s), 276 subject(s), 0 cached
-37 request(s), 155,249 input tokens, $0.00652, 6811 ms
+45 finding(s), 276 subject(s), 0 cached
+37 request(s), 155,249 input tokens, $0.00652, 6848 ms
 ```
+
+One run over `corpus/`, abridged — the values move by a few hundredths between
+runs, which is [why the cache exists](#limits).
 
 **[ast-grep](https://ast-grep.github.io) decides which code gets looked at. A
 sentence you write decides whether it is a problem. [Jev](https://typesafe.ai)
@@ -99,10 +104,11 @@ jevlint check src --dry-run        # plan and price it without asking anything
 ```
 
 **Review mode is the one to reach for in CI.** It scans only the changed files
-and keeps only the matches whose subject overlaps a changed line, so a
-four-function diff costs about two requests. It is also where the rules earn
-their keep: findings concentrate in freshly written code, because old names have
-already been argued over.
+and keeps only the matches whose subject overlaps a changed line. Measured on a
+one-function diff in this repository's corpus: **2 requests, 3,460 input tokens,
+$0.00015, 0.6 seconds**, with 3 subjects judged and 28 skipped as outside the
+diff. It is also where the rules earn their keep — findings concentrate in
+freshly written code, because old names have already been argued over.
 
 ```bash
 jevlint review --base "$GITHUB_BASE_REF" --format github
@@ -406,7 +412,7 @@ packs are **1,378 subjects, 65 requests, $0.043 and under five seconds** of wall
 clock. That is roughly **3 cents per 1,000 subjects**, and `--dry-run` quotes
 about 9% high, so treat it as a bound rather than a price.
 
-It found **nine real defects in about 13,000 lines**:
+It found **nine real defects in 8,132 lines of TypeScript**:
 
 | what it caught | how many |
 | --- | --- |
