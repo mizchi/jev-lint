@@ -23,7 +23,7 @@ Re-derive the tables without spending anything:
 
 ```bash
 npm run replay        # re-score AND re-fit the recorded run, no API key
-npm test              # 99 checks, no API key
+npm test              # 101 checks, no API key
 npm run typecheck     # the full type surface, including tools and tests
 ```
 
@@ -83,6 +83,8 @@ false positives, 0 misses, 107 true negatives.**
 
 With the baseline stated, because on an imbalanced set it has to be: a tool that
 **reports nothing at all** scores 79.9% accuracy on this corpus, at zero recall.
+(That is 107 of 134 on the 10-file corpus of this section. On the current
+13-file corpus it is 229 of 276, or 83.0%.)
 Accuracy is the wrong number here; the pair above is the honest one.
 
 Read the precision and recall figures as "the rules separate the classes in a

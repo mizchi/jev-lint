@@ -80,7 +80,7 @@ because their cutoffs were fitted to this package's corpus and not to your code.
 ```bash
 npm install
 npm run build          # tsc -> dist/, with .d.ts and source maps
-npm run ci             # labels + typecheck + 100 tests + build + offline replay
+npm run ci             # labels + typecheck + 101 tests + build + offline replay
 npm test               # no API key needed
 ```
 
@@ -400,11 +400,16 @@ Each rule ships in a Rust and an ECMAScript variant sharing one sentence, so
 nothing"**. Of the 15, **12 reach precision 1.00 and recall 1.00 on the corpus**
 with no decision flips across passes, and **3 do not separate at any cutoff**:
 `test-name-describes-code-rust` (precision 0.67), and both
-`comment-describes-block` rules, which **ship saying so** — cutoffs parked above
-every observed answer, `severity: info`, and a note recording what was tried.
+`comment-describes-block` rules, which **ship saying so** — cutoffs parked at
+the top of the observed range, `severity: info` so they cannot fail a build,
+and a note recording what was tried. Parked is not silenced: the Rust variant
+fires on the corpus at exactly its 0.94 cutoff, and refitting after the
+missing-code fix below still gives it precision 0.67 at best.
 Read the 12 as "these rules separate the classes in a corpus the author wrote",
-against the baseline that **a tool reporting nothing at all scores 79.9%
-accuracy on that corpus**, at zero recall.
+against the baseline that **a tool reporting nothing at all scores 83.0%
+accuracy on that corpus** (229 of its 276 subjects are clean), at zero recall.
+Accuracy is the wrong number on a set that imbalanced; the precision and recall
+pair with the raw counts is the honest one.
 
 ## What to expect
 
@@ -565,7 +570,7 @@ rules/          the shipped packs
 corpus/         the labeled corpus the cutoffs are fitted to
 tools/          the experiments: arms.ts, grouping.ts
 docs/data/      recorded runs, each replayable with no API key
-test/test.ts    100 checks, no API key needed
+test/test.ts    101 checks, no API key needed
 ```
 
 `docs/internal.md` has the module-by-module map.

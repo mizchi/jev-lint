@@ -289,7 +289,7 @@ change that alters gating or fitting fails CI without an API key.
 
 ## Testing
 
-`test/test.ts` is 100 checks, no API key, no network, run directly by Node. It
+`test/test.ts` is 101 checks, no API key, no network, run directly by Node. It
 is a single file on purpose: the assertions are cheap and the suite is read as
 documentation of the invariants.
 

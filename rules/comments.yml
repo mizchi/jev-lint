@@ -192,9 +192,11 @@
   # `jevlint gaps` now calls this `thin` rather than `rewrite`. The corpus needs
   # inline-comment cases before the question is judged.
   #
-  # Until then the cutoff sits above every answer observed, so the rule is
-  # effectively off, and `severity: info` keeps it out of anyone's way. Turn it
-  # on by lowering `at` once you have measured it on your own comments.
+  # Until then the cutoff sits at the top of the observed range, so the rule
+  # fires on almost nothing, and `severity: info` keeps it out of anyone's way.
+  # Not silenced, though: on this repository's own corpus the Rust variant lands
+  # exactly on its cutoff, and a 0.98 has been seen on the rule axis. Turn it on
+  # properly by lowering `at` once you have measured it on your own comments.
   at: 0.97
   severity: info
   rule:

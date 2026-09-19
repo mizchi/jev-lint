@@ -155,8 +155,10 @@ count is reproducible with `jevlint replay docs/data/calibration.json --labels
 corpus/labels.json`.) Read the 12 as "the rules separate the classes in a
 corpus I wrote", not as a generalisation, and note the baseline it has to be
 read against: on an imbalanced set, **a tool that reports nothing at
-all scores 79.9% accuracy** here, at zero recall. Accuracy is the wrong number;
-precision and recall with the raw tp/fp/fn counts are the honest ones.
+all scores 83.0% accuracy** here — 229 of the corpus's 276 subjects are clean —
+at zero recall. Accuracy is the wrong number; precision and recall with the raw
+tp/fp/fn counts are the honest ones. (An earlier write-up gave 79.9%, which was
+107 of 134 on the retired 10-file corpus.)
 
 Cutoffs are **per rule, never shared.** Eight same-shaped questions were
 measured returning between 0.20 and 0.94 for their own defect class. The cold

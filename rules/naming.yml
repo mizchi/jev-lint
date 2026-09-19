@@ -16,15 +16,15 @@
 # anywhere between 0.20 and 0.94. A shared threshold throws away the rules that
 # answer quietly.
 #
-# The `at:` values below were fitted to THIS repository's corpus (10 files, 569
-# lines, 134 subjects, Rust and TypeScript) as the midpoint of each rule's own
+# The `at:` values below were fitted to THIS repository's corpus (13 files, 276
+# subjects, Rust, TypeScript and JavaScript) as the midpoint of each rule's own
 # clean/violation gap. They are a starting point on your code, not a calibration
 # for it: a cutoff fitted to one corpus is an opinion about that corpus. Run
 # `jevlint gaps` first -- if a rule's answers are bunched together, no cutoff
 # will help and the sentence needs rewriting -- then `jevlint calibrate
 # --labels` against your own labels.
 #
-# `state:` values are likewise measured rather than chosen. `tools/arms.mjs`
+# `state:` values are likewise measured rather than chosen. `tools/arms.ts`
 # reports precision, recall and class separation per (rule, arm); the numbers
 # behind each choice are in docs/findings.md.
 #
