@@ -363,9 +363,12 @@ installed:
 `package.json` ships `dist`, `rules`, `README.md` and `LICENSE`. **`rules` has
 to stay in that list**, or a fresh install has no packs to fall back to.
 
-`npm run ci` is `labels:check && typecheck && test && build && replay`. The
+`npm run ci` is `labels:check && typecheck && test && build && replay:ci`. The
 replay step is a full offline re-score *and re-fit* of a recorded run, so a
-change that alters gating or fitting fails CI without an API key.
+change that breaks gating or fitting fails CI without an API key. `replay:ci`
+accepts exit 1 and nothing else: the corpus holds deliberate violations, so a
+replay that finds them exits 1 by design, and `ci` ran plain `replay` — and so
+failed on every commit — until an audit ran it. Exit 2 and 3 still fail it.
 
 ## Testing
 
