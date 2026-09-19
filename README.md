@@ -368,18 +368,38 @@ corpus with no decision flips across passes. The two `comment-describes-block`
 rules do not separate and **ship saying so** — cutoffs parked above every
 observed answer, `severity: info`, and a note recording what was tried.
 
-On this repository's own 788 subjects the naming pack reports nothing, with the
-highest answer anywhere at 0.68 against a 0.69 cutoff.
+### Run on itself
 
-The two subjects nearest that line were both correct, and both were weak
-assertions in this repository's own test suite — a test asserting its ceiling
-only inside an `if` that could skip every iteration, and a test titled "every
-format" that checked two of three. Neither is something a linter, type checker
-or coverage tool would report; coverage called both tests covered.
+Both packs over this repository's own TypeScript — `src`, `tools`, `test` —
+is **1,377 subjects, 65 requests, $0.043 and under five seconds** of wall clock.
+It found **nine real defects in about 13,000 lines**, and a fifth of what it
+reported was wrong:
+
+| what it caught | how many |
+| --- | --- |
+| comments that had become false | 2 |
+| tests that did not verify the behaviour their own names claimed | 6 |
+| bindings named for their input rather than their value | 6 |
+| findings I read and disagreed with | 2 of 11 |
+
+Two are worth quoting. `formatGithub`'s doc comment opened with "Everything is
+emitted as `notice` or `warning`, never `error`" while the first line of its
+body passes `error` through — and the rest of the same comment explained how to
+opt into that. And "a rule's own axis pin is never overruled" turned out to
+assert the pin without establishing that the scheduler wanted the other axis;
+writing the stronger version **disproved an assumption in the scheduler's own
+design notes.** Nothing a compiler, a linter or coverage would report: coverage
+called every one of those tests covered.
+
+The honest half of the result is that the tool's four worst bugs that round were
+found by *reading its output*, not by its rules — a "fell back from `bare` to
+`bare`" line that cannot mean anything, and the lost verdicts and mis-measured
+token estimator behind it. Section 13 of the findings has the whole exercise,
+including the residue it still reports and I still disagree with.
 
 **[docs/findings.md](docs/findings.md)** has everything measured, including the
-three defects the tool found in the corpus I had labelled clean, the five bugs
-it and the tests found in itself, and the API's real limits.
+three defects the tool found in the corpus I had labelled clean, the bugs it and
+the tests found in itself, the retracted claims, and the API's real limits.
 
 ## How it behaves when things go wrong
 
@@ -391,10 +411,17 @@ failure path lands on "no verdict":
   failures never reads as a clean repository.**
 - A malformed rule is dropped with a reason, printed loudly. A rule that
   silently failed to load looks exactly like a rule that found nothing.
-- A file too large for the 32Ki state budget steps down to a leaner arm, and
-  says it did.
-- `max_tokens_exceeded` halves the question set and retries, so the token
-  estimator only has to be roughly right.
+- A file whose **source** is too large for the 32Ki state budget steps down to
+  a leaner arm, and says it did. A file with many *matches* is split instead —
+  that is not a loss of context and is not reported as one.
+- `max_tokens_exceeded` halves the question set and retries. That rescues a
+  request over budget and **cannot rescue a state over budget**, since every
+  half still carries the same state, so the planner packs to 1.25x under the
+  state budget and 1.1x under the request budget. The token estimator is
+  measured per payload shape against the server's own accounting: source runs
+  3.37 characters per token, per-subject metadata records 2.18, and a single
+  ratio for both lost 100 verdicts in one run. `--dry-run` quotes with the same
+  estimator and reads about 9% high — a bound to budget against, not a quote.
 
 The verdict cache is **trusted input**: anything that can edit it can silence a
 rule or invent a finding. Keep it next to your rule files in review, not in a
@@ -415,6 +442,13 @@ pass each run.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
+- **`jevlint gaps` is for a labeled corpus, not for your repository.** A gap
+  needs two classes, and real code is ~99.8% clean, so on this repository's own
+  source it prints `rewrite` for every rule that fires. Read the per-rule
+  medians there instead.
+- **Expect to refit on your own code.** On this repository's test suite
+  `test-name-verifies-claim` has a clean-band median of 0.18 and a tail to 0.70,
+  against a corpus-fitted cutoff of 0.54.
 
 ## Layout
 

@@ -13,10 +13,12 @@
  * self-imposed `batchSize` cap remains worth having anyway: it bounds the blast
  * radius of one rejected request and bounds how much work a split has to redo.
  *
- * The estimator below is approximate on purpose. Being exactly right is not
- * needed when the client reacts to the server's own `max_tokens_exceeded` by
- * halving the question set, and an estimator tuned to be exact would be one
- * more thing that silently drifts as question shapes change.
+ * The estimator below is approximate, but the state budget is the one place
+ * where approximate is not enough: the client recovers from a request over
+ * budget by halving the question set, and halving does nothing for a state over
+ * budget. That case ends in lost verdicts. So the estimator is measured per
+ * payload shape, and the planner packs to a margin under each budget rather
+ * than up to it.
  */
 import { buildQuestion, questionId } from "./questions.ts";
 import { buildState, buildRuleState } from "./state.ts";
@@ -46,16 +48,98 @@ export const MAX_STATE_TOKENS = 32_768;
 export const DEFAULT_BATCH_SIZE = 256;
 
 /**
- * Rough input-token estimate for a JSON payload.
+ * Characters per input token, by payload shape, measured against the server's
+ * own `usage.input_tokens`.
  *
- * Deliberately pessimistic (dividing by less than the usual four characters per
- * token) so the estimate errs towards smaller batches: an over-large batch
- * costs a round trip to discover, an under-large one costs almost nothing
- * because the state is the expensive part and it is sent either way.
+ * One ratio for everything was wrong, and wrong in the direction that loses
+ * verdicts. A payload of this tool's shape is two different things:
+ *
+ *   prose and source    3.37 chars/token measured -- what one ratio was tuned
+ *                       for, and it was accurate to 1% on a file's text
+ *   structured records  2.18 chars/token measured -- the per-subject metadata
+ *                       list, which is mostly short quoted keys and
+ *                       punctuation. A single ratio of 3.4 undercounts it by
+ *                       36%.
+ *
+ * So a state of mostly source was sized well and a state of many subjects was
+ * not, and the run that found this lost 100 verdicts to a batch the planner
+ * thought fit in 27,274 of the 32,768-token state budget. The server refused it
+ * even with a single question attached, which is the signature of a state over
+ * budget rather than a request over budget.
+ *
+ * These constants are the measured values, not padded ones. The safety a
+ * planner needs lives in STATE_MARGIN and REQUEST_MARGIN instead, because this
+ * same estimate is what `--dry-run` prices a run with: ratios chosen
+ * pessimistically enough to plan safely overstated a real run's bill by 22%.
+ * Even so, a dry run reads about 10% high in aggregate -- it is a bound to
+ * budget against, not a quote.
+ */
+const CHARS_PER_TOKEN_TEXT = 3.4;
+const CHARS_PER_TOKEN_STRUCT = 2.2;
+
+/** Above this many characters a string is prose or source, not a label. */
+const TEXT_LIKE_LENGTH = 64;
+
+/**
+ * How much headroom the planner leaves under each budget.
+ *
+ * Two margins, because the two budgets fail differently and the estimate is
+ * biased differently on each.
+ *
+ * The STATE margin is the larger one. Overflowing the state loses the verdicts
+ * outright -- halving the questions, the client's only recovery, leaves the
+ * state untouched -- and the estimate's worst case is here: measured against
+ * the server's own counts it is 3% under on a state carrying a file, but 12%
+ * under on a state that is only metadata records, which is what the lean arms
+ * and the rule axis send. Those records are small and syntax-dense, and a
+ * tokenizer does much better on one big repetitive payload than on many small
+ * ones, so no single chars-per-token pair fits both.
+ *
+ * The REQUEST margin is the smaller one. Overflowing the request costs one
+ * round trip, the client recovers by halving, and the estimate runs 15-26%
+ * OVER on the questions that dominate a request -- so the risk is small in both
+ * likelihood and consequence.
+ */
+export const STATE_MARGIN = 1.25;
+export const REQUEST_MARGIN = 1.1;
+
+/** What the planner may spend, as opposed to what a request may carry. */
+const STATE_BUDGET = Math.floor(MAX_STATE_TOKENS / STATE_MARGIN);
+const REQUEST_BUDGET = Math.floor(MAX_REQUEST_TOKENS / REQUEST_MARGIN);
+
+/**
+ * Input-token estimate for a JSON payload, by shape.
+ *
+ * Accurate rather than conservative: this is also what a dry run quotes.
  */
 export function estimateTokens(value: unknown): number {
-  const text = typeof value === "string" ? value : JSON.stringify(value) ?? "";
-  return Math.ceil(text.length / 3.4);
+  return Math.ceil(cost(value));
+}
+
+function cost(value: unknown): number {
+  if (typeof value === "string") {
+    // The SERIALIZED length: a source blob full of quotes and newlines grows
+    // several percent under escaping, and that growth is real request bytes.
+    const len = JSON.stringify(value).length;
+    return len / (value.length >= TEXT_LIKE_LENGTH ? CHARS_PER_TOKEN_TEXT : CHARS_PER_TOKEN_STRUCT);
+  }
+  if (value === null || typeof value !== "object") {
+    return String(value).length / CHARS_PER_TOKEN_STRUCT;
+  }
+  if (Array.isArray(value)) {
+    // Brackets, plus one comma between elements.
+    return (
+      (2 + Math.max(0, value.length - 1)) / CHARS_PER_TOKEN_STRUCT +
+      value.reduce((sum: number, item) => sum + cost(item), 0)
+    );
+  }
+  // `JSON.stringify` drops undefined members, so the estimate must too.
+  const entries = Object.entries(value).filter(([, v]) => v !== undefined);
+  let total = (2 + Math.max(0, entries.length - 1)) / CHARS_PER_TOKEN_STRUCT;
+  for (const [key, v] of entries) {
+    total += (JSON.stringify(key).length + 1) / CHARS_PER_TOKEN_STRUCT + cost(v);
+  }
+  return total;
 }
 
 /**
@@ -66,9 +150,12 @@ export function estimateTokens(value: unknown): number {
  * as a record, so each entry also carries `,"q0000":` -- about ten characters.
  * Ignoring it made the planner undercount by roughly three tokens per
  * question, which is invisible on a small batch and put a 246-question batch
- * 464 tokens over the 64Ki ceiling. Rounded up, because the whole estimator is
- * deliberately pessimistic: overshooting costs a slightly smaller batch, and
- * undershooting costs a round trip to discover.
+ * 464 tokens over the 64Ki ceiling.
+ *
+ * The server also charges its own per-request and per-question scaffolding,
+ * measured at about 270 tokens per request plus 13 per question beyond the
+ * payload. That is not added here: the budget margins cover it, and at the
+ * default cap they cover it with room to spare.
  */
 const QUESTION_ENTRY_OVERHEAD = 4;
 
@@ -84,11 +171,17 @@ const QUESTION_ENTRY_OVERHEAD = 4;
  *   - no batch holds more than `batchSize` subjects
  *   - no batch's estimated total exceeds MAX_REQUEST_TOKENS, unless it holds a
  *     single subject that cannot be split further
+ *   - no batch's STATE exceeds MAX_STATE_TOKENS, under the same exception
+ *
+ * The planner packs to a margin under each of those, not up to them: see
+ * STATE_MARGIN and REQUEST_MARGIN.
  *
  * A file whose SOURCE alone exceeds the state budget is the one case that
- * cannot be fixed by splitting questions, because a split leaves the state
- * unchanged. Those batches are marked `degraded` and fall back to a leaner arm,
- * which is a real loss of context and is reported rather than hidden.
+ * cannot be fixed by splitting questions, because every split still carries
+ * that source. Those batches are marked `degraded` and fall back to a leaner
+ * arm, which is a real loss of context and is reported rather than hidden. A
+ * file with many MATCHES is not that case: the subject list is the part of a
+ * state that a split does shrink, so it is split instead of degraded.
  */
 export interface PlanOptions {
   batchSize?: number;
@@ -120,43 +213,55 @@ export function planBatches(
     const entry = symbols?.get(file) ?? null;
     const language = items[0]!.language;
 
+    const stateAt = (candidate: StateArm, batchItems: Subject[]) =>
+      buildState({ file, source, entry, subjects: batchItems, arm: candidate, language });
+
+    // Which arm can this file afford? Only the part of a state that a SPLIT
+    // cannot shrink decides that, and the floor is what one subject alone
+    // costs: `located` carries the whole source however few questions share
+    // it, so a huge file really does have to step down, while `bare` carries
+    // nothing but the subjects and is always rescued by splitting. Probing the
+    // whole group instead -- what this did before -- degraded a file for having
+    // many MATCHES rather than much SOURCE, and at `bare`, where there is
+    // nothing leaner to step to, it reported a fallback from `bare` to `bare`.
     let effectiveArm: StateArm = arm;
-    let degraded: ArmFallback | null = null;
-
-    // Does the state fit at the requested arm? If not, step down rather than
-    // fail: `graph` keeps the hierarchy without the file text, and `bare`
-    // keeps nothing but the subjects.
     for (const candidate of stepDown(arm)) {
-      const probe = buildState({ file, source, entry, subjects: items, arm: candidate, language });
-      if (estimateTokens(probe) <= MAX_STATE_TOKENS) {
-        effectiveArm = candidate;
-        if (candidate !== arm) degraded = { from: arm, to: candidate, reason: "state budget" };
-        break;
-      }
       effectiveArm = candidate;
-      degraded = { from: arm, to: candidate, reason: "state budget" };
+      if (estimateTokens(stateAt(candidate, items.slice(0, 1))) <= STATE_BUDGET) break;
     }
+    // So a step-down is recorded only when the arm actually changed. Anything
+    // else is a batch to be split, not context that was lost.
+    const degraded: ArmFallback | null =
+      effectiveArm === arm ? null : { from: arm, to: effectiveArm, reason: "state budget" };
 
-    const stateFor = (batchItems: Subject[]) =>
-      buildState({ file, source, entry, subjects: batchItems, arm: effectiveArm, language });
-
-    // The state's own size does not depend much on how many subjects share it,
-    // so it is measured once on the whole group and treated as fixed overhead.
-    const stateTokens = estimateTokens(stateFor(items));
+    const stateFor = (batchItems: Subject[]) => stateAt(effectiveArm, batchItems);
 
     let current: Subject[] = [];
-    let tokens = stateTokens;
+    let questionTokens = 0;
     for (const s of items) {
       const cost = estimateTokens(buildQuestion(s.rule, s, questionId(0))) + QUESTION_ENTRY_OVERHEAD;
+      // Re-measured per addition, because the subject list is part of the
+      // state and therefore not fixed overhead. Both budgets are independent
+      // and the state's fills first, so both are checked.
+      //
+      // Numbered exactly as `makeBatch` will number it: a subject's `id` is
+      // part of the state's text, and sizing un-numbered subjects undercounts
+      // every one of them by the width of its id.
+      const nextState = estimateTokens(
+        stateFor([...current, s].map((x, i) => ({ ...x, id: questionId(i) }))),
+      );
       const full =
-        current.length >= cap || (current.length > 0 && tokens + cost > MAX_REQUEST_TOKENS);
+        current.length >= cap ||
+        (current.length > 0 &&
+          (nextState > STATE_BUDGET ||
+            nextState + questionTokens + cost > REQUEST_BUDGET));
       if (full) {
         batches.push(makeBatch(file, effectiveArm, language, current, stateFor, degraded));
         current = [];
-        tokens = stateTokens;
+        questionTokens = 0;
       }
       current.push(s);
-      tokens += cost;
+      questionTokens += cost;
     }
     if (current.length > 0) {
       batches.push(makeBatch(file, effectiveArm, language, current, stateFor, degraded));
@@ -279,8 +384,8 @@ export function planRuleBatches(
         (a, x) => a + estimateTokens(buildQuestion(x.rule, x, questionId(0))) + QUESTION_ENTRY_OVERHEAD,
         0,
       );
-      const overState = stateTokens > MAX_STATE_TOKENS;
-      const overRequest = stateTokens + questionTokens > MAX_REQUEST_TOKENS;
+      const overState = stateTokens > STATE_BUDGET;
+      const overRequest = stateTokens + questionTokens > REQUEST_BUDGET;
       if (current.length > 0 && (next.length > cap || overState || overRequest)) {
         flush();
       }

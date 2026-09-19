@@ -248,7 +248,12 @@ export function toAstGrepRule(rule: Rule, language: Language): Record<string, un
   return out;
 }
 
-/** Every language any loaded rule asks for, plus the probes' languages. */
+/**
+ * Every language any loaded rule asks for, in the order first seen.
+ *
+ * The probes do not add any: `probeRules` is given this list and emits probes
+ * FOR these languages, so there is nothing to union in here.
+ */
 export function ruleLanguages(rules: Rule[]): Language[] {
   const out: Language[] = [];
   for (const r of rules) {

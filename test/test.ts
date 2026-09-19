@@ -31,6 +31,9 @@ import {
   planRuleBatches,
   estimateTokens,
   MAX_REQUEST_TOKENS,
+  MAX_STATE_TOKENS,
+  STATE_MARGIN,
+  REQUEST_MARGIN,
   DEFAULT_BATCH_SIZE,
 } from "../src/batch.ts";
 import { schedule, planMixed, explain } from "../src/schedule.ts";
@@ -665,11 +668,47 @@ test("batch: no batch exceeds the request ceiling", () => {
   // a 0.69 cutoff, for precisely this reason. The model was right.
   const multi = batches.filter((b) => b.subjects.length > 1);
   assert.ok(multi.length > 0, "the planner must actually group subjects for this to test anything");
-  for (const b of multi) {
+  // And then EVERY batch, not just the grouped ones. Checking only `multi` was
+  // the second weakness jevlint found here (0.74 against a 0.54 cutoff): the
+  // name says no batch, and a one-subject batch over the ceiling is exactly
+  // the case the planner is allowed to emit only when it cannot split further.
+  for (const b of batches) {
+    if (b.subjects.length === 1) continue; // irreducible: nothing left to split
     assert.ok(
       b.estimatedTokens <= MAX_REQUEST_TOKENS,
       `batch of ${b.subjects.length} estimated ${b.estimatedTokens}`,
     );
+    assert.ok(
+      estimateTokens(b.state) <= MAX_STATE_TOKENS,
+      `state of a ${b.subjects.length}-subject batch estimated ${estimateTokens(b.state)}`,
+    );
+  }
+});
+
+test("batch: many matches split the batch; only much source degrades the arm", () => {
+  // The distinction the planner got wrong until jevlint was run on it. The arm
+  // is decided by the part of a state a split cannot shrink, so:
+  //   many subjects, small file -> split, arm intact
+  //   one subject, huge file    -> cannot split, arm steps down
+  const fromManyMatches = planBatches(manySubjects(400, { arm: "bare", text: "x".repeat(400) }), {
+    sources: new Map([["a.ts", "source"]]),
+    symbols: new Map(),
+  });
+  assert.ok(fromManyMatches.length > 1, "a group this size has to be split");
+  for (const b of fromManyMatches) {
+    assert.equal(b.arm, "bare");
+    assert.equal(b.degraded, null, "splitting is not a loss of context and must not be reported as one");
+    assert.ok(estimateTokens(b.state) <= MAX_STATE_TOKENS);
+  }
+
+  const fromHugeSource = planBatches(manySubjects(2, { arm: "located" }), {
+    sources: new Map([["a.ts", "s".repeat(MAX_STATE_TOKENS * 4)]]),
+    symbols: new Map(),
+  });
+  for (const b of fromHugeSource) {
+    assert.notEqual(b.arm, "located", "a source that cannot fit must not be sent as if it had");
+    assert.ok(b.degraded, "and that step-down is a real loss, so it is reported");
+    assert.equal(b.degraded!.from, "located");
   }
 });
 
@@ -714,12 +753,46 @@ test("batch: a file too large for the state budget steps the arm down and says s
 });
 
 test("batch: the token estimate is pessimistic rather than optimistic", () => {
-  // The estimator must not under-count, or a batch sails past the ceiling and
-  // costs a round trip to find out.
+  // The estimator must not under-count. Under-counting the REQUEST costs a
+  // round trip to discover; under-counting the STATE costs the verdicts, since
+  // splitting the questions cannot shrink a state.
   const text = "a".repeat(3400);
   assert.ok(estimateTokens(text) >= 1000);
-  assert.equal(estimateTokens(""), 0);
   assert.ok(estimateTokens({ a: "b" }) > 0);
+  assert.ok(estimateTokens("") <= 2, "an empty payload is two quotes, not a page");
+});
+
+test("batch: the state is packed to a wider margin than the request", () => {
+  // Not a style preference: the two budgets fail differently. A request over
+  // budget is recovered by halving the questions; a state over budget is not
+  // recoverable at all, and a run that hit it lost 100 verdicts. The estimate
+  // is also 12% under on a metadata-only state and 15-26% OVER on questions,
+  // so the margins have to differ in this direction and by at least that much.
+  assert.ok(STATE_MARGIN > REQUEST_MARGIN, "the unrecoverable budget gets the wider margin");
+  assert.ok(STATE_MARGIN >= 1.12, "and enough of one to cover a 12% undercount");
+});
+
+test("batch: structured records are charged more per character than prose", () => {
+  // Measured against the server's own accounting: source text runs about 3.4
+  // characters per token and per-subject metadata records about 2.2, because
+  // the records are mostly short quoted keys and punctuation. Charging one
+  // ratio for both undercounted a metadata-heavy state by 36% and lost the
+  // verdicts in it. Same character count, two shapes:
+  const asProse = { source: "x".repeat(2000) };
+  const asRecords = Array.from({ length: 40 }, (_, i) => ({
+    id: `q${i}`,
+    rule: "some-rule-id",
+    node: "variable_declarator",
+    lines: `${i}`,
+  }));
+  const proseChars = JSON.stringify(asProse).length;
+  const recordChars = JSON.stringify(asRecords).length;
+  const perChar = (v: unknown, chars: number) => estimateTokens(v) / chars;
+  assert.ok(
+    perChar(asRecords, recordChars) > perChar(asProse, proseChars) * 1.4,
+    `records ${perChar(asRecords, recordChars).toFixed(3)} tok/char should cost well over ` +
+      `prose ${perChar(asProse, proseChars).toFixed(3)}`,
+  );
 });
 
 // ------------------------------------------------- batch: the rule axis
@@ -733,11 +806,33 @@ test("batch/rule: every subject lands in exactly one batch, grouped per rule", (
     ...manySubjects(3, { rule: a, file: "z.ts" }),
   ];
   const batches = planRuleBatches(subjects, { symbols: new Map() });
-  assert.equal(
-    batches.reduce((n, x) => n + x.subjects.length, 0),
-    15,
-  );
+  // Counting to 15 was the whole check here, and a count cannot see "exactly
+  // one": a subject duplicated into two batches while another is dropped still
+  // totals 15. jevlint flagged the name against the body for that (0.77 on a
+  // 0.54 cutoff), so the subjects are now identified rather than tallied.
+  const placements = new Map<string, number>();
+  for (const x of batches) {
+    for (const s of x.subjects) {
+      const key = `${s.rule.id}\u0000${s.file}\u0000${s.line}\u0000${s.text}`;
+      placements.set(key, (placements.get(key) ?? 0) + 1);
+    }
+  }
+  assert.equal(placements.size, 15, "every subject appears");
+  for (const [key, times] of placements) {
+    assert.equal(times, 1, `${key.replaceAll("\u0000", " ")} landed in ${times} batches`);
+  }
   assert.ok(batches.every((x) => x.subjects.length > 0));
+  // "Grouped" has to mean something: 15 batches of one subject each would
+  // satisfy every assertion above and group nothing. jevlint kept flagging the
+  // name over this even after the placement check went in, and it was right.
+  assert.ok(
+    batches.some((x) => x.subjects.length > 1),
+    "the planner must actually group, not emit one batch per subject",
+  );
+  // "Grouped per rule" is a claim about the batch COUNT: two rules, two
+  // batches, whatever files the subjects came from. Asserting only that no
+  // batch mixes rules left "rule a spread over three batches" passing.
+  assert.equal(batches.length, 2, "one batch per rule, since neither rule fills a batch");
   // A rule-axis state is one rule's matches, so a batch never mixes rules --
   // the questions in it share one sentence and one criteria block.
   for (const x of batches) {
@@ -801,6 +896,23 @@ test("batch/rule: the cap is honoured and the state budget closes a batch", () =
       );
     }
   }
+  // Which budget closed it is the actual claim in this test's name, and
+  // "a batch closed" does not establish it -- the request budget would have
+  // closed one too. jevlint flagged the name over exactly that, so: the state
+  // is at its own ceiling while the request total is nowhere near its own.
+  const bound = deep.find((b) => b.subjects.length > 1)!;
+  assert.ok(
+    estimateTokens(bound.state) <= MAX_STATE_TOKENS,
+    `state ${estimateTokens(bound.state)} must stay under its own budget`,
+  );
+  assert.ok(
+    estimateTokens(bound.state) > MAX_STATE_TOKENS / 2,
+    "and must be near it, or something other than the state closed this batch",
+  );
+  assert.ok(
+    bound.estimatedTokens < MAX_REQUEST_TOKENS * 0.9,
+    `the request budget must have room left (${bound.estimatedTokens}), or it is what bound`,
+  );
 });
 
 test("batch/rule: a file-bearing arm is recorded as degraded, with its reason", () => {
@@ -856,15 +968,34 @@ test("schedule: a file-bearing arm holds its rule on the file axis", () => {
 });
 
 test("schedule: a rule's own axis pin is never overruled", () => {
-  const pinnedToRule = scoreRule({ id: "pinned", state: "bare", axis: "rule" });
-  const s = schedule(manySubjects(4, { rule: pinnedToRule, arm: "bare" }), [pinnedToRule], {
-    sources: new Map(),
-    symbols: new Map(),
-  });
-  const d = s.decisions[0]!;
-  assert.equal(d.axis, "rule");
-  assert.equal(d.pinned, true);
-  assert.match(d.reason, /pinned/);
+  // "Never overruled" is only shown by a case the scheduler decides the other
+  // way on its own. jevlint flagged the earlier version for asserting the pin
+  // held without establishing that, and writing the stronger version found the
+  // assumed premise to be false: for a rule on a lean arm the rule axis is
+  // ALWAYS cheaper, since the file axis pays one request per file for exactly
+  // the same content. So the disagreeing direction is a `file` pin.
+  const layout = (rule: Rule) =>
+    [0, 1, 2, 3].map((i) => subjectOf({ rule, arm: "bare", file: `f${i}.ts`, line: i + 1 }));
+  const options = { sources: new Map<string, string>(), symbols: new Map() };
+
+  const unpinned = scoreRule({ id: "same-shape", state: "bare" });
+  const wouldBe = schedule(layout(unpinned), [unpinned], options).decisions[0]!;
+  assert.equal(wouldBe.axis, "rule", "the premise: cost prefers the rule axis for this shape");
+  assert.equal(wouldBe.pinned, false);
+
+  const pinnedToFile = scoreRule({ id: "pinned-file", state: "bare", axis: "file" });
+  const held = schedule(layout(pinnedToFile), [pinnedToFile], options).decisions[0]!;
+  assert.equal(held.axis, "file", "the pin wins against the cheaper axis");
+  assert.equal(held.pinned, true);
+  assert.match(held.reason, /pinned/);
+
+  // And a pin in the direction cost already agrees with is still recorded as a
+  // pin, not as a cost decision that happened to match.
+  const pinnedToRule = scoreRule({ id: "pinned-rule", state: "bare", axis: "rule" });
+  const agreed = schedule(layout(pinnedToRule), [pinnedToRule], options).decisions[0]!;
+  assert.equal(agreed.axis, "rule");
+  assert.equal(agreed.pinned, true);
+  assert.match(agreed.reason, /pinned/);
 });
 
 test("schedule: the axis decision does not depend on what was cached", () => {
@@ -924,10 +1055,10 @@ test("gate: score findings fire at the cutoff and are named by level", () => {
   const rule = scoreRule({ at: 2 });
   const below = decide(subjectOf({ rule }), { value: 1.99, confidence: 0.9, kind: "score" });
   assert.equal(below.reported, false);
-  const at = decide(subjectOf({ rule }), { value: 2.0, confidence: 0.9, kind: "score" });
-  assert.equal(at.reported, true);
-  assert.equal(at.messageId, "violation");
-  assert.equal(at.level, "arguable");
+  const onTheCutoff = decide(subjectOf({ rule }), { value: 2.0, confidence: 0.9, kind: "score" });
+  assert.equal(onTheCutoff.reported, true);
+  assert.equal(onTheCutoff.messageId, "violation");
+  assert.equal(onTheCutoff.level, "arguable");
   const high = decide(subjectOf({ rule }), { value: 2.9, confidence: 0.9, kind: "score" });
   assert.equal(high.level, "violation");
 });
@@ -943,9 +1074,24 @@ test("gate: low confidence changes the message and never suppresses the finding"
 });
 
 test("gate: a per-rule unsureBelow overrides the run-wide one", () => {
-  const rule = scoreRule({ at: 2, unsureBelow: 0.9 });
-  const f = decide(subjectOf({ rule }), { value: 2.5, confidence: 0.8, kind: "score" }, { unsureBelow: 0.1 });
-  assert.equal(f.messageId, "unsure");
+  // Both directions, because one of them does not distinguish "overrides" from
+  // "whichever is higher wins" -- which is what jevlint flagged the one-case
+  // version for. A per-rule value BELOW the run-wide one has to win too.
+  const raised = scoreRule({ at: 2, unsureBelow: 0.9 });
+  const asUnsure = decide(
+    subjectOf({ rule: raised }),
+    { value: 2.5, confidence: 0.8, kind: "score" },
+    { unsureBelow: 0.1 },
+  );
+  assert.equal(asUnsure.messageId, "unsure", "0.8 is below the rule's 0.9");
+
+  const lowered = scoreRule({ at: 2, unsureBelow: 0.1 });
+  const asViolation = decide(
+    subjectOf({ rule: lowered }),
+    { value: 2.5, confidence: 0.8, kind: "score" },
+    { unsureBelow: 0.9 },
+  );
+  assert.equal(asViolation.messageId, "violation", "0.8 is above the rule's 0.1, so the run-wide 0.9 must not apply");
 });
 
 test("gate: a noul fires on its own cutoff and has no unsure variant", () => {
@@ -1245,8 +1391,8 @@ test("calibrate: a fit over one pass is not the fit over the mean of two", () =>
     { rule: "n", file: "a.rs", line: 1, value: clean },
     { rule: "n", file: "a.rs", line: 2, value: bad },
   ];
-  const lastPassOnly = fitCutoffs(pass(0.1, 0.9), labels, [rule])[0]!;
-  const meanOfBoth = fitCutoffs(
+  const fitOverLastPass = fitCutoffs(pass(0.1, 0.9), labels, [rule])[0]!;
+  const fitOverBothPasses = fitCutoffs(
     // The mean this stands in for is what cli.ts's mergeRuns computes.
     [
       { rule: "n", file: "a.rs", line: 1, value: (0.1 + 0.5) / 2 },
@@ -1255,9 +1401,9 @@ test("calibrate: a fit over one pass is not the fit over the mean of two", () =>
     labels,
     [rule],
   )[0]!;
-  assert.equal(lastPassOnly.separable, true);
-  assert.equal(meanOfBoth.separable, true);
-  assert.notEqual(lastPassOnly.fitted, meanOfBoth.fitted);
+  assert.equal(fitOverLastPass.separable, true);
+  assert.equal(fitOverBothPasses.separable, true);
+  assert.notEqual(fitOverLastPass.fitted, fitOverBothPasses.fitted);
 });
 
 test("calibrate: a rule with no labeled violations reports why, not a number", () => {
@@ -1376,16 +1522,48 @@ test("scan: two symbols sharing a name do not form a call edge with each other",
   const syms = buildSymbols([mk("struct", 0, 20), mk("impl", 30, 60)], ["Rust"]);
   for (const s of syms.get("a.rs")!.symbols) {
     assert.deepEqual(s.calls, [], `${s.role} must not call itself by name`);
+    // An edge has two halves and only one was checked, so a bug that recorded
+    // the reverse direction passed. jevlint flagged the name over that.
+    assert.deepEqual(s.calledBy, [], `${s.role} must not be called by its own name`);
   }
+  // And the absence above has to mean "no edge", not "no graph": the same
+  // machinery must still connect two symbols with DIFFERENT names.
+  const twoNamedItems = buildSymbols(
+    [
+      probeMatch("__jevlint_c0_Rust", "b.rs", "Rust", "pub fn caller() { callee() }", 0, 28, 0, 0, "caller"),
+      probeMatch("__jevlint_c0_Rust", "b.rs", "Rust", "pub fn callee() {}", 30, 48, 2, 2, "callee"),
+    ],
+    ["Rust"],
+  ).get("b.rs")!;
+  assert.deepEqual(twoNamedItems.symbols.find((s) => s.name === "caller")!.calls, ["callee"]);
 });
 
 test("scan: every symbol has call arrays, including ones excluded from the graph", () => {
+  // "Every symbol" on a single symbol was what jevlint flagged here: the one
+  // case tested was the excluded one, so the claim about the rest was carried
+  // by the name alone. Both classes are present now.
+  // What "excluded" means here is `role: module`: `computeCalls` builds edges
+  // only between named non-module symbols, so a module is the one kind that
+  // never appears in the graph and still has to carry the arrays.
   const probes: AstGrepMatch[] = [
     probeMatch("__jevlint_c5_Rust", "a.rs", "Rust", "mod tests { }", 0, 13, 0, 0, "tests"),
+    probeMatch("__jevlint_c0_Rust", "a.rs", "Rust", "pub fn f() { g() }", 20, 38, 2, 2, "f"),
+    probeMatch("__jevlint_c0_Rust", "a.rs", "Rust", "pub fn g() {}", 40, 53, 4, 4, "g"),
   ];
   const entry = buildSymbols(probes, ["Rust"]).get("a.rs")!;
-  assert.deepEqual(entry.symbols[0]!.calls, []);
-  assert.deepEqual(entry.symbols[0]!.calledBy, []);
+  assert.equal(entry.symbols.length, 3);
+  for (const s of entry.symbols) {
+    assert.ok(Array.isArray(s.calls), `${s.name} has no calls array`);
+    assert.ok(Array.isArray(s.calledBy), `${s.name} has no calledBy array`);
+  }
+  const excluded = entry.symbols.find((s) => s.role === "module")!;
+  assert.ok(excluded, "the module is the excluded class");
+  assert.deepEqual(excluded.calls, []);
+  assert.deepEqual(excluded.calledBy, []);
+  // The included class is only meaningful if the graph actually ran, so assert
+  // the edge it should have produced rather than just the array's existence.
+  assert.deepEqual(entry.symbols.find((s) => s.name === "f")!.calls, ["g"]);
+  assert.deepEqual(entry.symbols.find((s) => s.name === "g")!.calledBy, ["f"]);
 });
 
 test("scan: Rust visibility and test markers come from the item's own text", () => {

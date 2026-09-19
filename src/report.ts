@@ -206,10 +206,11 @@ export function formatJson(result: ReportInput): string {
 /**
  * GitHub workflow commands.
  *
- * Everything is emitted as `notice` or `warning`, never `error`, and that is a
- * deliberate default rather than an oversight: a probabilistic reviewer that
- * can fail a build is a probabilistic reviewer that gets switched off. Raise it
- * per rule with `severity: error` once a rule has earned it on your own code.
+ * A finding is emitted as `notice` or `warning` unless its rule asked for
+ * `severity: error`, and no rule shipped here does. That default is deliberate
+ * rather than an oversight: a probabilistic reviewer that can fail a build is a
+ * probabilistic reviewer that gets switched off. Raise it per rule once a rule
+ * has earned it on your own code, and this will pass `error` through.
  */
 export function formatGithub(result: ReportInput): string {
   const out: string[] = [];

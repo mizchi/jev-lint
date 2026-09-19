@@ -7,25 +7,36 @@ the parts that went wrong and the parts that were later retracted. Against
 **Read in order, and note that later sections supersede earlier ones where they
 conflict.** Sections 1-8 record the tool at 8 rules over a 10-file corpus, with
 `.mjs` sources and a single batching axis. Sections 9-11 are the current state:
-15 rules across three packs, a 13-file corpus of 306 subjects, TypeScript
-sources, and two batching axes. Where a number changed, the later one is the
-live one and the earlier one is left standing because how it changed is part of
-the evidence. Two claims in sections 1-4 are explicitly **retracted** in section
-9; they are marked there rather than deleted here.
+15 rules across three packs, a 13-file corpus, TypeScript sources, and two
+batching axes. Section 12 lists what is still unmeasured, and section 13 is the
+tool applied to its own source, which is where its four worst bugs were found.
+Where a number changed, the later one is the live one and the earlier one is
+left standing because how it changed is part of the evidence. Three claims are
+explicitly **retracted** — two from sections 1-4 in section 9, and section 9's
+own "2.5x the false positives" inside section 9. They are marked rather than
+deleted.
 
 Re-derive the tables without spending anything:
 
 ```bash
-npm run replay        # re-score the recorded run under today's cutoffs
-npm test              # 86 checks, no API key
+npm run replay        # re-score AND re-fit the recorded run, no API key
+npm test              # 99 checks, no API key
 npm run typecheck     # the full type surface, including tools and tests
 ```
 
-The recorded runs are `docs/data/calibration.json` (the current 15-rule run),
-`docs/data/grouping.json` (the axis comparison, section 9),
-`docs/data/arms.json` (four state arms, section 3) and
-`docs/data/self-lint-cache.json` (the 737 verdicts behind section 5, kept as a
-cache so the numbers there can be checked rather than taken on trust).
+The recorded runs, each replayable with `jevlint replay <path> --labels
+corpus/labels.json`:
+
+| record | what it holds |
+| --- | --- |
+| `calibration.json` | the shipped 15-rule fit, file axis (sections 1, 4, 10) |
+| `calibration-rule-axis.json` | the naming pack refitted on the rule axis (section 9) |
+| `calibration-rule-axis-comments.json` | the comment pack, likewise |
+| `grouping.json` | the axis comparison (section 9) |
+| `grouping-refit.json` | the same comparison with each axis at its own cutoffs |
+| `arms.json` | four state arms (section 3) |
+| `self-lint-before.json` / `self-lint-after.json` | this repository judged before and after section 13's fixes |
+| `self-lint-cache.json` | the 737 verdicts behind section 5, kept as a cache |
 
 ---
 
@@ -809,3 +820,152 @@ because every calibrated rule pins `axis: file`, **`auto` moves only the two
 switch untouched and which showed the largest per-rule saving (377 → 4 requests,
 −52.7% tokens on tokio), is pinned shut. That is the safe default working as
 designed and it is also, on this configuration, close to a no-op.
+
+## 13. Running it on itself, as a code-quality tool
+
+The question this section answers is not "does it run" — section 5 covered that
+on an earlier version of the code — but **is it worth running on a codebase you
+care about.** So it was pointed at this repository's own TypeScript (`src`,
+`tools`, `test`, `corpus/build-labels.ts`), every finding was read against the
+code, the real ones were fixed, and it was re-run until it converged.
+
+One run: **1,377 subjects, 65 requests, ~1.02M input tokens, $0.043, 18s of
+request time, under 5 seconds of wall clock.** Seven of the fifteen rules fire;
+the eight Rust-only rules match nothing and say so. The whole exercise —
+five scans, the fixes, and the API probes below — cost about $0.34.
+
+### The score
+
+| round | findings | real, by reading the code | what changed |
+| --- | --- | --- | --- |
+| 1 | 9 | 7 | as shipped before this section |
+| 2 | 6 | — | after fixing the planner; **1 request failed, 100 verdicts lost** |
+| 3 | 11 | 9 | after fixing the token estimator |
+| 4 | 3 | 3 | after fixing the nine |
+| 5+ | 1–3 | ~1 | converged; the tail flickers |
+
+**9 real defects in about 13,000 lines, for four cents a pass.** Two of them are
+comments that had become false — the class nothing else can check. Six were
+tests that did not verify the behaviour their own names claimed. One was a
+binding named for its input rather than its value, six times over.
+
+### The best defects came from running it, not from its rules
+
+This is the result worth leading with, and it is not the flattering one. The
+rules found comment drift and weak tests. The *run* found four bugs in the tool
+itself, each one surfaced by a number in its own output that did not make sense:
+
+1. **`6 batch(es) / 214 subject(s) fell back from `bare` to `bare`.`** A
+   fallback from an arm to itself is not a fallback. The cause: the planner
+   probed the arm against the state for **every match in the file at once**, so
+   a file was degraded for having many matches rather than much source — and at
+   `bare`, where nothing is leaner, it reported a step-down with nowhere to
+   step. The fix probes the *irreducible* part of a state, what one subject
+   alone costs, and splits the rest. It restored `located` for about 1,000
+   subjects per run that had been quietly judged at `local`, which is the wrong
+   arm for the rules that were calibrated on `located`.
+
+2. **`1 request(s) failed: max_tokens_exceeded`, and 100 verdicts lost.** The
+   accurate planner immediately hit a wall the conservative one had been hiding.
+   Reproducing it found the important part: the request was refused *with a
+   single question attached*, which is the signature of a state over budget, and
+   `askSplitting` — the client's only recovery — halves the questions and cannot
+   shrink a state. So this failure mode is unrecoverable by design, which makes
+   the estimator's accuracy a correctness property, not a cost optimisation.
+
+3. **The token estimator used one ratio for every payload.** Measured against
+   the server's own `usage.input_tokens`, on three shapes:
+
+   | payload shape | measured | the single 3.4 ratio was |
+   | --- | --- | --- |
+   | a file's source inside a state | 3.37 chars/token | accurate to 1% |
+   | per-subject metadata records | 2.18 chars/token | **36% under** |
+   | a batch's questions record | 3.68–3.85 chars/token | 15–26% over |
+
+   Metadata records are small and syntax-dense; a questions record is large and
+   repetitive, and a tokenizer does far better on the second. No single pair of
+   constants fits both, which is why the estimator now charges string values and
+   JSON syntax separately — and why the remaining error is absorbed by margins
+   rather than by pretending the model is exact.
+
+4. **Two budgets need two margins.** The state budget is unrecoverable and the
+   estimate's worst case (−12%) is there, so the planner packs to 1.25× under
+   it. The request budget is recoverable and the estimate runs 15–26% *over*
+   there, so 1.1× is enough. Putting enough pessimism in the ratios to cover
+   the state made `--dry-run` overstate a real bill by 22%; splitting the two
+   concerns brought that to about +9%, which is now documented as a bound
+   rather than a quote.
+
+A fifth observation is about the tool's own advice. The README says to read
+`jevlint gaps` first. On this repository it prints **`rewrite` for all seven
+rules that fired** — because a gap needs two classes and real code is 99.8%
+clean, so there is nothing on the far side of the gap to separate from. The
+medians are the informative part there (`var-name-describes-value` sits at 0.10
+across 787 matches, so its 0.61 cutoff is nowhere near the clean band), and
+"read the gap first" is advice for a *labeled corpus*, not for your repository.
+
+### What the rules were right about
+
+The two comment findings were both real and both the kind a reviewer skims past:
+
+- `formatGithub`'s doc opened with "Everything is emitted as `notice` or
+  `warning`, never `error`" while the first line of its body passes `error`
+  through for any rule with `severity: error`. The rest of the same comment
+  explains how to opt into that — the comment contradicted itself, and the
+  sentence a reader would quote while auditing "can this fail my build" was the
+  false one.
+- `ruleLanguages`'s doc claimed it returns "every language any loaded rule asks
+  for, **plus the probes' languages**". The probes take that list as input, so
+  there is nothing to add; the comment described its caller.
+
+The test rule's six hits were more interesting than expected, because fixing
+them changed the tests' *power*, not their style:
+
+- "no batch exceeds the request ceiling" checked only batches holding more than
+  one subject.
+- "every subject lands in exactly one batch" asserted that the subject count
+  totalled 15, which a duplicate plus a drop also satisfies.
+- "a rule's own axis pin is never overruled" never established that the
+  scheduler wanted the other axis. **Writing the stronger version disproved my
+  own assumption**: for a rule on a lean arm the rule axis is always cheaper, so
+  the disagreeing direction is a `file` pin, not a `rule` pin. The test now
+  proves the premise before asserting the pin.
+- "two symbols sharing a name do not form a call edge" checked one half of the
+  edge, so a bug recording the reverse direction passed.
+- "every symbol has call arrays" tested one symbol, and it was the excluded one.
+- "the cap is honoured and the state budget closes a batch" showed that *a*
+  batch closed, which the request budget would also produce.
+
+### The caveats an adopter needs
+
+- **It flagged what I had just written.** Every naming hit was in code from the
+  last hour of work, including code written to fix an earlier hit. That is a
+  point in favour of `review` mode on a diff and against `check` on a whole
+  repository: the rules find fresh mistakes, and old code has had its names
+  argued over already.
+- **The residue flickers.** After the fixes, consecutive passes over identical
+  code report 1, 2 and 3 findings, drawn from a pool of four borderline tests at
+  0.55–0.70 against a 0.54 cutoff. One finding is stable across every pass and I
+  disagree with it: `batch/rule: every subject lands in exactly one batch,
+  grouped per rule` now verifies placement by identity, batch count, grouping
+  and rule purity, and is still flagged at 0.65–0.70. That is a false positive
+  three rounds of strengthening could not clear.
+- **So the cutoff is the adopter's job, again.** `test-name-verifies-claim`'s
+  clean band on this repository has a median of 0.18 and a tail to 0.70, while
+  its corpus-fitted cutoff is 0.54. The flags are genuine outliers against that
+  median — the rule is pointing somewhere real — but anyone running this on
+  their own tests should expect to refit, exactly as section 4 says and as this
+  section demonstrates on the author's own code.
+- **A state over budget still loses its verdicts.** The planner now avoids that
+  case by margin rather than recovering from it. The fix is for the client to
+  step the arm down and retry when question-splitting is exhausted, which needs
+  a batch to carry enough to rebuild its own state. Not done.
+
+### Verdict
+
+Worth running, in review mode, on code you are about to ask someone to read. It
+found nine real defects here at four cents a pass, two of them in the class no
+other tool checks and six of them tests that were quietly not testing what they
+said. It is not a substitute for reading the output: a fifth of the findings
+were wrong, and the most valuable four defects of the whole exercise came from
+distrusting its own summary lines rather than from any rule it ran.
