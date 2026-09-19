@@ -1,6 +1,6 @@
 # Using the shipped rules
 
-jev-lint ships two packs, 15 rules, in the npm package's `rules/` directory.
+jev-lint ships six packs, 21 rules, in the npm package's `rules/` directory.
 They are the rules to start from: each one has a cutoff fitted to a labelled
 corpus, a `state` arm chosen by measurement, and a `criteria` block that took
 several rounds to get right. Write your own only for a convention they do not
@@ -25,14 +25,40 @@ cover — see [cookbook.md](cookbook.md).
 | `comment-describes-declaration` | does the comment above this declaration still hold? | a declaration with a comment directly above it | `located` |
 | `comment-describes-block` | does a comment inside a body describe the lines under it? | a statement with a comment directly above it, inside a block; judged with its enclosing function | `bare` |
 
+**`guarantees.yml`** — a name that makes a specific promise
+
+| rule | names | asks | state |
+| --- | --- | --- | --- |
+| `safe-name-is-safe` | `safe*`, `try*`, `*OrNull`, `*OrDefault`, `*OrUndefined` | does a failure the name absorbs still escape as a throw? | `local` |
+| `idempotent-name` | `ensure*`, `upsert*`, `setup*`, `install*`, `register*` | does a second call leave a different result from the first? | `located` |
+
+Narrower cousins of `fn-name-promises`, which flags none of their labelled
+defects at its own cutoff: a specific promise separates where "does the body
+match the name" does not.
+
+**`tests.yml`** — tests that cannot verify their name, by construction
+
+| rule | asks | state |
+| --- | --- | --- |
+| `test-mocks-subject` | is the claimed behaviour performed by a stub, with the assertion reading the stub back? | `located` (the `vi.mock` at the top of the file is the evidence) |
+| `snapshot-only-behaviour-claim` | does the title claim a property a whole-render snapshot does not isolate? | `located` |
+
+**`messages.yml`** — `log-level-matches-event`: does the level of a
+`logger.<level>(...)` call match the severity of the path it sits on?
+`local`.
+
+**`config.yml`** — `script-name-does`: does a `package.json` script's name
+describe the command it runs? JSON, `bare`.
+
 Not asked, deliberately: style, redundancy, whether a comment should exist.
 One axis only — is the claim false.
 
-Each rule has an ECMAScript variant (`TypeScript, Tsx, JavaScript, Jsx`) and a
+The naming and comment rules each have an ECMAScript variant (`TypeScript, Tsx, JavaScript, Jsx`) and a
 Rust variant (`-rust`) sharing one sentence; `comment-describes-declaration`
 also has a `-js` variant, because JavaScript has no type declarations to
-match. **On a single-language repository about half the pack reports "matched
-nothing".** That line is expected there, and nowhere else.
+match. **On a TypeScript-only repository 8 of the 21 rules report "matched
+nothing"** — the seven Rust variants and the `-js` one. That line is expected
+there, and nowhere else.
 
 The two test rules are nested, not orthogonal: a test that exercises the wrong
 case also fails to establish its name, so both fire on that class and only
@@ -135,17 +161,19 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted to a 13-file corpus (Rust, TypeScript, JavaScript; 276 subjects). Of
-the 15 rules, 12 reach precision and recall 1.00 on it — resting on 41
-labelled defects between them, so read that as "separates the classes in a
-small corpus", not as a guarantee. Three do not separate at any cutoff and
-ship with a note in the pack saying so:
+Fitted to a corpus of 625 subjects (Rust, TypeScript, JavaScript, JSON), three
+passes. Of the 21 rules, 19 reach precision and recall 1.00 on it — resting
+on fewer than ten labelled defects each, all but one, so read that as
+"separates the classes in a small corpus", not as a guarantee. Two do not separate and ship
+with a note in the pack saying what they miss:
 
 | rule | measured | ships as |
 | --- | --- | --- |
-| `comment-describes-block` | precision 0.67 | `info` |
-| `comment-describes-block-rust` | recall 0.50 | `info` |
 | `test-name-describes-code-rust` | precision 0.67, by inversion | `warning`, with a note |
+| `test-name-verifies-claim` | precision 0.93 at 0.73; titles that claim nothing over a snapshot read as defects | `warning` at 0.75, with a note |
+
+The four newer packs were also run once over an unseen repository of 1,391
+subjects before shipping; their findings there are in the pack headers.
 
 On unseen code expect the clean band to be higher than the corpus's. That is
 the documented procedure, not a caveat: run, read the findings, and refit the

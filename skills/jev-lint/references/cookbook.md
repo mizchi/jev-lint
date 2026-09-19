@@ -50,6 +50,33 @@ capture is handed to the model by name, so capture what the sentence talks
 about. Captures propagate from inside `has:` / `inside:` / `follows:` at any
 depth.
 
+### YAML and JSON
+
+ast-grep parses both (`language: Yaml`, `language: Json`), and a `name:` in
+them is a claim like any other. Six things a rule author needs that took a
+day to find:
+
+- YAML wraps every container's contents in a `block_node`:
+  `block_sequence_item > block_node > block_mapping`. `inside:` and `has:`
+  stop at the neighbour by default, so `inside: {kind: block_sequence_item}`
+  on a `block_mapping` matches nothing. Nest through `block_node`, or use
+  `stopBy: end`.
+- A key is matched by text: `has: {field: key, regex: "^name$"}`. In JSON the
+  key node is a `string` **including its quotes**, so the regex is
+  `'^"scripts"$'` and the capture arrives quoted.
+- A YAML block scalar (`>-`, `|`) captures as raw source, indicator line and
+  indentation included, not the folded value.
+- Two `has:` keys in one mapping is a YAML duplicate-key error. Wrap them in
+  `all:`. Every claim-versus-evidence rule needs two.
+- `enclosing`, `local`, `graph` and `subject: file` have no structure to work
+  with in these grammars; `subject: node` with `bare` or `located` are the
+  real choices. Match the node that holds both the claim and the evidence
+  (the whole `"name": "command"` pair, the whole step mapping).
+- Subjects are one per line, so labels need `"window": 0`; the default window
+  of 3 lets a `bad` label claim its neighbours.
+
+The shipped `script-name-does` in `rules/config.yml` is the worked example.
+
 ### Narrowing a capture by its text
 
 A convention about a *family* of names — predicates, handlers, hooks —

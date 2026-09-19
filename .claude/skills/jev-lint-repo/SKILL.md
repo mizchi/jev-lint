@@ -25,7 +25,19 @@ node --experimental-strip-types src/cli.ts review --base main --retry 3
 
 - Labels are comments in `corpus/` (`// DEFECT (rule-id): reason`,
   `// CLEAN: reason`); `corpus/build-labels.ts` derives `corpus/labels.json`
-  and `--check` fails CI if it is stale. Never edit the JSON by hand.
+  and `--check` fails CI if it is stale. Never edit that JSON by hand. Files
+  that must stay marker-free — a rule reads the text around the match, or the
+  file is JSON — are labelled in `corpus/**/labels.hand.json`, which the
+  builder merges in; the four newer packs' corpora are labelled that way.
+- A fixture file named for the rule it exercises carries
+  `// jev-lint-ignore-file module-name-describes-contents` on line 1, above
+  its imports, so the module rule does not judge a name that was never a
+  claim about the exports.
+- A new rule goes through `experiments/rule-candidates/BRIEF.md`: its own
+  corpus with hard cleans, `gaps`, `calibrate --repeat 3 --record`, a report
+  with a verdict, and one pass over an unseen repository before it enters
+  `rules/`. Cross-rule labels matter: the whole corpus is judged by every
+  pack, so a new corpus file needs labels for the existing rules it trips.
 - Any change to a shipped rule's `ask`, `criteria`, `note`, matcher,
   `subject` or `state` is a new question: re-run
   `calibrate corpus --labels corpus/labels.json --repeat 3 --record` and

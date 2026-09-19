@@ -53,7 +53,7 @@
   # reviewer-action score is a judgment the file can dilute, while "does this
   # name describe this body" is one the file can supply evidence for.
   state: located
-  at: 0.83
+  at: 0.86
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -237,7 +237,7 @@
   # same file cannot change this one's answer, and cannot invalidate its cached
   # verdict either.
   state: bare
-  at: 0.93
+  at: 0.94
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -322,7 +322,18 @@
   # same file cannot change this one's answer, and cannot invalidate its cached
   # verdict either.
   state: bare
-  at: 0.53
+  # 0.75 is a best trade-off, not a midpoint. On the original four defects this
+  # rule separated at 0.53 with room to spare. The tests pack's corpus added
+  # eleven more defects and three hard cleans of a kind the first corpus did
+  # not have -- titles that claim nothing ("matches the snapshot", "renders",
+  # "renders the receipt for a single-item order") over a snapshot assertion --
+  # and the rule reads those at 0.69-0.77, inside its defect band. At 0.75:
+  # precision 0.93, recall 0.93, one of each wrong. The fix is in the criteria,
+  # not the cutoff: a title that only labels the input or asserts the snapshot
+  # itself makes no claim the body has to establish, and the false branch
+  # should say so. Until it does, the higher cutoff trades one quiet defect for
+  # three findings on titles that promise nothing.
+  at: 0.75
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning

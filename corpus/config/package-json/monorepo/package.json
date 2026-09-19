@@ -1,0 +1,23 @@
+{
+  "name": "acme-monorepo",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "test:e2e": "vitest run --dir src/unit",
+    "format": "eslint .",
+    "start": "npm run build",
+    "pretest": "npm run build",
+    "lint": "biome lint . && tsc --noEmit",
+    "version": "changeset version && git add .",
+    "gen": "openapi-typescript spec.yaml -o src/api.d.ts",
+    "bench": "node --experimental-strip-types bench/index.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@changesets/cli": "^2.27.0",
+    "eslint": "^9.10.0",
+    "openapi-typescript": "^7.4.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

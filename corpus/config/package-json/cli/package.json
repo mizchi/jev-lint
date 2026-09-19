@@ -1,0 +1,29 @@
+{
+  "name": "@acme/migrate",
+  "version": "0.9.3",
+  "bin": {
+    "acme-migrate": "./dist/cli.js"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node dist/cli.js",
+    "build": "esbuild src/cli.ts --bundle --platform=node --outfile=dist/cli.js",
+    "test": "node --test --experimental-strip-types 'src/**/*.test.ts'",
+    "e2e": "playwright test",
+    "coverage": "c8 --reporter=lcov npm test",
+    "migrate": "node dist/cli.js up",
+    "db:reset": "node dist/cli.js down --all && node dist/cli.js up",
+    "typecheck": "tsc --noEmit && git add -A && git commit -m 'chore: typecheck'",
+    "watch": "node --watch dist/cli.js up",
+    "deploy": "fly deploy --remote-only"
+  },
+  "dependencies": {
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "c8": "^10.1.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.0"
+  }
+}

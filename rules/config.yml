@@ -1,0 +1,58 @@
+# Names in configuration files. ast-grep parses JSON and YAML, and no linter
+# has ever given a key in them a meaning.
+#
+# The matcher is the whole `"name": "command"` pair under `scripts`, so the
+# claim and the evidence are one node and `bare` is the right arm. JSON keys
+# are string nodes WITH their quotes, which is why the regex is ^"scripts"$.
+#
+# Fitted on corpus/config/package-json/ (hand-labelled, window 0: one script
+# per line). On an unseen repository's 38 scripts it fired 0, highest 0.14.
+# Two siblings from the same family, workflow-step-name (GitHub Actions
+# `name:` versus `run:`) and openapi-summary-matches-schema, are in
+# experiments/rule-candidates/a-config-names/ with their measurements: the
+# first separates by one subject's width, the second had no unseen code to
+# meet.
+
+- id: script-name-does
+  language: Json
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.52
+  rule:
+    kind: pair
+    all:
+      - has:
+          field: key
+          pattern: $SCRIPT
+      - has:
+          field: value
+          kind: string
+          pattern: $COMMAND
+    inside:
+      kind: object
+      inside:
+        kind: pair
+        has:
+          field: key
+          regex: ^"scripts"$
+  ask: This npm script's name ($SCRIPT) misdescribes the command it runs ($COMMAND).
+  criteria:
+    "true": 'The command does a different thing than the name states: it prints or exits instead of
+      doing the named work, it rewrites files when the name promises only a check ("lint" running a
+      formatter in write mode), it only deletes when the name promises an artifact ("build" that is
+      just rm -rf), it runs a different tool category than the name says ("typecheck" running a
+      linter, "e2e" running unit tests), it only reports when the name promises to change files
+      ("format" running a linter without a fix flag), or it also does consequential extra work --
+      publishes, deploys, commits, deletes -- the name does not mention.'
+    "false": The command does what the name says. A terse or abbreviated name, a name that describes the
+      sum of several delegated scripts, a name that covers a family of read-only checks ("lint" that
+      also type-checks, "check" that runs several checkers), an npm lifecycle hook
+      (pre*/post*/prepare/postinstall/version) whose command is the conventional thing to run at
+      that moment, or a tool whose own name differs from the script name but does the named work is
+      not a mismatch.
+  note: Judge only the script name and its command. A `pre<x>` or `post<x>` name promises only "runs
+    before/after x", not x itself, so a `prebuild` that clears the output directory is honouring its
+    name. Whether the tool is a good choice, or whether the script should exist, is not the
+    question.
+  axis: file

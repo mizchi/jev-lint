@@ -228,9 +228,9 @@ with no API key.
 
 ## Rules
 
-Two packs ship in `rules/`, used when the project has no `rules/` directory
-of its own. Each rule exists in an ECMAScript and a Rust variant sharing one
-sentence, 15 rules in all.
+Six packs ship in `rules/`, 21 rules, used when the project has no `rules/`
+directory of its own. The naming and comment rules exist in an ECMAScript
+and a Rust variant sharing one sentence; the rest are ECMAScript or JSON.
 
 **`naming.yml`** — does the code do what it calls itself?
 
@@ -242,6 +242,24 @@ sentence, 15 rules in all.
 | `test-name-verifies-claim` | would this test still pass if the behaviour its name claims were broken? |
 | `module-name-describes-contents` | is this module named for what it contains? |
 
+**`guarantees.yml`** — the name makes a specific promise; does the body keep it?
+
+| rule | asks |
+| --- | --- |
+| `safe-name-is-safe` | `safe*` / `try*` / `*OrNull`: does a failure still escape as a throw? |
+| `idempotent-name` | `ensure*` / `upsert*` / `register*`: does a second call do something different from the first? |
+
+On the corpus behind this pack, `fn-name-promises` flags none of the 22
+labelled defects at its cutoff — the narrower promise separates where the
+general question does not.
+
+**`tests.yml`** — tests that cannot verify their name, by construction
+
+| rule | asks |
+| --- | --- |
+| `test-mocks-subject` | is the behaviour the title claims performed by a stub, with the assertion reading the stub back? |
+| `snapshot-only-behaviour-claim` | does the title claim a property that a whole-render snapshot does not isolate? |
+
 **`comments.yml`** — is the comment still true?
 
 | rule | asks |
@@ -249,15 +267,29 @@ sentence, 15 rules in all.
 | `comment-describes-declaration` | does the comment above this declaration still hold? |
 | `comment-describes-block` | does a comment inside a body describe the lines under it? |
 
-Deliberately not asked: style, redundancy, whether a comment should exist.
-One axis only — is the claim false.
+**`messages.yml`** — messages for a human, versus what the code does
 
-On the corpus the cutoffs were fitted to, 12 of the 15 rules reach precision
-and recall 1.00; three do not separate at any cutoff and ship with a note
-saying so, two of them at `severity: info`. The counts behind those numbers
-are small — 41 labelled defects across the 12 — and the full table, with what
-the packs found on this repository's own code, is in
-[docs/reference.md](docs/reference.md#the-shipped-packs).
+| rule | asks |
+| --- | --- |
+| `log-level-matches-event` | does this log call's level match the severity of the path it sits on? |
+
+**`config.yml`** — names in configuration files (ast-grep parses JSON and YAML)
+
+| rule | asks |
+| --- | --- |
+| `script-name-does` | does this `package.json` script's name describe the command it runs? |
+
+Deliberately not asked anywhere: style, redundancy, whether something should
+exist. One axis only — is the claim false.
+
+On the corpus the cutoffs were fitted to, 19 of the 21 rules reach precision
+and recall 1.00; the two that do not ship with a note in the pack saying
+what they miss. The counts behind those numbers are small — under ten
+labelled defects per rule — and the full table, with what the packs found on
+this repository's own code and on an unseen one, is in
+[docs/reference.md](docs/reference.md#the-shipped-packs). Nine more rules
+were built and measured the same way and not shipped; their reports are in
+`experiments/rule-candidates/`.
 
 ## Adding your rule
 

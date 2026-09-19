@@ -1,0 +1,766 @@
+{
+  "$note": "Hand-written labels for corpus files that must stay marker-free: the rules here read the text around a match, or the file is JSON. Merged into corpus/labels.json by corpus/build-labels.ts. Paths are from the repository root.",
+  "corpus/config/package-json/app/package.json": [
+    {
+      "line": 7,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: terse dev -> vite dev server",
+      "window": 0
+    },
+    {
+      "line": 8,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "build only deletes dist, produces nothing",
+      "window": 0
+    },
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "vite preview is a preview",
+      "window": 0
+    },
+    {
+      "line": 10,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: test -> vitest run, tool name differs from script name",
+      "window": 0
+    },
+    {
+      "line": 11,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: vitest with no args is watch mode",
+      "window": 0
+    },
+    {
+      "line": 12,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "lint runs prettier --write: formats and rewrites, does not lint",
+      "window": 0
+    },
+    {
+      "line": 13,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: fmt is the abbreviation for format; prettier --write formats",
+      "window": 0
+    },
+    {
+      "line": 14,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "typecheck runs eslint, which does not type check",
+      "window": 0
+    },
+    {
+      "line": 15,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: ci is the sum of delegated scripts",
+      "window": 0
+    },
+    {
+      "line": 16,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: prepare -> husky is the conventional lifecycle hook install",
+      "window": 0
+    }
+  ],
+  "corpus/config/package-json/lib/package.json": [
+    {
+      "line": 15,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: prebuild lifecycle hook that clears dist; a lazy rule reads 'build' and sees rm -rf",
+      "window": 0
+    },
+    {
+      "line": 16,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "tsc -p builds",
+      "window": 0
+    },
+    {
+      "line": 17,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "test prints ok and runs no tests",
+      "window": 0
+    },
+    {
+      "line": 18,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: terse check -> biome check",
+      "window": 0
+    },
+    {
+      "line": 19,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: lint:fix says fix, eslint --fix rewrites on purpose",
+      "window": 0
+    },
+    {
+      "line": 20,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "typedoc generates docs",
+      "window": 0
+    },
+    {
+      "line": 21,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "clean also compiles the project after deleting dist",
+      "window": 0
+    },
+    {
+      "line": 22,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: release -> changeset publish, different tool name, same act",
+      "window": 0
+    },
+    {
+      "line": 23,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: postinstall -> patch-package is the conventional hook",
+      "window": 0
+    }
+  ],
+  "corpus/config/package-json/cli/package.json": [
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "start runs the built entry",
+      "window": 0
+    },
+    {
+      "line": 10,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "esbuild bundle is a build",
+      "window": 0
+    },
+    {
+      "line": 11,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: node --test with strip-types is a test runner",
+      "window": 0
+    },
+    {
+      "line": 12,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: e2e -> playwright test",
+      "window": 0
+    },
+    {
+      "line": 13,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "c8 wrapping npm test is a coverage run",
+      "window": 0
+    },
+    {
+      "line": 14,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "cli up is a migration",
+      "window": 0
+    },
+    {
+      "line": 15,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: db:reset is down --all then up",
+      "window": 0
+    },
+    {
+      "line": 16,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "typecheck also stages and commits every change",
+      "window": 0
+    },
+    {
+      "line": 17,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: watch -> node --watch",
+      "window": 0
+    },
+    {
+      "line": 18,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "fly deploy deploys",
+      "window": 0
+    }
+  ],
+  "corpus/config/package-json/monorepo/package.json": [
+    {
+      "line": 6,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "test:e2e runs the unit test directory, not e2e",
+      "window": 0
+    },
+    {
+      "line": 7,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "format runs eslint without --fix: reports, does not format",
+      "window": 0
+    },
+    {
+      "line": 8,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "start builds and starts nothing",
+      "window": 0
+    },
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: pretest lifecycle hook building before tests",
+      "window": 0
+    },
+    {
+      "line": 10,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: lint as an umbrella for static checks; tsc --noEmit reports only",
+      "window": 0
+    },
+    {
+      "line": 11,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: npm `version` lifecycle hook, conventional changeset + git add",
+      "window": 0
+    },
+    {
+      "line": 12,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: terse gen -> openapi-typescript codegen",
+      "window": 0
+    },
+    {
+      "line": 13,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "bench runs a benchmark script",
+      "window": 0
+    }
+  ],
+  "corpus/ts/guarantees/safe.ts": [
+    {
+      "line": 5,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "tryParseDate throws RangeError on the exact failure (unparseable date) its name promises to report as null"
+    },
+    {
+      "line": 13,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "safeReadJson catches the read but JSON.parse is outside the try, so a malformed file throws"
+    },
+    {
+      "line": 34,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "getUserOrNull throws NotFoundError on the missing-row case that OrNull promises to return null for"
+    },
+    {
+      "line": 40,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "parsePortOrDefault returns the default only for an absent value and throws RangeError for an invalid one; OrDefault promises the fallback on bad input"
+    },
+    {
+      "line": 49,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: the only throw is a TypeError on a non-string argument, a programmer error, not the parse failure the name absorbs; parse failure returns null"
+    },
+    {
+      "line": 59,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: no try/catch at all, but no path can throw; missing segments return undefined"
+    },
+    {
+      "line": 73,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: logs in the catch, then returns the fallback; both read and parse are inside the try"
+    },
+    {
+      "line": 85,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: try* reporting the failure as false, nothing to catch"
+    },
+    {
+      "line": 92,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "safeDivide returns null on the division failure"
+    },
+    {
+      "line": 99,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "tryRun converts every throw into a result object"
+    },
+    {
+      "line": 107,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "firstOrUndefined cannot fail"
+    },
+    {
+      "line": 111,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "tryConnect rethrows on the last attempt, so the connection failure it promises to report as null reaches the caller as a rejection"
+    }
+  ],
+  "corpus/ts/guarantees/idempotent.ts": [
+    {
+      "line": 6,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "ensureIndex runs CREATE INDEX without IF NOT EXISTS and without checking; a second call fails on the existing index"
+    },
+    {
+      "line": 13,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "registerHandler pushes onto the array without checking, so a second call registers the handler twice"
+    },
+    {
+      "line": 17,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "setupDatabase runs ALTER TABLE users ADD COLUMN unconditionally between two IF NOT EXISTS statements; the second call fails on the duplicate column. On `local` this scores 0.22-0.28 in every attempt (below the clean setupLogger) -- the model does not bring the SQL knowledge; on `located`, with the file's other IF NOT EXISTS / ON CONFLICT statements in view, it scores 0.64-0.72. Labelled bad because it is one; the arm choice is what decides whether it is caught."
+    },
+    {
+      "line": 23,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "installShutdownHooks adds a fresh SIGTERM/SIGINT listener each call; the second call closes and exits twice"
+    },
+    {
+      "line": 40,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "upsertUser is a plain INSERT with no ON CONFLICT; a second call with the same id violates the primary key"
+    },
+    {
+      "line": 47,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: register* that overwrites by key"
+    },
+    {
+      "line": 51,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: existence check via headBucket before create"
+    },
+    {
+      "line": 68,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: reassigns a module-level binding on every call, but the second call leaves the same state as the first"
+    },
+    {
+      "line": 83,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: returns early on a flag it set"
+    },
+    {
+      "line": 92,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "ON CONFLICT DO UPDATE is a true upsert"
+    },
+    {
+      "line": 100,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: ensure* that is a pure conversion"
+    },
+    {
+      "line": 107,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: clears the previous interval under the same name before scheduling, so a repeat replaces rather than duplicates"
+    },
+    {
+      "line": 118,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "setupWorkspace overwrites workspace.json with defaults and appends another .cache/ line to .gitignore on every call; a second call clobbers edits and duplicates the ignore entry"
+    }
+  ],
+  "corpus/ts/messages/logging.ts": [
+    {
+      "line": 16,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "info for a failed save inside a catch that rethrows: the operation failed and the caller is left to deal with it, which is error"
+    },
+    {
+      "line": 42,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "error on the ordinary success path of opening a session: a user logging in is a routine event, info at most"
+    },
+    {
+      "line": 52,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "debug for a payment refusal that is returned to the caller as a failure and counted in metrics: an operator-visible outcome hidden at a level that is off in production"
+    },
+    {
+      "line": 70,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "warn for an unrecoverable startup failure followed by process.exit(1): nothing is degraded, the process is gone, which is error or fatal"
+    },
+    {
+      "line": 85,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "error for a cache miss on the normal path that then just fetches and fills the cache: routine, debug at most"
+    },
+    {
+      "line": 170,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "info for a delivery failure after which the message is discarded: data is lost and an operator would want to know, which is warn or error"
+    },
+    {
+      "line": 95,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: error in a catch that recovers by rebuilding, but a snapshot in an unexpected format is genuinely unexpected and an operator should see it"
+    },
+    {
+      "line": 107,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: info for an expired coupon is a routine business rejection returned as a value, not a fault"
+    },
+    {
+      "line": 120,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: debug for per-chunk progress inside the indexing loop; the hot-loop case"
+    },
+    {
+      "line": 132,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: warn for a single failed attempt inside a retry loop that goes on to retry; the word 'failed' in a catch tempts a lazy rule to want error"
+    },
+    {
+      "line": 142,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: warn for a missing config file that the function handles by using defaults; degraded, not failed"
+    },
+    {
+      "line": 150,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: console.error for a usage error in a CLI entry point that returns exit code 2; stderr at error is the convention"
+    },
+    {
+      "line": 34,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: info for a rejected login is a routine outcome returned as null, not a fault"
+    },
+    {
+      "line": 159,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "clean: info for a routine, intentional deletion; destructive-sounding but not a fault"
+    }
+  ],
+  "corpus/ts/tests/checkout.test.ts": [
+    {
+      "line": 36,
+      "label": "bad",
+      "rule": "test-mocks-subject",
+      "reason": "title claims the discount is applied; ./discount.ts is under vi.mock with a fake that returns subtotal*0.9, and 90 is that fake's arithmetic"
+    },
+    {
+      "line": 43,
+      "label": "bad",
+      "rule": "test-mocks-subject",
+      "reason": "title claims 8% CA tax is computed; computeTax is a vi.mock returning the constant 8 that the assertion checks"
+    },
+    {
+      "line": 50,
+      "label": "bad",
+      "rule": "test-mocks-subject",
+      "reason": "title claims the total is computed from line items; cart.total is spied with mockReturnValue(100) and the assertion reads that 100 back"
+    },
+    {
+      "line": 56,
+      "label": "clean",
+      "rule": "test-mocks-subject",
+      "reason": "hard clean: vi.spyOn on the subject's own method but no replacement value, so the real total runs and the value assertion sees it"
+    },
+    {
+      "line": 64,
+      "label": "clean",
+      "rule": "test-mocks-subject",
+      "reason": "hard clean: the repository is mocked (a dependency) while cancelOrder, the subject, runs for real and its rejection is asserted"
+    },
+    {
+      "line": 74,
+      "label": "bad",
+      "rule": "test-mocks-subject",
+      "reason": "title claims stock is reserved; inventory.reserveStock is stubbed with mockResolvedValue and the assertion is that stub's value echoed per item"
+    },
+    {
+      "line": 90,
+      "label": "clean",
+      "rule": "test-mocks-subject",
+      "reason": "hard clean: fake timers replace the clock (a dependency); isCouponActive runs for real"
+    },
+    {
+      "line": 96,
+      "label": "clean",
+      "rule": "test-mocks-subject",
+      "reason": "hard clean: fake timers replace the clock; the subject runs for real"
+    },
+    {
+      "line": 108,
+      "label": "bad",
+      "rule": "test-mocks-subject",
+      "reason": "title claims an ETA is computed from transit days; the fetch stub hands back eta '2024-07-04' verbatim and that is what the assertion checks, so no computation runs"
+    },
+    {
+      "line": 120,
+      "label": "clean",
+      "rule": "test-mocks-subject",
+      "reason": "hard clean: fetch (the network) is stubbed to fail once; the retry the title claims lives in getOrderStatus, which runs for real"
+    },
+    {
+      "line": 131,
+      "label": "clean",
+      "rule": "test-mocks-subject",
+      "reason": "hard clean: the title is about the boundary (posting to the API), and fetch is the boundary"
+    },
+    {
+      "line": 50,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the total is mocked to 100 and the assertion reads 100 back; a broken total() still passes"
+    },
+    {
+      "line": 74,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "reserveStock is mocked; the result asserted is the mock's value, so a reserveLineItems that reserved nothing still passes"
+    },
+    {
+      "line": 108,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "fetch is stubbed with the ETA; the assertion reads the stub back"
+    },
+    {
+      "line": 58,
+      "label": "bad",
+      "rule": "var-name-describes-value",
+      "window": 0,
+      "reason": "`total` is bound to a spy on cart.total, not to a total"
+    }
+  ],
+  "corpus/ts/tests/signup.test.ts": [
+    {
+      "line": 109,
+      "label": "clean",
+      "rule": "test-mocks-subject",
+      "reason": "hard clean: the SendGrid client is the adapter's dependency; the adapter runs for real"
+    },
+    {
+      "line": 55,
+      "label": "clean",
+      "rule": "test-mocks-subject",
+      "reason": "hard clean: the mailer is a mocked dependency; signup runs for real"
+    },
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "title claims the display name is in the email; the assertion is toHaveBeenCalled with no arguments checked"
+    },
+    {
+      "line": 44,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "title claims the hash is stored and the plaintext is not; the assertion is a call count"
+    },
+    {
+      "line": 49,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "title claims rejection; the rejection is swallowed with .catch and only the lookup call is asserted"
+    },
+    {
+      "line": 87,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "title claims the invitation is marked accepted; the assertion is that update was called, with anything"
+    }
+  ],
+  "corpus/ts/tests/order-summary.test.ts": [
+    {
+      "line": 18,
+      "label": "bad",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "title claims the error state is rendered on failure; the only assertion is a snapshot of the whole rendering, which would also pass with a recorded loading state"
+    },
+    {
+      "line": 23,
+      "label": "bad",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "title claims a price ordering; the only assertion is an inline snapshot of the whole section, in which the order is one detail among many and would be re-recorded if wrong"
+    },
+    {
+      "line": 43,
+      "label": "bad",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "title claims a row is hidden; the only assertion is a whole-output snapshot, which passes whether or not the discount row is there"
+    },
+    {
+      "line": 48,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: the title claims only that the output matches the snapshot"
+    },
+    {
+      "line": 53,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: 'renders' claims nothing specific"
+    },
+    {
+      "line": 57,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: a snapshot plus toContain of the error message, which targets the claim"
+    },
+    {
+      "line": 63,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: a snapshot plus an assertion on the sku order, which targets the claim"
+    },
+    {
+      "line": 70,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: the inline snapshot is a one-line literal that is itself the empty-cart message the title claims"
+    },
+    {
+      "line": 85,
+      "label": "bad",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "title claims currency formatting; the only assertion is a snapshot of the whole receipt, which passes with the amounts in EUR"
+    },
+    {
+      "line": 90,
+      "label": "clean",
+      "rule": "snapshot-only-behaviour-claim",
+      "reason": "hard clean: 'renders the receipt for a single-item order' names a scenario, not a behaviour the snapshot would have to isolate"
+    },
+    {
+      "line": 18,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the only assertion is a whole-render snapshot, which holds whatever was recorded, error state or not"
+    },
+    {
+      "line": 43,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "snapshot only; a discount row that is not hidden would be recorded and pass"
+    },
+    {
+      "line": 85,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "snapshot only; a wrong currency format would be recorded and pass"
+    },
+    {
+      "line": 48,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: the title claims only that the snapshot matches, which the assertion verifies exactly"
+    },
+    {
+      "line": 53,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: \"renders\" claims nothing a snapshot does not establish"
+    },
+    {
+      "line": 90,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: \"renders the receipt for a single-item order\" labels the input of the snapshot and asserts no property"
+    }
+  ]
+}

@@ -178,34 +178,24 @@
   kind: noul
   subject: enclosing
   state: bare
-  # NOT CALIBRATED, and deliberately shipped saying so.
+  # Calibrated late, and the reason is worth keeping.
   #
-  # The problem is not that this rule answers high to everything -- it does not.
-  # Its median is 0.20 over the corpus's 24 subjects and 0.19 over 149 on this
-  # repository, so it separates a low cluster from a high one perfectly well.
-  # What it cannot do is separate the CLEAN case that sits inside the high
-  # cluster: corpus/ts/session_store.ts:97, labelled clean because it describes
-  # exactly what the loop does, answers 0.94 -- an exact tie with the labelled
-  # defect above it. A tie admits no cutoff.
+  # This rule shipped for two versions saying "NOT CALIBRATED": its median was
+  # a healthy 0.20, but the clean case at corpus/ts/session_store.ts:97
+  # answered 0.94 -- an exact tie with the labelled defect above it in the same
+  # function, and a tie admits no cutoff. Two rewordings and one state fix did
+  # nothing to it. It was not the rule. A `subject: enclosing` rule keys its
+  # verdicts on the enclosing function's text, and two matches in one function
+  # shared a key: the second was never asked, and was handed the first one's
+  # verdict as a twin. Byte-identical scores over three passes were the tell,
+  # once a candidate rule made them visible. With the match in the key the
+  # clean case answers on its own and the classes separate: precision 1,
+  # recall 1, midpoint 0.80, on both variants.
   #
-  # Two things were tried and neither separated it: handing the question the
-  # matched statement alongside its container (which did fix precision to 1.0),
-  # and rewording the criteria to the declaration rule's proven "a specific
-  # claim is contradicted" shape. A third, unrelated fix -- supplying the code
-  # for subjects over the inline limit on a sourceless arm, which this rule's
-  # subjects usually are -- did not separate it either.
-  #
-  # What is NOT established is whether the rule is broken or merely untested:
-  # three subjects is below what the gap statistic can speak to, which is why
-  # `jev-lint gaps` now calls this `thin` rather than `rewrite`. The corpus needs
-  # inline-comment cases before the question is judged.
-  #
-  # Until then the cutoff sits at the top of the observed range, so the rule
-  # fires on almost nothing, and `severity: info` keeps it out of anyone's way.
-  # Not silenced, though: on this repository's own corpus the Rust variant lands
-  # exactly on its cutoff, and a 0.98 has been seen on the rule axis. Turn it on
-  # properly by lowering `at` once you have measured it on your own comments.
-  at: 0.96
+  # Two labelled defects per variant is thin, so it stays at `severity: info`
+  # until the corpus has more inline-comment cases. Lower `at` once you have
+  # measured it on your own comments.
+  at: 0.8
   severity: info
   rule:
     all:
@@ -258,9 +248,9 @@
   kind: noul
   subject: enclosing
   state: bare
-  # Not calibrated; see the note on `comment-describes-block`. Measured gap 0.05
-  # over three subjects, cutoff parked above every observed answer.
-  at: 0.92
+  # Calibrated with `comment-describes-block`, and for the same reason late:
+  # see the note there. Precision 1, recall 1 on two defects; thin.
+  at: 0.79
   severity: info
   rule:
     all:

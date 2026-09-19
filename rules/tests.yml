@@ -1,0 +1,82 @@
+# Tests that cannot verify what their name claims, by construction.
+#
+# The naming pack's test-name-verifies-claim asks whether the assertion would
+# fail if the named behaviour broke. These two ask about the setup instead: the
+# behaviour is performed by a stub and the assertion reads the stub back, or
+# the body is a snapshot and the title claims a property the snapshot does not
+# isolate. Both need `state: located`: a `vi.mock` at the top of the file is
+# what makes the first one answerable, and on `bare` its two top-of-file cases
+# fall from 0.6 to 0.3.
+#
+# test-mocks-subject's cutoff is low because its defect band is quiet
+# (0.42-0.64 on the corpus): a mocked subject reads as a mild claim. On an
+# unseen repository of 448 tests it fired once, on a test titled "executes
+# python code" whose exec was stubbed to return the expected stdout -- which is
+# the rule. snapshot-only-behaviour-claim fired 0 of 448 there, highest 0.38.
+#
+# Fitted on corpus/ts/tests/ (hand-labelled). A third candidate,
+# test-asserts-on-mock, separated as well and was dropped: the shipped
+# test-name-verifies-claim already reports every one of its cases.
+
+- id: test-mocks-subject
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: located
+  at: 0.3
+  rule: &a1
+    any:
+      - pattern: it($TITLE, $BODY)
+      - pattern: test($TITLE, $BODY)
+      - pattern: it($TITLE, $BODY, $TIMEOUT)
+      - pattern: test($TITLE, $BODY, $TIMEOUT)
+      - pattern: it.each($CASES)($TITLE, $BODY)
+  ask: The behaviour this test's name attributes to the code under test is performed by a mock or
+    stub, and the assertion reads back the stub's canned value unchanged.
+  criteria:
+    "true": "The title says the code under test computes, applies, derives, reserves or returns
+      something, but the function, method or module that would do it is replaced -- the module is
+      under vi.mock or jest.mock with a fake implementation, the method has mockReturnValue or
+      mockResolvedValue, a stubbed global resolves to a fixed payload -- and the value the assertion
+      checks can be traced to that stub's configuration with none of the subject's own logic in
+      between: the constant it was told to return, the payload it was given, its fake's arithmetic.
+      The assertion then checks the test's own setup, and the claimed behaviour never runs."
+    "false": "The stub stands in for a collaborator the code under test calls -- the network, the clock,
+      a repository, a mailer, an event bus -- and the assertion checks what the real code did with
+      the stub's output rather than the output itself: a value it derived, an error it raised, a
+      call it made, how many times it tried; or the title is itself about the collaborator; or the
+      spy has no replacement value and the real method runs."
+  note: "A title like \"sends an email\" whose assertion is about the call on a mocked mailer is not
+    this rule's concern: the mailer is the boundary. Whether an assertion on a mock's call log is
+    strong enough is a separate question."
+  axis: file
+- id: snapshot-only-behaviour-claim
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: located
+  at: 0.67
+  rule: *a1
+  ask: This test's name claims a specific behaviour, but the body only compares a snapshot.
+  criteria:
+    "true": The title asserts a property of the output -- an ordering, an element hidden or shown, a
+      particular state or branch rendered under a condition ("renders the empty state when the list
+      is empty"), a format or conversion applied -- and the only assertions are toMatchSnapshot,
+      toMatchInlineSnapshot or toMatchFileSnapshot over a whole rendering, so nothing in the test
+      isolates the named property from everything else in the output.
+    "false": The title claims only that the output matches a snapshot, or that something renders, or it
+      only names the input the snapshot was taken of ("renders the list for three users") without
+      asserting a property of the output; or at least one assertion targets the named behaviour
+      directly; or the inline snapshot is a short literal that is itself the named outcome.
+  note: A snapshot beside a targeted assertion is fine. "Renders X for input Y" is a label for the
+    snapshot; "renders X when Y" or "hides/sorts/formats X" is a claim the snapshot does not
+    isolate.
+  axis: file

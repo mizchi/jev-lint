@@ -70,7 +70,7 @@ Environment: **`TYPESAFE_API_KEY`** (required for anything that asks), with
 
 Two lines of output are never noise. **`N rules matched nothing`** is the only
 place a dead matcher is visible — check it before trusting a clean run. On a
-TypeScript-only repository expect 8 of the 15 shipped rules there: the 7 Rust
+TypeScript-only repository expect 8 of the 21 shipped rules there: the 7 Rust
 variants, plus `comment-describes-declaration-js`, which exists because
 JavaScript has no type declarations to match. **`N without a verdict`** means
 requests failed, and a run with failures never reads as a clean repository.
@@ -355,6 +355,9 @@ refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
 
 ## The shipped packs
 
+Six packs, 21 rules. The two below carry an ECMAScript and a Rust variant
+sharing one sentence; the other four are ECMAScript or JSON only.
+
 **`rules/naming.yml`** — does the code do what it calls itself?
 
 | rule | asks |
@@ -380,46 +383,108 @@ A comment is a claim in the one notation nothing checks. Deliberately *not*
 asked: style, redundancy, whether a comment should exist. One axis only — is the
 claim false. A vague or redundant comment is not a defect.
 
-Each rule ships in a Rust and an ECMAScript variant sharing one sentence, so
-**on a single-language repository about half the pack will report "matched
-nothing"**.
+**`rules/guarantees.yml`** — a name that makes a specific promise
 
-Of the 15, **12 reach precision 1.00 and recall 1.00 on the corpus** with no
-decision flips across passes. Read that with the positive counts beside it,
-because they are small: those 12 rest on **41 labelled defects between them**,
-and the per-rule count is 6, 6, 5, 4, 4, 4, 3, 3, 2, 2, 1, 1. The two
-`module-name-describes-contents` rules have **one labelled defect each** and
-ship at `severity: info` for that reason; `comment-describes-declaration-js`
-has two and the tool's own gap report calls it `thin` — "too few matches to
-judge. Not a pass."
+| rule | names | asks |
+| --- | --- | --- |
+| `safe-name-is-safe` | `safe*`, `try*`, `*OrNull`, `*OrDefault`, `*OrUndefined` | does a failure of the kind the name absorbs still escape as a throw or rejection? |
+| `idempotent-name` | `ensure*`, `upsert*`, `setup*`, `install*`, `register*` | does a second call leave a different result from the first? |
 
-**3 do not separate at any cutoff**, and a fourth joins them on the rule axis:
+These are narrower cousins of `fn-name-promises`, and the narrowing is the
+point: on the corpus behind this pack, `fn-name-promises` at its cutoff flags
+0 of the 22 labelled defects, 16 of which sit under 0.30 inside its clean
+band. The family they came from also built `guard-name-guards`
+(`validate*`/`sanitize*`/`ensure*`) and `pure-name-is-pure`
+(`compute*`/`format*`/`parse*`); both separate on their corpus and neither
+ships — the first has four defects behind it, the second produced one false
+positive pattern (a lazily loaded module counted as I/O) on half its findings
+on unseen code. Reports in `experiments/rule-candidates/b-guarantee-names/`.
+
+**`rules/tests.yml`** — tests that cannot verify their name, by construction
+
+| rule | asks |
+| --- | --- |
+| `test-mocks-subject` | is the behaviour the title claims performed by a stub, with the assertion reading the stub's canned value back? |
+| `snapshot-only-behaviour-claim` | does the title claim a property (an ordering, a hidden row, a branch) that a whole-render snapshot does not isolate? |
+
+Both need `state: located`: a `vi.mock` at the top of the file is what makes
+the first answerable, and on `bare` its two top-of-file cases fall from 0.6 to
+0.3. `test-mocks-subject`'s cutoff is 0.30, low because its defect band is
+quiet (0.42–0.64): a mocked subject reads as a mild claim. A third candidate,
+`test-asserts-on-mock`, separated as well and was dropped because
+`test-name-verifies-claim` already reports every one of its cases.
+
+**`rules/messages.yml`** — messages for a human reader
+
+| rule | asks |
+| --- | --- |
+| `log-level-matches-event` | does the level of this `logger.<level>(...)` call match the severity of the code path it sits on? |
+
+Siblings not shipped, in `experiments/rule-candidates/c-human-messages/`:
+`assertion-message-matches` (on unseen code its four findings were all test
+stubs throwing a simulated failure on a call counter) and `ui-message-honest`
+(needs `subject: enclosing`; measured before the promoted-subject key was
+fixed, so worth re-measuring).
+
+**`rules/config.yml`** — names in configuration files
+
+| rule | asks |
+| --- | --- |
+| `script-name-does` | does this `package.json` script's name describe the command it runs? |
+
+The matcher is the whole `"name": "command"` pair under `scripts`, so the
+claim and the evidence are one node and `bare` is the arm. Siblings not
+shipped: `workflow-step-name` (GitHub Actions `name:` versus `run:`, separates
+by one subject's width) and `openapi-summary-matches-schema` (no unseen code
+to meet); both in `experiments/rule-candidates/a-config-names/`, with nine
+things about matching YAML and JSON in ast-grep that the skill now states.
+
+### What the cutoffs are worth
+
+On a TypeScript-only repository the seven Rust variants and
+`comment-describes-declaration-js` report "matched nothing": 8 of the 21.
+
+Of the 21, **19 reach precision 1.00 and recall 1.00 on the corpus**
+(`docs/data/calibration.json`, 625 subjects, three passes). Read that with
+the positive counts beside them, because they are small: per rule, 14, 9, 7,
+6, 6, 6, 6, 6, 5, 5, 5, 4, 4, 4, 4, 3, 2, 2, 2, 1, 1 labelled defects. The
+two `module-name-describes-contents` rules have one each and ship at
+`severity: info` for that reason; `comment-describes-declaration-js` has two
+and the gap report calls it `thin`.
+
+Two do not separate:
 
 | rule | measured | ships |
 | --- | --- | --- |
-| `comment-describes-block` | precision 0.67 | `info`, with a note saying so |
-| `comment-describes-block-rust` | precision 0.67 | `info`, with a note saying so |
-| `test-name-describes-code-rust` | precision 0.67 | **`warning`**, with a note saying so |
-| `fn-name-promises-rust` | 1.00/1.00 on the file axis, no separating cutoff on the **rule** axis | `warning`, pinned to the file axis |
+| `test-name-describes-code-rust` | precision 0.67, by inversion: a clean test answers higher than the genuine defect | `warning`, with a note |
+| `test-name-verifies-claim` | precision 0.93, recall 1.00 at 0.73 | `warning` at 0.75, with a note |
 
-The block rules' cutoffs are parked at the top of the observed range, which is
-not the same as silenced: on the Rust variant two corpus subjects sit within
-0.01 of its 0.92 cutoff and flip between passes. And
-`test-name-describes-code-rust` fails by *inversion*, not by a bad threshold —
-a test that is clean for this rule answers higher than the genuine defect — so
-its TypeScript twin, which clears by 0.02 on 7 subjects, should be read as
-unproven rather than as a separate result.
+The second is new, and is the honest result of a bigger corpus: on its
+original four defects the rule separated at 0.53 with room to spare; the
+tests pack added eleven defects and three hard cleans whose titles claim
+nothing ("matches the snapshot", "renders") over a snapshot assertion, and
+the rule reads those at 0.69–0.77, inside its defect band. The cutoff moved
+to 0.75 to trade one quiet defect for three findings on titles that promise
+nothing; the fix belongs in the criteria's false branch, and the pack says so.
 
-The cutoffs in `rules/*.yml` were refit on 2026-09-19 after a fix to what the
+Two rules that did not separate before do now. `comment-describes-block` and
+its Rust twin shipped "NOT CALIBRATED" because a clean case tied a defect in
+the same function at 0.94. It was not the rule: a `subject: enclosing` rule
+keyed its verdicts on the enclosing function, so two matches in one function
+got one answer. With the match in the key both variants reach 1.00/1.00, on
+two defects each, at `severity: info` until the corpus has more.
+
+The cutoffs were refit twice on 2026-09-19: once after a fix to what the
 model is shown (an ast-grep bookkeeping capture had been going out beside the
-real ones on a quarter of the subjects), recorded in
-`docs/data/calibration.json`. Every rule moved by 0.08 or less, no labelled
-decision changed, and the refit itself moved by 0.02 or less when repeated —
-the midpoint of a gap slides for free. The measurements below that quote a
-cutoff were made at the earlier values, and say which.
-Read the 12 as "these rules separate the classes in a corpus the author wrote",
-against the baseline that **a tool reporting nothing at all scores 83.0%
-accuracy on that corpus** (229 of its 276 subjects are clean), at zero recall.
+real ones on a quarter of the subjects), once after the promoted-subject fix
+and the merge of the four new packs' corpora. Between the two, `fn-name-promises`
+moved 0.76 → 0.86 as its clean band rose with 45 more named functions in the
+corpus, and no other shipped rule moved by more than 0.08. The measurements
+below that quote a cutoff were made at the earlier values, and say which.
+Read the 19 as "these rules separate the classes in a corpus the author and
+five agents wrote", against the baseline that **a tool reporting nothing at
+all scores about 85% accuracy on that corpus** — most of its 625 subjects are
+clean — at zero recall.
 Accuracy is the wrong number on a set that imbalanced; the precision and recall
 pair with the raw counts is the honest one.
 
