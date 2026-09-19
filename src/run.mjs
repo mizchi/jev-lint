@@ -58,11 +58,26 @@ export async function collectSubjects({
 
   const subjects = [];
   let skippedByDiff = 0;
+  let duplicateGrammars = 0;
+  // One node, one rule, one question -- however many grammars claimed the file.
+  //
+  // ast-grep's grammars have overlapping file extensions: `.js` and `.mjs` are
+  // claimed by BOTH `JavaScript` and `Jsx`, so a rule listing both languages
+  // matches every JavaScript file twice and reports every finding twice. The
+  // per-grammar rule ids differ, but the jevlint rule and the node are the
+  // same, so identity is (file, byte range, rule) and not the ast-grep id.
+  const seenNodes = new Set();
   for (const m of matches) {
     // Matches come back tagged with the per-grammar id the emitter used, which
     // maps back to the one jevlint rule that owns the sentence.
     const rule = byId.get(baseRuleId(m.ruleId));
     if (!rule) continue;
+    const identity = `${m.file}\u0000${m.range.byteOffset.start}\u0000${m.range.byteOffset.end}\u0000${rule.id}`;
+    if (seenNodes.has(identity)) {
+      duplicateGrammars += 1;
+      continue;
+    }
+    seenNodes.add(identity);
     const entry = symbols.get(m.file) ?? null;
     const resolved = resolveSubject(m, rule, entry);
     if (diffRanges && !touchesChange(diffRanges, m.file, resolved.line, resolved.endLine)) {
@@ -84,7 +99,7 @@ export async function collectSubjects({
     (a, b) => a.file.localeCompare(b.file) || a.line - b.line || a.rule.id.localeCompare(b.rule.id),
   );
 
-  return { subjects, symbols, sources, matches, stderr, skippedByDiff };
+  return { subjects, symbols, sources, matches, stderr, skippedByDiff, duplicateGrammars };
 }
 
 /**
@@ -112,7 +127,7 @@ export async function run({
   onProgress = null,
 } = {}) {
   const started = Date.now();
-  const { subjects, symbols, sources, stderr, skippedByDiff } = await collectSubjects({
+  const { subjects, symbols, sources, stderr, skippedByDiff, duplicateGrammars } = await collectSubjects({
     rules,
     paths,
     arm,
@@ -154,6 +169,7 @@ export async function run({
       cache,
       stderr,
       skippedByDiff,
+      duplicateGrammars,
       cachedCount: results.length,
       spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
       ...gate(results, { cutoffs, unsureBelow }),
@@ -206,6 +222,7 @@ export async function run({
     errors,
     stderr,
     skippedByDiff,
+    duplicateGrammars,
     cachedCount: results.filter((r) => r.cached).length,
     spent: jev.spent,
     servedModel: jev.servedModel,

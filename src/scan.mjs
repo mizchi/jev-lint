@@ -34,6 +34,14 @@ export const PROBE_PREFIX = "__jevlint_";
 /** ast-grep's own exit code when a scan produced findings. Not an error. */
 const EXIT_FOUND = 1;
 
+/** A rule set ast-grep would not accept. Carries the reason, not a stack. */
+export class AstGrepError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "AstGrepError";
+  }
+}
+
 /**
  * Per-language structure, as ast-grep queries.
  *
@@ -63,10 +71,14 @@ export const STRUCTURE = {
     exports: [],
     testMarker: /#\[\s*(test|tokio::test|async_std::test)\s*\]|#\[\s*cfg\s*\(\s*test\s*\)\s*\]/,
   },
-  TypeScript: tsStructure(),
-  Tsx: tsStructure(),
-  JavaScript: tsStructure(),
-  Jsx: tsStructure(),
+  // The four ECMAScript grammars share most kinds, but not all: `ast-grep`
+  // REJECTS a rule naming a kind absent from the target grammar, and one
+  // rejected probe fails the whole scan rather than just itself. So the
+  // TypeScript-only kinds are gated rather than shared.
+  TypeScript: tsStructure({ typed: true }),
+  Tsx: tsStructure({ typed: true }),
+  JavaScript: tsStructure({ typed: false }),
+  Jsx: tsStructure({ typed: false }),
   Python: {
     containers: [
       { kind: "function_definition", role: "function", nameField: "name" },
@@ -90,15 +102,19 @@ export const STRUCTURE = {
   },
 };
 
-function tsStructure() {
+function tsStructure({ typed }) {
   return {
     containers: [
       { kind: "function_declaration", role: "function", nameField: "name" },
       { kind: "generator_function_declaration", role: "function", nameField: "name" },
       { kind: "method_definition", role: "method", nameField: "name" },
       { kind: "class_declaration", role: "class", nameField: "name" },
-      { kind: "interface_declaration", role: "interface", nameField: "name" },
-      { kind: "type_alias_declaration", role: "type", nameField: "name" },
+      ...(typed
+        ? [
+            { kind: "interface_declaration", role: "interface", nameField: "name" },
+            { kind: "type_alias_declaration", role: "type", nameField: "name" },
+          ]
+        : []),
       // An arrow function is named by the declarator that holds it.
       {
         kind: "variable_declarator",
@@ -247,9 +263,27 @@ export async function runAstGrep(rules, paths, { cwd = process.cwd(), maxBuffer 
       stderr = res.stderr;
     } catch (err) {
       // Exit 1 means "findings were produced", which is the normal case here.
-      if (err.code !== EXIT_FOUND || typeof err.stdout !== "string") throw err;
-      stdout = err.stdout;
-      stderr = err.stderr ?? "";
+      if (err.code === EXIT_FOUND && typeof err.stdout === "string") {
+        stdout = err.stdout;
+        stderr = err.stderr ?? "";
+      } else {
+        // ast-grep rejects a rule naming a node kind the target grammar does
+        // not have, and it fails the WHOLE file rather than the offending rule.
+        // A raw exec stack trace would bury that, and the actionable part is
+        // the one line naming the kind, so it is surfaced as a plain error.
+        const detail = String(err.stderr ?? err.message ?? err)
+          .split("\n")
+          .map((l) => l.replace(/^[╰✖▻\s]+/, "").trim())
+          .filter((l) => l !== "" && !l.startsWith("See also") && !l.startsWith("Usage"))
+          .slice(0, 6)
+          .join("; ");
+        throw new AstGrepError(
+          `ast-grep rejected the rule set: ${detail}\n` +
+            "One invalid rule fails every rule in the run. If it names a node kind, " +
+            "check that kind exists in that language's grammar -- `languages:` on a rule " +
+            "requires the matcher to be valid in each one.",
+        );
+      }
     }
 
     const matches = [];

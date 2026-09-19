@@ -435,13 +435,20 @@ async function cmdCalibrate({ rules, paths, diffRanges, opts, cachePath, out, lo
   return 0;
 }
 
-/** Mean answer per subject across passes, for one gap table over all of them. */
+/**
+ * Mean answer per subject across passes, for one gap table over all of them.
+ *
+ * The identity includes the subject's TEXT, not just its line. One line can
+ * hold several subjects for one rule -- `const a = 1, b = 2;` is two bindings
+ * -- and keying on the line alone silently averaged them together, so the gap
+ * table saw fewer subjects than the run actually judged.
+ */
 function mergeRuns(runs) {
   const acc = new Map();
   for (const r of runs) {
     for (const f of r) {
       if (typeof f.value !== "number") continue;
-      const k = `${f.rule}\u0000${f.file}\u0000${f.line}`;
+      const k = `${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
       if (!acc.has(k)) acc.set(k, { ...f, _n: 0, _sum: 0 });
       const e = acc.get(k);
       e._n += 1;
@@ -516,7 +523,12 @@ function cmdReplay(opts, out, log) {
 main(process.argv.slice(2)).then(
   (code) => process.exit(code),
   (err) => {
-    process.stderr.write(`jevlint: ${err?.stack ?? err}\n`);
+    // A rule set ast-grep would not accept, or a missing key, is a
+    // configuration mistake: the message is the useful part and a stack trace
+    // only buries it. Anything else is a bug here, and then the stack is what
+    // someone needs.
+    const configError = err?.name === "AstGrepError" || err?.kind === "auth";
+    process.stderr.write(`jevlint: ${configError ? err.message : (err?.stack ?? err)}\n`);
     process.exit(2);
   },
 );

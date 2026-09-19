@@ -5,3 +5,4 @@ node_modules/
 # trusted input -- anything that can edit it can silence a rule.
 .jevlint-cache.json
 *.tmp
+.jevlint-self.json

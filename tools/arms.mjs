@@ -135,7 +135,9 @@ for (const arm of arms) {
     };
     for (const f of r.all) {
       if (typeof f.value !== "number") continue;
-      const k = `${f.rule}\u0000${f.file}\u0000${f.line}`;
+      // Includes the subject text: one line can hold several subjects for one
+      // rule, and keying on the line alone averages them together.
+      const k = `${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
       if (!merged.has(k)) merged.set(k, { ...f, _n: 0, _sum: 0 });
       const e = merged.get(k);
       e._n += 1;

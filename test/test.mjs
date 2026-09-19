@@ -40,7 +40,7 @@ import {
   baseRuleId,
   toAstGrepRule,
 } from "../src/scan.mjs";
-import { formatGithub, formatJson, silentRules } from "../src/report.mjs";
+import { formatGithub, formatJson, formatPretty, silentRules } from "../src/report.mjs";
 import { Jev, JevError } from "../src/jev.mjs";
 
 let passed = 0;
@@ -589,13 +589,20 @@ test("batch: no batch exceeds the request ceiling", () => {
     sources: new Map([["a.ts", "source"]]),
     symbols: new Map(),
   });
-  for (const b of batches) {
-    if (b.subjects.length > 1) {
-      assert.ok(
-        b.estimatedTokens <= MAX_REQUEST_TOKENS,
-        `batch of ${b.subjects.length} estimated ${b.estimatedTokens}`,
-      );
-    }
+  // This guard is the point of the assertion below. Without it, a planner that
+  // returned one subject per batch would satisfy the loop vacuously and this
+  // test would pass while verifying nothing about the ceiling.
+  //
+  // This weakness was found by running jevlint on its own test suite:
+  // `test-name-matches-body` scored the original 0.68-0.73 across runs against
+  // a 0.69 cutoff, for precisely this reason. The model was right.
+  const multi = batches.filter((b) => b.subjects.length > 1);
+  assert.ok(multi.length > 0, "the planner must actually group subjects for this to test anything");
+  for (const b of multi) {
+    assert.ok(
+      b.estimatedTokens <= MAX_REQUEST_TOKENS,
+      `batch of ${b.subjects.length} estimated ${b.estimatedTokens}`,
+    );
   }
 });
 
@@ -1155,6 +1162,14 @@ test("report: an incomplete run says so in every format", () => {
   const result = { ...g, rules: [], subjects: [], spent: {}, elapsedMs: 1 };
   assert.match(formatGithub(result), /this run is incomplete/);
   assert.equal(JSON.parse(formatJson(result)).stats.missing, 1);
+  // The third format. This assertion was missing, and jevlint's own
+  // `test-name-matches-body` flagged the title's "every format" against a body
+  // that checked two of three (0.64 against a 0.69 cutoff -- under it, but for
+  // a correct reason).
+  assert.match(
+    formatPretty(result, { color: false, showMissing: true }),
+    /without a verdict|no verdict/,
+  );
 });
 
 test("report: severity error is honoured when a rule has earned it", () => {
@@ -1251,6 +1266,35 @@ await testAsync("end to end: the shipped pack finds the corpus defects it is fit
   const fileSubjects = subjects.filter((s) => s.rule.subject === "file");
   assert.ok(fileSubjects.length >= 8);
   assert.ok(fileSubjects.every((s) => s.isOutline && s.text.startsWith("path: ")));
+});
+
+await testAsync("end to end: overlapping grammars produce one subject per node", async () => {
+  // `.js` and `.mjs` are claimed by BOTH the JavaScript and Jsx grammars, so a
+  // rule listing them matched every node twice and reported every finding
+  // twice. Found by running this tool on its own source.
+  const { collectSubjects } = await import("../src/run.mjs");
+  const dir = mkdtempSync(join(tmpdir(), "jevlint-test-"));
+  try {
+    writeFileSync(join(dir, "a.mjs"), 'test("one", () => {});\ntest("two", () => {});\n');
+    const rule = normalizeRule({
+      id: "dup",
+      languages: ["JavaScript", "Jsx"],
+      kind: "noul",
+      rule: { pattern: "test($T, $B)" },
+      ask: "a",
+      criteria: { true: "y", false: "n" },
+    }).rule;
+    const { subjects, duplicateGrammars } = await collectSubjects({
+      rules: [rule],
+      paths: [dir],
+    });
+    assert.equal(subjects.length, 2, "two calls, two subjects, not four");
+    assert.equal(duplicateGrammars, 2, "the duplicates should be counted, not merely dropped");
+    // Two distinct nodes must survive; dedupe must key on the range, not the file.
+    assert.equal(new Set(subjects.map((s) => s.line)).size, 2);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 process.stdout.write(`\n${passed} passed, ${failed} failed\n`);

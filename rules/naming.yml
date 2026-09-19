@@ -16,10 +16,10 @@
 # anywhere between 0.20 and 0.94. A shared threshold throws away the rules that
 # answer quietly.
 #
-# The `at:` values below were fitted to THIS repository's corpus (8 files, 76
-# subjects, Rust and TypeScript) as the midpoint of each rule's own clean/
-# violation gap. They are a starting point on your code, not a calibration for
-# it: a cutoff fitted to one corpus is an opinion about that corpus. Run
+# The `at:` values below were fitted to THIS repository's corpus (10 files, 569
+# lines, 134 subjects, Rust and TypeScript) as the midpoint of each rule's own
+# clean/violation gap. They are a starting point on your code, not a calibration
+# for it: a cutoff fitted to one corpus is an opinion about that corpus. Run
 # `jevlint gaps` first -- if a rule's answers are bunched together, no cutoff
 # will help and the sentence needs rewriting -- then `jevlint calibrate
 # --labels` against your own labels.
@@ -37,7 +37,7 @@
 # 1. Does a function do what its name promises?
 # --------------------------------------------------------------------------
 - id: fn-name-promises
-  languages: [TypeScript, Tsx]
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
   kind: noul
   subject: node
   # `located`. Every arm separates this rule's classes perfectly on the corpus,
@@ -53,7 +53,7 @@
   # reviewer-action score is a judgment the file can dilute, while "does this
   # name describe this body" is one the file can supply evidence for.
   state: located
-  at: 0.61
+  at: 0.67
   severity: warning
   rule:
     any:
@@ -95,7 +95,7 @@
   kind: noul
   subject: node
   state: located
-  at: 0.59
+  at: 0.58
   severity: warning
   rule:
     all:
@@ -116,7 +116,7 @@
 # 2. Does a variable's name describe the value bound to it?
 # --------------------------------------------------------------------------
 - id: var-name-describes-value
-  languages: [TypeScript, Tsx]
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
   kind: noul
   subject: node
   # `located`, not `bare`, and this one was MEASURED rather than chosen.
@@ -130,7 +130,7 @@
   # This is the general rule, and it is not "more context is better": it is that
   # a question must be able to see its own answer. See docs/findings.md.
   state: located
-  at: 0.62
+  at: 0.59
   severity: warning
   rule:
     all:
@@ -167,7 +167,7 @@
   # separable on `located`, and on `bare` it was also the one rule whose
   # decision FLIPPED between two runs of the same corpus.
   state: located
-  at: 0.6
+  at: 0.62
   severity: warning
   rule:
     all:
@@ -186,7 +186,7 @@
 # whose two subjects are named explicitly is answerable; "is this test good" is
 # not.
 - id: test-name-matches-body
-  languages: [TypeScript, Tsx]
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
   kind: noul
   subject: node
   # `bare` -- the only rule in the pack that keeps the cheapest arm, and the
@@ -200,7 +200,7 @@
   # same file cannot change this one's answer, and cannot invalidate its cached
   # verdict either.
   state: bare
-  at: 0.6
+  at: 0.69
   severity: warning
   rule:
     any:
@@ -227,7 +227,7 @@
   kind: noul
   subject: node
   state: bare
-  at: 0.54
+  at: 0.51
   severity: warning
   rule:
     all:
@@ -249,7 +249,7 @@
 # because the model is weak but because the evidence is genuinely absent. The
 # subject is the module's OUTLINE: its path, its public items, its imports.
 - id: module-name-describes-contents
-  languages: [TypeScript, Tsx]
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
   kind: noul
   subject: file
   # `graph`, chosen for robustness rather than for the corpus score. `located`
