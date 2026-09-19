@@ -295,16 +295,17 @@ reaches production with a cutoff fitted to a corpus that flattered it.
 6. **Set the cutoff for headroom, not at the midpoint.** Where the gap is
    narrow, the midpoint is a coin flip on the next unseen sample.
 7. **Average repeated passes when deciding anything near a cutoff.** Measured on
-   ~1,380 real subjects: pass-to-pass spread is a median of 0.010 and a p90 of
-   0.050, but the maximum is 0.260 — so a single pass over-reports and
+   1,390 real subjects: pass-to-pass spread is a median of 0.010 and a p90 of
+   0.050, but the maximum is 0.220 — so a single pass over-reports and
    under-reports different subjects, and a three-pass mean is the honest unit.
+   On this repository that turns 3-4 single-pass findings into 2.
 8. **Commit the record.** Then any later claim about that rule is checkable
    without an API key, and recalibrating cannot silently rewrite history.
 
 ### Judging the tool's output
 
 Read every finding against the code before believing it. When jevlint was run on
-its own source — ~1,380 subjects, 65 requests, $0.043 — it produced 11 findings
+its own source — 1,390 subjects, 65 requests, $0.043 — it produced 11 findings
 of which **9 were real and 2 were wrong**, and the four worst bugs of that
 exercise were found by *distrusting its own summary lines*, not by any rule it
 ran. Both halves of that are the lesson.

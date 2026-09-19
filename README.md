@@ -408,7 +408,7 @@ accuracy on that corpus**, at zero recall.
 ## What to expect
 
 Run on this repository's own TypeScript — `src`, `tools`, `test` — the shipped
-packs are **1,378 subjects, 65 requests, $0.043 and under five seconds** of wall
+packs are **1,390 subjects, 65 requests, $0.043 and under five seconds** of wall
 clock. That is roughly **3 cents per 1,000 subjects**, and `--dry-run` quotes
 about 9% high, so treat it as a bound rather than a price.
 
@@ -443,45 +443,48 @@ third means the tool is wrong:
 
 ### Headroom predicts your next false positive
 
-After fixing the nine, three passes over identical code leave **5 of 1,378
-subjects over their cutoff, all within 0.11 of it**. The useful diagnostic is
-not the count but the distance from the highest *clean* answer to the cutoff:
+After fixing the nine, three passes over identical code leave **2 of 1,390
+subjects over their cutoff**, both on `test-name-verifies-claim` and both tests
+whose names I read as accurate. The useful diagnostic is not that count but the
+distance from the highest *clean* answer to the cutoff:
 
 | rule | subjects | median | highest clean | cutoff | headroom |
 | --- | --- | --- | --- | --- | --- |
-| `test-name-describes-code` | 92 | 0.09 | 0.25 | 0.95 | +0.70 |
-| `fn-name-promises` | 150 | 0.13 | 0.50 | 0.76 | +0.26 |
-| `comment-describes-block` | 138 | 0.24 | 0.76 | 0.97 | +0.21 |
+| `test-name-describes-code` | 93 | 0.09 | 0.31 | 0.95 | +0.64 |
+| `fn-name-promises` | 151 | 0.13 | 0.50 | 0.76 | +0.26 |
+| `comment-describes-block` | 141 | 0.22 | 0.76 | 0.97 | +0.21 |
 | `comment-describes-declaration` | 95 | 0.14 | 0.63 | 0.83 | +0.20 |
-| `module-name-describes-contents` | 19 | 0.19 | 0.56 | 0.62 | +0.06 |
-| `test-name-verifies-claim` | 92 | 0.17 | 0.46 | 0.54 | **+0.08** |
-| `var-name-describes-value` | 792 | 0.10 | 0.57 | 0.61 | **+0.04** |
+| `module-name-describes-contents` | 19 | 0.19 | 0.55 | 0.62 | +0.07 |
+| `var-name-describes-value` | 798 | 0.10 | 0.56 | 0.61 | +0.05 |
+| `test-name-verifies-claim` | 93 | 0.18 | 0.52 | 0.54 | **+0.02** |
 
-The two rules with the least headroom hold the entire residue. That is what a
-corpus-fitted cutoff does: it sits where the corpus's clean band ended, and real
-code's clean band goes higher.
+The rule with the least headroom holds the entire residue — two subjects at
++0.13 and +0.07 over a cutoff its clean band reaches to within 0.02 of. That is
+what a corpus-fitted cutoff does: it sits where the corpus's clean band ended,
+and real code's clean band goes higher. `test-name-verifies-claim` is the rule
+to refit first on your own tests.
 
 ### The residue flickers, and averaging is the fix
 
-Consecutive passes over identical code report between 2 and 6 findings. Per
-subject, pass-to-pass spread is a median of 0.010 and a p90 of 0.050 — but the
-maximum is 0.260, which is enough to cross a cutoff. **Average three passes
-before deciding anything near a cutoff**; on this repository a single pass
-reports 2–6 findings and the three-pass mean reports 5.
+Consecutive passes over identical code report 3, 4 and 3 findings. Per subject,
+pass-to-pass spread is a median of 0.010 and a p90 of 0.050 — but the maximum is
+0.220, which is enough to cross a cutoff. **Average three passes before deciding
+anything near a cutoff**: here that turns 3–4 single-pass findings into 2.
 
 Two honest notes about that residue:
 
 - **There is no describable pattern to it.** The obvious hypothesis — that
   compound or universal test names read as under-verified whatever the body does
-  — is refuted: grouping all 92 `test-name-verifies-claim` subjects by how many
+  — is refuted: grouping all 93 `test-name-verifies-claim` subjects by how many
   claims their name makes gives flat means of 0.18–0.23. The unglamorous
   explanation is the right one: a cutoff of 0.54 fitted where the corpus's clean
-  band ended, against a real clean band with a tail to 0.66.
-- **It runs in both directions.** The same measurement found a *missed* defect:
-  the highest `comment-describes-declaration` answer on this repository was 0.76
-  against a 0.83 cutoff, and it was real — a doc comment separated from its
-  function by an interface declaration, documenting the wrong thing. The cutoff
-  missed it by 0.07.
+  band ended, against a real clean band with a tail to 0.67.
+- **It runs in both directions.** Before those fixes the highest
+  `comment-describes-declaration` answer here was 0.76 against a 0.83 cutoff —
+  a **missed** defect, and a real one: a doc comment separated from its function
+  by an interface declaration, so it documented the wrong thing and claimed a
+  null return the function never makes. The cutoff missed it by 0.07. Fixing it
+  is why that rule's highest clean answer is 0.63 in the table above.
 
 So: **expect to refit on your own code.** That is not a disclaimer, it is the
 documented procedure, and `replay --labels` makes it free once you have a

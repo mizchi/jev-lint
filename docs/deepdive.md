@@ -363,7 +363,7 @@ high** — a bound to budget against, not a quote.
 ## 6. Accuracy on real code
 
 Both packs over this repository's own TypeScript (`src`, `tools`, `test`,
-`corpus/build-labels.ts`): **1,378 subjects, 65 requests, ~1.02M input tokens,
+`corpus/build-labels.ts`): **1,390 subjects, 65 requests, ~1.02M input tokens,
 $0.043, 18s of request time, under 5 seconds of wall clock.** Seven of the
 fifteen rules fire; the eight Rust-only rules match nothing and say so.
 
@@ -394,34 +394,41 @@ called every one of those tests covered.
 On unlabeled real code `gaps` is useless — a gap needs two classes, and real
 source is 99.8% clean, so it prints `rewrite` for every rule that fires. What
 *is* informative is the distance from the highest clean answer to the cutoff.
-Over three passes on 1,378 subjects, averaged per subject:
+Over three passes on 1,390 subjects, averaged per subject:
 
-| rule | subjects | median | p90 | highest clean | cutoff | headroom | over |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| `comment-describes-block` | 138 | 0.24 | 0.57 | 0.76 | 0.97 | +0.21 | 0 |
-| `comment-describes-declaration` | 95 | 0.14 | 0.34 | 0.63 | 0.83 | +0.20 | 0 |
-| `fn-name-promises` | 150 | 0.13 | 0.28 | 0.50 | 0.76 | +0.26 | 0 |
-| `module-name-describes-contents` | 19 | 0.19 | 0.40 | 0.56 | 0.62 | +0.06 | 0 |
-| `test-name-describes-code` | 92 | 0.09 | 0.18 | 0.25 | 0.95 | +0.70 | 0 |
-| `test-name-verifies-claim` | 92 | 0.17 | 0.39 | 0.46 | 0.54 | **+0.08** | 4 |
-| `var-name-describes-value` | 792 | 0.10 | 0.20 | 0.57 | 0.61 | **+0.04** | 1 |
+| rule | subjects | median | highest clean | cutoff | headroom | over |
+| --- | --- | --- | --- | --- | --- | --- |
+| `test-name-describes-code` | 93 | 0.09 | 0.31 | 0.95 | +0.64 | 0 |
+| `fn-name-promises` | 151 | 0.13 | 0.50 | 0.76 | +0.26 | 0 |
+| `comment-describes-block` | 141 | 0.22 | 0.76 | 0.97 | +0.21 | 0 |
+| `comment-describes-declaration` | 95 | 0.14 | 0.63 | 0.83 | +0.20 | 0 |
+| `module-name-describes-contents` | 19 | 0.19 | 0.55 | 0.62 | +0.07 | 0 |
+| `var-name-describes-value` | 798 | 0.10 | 0.56 | 0.61 | +0.05 | 0 |
+| `test-name-verifies-claim` | 93 | 0.18 | 0.52 | 0.54 | **+0.02** | 2 |
 
-The two rules with the least headroom are exactly the two holding the entire
-residue. That is the predictive value of the column: a corpus-fitted cutoff sits
-where the corpus's clean band ended, and real code's clean band goes higher.
+The rule with the least headroom holds the entire residue. That is the
+predictive value of the column: a corpus-fitted cutoff sits where the corpus's
+clean band ended, and real code's clean band goes higher — here to within 0.02
+of the cutoff, which leaves nothing between a clean answer and a reported one.
 
 ### The residue, and what it is not
 
-Five of 1,378 subjects are over their cutoff on the three-pass mean, **all of
-them within 0.11 of it.** A single pass reports between 2 and 6 findings on
-identical code; the three-pass mean reports 5. Pass-to-pass spread per subject
-is a median of 0.010 and a p90 of 0.050, with a maximum of 0.260 — so single
-passes both over- and under-report near a cutoff, and the mean is the honest
-unit.
+Two of 1,390 subjects are over their cutoff on the three-pass mean, at +0.13
+and +0.07, and both are tests whose names I read as accurate:
+`batch: no splittable batch exceeds either ceiling` and `batch/rule: every
+subject lands in exactly one batch, grouped per rule`. The second survived
+three rounds of strengthening — placement checked by identity, batch count,
+rule purity, and a guard against a planner that groups nothing — and is still
+flagged. It is the one finding here I am confident is simply wrong.
+
+Single passes report 3, 4 and 3 findings on identical code; the three-pass mean
+reports 2. Pass-to-pass spread per subject is a median of 0.010 and a p90 of
+0.050, with a maximum of 0.220 — so single passes both over- and under-report
+near a cutoff, and the mean is the honest unit.
 
 I looked for a mechanism and **did not find one.** The obvious hypothesis was
 that compound or universal test names read as under-verified whatever the body
-does. Grouping all 92 `test-name-verifies-claim` subjects by how many claims
+does. Grouping all 93 `test-name-verifies-claim` subjects by how many claims
 their name makes refutes it — the means are flat:
 
 | claims in the name | n | mean | median | over 0.54 |
@@ -437,18 +444,19 @@ samples against 69 — which is too thin to call a mechanism. Compound names
 appear at both the top and the bottom of the ranking.
 
 So the honest account of the residue is the unglamorous one: a cutoff of 0.54,
-fitted where the corpus's clean band ended, against a real clean band with a
-tail to 0.66. No rule-level pattern, and the remedy is the standing one —
-refit on your own code.
+fitted where the corpus's clean band ended, against a real clean band reaching
+0.52. No rule-level pattern, and the remedy is the standing one — refit on your
+own code, starting with this rule.
 
 ### The false negative worth knowing about
 
-The same measurement found the mirror image. The highest
+The same measurement found the mirror image. Before the fixes above, the highest
 `comment-describes-declaration` answer on this repository was **0.76 against a
-0.83 cutoff** — a near miss, and it was a real defect: a doc comment for
-`decide` separated from its function by an interface declaration, so it
-documented `GateOptions` instead, and its "Returns a finding or null" was
-false of a function that never returns null. The cutoff missed it by 0.07.
+0.83 cutoff** — a near miss, and a real defect: a doc comment for `decide`
+separated from its function by an interface declaration, so it documented
+`GateOptions` instead, and its "Returns a finding or null" was false of a
+function that never returns null. The cutoff missed it by 0.07. Fixing it is
+why that rule's highest clean answer is 0.63 in the table above.
 
 That is the shape of the risk in both directions: a corpus-fitted cutoff has the
 clean band it was shown, and real code supplies both harder clean cases *and*
