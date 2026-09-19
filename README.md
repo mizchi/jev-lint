@@ -180,24 +180,36 @@ Every flag, and the config file's precedence, is in
 ## What a full run costs
 
 This repository lints itself: `.jev-lint.yaml` points the shipped packs at
-`src`, `tools` and `test` (8,000-odd lines of TypeScript), and `corpus/` is
-excluded because it holds the labelled defects. One full pass, every rule,
-nothing cached, as recorded in `docs/data/self-lint-after.json`:
+`src`, `tools` and `test/test.ts`, and leaves out `corpus/` and the cookbook
+fixtures, which hold planted defects. One full pass, every rule, nothing
+cached, on a laptop over a home connection, recorded in
+`docs/data/self-lint-2026-09-19.json`:
 
 | | |
 | --- | --- |
-| subjects judged | 1,403 |
-| requests | 67, at concurrency 4 |
-| input tokens | 1,123,043 |
-| output tokens | 26,068 |
-| price | $0.047 |
-| request time, summed | 18.4 s |
+| subjects judged | 1,639 |
+| requests | 65, at concurrency 4 |
+| input tokens | 941,123 |
+| output tokens | 30,200 |
+| price | $0.0395 |
+| wall clock | 6.9 s (26.1 s of request time, summed) |
 | model | `jev-1.13.0`, 2026-09-19 |
+| findings | 4 |
 
-That is about 3 cents per 1,000 subjects. `--dry-run` estimates a few percent
-above what the server bills, so it is a bound to budget against rather than a
-quote. A `review` of one commit's diff is a different order: the commits
-behind this README's last rewrite plan to 44,059 tokens, $0.002.
+That is 2.4 cents per 1,000 subjects. `--dry-run` on the same tree estimated
+1,049,592 input tokens, 11.5% above what the server billed, so a dry run is a
+bound to budget against rather than a quote. A `review` of one commit's diff
+is a different order: the commits behind this README's last rewrite plan to
+44,059 tokens, $0.002.
+
+The four findings are what to expect from a tool tuned on a corpus and run
+on real code: a counter named `passed` holding a number, which reads as a
+boolean and was renamed; two bindings within 0.03 of the cutoff, left alone;
+and one test the tool is wrong about, stable at 0.69 across runs. A pass
+made just before this one also caught a test whose name promised "exactly
+one batch" while its body only counted placements — fixed, and the verdict
+moved off the cutoff in this run. `jev-lint replay
+docs/data/self-lint-2026-09-19.json` reproduces the table with no API key.
 
 ## Rules
 

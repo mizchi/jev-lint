@@ -103,17 +103,17 @@ const probeMatch = (
   ...(name ? { metaVariables: { single: { JEVNAME: { text: name } } } } : {}),
 });
 
-let passed = 0;
-let failed = 0;
+let passCount = 0;
+let failCount = 0;
 const only = process.argv[2] ?? null;
 
 function test(name: string, fn: () => void): void {
   if (only && !name.includes(only)) return;
   try {
     fn();
-    passed += 1;
+    passCount += 1;
   } catch (err: unknown) {
-    failed += 1;
+    failCount += 1;
     process.stdout.write(
       `FAIL  ${name}\n      ${String((err as Error).message).split("\n").join("\n      ")}\n`,
     );
@@ -124,9 +124,9 @@ async function testAsync(name: string, fn: () => Promise<void>): Promise<void> {
   if (only && !name.includes(only)) return;
   try {
     await fn();
-    passed += 1;
+    passCount += 1;
   } catch (err: unknown) {
-    failed += 1;
+    failCount += 1;
     process.stdout.write(
       `FAIL  ${name}\n      ${String((err as Error).message).split("\n").join("\n      ")}\n`,
     );
@@ -234,7 +234,7 @@ test("rules: a missing ask, rule, id or language is an error, not a silent drop"
 test("rules: a noul without nested criteria is rejected before it can reach the wire", () => {
   // The server accepts a flat {true,false} with a 200 and silently discards the
   // criteria. Rejecting the shape here is the only place it can be caught.
-  const flat = normalizeRule({
+  const rejected = normalizeRule({
     id: "n",
     language: "Rust",
     kind: "noul",
@@ -243,8 +243,8 @@ test("rules: a noul without nested criteria is rejected before it can reach the 
     true: "yes",
     false: "no",
   });
-  assert.ok(flat.error, "a noul with top-level true/false must be rejected");
-  assert.match(flat.error, /criteria/);
+  assert.ok(rejected.error, "a noul with top-level true/false must be rejected");
+  assert.match(rejected.error, /criteria/);
 
   const missingFalse = normalizeRule({
     id: "n",
@@ -732,8 +732,15 @@ test("batch: every subject lands in exactly one batch and none is empty", () => 
     sources: new Map([["a.ts", "source"]]),
     symbols: new Map([["a.ts", sampleEntry()]]),
   });
-  const total = batches.reduce((a, b) => a + b.subjects.length, 0);
-  assert.equal(total, 700);
+  // "Exactly one" is a claim about identity, not about a count: 700 placements
+  // could be 699 subjects with one of them twice. jev-lint flagged the count-only
+  // version of this test at 0.55 against a 0.54 cutoff, and it was right.
+  // By text, not by reference: the planner hands out copies with ids assigned.
+  const placed = batches.flatMap((b) => b.subjects.map((s) => s.text));
+  assert.equal(placed.length, subjects.length);
+  assert.equal(new Set(placed).size, subjects.length, "no subject is placed twice");
+  const wanted = new Set(subjects.map((s) => s.text));
+  assert.ok(placed.every((t) => wanted.has(t)), "nothing is placed that was not asked for");
   assert.ok(batches.every((b) => b.subjects.length > 0));
   assert.ok(batches.every((b) => b.subjects.length <= DEFAULT_BATCH_SIZE));
 });
@@ -2116,9 +2123,9 @@ test("retry: a failed pass is not counted as a disagreement", () => {
   // an unstable rule.
   const rule = noulRule({ id: "n", at: 0.5 });
   const s = subjectOf({ rule, file: "a.ts", line: 1 });
-  const ok = [{ subject: s, answer: { value: 0.9, confidence: null, kind: "noul" as const }, cached: false }];
-  const failed = [{ subject: s, answer: null, cached: false }];
-  const merged = mergePasses([ok, failed, ok], {});
+  const okPass = [{ subject: s, answer: { value: 0.9, confidence: null, kind: "noul" as const }, cached: false }];
+  const failedPass = [{ subject: s, answer: null, cached: false }];
+  const merged = mergePasses([okPass, failedPass, okPass], {});
   assert.deepEqual(merged[0]!.stability, { over: 2, of: 2, spread: 0 });
   assert.equal(merged[0]!.answer!.value, 0.9);
 });
@@ -2337,5 +2344,5 @@ test("jev: the endpoint is configurable and a trailing slash does not double up"
     "https://proxy.example/v1", "or the request path would contain //");
 });
 
-process.stdout.write(`\n${passed} passed, ${failed} failed\n`);
-process.exit(failed > 0 ? 1 : 0);
+process.stdout.write(`\n${passCount} passed, ${failCount} failed\n`);
+process.exit(failCount > 0 ? 1 : 0);
