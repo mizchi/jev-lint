@@ -13,55 +13,63 @@
  *     silently, so a rule that never fired is reported as its own line rather
  *     than left to be inferred from an absence.
  */
-import { describe } from "./gate.mjs";
+import { describe } from "./gate.ts";
+import type { Finding, ReportInput } from "./types.ts";
+import type { GapRow, StabilityReport } from "./calibrate.ts";
+
+type Painter = (s: string) => string;
+type Palette = Record<keyof typeof C, Painter>;
 
 const C = {
-  dim: (s) => `\u001b[2m${s}\u001b[0m`,
-  bold: (s) => `\u001b[1m${s}\u001b[0m`,
-  red: (s) => `\u001b[31m${s}\u001b[0m`,
-  yellow: (s) => `\u001b[33m${s}\u001b[0m`,
-  cyan: (s) => `\u001b[36m${s}\u001b[0m`,
-  green: (s) => `\u001b[32m${s}\u001b[0m`,
-  grey: (s) => `\u001b[90m${s}\u001b[0m`,
+  dim: (s: string) => `\u001b[2m${s}\u001b[0m`,
+  bold: (s: string) => `\u001b[1m${s}\u001b[0m`,
+  red: (s: string) => `\u001b[31m${s}\u001b[0m`,
+  yellow: (s: string) => `\u001b[33m${s}\u001b[0m`,
+  cyan: (s: string) => `\u001b[36m${s}\u001b[0m`,
+  green: (s: string) => `\u001b[32m${s}\u001b[0m`,
+  grey: (s: string) => `\u001b[90m${s}\u001b[0m`,
 };
 
-function plain(s) {
+function plain(s: string): string {
   return s;
 }
 
-function palette(color) {
+function palette(color: boolean): Palette {
   if (color) return C;
-  return Object.fromEntries(Object.keys(C).map((k) => [k, plain]));
+  return Object.fromEntries(Object.keys(C).map((k) => [k, plain])) as Palette;
 }
 
-const TAG = {
+const TAG: Record<string, (c: Palette) => string> = {
   violation: (c) => c.red("violation"),
   unsure: (c) => c.yellow("unsure   "),
   flag: (c) => c.red("flag     "),
   missing: (c) => c.grey("no-verdict"),
 };
 
-export function formatPretty(result, { color = true, showMissing = false } = {}) {
+export function formatPretty(
+  result: ReportInput,
+  { color = true, showMissing = false }: { color?: boolean; showMissing?: boolean } = {},
+): string {
   const c = palette(color);
-  const out = [];
+  const out: string[] = [];
   const { findings, all, stats, spent } = result;
 
-  const byFile = new Map();
+  const byFile = new Map<string, Finding[]>();
   for (const f of findings) {
     if (!byFile.has(f.file)) byFile.set(f.file, []);
-    byFile.get(f.file).push(f);
+    byFile.get(f.file)!.push(f);
   }
 
   for (const [file, list] of [...byFile.entries()].sort()) {
     out.push(c.bold(file));
     for (const f of list.sort((a, b) => a.line - b.line)) {
       const loc = `${f.line}`.padStart(5);
-      const tag = TAG[f.messageId]?.(c) ?? f.messageId;
+      const tag = (f.messageId ? TAG[f.messageId]?.(c) : null) ?? String(f.messageId);
       const what = f.message ?? f.ask;
       const num =
         f.kind === "score"
-          ? `${f.value.toFixed(2)}/3${typeof f.confidence === "number" ? ` conf ${f.confidence.toFixed(2)}` : ""}`
-          : f.value.toFixed(2);
+          ? `${f.value!.toFixed(2)}/3${typeof f.confidence === "number" ? ` conf ${f.confidence.toFixed(2)}` : ""}`
+          : f.value!.toFixed(2);
       out.push(`  ${loc}  ${tag}  ${what}`);
       out.push(
         `         ${c.dim(`${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  arm ${f.arm}`)}`,
@@ -131,12 +139,12 @@ export function formatPretty(result, { color = true, showMissing = false } = {})
 }
 
 /** Rules that produced no subject at all. */
-export function silentRules(result) {
+export function silentRules(result: Partial<ReportInput>): string[] {
   const fired = new Set((result.subjects ?? []).map((s) => s.rule.id));
   return (result.rules ?? []).map((r) => r.id).filter((id) => !fired.has(id));
 }
 
-export function formatJson(result) {
+export function formatJson(result: ReportInput): string {
   return JSON.stringify(
     {
       findings: result.findings.map((f) => ({
@@ -174,12 +182,12 @@ export function formatJson(result) {
  * can fail a build is a probabilistic reviewer that gets switched off. Raise it
  * per rule with `severity: error` once a rule has earned it on your own code.
  */
-export function formatGithub(result) {
-  const out = [];
+export function formatGithub(result: ReportInput): string {
+  const out: string[] = [];
   for (const f of result.findings) {
     const level = f.severity === "error" ? "error" : f.messageId === "unsure" ? "notice" : "warning";
     const title = `${f.rule}${f.messageId === "unsure" ? " (unsure)" : ""}`;
-    const num = f.kind === "score" ? `${f.value.toFixed(2)}/3` : f.value.toFixed(2);
+    const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
     const body = `${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}]`;
     out.push(
       `::${level} file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(title)}::${escape(body)}`,
@@ -193,21 +201,21 @@ export function formatGithub(result) {
   return out.join("\n");
 }
 
-function escape(s) {
+function escape(s: unknown): string {
   return String(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
 }
 
-const round = (n) => (typeof n === "number" ? Math.round(n * 1000) / 1000 : n);
+const round = (n: unknown) => (typeof n === "number" ? Math.round(n * 1000) / 1000 : n);
 
 /** The gap table -- the first thing to read when authoring rules. */
-export function formatGaps(rows, { color = true } = {}) {
+export function formatGaps(rows: GapRow[], { color = true }: { color?: boolean } = {}): string {
   const c = palette(color);
   const head = ["rule", "kind", "matched", "reported", "cutoff", "median", "gap", "suggest", "verdict"];
   const widths = [28, 5, 7, 8, 6, 6, 5, 7, 7];
-  const lines = [head.map((h, i) => h.padEnd(widths[i])).join(" ")];
+  const lines: string[] = [head.map((h, i) => h.padEnd(widths[i]!)).join(" ")];
   lines.push(c.dim(widths.map((w) => "-".repeat(w)).join(" ")));
 
-  const tag = {
+  const tag: Record<string, Painter> = {
     works: (s) => c.green(s),
     move: (s) => c.yellow(s),
     rewrite: (s) => c.red(s),
@@ -217,7 +225,7 @@ export function formatGaps(rows, { color = true } = {}) {
 
   for (const r of rows) {
     const cells = [
-      r.rule.slice(0, widths[0]),
+      r.rule.slice(0, widths[0]!),
       r.kind,
       String(r.matches),
       String(r.reported),
@@ -227,7 +235,7 @@ export function formatGaps(rows, { color = true } = {}) {
       r.matches > 1 ? String(r.suggested) : "-",
       r.verdict,
     ];
-    const row = cells.map((v, i) => String(v).padEnd(widths[i])).join(" ");
+    const row = cells.map((v, i) => String(v).padEnd(widths[i]!)).join(" ");
     lines.push(r.verdict === "works" ? row : (tag[r.verdict] ?? plain)(row));
   }
 
@@ -249,19 +257,22 @@ export function formatGaps(rows, { color = true } = {}) {
 }
 
 /** The stability table -- how much the model moves between runs. */
-export function formatStability(report, { color = true } = {}) {
+export function formatStability(
+  report: StabilityReport,
+  { color = true }: { color?: boolean } = {},
+): string {
   const c = palette(color);
-  const lines = [c.bold(`stability over ${report.runs} run(s)`), ""];
+  const lines: string[] = [c.bold(`stability over ${report.runs} run(s)`), ""];
   const widths = [28, 9, 8, 11, 10];
   lines.push(
     ["rule", "subjects", "flipped", "max spread", "mean spread"]
-      .map((h, i) => h.padEnd(widths[i]))
+      .map((h, i) => h.padEnd(widths[i]!))
       .join(" "),
   );
   lines.push(c.dim(widths.map((w) => "-".repeat(w)).join(" ")));
-  for (const r of report.rows.sort((a, b) => b.flipped - a.flipped)) {
+  for (const r of [...report.rows].sort((a, b) => b.flipped - a.flipped)) {
     const row = [r.rule.slice(0, 28), String(r.subjects), String(r.flipped), r.maxSpread.toFixed(2), r.meanSpread.toFixed(2)]
-      .map((v, i) => v.padEnd(widths[i]))
+      .map((v, i) => v.padEnd(widths[i]!))
       .join(" ");
     lines.push(r.flipped > 0 ? c.yellow(row) : row);
   }

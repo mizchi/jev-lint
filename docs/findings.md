@@ -1,27 +1,41 @@
 # Findings
 
 Everything measured while building this, in the order it happened, including
-the parts that went wrong. All numbers come from `corpus/` (10 files, 569
-lines, 134 subjects, Rust and TypeScript) unless stated otherwise, against
+the parts that went wrong and the parts that were later retracted. Against
 `jev-1.13.0`.
+
+**Read in order, and note that later sections supersede earlier ones where they
+conflict.** Sections 1-8 record the tool at 8 rules over a 10-file corpus, with
+`.mjs` sources and a single batching axis. Sections 9-11 are the current state:
+15 rules across three packs, a 13-file corpus of 306 subjects, TypeScript
+sources, and two batching axes. Where a number changed, the later one is the
+live one and the earlier one is left standing because how it changed is part of
+the evidence. Two claims in sections 1-4 are explicitly **retracted** in section
+9; they are marked there rather than deleted here.
 
 Re-derive the tables without spending anything:
 
 ```bash
 npm run replay        # re-score the recorded run under today's cutoffs
-npm test              # 85 checks, no API key
+npm test              # 86 checks, no API key
+npm run typecheck     # the full type surface, including tools and tests
 ```
 
-The recorded runs are `docs/data/calibration.json` (three passes),
-`docs/data/arms.json` (four state arms, two passes each) and
+The recorded runs are `docs/data/calibration.json` (the current 15-rule run),
+`docs/data/grouping.json` (the axis comparison, section 9),
+`docs/data/arms.json` (four state arms, section 3) and
 `docs/data/self-lint-cache.json` (the 737 verdicts behind section 5, kept as a
 cache so the numbers there can be checked rather than taken on trust).
 
 ---
 
-## 1. The headline
+## 1. The headline (superseded by section 9 for the axis; cutoffs refitted since)
 
-Eight rules over two languages, fitted to the corpus:
+Eight rules over two languages, fitted to the 10-file corpus. The rule names
+`test-name-matches-body*` were later split into `test-name-describes-code*` and
+`test-name-verifies-claim*` (section 10), and every cutoff below was refitted
+once the corpus grew to 13 files and the file axis became explicit. The shape of
+the result held: 13 of 15 rules at precision 1.0 and recall 1.0.
 
 | rule | language | cutoff | precision | recall | clean band | defect band |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -93,7 +107,7 @@ section 4.
 
 ## 3. State: the arm is not a quality knob
 
-`tools/arms.mjs` runs the whole corpus once per state arm. The column that
+`tools/arms.ts` runs the whole corpus once per state arm. The column that
 matters is `sep`, the distance between the clean and defective class means: it
 says how far apart the arm pushes the two classes, independently of where any
 cutoff lands.
@@ -306,7 +320,7 @@ Confirmed against the live service while building this.
   estimator only has to be roughly right. It is deliberately pessimistic.
 - **A `noul`'s criteria must be nested under `criteria`.** A flat
   `{true, false}` returns 200 with the criteria silently discarded; the only
-  visible symptom is a smaller input-token count. `rules.mjs` rejects the shape
+  visible symptom is a smaller input-token count. `rules.ts` rejects the shape
   so it cannot reach the wire.
 - **A `noul` returns no confidence**, only a probability. So there is no
   `unsure` routing for noul rules — the score scale is what buys that.
@@ -340,3 +354,243 @@ Confirmed against the live service while building this.
   referee. Each label carries its reason so a reader can disagree with a
   specific claim rather than with the aggregate — and the fitted cutoffs are
   fitted to those opinions.
+
+---
+
+## 9. Batching axis: one state per file, or one per rule?
+
+The state was per FILE: send a file's source, ask about every match in it. The
+alternative is per RULE: send only what the matcher caught, from anywhere, each
+item with its enclosing function as context, and never send a file whole.
+
+Both are implemented (`--group file`, `--group rule`), a scheduler costs them
+per rule (`--group auto`), and `tools/grouping.ts` measures them.
+
+### Scale: a round-trip saving, not really a cost saving
+
+Planned with `--dry-run`, which costs nothing:
+
+| | file axis | rule axis | |
+| --- | --- | --- | --- |
+| tokio, 799 Rust files, 7,583 subjects | 786 req / 4.23M tok | **54 req** / 3.37M tok | 14.6x fewer requests, 20% fewer tokens |
+| vue, 484 TS files, 19,659 subjects | 1,153 req / 10.23M tok | **147 req** / 9.43M tok | 7.8x fewer requests, **8.4%** fewer tokens |
+
+Requests collapse by 8-15x; dollars fall by 8-20%. Since the API prices tokens,
+**the rule axis buys latency and rate-limit headroom, not money.**
+
+And the token saving is almost entirely one thing. On vue, 583 file-axis batches
+hold 1-2 subjects — 50.6% of all requests but only 6.3% of tokens — and that
+6.3% is **81% of the entire token delta**. 495 of those thin batches are
+`module-name-describes-contents`, which has `subject: file` and is therefore one
+request per file by construction. The rule axis's win is removing thin batches,
+not amortising source.
+
+### The density crossover exists and is unreachable
+
+The theory was that density decides: amortising a file over many matches wins
+when matches per file is high, loses when it is low. The direction is confirmed
+strongly — a 14-point single-rule sweep on tokio and an 8-point one on vue show
+the token ratio rising monotonically with density, from 0.057 at 1.14
+matches/file to 0.998 at 139 — but **the crossover sits at about 135 distinct
+matches per file**, an order of magnitude past the densest rule anyone writes,
+and tokio never reaches it.
+
+The reason is in this repository's own code: `buildRuleState` deduplicates
+shared enclosing functions, which bounds the rule axis's context cost near the
+file's own source instead of letting it grow with density. Before that
+deduplication existed the rule axis cost 37% MORE than the file axis on tokio;
+after it, 20% less.
+
+One measurement subtlety: density has to be counted after subject-text
+deduplication. A `kind: identifier` rule on tokio has a raw density of 193.9 but
+a ratio of 0.712 — because 73,092 identifiers collapse to 4,699 distinct
+question texts, putting it exactly on the effective-density curve at 12.46.
+
+### Accuracy: the axis moves verdicts, and not for the reason first reported
+
+Forcing each axis over the whole corpus, 306 subjects, 15 rules:
+
+| axis | precision | recall | tp/fp/fn |
+| --- | --- | --- | --- |
+| file | 0.92 | 0.94 | 44/4/3 |
+| rule | 0.81 | 0.91 | 43/10/4 |
+
+**The rule axis carries 2.5x the false positives.** The two axes disagree on
+2.9% of decisions.
+
+#### Retraction: it is not anchoring
+
+The first reading of this blamed anchoring — unrelated snippets sharing one
+state pulling each other toward the middle — on the strength of 3 flips in 134
+corpus subjects at batch 256, all in one rule. A proper batch-size sweep on both
+large repositories retracts that, on four counts:
+
+1. **Flips start at batch 4** — the smallest batch with any neighbour at all —
+   and **saturate by 16** instead of growing with batch size. There is no safe
+   sub-threshold to sit under.
+2. **They are noise-dominated.** On vue, the 3 flips at batch 256 exactly equal
+   its own pass-to-pass flips at batch 1. Against a same-configuration noise
+   floor of 0.011-0.016 mean absolute delta, the batched delta is 0.027-0.052 —
+   real in magnitude, but 9 of 10 flips across both repositories sat within
+   0.115 of their cutoff, a borderline band holding only 1.9-3.0% of subjects.
+3. **The original flips did not reproduce.** They were not concentrated in
+   `fn-name-promises-rust`; at scale they land in whichever source-bearing rule
+   has the most subjects, and the `graph`-arm module rule never flipped once
+   anywhere.
+4. **The corpus could not have answered the question.** Its largest per-rule
+   group is 42 subjects, so `rule:64` and `rule:256` compile to the *identical*
+   plan and returned identical numbers. "Batch 256" on this corpus never meant
+   more than 42 neighbours. A real rule-axis batch is capped by the 32Ki state
+   budget at 135-140.
+
+Point 4 is the methodological lesson, and it is the same one as section 4: a
+corpus can return a confident number for a question it is structurally unable
+to answer, and nothing in the number says so.
+
+#### What does move verdicts: arm degradation
+
+A rule-axis state spans files, so it cannot carry *the* file — `planRuleBatches`
+substitutes `local` for `located`. Three independent measurements line up:
+
+- `var-name-describes-value` is not separable at any cutoff without the file
+  (section 3).
+- On vue, 101 of 147 rule-axis batches fell back from `located`, covering 58.4%
+  of subjects and 69.2% of tokens — and that population is essentially that one
+  rule (11,496 of 19,659 subjects).
+- Forcing the rule axis took false positives from 4 to 10 with true positives
+  flat.
+
+So the accuracy cost is structural, not statistical: **a rule whose evidence is
+the file loses its evidence.** That is a mechanism, and it is what the scheduler
+now enforces — a file-bearing arm (`located`, `full`) holds its rule on the file
+axis, and cost optimisation happens only among the rules where it is free.
+
+Per-rule on tokio, the pattern is exactly that:
+
+| rule | arm | requests | tokens | why |
+| --- | --- | --- | --- | --- |
+| `module-name-describes-contents-rust` | graph | 377 → 4 (94x) | **-52.7%** | one match per file, so file grouping sends one question per file |
+| `fn-name-promises-rust` | located | 312 → 23 (13.6x) | -38.6% | subject is a whole function, so `local` attaches nothing extra |
+| `var-name-describes-value-rust` | located | 242 → 24 (10.1x) | -26.5% | subject is a fragment, so `local` attaches an enclosing body to each |
+| `test-name-*-rust` | bare | 85 → 3 (28x) | **+1.2%** | no file to amortise either way |
+
+The `graph` and `bare` arms are where the rule axis is free. Composition note:
+the rule axis is exactly additive across rules (23+24+3+4 = 54 requests, tokens
+summing to the unit), while the file axis is not — two `located` rules share one
+state per file, so per-rule figures do not partition the combined total.
+
+### The answer to "does scheduling change the scores"
+
+No, and yes, and the distinction matters:
+
+| comparison | decision flips |
+| --- | --- |
+| scheduler vs forced rule axis | **1 / 306 (0.3%)** |
+| scheduler vs forced file axis | 8 / 306 (2.6%) |
+| forced file vs forced rule | 9 / 306 (2.9%) |
+
+The scheduler adds no disagreement of its own — it inherits whichever axis it
+picked. So **the axis is not verdict-neutral and the scheduler cannot be made
+neutral by being clever.** What it can do is decline to move a rule that would
+lose evidence, which is what it does.
+
+Consequences, all shipped:
+
+- `--group file` is the **default**, because it is the accurate axis.
+- `--group rule` and `--group auto` are opt-in, and the usage text says what
+  they cost.
+- Every calibrated rule carries `axis: file`, because a cutoff fitted on one
+  axis is not fitted for the other.
+- `--explain-schedule` prints the axis chosen per rule and why.
+
+---
+
+## 10. Two new rule families
+
+### Tests: the two failure modes are nested, not orthogonal
+
+The original single test rule asked one question whose criteria listed both
+"exercises a different case" and "asserts nothing at all". Splitting those into
+two rules — `test-name-describes-code` (the code does something else) and
+`test-name-verifies-claim` (the code would pass anyway) — first made things
+**worse**: 1.0/1.0 became 0.5/0.5 on the second rule and 0/2 recall in Rust.
+
+The cause was a labelling error founded on a wrong model of the domain. The
+classes are **nested, not disjoint**: a test that exercises the wrong case also
+fails to establish its name, so `verifies-claim` ⊃ `describes-code`. Labelling
+the wrong-case defects as belonging to both put every rule back to 1.0/1.0.
+
+Worth stating because the failure looked like a bad question and was a bad
+ontology. `verifies-claim` firing on both classes was it being *right*.
+
+| rule | cutoff | precision | recall |
+| --- | --- | --- | --- |
+| `test-name-describes-code` | 0.95 | 1.00 | 1.00 |
+| `test-name-describes-code-rust` | 0.93 | 0.67 | 1.00 |
+| `test-name-verifies-claim` | 0.54 | 1.00 | 1.00 |
+| `test-name-verifies-claim-rust` | 0.54 | 1.00 | 1.00 |
+
+### Comments: a comment is a claim nothing checks
+
+`rules/comments.yml`. The matcher pairs a comment with the code it sits above
+using `follows:` with a pattern, and **a `follows` capture propagates to
+metavariables** — so `$DOC` hands the question the comment by name while the
+matched node is the code. Both halves named, the same shape that makes the test
+rules sharp.
+
+| rule | cutoff | precision | recall |
+| --- | --- | --- | --- |
+| `comment-describes-declaration` (TS) | 0.83 | 1.00 | 1.00 |
+| `comment-describes-declaration-rust` | 0.59 | 1.00 | 1.00 |
+| `comment-describes-declaration-js` | 0.54 | 1.00 | 1.00 |
+| `comment-describes-block` | — | not calibrated | |
+| `comment-describes-block-rust` | — | not calibrated | |
+
+The declaration rules separate perfectly in three languages over nine labelled
+drifts: a unit that changed, a claimed absence of mutation that mutates, a
+claimed ordering that is reversed, a documented parameter that no longer exists,
+a claimed throw that returns false. The hard clean cases — vague comments,
+redundant comments, comments explaining *why* — are all correctly ignored,
+which is the axis working: the question is whether the claim is false, not
+whether the comment is good.
+
+**The block rules are not calibrated and ship saying so**, with cutoffs parked
+above every observed answer and `severity: info`. They answer 0.89-0.96 to
+almost everything. Two fixes were tried and neither separated them: handing the
+question the matched statement alongside its container (which did take precision
+to 1.0), and rewording to the declaration rule's proven "a specific claim is
+contradicted" shape. Whether the question is wrong or merely untested is not
+established — three subjects is below what a gap statistic can speak to.
+
+#### A corpus annotated with comments cannot calibrate a rule about comments
+
+The first comment-rule run produced a false positive at 0.78 on
+`corpus/ts/session.ts:20`. The "comment" it judged was this repository's own
+`// CLEAN: a predicate whose truth takes one step of reasoning to check …`
+corpus marker, sitting exactly where a doc comment sits.
+
+Every naming-corpus file is annotated with `// DEFECT` / `// CLEAN` comments
+directly above declarations, which is precisely the shape
+`comment-describes-declaration` matches. The comment rules are therefore
+calibrated only on `corpus/ts/session_store.ts`, `corpus/rust/budget.rs` and
+`corpus/js/legacy_cart.js`, where the markers sit *above* a real doc comment so
+the doc comment is what the matcher pairs with the code.
+
+It also showed up in the axis comparison: that subject scored 0.16 on the file
+axis and 0.775 on the rule axis, because with the whole file visible the model
+reads the marker as an annotation and without it reads it as documentation. The
+largest single disagreement in the whole comparison was an artefact of how the
+corpus is written.
+
+---
+
+## 11. Rewrites and fixes this round
+
+| found by | what |
+| --- | --- |
+| the port | `describe()` and the `unsureBelow` override bugs from section 6 would both have been caught by types; neither was, because JavaScript. The TypeScript port found nothing new, which is itself the honest result — 678 type errors were all missing annotations. |
+| the gap report | It called a rule `rewrite` on **three** data points. A widest-gap statistic over three answers is noise, and "rewrite the sentence" is expensive advice to give on noise. `thin` now covers anything under six. |
+| the comment rules | `subject: enclosing` reported findings at the *container's* line, so every match inside one function collapsed onto one reported line and per-line corpus labels could not tell them apart. Report location and judged subject are now separate concerns: the finding points at the match, the question describes the container. |
+| the comment rules | A promoted subject did not tell the question which node inside the container had matched, which is unanswerable when the container holds several candidates. The matched node is now handed over as `matched`. |
+| the scheduler | Optimising tokens alone silently bought the rule axis's extra false positives. The constraint is now structural (file-bearing arms hold their rule) rather than a cost comparison. |
+| distribution | `astGrepBin()` resolved `../node_modules/.bin/ast-grep`, which does not exist when npm hoists. Verified by installing the packed tarball into a clean project and linting real files through it. |

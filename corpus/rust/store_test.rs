@@ -10,30 +10,33 @@ mod tests {
         items.iter().find(|(i, _)| *i == id).map(|(_, v)| *v)
     }
 
-    // DEFECT (test-name-matches-body): the title names the empty case; the body
-    // exercises the non-empty one.
+    // DEFECT (test-name-describes-code, test-name-verifies-claim): the title
+    // names the empty case; the body
+    // exercises the non-empty one. Wrong THING.
     #[test]
     fn returns_zero_for_an_empty_slice() {
         assert_eq!(sum_prices(&[10, 20]), 30);
     }
 
-    // DEFECT (test-name-matches-body): the title claims it panics; the body
-    // asserts a value and never checks for a panic.
+    // DEFECT (test-name-describes-code, test-name-verifies-claim): the title
+    // claims it panics; the body
+    // expects an ordinary value. Wrong THING.
     #[test]
     fn panics_on_an_empty_slice() {
         assert_eq!(sum_prices(&[]), 0);
     }
 
-    // DEFECT (test-name-matches-body): the title claims an ordering guarantee;
-    // the body only checks the length, so the named behaviour could be broken
-    // and this would still pass.
+    // DEFECT (test-name-verifies-claim): the title claims an ordering guarantee
+    // and the body checks the length, so the named behaviour could be broken and
+    // this would still pass. Right thing, assertion too WEAK.
     #[test]
     fn returns_items_sorted_by_price() {
         let items = [(1u32, 30u32), (2, 10)];
         assert_eq!(items.len(), 2);
     }
 
-    // DEFECT (test-name-matches-body): asserts nothing.
+    // DEFECT (test-name-verifies-claim): asserts nothing, so nothing it claims is
+    // established.
     #[test]
     fn rejects_a_missing_id() {
         let items = [(1u32, 30u32)];

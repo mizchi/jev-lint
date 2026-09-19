@@ -18,10 +18,13 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 
+/** Post-image line ranges per file, inclusive at both ends. */
+export type ChangedRanges = Map<string, Array<[number, number]>>;
+
 /** Parse the `@@ -a,b +c,d @@` headers of a unified diff with zero context. */
-export function parseUnifiedDiff(text) {
-  const byFile = new Map();
-  let file = null;
+export function parseUnifiedDiff(text: string): ChangedRanges {
+  const byFile: ChangedRanges = new Map();
+  let file: string | null = null;
   for (const line of text.split("\n")) {
     // `+++ b/path` gives the post-image path, which is the one whose line
     // numbers the hunk headers refer to.
@@ -39,7 +42,7 @@ export function parseUnifiedDiff(text) {
     // A hunk with a zero line count is a pure deletion: nothing in the
     // post-image changed, so there is nothing here to review.
     if (count === 0) continue;
-    byFile.get(file).push([start, start + count - 1]);
+    byFile.get(file)!.push([start, start + count - 1]);
   }
   for (const [k, ranges] of byFile) {
     if (ranges.length === 0) byFile.delete(k);
@@ -48,18 +51,18 @@ export function parseUnifiedDiff(text) {
   return byFile;
 }
 
-function merge(ranges) {
+function merge(ranges: Array<[number, number]>): Array<[number, number]> {
   const sorted = [...ranges].sort((a, b) => a[0] - b[0]);
-  const out = [sorted[0]];
+  const out: Array<[number, number]> = [sorted[0]!];
   for (const [s, e] of sorted.slice(1)) {
-    const last = out.at(-1);
+    const last = out.at(-1)!;
     if (s <= last[1] + 1) last[1] = Math.max(last[1], e);
     else out.push([s, e]);
   }
   return out;
 }
 
-async function git(args, cwd) {
+async function git(args: string[], cwd: string): Promise<string> {
   const { stdout } = await execFileAsync("git", args, { cwd, maxBuffer: 256 * 1024 * 1024 });
   return stdout;
 }
@@ -72,7 +75,11 @@ async function git(args, cwd) {
  * not this change's doing. Without it, compares the working tree against HEAD,
  * so uncommitted edits are reviewable before they are committed.
  */
-export async function changedRanges({ base = null, cwd = process.cwd(), staged = false } = {}) {
+export async function changedRanges({
+  base = null,
+  cwd = process.cwd(),
+  staged = false,
+}: { base?: string | null; cwd?: string; staged?: boolean } = {}): Promise<ChangedRanges> {
   const args = ["diff", "--unified=0", "--no-color", "--no-ext-diff", "--diff-filter=d"];
   if (staged) args.push("--cached");
   if (base) args.push(`${base}...HEAD`);
@@ -97,7 +104,12 @@ export async function changedRanges({ base = null, cwd = process.cwd(), staged =
 }
 
 /** Does `[line, endLine]` intersect any changed range for this file? */
-export function touchesChange(ranges, file, line, endLine) {
+export function touchesChange(
+  ranges: ChangedRanges,
+  file: string,
+  line: number,
+  endLine: number,
+): boolean {
   const list = ranges.get(file);
   if (!list) return false;
   return list.some(([s, e]) => line <= e && endLine >= s);
@@ -110,7 +122,10 @@ export function touchesChange(ranges, file, line, endLine) {
  * matter: ast-grep would otherwise match the entire repository and every match
  * outside the diff would have to be discarded after the fact.
  */
-export function changedFiles(ranges, { filter = null } = {}) {
+export function changedFiles(
+  ranges: ChangedRanges,
+  { filter = null }: { filter?: ((f: string) => boolean) | null } = {},
+): string[] {
   const files = [...ranges.keys()];
   return filter ? files.filter(filter) : files;
 }

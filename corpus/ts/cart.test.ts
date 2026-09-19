@@ -21,26 +21,29 @@ const items: Item[] = [
 ];
 
 describe("cart", () => {
-  // DEFECT (test-name-matches-body): the title names the empty case; the body
-  // exercises the non-empty one and asserts it succeeds.
+  // DEFECT (test-name-describes-code, test-name-verifies-claim): the title
+  // names the empty case; the body
+  // exercises the non-empty one. Wrong THING, not a weak assertion.
   it("returns zero for an empty item list", () => {
     expect(sumPrices(items)).toBe(250);
   });
 
-  // DEFECT (test-name-matches-body): the title says it throws; the body
-  // asserts a returned value and never checks for a throw.
+  // DEFECT (test-name-describes-code, test-name-verifies-claim): the title
+  // says it throws; the body
+  // expects an ordinary value. Wrong THING.
   it("throws when the item list is empty", () => {
     expect(sumPrices([])).toBe(0);
   });
 
-  // DEFECT (test-name-matches-body): the title claims an ordering guarantee;
-  // the body only counts the results, so the named behaviour could be broken
-  // and this test would still pass.
+  // DEFECT (test-name-verifies-claim): the title claims an ordering guarantee
+  // and the body counts the results, so the named behaviour could be broken and
+  // this would still pass. Right thing, assertion too WEAK.
   it("returns items sorted by price", () => {
     expect(items.length).toBe(2);
   });
 
-  // DEFECT (test-name-matches-body): asserts nothing at all.
+  // DEFECT (test-name-verifies-claim): asserts nothing at all, so nothing it
+  // claims is established.
   it("rejects a negative quantity", () => {
     sumPrices([{ id: 3, price: 10, qty: -1 }]);
   });

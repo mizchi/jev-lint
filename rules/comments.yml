@@ -1,0 +1,275 @@
+# Comment drift: does the comment still describe the code?
+#
+# A comment is a claim the code makes about itself, in the one notation nothing
+# checks. Types are checked, names are at least read, tests run -- a comment
+# decays in total silence, and the only reader who can notice is one who
+# understands both the sentence and the code under it. That is exactly the
+# defect family this kind of model is measured to be good at, and exactly the
+# one with no existing tool.
+#
+# ## Why these rules are as sharp as the test rules
+#
+# Because the matcher hands the question BOTH halves by name. `follows:` with a
+# pattern captures the preceding comment into `$DOC`, and the matched node is
+# the code, so a question can say "does $DOC describe this?" rather than hoping
+# the model pairs them up itself. A question whose two subjects are named is
+# answerable; "are the comments here good" is not.
+#
+# ## What is deliberately NOT asked
+#
+# Not style, not whether a comment should exist, not whether it is redundant,
+# not whether it is well written. One axis only: is the claim TRUE of the code.
+# A comment restating the obvious is not a defect here, and a rubric that mixed
+# "untrue" with "unnecessary" would answer neither monotonically.
+#
+# Nor is a comment about something the subject cannot show. A comment claiming
+# "callers must hold the lock" is not checkable from the function it sits on, so
+# the criteria below confine themselves to claims the code in front of the model
+# can confirm or contradict -- a condition invisible in the subject makes every
+# answer land mid-scale, which looks like a threshold problem and is not one.
+
+# --------------------------------------------------------------------------
+# 1. Does a declaration's own comment describe the declaration?
+# --------------------------------------------------------------------------
+- id: comment-describes-declaration
+  # TypeScript only: the matcher below names `interface_declaration` and
+  # `type_alias_declaration`, which do not exist in the JavaScript grammar, and
+  # ast-grep rejects the entire rule set over one unknown kind. The JavaScript
+  # variant follows.
+  languages: [TypeScript, Tsx]
+  kind: noul
+  subject: node
+  # `located`: pending measurement, and the reason to expect it to matter here
+  # is different from the test rules. A test's title and body are a closed pair,
+  # but a doc comment routinely makes a claim about what a function RETURNS to
+  # its callers or about a type declared elsewhere in the file, so the file is
+  # where the confirmation lives. `tools/arms.ts` settles it.
+  state: located
+  at: 0.83
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule: &ts_documented
+    any:
+      # A comment directly above the declaration.
+      - all:
+          - any:
+              - kind: function_declaration
+              - kind: class_declaration
+              - kind: method_definition
+              - kind: interface_declaration
+              - kind: type_alias_declaration
+          - follows:
+              any:
+                - kind: comment
+              pattern: $DOC
+      # An exported declaration: the comment precedes the `export`, not the
+      # declaration, so the relation has to be tested one level up.
+      - all:
+          - any:
+              - kind: function_declaration
+              - kind: class_declaration
+              - kind: interface_declaration
+              - kind: type_alias_declaration
+          - inside:
+              kind: export_statement
+              follows:
+                kind: comment
+                pattern: $DOC
+  ask: &decl_ask >-
+    The comment above this code claims something that is not true of the code.
+  criteria: &decl_criteria
+    "true": >-
+      A specific claim the comment makes is contradicted by the code: it names a
+      different operation, direction, rounding, ordering or unit than the code
+      uses, it states a return value or guarantee the code does not provide, it
+      describes a side effect the code does not perform or omits one it does, it
+      gives a count, limit or default that differs from the code's, or it refers
+      to a parameter, field or function that the code no longer has.
+    "false": >-
+      Every specific claim the comment makes holds for the code below it. A
+      comment that is vague, redundant, restates the obvious, or says less than
+      it could is not a false comment -- only a claim that is actually wrong
+      counts here.
+  note: &decl_note >-
+    Judge only claims the code in front of you can confirm or contradict. A
+    comment about a caller's obligations, about performance, or about history is
+    not checkable here and is not a violation.
+
+- id: comment-describes-declaration-rust
+  language: Rust
+  kind: noul
+  subject: node
+  state: located
+  at: 0.59
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule: &rust_documented
+    all:
+      - any:
+          - kind: function_item
+          - kind: struct_item
+          - kind: enum_item
+          - kind: trait_item
+          - kind: impl_item
+      - follows:
+          # `///` and `//` are both `line_comment` in this grammar, and `/** */`
+          # is `block_comment`. All three are caught; the sentence decides
+          # whether what was caught makes a checkable claim.
+          any:
+            - kind: line_comment
+            - kind: block_comment
+          pattern: $DOC
+  ask: *decl_ask
+  criteria: *decl_criteria
+  note: *decl_note
+
+- id: comment-describes-declaration-js
+  languages: [JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: located
+  at: 0.54
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule:
+    any:
+      - all:
+          - any:
+              - kind: function_declaration
+              - kind: class_declaration
+              - kind: method_definition
+          - follows:
+              kind: comment
+              pattern: $DOC
+      - all:
+          - any:
+              - kind: function_declaration
+              - kind: class_declaration
+          - inside:
+              kind: export_statement
+              follows:
+                kind: comment
+                pattern: $DOC
+  ask: *decl_ask
+  criteria: *decl_criteria
+  note: *decl_note
+
+# --------------------------------------------------------------------------
+# 2. Does a comment inside a body describe the code it sits above?
+# --------------------------------------------------------------------------
+#
+# Where drift actually accumulates. A doc comment gets reread when the
+# signature changes; a comment in the middle of a function survives every
+# rewrite of the lines beneath it.
+#
+# `subject: enclosing` on purpose: the subject becomes the whole function, so
+# the model can see what the commented lines do in context, while `$DOC` names
+# the claim being tested. The matched statement alone is usually too small to
+# confirm or contradict anything.
+#
+# This matcher is the broadest in either pack -- every statement that follows
+# any comment -- so check its cost with `--dry-run` before running it over a
+# large repository, and see docs/findings.md for what it costs on tokio.
+- id: comment-describes-block
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: enclosing
+  state: bare
+  # NOT CALIBRATED, and deliberately shipped saying so.
+  #
+  # This rule answers 0.89-0.96 to almost everything, clean comments included:
+  # measured gap 0.03 over three subjects, which is bunched. Two things were
+  # tried and neither separated it -- handing the question the matched
+  # statement alongside its container (which did fix precision to 1.0), and
+  # rewording the criteria to the declaration rule's proven "a specific claim
+  # is contradicted" shape.
+  #
+  # What is NOT established is whether the rule is broken or merely untested:
+  # three subjects is below what the gap statistic can speak to, which is why
+  # `jevlint gaps` now calls this `thin` rather than `rewrite`. The corpus needs
+  # inline-comment cases before the question is judged.
+  #
+  # Until then the cutoff sits above every answer observed, so the rule is
+  # effectively off, and `severity: info` keeps it out of anyone's way. Turn it
+  # on by lowering `at` once you have measured it on your own comments.
+  at: 0.97
+  severity: info
+  rule:
+    all:
+      - any:
+          - kind: if_statement
+          - kind: for_statement
+          - kind: for_in_statement
+          - kind: while_statement
+          - kind: try_statement
+          - kind: switch_statement
+          - kind: return_statement
+          - kind: expression_statement
+          - kind: lexical_declaration
+      - follows:
+          kind: comment
+          pattern: $DOC
+      # Inside a body, not at the top level: a top-level comment above a
+      # statement is documentation and rule 1 covers the declarations.
+      - inside:
+          kind: statement_block
+          stopBy: end
+  # Reworded after measurement. The first version asked whether the commented
+  # lines "do something other than what the comment says", and answered 0.90 to
+  # 0.96 for everything -- a gap of 0.03, which no cutoff repairs. The wording
+  # below is the declaration rule's, which separates its classes perfectly in
+  # three languages: demand a SPECIFIC contradiction and name what does not
+  # count. See docs/findings.md for whether it worked.
+  ask: &block_ask >-
+    The comment marked as matched claims something that is not true of the code
+    it sits above.
+  criteria: &block_criteria
+    "true": >-
+      A specific claim in that comment is contradicted by the code directly
+      beneath it: it states a count, limit or number of attempts that differs
+      from the code's, it names a direction, order, rounding or unit the code
+      does not use, it describes a step or an operation the code does not
+      perform, or it describes something that is no longer there at all.
+    "false": >-
+      Every specific claim in that comment holds for the code beneath it. A
+      comment that merely restates the code, that explains why rather than what,
+      that is vague, or that describes the code loosely but not wrongly, is not
+      a false comment. Only an actual contradiction counts.
+  note: &block_note >-
+    The comment under test is the one captured as DOC. Other comments in the
+    same function are not your concern, and a comment explaining a reason rather
+    than an action has nothing to contradict.
+
+- id: comment-describes-block-rust
+  language: Rust
+  kind: noul
+  subject: enclosing
+  state: bare
+  # Not calibrated; see the note on `comment-describes-block`. Measured gap 0.05
+  # over three subjects, cutoff parked above every observed answer.
+  at: 0.94
+  severity: info
+  rule:
+    all:
+      - any:
+          - kind: if_expression
+          - kind: for_expression
+          - kind: while_expression
+          - kind: loop_expression
+          - kind: match_expression
+          - kind: let_declaration
+          - kind: expression_statement
+      - follows:
+          any:
+            - kind: line_comment
+            - kind: block_comment
+          pattern: $DOC
+      - inside:
+          kind: block
+          stopBy: end
+  ask: *block_ask
+  criteria: *block_criteria
+  note: *block_note

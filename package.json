@@ -1,41 +1,93 @@
 {
   "name": "jevlint",
   "version": "0.1.0",
-  "private": true,
   "description": "A natural-language linter: ast-grep picks the code, a sentence you write is the rule, and Jev returns the verdict",
-  "type": "module",
-  "bin": {
-    "jevlint": "./src/cli.mjs"
-  },
-  "exports": {
-    ".": "./src/run.mjs",
-    "./rules": "./src/rules.mjs",
-    "./gate": "./src/gate.mjs"
-  },
-  "files": [
-    "src",
-    "rules",
-    "README.md"
+  "keywords": [
+    "lint",
+    "linter",
+    "ast-grep",
+    "static-analysis",
+    "code-review",
+    "typescript",
+    "rust",
+    "naming"
   ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mizchi/ast-grep-jev.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mizchi/ast-grep-jev/issues"
+  },
+  "type": "module",
   "engines": {
     "node": ">=20"
   },
+  "bin": {
+    "jevlint": "dist/cli.js"
+  },
+  "main": "./dist/run.js",
+  "types": "./dist/run.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/run.d.ts",
+      "default": "./dist/run.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "default": "./dist/types.js"
+    },
+    "./rules": {
+      "types": "./dist/rules.d.ts",
+      "default": "./dist/rules.js"
+    },
+    "./gate": {
+      "types": "./dist/gate.d.ts",
+      "default": "./dist/gate.js"
+    },
+    "./calibrate": {
+      "types": "./dist/calibrate.d.ts",
+      "default": "./dist/calibrate.js"
+    },
+    "./report": {
+      "types": "./dist/report.d.ts",
+      "default": "./dist/report.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "rules",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "test": "node test/test.mjs",
-    "check": "node src/cli.mjs check corpus",
-    "review": "node src/cli.mjs review",
-    "rules": "node src/cli.mjs rules",
-    "gaps": "node src/cli.mjs gaps corpus",
-    "calibrate": "node src/cli.mjs calibrate corpus --labels corpus/labels.json --repeat 3",
-    "arms": "node tools/arms.mjs --repeat 2",
-    "labels": "node corpus/build-labels.mjs",
-    "labels:check": "node corpus/build-labels.mjs --check",
-    "replay": "node src/cli.mjs replay docs/data/calibration.json",
-    "dry": "node src/cli.mjs check corpus --dry-run --cache none",
-    "ci": "npm run labels:check && npm test && npm run replay"
+    "build": "tsc && node -e \"require('fs').chmodSync('dist/cli.js', 0o755)\"",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "test": "node --experimental-strip-types test/test.ts",
+    "test:dist": "npm run build && node dist/cli.js rules > /dev/null && node dist/cli.js check corpus --dry-run --cache none > /dev/null && echo \"built cli ok\"",
+    "check": "node --experimental-strip-types src/cli.ts check corpus",
+    "review": "node --experimental-strip-types src/cli.ts review",
+    "rules": "node --experimental-strip-types src/cli.ts rules",
+    "gaps": "node --experimental-strip-types src/cli.ts gaps corpus",
+    "calibrate": "node --experimental-strip-types src/cli.ts calibrate corpus --labels corpus/labels.json --repeat 3",
+    "arms": "node --experimental-strip-types tools/arms.ts --repeat 2",
+    "grouping": "node --experimental-strip-types tools/grouping.ts --repeat 2",
+    "labels": "node --experimental-strip-types corpus/build-labels.ts",
+    "labels:check": "node --experimental-strip-types corpus/build-labels.ts --check",
+    "replay": "node --experimental-strip-types src/cli.ts replay docs/data/calibration.json",
+    "dry": "node --experimental-strip-types src/cli.ts check corpus --dry-run --cache none",
+    "ci": "npm run labels:check && npm run typecheck && npm test && npm run build && npm run replay",
+    "prepack": "npm run clean && npm run build"
   },
   "dependencies": {
     "@ast-grep/cli": "^0.45.3",
     "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "typescript": "^7.0.2"
   }
 }

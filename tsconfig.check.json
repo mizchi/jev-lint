@@ -1,0 +1,12 @@
+{
+  // Typechecks everything, including the code that never ships: tests, the
+  // experiment tools and the corpus label generator. They are excluded from the
+  // build (only `src` is published) but a type error in an experiment is still
+  // a type error, and finding it at publish time is too late.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "include": ["src", "test", "tools", "corpus/build-labels.ts"]
+}

@@ -52,13 +52,30 @@ for the other half, which has no tool at all.
 ## Install
 
 ```bash
-npm install                    # @ast-grep/cli and yaml; nothing else
+npm install jevlint
 export TYPESAFEAI_API_KEY=...
+npx jevlint check src
 ```
 
-Node 20+. The matcher is the real `ast-grep` binary, so every language it
-supports is available — the shipped pack covers Rust, TypeScript, TSX and
-JavaScript.
+Node 20+, two runtime dependencies (`@ast-grep/cli` and `yaml`). The matcher is
+the real `ast-grep` binary, so every language it supports is available — the
+shipped packs cover Rust, TypeScript, TSX and JavaScript.
+
+### From this repository
+
+```bash
+npm install
+npm run build          # tsc -> dist/, with .d.ts and source maps
+npm run ci             # labels + typecheck + 86 tests + build + offline replay
+npm test               # no API key needed
+```
+
+Source is TypeScript and ships compiled. The source imports `./x.ts` and the
+emit rewrites those to `./x.js`, so the same files run three ways with no
+divergence: through `tsc` for the published build, through
+`node --experimental-strip-types` for development with no build step, and from
+`dist/` once installed. `erasableSyntaxOnly` is on to keep that true — anything
+TypeScript cannot simply erase is a compile error here.
 
 ## Use
 
@@ -113,6 +130,7 @@ A jevlint rule is an ast-grep rule plus `ask:`.
 | `subject` | `node` (default), `enclosing`, `file` | what code is judged |
 | `state` | `bare`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context for the model only |
+| `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
 | `severity` | `warning` (default) … `error` | `error` fails a build; earn it first |
 
 ### `score` or `noul`
@@ -169,7 +187,7 @@ cutoff** on `bare` and fully separable on `located` — because `const
 timeoutSeconds = 5000` is only wrong if you know 5000 is milliseconds, and that
 is visible where the binding is *used*. Meanwhile `test-name-matches-body`
 scores 1.00/1.00 on every arm, because the matcher already hands it both the
-title and the body. `tools/arms.mjs` measures this per rule -- four arms, two passes each, about two cents.
+title and the body. `tools/arms.ts` measures this per rule -- four arms, two passes each, about two cents.
 
 ### Matcher captures are the sharpest state available
 
@@ -249,7 +267,7 @@ publish. Without that, recalibrating silently rewrites history.
 The thresholds shipped in `rules/naming.yml` are fitted to `corpus/`, which
 makes them an opinion about that corpus and a starting point on your code.
 Build your own: label defects as comments next to the code
-(`// DEFECT (rule-id): reason`) and let `corpus/build-labels.mjs` derive the
+(`// DEFECT (rule-id): reason`) and let `corpus/build-labels.ts` derive the
 JSON, so line numbers cannot drift.
 
 And make sure it contains the **hard** clean cases. The first version of this
@@ -259,21 +277,74 @@ by a wide margin, until the first unseen function produced a false positive at
 0.69. A hole for a class the corpus does not contain is invisible from inside
 the corpus, however good the numbers look.
 
-## The shipped pack
+## Batching: one state per file, or one per rule?
 
-`rules/naming.yml` — does the code do what it calls itself?
+The state can be built two ways, and the choice is not free.
+
+- **`--group file`** (default) — one state per file: its source, then every
+  match in it. The source is amortised over the matches.
+- **`--group rule`** — one state per rule: only what the matcher caught, from
+  anywhere, each item with its enclosing function as context. No file is ever
+  sent whole.
+- **`--group auto`** — cost both per rule before asking anything, and pick.
+  `--explain-schedule` prints what it decided and why.
+
+Planned on real repositories with `--dry-run` (free), the rule axis collapses
+requests **8–15×** — 786 → 54 on tokio, 1,153 → 147 on vue — but tokens only
+fall 8–20%. Since the API prices tokens, **it buys latency and rate-limit
+headroom, not money.**
+
+And it costs accuracy. Over 306 corpus subjects the two axes disagree on 2.9% of
+decisions, and the rule axis carries **2.5× the false positives** (4 → 10 with
+true positives flat). The mechanism is structural: a rule-axis state spans
+files, so it cannot carry one, and the `located` arm degrades to `local` — which
+removes the evidence from exactly the rules whose evidence is the file.
+
+So the accurate axis is the default, the cheap one is opt-in, and the scheduler
+refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
+`axis: file`. Full numbers, including a retracted anchoring claim, in
+[docs/findings.md](docs/findings.md#9-batching-axis-one-state-per-file-or-one-per-rule).
+
+## The shipped packs
+
+**`rules/naming.yml`** — does the code do what it calls itself?
 
 | rule | asks |
 | --- | --- |
 | `fn-name-promises` | does this function's body do what its name promises? |
 | `var-name-describes-value` | does this binding's name describe the value bound to it? |
-| `test-name-matches-body` | does this test verify the behaviour its title names? |
+| `test-name-describes-code` | does this test's code do what its name says? |
+| `test-name-verifies-claim` | would it still pass if the named behaviour broke? |
 | `module-name-describes-contents` | is this module named for what it contains? |
 
-Each in a Rust variant and an ECMAScript one. On the corpus all eight reach
-precision 1.00 and recall 1.00 with no decision flips across three passes; on
-this repository's own 788 subjects they report nothing, with the highest answer
-anywhere at 0.68 against a 0.69 cutoff.
+The two test rules are **nested, not orthogonal** — a test that exercises the
+wrong case also fails to establish its name — which is why both fire on the
+wrong-case class and only one fires on weak assertions. Splitting them was worth
+it because a finding can now name which kind it is.
+
+**`rules/comments.yml`** — is the comment still true?
+
+| rule | asks |
+| --- | --- |
+| `comment-describes-declaration` | does the comment above this declaration still hold? |
+| `comment-describes-block` | does a comment inside a body describe the lines under it? |
+
+A comment is a claim in the one notation nothing checks. The matcher pairs the
+comment with the code using `follows:` with a pattern — **a `follows` capture
+propagates to metavariables** — so `$DOC` names the claim and the matched node
+is the code. Both halves named, which is what makes these sharp.
+
+Deliberately *not* asked: style, redundancy, whether a comment should exist. One
+axis only, is the claim false. A vague or redundant comment is not a defect.
+
+Each rule ships in a Rust and an ECMAScript variant, sharing one sentence
+through a YAML anchor. **13 of 15 reach precision 1.00 and recall 1.00** on the
+corpus with no decision flips across passes. The two `comment-describes-block`
+rules do not separate and **ship saying so** — cutoffs parked above every
+observed answer, `severity: info`, and a note recording what was tried.
+
+On this repository's own 788 subjects the naming pack reports nothing, with the
+highest answer anywhere at 0.68 against a 0.69 cutoff.
 
 The two subjects nearest that line were both correct, and both were weak
 assertions in this repository's own test suite — a test asserting its ceiling
@@ -323,20 +394,23 @@ pass each run.
 ## Layout
 
 ```
-src/rules.mjs       rule schema and validation; the draft hash
-src/scan.mjs        the ast-grep driver, and the structural probes
-src/state.mjs       the arms, subject resolution, module outlines
-src/questions.mjs   score and noul question construction
-src/batch.mjs       token-aware batch planning
-src/gate.mjs        answers -> findings. Pure, offline, free to re-run
-src/cache.mjs       content-addressed verdicts. Never throws
-src/diff.mjs        review mode
-src/calibrate.mjs   gaps, stability, threshold fitting
-src/report.mjs      pretty / json / github
-src/run.mjs         the runner
-tools/arms.mjs      the state-arm experiment
+src/types.ts        the shared type surface; unions derived from const arrays
+src/rules.ts        rule schema and validation; the draft hash
+src/scan.ts         the ast-grep driver, and the structural probes
+src/state.ts        the arms, subject resolution, module outlines
+src/questions.ts    score and noul question construction
+src/batch.ts        token-aware batch planning, both axes
+src/schedule.ts     per-rule axis choice, and the constraint that limits it
+src/gate.ts         answers -> findings. Pure, offline, free to re-run
+src/cache.ts        content-addressed verdicts. Never throws
+src/diff.ts         review mode
+src/calibrate.ts    gaps, stability, threshold fitting
+src/report.ts       pretty / json / github
+src/run.ts          the runner
+tools/arms.ts       the state-arm experiment
+tools/grouping.ts   the batching-axis experiment
 corpus/             labeled corpus; labels derived from in-code markers
-test/test.mjs       85 checks, no API key
+test/test.ts        86 checks, no API key
 ```
 
 ## Prior art

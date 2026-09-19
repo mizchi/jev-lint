@@ -23,14 +23,14 @@ import {
   normalizeLanguage,
   SCORE_LEVELS,
   DEFAULT_SCORE_AT,
-} from "../src/rules.mjs";
-import { buildQuestion, questionId, readAnswer } from "../src/questions.mjs";
-import { buildState, resolveSubject, renderOutline, capturedMetavariables } from "../src/state.mjs";
-import { planBatches, estimateTokens, MAX_REQUEST_TOKENS, DEFAULT_BATCH_SIZE } from "../src/batch.mjs";
-import { decide, gate, describe as describeFinding } from "../src/gate.mjs";
-import { Cache, verdictKey } from "../src/cache.mjs";
-import { parseUnifiedDiff, touchesChange } from "../src/diff.mjs";
-import { widestGap, gapReport, fitCutoffs, labelFor, stabilityReport } from "../src/calibrate.mjs";
+} from "../src/rules.ts";
+import { buildQuestion, questionId, readAnswer } from "../src/questions.ts";
+import { buildState, resolveSubject, renderOutline, capturedMetavariables } from "../src/state.ts";
+import { planBatches, estimateTokens, MAX_REQUEST_TOKENS, DEFAULT_BATCH_SIZE } from "../src/batch.ts";
+import { decide, gate, describe as describeFinding } from "../src/gate.ts";
+import { Cache, verdictKey } from "../src/cache.ts";
+import { parseUnifiedDiff, touchesChange } from "../src/diff.ts";
+import { widestGap, gapReport, fitCutoffs, labelFor, stabilityReport } from "../src/calibrate.ts";
 import {
   buildSymbols,
   enclosingSymbol,
@@ -39,37 +39,79 @@ import {
   astGrepRuleId,
   baseRuleId,
   toAstGrepRule,
-} from "../src/scan.mjs";
-import { formatGithub, formatJson, formatPretty, silentRules } from "../src/report.mjs";
-import { Jev, JevError } from "../src/jev.mjs";
+} from "../src/scan.ts";
+import { formatGithub, formatJson, formatPretty, silentRules } from "../src/report.ts";
+import { Jev, JevError } from "../src/jev.ts";
+import type {
+  Answer,
+  AstGrepMatch,
+  Question,
+  FileSymbols,
+  Rule,
+  StateArm,
+  Subject,
+} from "../src/types.ts";
+import type { ChangedRanges } from "../src/diff.ts";
+import type { Labels } from "../src/types.ts";
+
+/** Typed label fixtures, so the `$`-prefixed metadata keys check out. */
+const labelsOf = (o: Record<string, unknown>): Labels => o as Labels;
+
+/** A structural-probe match, as buildSymbols consumes them. */
+const probeMatch = (
+  ruleId: string,
+  file: string,
+  language: string,
+  text: string,
+  start: number,
+  end: number,
+  line: number,
+  endLine: number,
+  name?: string,
+): AstGrepMatch => ({
+  ruleId,
+  file,
+  language,
+  text,
+  range: {
+    byteOffset: { start, end },
+    start: { line, column: 0 },
+    end: { line: endLine, column: 0 },
+  },
+  ...(name ? { metaVariables: { single: { JEVNAME: { text: name } } } } : {}),
+});
 
 let passed = 0;
 let failed = 0;
 const only = process.argv[2] ?? null;
 
-function test(name, fn) {
+function test(name: string, fn: () => void): void {
   if (only && !name.includes(only)) return;
   try {
     fn();
     passed += 1;
-  } catch (err) {
+  } catch (err: unknown) {
     failed += 1;
-    process.stdout.write(`FAIL  ${name}\n      ${err.message.split("\n").join("\n      ")}\n`);
+    process.stdout.write(
+      `FAIL  ${name}\n      ${String((err as Error).message).split("\n").join("\n      ")}\n`,
+    );
   }
 }
 
-async function testAsync(name, fn) {
+async function testAsync(name: string, fn: () => Promise<void>): Promise<void> {
   if (only && !name.includes(only)) return;
   try {
     await fn();
     passed += 1;
-  } catch (err) {
+  } catch (err: unknown) {
     failed += 1;
-    process.stdout.write(`FAIL  ${name}\n      ${err.message.split("\n").join("\n      ")}\n`);
+    process.stdout.write(
+      `FAIL  ${name}\n      ${String((err as Error).message).split("\n").join("\n      ")}\n`,
+    );
   }
 }
 
-const scoreRule = (over = {}) => {
+const scoreRule = (over: Record<string, unknown> = {}): Rule => {
   const { rule, error } = normalizeRule({
     id: "r",
     language: "TypeScript",
@@ -78,10 +120,10 @@ const scoreRule = (over = {}) => {
     ...over,
   });
   assert.equal(error, undefined, `fixture rule invalid: ${error}`);
-  return rule;
+  return rule!;
 };
 
-const noulRule = (over = {}) =>
+const noulRule = (over: Record<string, unknown> = {}): Rule =>
   normalizeRule({
     id: "n",
     language: "Rust",
@@ -90,18 +132,20 @@ const noulRule = (over = {}) =>
     ask: "this function hides a failure",
     criteria: { true: "it does", false: "it does not" },
     ...over,
-  }).rule;
+  }).rule!;
 
-const subjectOf = (over = {}) => ({
+const subjectOf = (over: Partial<Subject> = {}): Subject => ({
   rule: scoreRule(),
   file: "a.ts",
   line: 3,
   endLine: 5,
   text: "fetch(url)",
   nodeKind: "call_expression",
-  arm: "located",
+  arm: "located" as StateArm,
   language: "TypeScript",
   captured: {},
+  enclosing: null,
+  promoted: false,
   ...over,
 });
 
@@ -118,12 +162,13 @@ test("rules: a minimal score rule is valid and defaults are the documented ones"
 });
 
 test("rules: a missing ask, rule, id or language is an error, not a silent drop", () => {
-  for (const [field, patch] of [
+  const badPatches: Array<[string, Record<string, unknown>]> = [
     ["ask", { ask: "  " }],
     ["rule", { rule: undefined }],
     ["id", { id: "" }],
     ["language", { language: "Klingon" }],
-  ]) {
+  ];
+  for (const [field, patch] of badPatches) {
     const { rule, error } = normalizeRule({
       id: "x",
       language: "TypeScript",
@@ -208,7 +253,7 @@ test("rules: languages expands, dedupes and rejects mixing with language", () =>
     languages: ["ts", "Tsx", "typescript"],
     rule: { kind: "x" },
     ask: "a",
-  }).rule;
+  }).rule!;
   assert.deepEqual(r.languages, ["TypeScript", "Tsx"]);
   assert.ok(
     normalizeRule({
@@ -262,7 +307,7 @@ test("rules: a shared YAML anchor gives two language variants the same draft has
     const { rules, errors } = loadRules([dir]);
     assert.deepEqual(errors, []);
     assert.equal(rules.length, 2);
-    assert.equal(ruleTextHash(rules[0]), ruleTextHash(rules[1]));
+    assert.equal(ruleTextHash(rules[0]!), ruleTextHash(rules[1]!));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -300,7 +345,9 @@ test("questions: a noul question nests its criteria and carries no threshold", (
   const q = buildQuestion(noulRule(), subjectOf(), "q0000");
   assert.equal(q.type, "noul");
   assert.deepEqual(Object.keys(q.criteria).sort(), ["false", "true"]);
-  assert.equal(q.true, undefined, "criteria must not be hoisted to the top level");
+  // Deliberately inspecting a field the type says cannot be there: the point of
+  // the check is that the wire shape has no top-level `true`.
+  assert.equal((q as unknown as Record<string, unknown>).true, undefined, "criteria must not be hoisted to the top level");
   const wire = JSON.stringify(q);
   assert.ok(!/\bat\b.*0\.\d/.test(wire), "a cutoff must never appear in a question");
 });
@@ -368,17 +415,17 @@ test("questions: unusable answers read back as null rather than as zero", () => 
   });
   // A noul has no confidence of its own; inventing one would let it be routed.
   assert.equal(
-    readAnswer({ q0000: { type: "noul", noul: 0.9, confidence: 0.3 } }, "q0000", "noul").confidence,
+    readAnswer({ q0000: { type: "noul", noul: 0.9, confidence: 0.3 } }, "q0000", "noul")!.confidence,
     null,
   );
 });
 
 // ----------------------------------------------------------------- state
 
-const sampleEntry = () => ({
+const sampleEntry = (): FileSymbols => ({
   language: "TypeScript",
   imports: ['import { db } from "./db"'],
-  exportRanges: [],
+  exportRanges: [] as Array<[number, number]>,
   symbols: [
     {
       name: "outer",
@@ -414,7 +461,7 @@ test("state: each arm carries exactly the sections it promises", () => {
     file: "src/a.ts",
     source: "SOURCE",
     entry: sampleEntry(),
-    subjects: [{ id: "q0000", ruleId: "r", nodeKind: "call", line: 3, endLine: 3 }],
+    subjects: [subjectOf({ id: "q0000", nodeKind: "call", line: 3, endLine: 3 })],
     language: "TypeScript",
   };
   const bare = buildState({ ...args, arm: "bare" });
@@ -428,21 +475,21 @@ test("state: each arm carries exactly the sections it promises", () => {
 
   const graph = buildState({ ...args, arm: "graph" });
   assert.equal(graph.source, undefined, "graph is the arm that fits a large file");
-  assert.ok(graph.symbols.length === 2);
-  assert.equal(graph.module.stem, "a");
+  assert.equal(graph.symbols!.length, 2);
+  assert.equal((graph.module as { stem: string }).stem, "a");
   assert.deepEqual(graph.imports, ['import { db } from "./db"']);
 
   const full = buildState({ ...args, arm: "full" });
   assert.equal(full.source, "SOURCE");
-  assert.ok(full.symbols.length === 2);
+  assert.equal(full.symbols!.length, 2);
 });
 
 test("state: every question appears in the subject index on every arm", () => {
   const subjects = [
-    { id: "q0000", ruleId: "r", nodeKind: "call", line: 3, endLine: 3 },
-    { id: "q0001", ruleId: "r2", nodeKind: "call", line: 9, endLine: 11 },
+    subjectOf({ id: "q0000", nodeKind: "call", line: 3, endLine: 3 }),
+    subjectOf({ id: "q0001", nodeKind: "call", line: 9, endLine: 11 }),
   ];
-  for (const arm of ["bare", "located", "graph", "full"]) {
+  for (const arm of ["bare", "located", "graph", "full"] as StateArm[]) {
     const s = buildState({
       file: "a.ts",
       source: "x",
@@ -452,7 +499,7 @@ test("state: every question appears in the subject index on every arm", () => {
       language: "TypeScript",
     });
     assert.deepEqual(s.subjects.map((x) => x.id), ["q0000", "q0001"], `arm ${arm}`);
-    assert.equal(s.subjects[1].lines, "9-11");
+    assert.equal(s.subjects[1]!.lines, "9-11");
   }
 });
 
@@ -466,12 +513,13 @@ test("state: the graph arm excludes symbol bodies, which is what keeps it small"
     language: "TypeScript",
   });
   assert.ok(!JSON.stringify(s).includes("function outer() {}"));
-  assert.deepEqual(s.symbols[0].calls, ["inner"]);
-  assert.deepEqual(s.symbols[1].called_by, ["outer"]);
-  assert.equal(s.symbols[0].exported, true);
+  assert.deepEqual(s.symbols![0]!.calls, ["inner"]);
+  assert.deepEqual(s.symbols![1]!.called_by, ["outer"]);
+  assert.equal(s.symbols![0]!.exported, true);
 });
 
-const matchAt = (start, end, over = {}) => ({
+const matchAt = (start: number, end: number, over: Partial<AstGrepMatch> = {}): AstGrepMatch => ({
+  ruleId: "r",
   file: "a.ts",
   text: "fetch(u)",
   language: "TypeScript",
@@ -491,11 +539,17 @@ test("state: subject node reports the match and names its container", () => {
   assert.equal(s.promoted, false);
 });
 
-test("state: subject enclosing promotes to the narrowest container", () => {
+test("state: subject enclosing promotes the judged code but reports the match", () => {
   const s = resolveSubject(matchAt(60, 70), scoreRule({ subject: "enclosing" }), sampleEntry());
-  assert.equal(s.text, "function inner() {}");
-  assert.equal(s.line, 5);
+  assert.equal(s.text, "function inner() {}", "the container is what gets judged");
   assert.equal(s.promoted, true);
+  // Two separate things: a reader is sent to the line that matched, and the
+  // model is told the range of the code it was actually given. Collapsing them
+  // sends readers to the top of a long function and makes every match inside
+  // one function share a reported line.
+  assert.equal(s.line, 6, "the finding reports the match's line");
+  assert.equal(s.subjectLine, 5, "the question describes the container's range");
+  assert.equal(s.subjectEndLine, 9);
 });
 
 test("state: subject enclosing falls back to the node rather than dropping it", () => {
@@ -521,8 +575,8 @@ test("state: a symbol is not its own container", () => {
 
 test("state: enclosingSymbol picks the narrowest and returns null outside", () => {
   const e = sampleEntry();
-  assert.equal(enclosingSymbol(e, 60, 70).name, "inner");
-  assert.equal(enclosingSymbol(e, 10, 20).name, "outer");
+  assert.equal(enclosingSymbol(e, 60, 70)!.name, "inner");
+  assert.equal(enclosingSymbol(e, 10, 20)!.name, "outer");
   assert.equal(enclosingSymbol(e, 900, 950), null);
   assert.equal(enclosingSymbol(null, 1, 2), null);
 });
@@ -536,7 +590,12 @@ test("state: the module outline carries path, visibility split and imports", () 
 });
 
 test("state: a module with no named items says so rather than rendering nothing", () => {
-  const out = renderOutline("src/empty.ts", { symbols: [], imports: [] });
+  const out = renderOutline("src/empty.ts", {
+    language: "TypeScript",
+    symbols: [],
+    imports: [],
+    exportRanges: [],
+  });
   assert.match(out, /declares no named items/);
 });
 
@@ -549,6 +608,7 @@ test("state: moduleIdentity resolves conventional entry points to their director
 
 test("state: reserved captures are hidden and long ones truncated", () => {
   const c = capturedMetavariables({
+    ...matchAt(0, 1),
     metaVariables: {
       single: {
         JEVNAME: { text: "probe-only" },
@@ -566,7 +626,7 @@ test("state: reserved captures are hidden and long ones truncated", () => {
 
 // ----------------------------------------------------------------- batch
 
-const manySubjects = (n, over = {}) =>
+const manySubjects = (n: number, over: Partial<Subject> = {}): Subject[] =>
   Array.from({ length: n }, (_, i) =>
     subjectOf({ line: i + 1, endLine: i + 1, text: `call${i}()`, ...over }),
   );
@@ -625,7 +685,7 @@ test("batch: question ids match the state's subject index", () => {
     sources: new Map([["a.ts", "s"]]),
     symbols: new Map(),
   });
-  const b = batches[0];
+  const b = batches[0]!;
   assert.deepEqual(Object.keys(b.questions), ["q0000", "q0001", "q0002"]);
   assert.deepEqual(
     b.state.subjects.map((s) => s.id),
@@ -641,9 +701,9 @@ test("batch: a file too large for the state budget steps the arm down and says s
   });
   assert.ok(batches.every((b) => b.arm !== "located"));
   assert.ok(batches.every((b) => b.degraded));
-  assert.equal(batches[0].degraded.from, "located");
+  assert.equal(batches[0]!.degraded!.from, "located");
   // A step-down is a real loss of context, so it must be visible.
-  assert.match(batches[0].degraded.reason, /state budget/);
+  assert.match(batches[0]!.degraded!.reason, /state budget/);
 });
 
 test("batch: the token estimate is pessimistic rather than optimistic", () => {
@@ -785,7 +845,9 @@ test("cache: a round trip through disk preserves verdicts, and prune drops orpha
 
 test("cache: a non-numeric verdict is never stored", () => {
   const c = new Cache(null);
-  c.set("k", { value: "2", kind: "score" });
+  // Deliberately the wrong type for `value`: the point is that a non-numeric
+  // verdict is never stored, and the type says it cannot happen.
+  c.set("k", { value: "2", kind: "score" } as unknown as Answer);
   c.set("k2", null);
   assert.equal(c.entries.size, 0);
 });
@@ -835,7 +897,7 @@ test("diff: adjacent hunks merge so a subject is not tested twice", () => {
 });
 
 test("diff: overlap is inclusive at both ends and false for unknown files", () => {
-  const ranges = new Map([["a.ts", [[10, 20]]]]);
+  const ranges: ChangedRanges = new Map([["a.ts", [[10, 20]]]]);
   assert.equal(touchesChange(ranges, "a.ts", 1, 10), true, "ends touching counts");
   assert.equal(touchesChange(ranges, "a.ts", 20, 30), true);
   assert.equal(touchesChange(ranges, "a.ts", 5, 9), false);
@@ -849,69 +911,86 @@ test("diff: overlap is inclusive at both ends and false for unknown files", () =
 test("calibrate: widestGap finds the largest step and where it sits", () => {
   const g = widestGap([0.1, 0.15, 0.9, 0.95]);
   assert.ok(Math.abs(g.gap - 0.75) < 1e-9);
-  assert.ok(Math.abs(g.low - 0.15) < 1e-9);
-  assert.ok(Math.abs(g.high - 0.9) < 1e-9);
+  assert.ok(Math.abs(g.low! - 0.15) < 1e-9);
+  assert.ok(Math.abs(g.high! - 0.9) < 1e-9);
   assert.equal(widestGap([]).gap, 0);
   assert.equal(widestGap([0.5]).gap, 0);
 });
 
 test("calibrate: a wide gap with the cutoff inside it reads `works`", () => {
   const rule = noulRule({ at: 0.5 });
-  const all = [0.05, 0.1, 0.12, 0.9, 0.93].map((value, i) => ({
+  const all = [0.05, 0.1, 0.12, 0.14, 0.9, 0.93, 0.95].map((value: number, i: number) => ({
     rule: "n",
     file: "a.rs",
     line: i,
     value,
   }));
-  const row = gapReport(all, [rule])[0];
+  const row = gapReport(all, [rule])[0]!;
   assert.equal(row.verdict, "works");
   assert.equal(row.inGap, true);
-  assert.equal(row.reported, 2);
+  assert.equal(row.reported, 3);
 });
 
 test("calibrate: a wide gap with the cutoff outside it reads `move` and suggests the midpoint", () => {
   const rule = noulRule({ at: 0.95 });
-  const all = [0.05, 0.1, 0.12, 0.8, 0.82].map((value, i) => ({
+  const all = [0.05, 0.1, 0.12, 0.14, 0.8, 0.82, 0.84].map((value: number, i: number) => ({
     rule: "n",
     file: "a.rs",
     line: i,
     value,
   }));
-  const row = gapReport(all, [rule])[0];
+  const row = gapReport(all, [rule])[0]!;
   assert.equal(row.verdict, "move");
   assert.ok(Math.abs(row.suggested - 0.46) < 0.02);
 });
 
 test("calibrate: bunched answers read `rewrite`, because no cutoff can fix them", () => {
   const rule = noulRule({ at: 0.5 });
-  const all = [0.41, 0.45, 0.48, 0.52, 0.55].map((value, i) => ({
+  const all = [0.41, 0.43, 0.45, 0.48, 0.52, 0.55, 0.57].map((value: number, i: number) => ({
     rule: "n",
     file: "a.rs",
     line: i,
     value,
   }));
-  assert.equal(gapReport(all, [rule])[0].verdict, "rewrite");
+  assert.equal(gapReport(all, [rule])[0]!.verdict, "rewrite");
+});
+
+test("calibrate: too few answers read `thin`, which is not a verdict on the rule", () => {
+  // The threshold matters: a widest-gap statistic over a handful of answers is
+  // noise, and "rewrite the sentence" is expensive advice to give on noise.
+  // This boundary was raised after the report called a real rule `rewrite` on
+  // three subjects.
+  const rule = noulRule({ at: 0.5 });
+  const five = [0.9, 0.91, 0.92, 0.93, 0.94].map((value: number, i: number) => ({
+    rule: "n",
+    file: "a.rs",
+    line: i,
+    value,
+  }));
+  assert.equal(gapReport(five, [rule])[0]!.verdict, "thin");
+  const six = [...five, { rule: "n", file: "a.rs", line: 9, value: 0.95 }];
+  assert.notEqual(gapReport(six, [rule])[0]!.verdict, "thin", "six is enough to judge");
 });
 
 test("calibrate: a matcher that never fired reads `silent`, not clean", () => {
-  const row = gapReport([], [noulRule()])[0];
+  const row = gapReport([], [noulRule()])[0]!;
   assert.equal(row.verdict, "silent");
   assert.equal(row.matches, 0);
 });
 
 test("calibrate: `wide` is judged relative to the scale, not absolutely", () => {
   // 0.4 is narrow on a 0-3 score and wide on a 0-1 noul.
-  const values = [0.1, 0.12, 0.15, 0.55, 0.58];
+  const values = [0.1, 0.11, 0.12, 0.15, 0.55, 0.57, 0.58];
   const asNoul = gapReport(
-    values.map((value, i) => ({ rule: "n", file: "a", line: i, value })),
+    values.map((value: number, i: number) => ({ rule: "n", file: "a", line: i, value })),
     [noulRule({ at: 0.3 })],
   )[0];
   const asScore = gapReport(
-    values.map((value, i) => ({ rule: "r", file: "a", line: i, value })),
+    values.map((value: number, i: number) => ({ rule: "r", file: "a", line: i, value })),
     [scoreRule({ at: 0.3 })],
   )[0];
-  assert.equal(asNoul.verdict, "works");
-  assert.equal(asScore.verdict, "rewrite");
+  assert.equal(asNoul!.verdict, "works");
+  assert.equal(asScore!.verdict, "rewrite");
 });
 
 test("calibrate: a separable corpus fits the midpoint of the gap, not its edge", () => {
@@ -923,13 +1002,13 @@ test("calibrate: a separable corpus fits the midpoint of the gap, not its edge",
     { rule: "n", file: "a.rs", line: 2, value: 0.2 },
     { rule: "n", file: "a.rs", line: 3, value: 0.9 },
   ];
-  const labels = {
+  const labels = labelsOf({
     $default: "clean",
     "a.rs": [{ line: 3, label: "bad", rule: "n", window: 0 }],
-  };
-  const fit = fitCutoffs(all, labels, [rule])[0];
+  });
+  const fit = fitCutoffs(all, labels, [rule])[0]!;
   assert.equal(fit.separable, true);
-  assert.ok(Math.abs(fit.fitted - 0.55) < 0.01, `expected the midpoint, got ${fit.fitted}`);
+  assert.ok(Math.abs(fit.fitted! - 0.55) < 0.01, `expected the midpoint, got ${fit.fitted}`);
   assert.equal(fit.precision, 1);
   assert.equal(fit.recall, 1);
 });
@@ -940,11 +1019,11 @@ test("calibrate: an overlapping corpus reports no separating cutoff rather than 
     { rule: "n", file: "a.rs", line: 1, value: 0.8 },
     { rule: "n", file: "a.rs", line: 2, value: 0.3 },
   ];
-  const labels = {
+  const labels = labelsOf({
     $default: "clean",
     "a.rs": [{ line: 2, label: "bad", rule: "n", window: 0 }],
-  };
-  const fit = fitCutoffs(all, labels, [rule])[0];
+  });
+  const fit = fitCutoffs(all, labels, [rule])[0]!;
   assert.equal(fit.separable, false);
   assert.match(fit.reason, /no separating cutoff/);
 });
@@ -952,38 +1031,38 @@ test("calibrate: an overlapping corpus reports no separating cutoff rather than 
 test("calibrate: a rule with no labeled violations reports why, not a number", () => {
   const fit = fitCutoffs(
     [{ rule: "n", file: "a.rs", line: 1, value: 0.2 }],
-    { $default: "clean" },
+    labelsOf({ $default: "clean" }),
     [noulRule({ id: "n" })],
-  )[0];
+  )[0]!;
   assert.equal(fit.fitted, null);
   assert.match(fit.reason, /no labeled violations/);
 });
 
 test("calibrate: labels match within a window, respect the rule, and default", () => {
-  const labels = {
+  const labels = labelsOf({
     $default: "clean",
     "a.ts": [
       { line: 10, label: "bad", rule: "r1", window: 2 },
       { line: 40, label: "clean", window: 2 },
     ],
-  };
+  });
   assert.equal(labelFor(labels, "a.ts", 11, "r1"), "bad");
   assert.equal(labelFor(labels, "a.ts", 13, "r1"), "clean", "outside the window");
   assert.equal(labelFor(labels, "a.ts", 10, "r2"), "clean", "another rule's label");
   assert.equal(labelFor(labels, "b.ts", 1, "r1"), "clean", "unlisted file takes the default");
-  assert.equal(labelFor({}, "b.ts", 1, "r1"), "unlabeled", "no default means unlabeled");
+  assert.equal(labelFor(labelsOf({}), "b.ts", 1, "r1"), "unlabeled", "no default means unlabeled");
 });
 
 test("calibrate: stability reports a flip only when the decision changes", () => {
   const rule = noulRule({ id: "n", at: 0.5 });
-  const mk = (value) => [{ rule: "n", file: "a.rs", line: 1, value }];
+  const mk = (value: number) => [{ rule: "n", file: "a.rs", line: 1, value }];
   const stable = stabilityReport([mk(0.9), mk(0.95), mk(0.88)], [rule]);
   assert.equal(stable.flipped.length, 0);
-  assert.ok(stable.subjects[0].spread > 0, "a wobble away from the cutoff is not a flip");
+  assert.ok(stable.subjects[0]!.spread > 0, "a wobble away from the cutoff is not a flip");
 
   const flipping = stabilityReport([mk(0.49), mk(0.51)], [rule]);
   assert.equal(flipping.flipped.length, 1);
-  assert.equal(flipping.rows[0].flipped, 1);
+  assert.equal(flipping.rows[0]!.flipped, 1);
 });
 
 // ------------------------------------------------------------------ scan
@@ -1003,7 +1082,7 @@ test("scan: a multi-language rule emits one ast-grep rule per grammar", () => {
     languages: ["TypeScript", "Tsx"],
     rule: { kind: "program" },
     ask: "a",
-  }).rule;
+  }).rule!;
   const text = emitRuleFile([r], ["TypeScript", "Tsx"]);
   assert.match(text, /id: m@TypeScript/);
   assert.match(text, /id: m@Tsx/);
@@ -1023,50 +1102,24 @@ test("scan: constraints and utils pass through untouched", () => {
     constraints: { A: { regex: "^this$" } },
     utils: { helper: { kind: "identifier" } },
     ask: "a",
-  }).rule;
+  }).rule!;
   const emitted = toAstGrepRule(r, "TypeScript");
   assert.deepEqual(emitted.constraints, { A: { regex: "^this$" } });
   assert.deepEqual(emitted.utils, { helper: { kind: "identifier" } });
 });
 
 test("scan: symbols come out nested, visibility resolved, with call edges", () => {
-  const probes = [
-    // Two containers and an export wrapper, as the probes would report them.
-    {
-      ruleId: "__jevlint_c0_TypeScript",
-      file: "a.ts",
-      language: "TypeScript",
-      text: "function outer() { return inner(); }",
-      range: { byteOffset: { start: 7, end: 60 }, start: { line: 0 }, end: { line: 4 } },
-      metaVariables: { single: { JEVNAME: { text: "outer" } } },
-    },
-    {
-      ruleId: "__jevlint_c0_TypeScript",
-      file: "a.ts",
-      language: "TypeScript",
-      text: "function inner() { return 1; }",
-      range: { byteOffset: { start: 70, end: 100 }, start: { line: 6 }, end: { line: 8 } },
-      metaVariables: { single: { JEVNAME: { text: "inner" } } },
-    },
-    {
-      ruleId: "__jevlint_e0_TypeScript",
-      file: "a.ts",
-      language: "TypeScript",
-      text: "export function outer() {}",
-      range: { byteOffset: { start: 0, end: 60 }, start: { line: 0 }, end: { line: 4 } },
-    },
-    {
-      ruleId: "__jevlint_i0_TypeScript",
-      file: "a.ts",
-      language: "TypeScript",
-      text: 'import { db } from "./db";',
-      range: { byteOffset: { start: 200, end: 226 }, start: { line: 10 }, end: { line: 10 } },
-    },
+  // Two containers, an export wrapper and an import, as the probes report them.
+  const probes: AstGrepMatch[] = [
+    probeMatch("__jevlint_c0_TypeScript", "a.ts", "TypeScript", "function outer() { return inner(); }", 7, 60, 0, 4, "outer"),
+    probeMatch("__jevlint_c0_TypeScript", "a.ts", "TypeScript", "function inner() { return 1; }", 70, 100, 6, 8, "inner"),
+    probeMatch("__jevlint_e0_TypeScript", "a.ts", "TypeScript", "export function outer() {}", 0, 60, 0, 4),
+    probeMatch("__jevlint_i0_TypeScript", "a.ts", "TypeScript", 'import { db } from "./db";', 200, 226, 10, 10),
   ];
   const syms = buildSymbols(probes, ["TypeScript"]);
-  const entry = syms.get("a.ts");
-  const outer = entry.symbols.find((s) => s.name === "outer");
-  const inner = entry.symbols.find((s) => s.name === "inner");
+  const entry = syms.get("a.ts")!;
+  const outer = entry.symbols.find((s) => s.name === "outer")!;
+  const inner = entry.symbols.find((s) => s.name === "inner")!;
   assert.equal(outer.exported, true, "containment in an export_statement resolves visibility");
   assert.equal(inner.exported, false);
   assert.deepEqual(outer.calls, ["inner"]);
@@ -1076,48 +1129,39 @@ test("scan: symbols come out nested, visibility resolved, with call edges", () =
 
 test("scan: two symbols sharing a name do not form a call edge with each other", () => {
   // Rust's `struct Cache` and `impl Cache` share one name.
-  const mk = (role, start, end) => ({
-    ruleId: role === "struct" ? "__jevlint_c2_Rust" : "__jevlint_c1_Rust",
-    file: "a.rs",
-    language: "Rust",
-    text: role === "struct" ? "pub struct Cache { }" : "impl Cache { }",
-    range: { byteOffset: { start, end }, start: { line: 0 }, end: { line: 1 } },
-    metaVariables: { single: { JEVNAME: { text: "Cache" } } },
-  });
+  const mk = (role: string, start: number, end: number): AstGrepMatch =>
+    probeMatch(
+      role === "struct" ? "__jevlint_c2_Rust" : "__jevlint_c1_Rust",
+      "a.rs",
+      "Rust",
+      role === "struct" ? "pub struct Cache { }" : "impl Cache { }",
+      start,
+      end,
+      0,
+      1,
+      "Cache",
+    );
   const syms = buildSymbols([mk("struct", 0, 20), mk("impl", 30, 60)], ["Rust"]);
-  for (const s of syms.get("a.rs").symbols) {
+  for (const s of syms.get("a.rs")!.symbols) {
     assert.deepEqual(s.calls, [], `${s.role} must not call itself by name`);
   }
 });
 
 test("scan: every symbol has call arrays, including ones excluded from the graph", () => {
-  const probes = [
-    {
-      ruleId: "__jevlint_c5_Rust",
-      file: "a.rs",
-      language: "Rust",
-      text: "mod tests { }",
-      range: { byteOffset: { start: 0, end: 13 }, start: { line: 0 }, end: { line: 0 } },
-      metaVariables: { single: { JEVNAME: { text: "tests" } } },
-    },
+  const probes: AstGrepMatch[] = [
+    probeMatch("__jevlint_c5_Rust", "a.rs", "Rust", "mod tests { }", 0, 13, 0, 0, "tests"),
   ];
-  const entry = buildSymbols(probes, ["Rust"]).get("a.rs");
-  assert.deepEqual(entry.symbols[0].calls, []);
-  assert.deepEqual(entry.symbols[0].calledBy, []);
+  const entry = buildSymbols(probes, ["Rust"]).get("a.rs")!;
+  assert.deepEqual(entry.symbols[0]!.calls, []);
+  assert.deepEqual(entry.symbols[0]!.calledBy, []);
 });
 
 test("scan: Rust visibility and test markers come from the item's own text", () => {
-  const mk = (text) => ({
-    ruleId: "__jevlint_c0_Rust",
-    file: "a.rs",
-    language: "Rust",
-    text,
-    range: { byteOffset: { start: 0, end: text.length }, start: { line: 0 }, end: { line: 0 } },
-    metaVariables: { single: { JEVNAME: { text: "f" } } },
-  });
-  const pub = buildSymbols([mk("pub fn f() {}")], ["Rust"]).get("a.rs").symbols[0];
-  const priv = buildSymbols([mk("fn f() {}")], ["Rust"]).get("a.rs").symbols[0];
-  const test_ = buildSymbols([mk("#[cfg(test)] mod f {}")], ["Rust"]).get("a.rs").symbols[0];
+  const mk = (text: string): AstGrepMatch =>
+    probeMatch("__jevlint_c0_Rust", "a.rs", "Rust", text, 0, text.length, 0, 0, "f");
+  const pub = buildSymbols([mk("pub fn f() {}")], ["Rust"]).get("a.rs")!.symbols[0]!;
+  const priv = buildSymbols([mk("fn f() {}")], ["Rust"]).get("a.rs")!.symbols[0]!;
+  const test_ = buildSymbols([mk("#[cfg(test)] mod f {}")], ["Rust"]).get("a.rs")!.symbols[0]!;
   assert.equal(pub.exported, true);
   assert.equal(priv.exported, false);
   assert.equal(test_.isTest, true);
@@ -1128,7 +1172,7 @@ test("scan: Rust visibility and test markers come from the item's own text", () 
 test("report: rules that produced no subject are listed", () => {
   const fired = scoreRule({ id: "fired" });
   const quiet = scoreRule({ id: "quiet" });
-  const result = { rules: [fired, quiet], subjects: [{ rule: fired }] };
+  const result = { rules: [fired, quiet], subjects: [{ rule: fired } as Subject] };
   assert.deepEqual(silentRules(result), ["quiet"]);
 });
 
@@ -1159,7 +1203,7 @@ test("report: github annotations escape newlines and never use error by default"
 
 test("report: an incomplete run says so in every format", () => {
   const g = gate([{ subject: subjectOf(), answer: null }]);
-  const result = { ...g, rules: [], subjects: [], spent: {}, elapsedMs: 1 };
+  const result = { ...g, rules: [] as Rule[], subjects: [] as Subject[], elapsedMs: 1 };
   assert.match(formatGithub(result), /this run is incomplete/);
   assert.equal(JSON.parse(formatJson(result)).stats.missing, 1);
   // The third format. This assertion was missing, and jevlint's own
@@ -1184,11 +1228,17 @@ test("report: severity error is honoured when a rule has earned it", () => {
 
 await testAsync("jev: no API key is an auth error, not a crash mid-run", async () => {
   const jev = new Jev({ apiKey: "" });
-  await assert.rejects(() => jev.ask({}, { q0000: {} }), (err) => {
-    assert.ok(err instanceof JevError);
-    assert.equal(err.kind, "auth");
-    return true;
-  });
+  await assert.rejects(
+    () =>
+      jev.ask({}, {
+        q0000: { type: "noul", instructions: {}, criteria: { true: "y", false: "n" } },
+      }),
+    (err: unknown) => {
+      assert.ok(err instanceof JevError);
+      assert.equal((err as JevError).kind, "auth");
+      return true;
+    },
+  );
 });
 
 await testAsync("jev: an empty question set costs nothing and makes no request", async () => {
@@ -1202,9 +1252,9 @@ await testAsync("jev: an empty question set costs nothing and makes no request",
 
 await testAsync("jev: a too-big request is halved until it fits, and answers merge", async () => {
   const jev = new Jev({ apiKey: "k", retries: 0 });
-  const seen = [];
+  const seen: string[][] = [];
   let calls = 0;
-  jev.ask = async (state, questions) => {
+  jev.ask = async (_state: unknown, questions: Record<string, Question>) => {
     calls += 1;
     const names = Object.keys(questions);
     if (names.length > 2) {
@@ -1217,11 +1267,14 @@ await testAsync("jev: a too-big request is halved until it fits, and answers mer
     };
   };
   const questions = Object.fromEntries(
-    Array.from({ length: 8 }, (_, i) => [questionId(i), { type: "noul" }]),
-  );
+    Array.from({ length: 8 }, (_, i) => [
+      questionId(i),
+      { type: "noul", instructions: {}, criteria: { true: "y", false: "n" } },
+    ]),
+  ) as Record<string, Question>;
   const res = await jev.askSplitting({}, questions);
-  assert.equal(Object.keys(res.answers).length, 8, "every question must come back");
-  assert.equal(res.usage.input_tokens, 40);
+  assert.equal(Object.keys(res.answers!).length, 8, "every question must come back");
+  assert.equal(res.usage!.input_tokens, 40);
   assert.ok(seen.every((s) => s.length <= 2));
   assert.ok(calls > 1);
 });
@@ -1231,7 +1284,13 @@ await testAsync("jev: a single question that is still too big is not retried for
   jev.ask = async () => {
     throw new JevError("max_tokens_exceeded", { status: 400, kind: "too_big" });
   };
-  await assert.rejects(() => jev.askSplitting({}, { q0000: {} }), /max_tokens_exceeded/);
+  await assert.rejects(
+    () =>
+      jev.askSplitting({}, {
+        q0000: { type: "noul", instructions: {}, criteria: { true: "y", false: "n" } },
+      }),
+    /max_tokens_exceeded/,
+  );
 });
 
 await testAsync("jev: usage is priced at the published input rate", async () => {
@@ -1247,7 +1306,7 @@ await testAsync("end to end: the shipped pack finds the corpus defects it is fit
   // plumbing, never a verdict: no request is made, so there is no answer to
   // assert. That the rules separate their classes is measured by
   // `jevlint calibrate`, and recorded in docs/data/calibration.json.
-  const { collectSubjects } = await import("../src/run.mjs");
+  const { collectSubjects } = await import("../src/run.ts");
   const { rules } = loadRules(["rules"]);
   const { subjects } = await collectSubjects({ rules, paths: ["corpus"] });
   assert.ok(subjects.length > 50, `expected the corpus to produce subjects, got ${subjects.length}`);
@@ -1272,9 +1331,12 @@ await testAsync("end to end: overlapping grammars produce one subject per node",
   // `.js` and `.mjs` are claimed by BOTH the JavaScript and Jsx grammars, so a
   // rule listing them matched every node twice and reported every finding
   // twice. Found by running this tool on its own source.
-  const { collectSubjects } = await import("../src/run.mjs");
+  const { collectSubjects } = await import("../src/run.ts");
   const dir = mkdtempSync(join(tmpdir(), "jevlint-test-"));
   try {
+    // `.mjs` deliberately: the whole point is that this extension is claimed by
+    // BOTH the JavaScript and Jsx grammars. A `.ts` file is claimed by
+    // TypeScript alone and would match once, testing nothing.
     writeFileSync(join(dir, "a.mjs"), 'test("one", () => {});\ntest("two", () => {});\n');
     const rule = normalizeRule({
       id: "dup",
@@ -1283,7 +1345,7 @@ await testAsync("end to end: overlapping grammars produce one subject per node",
       rule: { pattern: "test($T, $B)" },
       ask: "a",
       criteria: { true: "y", false: "n" },
-    }).rule;
+    }).rule!;
     const { subjects, duplicateGrammars } = await collectSubjects({
       rules: [rule],
       paths: [dir],

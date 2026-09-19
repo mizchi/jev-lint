@@ -53,7 +53,9 @@
   # reviewer-action score is a judgment the file can dilute, while "does this
   # name describe this body" is one the file can supply evidence for.
   state: located
-  at: 0.67
+  at: 0.76
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
   severity: warning
   rule:
     any:
@@ -95,7 +97,9 @@
   kind: noul
   subject: node
   state: located
-  at: 0.58
+  at: 0.68
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
   severity: warning
   rule:
     all:
@@ -130,7 +134,9 @@
   # This is the general rule, and it is not "more context is better": it is that
   # a question must be able to see its own answer. See docs/findings.md.
   state: located
-  at: 0.59
+  at: 0.61
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
   severity: warning
   rule:
     all:
@@ -167,7 +173,9 @@
   # separable on `located`, and on `bare` it was also the one rule whose
   # decision FLIPPED between two runs of the same corpus.
   state: located
-  at: 0.62
+  at: 0.6
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
   severity: warning
   rule:
     all:
@@ -178,14 +186,38 @@
   criteria: *var_criteria
 
 # --------------------------------------------------------------------------
-# 3. Does a test verify what its name says it verifies?
+# 3. Tests: two rules, because there are two ways a test can lie
 # --------------------------------------------------------------------------
 #
-# The sharpest rule in the pack, because the matcher hands the question both
-# halves of the comparison by name: the title string and the body. A question
-# whose two subjects are named explicitly is answerable; "is this test good" is
-# not.
-- id: test-name-matches-body
+# These are the sharpest rules in the pack, because the matcher hands the
+# question both halves of the comparison by name: the title string and the
+# body. A question whose two subjects are named explicitly is answerable;
+# "is this test good" is not.
+#
+# There are two rules and not one because a test can fail its name in two
+# unrelated ways, and a rubric answers the axis it was written on and nothing
+# else -- mixing axes into one question stops it being monotone:
+#
+#   test-name-describes-code   the code does something OTHER than the name says.
+#                              A title about the empty case exercising the
+#                              non-empty one. A title promising a throw whose
+#                              body expects a value.
+#   test-name-verifies-claim   the code is ABOUT the right thing but does not
+#                              actually establish it. An assertion so weak the
+#                              named behaviour could be broken and still pass.
+#                              No assertion at all.
+#
+# The first version of this pack asked both in one question, whose criteria
+# listed "a different case ... or asserts nothing at all" together. That caught
+# the corpus's defects, but it could not say WHICH kind a finding was, and a
+# finding that cannot name its kind is one a reader has to re-derive. Whether
+# splitting also changes recall is measured in docs/findings.md.
+#
+# They overlap, and that is expected rather than a problem: an atomic rule is an
+# addition to a broader one, not a replacement, and each carries its own cutoff.
+
+# 3a. Does the code do what the name says?
+- id: test-name-describes-code
   languages: [TypeScript, Tsx, JavaScript, Jsx]
   kind: noul
   subject: node
@@ -200,44 +232,100 @@
   # same file cannot change this one's answer, and cannot invalidate its cached
   # verdict either.
   state: bare
-  at: 0.69
+  at: 0.95
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
   severity: warning
-  rule:
+  rule: &js_test_matcher
     any:
       - pattern: it($TITLE, $BODY)
       - pattern: test($TITLE, $BODY)
       - pattern: it($TITLE, $BODY, $TIMEOUT)
       - pattern: test($TITLE, $BODY, $TIMEOUT)
       - pattern: it.each($CASES)($TITLE, $BODY)
-  ask: &test_ask >-
-    This test does not verify the behaviour its name describes.
-  criteria: &test_criteria
+  ask: &describes_ask >-
+    The code in this test does something other than what its name says it does.
+  criteria: &describes_criteria
+    # Deliberately silent about assertion STRENGTH. A weak assertion about the
+    # right thing is the other rule's business, and a criterion that mentioned
+    # both would be answering two axes at once.
     "true": >-
-      What the body actually asserts is materially different from the behaviour
-      named in the title: it checks a different condition, exercises a different
-      case, asserts the opposite outcome, asserts something so weak that the
-      named behaviour would still be broken if it passed, never sets up the case
-      the title names, or asserts nothing at all.
+      Reading the name and then the code, they are about different things: the
+      code exercises a different operation, input or case than the name states,
+      it expects the opposite outcome to the one the name implies, the name
+      promises an error or a rejection where the code expects an ordinary value,
+      or the name refers to something the code never touches at all.
     "false": >-
-      The assertions in the body check the behaviour the title describes, and
-      would fail if that behaviour were broken.
+      The code is about the thing the name says: the operation it calls, the
+      input it sets up and the outcome it expects are the ones the name
+      describes. It may or may not establish that thing convincingly, which is
+      a separate question.
 
-- id: test-name-matches-body-rust
+- id: test-name-describes-code-rust
   language: Rust
   kind: noul
   subject: node
   state: bare
-  at: 0.51
+  at: 0.93
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
   severity: warning
-  rule:
+  rule: &rust_test_matcher
     all:
       - kind: function_item
       - has: { field: name, pattern: $NAME }
       - follows:
           kind: attribute_item
           regex: "test"
-  ask: *test_ask
-  criteria: *test_criteria
+  ask: *describes_ask
+  criteria: *describes_criteria
+
+# 3b. Granted it is about the right thing -- does it actually establish it?
+- id: test-name-verifies-claim
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  # `bare` -- the only arm in the pack kept at the cheapest setting, because
+  # this subject already contains both things being compared. The matcher
+  # captures the title and the body, so the file adds no evidence: it widened
+  # the class margin from 0.82 to 0.90, which changed no decision, and every
+  # arm scored precision 1.0 and recall 1.0.
+  #
+  # Staying on `bare` buys something the wider margin does not: a verdict that
+  # depends on nothing outside the test itself. Editing an unrelated test in the
+  # same file cannot change this one's answer, and cannot invalidate its cached
+  # verdict either.
+  state: bare
+  at: 0.54
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule: *js_test_matcher
+  ask: &verifies_ask >-
+    This test would still pass if the behaviour its name claims were broken.
+  criteria: &verifies_criteria
+    "true": >-
+      The body does not establish what the name claims: it asserts nothing at
+      all, it asserts something that would hold whether or not the named
+      behaviour worked, it checks an incidental property such as a length or a
+      type instead of the named behaviour itself, or it never sets up the case
+      the name is about so the assertion never exercises it.
+    "false": >-
+      The body contains at least one assertion that would fail if the named
+      behaviour were broken.
+
+- id: test-name-verifies-claim-rust
+  language: Rust
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.54
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
+  severity: warning
+  rule: *rust_test_matcher
+  ask: *verifies_ask
+  criteria: *verifies_criteria
 
 # --------------------------------------------------------------------------
 # 4. Is a module named for what it contains?
@@ -261,7 +349,9 @@
   # file's size, so the rule behaves the same on a large module as on a small
   # one. Every arm scored precision 1.0 and recall 1.0 on the corpus.
   state: graph
-  at: 0.59
+  at: 0.62
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
   severity: info
   rule:
     kind: program
@@ -288,7 +378,9 @@
   kind: noul
   subject: file
   state: graph
-  at: 0.48
+  at: 0.52
+  # Calibrated on the file axis; pinned so the scheduler cannot move it.
+  axis: file
   severity: info
   rule:
     kind: source_file

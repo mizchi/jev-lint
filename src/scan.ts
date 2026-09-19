@@ -18,12 +18,22 @@
  * the table below, not writing an analyzer.
  */
 import { execFile } from "node:child_process";
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, basename, extname, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 import { promisify } from "node:util";
 import YAML from "yaml";
+import type {
+  AstGrepMatch,
+  FileSymbols,
+  Language,
+  ModuleIdentity,
+  Rule,
+  SymbolIndex,
+  SymbolInfo,
+} from "./types.ts";
 
 const execFileAsync = promisify(execFile);
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -36,7 +46,7 @@ const EXIT_FOUND = 1;
 
 /** A rule set ast-grep would not accept. Carries the reason, not a stack. */
 export class AstGrepError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = "AstGrepError";
   }
@@ -55,7 +65,25 @@ export class AstGrepError extends Error {
  * function has no name of its own, so the container is the `variable_declarator`
  * that names it.
  */
-export const STRUCTURE = {
+/** One named container kind, and where its identifier lives in the grammar. */
+interface ContainerProbe {
+  kind: string;
+  role: string;
+  nameField: string | null;
+  /** For a container named by a parent, e.g. an arrow function's declarator. */
+  via?: Record<string, unknown>;
+}
+
+interface LanguageStructure {
+  containers: ContainerProbe[];
+  imports: string[];
+  exports: string[];
+  /** Set when visibility is readable from the item's own text, as in Rust. */
+  exportedIf: ((text: string) => boolean) | null;
+  testMarker: RegExp | null;
+}
+
+export const STRUCTURE: Partial<Record<Language, LanguageStructure>> = {
   Rust: {
     containers: [
       { kind: "function_item", role: "function", nameField: "name" },
@@ -67,7 +95,7 @@ export const STRUCTURE = {
     ],
     imports: ["use_declaration"],
     /** Rust announces visibility in the item's own text, so no probe is needed. */
-    exportedIf: (text) => /^\s*pub(\s|\()/.test(text),
+    exportedIf: (text: string) => /^\s*pub(\s|\()/.test(text),
     exports: [],
     testMarker: /#\[\s*(test|tokio::test|async_std::test)\s*\]|#\[\s*cfg\s*\(\s*test\s*\)\s*\]/,
   },
@@ -85,7 +113,7 @@ export const STRUCTURE = {
       { kind: "class_definition", role: "class", nameField: "name" },
     ],
     imports: ["import_statement", "import_from_statement"],
-    exportedIf: (text) => !/^\s*(async\s+)?def\s+_/.test(text),
+    exportedIf: (text: string) => !/^\s*(async\s+)?def\s+_/.test(text),
     exports: [],
     testMarker: /^\s*(async\s+)?def\s+test_/,
   },
@@ -96,13 +124,13 @@ export const STRUCTURE = {
       { kind: "type_declaration", role: "type", nameField: null },
     ],
     imports: ["import_declaration"],
-    exportedIf: (text) => /\b(func|type)\s+\(?[^)]*\)?\s*[A-Z]/.test(text),
+    exportedIf: (text: string) => /\b(func|type)\s+\(?[^)]*\)?\s*[A-Z]/.test(text),
     exports: [],
     testMarker: /\bfunc\s+Test[A-Z_]/,
   },
 };
 
-function tsStructure({ typed }) {
+function tsStructure({ typed }: { typed: boolean }): LanguageStructure {
   return {
     containers: [
       { kind: "function_declaration", role: "function", nameField: "name" },
@@ -134,15 +162,28 @@ function tsStructure({ typed }) {
   };
 }
 
+interface ProbeMeta {
+  type: "container" | "import" | "export";
+  role?: string;
+  language: Language;
+}
+
+interface ProbeRule {
+  id: string;
+  language: Language;
+  rule: Record<string, unknown>;
+  __probe: ProbeMeta;
+}
+
 /** Rules whose matches are structure, not findings. */
-function probeRules(languages) {
-  const out = [];
+function probeRules(languages: Language[]): ProbeRule[] {
+  const out: ProbeRule[] = [];
   for (const language of languages) {
     const s = STRUCTURE[language];
     if (!s) continue;
     s.containers.forEach((c, i) => {
-      const rule = { kind: c.kind };
-      const inner = [];
+      const rule: Record<string, unknown> = { kind: c.kind };
+      const inner: Array<Record<string, unknown>> = [];
       if (c.nameField) inner.push({ field: c.nameField, pattern: "$JEVNAME" });
       if (c.via) inner.push(c.via);
       if (inner.length === 1) rule.has = inner[0];
@@ -182,25 +223,25 @@ function probeRules(languages) {
  */
 const LANG_SUFFIX = "@";
 
-export function astGrepRuleId(ruleId, language) {
+export function astGrepRuleId(ruleId: string, language: Language): string {
   return `${ruleId}${LANG_SUFFIX}${language}`;
 }
 
-export function baseRuleId(astGrepId) {
+export function baseRuleId(astGrepId: string): string {
   const i = astGrepId.lastIndexOf(LANG_SUFFIX);
   return i < 1 ? astGrepId : astGrepId.slice(0, i);
 }
 
 /** Strip jevlint-only fields; what is left is a valid ast-grep rule. */
-export function toAstGrepRule(rule, language) {
-  const out = {
+export function toAstGrepRule(rule: Rule, language: Language): Record<string, unknown> {
+  const out: Record<string, unknown> = {
     id: astGrepRuleId(rule.id, language),
     language,
     // ast-grep requires a message; ours is never shown to a user (the finding
     // text is built from the rule's own `ask`), so it is only a marker.
     message: "jevlint",
     severity: "hint",
-    rule: rule.matcher ?? rule.rule,
+    rule: rule.matcher,
   };
   if (rule.constraints) out.constraints = rule.constraints;
   if (rule.utils) out.utils = rule.utils;
@@ -208,8 +249,8 @@ export function toAstGrepRule(rule, language) {
 }
 
 /** Every language any loaded rule asks for, plus the probes' languages. */
-export function ruleLanguages(rules) {
-  const out = [];
+export function ruleLanguages(rules: Rule[]): Language[] {
+  const out: Language[] = [];
   for (const r of rules) {
     for (const l of r.languages ?? [r.language]) {
       if (!out.includes(l)) out.push(l);
@@ -218,8 +259,8 @@ export function ruleLanguages(rules) {
   return out;
 }
 
-export function emitRuleFile(rules, languages) {
-  const docs = [];
+export function emitRuleFile(rules: Rule[], languages: Language[]): string {
+  const docs: Array<Record<string, unknown>> = [];
   for (const rule of rules) {
     for (const language of rule.languages ?? [rule.language]) {
       docs.push(toAstGrepRule(rule, language));
@@ -231,12 +272,41 @@ export function emitRuleFile(rules, languages) {
   return docs.map((d) => YAML.stringify(d)).join("---\n");
 }
 
-function astGrepBin() {
+/**
+ * Locate the `ast-grep` binary.
+ *
+ * Four places, in order, because the layout differs between working in this
+ * repository and being installed as a dependency -- where npm hoists
+ * `node_modules` to the consumer's root and `../node_modules/.bin` beside the
+ * package does not exist. Resolving through `@ast-grep/cli`'s own package
+ * location is what works in both, and the pinned version is preferred over
+ * whatever happens to be on PATH so a scan cannot silently change behaviour
+ * with the user's shell.
+ */
+function astGrepBin(): string {
   if (process.env.JEVLINT_AST_GREP) return process.env.JEVLINT_AST_GREP;
-  // Resolved from this package's own node_modules so the pinned version is the
-  // one that runs, rather than whatever `ast-grep` is on PATH.
-  const local = join(HERE, "..", "node_modules", ".bin", "ast-grep");
-  return local;
+
+  const candidates: string[] = [];
+  try {
+    const require_ = createRequire(import.meta.url);
+    const pkgJson = require_.resolve("@ast-grep/cli/package.json");
+    const pkgDir = dirname(pkgJson);
+    // The platform package ships the executable; the wrapper re-exports it.
+    candidates.push(join(pkgDir, "ast-grep"), join(pkgDir, "bin", "ast-grep"));
+    // The bin shim that npm links, found from the resolved package upwards.
+    candidates.push(join(pkgDir, "..", "..", ".bin", "ast-grep"));
+  } catch {
+    // Not resolvable: fall through to the layout-based guesses.
+  }
+  candidates.push(join(HERE, "..", "node_modules", ".bin", "ast-grep"));
+  candidates.push(join(HERE, "..", "..", "node_modules", ".bin", "ast-grep"));
+
+  for (const c of candidates) {
+    if (existsSync(c)) return c;
+  }
+  // Last resort: whatever is on PATH. If that is missing too, execFile fails
+  // with ENOENT and `runAstGrep` turns it into a named configuration error.
+  return "ast-grep";
 }
 
 /**
@@ -245,7 +315,17 @@ function astGrepBin() {
  * `--json=stream` is newline-delimited JSON, which means a large repository
  * does not have to be buffered as one array before parsing.
  */
-export async function runAstGrep(rules, paths, { cwd = process.cwd(), maxBuffer = 512 * 1024 * 1024 } = {}) {
+export interface ScanResult {
+  matches: AstGrepMatch[];
+  probes: AstGrepMatch[];
+  stderr: string;
+}
+
+export async function runAstGrep(
+  rules: Rule[],
+  paths: string[],
+  { cwd = process.cwd(), maxBuffer = 512 * 1024 * 1024 } = {},
+): Promise<ScanResult> {
   if (rules.length === 0 || paths.length === 0) {
     return { matches: [], probes: [], stderr: "" };
   }
@@ -261,7 +341,11 @@ export async function runAstGrep(rules, paths, { cwd = process.cwd(), maxBuffer 
       const res = await execFileAsync(astGrepBin(), args, { cwd, maxBuffer });
       stdout = res.stdout;
       stderr = res.stderr;
-    } catch (err) {
+    } catch (raw: unknown) {
+      // Not intersected with ErrnoException: execFile reports the process exit
+      // status in `code` as a NUMBER, while ErrnoException types it as a string,
+      // and the intersection collapses to string and never matches.
+      const err = raw as { code?: number | string; stdout?: string; stderr?: string; message?: string };
       // Exit 1 means "findings were produced", which is the normal case here.
       if (err.code === EXIT_FOUND && typeof err.stdout === "string") {
         stdout = err.stdout;
@@ -286,13 +370,13 @@ export async function runAstGrep(rules, paths, { cwd = process.cwd(), maxBuffer 
       }
     }
 
-    const matches = [];
-    const probes = [];
+    const matches: AstGrepMatch[] = [];
+    const probes: AstGrepMatch[] = [];
     for (const line of stdout.split("\n")) {
       if (line.trim() === "") continue;
-      let j;
+      let j: AstGrepMatch;
       try {
-        j = JSON.parse(line);
+        j = JSON.parse(line) as AstGrepMatch;
       } catch {
         continue;
       }
@@ -305,14 +389,14 @@ export async function runAstGrep(rules, paths, { cwd = process.cwd(), maxBuffer 
 }
 
 /** Map probe rule ids back to what they were probing for. */
-function probeIndex(languages) {
+function probeIndex(languages: Language[]): Map<string, ProbeMeta> {
   return new Map(probeRules(languages).map((r) => [r.id, r.__probe]));
 }
 
-const byteStart = (m) => m.range.byteOffset.start;
-const byteEnd = (m) => m.range.byteOffset.end;
+const byteStart = (m: AstGrepMatch) => m.range.byteOffset.start;
+const byteEnd = (m: AstGrepMatch) => m.range.byteOffset.end;
 
-function metaName(m) {
+function metaName(m: AstGrepMatch): string | null {
   const t = m.metaVariables?.single?.JEVNAME?.text;
   return typeof t === "string" && t.trim() !== "" ? t.trim() : null;
 }
@@ -324,16 +408,16 @@ function metaName(m) {
  * without any tree walking: the narrowest container containing a position is
  * the last one that starts before it and ends after it.
  */
-export function buildSymbols(probes, languages) {
+export function buildSymbols(probes: AstGrepMatch[], languages: Language[]): SymbolIndex {
   const index = probeIndex(languages);
-  const byFile = new Map();
+  const byFile: SymbolIndex = new Map();
   for (const p of probes) {
     const meta = index.get(p.ruleId);
     if (!meta) continue;
     if (!byFile.has(p.file)) {
       byFile.set(p.file, { symbols: [], imports: [], exportRanges: [], language: p.language });
     }
-    const entry = byFile.get(p.file);
+    const entry = byFile.get(p.file)!;
     if (meta.type === "import") {
       entry.imports.push(p.text.trim().replace(/\s+/g, " ").slice(0, 200));
       continue;
@@ -342,10 +426,11 @@ export function buildSymbols(probes, languages) {
       entry.exportRanges.push([byteStart(p), byteEnd(p)]);
       continue;
     }
-    const struct = STRUCTURE[p.language];
+    const struct = STRUCTURE[p.language as Language];
     entry.symbols.push({
       name: metaName(p),
-      role: meta.role,
+      // Only container probes reach here; imports and exports returned above.
+      role: meta.role ?? "container",
       start: byteStart(p),
       end: byteEnd(p),
       line: p.range.start.line + 1,
@@ -353,6 +438,9 @@ export function buildSymbols(probes, languages) {
       text: p.text,
       exported: struct?.exportedIf ? struct.exportedIf(p.text) : false,
       isTest: struct?.testMarker ? struct.testMarker.test(p.text) : false,
+      // Filled in by computeCalls once the whole file's symbols are known.
+      calls: [],
+      calledBy: [],
     });
   }
 
@@ -381,7 +469,7 @@ export function buildSymbols(probes, languages) {
  * over-inclusive edge list is the safer error. Cross-file edges are out of
  * scope here; `imports` is the cross-file signal instead.
  */
-function computeCalls(entry) {
+function computeCalls(entry: FileSymbols): void {
   for (const s of entry.symbols) {
     s.calls = [];
     s.calledBy = [];
@@ -390,10 +478,10 @@ function computeCalls(entry) {
   // One name can belong to several symbols -- in Rust a `struct Cache` and its
   // `impl Cache` share one -- so the index holds every symbol under a name and
   // same-name pairs never form an edge.
-  const index = new Map();
+  const index = new Map<string, SymbolInfo[]>();
   for (const s of named) {
-    if (!index.has(s.name)) index.set(s.name, []);
-    index.get(s.name).push(s);
+    if (!index.has(s.name!)) index.set(s.name!, []);
+    index.get(s.name!)!.push(s);
   }
   for (const s of named) {
     const seen = new Set();
@@ -409,7 +497,7 @@ function computeCalls(entry) {
       if (outside.length === 0) continue;
       seen.add(name);
       s.calls.push(name);
-      for (const t of outside) t.calledBy.push(s.name);
+      for (const t of outside) t.calledBy.push(s.name!);
     }
   }
   for (const s of entry.symbols) {
@@ -419,8 +507,13 @@ function computeCalls(entry) {
 }
 
 /** The narrowest symbol whose range contains `[start, end)`, or null. */
-export function enclosingSymbol(entry, start, end, { skipSelf = null } = {}) {
-  let best = null;
+export function enclosingSymbol(
+  entry: FileSymbols | null,
+  start: number,
+  end: number,
+  { skipSelf = null }: { skipSelf?: { start: number; end: number } | null } = {},
+): SymbolInfo | null {
+  let best: SymbolInfo | null = null;
   for (const s of entry?.symbols ?? []) {
     if (s.start > start) break;
     if (s.end < end) continue;
@@ -431,7 +524,11 @@ export function enclosingSymbol(entry, start, end, { skipSelf = null } = {}) {
 }
 
 /** Every symbol containing the position, outermost first. */
-export function enclosingChain(entry, start, end) {
+export function enclosingChain(
+  entry: FileSymbols | null,
+  start: number,
+  end: number,
+): SymbolInfo[] {
   return (entry?.symbols ?? [])
     .filter((s) => s.start <= start && s.end >= end)
     .sort((a, b) => a.start - b.start || b.end - a.end);
@@ -445,7 +542,7 @@ export function enclosingChain(entry, start, end) {
  * a judgment the file's text alone cannot support, because the text never
  * mentions its own path.
  */
-export function moduleIdentity(file) {
+export function moduleIdentity(file: string): ModuleIdentity {
   const ext = extname(file);
   const base = basename(file, ext);
   const segments = dirname(file).split(sep).filter((s) => s !== "" && s !== ".");

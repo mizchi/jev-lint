@@ -24,11 +24,12 @@
  *     input -- which looks like a threshold problem and is not one. Write
  *     exceptions in terms of what the subject itself reveals.
  */
-import { SCORE_LEVELS } from "./rules.mjs";
-import { INLINE_LIMIT } from "./state.mjs";
+import { SCORE_LEVELS } from "./rules.ts";
+import { INLINE_LIMIT } from "./state.ts";
+import type { Answer, Question, Rule, RuleKind, Subject } from "./types.ts";
 
 /** Stable question name, so answers can be matched back positionally. */
-export function questionId(i) {
+export function questionId(i: number): string {
   return `q${String(i).padStart(4, "0")}`;
 }
 
@@ -45,10 +46,14 @@ const TASK_NOUL =
  * into a schema here would mean the sentence they tuned is not the sentence
  * that was asked.
  */
-export function buildQuestion(rule, subject, id) {
-  const shared = {
+export function buildQuestion(rule: Rule, subject: Subject, id: string): Question {
+  // The lines of the code actually supplied, which is the subject's range and
+  // not the match's when `subject: enclosing` promoted it.
+  const from = subject.subjectLine ?? subject.line;
+  const to = subject.subjectEndLine ?? subject.endLine;
+  const shared: Record<string, unknown> = {
     subject: id,
-    lines: subject.line === subject.endLine ? `${subject.line}` : `${subject.line}-${subject.endLine}`,
+    lines: from === to ? `${from}` : `${from}-${to}`,
     node: subject.nodeKind,
   };
 
@@ -63,8 +68,8 @@ export function buildQuestion(rule, subject, id) {
     shared.inside = `${subject.enclosing.role} \`${subject.enclosing.name}\``;
   }
   if (subject.promoted) {
-    shared.note_on_subject =
-      "The rule matched a smaller node inside this one; the code below is the container it sits in.";
+    shared.note_on_subject = `The rule selected the code in \`matched\` at line ${subject.line}. Judge THAT; the \`code\` field is the container it sits in, supplied so you can see what it does in context.`;
+    if (subject.matchText) shared.matched = subject.matchText;
   }
   // Telling the model the matcher is loose is what makes level 0 usable: it is
   // the model's way of saying the matcher caught something irrelevant, which is
@@ -91,9 +96,9 @@ export function buildQuestion(rule, subject, id) {
       },
       // Nested under `criteria`, never at the top level. A flat `{true, false}`
       // gets a 200 back with the criteria silently discarded; the only symptom
-      // is a smaller input-token count. `rules.mjs` validates the shape so the
+      // is a smaller input-token count. `rules.ts` validates the shape so the
       // mistake cannot reach the wire.
-      criteria: { true: rule.criteria.true, false: rule.criteria.false },
+      criteria: { true: rule.criteria!.true, false: rule.criteria!.false },
     };
   }
 
@@ -110,19 +115,25 @@ export function buildQuestion(rule, subject, id) {
 }
 
 /** Read one answer back. Returns null when the answer is unusable. */
-export function readAnswer(answers, id, kind) {
-  const a = answers?.[id];
+export function readAnswer(
+  answers: Record<string, unknown> | undefined,
+  id: string,
+  kind: RuleKind,
+): Answer | null {
+  const a = answers?.[id] as
+    | { type?: string; noul?: unknown; score?: unknown; confidence?: unknown; probabilities?: unknown }
+    | undefined;
   if (!a) return null;
   if (kind === "noul") {
     if (a.type !== "noul" || typeof a.noul !== "number") return null;
     // A noul carries no confidence of its own; the probability IS the answer.
-    return { value: a.noul, confidence: null, kind: "noul" };
+    return { value: a.noul as number, confidence: null, kind: "noul" };
   }
   if (a.type !== "score" || typeof a.score !== "number") return null;
   return {
-    value: a.score,
+    value: a.score as number,
     confidence: typeof a.confidence === "number" ? a.confidence : null,
     kind: "score",
-    probabilities: a.probabilities ?? null,
+    probabilities: (a.probabilities as Record<string, number> | undefined) ?? null,
   };
 }

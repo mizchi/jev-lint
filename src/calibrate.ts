@@ -24,16 +24,98 @@
  *
  * So: `jevlint gaps` first. `jevlint calibrate` only once the gaps are wide.
  */
-import { cutoffFor, DEFAULT_SCORE_AT, DEFAULT_NOUL_AT } from "./rules.mjs";
+import { cutoffFor, DEFAULT_SCORE_AT, DEFAULT_NOUL_AT } from "./rules.ts";
+import type { Finding, Labels, Rule } from "./types.ts";
+
+/** One row of the separation report: the table `jevlint gaps` prints. */
+export interface GapRow {
+  rule: string;
+  kind: string;
+  matches: number;
+  reported: number;
+  at: number;
+  min: number | null;
+  max: number | null;
+  median: number | null;
+  gap: number;
+  gapLow: number | null;
+  gapHigh: number | null;
+  inGap: boolean;
+  suggested: number;
+  verdict: "works" | "move" | "rewrite" | "silent" | "thin";
+  values: number[];
+}
+
+export interface StabilitySubject {
+  rule: string;
+  file: string;
+  line: number;
+  values: number[];
+  runs: number;
+  min: number;
+  max: number;
+  spread: number;
+  mean: number;
+  at: number;
+  flipped: boolean;
+  distance: number;
+}
+
+export interface StabilityRow {
+  rule: string;
+  subjects: number;
+  flipped: number;
+  maxSpread: number;
+  meanSpread: number;
+}
+
+export interface StabilityReport {
+  runs: number;
+  subjects: StabilitySubject[];
+  rows: StabilityRow[];
+  flipped: StabilitySubject[];
+}
+
+export interface CutoffFit {
+  rule: string;
+  fitted: number | null;
+  reason: string;
+  separable?: boolean;
+  hiClean?: number;
+  loBad?: number;
+  bad: number;
+  clean: number;
+  precision?: number | null;
+  recall?: number | null;
+  tp?: number;
+  fp?: number;
+  fn?: number;
+}
+
+/** A label, resolved. `unlabeled` means the corpus says nothing about it. */
+export type ResolvedLabel = "bad" | "clean" | "unlabeled";
+
+/**
+ * The only fields these reports read.
+ *
+ * Narrower than `Finding` on purpose: gap, stability and threshold fitting need
+ * a rule, a location and a number, and nothing else. Declaring the whole
+ * `Finding` would claim a dependency that does not exist and force every caller
+ * -- including a replay reading a recorded run, and every test -- to
+ * manufacture fields no code here looks at.
+ */
+export type ScoredSubject = Pick<Finding, "rule" | "file" | "line" | "value"> & {
+  text?: string;
+};
 
 /** Largest step between consecutive sorted values, and where it sits. */
-export function widestGap(values) {
+export function widestGap(values: number[]): { gap: number; low: number | null; high: number | null } {
   if (values.length < 2) return { gap: 0, low: values[0] ?? null, high: values[0] ?? null };
   const sorted = [...values].sort((a, b) => a - b);
-  let best = { gap: -1, low: sorted[0], high: sorted[0] };
+  let best = { gap: -1, low: sorted[0]!, high: sorted[0]! };
   for (let i = 1; i < sorted.length; i += 1) {
-    const gap = sorted[i] - sorted[i - 1];
-    if (gap > best.gap) best = { gap, low: sorted[i - 1], high: sorted[i] };
+    const gap = sorted[i]! - sorted[i - 1]!;
+    if (gap > best.gap) best = { gap, low: sorted[i - 1]!, high: sorted[i]! };
   }
   return best;
 }
@@ -55,30 +137,42 @@ export function widestGap(values) {
  *            matched looks exactly like a rule that found no problems.
  *   thin     too few matches to say anything. Not a pass.
  */
-export function gapReport(all, rules, { cutoffs = {} } = {}) {
-  const byRule = new Map(rules.map((r) => [r.id, []]));
+export function gapReport(
+  all: ScoredSubject[],
+  rules: Rule[],
+  { cutoffs = {} }: { cutoffs?: Record<string, number> } = {},
+): GapRow[] {
+  const byRule = new Map<string, ScoredSubject[]>(rules.map((r) => [r.id, [] as ScoredSubject[]]));
   for (const f of all) {
     if (typeof f.value !== "number") continue;
     if (!byRule.has(f.rule)) byRule.set(f.rule, []);
-    byRule.get(f.rule).push(f);
+    byRule.get(f.rule)!.push(f);
   }
 
-  const rows = [];
+  const rows: GapRow[] = [];
   for (const rule of rules) {
     const answers = byRule.get(rule.id) ?? [];
-    const values = answers.map((a) => a.value);
+    const values = answers.map((a) => a.value!) as number[];
     const at = cutoffFor(rule, cutoffs);
     const scale = rule.kind === "score" ? 3 : 1;
     const { gap, low, high } = widestGap(values);
-    const reported = answers.filter((a) => a.value >= at).length;
+    const reported = answers.filter((a) => a.value! >= at).length;
     // "Wide" has to be relative to the scale: 0.5 is narrow on a 0-3 score and
     // half the range on a 0-1 noul.
     const wide = gap >= 0.25 * scale;
-    const inGap = gap > 0 && at > low && at <= high;
+    const inGap = gap > 0 && low !== null && high !== null && at > low && at <= high;
 
-    let verdict;
+    let verdict: GapRow["verdict"];
     if (values.length === 0) verdict = "silent";
-    else if (values.length < 3) verdict = "thin";
+    // `thin` covers up to five, not up to two.
+    //
+    // Raised after this report called a rule "rewrite" on three data points.
+    // A widest-gap statistic over three answers is noise: one answer moving by
+    // the model's own run-to-run wobble changes the verdict, and "rewrite the
+    // sentence" is expensive advice to give on that basis. Under six, the
+    // honest answer is that the corpus does not cover the rule yet -- which is
+    // a different instruction (write more corpus) from rewriting the question.
+    else if (values.length < 6) verdict = "thin";
     else if (!wide) verdict = "rewrite";
     else if (inGap) verdict = "works";
     else verdict = "move";
@@ -100,7 +194,7 @@ export function gapReport(all, rules, { cutoffs = {} } = {}) {
       // answer, and therefore the one least likely to be crossed by the next
       // draw. Fitting a cutoff to the edge of the observed clean set puts it
       // exactly on the boundary it was meant to clear.
-      suggested: gap > 0 ? round2((low + high) / 2) : at,
+      suggested: gap > 0 && low !== null && high !== null ? round2((low + high) / 2) : at,
       verdict,
       values: values.slice().sort((a, b) => b - a),
     });
@@ -108,14 +202,14 @@ export function gapReport(all, rules, { cutoffs = {} } = {}) {
   return rows;
 }
 
-function median(values) {
+function median(values: number[]): number | null {
   if (values.length === 0) return null;
   const s = [...values].sort((a, b) => a - b);
   const mid = Math.floor(s.length / 2);
-  return round2(s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2);
+  return round2(s.length % 2 ? s[mid]! : (s[mid - 1]! + s[mid]!) / 2);
 }
 
-const round2 = (n) => Math.round(n * 100) / 100;
+const round2 = (n: number) => Math.round(n * 100) / 100;
 
 /**
  * Stability across repeated runs of the same subjects.
@@ -130,19 +224,23 @@ const round2 = (n) => Math.round(n * 100) / 100;
  * sitting inside the wobble band should not be automated: a trivial difference
  * in input flips it. Those belong in front of a person.
  */
-export function stabilityReport(runs, rules, { cutoffs = {} } = {}) {
+export function stabilityReport(
+  runs: ScoredSubject[][],
+  rules: Rule[],
+  { cutoffs = {} }: { cutoffs?: Record<string, number> } = {},
+): StabilityReport {
   const atFor = new Map(rules.map((r) => [r.id, cutoffFor(r, cutoffs)]));
-  const bySubject = new Map();
+  const bySubject = new Map<string, { rule: string; file: string; line: number; values: number[] }>();
   for (const run of runs) {
     for (const f of run) {
       if (typeof f.value !== "number") continue;
       const key = `${f.rule}\u0000${f.file}\u0000${f.line}`;
       if (!bySubject.has(key)) bySubject.set(key, { rule: f.rule, file: f.file, line: f.line, values: [] });
-      bySubject.get(key).values.push(f.value);
+      bySubject.get(key)!.values.push(f.value!);
     }
   }
 
-  const subjects = [];
+  const subjects: StabilitySubject[] = [];
   for (const s of bySubject.values()) {
     if (s.values.length < 2) continue;
     const at = atFor.get(s.rule) ?? 0;
@@ -163,10 +261,10 @@ export function stabilityReport(runs, rules, { cutoffs = {} } = {}) {
     });
   }
 
-  const byRule = new Map();
+  const byRule = new Map<string, StabilitySubject[]>();
   for (const s of subjects) {
     if (!byRule.has(s.rule)) byRule.set(s.rule, []);
-    byRule.get(s.rule).push(s);
+    byRule.get(s.rule)!.push(s);
   }
   const rows = [...byRule.entries()].map(([rule, list]) => ({
     rule,
@@ -202,21 +300,21 @@ export function stabilityReport(runs, rules, { cutoffs = {} } = {}) {
  * -- the midpoint of the widest gap, wherever the truth lies -- is the best
  * available guess. It is a starting point, not a calibration.
  */
-export function fitCutoffs(all, labels, rules) {
-  const byRule = new Map();
+export function fitCutoffs(all: ScoredSubject[], labels: Labels, rules: Rule[]): CutoffFit[] {
+  const byRule = new Map<string, Array<ScoredSubject & { label: ResolvedLabel }>>();
   for (const f of all) {
     if (typeof f.value !== "number") continue;
     if (!byRule.has(f.rule)) byRule.set(f.rule, []);
     const label = labelFor(labels, f.file, f.line, f.rule);
-    byRule.get(f.rule).push({ ...f, label });
+    byRule.get(f.rule)!.push({ ...f, label });
   }
 
-  const fits = [];
+  const fits: CutoffFit[] = [];
   for (const rule of rules) {
     const answers = byRule.get(rule.id) ?? [];
     const scale = rule.kind === "score" ? 3 : 1;
-    const bad = answers.filter((a) => a.label === "bad").map((a) => a.value);
-    const clean = answers.filter((a) => a.label === "clean").map((a) => a.value);
+    const bad = answers.filter((a) => a.label === "bad").map((a) => a.value!) as number[];
+    const clean = answers.filter((a) => a.label === "clean").map((a) => a.value!) as number[];
 
     if (bad.length === 0 || clean.length === 0) {
       fits.push({
@@ -256,9 +354,9 @@ export function fitCutoffs(all, labels, rules) {
   return fits;
 }
 
-function bestTradeoff(answers, scale) {
+function bestTradeoff(answers: Array<ScoredSubject & { label: ResolvedLabel }>, scale: number): number {
   let best = { at: scale / 2, gain: -Infinity };
-  const candidates = [...new Set(answers.map((a) => a.value))].sort((x, y) => x - y);
+  const candidates = [...new Set(answers.map((a) => a.value!))].sort((x, y) => x - y);
   for (const v of candidates) {
     const at = v;
     const { tp, fp } = score(answers, at);
@@ -268,12 +366,15 @@ function bestTradeoff(answers, scale) {
   return best.at;
 }
 
-function score(answers, at) {
+function score(
+  answers: Array<ScoredSubject & { label: ResolvedLabel }>,
+  at: number,
+): { tp: number; fp: number; fn: number } {
   let tp = 0;
   let fp = 0;
   let fn = 0;
   for (const a of answers) {
-    const flagged = a.value >= at;
+    const flagged = a.value! >= at;
     if (a.label === "bad") flagged ? (tp += 1) : (fn += 1);
     else if (a.label === "clean" && flagged) fp += 1;
   }
@@ -289,15 +390,20 @@ function score(answers, at) {
  * brittle against a rule whose `subject: enclosing` moves the reported line to
  * the top of the function.
  */
-export function labelFor(labels, file, line, rule) {
+export function labelFor(
+  labels: Labels | null | undefined,
+  file: string,
+  line: number,
+  rule: string,
+): ResolvedLabel {
   // `$default` lets a corpus mark only its defects and treat everything else as
   // clean, which is the only practical way to author one: the clean cases are
   // most of the corpus and enumerating them by line is busywork that goes stale
   // the moment a file is edited.
-  const fallbackLabel = labels?.$default ?? "unlabeled";
+  const fallbackLabel: ResolvedLabel = labels?.$default ?? "unlabeled";
   const forFile = labels?.[file];
   if (!Array.isArray(forFile)) return fallbackLabel;
-  let result = fallbackLabel;
+  let result: ResolvedLabel = fallbackLabel;
   for (const l of forFile) {
     const within = Math.abs((l.line ?? -1) - line) <= (l.window ?? 3);
     if (!within) continue;
@@ -306,7 +412,7 @@ export function labelFor(labels, file, line, rule) {
     // windows are loose and a defect inside a nearby clean span is still a
     // defect.
     if (l.label === "bad") return "bad";
-    result = l.label ?? result;
+    result = (l.label as ResolvedLabel) ?? result;
   }
   return result;
 }

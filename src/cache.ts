@@ -9,7 +9,7 @@
  *
  * Keys are content-addressed over everything the model was shown:
  *
- *     sha256(schema, rule draft, arm, subject text)
+ *     sha256(schema, rule draft, arm, grouping, subject text)
  *
  * so editing a rule's sentence invalidates that rule's verdicts and nothing
  * else, moving a function between files keeps its verdict, and -- deliberately
@@ -37,19 +37,38 @@
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, renameSync } from "node:fs";
 import { dirname } from "node:path";
-import { SCHEMA, ruleTextHash } from "./rules.mjs";
+import { SCHEMA, ruleTextHash } from "./rules.ts";
+import type { Answer, CacheEntry, Grouping, Rule, RuleKind, StateArm } from "./types.ts";
 
 export const DEFAULT_CACHE_PATH = ".jevlint-cache.json";
 
-export function verdictKey(rule, arm, subjectText) {
+export function verdictKey(
+  rule: Rule,
+  arm: StateArm,
+  subjectText: string,
+  group: Grouping = "file",
+): string {
+  // `group` is in the key because it changes what the model saw. The same
+  // subject at the same arm sits next to its own file's other matches under
+  // file grouping and next to unrelated matches from other files under rule
+  // grouping, and those are not the same question.
   return createHash("sha256")
-    .update([SCHEMA, rule.id, ruleTextHash(rule), arm, subjectText].join("\n"))
+    .update([SCHEMA, rule.id, ruleTextHash(rule), arm, group, subjectText].join("\n"))
     .digest("hex")
     .slice(0, 24);
 }
 
 export class Cache {
-  constructor(path = DEFAULT_CACHE_PATH) {
+  /** null disables persistence entirely; the cache then only dedupes in memory. */
+  path: string | null;
+  entries: Map<string, CacheEntry>;
+  meta: Record<string, unknown>;
+  hits: number;
+  misses: number;
+  writes: number;
+  loadError: string | null;
+
+  constructor(path: string | null = DEFAULT_CACHE_PATH) {
     this.path = path;
     this.entries = new Map();
     this.meta = { schema: SCHEMA };
@@ -59,10 +78,13 @@ export class Cache {
     this.loadError = null;
   }
 
-  static load(path = DEFAULT_CACHE_PATH) {
+  static load(path: string = DEFAULT_CACHE_PATH): Cache {
     const cache = new Cache(path);
     try {
-      const raw = JSON.parse(readFileSync(path, "utf8"));
+      const raw = JSON.parse(readFileSync(path, "utf8")) as {
+        schema?: string;
+        entries?: Record<string, CacheEntry>;
+      };
       // A cache written by a different question schema is not upgradeable: the
       // verdicts answered questions that no longer exist. Dropping it is the
       // only honest option.
@@ -76,15 +98,15 @@ export class Cache {
         if (v && typeof v.value === "number") cache.entries.set(k, v);
       }
       cache.meta = { ...raw, entries: undefined };
-    } catch (err) {
-      if (err?.code !== "ENOENT") {
+    } catch (err: unknown) {
+      if ((err as NodeJS.ErrnoException)?.code !== "ENOENT") {
         cache.loadError = `cache at ${path} unreadable (${String(err).slice(0, 120)}); ignoring it`;
       }
     }
     return cache;
   }
 
-  get(key, kind) {
+  get(key: string, kind: RuleKind): Answer | null {
     const e = this.entries.get(key);
     if (!e) {
       this.misses += 1;
@@ -101,7 +123,7 @@ export class Cache {
     return { value: e.value, confidence: e.confidence ?? null, kind: e.kind };
   }
 
-  set(key, answer, provenance = {}) {
+  set(key: string, answer: Answer | null, provenance: Partial<CacheEntry> = {}): void {
     if (!answer || typeof answer.value !== "number") return;
     this.entries.set(key, {
       value: answer.value,
@@ -115,7 +137,7 @@ export class Cache {
     this.writes += 1;
   }
 
-  save({ model = null, extra = {} } = {}) {
+  save({ model = null, extra = {} }: { model?: string | null; extra?: Record<string, unknown> } = {}): boolean {
     const payload = {
       schema: SCHEMA,
       model,
@@ -123,6 +145,7 @@ export class Cache {
       ...extra,
       entries: Object.fromEntries(this.entries),
     };
+    if (!this.path) return false;
     try {
       mkdirSync(dirname(this.path), { recursive: true });
       // Write-then-rename, so an interrupted save cannot leave a half-written
@@ -131,14 +154,14 @@ export class Cache {
       writeFileSync(tmp, `${JSON.stringify(payload, null, 2)}\n`);
       renameSync(tmp, this.path);
       return true;
-    } catch (err) {
+    } catch (err: unknown) {
       this.loadError = `could not write cache to ${this.path} (${String(err).slice(0, 120)})`;
       return false;
     }
   }
 
   /** Drop entries no live key refers to. Returns how many went. */
-  prune(liveKeys) {
+  prune(liveKeys: Iterable<string>): number {
     const live = new Set(liveKeys);
     let dropped = 0;
     for (const k of [...this.entries.keys()]) {

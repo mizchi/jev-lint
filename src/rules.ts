@@ -27,27 +27,44 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { basename, extname, join } from "node:path";
 import { createHash } from "node:crypto";
 import YAML from "yaml";
+import {
+  GROUPINGS,
+  KINDS,
+  LANGUAGES,
+  STATE_ARMS,
+  SUBJECTS,
+  type Grouping,
+  type Language,
+  type NoulCriteria,
+  type Rule,
+  type RuleKind,
+  type RuleResult,
+  type Severity,
+  type StateArm,
+  type SubjectMode,
+} from "./types.ts";
+
+// Re-exported rather than redefined. `types.ts` owns the vocabulary so a new
+// arm or kind cannot be added to the validator and missed by the type, and
+// these re-exports keep every existing import site pointing at one definition.
+export { GROUPINGS, KINDS, LANGUAGES, STATE_ARMS, SUBJECTS };
+export type {
+  Grouping,
+  Language,
+  NoulCriteria,
+  Rule,
+  RuleKind,
+  RuleResult,
+  Severity,
+  StateArm,
+  SubjectMode,
+};
 
 /** Bumped when question construction or the scales change. Part of cache keys. */
-export const SCHEMA = "jevlint-1";
+export const SCHEMA = "jevlint-2";
 
-/**
- * Languages the ast-grep CLI has built in.
- *
- * The matcher is the real `ast-grep` binary rather than an in-process binding,
- * and this is the reason: the Node binding ships JavaScript, TypeScript, HTML
- * and CSS only, so Rust would have needed a hand-built dynamic grammar. The
- * CLI already has every grammar below, takes the rule format unchanged, and
- * matches all rules against all files in one invocation.
- */
-export const LANGUAGES = [
-  "Bash", "C", "Cpp", "CSharp", "Css", "Dart", "Elixir", "Go", "Haskell",
-  "Html", "Java", "JavaScript", "Json", "Jsx", "Kotlin", "Lua", "Php",
-  "Python", "Ruby", "Rust", "Scala", "Solidity", "Swift", "Tsx", "TypeScript",
-  "Yaml",
-];
 
-const LANG_ALIASES = {
+const LANG_ALIASES: Record<string, Language> = {
   ts: "TypeScript",
   typescript: "TypeScript",
   tsx: "Tsx",
@@ -87,8 +104,6 @@ const LANG_ALIASES = {
   solidity: "Solidity",
 };
 
-/** What the question asks for, and therefore what the answer means. */
-export const KINDS = ["score", "noul"];
 
 /**
  * The score scale, shared by every `kind: score` rule.
@@ -137,38 +152,15 @@ export const DEFAULT_NOUL_AT = 0.5;
 /** Below this confidence a finding is worded as a question, not a verdict. */
 export const DEFAULT_UNSURE_BELOW = 0.5;
 
-/**
- * What code the question is actually about.
- *
- *   node       the matched node itself
- *   enclosing  the smallest function/class/method containing it
- *   file       the module as a whole, presented as an outline of what it holds
- *
- * `enclosing` matters when the matcher points at a small node whose predicate
- * needs its surroundings: "this fetch has no timeout" is about the call, but
- * "this catch block hides a failure the caller needed" is about the function.
- * Asking about a subject that cannot answer the question is the most common way
- * a rule fails -- every answer lands mid-scale and no cutoff helps.
- *
- * `file` exists for one judgment that has no node to point at: whether a module
- * is named for what it contains. Match the file's root node (`source_file` in
- * Rust, `program` in TypeScript) and the subject becomes the module's outline --
- * its path, its exports, its imports -- rather than thousands of lines of text.
- * That is both the only affordable way to ask and the more accurate one: the
- * question is about the module's shape, and the shape is what it is shown.
- */
-export const SUBJECTS = ["node", "enclosing", "file"];
 
-/**
- * Which sections of the file's state accompany the questions.
- * Defined and measured in state.mjs; listed here for validation.
- */
-export const STATE_ARMS = ["bare", "located", "graph", "full"];
 
-export function normalizeLanguage(raw) {
+export function normalizeLanguage(raw: unknown): Language | null {
   if (typeof raw !== "string") return null;
   const t = raw.trim();
-  if (LANGUAGES.includes(t)) return t;
+  // `includes` on a readonly tuple does not narrow, so the membership test and
+  // the narrowing are done in one step.
+  const known = LANGUAGES.find((l) => l === t);
+  if (known) return known;
   const alias = LANG_ALIASES[t.toLowerCase()];
   if (alias) return alias;
   const exact = LANGUAGES.find((l) => l.toLowerCase() === t.toLowerCase());
@@ -179,7 +171,7 @@ export function normalizeLanguage(raw) {
  * Validate and normalize one rule object.
  * Returns `{rule}` or `{error}`; never throws.
  */
-export function normalizeRule(raw, where = "rule") {
+export function normalizeRule(raw: any, where = "rule"): RuleResult {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
     return { error: `${where}: not a mapping` };
   }
@@ -202,7 +194,7 @@ export function normalizeRule(raw, where = "rule") {
     return { error: `${id}: missing \`language\` (or \`languages\`)` };
   }
   const list = Array.isArray(rawLangs) ? rawLangs : [rawLangs];
-  const languages = [];
+  const languages: Language[] = [];
   for (const l of list) {
     const norm = normalizeLanguage(l);
     if (!norm) {
@@ -275,6 +267,15 @@ export function normalizeRule(raw, where = "rule") {
     return { error: `${id}: \`state\` must be one of ${STATE_ARMS.join(", ")}` };
   }
 
+  // An axis pin is optional; absent means the scheduler may choose.
+  let axis: Grouping | null = null;
+  if (raw.axis !== undefined && raw.axis !== null) {
+    if (!GROUPINGS.includes(raw.axis)) {
+      return { error: `${id}: \`axis\` must be ${GROUPINGS.join(" or ")} (got ${JSON.stringify(raw.axis)})` };
+    }
+    axis = raw.axis as Grouping;
+  }
+
   const severity = raw.severity === undefined ? "warning" : raw.severity;
   if (!["hint", "info", "warning", "error"].includes(severity)) {
     return { error: `${id}: \`severity\` must be hint, info, warning or error` };
@@ -289,7 +290,7 @@ export function normalizeRule(raw, where = "rule") {
 
   const known = new Set([
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
-    "note", "kind", "criteria", "at", "subject", "state", "severity",
+    "note", "kind", "criteria", "at", "subject", "state", "axis", "severity",
     "message", "unsureBelow", "docs", "tags",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
@@ -312,17 +313,18 @@ export function normalizeRule(raw, where = "rule") {
       at,
       subject,
       state,
+      axis,
       severity,
       unsureBelow,
       message: typeof raw.message === "string" ? raw.message : null,
       docs: typeof raw.docs === "string" ? raw.docs : null,
-      tags: Array.isArray(raw.tags) ? raw.tags.filter((t) => typeof t === "string") : [],
+      tags: Array.isArray(raw.tags) ? raw.tags.filter((t: unknown) => typeof t === "string") : [],
     },
   };
 }
 
 /** The cutoff actually in force for a rule, after config overrides. */
-export function cutoffFor(rule, overrides = {}) {
+export function cutoffFor(rule: Rule, overrides: Record<string, number> = {}): number {
   const override = overrides[rule.id];
   if (typeof override === "number") return override;
   if (typeof rule.at === "number") return rule.at;
@@ -337,7 +339,7 @@ export function cutoffFor(rule, overrides = {}) {
  * model is shown and nothing else: `at` is deliberately excluded, because
  * re-calibrating a threshold must not cost a single request.
  */
-export function ruleTextHash(rule) {
+export function ruleTextHash(rule: Rule): string {
   return createHash("sha256")
     .update(
       [
@@ -355,9 +357,9 @@ export function ruleTextHash(rule) {
 }
 
 /** Load every rule from a YAML file, a directory of them, or a list of paths. */
-export function loadRules(paths) {
-  const files = [];
-  for (const p of [].concat(paths)) {
+export function loadRules(paths: string | string[]): { rules: Rule[]; errors: string[] } {
+  const files: Array<{ path: string; missing?: boolean }> = [];
+  for (const p of Array.isArray(paths) ? paths : [paths]) {
     let st;
     try {
       st = statSync(p);
@@ -372,9 +374,9 @@ export function loadRules(paths) {
     }
   }
 
-  const rules = [];
-  const errors = [];
-  const seen = new Map();
+  const rules: Rule[] = [];
+  const errors: string[] = [];
+  const seen = new Map<string, string>();
 
   for (const { path, missing } of files) {
     if (missing) {
@@ -411,12 +413,12 @@ export function loadRules(paths) {
           ? value.rules
           : [value];
 
-      items.forEach((item, j) => {
+      items.forEach((item: unknown, j: number) => {
         const where =
           items.length > 1 || docs.length > 1 ? `${path}#${docs.length > 1 ? i : j}` : path;
         const { rule, error } = normalizeRule(item, where);
-        if (error) {
-          errors.push(error);
+        if (error || !rule) {
+          errors.push(error ?? `${where}: could not be normalized`);
           return;
         }
         if (seen.has(rule.id)) {
@@ -431,7 +433,7 @@ export function loadRules(paths) {
   return { rules, errors };
 }
 
-function* walkYaml(dir) {
+function* walkYaml(dir: string): Generator<string> {
   for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) =>
     a.name.localeCompare(b.name),
   )) {

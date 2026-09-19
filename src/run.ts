@@ -15,15 +15,29 @@
  * at once, instead of once per rule per file.
  */
 import { readFileSync } from "node:fs";
-import { Jev, mapLimit } from "./jev.mjs";
-import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.mjs";
-import { resolveSubject } from "./state.mjs";
-import { questionId, readAnswer } from "./questions.mjs";
-import { planBatches, DEFAULT_BATCH_SIZE } from "./batch.mjs";
-import { Cache, verdictKey } from "./cache.mjs";
-import { gate } from "./gate.mjs";
-import { touchesChange } from "./diff.mjs";
-import { ruleTextHash } from "./rules.mjs";
+import { Jev, mapLimit } from "./jev.ts";
+import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.ts";
+import { resolveSubject } from "./state.ts";
+import { questionId, readAnswer } from "./questions.ts";
+import { planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
+import { schedule, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
+import { Cache, verdictKey } from "./cache.ts";
+import { gate } from "./gate.ts";
+import { touchesChange } from "./diff.ts";
+import { ruleTextHash } from "./rules.ts";
+import type {
+  Answer,
+  Batch,
+  Grouping,
+  GroupMode,
+  Rule,
+  RunError,
+  RunResult,
+  StateArm,
+  Subject,
+  SymbolIndex,
+} from "./types.ts";
+import type { ChangedRanges } from "./diff.ts";
 
 /**
  * Collect the subjects a rule set produces over some paths.
@@ -31,21 +45,39 @@ import { ruleTextHash } from "./rules.mjs";
  * Split out from `run` so that `--dry-run`, the gap report and the tests can
  * see exactly what would be asked without spending anything.
  */
+export interface CollectOptions {
+  rules: Rule[];
+  paths: string[];
+  arm?: StateArm | null;
+  diffRanges?: ChangedRanges | null;
+  cwd?: string;
+}
+
+export interface CollectResult {
+  subjects: Subject[];
+  symbols: SymbolIndex;
+  sources: Map<string, string>;
+  matches: unknown[];
+  stderr: string;
+  skippedByDiff: number;
+  duplicateGrammars: number;
+}
+
 export async function collectSubjects({
   rules,
   paths,
   arm = null,
   diffRanges = null,
   cwd = process.cwd(),
-}) {
+}: CollectOptions): Promise<CollectResult> {
   const { matches, probes, stderr } = await runAstGrep(rules, paths, { cwd });
   const languages = ruleLanguages(rules);
   const symbols = buildSymbols(probes, languages);
   const byId = new Map(rules.map((r) => [r.id, r]));
 
-  const sources = new Map();
-  const readSource = (file) => {
-    if (sources.has(file)) return sources.get(file);
+  const sources = new Map<string, string>();
+  const readSource = (file: string): string => {
+    if (sources.has(file)) return sources.get(file)!;
     let text = "";
     try {
       text = readFileSync(file, "utf8");
@@ -56,7 +88,7 @@ export async function collectSubjects({
     return text;
   };
 
-  const subjects = [];
+  const subjects: Subject[] = [];
   let skippedByDiff = 0;
   let duplicateGrammars = 0;
   // One node, one rule, one question -- however many grammars claimed the file.
@@ -66,7 +98,7 @@ export async function collectSubjects({
   // matches every JavaScript file twice and reports every finding twice. The
   // per-grammar rule ids differ, but the jevlint rule and the node are the
   // same, so identity is (file, byte range, rule) and not the ast-grep id.
-  const seenNodes = new Set();
+  const seenNodes = new Set<string>();
   for (const m of matches) {
     // Matches come back tagged with the per-grammar id the emitter used, which
     // maps back to the one jevlint rule that owns the sentence.
@@ -109,6 +141,28 @@ export async function collectSubjects({
  * would cost, which is the cheap way to point this at an unfamiliar repository
  * before spending anything on it.
  */
+export interface RunOptions {
+  rules: Rule[];
+  paths: string[];
+  arm?: StateArm | null;
+  cutoffs?: Record<string, number>;
+  unsureBelow?: number | null;
+  diffRanges?: ChangedRanges | null;
+  cachePath?: string | null;
+  force?: boolean;
+  dryRun?: boolean;
+  concurrency?: number;
+  batchSize?: number;
+  /** "file", "rule", or "auto" to let the scheduler cost both per rule. */
+  group?: GroupMode;
+  /** Subjects per rule-axis request under `auto`. */
+  ruleBatchCap?: number;
+  model?: string | null;
+  apiKey?: string | null;
+  cwd?: string;
+  onProgress?: ((p: { done: number; total: number; file: string }) => void) | null;
+}
+
 export async function run({
   rules,
   paths,
@@ -121,11 +175,13 @@ export async function run({
   dryRun = false,
   concurrency = 4,
   batchSize = DEFAULT_BATCH_SIZE,
+  group = "file",
+  ruleBatchCap = DEFAULT_RULE_BATCH_CAP,
   model = null,
   apiKey = null,
   cwd = process.cwd(),
   onProgress = null,
-} = {}) {
+}: RunOptions): Promise<RunResult> {
   const started = Date.now();
   const { subjects, symbols, sources, stderr, skippedByDiff, duplicateGrammars } = await collectSubjects({
     rules,
@@ -136,40 +192,63 @@ export async function run({
   });
 
   const cache = cachePath ? Cache.load(cachePath) : new Cache(null);
-  const keyed = subjects.map((s) => ({ ...s, key: verdictKey(s.rule, s.arm, s.text) }));
+  // Under `auto` the axis is decided per rule, and the axis is part of what
+  // the model saw -- so the cache key needs the axis this subject actually
+  // took, not the mode that was requested.
+  let plan: Schedule | null = null;
+  let axisOf: Map<string, Grouping> | null = null;
+  if (group === "auto") {
+    plan = schedule(subjects, rules, { sources, symbols, batchSize, ruleBatchCap });
+    axisOf = new Map(plan.decisions.map((d) => [d.rule, d.axis]));
+  }
+  const effectiveAxis = (s: Subject): Grouping =>
+    group === "auto" ? (axisOf!.get(s.rule.id) ?? "rule") : group;
+
+  const keyed = subjects.map((s) => ({
+    ...s,
+    key: verdictKey(s.rule, s.arm, s.text, effectiveAxis(s)),
+  }));
 
   // Identical subject text under the same rule draft is one question however
   // many times it occurs, so a repository with duplicated code costs less than
   // its size suggests.
-  const results = [];
-  const toAsk = [];
-  const wanted = new Map();
+  const results: Array<{ subject: Subject; answer: Answer | null; cached: boolean }> = [];
+  const toAsk: Subject[] = [];
+  const wanted = new Map<string, Subject[]>();
   for (const s of keyed) {
     const hit = force || !cachePath ? null : cache.get(s.key, s.rule.kind);
     if (hit) {
       results.push({ subject: s, answer: hit, cached: true });
       continue;
     }
-    if (wanted.has(s.key)) {
-      wanted.get(s.key).push(s);
+    if (wanted.has(s.key!)) {
+      wanted.get(s.key!)!.push(s);
       continue;
     }
-    wanted.set(s.key, [s]);
+    wanted.set(s.key!, [s]);
     toAsk.push(s);
   }
 
-  const batches = planBatches(toAsk, { batchSize, sources, symbols });
+  // Under `auto`, re-plan over only the subjects that still need asking: the
+  // schedule above was costed over all of them, and a cache hit changes the
+  // density the decision rests on.
+  const batches =
+    group === "auto"
+      ? schedule(toAsk, rules, { sources, symbols, batchSize, ruleBatchCap }).batches
+      : planBatches(toAsk, { batchSize, sources, symbols, group });
 
   if (dryRun) {
     return {
       dryRun: true,
       rules,
+      group,
       subjects: keyed,
       batches,
       cache,
       stderr,
       skippedByDiff,
       duplicateGrammars,
+      schedule: plan,
       cachedCount: results.length,
       spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
       ...gate(results, { cutoffs, unsureBelow }),
@@ -178,7 +257,7 @@ export async function run({
   }
 
   const jev = new Jev({ apiKey, model });
-  const errors = [];
+  const errors: RunError[] = [];
 
   await mapLimit(batches, concurrency, async (batch, i) => {
     try {
@@ -186,11 +265,11 @@ export async function run({
       batch.subjects.forEach((s, qi) => {
         const answer = readAnswer(res.answers, questionId(qi), s.rule.kind);
         // One verdict answers for every subject that shared its key.
-        for (const twin of wanted.get(s.key) ?? [s]) {
+        for (const twin of wanted.get(s.key!) ?? [s]) {
           results.push({ subject: twin, answer, cached: false });
         }
         if (answer && cachePath) {
-          cache.set(s.key, answer, {
+          cache.set(s.key!, answer, {
             rule: s.rule.id,
             draft: ruleTextHash(s.rule),
             arm: s.arm,
@@ -199,12 +278,16 @@ export async function run({
           });
         }
       });
-    } catch (err) {
-      errors.push({ file: batch.file, subjects: batch.subjects.length, error: String(err.message ?? err) });
+    } catch (err: unknown) {
+      errors.push({
+        file: batch.file,
+        subjects: batch.subjects.length,
+        error: String((err as Error)?.message ?? err),
+      });
       // Fail open: a failed batch yields no verdicts, which the gate records as
       // `missing` rather than as a clean bill of health.
       for (const s of batch.subjects) {
-        for (const twin of wanted.get(s.key) ?? [s]) {
+        for (const twin of wanted.get(s.key!) ?? [s]) {
           results.push({ subject: twin, answer: null, cached: false });
         }
       }
@@ -216,6 +299,7 @@ export async function run({
 
   return {
     rules,
+    group,
     subjects: keyed,
     batches,
     cache,
@@ -223,6 +307,7 @@ export async function run({
     stderr,
     skippedByDiff,
     duplicateGrammars,
+    schedule: plan,
     cachedCount: results.filter((r) => r.cached).length,
     spent: jev.spent,
     servedModel: jev.servedModel,
@@ -239,7 +324,10 @@ export async function run({
  * every report published before the change, and there is no way to tell a model
  * difference from a threshold edit afterwards.
  */
-export function toRecord(result, { arm, cutoffs, unsureBelow }) {
+export function toRecord(
+  result: RunResult,
+  { arm, cutoffs, unsureBelow }: { arm: StateArm | null; cutoffs: Record<string, number>; unsureBelow: number | null },
+): Record<string, unknown> {
   return {
     schema: "jevlint-run-1",
     recorded: new Date().toISOString(),

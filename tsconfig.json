@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["es2023"],
+
+    // `nodenext` with `"type": "module"` in package.json is what makes plain
+    // `.ts` files ESM -- which is the reason the source is `.ts` and not `.mts`.
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"],
+
+    "strict": true,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Source imports `./x.ts` and the emit rewrites it to `./x.js`. That keeps
+    // the source honest about what it imports, and keeps it runnable as-is
+    // under `node --experimental-strip-types` with no build step.
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+
+    // Every construct TypeScript cannot simply erase (enums, namespaces,
+    // parameter properties) is banned, so the same files run under Node's type
+    // stripping as under `tsc`. Without this the two diverge silently.
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": "src",
+
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}

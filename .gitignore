@@ -6,3 +6,5 @@ node_modules/
 .jevlint-cache.json
 *.tmp
 .jevlint-self.json
+dist/
+*.tgz

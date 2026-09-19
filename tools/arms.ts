@@ -22,23 +22,33 @@
  *   - a judgment about a module's name has no local evidence at all
  *
  * Usage:
- *   node tools/arms.mjs [--repeat 1] [--arms bare,located,graph,full]
+ *   node tools/arms.ts [--repeat 1] [--arms bare,located,graph,full]
  *                       [--rules rules] [--paths corpus] [--out path.json]
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { loadRules } from "../src/rules.mjs";
-import { run } from "../src/run.mjs";
-import { labelFor } from "../src/calibrate.mjs";
-import { widestGap } from "../src/calibrate.mjs";
-import { ARMS } from "../src/state.mjs";
+import { loadRules } from "../src/rules.ts";
+import { run } from "../src/run.ts";
+import { labelFor } from "../src/calibrate.ts";
+import { widestGap } from "../src/calibrate.ts";
+import { ARMS } from "../src/state.ts";
+import type { Finding, Labels, Rule, StateArm } from "../src/types.ts";
+import type { ScoredSubject } from "../src/calibrate.ts";
 
-function arg(name, fallback) {
+/** An answer with its corpus label attached, which is what scoring reads. */
+type Labelled = ScoredSubject & { label: "bad" | "clean" | "unlabeled"; values?: number[] };
+
+function arg(name: string, fallback: string): string;
+function arg(name: string, fallback: null): string | null;
+function arg(name: string, fallback: string | null): string | null {
   const i = process.argv.indexOf(`--${name}`);
-  return i >= 0 && i + 1 < process.argv.length ? process.argv[i + 1] : fallback;
+  return i >= 0 && i + 1 < process.argv.length ? process.argv[i + 1]! : fallback;
 }
 
 const repeat = Number(arg("repeat", "1"));
-const arms = arg("arms", ARMS.join(",")).split(",").map((s) => s.trim()).filter(Boolean);
+const arms = arg("arms", ARMS.join(","))
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean) as StateArm[];
 const rulePaths = arg("rules", "rules").split(",");
 const paths = arg("paths", "corpus").split(",");
 const outPath = arg("out", null);
@@ -50,7 +60,7 @@ if (rules.length === 0) {
   process.stderr.write("no rules\n");
   process.exit(2);
 }
-const labels = JSON.parse(readFileSync(labelPath, "utf8"));
+const labels = JSON.parse(readFileSync(labelPath, "utf8")) as Labels;
 
 /**
  * Score one arm's answers against the labels.
@@ -60,13 +70,13 @@ const labels = JSON.parse(readFileSync(labelPath, "utf8"));
  * measure the cutoff rather than the arm: an arm that shifts every answer down
  * by 0.2 would look broken when it had merely rescaled.
  */
-function scoreArm(all, rule) {
-  const answers = all
+function scoreArm(all: Labelled[], rule: Rule) {
+  const answers: Labelled[] = all
     .filter((f) => f.rule === rule.id && typeof f.value === "number")
     .map((f) => ({ ...f, label: labelFor(labels, f.file, f.line, f.rule) }));
 
-  const bad = answers.filter((a) => a.label === "bad").map((a) => a.value);
-  const clean = answers.filter((a) => a.label === "clean").map((a) => a.value);
+  const bad = answers.filter((a) => a.label === "bad").map((a) => a.value!);
+  const clean = answers.filter((a) => a.label === "clean").map((a) => a.value!);
   if (answers.length === 0) return null;
 
   const separable = bad.length > 0 && clean.length > 0 && Math.min(...bad) > Math.max(...clean);
@@ -76,7 +86,7 @@ function scoreArm(all, rule) {
     // No separating cutoff: take the one maximising true minus false positives,
     // so the row shows the best this arm can do rather than the worst.
     let best = { at: 0.5, gain: -Infinity };
-    for (const v of [...new Set(answers.map((a) => a.value))].sort((x, y) => x - y)) {
+    for (const v of [...new Set(answers.map((a) => a.value!))].sort((x, y) => x - y)) {
       const tp = bad.filter((b) => b >= v).length;
       const fp = clean.filter((c) => c >= v).length;
       if (tp - fp > best.gain) best = { at: v, gain: tp - fp };
@@ -87,7 +97,7 @@ function scoreArm(all, rule) {
   const tp = bad.filter((v) => v >= at).length;
   const fn = bad.length - tp;
   const fp = clean.filter((v) => v >= at).length;
-  const gap = widestGap(answers.map((a) => a.value)).gap;
+  const gap = widestGap(answers.map((a) => a.value!)).gap;
 
   return {
     rule: rule.id,
@@ -110,12 +120,13 @@ function scoreArm(all, rule) {
   };
 }
 
-const mean = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
-const round = (n) => Math.round(n * 1000) / 1000;
+const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
+const round = (n: number) => Math.round(n * 1000) / 1000;
 
-const results = {};
+type ArmRows = NonNullable<ReturnType<typeof scoreArm>>;
+const results: Record<string, { spent: { calls: number; inputTokens: number; usd: number }; rows: ArmRows[] }> = {};
 for (const arm of arms) {
-  const merged = new Map();
+  const merged = new Map<string, Labelled & { _n: number; _sum: number }>();
   let spent = { calls: 0, inputTokens: 0, usd: 0 };
   for (let i = 0; i < repeat; i += 1) {
     const r = await run({
@@ -138,10 +149,10 @@ for (const arm of arms) {
       // Includes the subject text: one line can hold several subjects for one
       // rule, and keying on the line alone averages them together.
       const k = `${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
-      if (!merged.has(k)) merged.set(k, { ...f, _n: 0, _sum: 0 });
-      const e = merged.get(k);
+      if (!merged.has(k)) merged.set(k, { ...f, label: "unlabeled", _n: 0, _sum: 0 });
+      const e = merged.get(k)!;
       e._n += 1;
-      e._sum += f.value;
+      e._sum += f.value!;
       e.value = e._sum / e._n;
     }
     process.stderr.write(
@@ -151,19 +162,19 @@ for (const arm of arms) {
   const all = [...merged.values()];
   results[arm] = {
     spent,
-    rows: rules.map((r) => scoreArm(all, r)).filter(Boolean),
+    rows: rules.map((r) => scoreArm(all, r)).filter((r): r is ArmRows => r !== null),
   };
 }
 
 // Report: one block per rule, one row per arm, so the comparison that matters
 // (this rule, across arms) reads down a column.
-const out = [];
+const out: string[] = [];
 out.push(`state arms compared over ${repeat} pass(es) on ${paths.join(", ")}`);
 out.push("");
 for (const rule of rules) {
   const rows = arms
-    .map((arm) => ({ arm, ...(results[arm].rows.find((r) => r?.rule === rule.id) ?? {}) }))
-    .filter((r) => r.subjects);
+    .map((arm) => ({ arm, ...(results[arm]!.rows.find((r) => r?.rule === rule.id) ?? {}) }))
+    .filter((r) => "subjects" in r && r.subjects) as Array<{ arm: string } & ArmRows>;
   if (rows.length === 0) continue;
   out.push(`${rule.id}  (${rule.languages.join("/")}, subject: ${rule.subject}, declared arm: ${rule.state})`);
   out.push(
@@ -187,7 +198,7 @@ for (const rule of rules) {
 out.push("cost:");
 for (const arm of arms) {
   out.push(
-    `  ${arm.padEnd(9)} ${results[arm].spent.calls} request(s), ${results[arm].spent.inputTokens.toLocaleString()} input tokens, $${results[arm].spent.usd.toFixed(5)}`,
+    `  ${arm.padEnd(9)} ${results[arm]!.spent.calls} request(s), ${results[arm]!.spent.inputTokens.toLocaleString()} input tokens, $${results[arm]!.spent.usd.toFixed(5)}`,
   );
 }
 

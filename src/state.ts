@@ -35,12 +35,26 @@
  * decoration there; it is the difference between a question that can be
  * answered and one that cannot.
  */
-import { moduleIdentity } from "./scan.mjs";
+import { moduleIdentity } from "./scan.ts";
+import { STATE_ARMS } from "./types.ts";
+import type {
+  FileSymbols,
+  ModuleIdentity,
+  Rule,
+  ResolvedSubject,
+  StateArm,
+  Subject,
+  StatePayload,
+  SymbolIndex,
+  SymbolInfo,
+  AstGrepMatch,
+} from "./types.ts";
 
-export const ARMS = ["bare", "located", "graph", "full"];
+export const ARMS = STATE_ARMS;
 
-export const ARM_BLURB = {
+export const ARM_BLURB: Record<StateArm, string> = {
   bare: "the matched code only -- no file, no graph",
+  local: "the matched code plus its enclosing function; no whole file",
   located: "the matched code plus the whole file source",
   graph: "path identity, imports and the symbol table with call edges; no file source",
   full: "the file source and the graph",
@@ -66,8 +80,8 @@ export const INLINE_LIMIT = 900;
  * file's structure fits in a few hundred tokens when its text would not fit at
  * all.
  */
-function symbolSummary(s) {
-  const out = {
+function symbolSummary(s: SymbolInfo): Record<string, unknown> {
+  const out: Record<string, unknown> = {
     name: s.name,
     role: s.role,
     lines: s.line === s.endLine ? `${s.line}` : `${s.line}-${s.endLine}`,
@@ -87,16 +101,34 @@ function symbolSummary(s) {
  * even on `bare`, because a question whose subject the state does not
  * acknowledge is a question about nothing.
  */
-export function buildState({ file, source, entry, subjects, arm, language }) {
-  const state = {
+export interface BuildStateArgs {
+  file: string;
+  source: string;
+  entry: FileSymbols | null;
+  subjects: Subject[];
+  arm: StateArm;
+  language: string;
+}
+
+export function buildState({
+  file,
+  source,
+  entry,
+  subjects,
+  arm,
+  language,
+}: BuildStateArgs): StatePayload {
+  const state: StatePayload = {
     language,
     reviewing: "source code, against project-specific rules stated in the questions",
     subjects: subjects.map((s) => {
-      const out = {
+      const from = s.subjectLine ?? s.line;
+      const to = s.subjectEndLine ?? s.endLine;
+      const out: Record<string, unknown> = {
         id: s.id,
-        rule: s.ruleId,
+        rule: s.rule?.id,
         node: s.nodeKind,
-        lines: s.line === s.endLine ? `${s.line}` : `${s.line}-${s.endLine}`,
+        lines: from === to ? `${from}` : `${from}-${to}`,
       };
       if (s.enclosing) out.inside = `${s.enclosing.role} \`${s.enclosing.name}\``;
       if (s.captured && Object.keys(s.captured).length > 0) out.captured = s.captured;
@@ -119,7 +151,138 @@ export function buildState({ file, source, entry, subjects, arm, language }) {
     state.source = source;
   }
 
+  if (arm === "local") {
+    // Per-subject context instead of the whole file: each subject's enclosing
+    // function, deduplicated, since several matches usually share one.
+    const seen = new Map<string, string | null>();
+    for (const s of subjects) {
+      if (!s.context || seen.has(s.context)) continue;
+      seen.set(s.context, s.contextName ?? null);
+    }
+    if (seen.size > 0) {
+      state.enclosing_code = [...seen.entries()].map(([code, name]) => ({
+        ...(name ? { name } : {}),
+        code,
+      }));
+    }
+  }
+
   return state;
+}
+
+/**
+ * The state for a RULE-grouped batch: one rule, many matches, many files.
+ *
+ * The file-grouped state above sends a file once and asks about everything in
+ * it. This one inverts that: it sends only what the matcher caught, from
+ * wherever it caught it, and asks the same question of each item.
+ *
+ * Which is better is a question about MATCH DENSITY, not about which is nicer.
+ * File-grouping amortises a file's source over the matches inside it, so it
+ * wins when a rule matches many things per file and loses when it matches few
+ * -- and "few per file" is the normal case for a narrow rule on a large
+ * repository. A rule matching one node in a 2000-line file pays 2000 lines for
+ * one question, once per file, forever.
+ *
+ * The risk it takes is contamination. Two hundred unrelated snippets sitting
+ * side by side in one state could anchor each other -- a mediocre name looking
+ * fine next to a terrible one. Published measurement on the file-grouped case
+ * found this small (mean absolute difference 0.082, 3.6% of decisions), but
+ * that was neighbours from the same file, which is a much weaker form of the
+ * same thing. `note_on_independence` below states the requirement explicitly,
+ * and `tools/grouping.ts` measures whether it holds by comparing against
+ * one-request-per-match.
+ */
+export interface BuildRuleStateArgs {
+  rule: Rule;
+  subjects: Subject[];
+  arm: StateArm;
+  symbols?: SymbolIndex | null;
+}
+
+export function buildRuleState({
+  rule,
+  subjects,
+  arm,
+  symbols,
+}: BuildRuleStateArgs): StatePayload {
+  const languages = [...new Set(subjects.map((s) => s.language))];
+
+  // Shared context, referenced by id rather than repeated.
+  //
+  // Several matches usually sit in one function -- five bindings in one body is
+  // ordinary -- so inlining each subject's enclosing code would send that body
+  // five times. Measured on tokio, not deduplicating was the difference
+  // between rule grouping costing less than file grouping and costing more.
+  const contexts = new Map<string, { id: string; name: string | null }>();
+  if (arm === "local") {
+    for (const s of subjects) {
+      if (!s.context || contexts.has(s.context)) continue;
+      contexts.set(s.context, { id: `c${contexts.size}`, name: s.contextName ?? null });
+    }
+  }
+
+  const state: StatePayload = {
+    language: languages.length === 1 ? languages[0]! : languages,
+    reviewing:
+      "code selected from across one codebase by a single structural matcher, to be judged item by item against the one rule stated in the questions",
+    // The items are unrelated, and the model has to be told so. In the
+    // file-grouped state the neighbours are genuinely context; here they are
+    // just other work that happens to share a request.
+    note_on_independence:
+      "These items come from different files and have nothing to do with one another. Judge each one only on its own merits; do not compare them, rank them against each other, or let one item's quality influence another's.",
+    subjects: subjects.map((s) => {
+      const from = s.subjectLine ?? s.line;
+      const to = s.subjectEndLine ?? s.endLine;
+      const out: Record<string, unknown> = {
+        id: s.id,
+        file: s.file,
+        lines: from === to ? `${from}` : `${from}-${to}`,
+        node: s.nodeKind,
+      };
+      if (languages.length > 1) out.language = s.language;
+      if (s.enclosing?.name) out.inside = `${s.enclosing.role} \`${s.enclosing.name}\``;
+      if (s.captured && Object.keys(s.captured).length > 0) out.captured = s.captured;
+      if (arm === "local" && s.context) out.enclosed_by = contexts.get(s.context)!.id;
+      if ((arm === "graph" || arm === "full") && s.rule.subject !== "file") {
+        const entry = symbols?.get(s.file);
+        if (entry) out.module = compactOutline(s.file, entry);
+      }
+      return out;
+    }),
+  };
+
+  if (contexts.size > 0) {
+    state.enclosing_code = [...contexts.entries()].map(([code, meta]) => ({
+      id: meta.id,
+      ...(meta.name ? { name: meta.name } : {}),
+      code,
+    }));
+    state.note_on_enclosing_code =
+      "Each subject's `enclosed_by` names the entry in `enclosing_code` it appears inside. Several subjects can share one.";
+  }
+
+  if (rule?.id) state.matcher = `all items matched one structural matcher for the rule \`${rule.id}\``;
+  return state;
+}
+
+/**
+ * A one-line-per-symbol outline, for the `graph` arm under rule grouping.
+ *
+ * The file-grouped `graph` arm can afford the full symbol table because it
+ * sends it once per file. Here a file's outline would be repeated for every
+ * match in it, so this is deliberately thinner: names and roles, no ranges and
+ * no call edges.
+ */
+function compactOutline(file: string, entry: FileSymbols | null): Record<string, unknown> {
+  const id = moduleIdentity(file);
+  const named = (entry?.symbols ?? []).filter((s) => s.name);
+  return {
+    path: id.path,
+    ...(id.named_by_directory ? { subject: id.named_by_directory } : {}),
+    exports: named.filter((s) => s.exported).map((s) => s.name),
+    locals: named.filter((s) => !s.exported).map((s) => s.name),
+  };
 }
 
 /**
@@ -136,7 +299,11 @@ export function buildState({ file, source, entry, subjects, arm, language }) {
  * a second way, and silent is the one failure mode this design spends effort
  * to avoid.
  */
-export function resolveSubject(match, rule, entry) {
+export function resolveSubject(
+  match: AstGrepMatch,
+  rule: Rule,
+  entry: FileSymbols | null,
+): ResolvedSubject {
   const start = match.range.byteOffset.start;
   const end = match.range.byteOffset.end;
   const line = match.range.start.line + 1;
@@ -162,8 +329,25 @@ export function resolveSubject(match, rule, entry) {
     if (encl) {
       return {
         text: truncate(encl.text),
-        line: encl.line,
-        endLine: encl.endLine,
+        // The finding is reported where the MATCH is, not where the judged
+        // subject starts. Those are two different concerns and conflating them
+        // costs twice: a reader sent to the top of a 60-line function has to
+        // find the line that actually matched, and every match inside one
+        // function collapses onto the same reported line -- which made
+        // per-line corpus labels unable to tell them apart.
+        line,
+        endLine,
+        subjectLine: encl.line,
+        subjectEndLine: encl.endLine,
+        // The matched node itself, kept alongside the container.
+        //
+        // Without it a promoted subject is unanswerable whenever the container
+        // holds several candidates: a rule about a comment and the lines under
+        // it hands over a whole function with three comments in it and no way
+        // to say which one is under test. Measured on the comment pack, that
+        // failure looked exactly like a threshold problem -- every answer came
+        // back near 0.95, a gap of 0.03 -- and no cutoff could have fixed it.
+        matchText: truncate(match.text),
         nodeKind: encl.role,
         enclosing: null,
         promoted: true,
@@ -179,6 +363,22 @@ export function resolveSubject(match, rule, entry) {
     endLine,
     nodeKind: matcherLabel(rule),
     enclosing: encl ? { name: encl.name, role: encl.role } : null,
+    // The `local` arm's context: the smallest named thing containing the match,
+    // but ONLY when the match is a fragment inside one.
+    //
+    // For a binding rule this is the payload that matters. `const
+    // timeoutSeconds = 5000` is only wrong if you can see 5000 used as
+    // milliseconds, and the use is in the enclosing function -- so this is a
+    // candidate for the cheapest context that still contains the answer, which
+    // is the standard the whole arm design is held to.
+    //
+    // When the match IS a named symbol, though, it is already a complete unit
+    // and its "enclosing" symbol is the class or `impl` block around it --
+    // which is most of the file, carries no extra evidence about this
+    // function's name, and was measured costing 37% more tokens than sending
+    // the file once. So for those, `local` adds nothing and equals `bare`.
+    context: encl && !isNamedSymbol(entry, start, end) ? truncate(encl.text) : null,
+    contextName: encl?.name ?? null,
     promoted: false,
     captured,
   };
@@ -191,16 +391,26 @@ export function resolveSubject(match, rule, entry) {
  * grammar kind, so this comes from the rule's own matcher rather than from the
  * match. It is only a label in the question; nothing decides on it.
  */
-export function matcherLabel(rule) {
-  const m = rule.matcher ?? rule.rule ?? {};
+export function matcherLabel(rule: Rule): string {
+  const m = (rule.matcher ?? {}) as Record<string, unknown>;
   if (typeof m.kind === "string") return m.kind;
   if (typeof m.pattern === "string") return "pattern match";
   if (m.all || m.any) return "composite match";
   return "node";
 }
 
-function pickEnclosing(entry, start, end, self) {
-  let best = null;
+/** Is this exact range a named symbol -- i.e. already a complete unit? */
+function isNamedSymbol(entry: FileSymbols | null, start: number, end: number): boolean {
+  return (entry?.symbols ?? []).some((s) => s.name && s.start === start && s.end === end);
+}
+
+function pickEnclosing(
+  entry: FileSymbols | null,
+  start: number,
+  end: number,
+  self: { start: number; end: number },
+): SymbolInfo | null {
+  let best: SymbolInfo | null = null;
   for (const s of entry?.symbols ?? []) {
     if (!s.name) continue;
     if (s.start > start) break;
@@ -225,8 +435,8 @@ function pickEnclosing(entry, start, end, self) {
  *
  * Reserved captures are hidden: `$JEVNAME` belongs to the structural probes.
  */
-export function capturedMetavariables(match) {
-  const out = {};
+export function capturedMetavariables(match: AstGrepMatch): Record<string, string> {
+  const out: Record<string, string> = {};
   const single = match.metaVariables?.single ?? {};
   for (const [k, v] of Object.entries(single)) {
     if (k === "JEVNAME" || k.startsWith("_")) continue;
@@ -242,7 +452,7 @@ export function capturedMetavariables(match) {
   return out;
 }
 
-function truncate(text) {
+function truncate(text: string): string {
   return text.length > SUBJECT_TEXT_LIMIT
     ? `${text.slice(0, SUBJECT_TEXT_LIMIT)}\n/* … truncated … */`
     : text;
@@ -259,7 +469,7 @@ function truncate(text) {
  * not change it. Renaming a local, fixing a comment, reordering statements: all
  * of them leave this outline, and therefore the cached verdict, untouched.
  */
-export function renderOutline(file, entry) {
+export function renderOutline(file: string, entry: FileSymbols | null): string {
   const id = moduleIdentity(file);
   const lines = [`path: ${id.path}`];
   if (id.named_by_directory) {
@@ -270,7 +480,7 @@ export function renderOutline(file, entry) {
   const local = symbols.filter((s) => !s.exported && !s.isTest);
   const tests = symbols.filter((s) => s.isTest);
 
-  const render = (list) =>
+  const render = (list: SymbolInfo[]) =>
     list.map((s) => `${s.name} (${s.role}, lines ${s.line}-${s.endLine})`).join("\n  ");
 
   if (exported.length) lines.push(`public API:\n  ${render(exported)}`);

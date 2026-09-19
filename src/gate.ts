@@ -25,16 +25,25 @@
  *    produces no finding AND is counted, because a run where half the requests
  *    failed must not look like a clean repository.
  */
-import { cutoffFor, DEFAULT_UNSURE_BELOW, SCORE_LEVEL_NAMES } from "./rules.mjs";
-
-export const MESSAGE_IDS = ["violation", "unsure", "flag", "missing"];
+import { cutoffFor, DEFAULT_UNSURE_BELOW, SCORE_LEVEL_NAMES } from "./rules.ts";
+import type { Answer, Finding, GateResult, Subject } from "./types.ts";
+export { MESSAGE_IDS } from "./types.ts";
 
 /**
  * Decide one subject. Returns a finding or null.
  *
  * `answer` is `{value, confidence, kind}` from `readAnswer`, or null.
  */
-export function decide(subject, answer, { cutoffs = {}, unsureBelow } = {}) {
+export interface GateOptions {
+  cutoffs?: Record<string, number>;
+  unsureBelow?: number | null;
+}
+
+export function decide(
+  subject: Subject,
+  answer: Answer | null,
+  { cutoffs = {}, unsureBelow }: GateOptions = {},
+): Finding {
   const rule = subject.rule;
   const at = cutoffFor(rule, cutoffs);
 
@@ -53,7 +62,9 @@ export function decide(subject, answer, { cutoffs = {}, unsureBelow } = {}) {
     };
   }
 
-  const base = {
+  const base: Finding = {
+    messageId: null,
+    reported: false,
     rule: rule.id,
     severity: rule.severity,
     file: subject.file,
@@ -95,12 +106,15 @@ export function decide(subject, answer, { cutoffs = {}, unsureBelow } = {}) {
 }
 
 /** Decide a whole run. Returns `{findings, all, stats}`. */
-export function gate(results, options = {}) {
+export function gate(
+  results: Array<{ subject: Subject; answer: Answer | null }>,
+  options: GateOptions = {},
+): GateResult {
   const all = results.map(({ subject, answer }) => decide(subject, answer, options));
   const findings = all.filter((f) => f.reported);
   findings.sort(
     (a, b) =>
-      b.margin - a.margin ||
+      (b.margin ?? 0) - (a.margin ?? 0) ||
       a.file.localeCompare(b.file) ||
       a.line - b.line,
   );
@@ -117,8 +131,8 @@ export function gate(results, options = {}) {
   };
 }
 
-function countBy(items, key) {
-  const out = {};
+function countBy<T>(items: T[], key: (item: T) => string): Record<string, number> {
+  const out: Record<string, number> = {};
   for (const it of items) {
     const k = key(it);
     out[k] = (out[k] ?? 0) + 1;
@@ -133,7 +147,7 @@ function countBy(items, key) {
  * usually an exception clause -- and surfacing it would read as if it were part
  * of the complaint.
  */
-export function describe(finding) {
+export function describe(finding: Finding): string {
   const where = `${finding.file}:${finding.line}`;
 
   // A missing verdict has no number to format, and formatting it anyway is how

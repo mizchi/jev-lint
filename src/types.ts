@@ -1,0 +1,446 @@
+/**
+ * The shared type surface.
+ *
+ * Every domain vocabulary that more than one module needs lives here, so there
+ * is one definition of what a rule, a subject, a batch and an answer are rather
+ * than an implicit agreement between modules that drifts.
+ *
+ * Two conventions throughout:
+ *
+ * - **Unions come from `as const` arrays, not enums.** The arrays already
+ *   existed because validation needs them at runtime, and deriving the type
+ *   from the array means a new arm or kind cannot be added to one without the
+ *   other. It also keeps the build inside `erasableSyntaxOnly`, so the same
+ *   source runs under `tsc` and under Node's type stripping.
+ * - **`null` means "known to be absent", `undefined` means "not applicable
+ *   here".** A rule with `at: null` has no cutoff of its own and takes the
+ *   default; a subject with no `id` has not been assigned to a batch yet.
+ */
+
+// ---------------------------------------------------------------- vocabulary
+
+/** Languages the ast-grep CLI has built in. */
+export const LANGUAGES = [
+  "Bash", "C", "Cpp", "CSharp", "Css", "Dart", "Elixir", "Go", "Haskell",
+  "Html", "Java", "JavaScript", "Json", "Jsx", "Kotlin", "Lua", "Php",
+  "Python", "Ruby", "Rust", "Scala", "Solidity", "Swift", "Tsx", "TypeScript",
+  "Yaml",
+] as const;
+export type Language = (typeof LANGUAGES)[number];
+
+/** What the question asks for, and therefore what the answer means. */
+export const KINDS = ["score", "noul"] as const;
+export type RuleKind = (typeof KINDS)[number];
+
+/** What code the question is actually about. */
+export const SUBJECTS = ["node", "enclosing", "file"] as const;
+export type SubjectMode = (typeof SUBJECTS)[number];
+
+/** Which sections of state accompany the questions. */
+export const STATE_ARMS = ["bare", "local", "located", "graph", "full"] as const;
+export type StateArm = (typeof STATE_ARMS)[number];
+
+/** What a state is built around: one file, or one rule's matches. */
+export const GROUPINGS = ["file", "rule"] as const;
+export type Grouping = (typeof GROUPINGS)[number];
+
+/**
+ * What the runner is asked to do about the axis.
+ *
+ * `auto` lets the scheduler cost both ways per rule before spending anything;
+ * the other two force one axis for everything, which is what the grouping
+ * experiment needs in order to measure them against each other.
+ */
+export const GROUP_MODES = ["file", "rule", "auto"] as const;
+export type GroupMode = (typeof GROUP_MODES)[number];
+
+export const SEVERITIES = ["hint", "info", "warning", "error"] as const;
+export type Severity = (typeof SEVERITIES)[number];
+
+export const MESSAGE_IDS = ["violation", "unsure", "flag", "missing"] as const;
+export type MessageId = (typeof MESSAGE_IDS)[number];
+
+// --------------------------------------------------------------------- rules
+
+/**
+ * An ast-grep matcher, passed through untouched.
+ *
+ * Deliberately not modelled further. ast-grep owns this grammar, it is
+ * recursive and it grows; a partial model here would reject valid matchers and
+ * give a false sense that they had been checked. ast-grep validates it, and
+ * rejects the whole rule set if it is wrong.
+ */
+export type Matcher = Record<string, unknown>;
+
+/** A noul's two branches. Must be nested under `criteria` on the wire. */
+export interface NoulCriteria {
+  true: string;
+  false: string;
+}
+
+/** A validated, normalized rule. */
+export interface Rule {
+  id: string;
+  /** The first of `languages`; kept for display and single-language callers. */
+  language: Language;
+  languages: Language[];
+  matcher: Matcher;
+  constraints: Record<string, unknown> | null;
+  utils: Record<string, unknown> | null;
+  ask: string;
+  /** Context for the model only. Never shown in a finding. */
+  note: string | null;
+  kind: RuleKind;
+  /** Present exactly when `kind` is `noul`. */
+  criteria: NoulCriteria | null;
+  /** The rule's own cutoff, or null to take the default for its kind. */
+  at: number | null;
+  subject: SubjectMode;
+  state: StateArm;
+  /**
+   * Pin this rule to a batching axis, overruling the scheduler.
+   *
+   * Set it when a rule's cutoff was calibrated on one axis: the grouping can
+   * move a verdict, so a rule that was measured on the file axis should not be
+   * silently rescheduled onto the rule axis for a token saving. null means
+   * "the scheduler may choose".
+   */
+  axis: Grouping | null;
+  severity: Severity;
+  unsureBelow: number | null;
+  message: string | null;
+  docs: string | null;
+  tags: string[];
+  /** Where it was loaded from. Absent on rules built in memory. */
+  source?: string;
+  pack?: string;
+}
+
+/** `normalizeRule` returns one or the other, never both, and never throws. */
+export type RuleResult = { rule: Rule; error?: undefined } | { rule?: undefined; error: string };
+
+// ------------------------------------------------------------------ ast-grep
+
+export interface Position {
+  line: number;
+  column: number;
+}
+
+export interface Range {
+  byteOffset: { start: number; end: number };
+  start: Position;
+  end: Position;
+}
+
+export interface MetaVarNode {
+  text: string;
+  range?: Range;
+}
+
+/** One match, as `ast-grep scan --json=stream` reports it. */
+export interface AstGrepMatch {
+  text: string;
+  range: Range;
+  file: string;
+  language: string;
+  ruleId: string;
+  lines?: string;
+  severity?: string;
+  message?: string;
+  metaVariables?: {
+    single?: Record<string, MetaVarNode>;
+    multi?: Record<string, MetaVarNode[]>;
+    transformed?: Record<string, unknown>;
+  };
+}
+
+// ------------------------------------------------------------------- symbols
+
+/** A named container found by the structural probes. */
+export interface SymbolInfo {
+  name: string | null;
+  role: string;
+  /** Byte offsets, which is what containment is computed from. */
+  start: number;
+  end: number;
+  /** 1-based, matching what a report shows. */
+  line: number;
+  endLine: number;
+  text: string;
+  exported: boolean;
+  isTest: boolean;
+  /** Within-file, by name occurrence. Approximate by design. */
+  calls: string[];
+  calledBy: string[];
+}
+
+export interface FileSymbols {
+  language: string;
+  symbols: SymbolInfo[];
+  imports: string[];
+  /** Ranges of `export` wrappers, used to resolve visibility by containment. */
+  exportRanges: Array<[number, number]>;
+}
+
+export type SymbolIndex = Map<string, FileSymbols>;
+
+export interface ModuleIdentity {
+  path: string;
+  stem: string;
+  directories: string[];
+  named_by_directory: string | null;
+}
+
+// ------------------------------------------------------------------ subjects
+
+/** What `resolveSubject` determines about one match. */
+export interface ResolvedSubject {
+  text: string;
+  /** Where the MATCH is. This is what a finding reports. */
+  line: number;
+  endLine: number;
+  /**
+   * Where the judged subject is, when it differs from the match.
+   *
+   * `subject: enclosing` judges the containing function but the finding still
+   * points at the matched node, so the question needs the subject's own range
+   * separately -- otherwise it would tell the model the wrong line numbers for
+   * the code it was given.
+   */
+  subjectLine?: number;
+  subjectEndLine?: number;
+  /**
+   * The matched node's own text, when the subject was promoted past it.
+   *
+   * A promoted subject is the container; this is the thing inside it the rule
+   * actually selected. A question that omits it cannot say which of several
+   * candidates in the container is under test.
+   */
+  matchText?: string;
+  nodeKind: string;
+  enclosing: { name: string | null; role: string } | null;
+  /** The `local` arm's context: the enclosing function, when there is one. */
+  context?: string | null;
+  contextName?: string | null;
+  /** True when `subject: enclosing` moved the subject up to its container. */
+  promoted: boolean;
+  /** True when the subject is a module outline rather than code. */
+  isOutline?: boolean;
+  captured: Record<string, string>;
+}
+
+/** A resolved match, ready to be asked about. */
+export interface Subject extends ResolvedSubject {
+  rule: Rule;
+  file: string;
+  language: string;
+  arm: StateArm;
+  /** Assigned when the subject is placed in a batch; meaningful only there. */
+  id?: string;
+  /** The content-addressed cache key. Assigned by the runner. */
+  key?: string;
+}
+
+// ----------------------------------------------------------------- questions
+
+export interface ScoreQuestion {
+  type: "score";
+  instructions: Record<string, unknown>;
+  criteria: readonly string[];
+}
+
+export interface NoulQuestion {
+  type: "noul";
+  instructions: Record<string, unknown>;
+  criteria: NoulCriteria;
+}
+
+export type Question = ScoreQuestion | NoulQuestion;
+
+/** A usable answer. Absent rather than zero when unusable. */
+export interface Answer {
+  value: number;
+  /** A score carries one; a noul never does. */
+  confidence: number | null;
+  kind: RuleKind;
+  probabilities?: Record<string, number> | null;
+}
+
+/** The server's reply to one request. */
+export interface SystemOneResponse {
+  model?: string;
+  answers?: Record<string, unknown>;
+  usage?: { input_tokens?: number; output_tokens?: number };
+}
+
+/**
+ * The `state` object sent with a request.
+ *
+ * Typed loosely on purpose: the known sections are named so callers and tests
+ * can read them without casting, and the index signature stays because the
+ * state is JSON handed to a model rather than an interface with a contract.
+ * Adding a section should not require a type change in three places.
+ */
+export interface StatePayload {
+  language: string | string[];
+  reviewing: string;
+  subjects: Array<Record<string, unknown>>;
+  file?: string;
+  module?: ModuleIdentity | Record<string, unknown>;
+  imports?: string[];
+  symbols?: Array<Record<string, unknown>>;
+  source?: string;
+  enclosing_code?: Array<Record<string, unknown>>;
+  note_on_independence?: string;
+  note_on_enclosing_code?: string;
+  matcher?: string;
+  [key: string]: unknown;
+}
+
+// ------------------------------------------------------------------- batches
+
+export interface ArmFallback {
+  from: StateArm;
+  to: StateArm;
+  reason: string;
+}
+
+export interface Batch {
+  /** A file path under file grouping; a rule and file count under rule grouping. */
+  file: string;
+  group?: Grouping;
+  rule?: string;
+  arm: StateArm;
+  language: string;
+  subjects: Subject[];
+  state: StatePayload;
+  questions: Record<string, Question>;
+  degraded: ArmFallback | null;
+  estimatedTokens: number;
+}
+
+// ------------------------------------------------------------------ findings
+
+export interface Finding {
+  /** null when the answer was below the cutoff and nothing is reported. */
+  messageId: MessageId | null;
+  reported: boolean;
+  rule: string;
+  severity: Severity;
+  file: string;
+  line: number;
+  endLine: number;
+  at: number;
+  value: number | null;
+  confidence: number | null;
+  kind?: RuleKind;
+  /** How far past its own cutoff, which is the only cross-rule ranking. */
+  margin?: number;
+  ask?: string;
+  message?: string | null;
+  docs?: string | null;
+  text?: string;
+  captured?: Record<string, string> | null;
+  arm?: StateArm;
+  level?: string;
+}
+
+export interface GateStats {
+  subjects: number;
+  reported: number;
+  missing: number;
+  unsure: number;
+  byRule: Record<string, number>;
+}
+
+export interface GateResult {
+  findings: Finding[];
+  all: Finding[];
+  stats: GateStats;
+}
+
+// --------------------------------------------------------------------- cache
+
+export interface CacheEntry {
+  value: number;
+  confidence: number | null;
+  kind: RuleKind;
+  rule?: string;
+  draft?: string;
+  arm?: StateArm;
+  file?: string;
+  line?: number;
+  at?: string;
+}
+
+// ----------------------------------------------------------------- reporting
+
+export interface Spend {
+  calls: number;
+  inputTokens: number;
+  outputTokens?: number;
+  ms: number;
+  retried?: number;
+  splits?: number;
+  usd: number;
+}
+
+export interface RunError {
+  file: string;
+  subjects: number;
+  error: string;
+}
+
+/** Everything a report, a record or a replay needs from one pass. */
+export interface RunResult extends GateResult {
+  rules: Rule[];
+  group?: GroupMode;
+  subjects: Subject[];
+  batches: Batch[];
+  cache?: unknown;
+  errors?: RunError[];
+  stderr?: string;
+  skippedByDiff?: number;
+  duplicateGrammars?: number;
+  /** Present when `group: "auto"`: what the scheduler decided, and why. */
+  schedule?: unknown;
+  cachedCount: number;
+  spent: Spend;
+  servedModel?: string | null;
+  elapsedMs?: number;
+  dryRun?: boolean;
+}
+
+/**
+ * What a report needs: a gate result, plus whatever else the caller happens to
+ * have.
+ *
+ * A live run has batches, spend and a cache; a replay of a recorded run has
+ * answers and thresholds and nothing else. Demanding the full `RunResult` would
+ * force a replay -- and every test -- to invent batches and token counts that
+ * no formatter reads, so the optional half is optional in the type too.
+ */
+export type ReportInput = GateResult & Partial<Omit<RunResult, keyof GateResult>>;
+
+// ----------------------------------------------------------------- labels
+
+/** One corpus label. `window` is a line tolerance, not an exact match. */
+export interface Label {
+  line: number;
+  label: "bad" | "clean";
+  rule?: string;
+  window?: number;
+  reason?: string;
+}
+
+/**
+ * A label file: paths to labels, plus `$default` for everything unmarked.
+ *
+ * The `$`-prefixed keys are metadata rather than paths, which is why lookups
+ * have to skip them.
+ */
+export interface Labels {
+  $default?: "bad" | "clean" | "unlabeled";
+  $note?: string;
+  [path: string]: Label[] | string | undefined;
+}
