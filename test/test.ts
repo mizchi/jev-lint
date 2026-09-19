@@ -1231,6 +1231,35 @@ test("calibrate: an overlapping corpus reports no separating cutoff rather than 
   assert.match(fit.reason, /no separating cutoff/);
 });
 
+test("calibrate: a fit over one pass is not the fit over the mean of two", () => {
+  // Why `replay --labels` averages a record's passes instead of scoring its
+  // top-level `answers` (the last pass alone): a per-pass fit and a
+  // mean-of-passes fit are different numbers, so replaying one pass would print
+  // a cutoff that disagrees with the one calibrate derived and shipped.
+  const rule = noulRule({ id: "n" });
+  const labels = labelsOf({
+    $default: "clean",
+    "a.rs": [{ line: 2, label: "bad", rule: "n", window: 0 }],
+  });
+  const pass = (clean: number, bad: number) => [
+    { rule: "n", file: "a.rs", line: 1, value: clean },
+    { rule: "n", file: "a.rs", line: 2, value: bad },
+  ];
+  const lastPassOnly = fitCutoffs(pass(0.1, 0.9), labels, [rule])[0]!;
+  const meanOfBoth = fitCutoffs(
+    // The mean this stands in for is what cli.ts's mergeRuns computes.
+    [
+      { rule: "n", file: "a.rs", line: 1, value: (0.1 + 0.5) / 2 },
+      { rule: "n", file: "a.rs", line: 2, value: (0.9 + 0.7) / 2 },
+    ],
+    labels,
+    [rule],
+  )[0]!;
+  assert.equal(lastPassOnly.separable, true);
+  assert.equal(meanOfBoth.separable, true);
+  assert.notEqual(lastPassOnly.fitted, meanOfBoth.fitted);
+});
+
 test("calibrate: a rule with no labeled violations reports why, not a number", () => {
   const fit = fitCutoffs(
     [{ rule: "n", file: "a.rs", line: 1, value: 0.2 }],

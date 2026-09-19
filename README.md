@@ -66,7 +66,7 @@ shipped packs cover Rust, TypeScript, TSX and JavaScript.
 ```bash
 npm install
 npm run build          # tsc -> dist/, with .d.ts and source maps
-npm run ci             # labels + typecheck + 86 tests + build + offline replay
+npm run ci             # labels + typecheck + 96 tests + build + offline replay and refit
 npm test               # no API key needed
 ```
 
@@ -88,6 +88,7 @@ jevlint gaps src                   # per-rule separation -- read this before any
 jevlint calibrate src --labels corpus/labels.json --repeat 3
 jevlint rules                      # what loaded, and every validation error
 jevlint replay run.json            # re-score a recorded run under new cutoffs, free
+jevlint replay run.json --labels corpus/labels.json   # ...and re-fit them, free
 
 jevlint check src --dry-run        # plan and price it without asking anything
 ```
@@ -259,8 +260,11 @@ answering their own defect class anywhere between 0.20 and 0.94; the quiet ones
 are not broken, they simply never reach a common threshold.
 
 Re-gating is free — `jevlint replay` re-scores a recorded run under new cutoffs
-with zero requests — so a recorded run also pins the numbers in any report you
-publish. Without that, recalibrating silently rewrites history.
+with zero requests, and with `--labels` re-fits them too — so a recorded run
+also pins the numbers in any report you publish. Without that, recalibrating
+silently rewrites history. It is also how a cutoff stays auditable: the number
+is a claim about a specific set of answers, and whoever holds the record can
+re-derive it without an API key.
 
 ### The corpus is the investment
 
@@ -305,15 +309,25 @@ configuration nobody runs. Since the API prices tokens, **the rule axis buys
 latency and rate-limit headroom, not money**, and at the shipped cap it buys
 less of both than the uncapped figures suggest.
 
-And it costs accuracy. Over 306 corpus subjects the two axes disagree on 2.9% of
-decisions, and the rule axis carries **2.5× the false positives** (4 → 10 with
-true positives flat). The mechanism is structural: a rule-axis state spans
-files, so it cannot carry one, and the `located` arm degrades to `local` — which
-removes the evidence from exactly the rules whose evidence is the file.
+And it costs accuracy — less than first reported, and mostly through the
+**cutoff**. Over 276 corpus subjects the two axes disagree on 1.4% of decisions.
+Judged at the shipped cutoffs, which were fitted on the file axis, the rule axis
+scores 42/2/5 against the file axis's 43/1/4. Refit on its own answers it
+recovers most of that (44/3/3 against 45/1/2): **1 fewer true positive and 2
+more false positives out of 276**, on too few events to size. An earlier version
+of this section said "2.5× the false positives"; that compared two axes at one
+axis's cutoffs, and is retracted.
 
-So the accurate axis is the default, the cheap one is opt-in, and the scheduler
-refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
-`axis: file`. Full numbers, including a retracted anchoring claim, in
+The residue is structural. A rule-axis state spans files, so it cannot carry
+one, and the `located` arm degrades to `local` — which removes the evidence from
+exactly the rules whose evidence is the file. One rule, `fn-name-promises-rust`,
+separates cleanly on the file axis and has **no separating cutoff** on the rule
+axis: fitting cannot put a missing file back.
+
+So the accurate axis is the default, the cheap one is opt-in, the scheduler
+refuses to move a rule on a file-bearing arm, and switching axis means
+refitting — `jevlint replay <record> --labels <labels>` does that for free from a
+recorded run. Pin any rule you calibrated with `axis: file`. Full numbers, including a retracted anchoring claim, in
 [docs/findings.md](docs/findings.md#9-batching-axis-one-state-per-file-or-one-per-rule).
 
 ## The shipped packs

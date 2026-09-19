@@ -424,17 +424,81 @@ deduplication. A `kind: identifier` rule on tokio has a raw density of 193.9 but
 a ratio of 0.712 — because 73,092 identifiers collapse to 4,699 distinct
 question texts, putting it exactly on the effective-density curve at 12.46.
 
-### Accuracy: the axis moves verdicts, and not for the reason first reported
+### Accuracy: the axis moves verdicts, and most of that was the cutoff
 
-Forcing each axis over the whole corpus, 306 subjects, 15 rules:
+An earlier version of this section reported the rule axis carrying **2.5x the
+false positives** — 306 subjects, 4 against 10 — and that number is retracted
+on two counts. It compared two axes at cutoffs fitted on one of them, which
+measures the mismatch and calls it the axis; and it predates both the cutoff
+refit and the corpus relabelling in section 10, so it is not comparable to
+anything measured since. Refitting each axis on its own answers, same corpus,
+same run, 276 subjects, 15 rules, 2 passes:
 
-| axis | precision | recall | tp/fp/fn |
-| --- | --- | --- | --- |
-| file | 0.92 | 0.94 | 44/4/3 |
-| rule | 0.81 | 0.91 | 43/10/4 |
+| axis | cutoffs | precision | recall | tp/fp/fn |
+| --- | --- | --- | --- | --- |
+| file | shipped (fitted on this axis) | 0.977 | 0.915 | 43/1/4 |
+| rule | shipped (fitted on the *file* axis) | 0.955 | 0.894 | 42/2/5 |
+| file | refit on its own answers | 0.978 | 0.957 | 45/1/2 |
+| rule | refit on its own answers | 0.936 | 0.936 | 44/3/3 |
 
-**The rule axis carries 2.5x the false positives.** The two axes disagree on
-2.9% of decisions.
+Refitting recovers most of the gap: the rule axis goes from 42/2/5 to 44/3/3,
+buying back 2 defects for 1 false positive. What is left against the refitted
+file axis is **1 fewer true positive and 2 more false positives out of 276** —
+a real direction, on 3 events, which is not enough to put a ratio on. The two
+axes disagree on 1.4% of decisions (4 of 276), mean absolute delta 0.059.
+
+`docs/data/grouping-refit.json`, reproducible with
+`tools/grouping.ts --repeat 2 --configs file:256,rule:256 --fit-per-config`.
+
+#### What the refit does per rule, and the one rule no cutoff saves
+
+The corpus-wide table above mixes the comment rules' marker contamination
+(section 10) back in. Fitting each pack on the corpus it was calibrated
+against, forced onto the rule axis, isolates what refitting actually buys —
+free, from the records, with `jevlint replay <record> --labels corpus/labels.json`:
+
+| rule | arm here | n | at shipped | refit | what changed |
+| --- | --- | --- | --- | --- | --- |
+| `fn-name-promises` | `local` | 41 | 0.76 → 6/0/0 | 0.68 → 6/0/0 | nothing |
+| `fn-name-promises-rust` | `local` | 35 | 0.68 → 5/0/1 | 0.80 → 5/0/1 | **nothing, and nothing can** |
+| `var-name-describes-value` | `local` | 52 | 0.61 → 3/0/0 | 0.57 → 3/0/0 | nothing |
+| `var-name-describes-value-rust` | `local` | 17 | 0.60 → 3/0/0 | 0.63 → 3/0/0 | nothing |
+| `test-name-describes-code` | `bare` | 7 | 0.95 → 2/1/0 | 0.96 → 2/0/0 | −1 false positive |
+| `test-name-describes-code-rust` | `bare` | 7 | 0.93 → 2/1/0 | 0.94 → 2/1/0 | nothing; unseparable on both axes |
+| `test-name-verifies-claim` | `bare` | 7 | 0.54 → 4/0/0 | 0.67 → 4/0/0 | nothing |
+| `test-name-verifies-claim-rust` | `bare` | 7 | 0.54 → 4/0/0 | 0.55 → 4/0/0 | nothing |
+| `module-name-describes-contents` | `graph` | 8 | 0.62 → 1/0/0 | 0.54 → 1/0/0 | nothing |
+| `module-name-describes-contents-rust` | `graph` | 6 | 0.52 → 1/0/0 | 0.54 → 1/0/0 | nothing |
+| `comment-describes-declaration` | `local` | 10 | 0.83 → 4/0/1 | 0.44 → 5/0/0 | −1 false negative |
+| `comment-describes-declaration-rust` | `local` | 9 | 0.59 → 4/0/0 | 0.69 → 4/0/0 | nothing |
+| `comment-describes-declaration-js` | `local` | 4 | 0.54 → 2/0/0 | 0.57 → 2/0/0 | nothing |
+| `comment-describes-block` | `bare` | 3 | 0.97 → 1/0/1 | 0.93 → 2/1/0 | traded a miss for a false positive |
+| `comment-describes-block-rust` | `bare` | 3 | 0.94 → 1/0/1 | 0.91 → 1/0/1 | nothing |
+
+**4 of 216 decisions change.** Three results in that table matter:
+
+1. **Most cutoff movement is midpoint drift, not signal.** All 15 rules want a
+   different number on the rule axis and 12 of them change no decision at all,
+   because a fitted cutoff is the midpoint of a wide gap and the midpoint can
+   slide the width of the gap for free. Reading the cutoff instead of the gap
+   would have made this look like fifteen rules needing attention. Three do.
+2. **The one big move is real.** `comment-describes-declaration` wants 0.44 on
+   the rule axis against 0.83 on the file axis. That rule is `located` on the
+   file axis and `local` on the rule axis: stripped of the file, the same
+   question answers the same defects with much lower values, and the
+   file-fitted 0.83 silently misses one. This is the mechanism the old "2.5x"
+   number was really seeing.
+3. **One rule changes class, and no cutoff fixes it.** `fn-name-promises-rust`
+   is 6/0/0 with a separating gap on the file axis and 5/0/1 with *no*
+   separating cutoff on the rule axis. Losing the file loses the evidence, and
+   fitting cannot put it back. This is why the scheduler refuses to move a
+   file-bearing rule (`FILE_BEARING_ARMS`) and why both packs pin `axis: file`.
+
+So the rule axis is usable on this corpus **if you refit for it**, with one rule
+that should stay on the file axis whatever the token bill says. `jevlint replay
+<record> --labels <labels>` exists for exactly this: a cutoff is a claim about a
+specific set of answers, and anyone holding the record can re-derive it for
+free, on either axis, without an API key.
 
 #### The decomposition below is confounded, and adversarial review caught it
 
@@ -675,11 +739,14 @@ Ordered by how much each would change the decision to prefer one batching axis.
    verdict-neutral once the arm is held — an assumption that has not been
    tested.
 
-4. **No cutoff has ever been fitted on the rule axis.** All 15 `at:` values were
-   fitted on the file axis, and each rule now says so. So "the rule axis carries
-   2.5× the false positives" conflates the axis with *using file-axis cutoffs on
-   rule-axis answers*, which is a different and cheaper problem.
-   `calibrate --group rule` would separate them for about $0.02.
+4. ~~**No cutoff has ever been fitted on the rule axis.**~~ **Closed**, and the
+   gap was right: refitting on the rule axis recovered most of the difference,
+   the "2.5×" claim is retracted, and what survives is one rule that loses its
+   separation with the file. Section 9, `docs/data/calibration-rule-axis.json`,
+   `calibration-rule-axis-comments.json`, `grouping-refit.json`. Cost $0.005.
+   Still open underneath it: the rule-axis cutoffs are documented but not
+   *shippable* — a rule carries one `at:`, so running `--group rule` still
+   needs the refit passed by hand with `--at`.
 
 5. **No accuracy measurement at the shipped cap.** The sweep used
    1/4/16/64/256 — never 32, which is what ships.

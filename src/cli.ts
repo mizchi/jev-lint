@@ -32,7 +32,7 @@ import { ARMS, ARM_BLURB } from "./state.ts";
 import { DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { Cache, DEFAULT_CACHE_PATH } from "./cache.ts";
 import { GROUP_MODES, STATE_ARMS } from "./types.ts";
-import type { Finding, GroupMode, Rule, RunResult, StateArm, Subject } from "./types.ts";
+import type { Finding, GroupMode, Labels, Rule, RunResult, StateArm, Subject } from "./types.ts";
 import { explain, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
 import type { ChangedRanges } from "./diff.ts";
 
@@ -91,7 +91,7 @@ options:
       --concurrency <n>    parallel requests (default 4)
       --batch-size <n>     subjects per request (default ${DEFAULT_BATCH_SIZE})
       --repeat <n>         calibrate: how many times to re-ask (default 3)
-      --labels <path>      calibrate: labeled corpus JSON
+      --labels <path>      calibrate or replay: labeled corpus JSON, to fit cutoffs
       --record <path>      write a replayable run record
       --model <id>         Jev model
       --force              ignore cached verdicts
@@ -101,19 +101,24 @@ options:
       --quiet              findings only
 
 batching:
-  The axis is not free of accuracy. Measured on this repository's corpus over
-  306 subjects, the two axes disagree on 2.9% of decisions, and the rule axis
-  carried 2.5x the false positives (4 against 10). So the accurate axis is the
-  default and the cheap one is opt-in.
+  The axis moves verdicts, and most of that is the CUTOFF, not the axis. On
+  this repository's corpus, 276 subjects, the two axes disagree on 1.4% of
+  decisions. Judged at the shipped cutoffs -- which were fitted on the file
+  axis -- the rule axis loses 1 true positive and gains 1 false positive.
+  Refit on its own answers it recovers most of that, and what is left is 1
+  fewer true positive and 2 more false positives out of 276: a real direction
+  on too few events to size. So the accurate axis is the default, the cheap one
+  is opt-in, and switching axis means re-fitting.
 
   --group file   DEFAULT. One state per file: the file's source, then every
                  match in it. The source is amortised over the matches, so a
                  dense rule is cheap and a rule matching once in a large file
                  pays for the whole file.
   --group rule   One state per rule: only what the matcher caught, from any
-                 number of files. Far fewer requests -- 14.6x fewer planned on
-                 tokio -- and no file ever sent whole, at the cost of accuracy
-                 above. It carries a match's enclosing function only where the
+                 number of files. Far fewer requests -- 3.3x fewer planned on
+                 tokio at the default cap -- and no file ever sent whole, at
+                 the cost of accuracy above and of a cutoff that has to be
+                 refitted. It carries a match's enclosing function only where the
                  match is a FRAGMENT inside one, so a rule matching whole
                  functions gets no context and lands on "bare".
                  Switching axis also invalidates every cached verdict, because
@@ -499,34 +504,7 @@ async function cmdCalibrate({ rules, paths, diffRanges, opts, out, log }: Comman
     out("");
   }
 
-  if (opts.labels) {
-    let labels = null;
-    try {
-      labels = JSON.parse(readFileSync(opts.labels, "utf8"));
-    } catch (err: unknown) {
-      log(`could not read labels from ${opts.labels}: ${String(err).slice(0, 160)}`);
-    }
-    if (labels) {
-      const fits = fitCutoffs(mergeRuns(runs), labels, rules);
-      out("fitted cutoffs (against the labeled corpus):");
-      for (const f of fits) {
-        if (f.fitted === null) {
-          out(`  ${f.rule.padEnd(28)} -        ${f.reason}`);
-          continue;
-        }
-        out(
-          `  ${f.rule.padEnd(28)} ${String(f.fitted).padEnd(6)} ` +
-            `precision ${f.precision ?? "-"} recall ${f.recall ?? "-"} ` +
-            `(tp ${f.tp} fp ${f.fp} fn ${f.fn})  ${f.reason}`,
-        );
-      }
-      out("");
-      out("Apply with --at rule=value, or write `at:` into the rule file.");
-      out(
-        "A fitted number is a starting point on YOUR corpus, not a calibration for anyone else's.",
-      );
-    }
-  }
+  emitFits(opts.labels, mergeRuns(runs), rules, out, log);
 
   if (opts.record && last) {
     writeFileSync(
@@ -540,6 +518,52 @@ async function cmdCalibrate({ rules, paths, diffRanges, opts, out, log }: Comman
     log(`recorded ${repeat} pass(es) to ${opts.record}`);
   }
   return 0;
+}
+
+/**
+ * Fit a cutoff per rule against a labeled corpus, and print the table.
+ *
+ * Shared by `calibrate`, which fits the answers it just paid for, and by
+ * `replay`, which fits recorded ones for free. The second is the one that makes
+ * a cutoff auditable: a shipped cutoff is a claim about a specific set of
+ * answers, and anyone holding the record can re-derive it without an API key.
+ */
+function emitFits(
+  labelPath: string | null,
+  all: Finding[],
+  rules: Rule[],
+  out: Log,
+  log: Log,
+): void {
+  if (!labelPath) return;
+  let labels: Labels | null = null;
+  try {
+    labels = JSON.parse(readFileSync(labelPath, "utf8")) as Labels;
+  } catch (err: unknown) {
+    log(`could not read labels from ${labelPath}: ${String(err).slice(0, 160)}`);
+    return;
+  }
+
+  const fits = fitCutoffs(all, labels, rules);
+  out("fitted cutoffs (against the labeled corpus):");
+  for (const f of fits) {
+    if (f.fitted === null) {
+      out(`  ${f.rule.padEnd(28)} -        ${f.reason}`);
+      continue;
+    }
+    out(
+      `  ${f.rule.padEnd(28)} ${String(f.fitted).padEnd(6)} ` +
+        `precision ${f.precision ?? "-"} recall ${f.recall ?? "-"} ` +
+        `(tp ${f.tp} fp ${f.fp} fn ${f.fn})  ${f.reason}`,
+    );
+  }
+  out("");
+  out("Apply with --at rule=value, or write `at:` into the rule file.");
+  out("A fitted number is a starting point on YOUR corpus, not a calibration for anyone else's.");
+  out(
+    "Refit after changing --group: a cutoff belongs to an axis. Refitting these rules on " +
+      "rule-axis answers changed 4 of 216 decisions, and one rule stopped separating at any cutoff.",
+  );
 }
 
 /**
@@ -627,12 +651,23 @@ function cmdReplay(opts: Options, out: Log, log: Log): number {
   else if (opts.format === "github") out(formatGithub(result));
   else out(formatPretty(result, { color: opts.color, showMissing: opts.showMissing }));
 
+  // A `calibrate --repeat n` record carries every pass, and its top-level
+  // `answers` is only the last one. The gap and fit tables average the passes,
+  // exactly as calibrate did when it printed them -- scoring one pass here
+  // would make a replayed table disagree with the one the cutoff came from.
+  const passes: Finding[][] = Array.isArray(record.passes) ? record.passes : [];
+  const analysed = passes.length > 0 ? mergeRuns(passes) : (gated.all as Finding[]);
+
   out("");
-  out(formatGaps(gapReport(gated.all, rules, { cutoffs }), { color: opts.color }));
+  out(formatGaps(gapReport(analysed, rules, { cutoffs }), { color: opts.color }));
   out("");
+  emitFits(opts.labels, analysed, rules, out, log);
   out(
     `replayed ${record.answers.length} recorded answer(s) from ${record.recorded} (model ${record.model ?? "unknown"}), 0 requests`,
   );
+  if (passes.length > 1) {
+    out(`gap and fit tables are the mean of ${passes.length} recorded pass(es)`);
+  }
   const changed = Object.keys(opts.at);
   if (changed.length > 0) out(`cutoffs overridden: ${changed.join(", ")}`);
   return gated.findings.length > 0 ? 1 : 0;

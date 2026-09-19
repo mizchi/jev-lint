@@ -33,7 +33,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { loadRules, cutoffFor } from "../src/rules.ts";
 import { run } from "../src/run.ts";
-import { labelFor, widestGap } from "../src/calibrate.ts";
+import { fitCutoffs, labelFor, widestGap } from "../src/calibrate.ts";
 import type { Finding, GroupMode, Labels, Rule } from "../src/types.ts";
 import type { ScoredSubject } from "../src/calibrate.ts";
 
@@ -50,6 +50,7 @@ function arg(name: string, fallback: string | null): string | null {
   return i >= 0 && i + 1 < process.argv.length ? process.argv[i + 1]! : fallback;
 }
 const flag = (name: string): boolean => process.argv.includes(`--${name}`);
+const fitPerConfig = flag("fit-per-config");
 
 const repeat = Number(arg("repeat", "2"));
 const paths = arg("paths", "corpus").split(",");
@@ -127,6 +128,9 @@ interface ConfigResult {
   group: GroupMode;
   batchSize: number;
   blurb: string;
+  /** Cutoffs fitted on THIS configuration's own answers, when asked for. */
+  ownCutoffs?: Map<string, number>;
+  ownOverall?: ReturnType<typeof scoreOverall>;
   batchesPerPass: number;
   requestsPerPass: number;
   tokensPerPass: number;
@@ -187,8 +191,22 @@ for (const cfg of CONFIGS) {
     label: labelFor(labels, f.file, f.line, f.rule),
   }));
 
-  results[cfg.key]! = {
+  // Fit this configuration's own cutoffs before scoring it, so the comparison
+  // varies the configuration and not the threshold it is judged against.
+  let ownCutoffs: Map<string, number> | undefined;
+  let ownOverall: ReturnType<typeof scoreOverall> | undefined;
+  if (fitPerConfig) {
+    ownCutoffs = new Map(cutoffs);
+    for (const fit of fitCutoffs(answers, labels, rules)) {
+      if (typeof fit.fitted === "number") ownCutoffs.set(fit.rule, fit.fitted);
+    }
+    ownOverall = scoreOverall(answers, ownCutoffs);
+  }
+
+  results[cfg.key] = {
     ...cfg,
+    ownCutoffs,
+    ownOverall,
     batchesPerPass: batches,
     requestsPerPass: Math.round(spent.calls / repeat),
     tokensPerPass: Math.round(spent.inputTokens / repeat),
@@ -225,13 +243,13 @@ function scoreRule(answers: Labelled[], rule: Rule) {
   };
 }
 
-function scoreOverall(answers: Labelled[]) {
+function scoreOverall(answers: Labelled[], at: Map<string, number> = cutoffs) {
   let tp = 0;
   let fp = 0;
   let fn = 0;
   let tn = 0;
   for (const a of answers) {
-    const flagged = a.value! >= cutoffs.get(a.rule)!;
+    const flagged = a.value! >= at.get(a.rule)!;
     if (a.label === "bad") flagged ? (tp += 1) : (fn += 1);
     else if (a.label === "clean") flagged ? (fp += 1) : (tn += 1);
   }
@@ -300,6 +318,35 @@ for (const cfg of CONFIGS) {
       `${String(o.recall ?? "-").padEnd(7)} ${o.tp}/${o.fp}/${o.fn}`,
   );
 }
+if (fitPerConfig) {
+  out.push("");
+  out.push("the same configurations scored at cutoffs fitted on their OWN answers:");
+  out.push(
+    `  ${"config".padEnd(11)} ${"prec".padEnd(6)} ${"recall".padEnd(7)} ${"tp/fp/fn".padEnd(10)} rules refitted`,
+  );
+  for (const cfg of CONFIGS) {
+    const r = results[cfg.key]!;
+    const o = r.ownOverall;
+    if (!o) continue;
+    const moved = [...(r.ownCutoffs ?? [])].filter(([k, v]) => cutoffs.get(k) !== v).length;
+    out.push(
+      `  ${cfg.key.padEnd(11)} ${String(o.precision ?? "-").padEnd(6)} ${String(o.recall ?? "-").padEnd(7)} ` +
+        `${`${o.tp}/${o.fp}/${o.fn}`.padEnd(10)} ${moved}`,
+    );
+  }
+  out.push("");
+  out.push(
+    "  The gap between this table and the one above is how much of any apparent",
+  );
+  out.push(
+    "  accuracy penalty was the CUTOFFS rather than the configuration. Every",
+  );
+  out.push(
+    "  shipped cutoff was fitted on the file axis, so scoring a rule-axis run",
+  );
+  out.push("  with them measures the axis and the mismatch together.");
+}
+
 out.push("");
 for (const cfg of CONFIGS) out.push(`  ${cfg.key.padEnd(11)} ${cfg.blurb}`);
 
@@ -408,11 +455,13 @@ if (outPath) {
         paths,
         configs: CONFIGS.map((c) => c.key),
         cutoffs: Object.fromEntries(cutoffs),
+        fitPerConfig,
         results: Object.fromEntries(
           Object.entries(results).map(([k, v]) => [
             k,
             {
               ...v,
+              ownCutoffs: v.ownCutoffs ? Object.fromEntries(v.ownCutoffs) : undefined,
               // The full answer list is the evidence; keep it, drop the
               // accumulator fields that are an implementation detail.
               answers: v.answers.map((a) => ({
