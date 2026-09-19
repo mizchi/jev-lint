@@ -1,0 +1,233 @@
+# Family B: function names that promise a guarantee.
+#
+# Sharper cousins of the shipped `fn-name-promises`. Each matcher narrows the
+# captured $NAME with a regex to a family of names that makes one specific
+# promise -- a check is performed, failure is absorbed, a repeat is harmless,
+# nothing outside is touched -- and the sentence asks only about that promise.
+
+# ----------------------------------------------------------------------------
+# 1. validate* / sanitize* / assert* / ensure* / check* / verify*
+# ----------------------------------------------------------------------------
+- id: guard-name-guards
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: local
+  at: 0.63
+  # Fitted on records/final-local.json: clean tops at 0.47 (ensureBucket),
+  # defects start at 0.79 (ensureDir). Midpoint of that gap, 0.16 headroom each
+  # side. `located` widened the gap by 0.08 and changed no decision.
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &guard_name
+              field: name
+              pattern: $NAME
+              regex: "^(validate|sanitize|assert|ensure|check|verify)([A-Z0-9_]|$)"
+      - all:
+          - kind: method_definition
+          - has: *guard_name
+      - all:
+          - kind: variable_declarator
+          - has: *guard_name
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: >-
+    This function's name ($NAME) promises a check, but there is a path through
+    its body on which that check is not performed and the function still
+    completes as if it had passed.
+  criteria:
+    "true": >-
+      Some path returns, resolves or falls through normally without the check
+      the name promises having been performed: an input is accepted early
+      without being examined, a failure of the operation that would have
+      established the condition is caught and discarded, or a shortcut branch
+      skips the check for some callers or inputs.
+    "false": >-
+      On every path that completes normally the check the name promises has
+      been performed, by this body or by a schema, library or helper it
+      delegates to. Reporting the outcome by returning false, null or a
+      result object rather than throwing is still performing the check, and a
+      terse name is not a missing check.
+  note: >-
+    Only this function's paths are judged, not how thorough its check is: a
+    body that performs the check the name names on every path but could have
+    examined more is not skipping it. A schema, validator or helper the body
+    calls is assumed to check what its own name says. Failing closed --
+    rejecting when the check cannot be run -- honours the name; failing open
+    -- accepting when the check cannot be run or was skipped -- does not.
+
+# ----------------------------------------------------------------------------
+# 2. safe* / try* / *OrNull / *OrDefault / *OrUndefined
+# ----------------------------------------------------------------------------
+- id: safe-name-is-safe
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: local
+  at: 0.48
+  # Fitted on records/final-local.json: clean tops at 0.27 (tryAcquireLock),
+  # defects start at 0.70 (safeReadJson). `located` widened the gap to 0.66
+  # and changed no decision; not needed.
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &safe_name
+              field: name
+              pattern: $NAME
+              regex: "^(safe|try)([A-Z0-9_]|$)|(OrNull|OrDefault|OrUndefined)$"
+      - all:
+          - kind: method_definition
+          - has: *safe_name
+      - all:
+          - kind: variable_declarator
+          - has: *safe_name
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: >-
+    This function's name ($NAME) says that failure is absorbed and reported
+    as a value, but its body has a path on which a failure escapes as a
+    throw or a rejection.
+  criteria:
+    "true": >-
+      A failure of the kind the name promises to absorb can reach the caller
+      as an exception or a rejected promise: the operation that can fail is
+      outside any try, the catch rethrows or throws a new error, a failing
+      case is detected and answered with a throw instead of the null,
+      undefined, default, false or result value the name promises, or the
+      fallback itself is computed by something that can fail.
+    "false": >-
+      Every failure of the kind the name refers to is turned into the value
+      the name promises: null, undefined, a default, a boolean, or a result
+      object the caller can inspect. A body that cannot fail at all, and so
+      has nothing to catch, honours the name.
+  note: >-
+    A throw on a programmer error -- an argument of the wrong type, a misuse
+    of the function's own API -- is not the failure such a name promises to
+    absorb and does not count. Logging before returning the fallback is fine.
+    The failure that counts is the one the name and the parameters are about:
+    parsing, lookup, I/O, connection, conversion.
+
+# ----------------------------------------------------------------------------
+# 3. ensure* / upsert* / setup* / install* / register*
+# ----------------------------------------------------------------------------
+- id: idempotent-name
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: located
+  at: 0.47
+  # `located`, measured: on `local` the unconditional ALTER TABLE in
+  # setupDatabase scores 0.22-0.28, under the top clean (setupLogger 0.25);
+  # with the file in view it scores 0.64-0.72. Fitted on
+  # records/final-located.json: clean tops at 0.28, defects start at 0.64.
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &idem_name
+              field: name
+              pattern: $NAME
+              regex: "^(ensure|upsert|setup|install|register)([A-Z0-9_]|$)"
+      - all:
+          - kind: method_definition
+          - has: *idem_name
+      - all:
+          - kind: variable_declarator
+          - has: *idem_name
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: >-
+    This function's name ($NAME) says a repeated call is harmless, but
+    calling it a second time with the same arguments leaves a different
+    result from calling it once.
+  criteria:
+    "true": >-
+      The body performs its effect without finding out whether it is already
+      in place, and repeating the effect accumulates or fails: it appends to a
+      list or adds a listener, creates a record, index, table, column or
+      resource that would then exist twice or make the second creation fail,
+      inserts where a matching row may already be, or runs a step that is not
+      itself safe to repeat -- with no existence check, no keyed overwrite and
+      no guard that makes the second call a no-op. One such step is enough,
+      even when the other steps of the body are safe to repeat.
+    "false": >-
+      A second call finds the effect already in place and leaves the state as
+      the first call left it: the body checks for existence before acting,
+      writes by key so a repeat overwrites the same entry, assigns rather than
+      appends, uses an operation that is inherently repeatable (put, set,
+      mkdir with recursive, CREATE IF NOT EXISTS, ON CONFLICT), returns early
+      on a flag it sets, or has no effect at all beyond its return value.
+  note: >-
+    Only this body is judged. A helper it calls whose own name says it is
+    repeat-safe (ensure*, upsert*, put*, set*, *IfNotExists) is assumed to
+    be. Logging on each call, or returning a fresh object each call, is not a
+    different result. A function whose name says ensure but is a pure
+    conversion of its argument has nothing to repeat and is not a violation.
+
+# ----------------------------------------------------------------------------
+# 4. compute* / calculate* / derive* / format* / to* / parse*
+# ----------------------------------------------------------------------------
+- id: pure-name-is-pure
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: local
+  at: 0.48
+  # Fitted on records/final-local.json: clean tops at 0.07, defects start at
+  # 0.87. Memoisation into a module-level Map is decided to be an effect (see
+  # note); exempting it in attempt 2 shrank the gap from 0.80 to 0.17.
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &pure_name
+              field: name
+              pattern: $NAME
+              regex: "^(compute|calculate|derive|format|to|parse)([A-Z0-9_]|$)"
+      - all:
+          - kind: method_definition
+          - has: *pure_name
+      - all:
+          - kind: variable_declarator
+          - has: *pure_name
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: >-
+    This function's name ($NAME) presents it as a computation of a result
+    from its inputs, but its body changes state outside itself or performs
+    I/O.
+  criteria:
+    "true": >-
+      The body mutates an argument or something reachable through one,
+      assigns to a module-level binding, a field of `this` or an object it did
+      not create, records into a store that other code reads, logs, emits or
+      increments a metric, or reads or writes a file, network, database,
+      environment, clock or random source -- directly or through a call whose
+      name shows it does so.
+    "false": >-
+      The body derives its result from its parameters, from `this` and from
+      module-level values it only reads, using only locals it created, and
+      returns it. A mutable local accumulator, a copy of an argument that is
+      then modified, and a local object built up and returned are not effects
+      outside the function.
+  note: >-
+    Reading `this` in a toJSON, toString or similar method is reading, not
+    writing. Writing into a cache, Map or Set that outlives the call -- a
+    module-level one or one captured from an enclosing scope -- is an effect
+    outside the function even when it is only memoisation. Sorting or
+    mutating a copy the body made itself is not mutating the argument.

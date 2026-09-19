@@ -1,0 +1,122 @@
+# Family D: tests that cannot verify what their name claims because of how
+# they are constructed. The shipped `test-name-verifies-claim` judges the
+# assertion; these judge what sits between the title and the assertion: a
+# stub standing in for the subject, an assertion aimed at a mock's call log,
+# or a snapshot standing in for a claim.
+
+- id: test-mocks-subject
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  # The stub is often a `vi.mock(...)` at the top of the file, outside the
+  # matched node, so the file has to be there. Measured: on `bare` the two
+  # bad cases whose stub is a top-of-file vi.mock fall from 0.58/0.64 to
+  # 0.28/0.28, leaving 0.11 of gap; see records/family-d-bare.json.
+  state: located
+  # Fitted 0.29 on records/family-d-located.json (5 bad, 28 clean, 3 passes,
+  # 0 flips): clean top 0.16, lowest bad 0.42. The bad band is quiet
+  # (0.42-0.64 for four of five), so this cutoff is low by construction.
+  at: 0.30
+  rule: &js_test_matcher
+    any:
+      - pattern: it($TITLE, $BODY)
+      - pattern: test($TITLE, $BODY)
+      - pattern: it($TITLE, $BODY, $TIMEOUT)
+      - pattern: test($TITLE, $BODY, $TIMEOUT)
+      - pattern: it.each($CASES)($TITLE, $BODY)
+  ask: >-
+    The behaviour this test's name attributes to the code under test is
+    performed by a mock or stub, and the assertion reads back the stub's
+    canned value unchanged.
+  criteria:
+    "true": >-
+      The title says the code under test computes, applies, derives,
+      reserves or returns something, but the function, method or module that
+      would do it is replaced -- the module is under vi.mock or jest.mock
+      with a fake implementation, the method has mockReturnValue or
+      mockResolvedValue, a stubbed global resolves to a fixed payload -- and
+      the value the assertion checks can be traced to that stub's
+      configuration with none of the subject's own logic in between: the
+      constant it was told to return, the payload it was given, its fake's
+      arithmetic. The assertion then checks the test's own setup, and the
+      claimed behaviour never runs.
+    "false": >-
+      The stub stands in for a collaborator the code under test calls -- the
+      network, the clock, a repository, a mailer, an event bus -- and the
+      assertion checks what the real code did with the stub's output rather
+      than the output itself: a value it derived, an error it raised, a
+      call it made, how many times it tried; or the title is itself about
+      the collaborator; or the spy has no replacement value and the real
+      method runs.
+  note: >-
+    A title like "sends an email" whose assertion is about the call on a
+    mocked mailer is not this rule's concern: the mailer is the boundary.
+    Whether an assertion on a mock's call log is strong enough is a separate
+    question.
+
+- id: test-asserts-on-mock
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  # `bare` separates identically (records/family-d-bare.json); kept on
+  # `located` so the file's mock setup is in view, as the brief asked.
+  state: located
+  # Fitted 0.51 on records/family-d-located.json (4 bad, 29 clean, 3 passes,
+  # 0 flips): clean top 0.19, lowest bad 0.84.
+  at: 0.50
+  rule: *js_test_matcher
+  ask: >-
+    This test's name claims an outcome, but its assertions only check that a
+    mock was called.
+  criteria:
+    "true": >-
+      The title states a result or property of what the code under test
+      produces -- content sent, data stored in a certain form, a rejection, a
+      state change -- and every assertion is toHaveBeenCalled,
+      toHaveBeenCalledTimes, or a toHaveBeenCalledWith whose arguments do not
+      include the thing the title claims, so the named outcome could be wrong
+      or absent and the test would pass.
+    "false": >-
+      The title itself claims the interaction -- that something is called,
+      how many times, or not at all -- or the code under test is an adapter
+      whose whole job is that call, or an assertion checks a return value, a
+      thrown error, or call arguments that carry the outcome the title names.
+  note: >-
+    A toHaveBeenCalledWith whose arguments contain the claimed content is a
+    check of the outcome, not a violation. Whether the subject is itself
+    mocked is a separate question.
+
+- id: snapshot-only-behaviour-claim
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  # `bare` separates identically (records/family-d-bare.json); the title and
+  # the snapshot call are both inside the node.
+  state: located
+  # Fitted 0.66 on records/family-d-located.json (4 bad, 29 clean, 3 passes,
+  # 0 flips): clean top 0.44, lowest bad 0.88.
+  at: 0.66
+  rule: *js_test_matcher
+  ask: >-
+    This test's name claims a specific behaviour, but the body only compares
+    a snapshot.
+  criteria:
+    "true": >-
+      The title asserts a property of the output -- an ordering, an element
+      hidden or shown, a particular state or branch rendered under a
+      condition ("renders the empty state when the list is empty"), a format
+      or conversion applied -- and the only assertions are toMatchSnapshot,
+      toMatchInlineSnapshot or toMatchFileSnapshot over a whole rendering, so
+      nothing in the test isolates the named property from everything else
+      in the output.
+    "false": >-
+      The title claims only that the output matches a snapshot, or that
+      something renders, or it only names the input the snapshot was taken
+      of ("renders the list for three users") without asserting a property
+      of the output; or at least one assertion targets the named behaviour
+      directly; or the inline snapshot is a short literal that is itself the
+      named outcome.
+  note: >-
+    A snapshot beside a targeted assertion is fine. "Renders X for input Y"
+    is a label for the snapshot; "renders X when Y" or "hides/sorts/formats
+    X" is a claim the snapshot does not isolate.

@@ -1,0 +1,32 @@
+{
+  "name": "@acme/retry",
+  "version": "1.2.0",
+  "description": "Retry with jitter for fetch-like clients",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "echo ok",
+    "check": "biome check .",
+    "lint:fix": "eslint . --fix",
+    "docs": "typedoc src/index.ts --out docs",
+    "clean": "rm -rf dist && tsc -p tsconfig.build.json",
+    "release": "changeset publish",
+    "postinstall": "patch-package"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@changesets/cli": "^2.27.0",
+    "patch-package": "^8.0.0",
+    "typedoc": "^0.26.0",
+    "typescript": "^5.6.0"
+  }
+}

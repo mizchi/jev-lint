@@ -1,0 +1,359 @@
+{
+  "$default": "clean",
+  "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts": [
+    {
+      "line": 7,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "reason": "validateEmail returns true for the empty string without examining it: the empty path is accepted as valid, and '' is not an email"
+    },
+    {
+      "line": 12,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean for THIS rule, out of scope: sanitizeHtml strips only <script> and is an incomplete sanitiser, but that is a completeness defect needing knowledge of what HTML sanitisation must cover, not a path that skips the check. Asked as a path question it scores 0.39-0.40 (attempt 1); asked 'in full' (attempt 2) it rose to 0.57 but dragged ensureIndex/ensureBucket to 0.55 and the rule stopped separating. Known miss."
+    },
+    {
+      "line": 16,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "reason": "ensureDir swallows every mkdir error, so on EACCES/ENOTDIR it returns normally with the directory not ensured"
+    },
+    {
+      "line": 16,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean for idempotent-name: mkdir recursive is repeat-safe; the swallowed error is guard-name-guards' business"
+    },
+    {
+      "line": 24,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "reason": "verifyWebhookSignature returns true when no signature header is present: an attacker omits the header and the payload is accepted as verified"
+    },
+    {
+      "line": 46,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: the body shows no check of its own, it delegates entirely to a zod schema"
+    },
+    {
+      "line": 55,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: a check* that returns a boolean rather than throwing, and reads a module-level map"
+    },
+    {
+      "line": 66,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: terse assertOk, one condition, throws on failure"
+    },
+    {
+      "line": 70,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: ensure* that is a pure conversion, nothing to check"
+    },
+    {
+      "line": 70,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: ensure* that is pure; nothing to repeat"
+    },
+    {
+      "line": 79,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: verify* reports failure as null rather than throwing; every path that returns claims has checked shape, signature and expiry"
+    },
+    {
+      "line": 91,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "sanitizeFilename uses an allowlist so nothing outside it survives"
+    },
+    {
+      "line": 96,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "checkAgeGate computes and returns the answer on its only path"
+    },
+    {
+      "line": 106,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "reason": "checkRateLimit returns true (allowed) when the counter store throws: the caller reads that as 'checked and under the limit', but on that path the limit was never checked -- it fails open"
+    }
+  ],
+  "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts": [
+    {
+      "line": 4,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "tryParseDate throws RangeError on the exact failure (unparseable date) its name promises to report as null"
+    },
+    {
+      "line": 12,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "safeReadJson catches the read but JSON.parse is outside the try, so a malformed file throws"
+    },
+    {
+      "line": 33,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "getUserOrNull throws NotFoundError on the missing-row case that OrNull promises to return null for"
+    },
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "parsePortOrDefault returns the default only for an absent value and throws RangeError for an invalid one; OrDefault promises the fallback on bad input"
+    },
+    {
+      "line": 39,
+      "label": "clean",
+      "rule": "pure-name-is-pure",
+      "reason": "hard clean for pure-name-is-pure: throws, but touches nothing outside itself"
+    },
+    {
+      "line": 48,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: the only throw is a TypeError on a non-string argument, a programmer error, not the parse failure the name absorbs; parse failure returns null"
+    },
+    {
+      "line": 58,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: no try/catch at all, but no path can throw; missing segments return undefined"
+    },
+    {
+      "line": 72,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: logs in the catch, then returns the fallback; both read and parse are inside the try"
+    },
+    {
+      "line": 84,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "hard clean: try* reporting the failure as false, nothing to catch"
+    },
+    {
+      "line": 91,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "safeDivide returns null on the division failure"
+    },
+    {
+      "line": 98,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "tryRun converts every throw into a result object"
+    },
+    {
+      "line": 106,
+      "label": "clean",
+      "rule": "safe-name-is-safe",
+      "reason": "firstOrUndefined cannot fail"
+    },
+    {
+      "line": 110,
+      "label": "bad",
+      "rule": "safe-name-is-safe",
+      "reason": "tryConnect rethrows on the last attempt, so the connection failure it promises to report as null reaches the caller as a rejection"
+    }
+  ],
+  "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts": [
+    {
+      "line": 5,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "ensureIndex runs CREATE INDEX without IF NOT EXISTS and without checking; a second call fails on the existing index"
+    },
+    {
+      "line": 5,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean for guard-name-guards: the index is created on the only path; what is wrong is the repeat, not a skipped check"
+    },
+    {
+      "line": 12,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "registerHandler pushes onto the array without checking, so a second call registers the handler twice"
+    },
+    {
+      "line": 16,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "setupDatabase runs ALTER TABLE users ADD COLUMN unconditionally between two IF NOT EXISTS statements; the second call fails on the duplicate column. On `local` this scores 0.22-0.28 in every attempt (below the clean setupLogger) -- the model does not bring the SQL knowledge; on `located`, with the file's other IF NOT EXISTS / ON CONFLICT statements in view, it scores 0.64-0.72. Labelled bad because it is one; the arm choice is what decides whether it is caught."
+    },
+    {
+      "line": 22,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "installShutdownHooks adds a fresh SIGTERM/SIGINT listener each call; the second call closes and exits twice"
+    },
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "upsertUser is a plain INSERT with no ON CONFLICT; a second call with the same id violates the primary key"
+    },
+    {
+      "line": 46,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: register* that overwrites by key"
+    },
+    {
+      "line": 50,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: existence check via headBucket before create"
+    },
+    {
+      "line": 50,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: rethrows any error other than NotFound, so the bucket is ensured on every normal path"
+    },
+    {
+      "line": 67,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: reassigns a module-level binding on every call, but the second call leaves the same state as the first"
+    },
+    {
+      "line": 82,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: returns early on a flag it set"
+    },
+    {
+      "line": 91,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "ON CONFLICT DO UPDATE is a true upsert"
+    },
+    {
+      "line": 99,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: ensure* that is a pure conversion"
+    },
+    {
+      "line": 99,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "reason": "hard clean: ensure* that is a pure conversion, nothing to check"
+    },
+    {
+      "line": 106,
+      "label": "clean",
+      "rule": "idempotent-name",
+      "reason": "hard clean: clears the previous interval under the same name before scheduling, so a repeat replaces rather than duplicates"
+    },
+    {
+      "line": 117,
+      "label": "bad",
+      "rule": "idempotent-name",
+      "reason": "setupWorkspace overwrites workspace.json with defaults and appends another .cache/ line to .gitignore on every call; a second call clobbers edits and duplicates the ignore entry"
+    }
+  ],
+  "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts": [
+    {
+      "line": 4,
+      "label": "bad",
+      "rule": "pure-name-is-pure",
+      "reason": "formatDate calls setHours on its argument, mutating the caller's Date"
+    },
+    {
+      "line": 17,
+      "label": "bad",
+      "rule": "pure-name-is-pure",
+      "reason": "computeTotal writes cart.lastTotal on its argument and increments a metric"
+    },
+    {
+      "line": 30,
+      "label": "bad",
+      "rule": "pure-name-is-pure",
+      "reason": "parseConfig takes a path and reads the file; parse* promises a conversion of its input, not I/O"
+    },
+    {
+      "line": 41,
+      "label": "bad",
+      "rule": "pure-name-is-pure",
+      "reason": "deriveSessionKey increments account.keyVersion on its argument; each call derives a different key"
+    },
+    {
+      "line": 48,
+      "label": "bad",
+      "rule": "pure-name-is-pure",
+      "reason": "toSlug records into a module-level Set so the same title yields a different slug on the next call"
+    },
+    {
+      "line": 62,
+      "label": "clean",
+      "rule": "pure-name-is-pure",
+      "reason": "hard clean: toJSON reads this and returns a new object"
+    },
+    {
+      "line": 66,
+      "label": "clean",
+      "rule": "pure-name-is-pure",
+      "reason": "hard clean: toString reads this"
+    },
+    {
+      "line": 71,
+      "label": "clean",
+      "rule": "pure-name-is-pure",
+      "reason": "hard clean: a mutable local accumulator, nothing outside"
+    },
+    {
+      "line": 82,
+      "label": "bad",
+      "rule": "pure-name-is-pure",
+      "reason": "formatMoney writes into a module-level Map (memoised Intl.NumberFormat). Decided in attempt 3: memoisation into a cache that outlives the call counts as an effect, because asking the model to exempt it (attempt 2) halved the margin -- formatMoney fell only to 0.51-0.62 while toSlug fell to 0.79. The finding is accurate: the name does not say the function fills a cache."
+    },
+    {
+      "line": 92,
+      "label": "clean",
+      "rule": "pure-name-is-pure",
+      "reason": "builds and returns local objects"
+    },
+    {
+      "line": 107,
+      "label": "clean",
+      "rule": "pure-name-is-pure",
+      "reason": "hard clean: calls .sort() but on a copy the body made"
+    },
+    {
+      "line": 119,
+      "label": "clean",
+      "rule": "pure-name-is-pure",
+      "reason": "hard clean: assigns into an object, but one it created by spreading defaults"
+    },
+    {
+      "line": 128,
+      "label": "bad",
+      "rule": "pure-name-is-pure",
+      "reason": "calculateShippingCost fetches a quote over the network"
+    },
+    {
+      "line": 141,
+      "label": "clean",
+      "rule": "pure-name-is-pure",
+      "reason": "hard clean: 'log' in the name and a Date construction, but it only formats its argument and returns a string"
+    },
+    {
+      "line": 153,
+      "label": "clean",
+      "rule": "pure-name-is-pure",
+      "reason": "hard clean: 'env' in the name, but the environment is a parameter; the body reads it and returns a new object, and the throw is not an effect"
+    }
+  ]
+}

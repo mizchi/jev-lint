@@ -1,0 +1,45 @@
+{
+  "$default": "clean",
+  "experiments/rule-candidates/d-tests-by-construction/corpus/checkout.test.ts": [
+    { "line": 36, "label": "bad", "rule": "test-mocks-subject", "reason": "title claims the discount is applied; ./discount.ts is under vi.mock with a fake that returns subtotal*0.9, and 90 is that fake's arithmetic" },
+    { "line": 43, "label": "bad", "rule": "test-mocks-subject", "reason": "title claims 8% CA tax is computed; computeTax is a vi.mock returning the constant 8 that the assertion checks" },
+    { "line": 50, "label": "bad", "rule": "test-mocks-subject", "reason": "title claims the total is computed from line items; cart.total is spied with mockReturnValue(100) and the assertion reads that 100 back" },
+    { "line": 56, "label": "clean", "rule": "test-mocks-subject", "reason": "hard clean: vi.spyOn on the subject's own method but no replacement value, so the real total runs and the value assertion sees it" },
+    { "line": 56, "label": "clean", "rule": "test-asserts-on-mock", "reason": "hard clean: title claims the call count itself ('once per checkout'), and a value assertion sits beside it" },
+    { "line": 64, "label": "clean", "rule": "test-mocks-subject", "reason": "hard clean: the repository is mocked (a dependency) while cancelOrder, the subject, runs for real and its rejection is asserted" },
+    { "line": 74, "label": "bad", "rule": "test-mocks-subject", "reason": "title claims stock is reserved; inventory.reserveStock is stubbed with mockResolvedValue and the assertion is that stub's value echoed per item" },
+    { "line": 90, "label": "clean", "rule": "test-mocks-subject", "reason": "hard clean: fake timers replace the clock (a dependency); isCouponActive runs for real" },
+    { "line": 96, "label": "clean", "rule": "test-mocks-subject", "reason": "hard clean: fake timers replace the clock; the subject runs for real" },
+    { "line": 108, "label": "bad", "rule": "test-mocks-subject", "reason": "title claims an ETA is computed from transit days; the fetch stub hands back eta '2024-07-04' verbatim and that is what the assertion checks, so no computation runs" },
+    { "line": 120, "label": "clean", "rule": "test-mocks-subject", "reason": "hard clean: fetch (the network) is stubbed to fail once; the retry the title claims lives in getOrderStatus, which runs for real" },
+    { "line": 120, "label": "clean", "rule": "test-asserts-on-mock", "reason": "hard clean: title claims the interaction ('retries once'), and the call count is that claim; a value assertion follows" },
+    { "line": 131, "label": "clean", "rule": "test-mocks-subject", "reason": "hard clean: the title is about the boundary (posting to the API), and fetch is the boundary" },
+    { "line": 131, "label": "clean", "rule": "test-asserts-on-mock", "reason": "hard clean: title claims the call to the API and toHaveBeenCalledWith carries the payload the title names" }
+  ],
+  "experiments/rule-candidates/d-tests-by-construction/corpus/signup.test.ts": [
+    { "line": 39, "label": "bad", "rule": "test-asserts-on-mock", "reason": "title claims the email carries the display name; the only assertion is toHaveBeenCalled, so an email with no name or the wrong template passes" },
+    { "line": 44, "label": "bad", "rule": "test-asserts-on-mock", "reason": "title claims the stored password is hashed; the only assertion is insert toHaveBeenCalledTimes(1), which holds with the plaintext stored" },
+    { "line": 49, "label": "bad", "rule": "test-asserts-on-mock", "reason": "title claims a rejection; the rejection is swallowed by .catch and the only assertion is that findByEmail was called with the email" },
+    { "line": 55, "label": "clean", "rule": "test-asserts-on-mock", "reason": "hard clean: the assertion is on a mock, but toHaveBeenCalledWith carries the recipient and template the title claims" },
+    { "line": 62, "label": "clean", "rule": "test-asserts-on-mock", "reason": "hard clean: the title claims no email is sent; not.toHaveBeenCalled is that claim, and the rejection is asserted too" },
+    { "line": 67, "label": "clean", "rule": "test-asserts-on-mock", "reason": "hard clean: toHaveBeenCalledWith checks the event name and the id the title names" },
+    { "line": 72, "label": "clean", "rule": "test-asserts-on-mock", "reason": "hard clean: the title claims an ordering of two calls, and the assertions check exactly that ordering" },
+    { "line": 87, "label": "bad", "rule": "test-asserts-on-mock", "reason": "title claims the invitation ends up accepted; the only assertion is update toHaveBeenCalled, with no check of what status was written" },
+    { "line": 98, "label": "clean", "rule": "test-asserts-on-mock", "reason": "hard clean: the title claims the call count ('exactly once') and that is what is asserted" },
+    { "line": 109, "label": "clean", "rule": "test-asserts-on-mock", "reason": "hard clean: SendGridMailer is an adapter whose whole job is the client call; the args assertion carries recipient and subject" },
+    { "line": 109, "label": "clean", "rule": "test-mocks-subject", "reason": "hard clean: the SendGrid client is the adapter's dependency; the adapter runs for real" },
+    { "line": 55, "label": "clean", "rule": "test-mocks-subject", "reason": "hard clean: the mailer is a mocked dependency; signup runs for real" }
+  ],
+  "experiments/rule-candidates/d-tests-by-construction/corpus/order-summary.test.ts": [
+    { "line": 18, "label": "bad", "rule": "snapshot-only-behaviour-claim", "reason": "title claims the error state is rendered on failure; the only assertion is a snapshot of the whole rendering, which would also pass with a recorded loading state" },
+    { "line": 23, "label": "bad", "rule": "snapshot-only-behaviour-claim", "reason": "title claims a price ordering; the only assertion is an inline snapshot of the whole section, in which the order is one detail among many and would be re-recorded if wrong" },
+    { "line": 43, "label": "bad", "rule": "snapshot-only-behaviour-claim", "reason": "title claims a row is hidden; the only assertion is a whole-output snapshot, which passes whether or not the discount row is there" },
+    { "line": 48, "label": "clean", "rule": "snapshot-only-behaviour-claim", "reason": "hard clean: the title claims only that the output matches the snapshot" },
+    { "line": 53, "label": "clean", "rule": "snapshot-only-behaviour-claim", "reason": "hard clean: 'renders' claims nothing specific" },
+    { "line": 57, "label": "clean", "rule": "snapshot-only-behaviour-claim", "reason": "hard clean: a snapshot plus toContain of the error message, which targets the claim" },
+    { "line": 63, "label": "clean", "rule": "snapshot-only-behaviour-claim", "reason": "hard clean: a snapshot plus an assertion on the sku order, which targets the claim" },
+    { "line": 70, "label": "clean", "rule": "snapshot-only-behaviour-claim", "reason": "hard clean: the inline snapshot is a one-line literal that is itself the empty-cart message the title claims" },
+    { "line": 85, "label": "bad", "rule": "snapshot-only-behaviour-claim", "reason": "title claims currency formatting; the only assertion is a snapshot of the whole receipt, which passes with the amounts in EUR" },
+    { "line": 90, "label": "clean", "rule": "snapshot-only-behaviour-claim", "reason": "hard clean: 'renders the receipt for a single-item order' names a scenario, not a behaviour the snapshot would have to isolate" }
+  ]
+}

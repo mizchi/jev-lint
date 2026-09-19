@@ -1,0 +1,459 @@
+{
+  "$default": "clean",
+  "experiments/rule-candidates/c-human-messages/corpus/logging.ts": [
+    {
+      "line": 15,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "info for a failed save inside a catch that rethrows: the operation failed and the caller is left to deal with it, which is error"
+    },
+    {
+      "line": 41,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "error on the ordinary success path of opening a session: a user logging in is a routine event, info at most"
+    },
+    {
+      "line": 51,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "debug for a payment refusal that is returned to the caller as a failure and counted in metrics: an operator-visible outcome hidden at a level that is off in production"
+    },
+    {
+      "line": 69,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "warn for an unrecoverable startup failure followed by process.exit(1): nothing is degraded, the process is gone, which is error or fatal"
+    },
+    {
+      "line": 84,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "error for a cache miss on the normal path that then just fetches and fills the cache: routine, debug at most"
+    },
+    {
+      "line": 169,
+      "window": 0,
+      "label": "bad",
+      "rule": "log-level-matches-event",
+      "reason": "info for a delivery failure after which the message is discarded: data is lost and an operator would want to know, which is warn or error"
+    },
+    {
+      "line": 94,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: error in a catch that recovers by rebuilding, but a snapshot in an unexpected format is genuinely unexpected and an operator should see it"
+    },
+    {
+      "line": 106,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: info for an expired coupon is a routine business rejection returned as a value, not a fault"
+    },
+    {
+      "line": 119,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: debug for per-chunk progress inside the indexing loop; the hot-loop case"
+    },
+    {
+      "line": 131,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: warn for a single failed attempt inside a retry loop that goes on to retry; the word 'failed' in a catch tempts a lazy rule to want error"
+    },
+    {
+      "line": 141,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: warn for a missing config file that the function handles by using defaults; degraded, not failed"
+    },
+    {
+      "line": 149,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: console.error for a usage error in a CLI entry point that returns exit code 2; stderr at error is the convention"
+    },
+    {
+      "line": 33,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "hard clean: info for a rejected login is a routine outcome returned as null, not a fault"
+    },
+    {
+      "line": 158,
+      "window": 0,
+      "label": "clean",
+      "rule": "log-level-matches-event",
+      "reason": "clean: info for a routine, intentional deletion; destructive-sounding but not a fault"
+    }
+  ],
+  "experiments/rule-candidates/c-human-messages/corpus/ui-messages.tsx": [
+    {
+      "line": 13,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Saved' after only enqueuing a persist-draft job; nothing was saved yet and the result of the job is never seen"
+    },
+    {
+      "line": 18,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Request received' after enqueuing is exactly what happened"
+    },
+    {
+      "line": 23,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Email sent' with mailer.send fire-and-forget: not awaited, no result checked, the send may still fail"
+    },
+    {
+      "line": 29,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'Receipt emailed' only after the awaited send reports the address as accepted"
+    },
+    {
+      "line": 39,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Payment successful' is set before the charge promise resolves; the code only reports a failure afterwards"
+    },
+    {
+      "line": 58,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Saving\u2026' as a progress message before the await"
+    },
+    {
+      "line": 76,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Published' after the awaited publish call; the honest sibling of the bad case at line 13"
+    },
+    {
+      "line": 96,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Network error' in a catch that also catches the validation Error thrown for a row with no email; a specific cause claimed by a catch-all"
+    },
+    {
+      "line": 104,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: a generic 'Something went wrong' in a catch-all claims nothing specific"
+    },
+    {
+      "line": 116,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'Copied to clipboard' after the awaited write, on the path where it did not throw"
+    },
+    {
+      "line": 122,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Export complete. Download ready' right after POST /exports returned a job; the export was started, not completed"
+    },
+    {
+      "line": 127,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Invitation sent' after an awaited successful POST to /invites; the code never sends mail itself, but the message restates what the call it awaited is for"
+    },
+    {
+      "line": 132,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'Report scheduled' after posting a schedule"
+    },
+    {
+      "line": 142,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: the message is chosen from the awaited response's ok flag"
+    },
+    {
+      "line": 157,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'You have been unsubscribed' shown immediately, with the unsubscribe request neither awaited nor checked"
+    },
+    {
+      "line": 164,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Project archived' after awaiting a PATCH that sets archived; the soft action is named as what it is"
+    }
+  ],
+  "experiments/rule-candidates/c-human-messages/corpus/handlers.ts": [
+    {
+      "line": 14,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Account permanently deleted' when the handler only sets deletedAt and status: a soft delete described as permanent"
+    },
+    {
+      "line": 25,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: the same soft delete described honestly as closed with retention; the retention claim is about a later process the handler cannot show"
+    },
+    {
+      "line": 35,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Password updated' when the handler only creates a reset token and sends an email; nothing was updated"
+    },
+    {
+      "line": 45,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: the deliberately vague 'if an account exists, a link has been sent' is true of the code, which sends only when a user exists"
+    },
+    {
+      "line": 50,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Cache purge started' with 202 after enqueuing is what happened"
+    },
+    {
+      "line": 55,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Index rebuilt' after only enqueuing a search.rebuild job"
+    },
+    {
+      "line": 63,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: the 400 message names the URL parse failure that reached the catch"
+    },
+    {
+      "line": 72,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'Webhook updated' after the awaited update"
+    },
+    {
+      "line": 82,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: matcher over-match, res.send(toCsv(orders)) is a body, not a message"
+    },
+    {
+      "line": 92,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Subscription cancelled' after an awaited cancel(..., { atPeriodEnd: true }); the message restates the call it follows and adds no claim about timing"
+    },
+    {
+      "line": 106,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'Refund issued' only after the refund's status was checked"
+    },
+    {
+      "line": 112,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'This verification link has expired' for a token that is missing, already used or expired: three visible causes, one named, and expiry is not even the first"
+    },
+    {
+      "line": 123,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: matcher over-match, a plain-text health response is not a claim about an action"
+    }
+  ],
+  "experiments/rule-candidates/c-human-messages/corpus/assertions.ts": [
+    {
+      "line": 8,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "checks quantity > 0 but says 'non-negative': zero fails the check and the message says it should pass"
+    },
+    {
+      "line": 13,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: sku.length > 0 and 'must not be empty' agree"
+    },
+    {
+      "line": 19,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "checks that a user was found but says 'order not found'"
+    },
+    {
+      "line": 24,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires on an empty batch but says 'too many items'"
+    },
+    {
+      "line": 29,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: > MAX_BATCH and 'exceeds' agree"
+    },
+    {
+      "line": 34,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires when the session is absent but says 'expired'; the next line handles expiry separately"
+    },
+    {
+      "line": 40,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: expiresAt < now and 'session expired' agree"
+    },
+    {
+      "line": 47,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires on a currency mismatch but says 'amounts must not be negative'; the sign checks are done above by a helper"
+    },
+    {
+      "line": 52,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires when the frame would run past the end of the buffer, which is an overflow, but says 'underflow'"
+    },
+    {
+      "line": 58,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: 'bad input' is terse but is about the null check"
+    },
+    {
+      "line": 64,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: the compound condition and the message state the same range"
+    },
+    {
+      "line": 70,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: 'cannot proceed without a user' states the consequence of the user check, which counts as matching"
+    },
+    {
+      "line": 76,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: !order and 'order not found' agree"
+    },
+    {
+      "line": 86,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: 'gave up after max attempts' states the consequence of attempt >= max"
+    },
+    {
+      "line": 92,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: 'duplicate ids' names the cause of seen.size !== ids.length rather than the literal condition"
+    },
+    {
+      "line": 97,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: 'start must not exceed end' is end < start said from the other side"
+    },
+    {
+      "line": 103,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: i < 0 from indexOf and 'unknown column' agree"
+    },
+    {
+      "line": 108,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: holder !== who and 'not held by the caller' agree"
+    },
+    {
+      "line": 115,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: size > 0 and 'non-empty' agree"
+    },
+    {
+      "line": 124,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires when the requested page starts past the end of the list but says 'page size must be positive', a different condition entirely"
+    },
+    {
+      "line": 129,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: 'forbidden' names the consequence of role !== admin, terse but about the check"
+    }
+  ]
+}

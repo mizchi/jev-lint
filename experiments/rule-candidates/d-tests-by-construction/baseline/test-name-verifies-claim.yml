@@ -1,0 +1,29 @@
+# Verbatim copy of the shipped rule from rules/naming.yml (cutoff 0.53, bare),
+# run on this family's corpus to measure what it already catches.
+- id: test-name-verifies-claim
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.53
+  axis: file
+  severity: warning
+  rule:
+    any:
+      - pattern: it($TITLE, $BODY)
+      - pattern: test($TITLE, $BODY)
+      - pattern: it($TITLE, $BODY, $TIMEOUT)
+      - pattern: test($TITLE, $BODY, $TIMEOUT)
+      - pattern: it.each($CASES)($TITLE, $BODY)
+  ask: >-
+    This test would still pass if the behaviour its name claims were broken.
+  criteria:
+    "true": >-
+      The body does not establish what the name claims: it asserts nothing at
+      all, it asserts something that would hold whether or not the named
+      behaviour worked, it checks an incidental property such as a length or a
+      type instead of the named behaviour itself, or it never sets up the case
+      the name is about so the assertion never exercises it.
+    "false": >-
+      The body contains at least one assertion that would fail if the named
+      behaviour were broken.

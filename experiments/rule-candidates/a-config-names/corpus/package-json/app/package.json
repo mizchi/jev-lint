@@ -1,0 +1,30 @@
+{
+  "name": "@acme/dashboard",
+  "version": "3.4.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "rm -rf dist",
+    "preview": "vite preview --port 4173",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "prettier --write .",
+    "fmt": "prettier --write .",
+    "typecheck": "eslint . --ext .ts,.tsx",
+    "ci": "npm run lint && npm run typecheck && npm test",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.10.0",
+    "husky": "^9.1.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.6.0",
+    "vite": "^6.0.0",
+    "vitest": "^2.1.0"
+  }
+}

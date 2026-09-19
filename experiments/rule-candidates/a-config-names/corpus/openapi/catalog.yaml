@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: Catalog API
+  version: 0.4.0
+
+paths:
+  /products:
+    get:
+      operationId: searchProducts
+      summary: Search products
+      description: >-
+        Returns products matching `q`. Results are cached for 60 seconds, so
+        a product created moments ago may not appear yet.
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Matching products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      operationId: createProduct
+      summary: Create a product
+      description: >-
+        The request body must include `sku` and `price`; `price` is in the
+        store's default currency.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sku]
+              properties:
+                sku: { type: string }
+                name: { type: string }
+                amountCents: { type: integer }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /products/{sku}:
+    get:
+      operationId: getProduct
+      summary: Get product
+      description: Returns the product, or 404 if no product has that SKU.
+      parameters:
+        - name: sku
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "410":
+          description: The product was discontinued
+    delete:
+      operationId: deleteProduct
+      summary: Delete product
+      description: Removes the product. This cannot be undone.
+      parameters:
+        - name: sku
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /categories:
+    get:
+      operationId: listCategories
+      summary: List categories
+      description: Returns every category as a flat array, sorted by name.
+      responses:
+        "200":
+          description: Categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        name: { type: string }
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        sku: { type: string }
+        name: { type: string }
+        amountCents: { type: integer }

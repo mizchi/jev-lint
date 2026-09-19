@@ -1,0 +1,626 @@
+- id: workflow-step-name
+  language: Yaml
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.44
+  rule:
+    kind: block_mapping
+    inside:
+      kind: block_node
+      inside:
+        kind: block_sequence_item
+    all:
+      - has:
+          kind: block_mapping_pair
+          all:
+            - has:
+                field: key
+                regex: ^name$
+            - has:
+                field: value
+                pattern: $NAME
+      - has:
+          kind: block_mapping_pair
+          has:
+            field: key
+            regex: ^(run|uses)$
+  ask: This workflow step's name ($NAME) misdescribes what the step runs.
+  criteria:
+    "true": "Someone who read only the name would be wrong about what the step does:
+      the command or action performs a different operation than the name states
+      (builds when the name says test, formats when the name says lint, checks
+      out when the name says cache, downloads when the name says upload), it
+      rewrites files when the name promises only a check or a verification, or
+      the step also does something consequential -- publishes, pushes, deploys,
+      deletes, commits -- that is not part of what the name names."
+    "false": The command or action does what the name says. A terse name ("Test",
+      "Install"), a conventional name for a well-known action ("Checkout" for
+      actions/checkout, "Setup Node" for actions/setup-node), or a name that
+      summarises a multi-line script as one operation is not a mismatch, even
+      when that operation conventionally ends in a commit, push or deploy -- a
+      version bump that pushes its tag, a release that publishes, a preview that
+      deploys to a preview environment.
+  note: Judge the name against the `run:` script or the `uses:` action and its
+    `with:` inputs only. Whether the step is placed well, or whether it should
+    exist, is not the question.
+- id: script-name-does
+  language: Json
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.56
+  rule:
+    kind: pair
+    all:
+      - has:
+          field: key
+          pattern: $SCRIPT
+      - has:
+          field: value
+          kind: string
+          pattern: $COMMAND
+    inside:
+      kind: object
+      inside:
+        kind: pair
+        has:
+          field: key
+          regex: ^"scripts"$
+  ask: This npm script's name ($SCRIPT) misdescribes the command it runs ($COMMAND).
+  criteria:
+    "true": 'The command does a different thing than the name states: it prints or
+      exits instead of doing the named work, it rewrites files when the name
+      promises only a check ("lint" running a formatter in write mode), it only
+      deletes when the name promises an artifact ("build" that is just rm -rf),
+      it runs a different tool category than the name says ("typecheck" running
+      a linter, "e2e" running unit tests), it only reports when the name
+      promises to change files ("format" running a linter without a fix flag),
+      or it also does consequential extra work -- publishes, deploys, commits,
+      deletes -- the name does not mention.'
+    "false": The command does what the name says. A terse or abbreviated name, a
+      name that describes the sum of several delegated scripts, a name that
+      covers a family of read-only checks ("lint" that also type-checks, "check"
+      that runs several checkers), an npm lifecycle hook
+      (pre*/post*/prepare/postinstall/version) whose command is the conventional
+      thing to run at that moment, or a tool whose own name differs from the
+      script name but does the named work is not a mismatch.
+  note: Judge only the script name and its command. A `pre<x>` or `post<x>` name
+    promises only "runs before/after x", not x itself, so a `prebuild` that
+    clears the output directory is honouring its name. Whether the tool is a
+    good choice, or whether the script should exist, is not the question.
+- id: openapi-summary-matches-schema
+  language: Yaml
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.58
+  rule:
+    kind: block_mapping
+    inside:
+      kind: block_node
+      inside:
+        kind: block_mapping_pair
+        has:
+          field: key
+          regex: ^(get|post|put|patch|delete|head|options|trace)$
+    all:
+      - has:
+          kind: block_mapping_pair
+          has:
+            field: key
+            regex: ^responses$
+      - any:
+          - all:
+              - has: &a1
+                  kind: block_mapping_pair
+                  all:
+                    - has:
+                        field: key
+                        regex: ^summary$
+                    - has:
+                        field: value
+                        pattern: $SUMMARY
+              - has: &a2
+                  kind: block_mapping_pair
+                  all:
+                    - has:
+                        field: key
+                        regex: ^description$
+                    - has:
+                        field: value
+                        pattern: $DESCRIPTION
+          - has: *a1
+          - has: *a2
+  ask: This operation's summary or description claims something that its
+    parameters, request body or responses contradict.
+  criteria:
+    "true": "A specific claim in the summary or description is false of the schema
+      beside it: it says the response is a list when the success response schema
+      is a single object or the reverse, it names a parameter, field or header
+      the operation does not declare, it states a status code or body shape the
+      responses do not declare, it lists accepted values that differ from an
+      enum, or it calls the operation safe, read-only or free of side effects
+      when the method and responses show it creates, replaces or deletes
+      something."
+    "false": Every checkable claim holds. A summary that is vague, says less than
+      the schema, or does not mention pagination, envelopes or error codes the
+      schema declares is not a contradiction.
+  note: Judge only claims the operation's own parameters, requestBody and
+    responses can confirm or contradict. A claim about authentication, rate
+    limits, other endpoints, or behaviour the schema cannot show is not
+    checkable here and is not a violation. A POST used for a search or query
+    that only reads is not a contradiction.
+- id: guard-name-guards
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: local
+  at: 0.63
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &a3
+              field: name
+              pattern: $NAME
+              regex: ^(validate|sanitize|assert|ensure|check|verify)([A-Z0-9_]|$)
+      - all:
+          - kind: method_definition
+          - has: *a3
+      - all:
+          - kind: variable_declarator
+          - has: *a3
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: This function's name ($NAME) promises a check, but there is a path through
+    its body on which that check is not performed and the function still
+    completes as if it had passed.
+  criteria:
+    "true": "Some path returns, resolves or falls through normally without the check
+      the name promises having been performed: an input is accepted early
+      without being examined, a failure of the operation that would have
+      established the condition is caught and discarded, or a shortcut branch
+      skips the check for some callers or inputs."
+    "false": On every path that completes normally the check the name promises has
+      been performed, by this body or by a schema, library or helper it
+      delegates to. Reporting the outcome by returning false, null or a result
+      object rather than throwing is still performing the check, and a terse
+      name is not a missing check.
+  note: "Only this function's paths are judged, not how thorough its check is: a
+    body that performs the check the name names on every path but could have
+    examined more is not skipping it. A schema, validator or helper the body
+    calls is assumed to check what its own name says. Failing closed --
+    rejecting when the check cannot be run -- honours the name; failing open --
+    accepting when the check cannot be run or was skipped -- does not."
+- id: safe-name-is-safe
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: local
+  at: 0.48
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &a4
+              field: name
+              pattern: $NAME
+              regex: ^(safe|try)([A-Z0-9_]|$)|(OrNull|OrDefault|OrUndefined)$
+      - all:
+          - kind: method_definition
+          - has: *a4
+      - all:
+          - kind: variable_declarator
+          - has: *a4
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: This function's name ($NAME) says that failure is absorbed and reported as
+    a value, but its body has a path on which a failure escapes as a throw or a
+    rejection.
+  criteria:
+    "true": "A failure of the kind the name promises to absorb can reach the caller
+      as an exception or a rejected promise: the operation that can fail is
+      outside any try, the catch rethrows or throws a new error, a failing case
+      is detected and answered with a throw instead of the null, undefined,
+      default, false or result value the name promises, or the fallback itself
+      is computed by something that can fail."
+    "false": "Every failure of the kind the name refers to is turned into the value
+      the name promises: null, undefined, a default, a boolean, or a result
+      object the caller can inspect. A body that cannot fail at all, and so has
+      nothing to catch, honours the name."
+  note: "A throw on a programmer error -- an argument of the wrong type, a misuse
+    of the function's own API -- is not the failure such a name promises to
+    absorb and does not count. Logging before returning the fallback is fine.
+    The failure that counts is the one the name and the parameters are about:
+    parsing, lookup, I/O, connection, conversion."
+- id: idempotent-name
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: located
+  at: 0.47
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &a5
+              field: name
+              pattern: $NAME
+              regex: ^(ensure|upsert|setup|install|register)([A-Z0-9_]|$)
+      - all:
+          - kind: method_definition
+          - has: *a5
+      - all:
+          - kind: variable_declarator
+          - has: *a5
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: This function's name ($NAME) says a repeated call is harmless, but calling
+    it a second time with the same arguments leaves a different result from
+    calling it once.
+  criteria:
+    "true": "The body performs its effect without finding out whether it is already
+      in place, and repeating the effect accumulates or fails: it appends to a
+      list or adds a listener, creates a record, index, table, column or
+      resource that would then exist twice or make the second creation fail,
+      inserts where a matching row may already be, or runs a step that is not
+      itself safe to repeat -- with no existence check, no keyed overwrite and
+      no guard that makes the second call a no-op. One such step is enough, even
+      when the other steps of the body are safe to repeat."
+    "false": "A second call finds the effect already in place and leaves the state
+      as the first call left it: the body checks for existence before acting,
+      writes by key so a repeat overwrites the same entry, assigns rather than
+      appends, uses an operation that is inherently repeatable (put, set, mkdir
+      with recursive, CREATE IF NOT EXISTS, ON CONFLICT), returns early on a
+      flag it sets, or has no effect at all beyond its return value."
+  note: Only this body is judged. A helper it calls whose own name says it is
+    repeat-safe (ensure*, upsert*, put*, set*, *IfNotExists) is assumed to be.
+    Logging on each call, or returning a fresh object each call, is not a
+    different result. A function whose name says ensure but is a pure conversion
+    of its argument has nothing to repeat and is not a violation.
+- id: pure-name-is-pure
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: local
+  at: 0.48
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &a6
+              field: name
+              pattern: $NAME
+              regex: ^(compute|calculate|derive|format|to|parse)([A-Z0-9_]|$)
+      - all:
+          - kind: method_definition
+          - has: *a6
+      - all:
+          - kind: variable_declarator
+          - has: *a6
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: This function's name ($NAME) presents it as a computation of a result from
+    its inputs, but its body changes state outside itself or performs I/O.
+  criteria:
+    "true": The body mutates an argument or something reachable through one, assigns
+      to a module-level binding, a field of `this` or an object it did not
+      create, records into a store that other code reads, logs, emits or
+      increments a metric, or reads or writes a file, network, database,
+      environment, clock or random source -- directly or through a call whose
+      name shows it does so.
+    "false": The body derives its result from its parameters, from `this` and from
+      module-level values it only reads, using only locals it created, and
+      returns it. A mutable local accumulator, a copy of an argument that is
+      then modified, and a local object built up and returned are not effects
+      outside the function.
+  note: Reading `this` in a toJSON, toString or similar method is reading, not
+    writing. Writing into a cache, Map or Set that outlives the call -- a
+    module-level one or one captured from an enclosing scope -- is an effect
+    outside the function even when it is only memoisation. Sorting or mutating a
+    copy the body made itself is not mutating the argument.
+- id: log-level-matches-event
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: local
+  at: 0.6
+  rule:
+    any:
+      - pattern: $LOGGER.$LEVEL($MSG, $$$REST)
+      - pattern: $LOGGER.$LEVEL($MSG)
+  constraints:
+    LEVEL:
+      regex: ^(trace|debug|verbose|info|warn|warning|error|fatal)$
+    LOGGER:
+      regex: (?i)(log|console)
+  ask: The level of this log call ($LEVEL) misstates the severity of what the
+    surrounding code is handling at that point.
+  criteria:
+    "true": "What the code is doing where the call sits belongs at a clearly
+      different level than the one used: the call is at info, debug or trace but
+      sits on a path where the operation has failed and the function gives up,
+      rethrows, exits, discards data or returns a failure the caller must act
+      on; the call is at debug or trace for an outcome the function reports to
+      its caller, such as a refusal or a rejection, rather than for progress or
+      detail on the way to an outcome; the call is at error or fatal but sits on
+      the ordinary success path or on a routine, expected branch such as a cache
+      miss, a normal rejection or a validation failure; or the call is at warn
+      but the code immediately exits or throws with no recovery."
+    "false": "The level fits what the code around the call shows: error or warn
+      where something went wrong that an operator should see, even if the
+      function recovers from it; info for routine outcomes including expected
+      business rejections and refused logins; debug or trace for per-item
+      progress in loops and other chatter; warn for a degraded or transient
+      condition the code goes on to handle; error on stderr for a usage error in
+      a command-line entry point. Whether the message text is well written is
+      not the question."
+  note: Judge the level against the code path the call sits on, not against words
+    in the message. A logger call whose first argument is not a message for a
+    human is not a violation.
+- id: ui-message-honest
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: enclosing
+  state: local
+  at: 0.62
+  rule:
+    any:
+      - all:
+          - any:
+              - pattern: $FN($MSG, $$$REST)
+              - pattern: $FN($MSG)
+          - has:
+              field: function
+              regex: ^(toast|notify|alert|showMessage|showToast|showNotification|showAlert|enqueueSnackbar|setStatus|setMessage|setError|setSuccess|setFeedback)$
+      - all:
+          - any:
+              - pattern: $UI.$KIND($MSG, $$$REST)
+              - pattern: $UI.$KIND($MSG)
+          - has:
+              field: function
+              regex: ^(toast|notify|message|notification|notifications|snackbar|Alert)\.
+      - all:
+          - pattern: $RES.send($MSG)
+          - has:
+              field: function
+              regex: ^(res|reply|response|ctx)\b
+      - all:
+          - kind: call_expression
+          - has:
+              field: function
+              regex: ^(res|reply|response|ctx)\b.*\.(json|send|render)$
+          - has:
+              field: arguments
+              has:
+                kind: object
+                has:
+                  kind: pair
+                  all:
+                    - has:
+                        field: key
+                        regex: ^(message|msg|error|detail|status)$
+                    - has:
+                        field: value
+                        pattern: $MSG
+  ask: This message ($MSG), shown to the user, tells them something other than
+    what the surrounding code actually did.
+  criteria:
+    "true": 'The message states an outcome the code in front of it did not
+      establish: it reports an operation as done or successful when the code
+      only enqueued, scheduled or started it; it reports it as done when the
+      code did not wait for it, so the message is shown before the outcome is
+      known; it reports success when the code holds a result that can express
+      failure and did not look at it; it claims a specific, stronger fact than
+      what was done, such as "permanently deleted" when the code only marks a
+      record; it reports an action the code never performed at all; or, in a
+      catch, it names one specific cause such as a network failure or an expired
+      link when the block also receives failures of another kind that the code
+      above visibly raises.'
+    "false": The message matches what the code did and knows. An awaited call that
+      either completed or threw counts as done, whether or not its return value
+      is inspected. Saying received, started, queued or scheduled after
+      enqueuing is honest. Naming a soft action by its usual word, such as
+      archived, closed or cancelled for a record that was flagged rather than
+      destroyed, is honest unless the message adds a claim the code does not
+      make. A generic failure message in a generic catch is honest. A progress
+      message such as "Saving" before the operation is honest. A message that is
+      vague, terse or could be more specific is not a violation, and a message
+      that restates the intent of the call it follows, such as "invitation sent"
+      after a successful call to an invitations endpoint, is honest.
+  note: Judge only what the enclosing function shows. A claim about what a server,
+    a job or another system will do later, such as data being removed after a
+    retention period, is not checkable here and is not a violation. A call whose
+    argument is not a message for a human, such as a body, a buffer, a
+    health-check string or an empty string, is not a violation.
+- id: assertion-message-matches
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: local
+  at: 0.65
+  rule:
+    any:
+      - pattern: assert($COND, $MSG)
+      - pattern: assert($COND, $MSG, $$$REST)
+      - pattern: invariant($COND, $MSG)
+      - pattern: console.assert($COND, $MSG)
+      - pattern: console.assert($COND, $MSG, $$$REST)
+      - pattern: if ($COND) throw new $TYPE($MSG)
+      - pattern: if ($COND) throw new $TYPE($MSG, $$$REST)
+      - pattern: if ($COND) { throw new $TYPE($MSG) }
+      - pattern: if ($COND) { throw new $TYPE($MSG, $$$REST) }
+  ask: When this check fails, its message ($MSG) tells the reader something untrue
+    about what was wrong, judged against the condition ($COND) that was actually
+    tested.
+  criteria:
+    "true": "The message and the condition disagree about what is being required:
+      the message names a different thing than the one the condition examines,
+      such as an order when the condition tests a user; it states a different
+      bound, direction or sign than the condition, such as non-negative for a
+      check that rejects zero, too many for a check that fires on none, or a
+      term for one direction of overrun when the condition detects the other; it
+      names a different failure than the one the condition detects, such as
+      expired for a check that fires on absence; it is about a different
+      quantity than the one compared, such as a size being positive when the
+      condition compares a position to a length; or it is a copy of another
+      check's message in the same function and describes that check's condition
+      rather than this one."
+    "false": 'The message is about the condition being checked, whether it states
+      the requirement, its negation, the consequence of failing it, or the cause
+      the condition implies: "duplicate ids" for a set that is smaller than the
+      list it was built from is a match, as is "forbidden" for a role check. A
+      message that is terse or generic, that says the same thing from the other
+      side, or that names what cannot proceed rather than the value that failed,
+      is not a mismatch.'
+  note: The check fires when the guard is true for if-throw shapes and when the
+    condition is false for assert and invariant shapes; judge the message
+    against the case in which it is shown. Only the condition and the message
+    are compared; whether the check itself is correct is not the question.
+- id: test-mocks-subject
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: located
+  at: 0.3
+  rule: &a7
+    any:
+      - pattern: it($TITLE, $BODY)
+      - pattern: test($TITLE, $BODY)
+      - pattern: it($TITLE, $BODY, $TIMEOUT)
+      - pattern: test($TITLE, $BODY, $TIMEOUT)
+      - pattern: it.each($CASES)($TITLE, $BODY)
+  ask: The behaviour this test's name attributes to the code under test is
+    performed by a mock or stub, and the assertion reads back the stub's canned
+    value unchanged.
+  criteria:
+    "true": "The title says the code under test computes, applies, derives, reserves
+      or returns something, but the function, method or module that would do it
+      is replaced -- the module is under vi.mock or jest.mock with a fake
+      implementation, the method has mockReturnValue or mockResolvedValue, a
+      stubbed global resolves to a fixed payload -- and the value the assertion
+      checks can be traced to that stub's configuration with none of the
+      subject's own logic in between: the constant it was told to return, the
+      payload it was given, its fake's arithmetic. The assertion then checks the
+      test's own setup, and the claimed behaviour never runs."
+    "false": "The stub stands in for a collaborator the code under test calls -- the
+      network, the clock, a repository, a mailer, an event bus -- and the
+      assertion checks what the real code did with the stub's output rather than
+      the output itself: a value it derived, an error it raised, a call it made,
+      how many times it tried; or the title is itself about the collaborator; or
+      the spy has no replacement value and the real method runs."
+  note: "A title like \"sends an email\" whose assertion is about the call on a
+    mocked mailer is not this rule's concern: the mailer is the boundary.
+    Whether an assertion on a mock's call log is strong enough is a separate
+    question."
+- id: snapshot-only-behaviour-claim
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: node
+  state: located
+  at: 0.66
+  rule: *a7
+  ask: This test's name claims a specific behaviour, but the body only compares a
+    snapshot.
+  criteria:
+    "true": The title asserts a property of the output -- an ordering, an element
+      hidden or shown, a particular state or branch rendered under a condition
+      ("renders the empty state when the list is empty"), a format or conversion
+      applied -- and the only assertions are toMatchSnapshot,
+      toMatchInlineSnapshot or toMatchFileSnapshot over a whole rendering, so
+      nothing in the test isolates the named property from everything else in
+      the output.
+    "false": The title claims only that the output matches a snapshot, or that
+      something renders, or it only names the input the snapshot was taken of
+      ("renders the list for three users") without asserting a property of the
+      output; or at least one assertion targets the named behaviour directly; or
+      the inline snapshot is a short literal that is itself the named outcome.
+  note: A snapshot beside a targeted assertion is fine. "Renders X for input Y" is
+    a label for the snapshot; "renders X when Y" or "hides/sorts/formats X" is a
+    claim the snapshot does not isolate.
+- id: module-naming-consistent
+  languages:
+    - TypeScript
+    - Tsx
+    - JavaScript
+    - Jsx
+  kind: noul
+  subject: file
+  state: full
+  axis: file
+  at: 0.51
+  rule:
+    kind: program
+  ask: This module's public items use different verbs for the same kind of
+    operation.
+  criteria:
+    "true": "Two or more public items do the same kind of thing -- the same
+      operation applied to different nouns, with the same shape of signature --
+      yet their names use different verbs for it: synonyms such as get, fetch,
+      load and retrieve for identical lookups; create, make, new and build for
+      identical constructors; set, update, change and modify for identical
+      setters; send beside dispatch for identical deliveries; or a function that
+      returns a boolean answer like its siblings but is named with a command
+      verb (check, verify, validate) where the siblings are named is, has or
+      can. Swap the nouns and the items would be interchangeable; only the verb
+      differs."
+    "false": "Every difference in verb marks a difference in what the item does, and
+      the difference is visible here: a synchronous read from a cache beside an
+      asynchronous fetch over the network, a lookup by id (get) beside a search
+      by criteria (find), a conventional inverse pair such as parse/stringify or
+      encode/decode, or verbs naming distinct operations such as create, cancel
+      and list. A module with one public item, or whose public items each do a
+      different thing, has nothing to be inconsistent about."
+  note: Judge the public items against each other. Private helpers, imports and
+    call edges are evidence of what each public item does, not subjects.
+    Different nouns are expected; the question is only whether the verbs
+    disagree about the same operation.

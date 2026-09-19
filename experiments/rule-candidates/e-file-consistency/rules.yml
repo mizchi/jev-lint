@@ -1,0 +1,121 @@
+# Family E: consistency among the siblings in one file.
+#
+# Both rules judge the module as a whole (`subject: file`), because the
+# convention a sibling breaks is not written anywhere -- it has to be read off
+# the other siblings. A linter can only check a convention it was told.
+
+- id: module-naming-consistent
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: file
+  # `full`, not `graph`: on the outline alone the hard clean case (a sync cache
+  # `get` beside an async network `fetch`) sat at 0.47 against a weakest defect
+  # of 0.68; with the source it drops to 0.29. The outline has names, not
+  # signatures. Costs the file's source in the state (+20% tokens on 30-line
+  # files; the whole file on a big one).
+  state: full
+  axis: file
+  # Fitted on records/attempt5-full-repeat3.json: 19 modules, 6 defects,
+  # precision 1 recall 1, gap 0.29-0.72, 0 flips over 3 passes.
+  at: 0.51
+  rule:
+    kind: program
+  ask: >-
+    This module's public items use different verbs for the same kind of
+    operation.
+  criteria:
+    "true": >-
+      Two or more public items do the same kind of thing -- the same operation
+      applied to different nouns, with the same shape of signature -- yet their
+      names use different verbs for it: synonyms such as get, fetch, load and
+      retrieve for identical lookups; create, make, new and build for identical
+      constructors; set, update, change and modify for identical setters; send
+      beside dispatch for identical deliveries; or a function that returns a
+      boolean answer like its siblings but is named with a command verb
+      (check, verify, validate) where the siblings are named is, has or can.
+      Swap the nouns and the items would be interchangeable; only the verb
+      differs.
+    "false": >-
+      Every difference in verb marks a difference in what the item does, and
+      the difference is visible here: a synchronous read from a cache beside an
+      asynchronous fetch over the network, a lookup by id (get) beside a search
+      by criteria (find), a conventional inverse pair such as parse/stringify
+      or encode/decode, or verbs naming distinct operations such as create,
+      cancel and list. A module with one public item, or whose public items
+      each do a different thing, has nothing to be inconsistent about.
+  note: >-
+    Judge the public items against each other. Private helpers, imports and
+    call edges are evidence of what each public item does, not subjects.
+    Different nouns are expected; the question is only whether the verbs
+    disagree about the same operation.
+
+- id: sibling-deviates
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: file
+  state: full
+  axis: file
+  # NOT a calibrated cutoff: no cutoff separates on the corpus. 0.65 is the
+  # best trade-off (precision 1, recall 0.86, headroom 0.03 over the highest
+  # clean). See REPORT.md; the `score` form below is the recommended shape.
+  at: 0.65
+  rule:
+    kind: program
+  ask: >-
+    Every public item of this module but one follows the same convention, and
+    the one exception does the same kind of work as the rest.
+  criteria:
+    "true": >-
+      Count the forms the public items take. All but one take the same form --
+      the same kind of name (one shared prefix or suffix, or all
+      question-shaped is/has/can names), the same parameter order, all async
+      or all sync, the same way of reporting failure (returning a Result or
+      null versus throwing) -- and the single remaining item does the same job
+      as the others in a different form, with nothing in the code saying why.
+    "false": >-
+      The items take one form, with no exception; or they take three or more
+      forms with no single exception (several verbs, several shapes: that is
+      inconsistency across the module, not one deviant); or the exception is
+      explained by the code: it is a helper the others call, a combinator over
+      them, a different kind of thing from its siblings (a type, a factory, a
+      placeholder), one of two internally consistent groups, or it carries a
+      comment saying why it differs.
+  note: >-
+    A difference that follows from a genuinely different operation is not a
+    deviation: a cache read has no reason to be async because its siblings
+    hit the network. Judge whether the one item does the same job as its
+    siblings in a different shape.
+
+# The `score` variant of sibling-deviates, tried because the noul landed
+# `rewrite` on graph and mid-scale on the name-level cases: "how far does the
+# one item deviate" is an ordered answer, and a confidence comes with it.
+- id: sibling-deviates-score
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: score
+  subject: file
+  state: full
+  axis: file
+  # 2.5 reports only the signature-level deviants (2.77-2.87, confidence
+  # ~0.8): precision 1, recall 0.57, headroom 0.14, 0 flips. The name-level
+  # deviants and the "everyone differs" clean case share a band at 2.2-2.4
+  # with confidence 0.2-0.35; `at: 2.0` with `unsureBelow: 0.5` reports that
+  # band as questions instead.
+  at: 2.5
+  unsureBelow: 0.5
+  rule:
+    kind: program
+  ask: >-
+    One public item of this module differs in shape from all of its siblings,
+    which agree with each other -- a different form of name, parameter order,
+    async-ness or way of reporting failure -- while doing the same kind of
+    work as they do.
+  note: >-
+    Not applicable when the module has one public item or its items do
+    unrelated work. Satisfied when every item follows one shape; when the
+    items differ from each other in several ways with no majority form (that
+    is inconsistency, not one deviant); when the odd item is a helper the
+    others call or a combinator over them; when the module holds two or more
+    internally consistent groups; or when a comment beside the odd item says
+    why it differs. Names that ask a question (is, has, can, should) count as
+    one form. The more the deviating item's job matches its siblings' and the
+    more of their shape it breaks, the stronger the violation.

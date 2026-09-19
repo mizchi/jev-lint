@@ -1,0 +1,1281 @@
+{
+  "schema": "jev-lint-run-1",
+  "recorded": "2026-09-19T14:44:23.449Z",
+  "model": "jev-1.13.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 24,
+    "inputTokens": 177336,
+    "outputTokens": 6816,
+    "ms": 9103,
+    "retried": 0,
+    "splits": 0,
+    "usd": 0.007448112
+  },
+  "rules": [
+    {
+      "id": "fn-name-promises",
+      "kind": "noul",
+      "ask": "The body of this function does something materially different from what its name promises.",
+      "note": null,
+      "draft": "beea7353af3f",
+      "at": 0.83,
+      "state": "located",
+      "subject": "node",
+      "severity": "warning",
+      "language": "TypeScript"
+    },
+    {
+      "id": "fn-name-promises-rust",
+      "kind": "noul",
+      "ask": "The body of this function does something materially different from what its name promises.",
+      "note": null,
+      "draft": "63c5915004cb",
+      "at": 0.66,
+      "state": "located",
+      "subject": "node",
+      "severity": "warning",
+      "language": "Rust"
+    },
+    {
+      "id": "var-name-describes-value",
+      "kind": "noul",
+      "ask": "This binding's name misdescribes the value it is bound to.",
+      "note": null,
+      "draft": "41453adff090",
+      "at": 0.62,
+      "state": "located",
+      "subject": "node",
+      "severity": "warning",
+      "language": "TypeScript"
+    },
+    {
+      "id": "var-name-describes-value-rust",
+      "kind": "noul",
+      "ask": "This binding's name misdescribes the value it is bound to.",
+      "note": null,
+      "draft": "0b72e56d4803",
+      "at": 0.59,
+      "state": "located",
+      "subject": "node",
+      "severity": "warning",
+      "language": "Rust"
+    },
+    {
+      "id": "test-name-describes-code",
+      "kind": "noul",
+      "ask": "The code in this test does something other than what its name says it does.",
+      "note": null,
+      "draft": "d5fdf2587c3d",
+      "at": 0.93,
+      "state": "bare",
+      "subject": "node",
+      "severity": "warning",
+      "language": "TypeScript"
+    },
+    {
+      "id": "test-name-describes-code-rust",
+      "kind": "noul",
+      "ask": "The code in this test does something other than what its name says it does.",
+      "note": null,
+      "draft": "7e14fe1f39a7",
+      "at": 0.93,
+      "state": "bare",
+      "subject": "node",
+      "severity": "warning",
+      "language": "Rust"
+    },
+    {
+      "id": "test-name-verifies-claim",
+      "kind": "noul",
+      "ask": "This test would still pass if the behaviour its name claims were broken.",
+      "note": null,
+      "draft": "0e7c59b468cd",
+      "at": 0.53,
+      "state": "bare",
+      "subject": "node",
+      "severity": "warning",
+      "language": "TypeScript"
+    },
+    {
+      "id": "test-name-verifies-claim-rust",
+      "kind": "noul",
+      "ask": "This test would still pass if the behaviour its name claims were broken.",
+      "note": null,
+      "draft": "31c08c31d911",
+      "at": 0.53,
+      "state": "bare",
+      "subject": "node",
+      "severity": "warning",
+      "language": "Rust"
+    },
+    {
+      "id": "module-name-describes-contents",
+      "kind": "noul",
+      "ask": "This module's name does not describe what the module contains.",
+      "note": "A module holding one cohesive group of items is not a mismatch merely for holding several of them, and a conventional entry-point name (index, mod, lib, main) is named by its directory rather than by itself.",
+      "draft": "b2cd5b5edc87",
+      "at": 0.62,
+      "state": "graph",
+      "subject": "file",
+      "severity": "info",
+      "language": "TypeScript"
+    },
+    {
+      "id": "module-name-describes-contents-rust",
+      "kind": "noul",
+      "ask": "This module's name does not describe what the module contains.",
+      "note": "A module holding one cohesive group of items is not a mismatch merely for holding several of them, and a conventional entry-point name (index, mod, lib, main) is named by its directory rather than by itself.",
+      "draft": "6f59fdaefc20",
+      "at": 0.52,
+      "state": "graph",
+      "subject": "file",
+      "severity": "info",
+      "language": "Rust"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "module-name-describes-contents",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 1,
+      "endLine": 121,
+      "kind": "noul",
+      "value": 0.8566666666666666,
+      "confidence": null,
+      "arm": "graph"
+    },
+    {
+      "rule": "module-name-describes-contents",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 1,
+      "endLine": 116,
+      "kind": "noul",
+      "value": 0.6999999999999998,
+      "confidence": null,
+      "arm": "graph"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 5,
+      "endLine": 7,
+      "kind": "noul",
+      "value": 0.19666666666666668,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 10,
+      "endLine": 10,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 12,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.08666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 16,
+      "endLine": 20,
+      "kind": "noul",
+      "value": 0.18000000000000002,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 22,
+      "endLine": 31,
+      "kind": "noul",
+      "value": 0.19333333333333336,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 23,
+      "endLine": 28,
+      "kind": "noul",
+      "value": 0.26,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 39,
+      "endLine": 41,
+      "kind": "noul",
+      "value": 0.79,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 44,
+      "endLine": 44,
+      "kind": "noul",
+      "value": 0.10333333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 46,
+      "endLine": 48,
+      "kind": "noul",
+      "value": 0.07333333333333335,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 50,
+      "endLine": 58,
+      "kind": "noul",
+      "value": 0.15333333333333332,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 65,
+      "endLine": 65,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 67,
+      "endLine": 75,
+      "kind": "noul",
+      "value": 0.27,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 82,
+      "endLine": 89,
+      "kind": "noul",
+      "value": 0.14333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 91,
+      "endLine": 97,
+      "kind": "noul",
+      "value": 0.09000000000000001,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 99,
+      "endLine": 102,
+      "kind": "noul",
+      "value": 0.08666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 104,
+      "endLine": 104,
+      "kind": "noul",
+      "value": 0.3,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 106,
+      "endLine": 110,
+      "kind": "noul",
+      "value": 0.16666666666666666,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 107,
+      "endLine": 107,
+      "kind": "noul",
+      "value": 0.12333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 115,
+      "endLine": 115,
+      "kind": "noul",
+      "value": 0.056666666666666664,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/idempotent.ts",
+      "line": 117,
+      "endLine": 120,
+      "kind": "noul",
+      "value": 0.19333333333333336,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 5,
+      "endLine": 5,
+      "kind": "noul",
+      "value": 0.09333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 7,
+      "endLine": 10,
+      "kind": "noul",
+      "value": 0.20000000000000004,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 12,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.27666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 16,
+      "endLine": 22,
+      "kind": "noul",
+      "value": 0.18333333333333335,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 24,
+      "endLine": 36,
+      "kind": "noul",
+      "value": 0.22666666666666666,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 33,
+      "endLine": 33,
+      "kind": "noul",
+      "value": 0.07333333333333335,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 38,
+      "endLine": 42,
+      "kind": "noul",
+      "value": 0.06333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 46,
+      "endLine": 50,
+      "kind": "noul",
+      "value": 0.1466666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 47,
+      "endLine": 47,
+      "kind": "noul",
+      "value": 0.12333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 52,
+      "endLine": 52,
+      "kind": "noul",
+      "value": 0.2333333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 53,
+      "endLine": 53,
+      "kind": "noul",
+      "value": 0.08666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 55,
+      "endLine": 58,
+      "kind": "noul",
+      "value": 0.13333333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 56,
+      "endLine": 56,
+      "kind": "noul",
+      "value": 0.06333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 61,
+      "endLine": 63,
+      "kind": "noul",
+      "value": 0.06333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 66,
+      "endLine": 68,
+      "kind": "noul",
+      "value": 0.20000000000000004,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 70,
+      "endLine": 72,
+      "kind": "noul",
+      "value": 0.056666666666666664,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 79,
+      "endLine": 89,
+      "kind": "noul",
+      "value": 0.27666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 80,
+      "endLine": 80,
+      "kind": "noul",
+      "value": 0.10666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 82,
+      "endLine": 82,
+      "kind": "noul",
+      "value": 0.10666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 86,
+      "endLine": 86,
+      "kind": "noul",
+      "value": 0.12666666666666668,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 91,
+      "endLine": 94,
+      "kind": "noul",
+      "value": 0.11333333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 92,
+      "endLine": 92,
+      "kind": "noul",
+      "value": 0.05333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 96,
+      "endLine": 100,
+      "kind": "noul",
+      "value": 0.08333333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 97,
+      "endLine": 97,
+      "kind": "noul",
+      "value": 0.19999999999999998,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/guards.ts",
+      "line": 106,
+      "endLine": 115,
+      "kind": "noul",
+      "value": 0.5499999999999999,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "module-name-describes-contents",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 1,
+      "endLine": 122,
+      "kind": "noul",
+      "value": 0.7666666666666666,
+      "confidence": null,
+      "arm": "graph"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 4,
+      "endLine": 10,
+      "kind": "noul",
+      "value": 0.20333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 5,
+      "endLine": 5,
+      "kind": "noul",
+      "value": 0.05000000000000001,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 12,
+      "endLine": 20,
+      "kind": "noul",
+      "value": 0.19666666666666668,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 23,
+      "endLine": 25,
+      "kind": "noul",
+      "value": 0.08666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 33,
+      "endLine": 37,
+      "kind": "noul",
+      "value": 0.24333333333333332,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 34,
+      "endLine": 34,
+      "kind": "noul",
+      "value": 0.1366666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 39,
+      "endLine": 46,
+      "kind": "noul",
+      "value": 0.2933333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 41,
+      "endLine": 41,
+      "kind": "noul",
+      "value": 0.06333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 48,
+      "endLine": 56,
+      "kind": "noul",
+      "value": 0.22666666666666668,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 52,
+      "endLine": 52,
+      "kind": "noul",
+      "value": 0.05000000000000001,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 54,
+      "endLine": 54,
+      "kind": "noul",
+      "value": 0.09333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 58,
+      "endLine": 65,
+      "kind": "noul",
+      "value": 0.18333333333333335,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 59,
+      "endLine": 59,
+      "kind": "noul",
+      "value": 0.1366666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 72,
+      "endLine": 80,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 74,
+      "endLine": 74,
+      "kind": "noul",
+      "value": 0.056666666666666664,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 82,
+      "endLine": 82,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 84,
+      "endLine": 89,
+      "kind": "noul",
+      "value": 0.24666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 85,
+      "endLine": 85,
+      "kind": "noul",
+      "value": 0.19333333333333336,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 91,
+      "endLine": 94,
+      "kind": "noul",
+      "value": 0.19666666666666668,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 98,
+      "endLine": 104,
+      "kind": "noul",
+      "value": 0.2333333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 106,
+      "endLine": 108,
+      "kind": "noul",
+      "value": 0.05000000000000001,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 110,
+      "endLine": 121,
+      "kind": "noul",
+      "value": 0.20333333333333337,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 111,
+      "endLine": 111,
+      "kind": "noul",
+      "value": 0.1366666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "module-name-describes-contents",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 1,
+      "endLine": 162,
+      "kind": "noul",
+      "value": 0.8966666666666666,
+      "confidence": null,
+      "arm": "graph"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 4,
+      "endLine": 7,
+      "kind": "noul",
+      "value": 0.6533333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 15,
+      "endLine": 15,
+      "kind": "noul",
+      "value": 0.4266666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 17,
+      "endLine": 23,
+      "kind": "noul",
+      "value": 0.5166666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 18,
+      "endLine": 18,
+      "kind": "noul",
+      "value": 0.09333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 30,
+      "endLine": 33,
+      "kind": "noul",
+      "value": 0.19333333333333336,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 31,
+      "endLine": 31,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 41,
+      "endLine": 44,
+      "kind": "noul",
+      "value": 0.68,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 46,
+      "endLine": 46,
+      "kind": "noul",
+      "value": 0.10666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 48,
+      "endLine": 54,
+      "kind": "noul",
+      "value": 0.5833333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 49,
+      "endLine": 49,
+      "kind": "noul",
+      "value": 0.15000000000000002,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 50,
+      "endLine": 50,
+      "kind": "noul",
+      "value": 0.09999999999999999,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 51,
+      "endLine": 51,
+      "kind": "noul",
+      "value": 0.09333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 57,
+      "endLine": 60,
+      "kind": "noul",
+      "value": 0.05000000000000001,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 62,
+      "endLine": 64,
+      "kind": "noul",
+      "value": 0.07333333333333335,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 66,
+      "endLine": 68,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 71,
+      "endLine": 78,
+      "kind": "noul",
+      "value": 0.12333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 72,
+      "endLine": 72,
+      "kind": "noul",
+      "value": 0.3333333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 73,
+      "endLine": 73,
+      "kind": "noul",
+      "value": 0.07333333333333335,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 95,
+      "endLine": 95,
+      "kind": "noul",
+      "value": 0.07333333333333335,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/safe.ts",
+      "line": 112,
+      "endLine": 112,
+      "kind": "noul",
+      "value": 0.07333333333333335,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 80,
+      "endLine": 80,
+      "kind": "noul",
+      "value": 0.07666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 82,
+      "endLine": 90,
+      "kind": "noul",
+      "value": 0.18000000000000002,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 83,
+      "endLine": 83,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 84,
+      "endLine": 84,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 92,
+      "endLine": 105,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 93,
+      "endLine": 93,
+      "kind": "noul",
+      "value": 0.10333333333333333,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 94,
+      "endLine": 94,
+      "kind": "noul",
+      "value": 0.056666666666666664,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 96,
+      "endLine": 96,
+      "kind": "noul",
+      "value": 0.05000000000000001,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 98,
+      "endLine": 98,
+      "kind": "noul",
+      "value": 0.17333333333333334,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 107,
+      "endLine": 111,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 108,
+      "endLine": 108,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 119,
+      "endLine": 126,
+      "kind": "noul",
+      "value": 0.09000000000000001,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 120,
+      "endLine": 120,
+      "kind": "noul",
+      "value": 0.06666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 122,
+      "endLine": 122,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 128,
+      "endLine": 132,
+      "kind": "noul",
+      "value": 0.15000000000000002,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 129,
+      "endLine": 129,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 130,
+      "endLine": 130,
+      "kind": "noul",
+      "value": 0.07333333333333335,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 141,
+      "endLine": 145,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 142,
+      "endLine": 142,
+      "kind": "noul",
+      "value": 0.08666666666666667,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 143,
+      "endLine": 143,
+      "kind": "noul",
+      "value": 0.6066666666666666,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "fn-name-promises",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 153,
+      "endLine": 161,
+      "kind": "noul",
+      "value": 0.15666666666666665,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "var-name-describes-value",
+      "file": "experiments/rule-candidates/b-guarantee-names/corpus/pure.ts",
+      "line": 154,
+      "endLine": 154,
+      "kind": "noul",
+      "value": 0.05000000000000001,
+      "confidence": null,
+      "arm": "located"
+    }
+  ]
+}

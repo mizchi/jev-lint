@@ -1,0 +1,440 @@
+{
+  "$default": "clean",
+  "experiments/rule-candidates/e-file-consistency/corpus/user_repository.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "getUser / fetchOrder / loadCart / retrieveInvoice are four identical by-id SQL lookups with the same signature; four verbs for one operation."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: inconsistent throughout, no single deviant -- every item differs from every other, so there is no pattern one item breaks."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: inconsistent throughout, no single deviant -- every item differs from every other, so there is no pattern one item breaks."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/factories.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "createOrder / makeInvoice / newCustomer / buildShipment are four identical plain-object constructors; four verbs for one operation."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: four different verbs, no majority pattern for one item to break."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: four different verbs, no majority pattern for one item to break."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/permissions.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "checkAdmin is a boolean predicate like isValid / hasPermission / canEdit / isOwner but named as a command."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "four predicates named is*/has*/can*; checkAdmin does the same work (returns boolean) under a command-shaped name, one deviant."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "four predicates named is*/has*/can*; checkAdmin does the same work (returns boolean) under a command-shaped name, one deviant."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/settings.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "updateTheme / setLocale / changeTimezone / modifyDensity / setFontScale are five identical immutable setters; four verbs for one operation."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: no single deviant -- set* is used twice but three other verbs each once; inconsistency, not a pattern with one exception."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: no single deviant -- set* is used twice but three other verbs each once; inconsistency, not a pattern with one exception."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/notifications.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "sendEmail / sendSms / sendWebhook / dispatchPush are four identical deliveries with the same signature; dispatch is a synonym of send here."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "three send* siblings and one dispatch* doing the same job with the same signature; one deviant in name form."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "three send* siblings and one dispatch* doing the same job with the same signature; one deviant in name form."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/product_source.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: fetchProduct (async, network via ./http), getProduct (sync, cache via ./cache), loadProduct (cache then network) are three different operations; the verbs carry that difference."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: getProduct is the only sync item, but it reads a cache while its siblings hit the network -- the difference follows from the operation."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: getProduct is the only sync item, but it reads a cache while its siblings hit the network -- the difference follows from the operation."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/codec.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: encodeFrame/decodeFrame (bytes) and parseHeader/stringifyHeader (text) are two conventional inverse pairs for two different representations."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: two groups (frame codec, header codec), each internally consistent; no single deviant."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: two groups (frame codec, header codec), each internally consistent; no single deviant."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/rate_limiter.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: one public item (createRateLimiter); private helpers refill/takeOne are not siblings to compare."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: one public item; nothing to deviate from."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: one public item; nothing to deviate from."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/order_service.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: getOrder (by id, throws) vs findOrdersByCustomer (by criteria, list) is the conventional get/find split; createOrder/cancelOrder/listOrders are distinct operations."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: cancelOrder returns void and getOrder throws where find/list do not, but each does a different operation; no one item breaks a shared shape."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: cancelOrder returns void and getOrder throws where find/list do not, but each does a different operation; no one item breaks a shared shape."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/handlers.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: all six exports are handle* with different nouns; verbs agree."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "five handlers return Promise<Result<T>> and report failure with err(); handleArchive returns Promise<Note> and throws for the same not-found case."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "five handlers return Promise<Result<T>> and report failure with err(); handleArchive returns Promise<Note> and throws for the same not-found case."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/project_files.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: all five are read* with different nouns; verbs agree."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "four read* functions are async over fs/promises; readSchema does the same file read synchronously with readFileSync and no reason given."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "four read* functions are async over fs/promises; readSchema does the same file read synchronously with readFileSync and no reason given."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/commands.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: all five are run* with different nouns; verbs agree."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "four commands take (ctx, input); runExport takes (input, ctx) for the same kind of work."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "four commands take (ctx, input); runExport takes (input, ctx) for the same kind of work."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/auth_routes.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: every export uses the same word handle/handler; the disagreement is in position (suffix vs prefix), not in the verb chosen for the operation."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "four exports are *Handler; handleSignup is the same kind of express handler with the word moved to a prefix."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "four exports are *Handler; handleSignup is the same kind of express handler with the word moved to a prefix."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/validators.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: validate* for five checks and fail() for constructing the error they return; different operations, different verbs."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: fail() has a different shape from the five validate* items, but it is the helper every one of them calls."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: fail() has a different shape from the five validate* items, but it is the helper every one of them calls."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/sync.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: diff* (sync, returns Change[]) and push* (async, returns PushReport) are two operations; verbs match operations."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: two groups of three, each internally consistent (three sync diff*, three async push*); no single deviant."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: two groups of three, each internally consistent (three sync diff*, three async push*); no single deviant."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/jobs.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: purge / rebuild / send / rotate / compact are distinct jobs, not one operation under several verbs; noopJob is a placeholder."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: noopJob is the only sync item, and the comment above it says why (installed in a disabled slot, called before an awaitable context exists) -- a deliberate, documented exception."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: noopJob is the only sync item, and the comment above it says why (installed in a disabled slot, called before an awaitable context exists) -- a deliberate, documented exception."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/middleware.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: middleware names are nouns/adjectives for what they do (requestId, noCache, timing) plus compose; there is no repeated operation under different verbs."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: compose(...stack) differs in shape from the five (req, res, next) middlewares, but it is a combinator over them, a different kind of thing."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: compose(...stack) differs in shape from the five (req, res, next) middlewares, but it is a combinator over them, a different kind of thing."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/preferences.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: load/save are the file-level pair (async, path), get/set the in-memory pair (sync, prefs object); two conventional pairs at two layers, plus reset. A lazy rule flags get vs load as synonyms."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: two groups (async load/save on a path; sync get/set on the object) plus resetPreferences, which is a factory for the default; no single deviant."
+    },
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "hard clean: two groups (async load/save on a path; sync get/set on the object) plus resetPreferences, which is a factory for the default; no single deviant."
+    }
+  ],
+  "experiments/rule-candidates/e-file-consistency/corpus/lookups.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "five identical by-id lookups; four are get*, loadInvoice uses a synonym for the same operation."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "four get* siblings with the same signature; loadInvoice does the same job under a different verb, one deviant in name form."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates-score",
+      "window": 1000000,
+      "reason": "four get* siblings with the same signature; loadInvoice does the same job under a different verb, one deviant in name form."
+    }
+  ]
+}

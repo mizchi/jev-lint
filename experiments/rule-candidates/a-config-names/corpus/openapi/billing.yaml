@@ -1,0 +1,205 @@
+openapi: 3.0.3
+info:
+  title: Billing API
+  version: 1.8.0
+
+paths:
+  /invoices:
+    get:
+      operationId: listInvoices
+      summary: List invoices
+      parameters:
+        - name: cursor
+          in: query
+          schema: { type: string }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, open, paid, void]
+      responses:
+        "200":
+          description: A page of invoices
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Invoice"
+                  nextCursor:
+                    type: string
+                    nullable: true
+
+  /invoices/{id}/export:
+    get:
+      operationId: exportInvoice
+      summary: Export an invoice
+      description: >-
+        Renders the invoice in the requested `format`. Accepts `csv` or
+        `json`; the response body is the rendered document.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: format
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [pdf, xlsx]
+      responses:
+        "200":
+          description: The rendered invoice
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+        "404":
+          description: Not found
+
+  /invoices/{id}/void:
+    post:
+      operationId: voidInvoice
+      summary: Void an invoice
+      description: >-
+        Marks the invoice as void. Only invoices in `open` status can be
+        voided; the caller must have the billing:write scope. Returns 404 if
+        the invoice does not exist and 409 if it is already paid.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The voided invoice
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "404":
+          description: Not found
+        "409":
+          description: Invoice is paid and cannot be voided
+
+  /invoices/search:
+    post:
+      operationId: searchInvoices
+      summary: Search invoices
+      description: >-
+        Read-only. Runs the query in the request body against the invoice
+        index and returns the matching invoices. Nothing is created or
+        modified.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query: { type: string }
+                customerId: { type: string }
+                minTotal: { type: number }
+      responses:
+        "200":
+          description: Matching invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+
+  /payments:
+    post:
+      operationId: createPayment
+      summary: Record a payment
+      description: >-
+        Records a payment against an invoice. Rate limited to 10 requests per
+        second per API key; retries should back off exponentially.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [invoiceId, amountCents]
+              properties:
+                invoiceId: { type: string }
+                amountCents: { type: integer, minimum: 1 }
+                method:
+                  type: string
+                  enum: [card, bank_transfer]
+      responses:
+        "201":
+          description: Payment recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+        "422":
+          description: Amount exceeds the invoice balance
+
+  /payments/{id}:
+    get:
+      operationId: getPayment
+      summary: Get a payment
+      description: >-
+        Returns the payment together with its `refunds` array. Pass
+        `expand=invoice` to embed the parent invoice in the response.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The payment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  amountCents: { type: integer }
+                  invoiceId: { type: string }
+        "404":
+          description: Not found
+
+  /webhooks/test:
+    post:
+      operationId: sendTestWebhook
+      summary: Send a test webhook
+      description: >-
+        Delivers a synthetic `invoice.paid` event to the configured endpoint
+        and returns the delivery attempt. Has a side effect on the receiving
+        system.
+      responses:
+        "202":
+          description: Delivery scheduled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attemptId: { type: string }
+                  event: { type: string }
+
+components:
+  schemas:
+    Invoice:
+      type: object
+      properties:
+        id: { type: string }
+        status: { type: string, enum: [draft, open, paid, void] }
+        totalCents: { type: integer }
+    Payment:
+      type: object
+      properties:
+        id: { type: string }
+        invoiceId: { type: string }
+        amountCents: { type: integer }

@@ -1,0 +1,261 @@
+{
+  "schema": "jev-lint-run-1",
+  "recorded": "2026-09-19T14:42:17.057Z",
+  "model": "jev-1.13.0",
+  "arm": null,
+  "cutoffs": {
+    "workflow-step-name": 0.56,
+    "script-name-does": 0.52,
+    "openapi-summary-matches-schema": 0.56
+  },
+  "unsureBelow": null,
+  "spent": {
+    "calls": 9,
+    "inputTokens": 35622,
+    "outputTokens": 1236,
+    "ms": 3450,
+    "retried": 0,
+    "splits": 0,
+    "usd": 0.0014961240000000002
+  },
+  "rules": [
+    {
+      "id": "workflow-step-name",
+      "kind": "noul",
+      "ask": "This workflow step's name ($NAME) misdescribes what the step runs.",
+      "note": "Judge the name against the `run:` script or the `uses:` action and its `with:` inputs only. Whether the step is placed well, or whether it should exist, is not the question.",
+      "draft": "5d9c745f4917",
+      "at": 0.7,
+      "state": "bare",
+      "subject": "node",
+      "severity": "warning",
+      "language": "Yaml"
+    },
+    {
+      "id": "script-name-does",
+      "kind": "noul",
+      "ask": "This npm script's name ($SCRIPT) misdescribes the command it runs ($COMMAND).",
+      "note": "Judge only the script name and its command. A `pre<x>` or `post<x>` name promises only \"runs before/after x\", not x itself, so a `prebuild` that clears the output directory is honouring its name. Whether the tool is a good choice, or whether the script should exist, is not the question.",
+      "draft": "3ceb885778bf",
+      "at": 0.7,
+      "state": "bare",
+      "subject": "node",
+      "severity": "warning",
+      "language": "Json"
+    },
+    {
+      "id": "openapi-summary-matches-schema",
+      "kind": "noul",
+      "ask": "This operation's summary or description claims something that its parameters, request body or responses contradict.",
+      "note": "Judge only claims the operation's own parameters, requestBody and responses can confirm or contradict. A claim about authentication, rate limits, other endpoints, or behaviour the schema cannot show is not checkable here and is not a violation. A POST used for a search or query that only reads is not a contradiction.",
+      "draft": "a94796c1875e",
+      "at": 0.7,
+      "state": "bare",
+      "subject": "node",
+      "severity": "warning",
+      "language": "Yaml"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "script-name-does",
+      "file": "experiments/rule-candidates/a-config-names/corpus/package-json/monorepo/package.json",
+      "line": 6,
+      "endLine": 6,
+      "kind": "noul",
+      "value": 0.8933333333333334,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "script-name-does",
+      "file": "experiments/rule-candidates/a-config-names/corpus/package-json/monorepo/package.json",
+      "line": 7,
+      "endLine": 7,
+      "kind": "noul",
+      "value": 0.58,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "script-name-does",
+      "file": "experiments/rule-candidates/a-config-names/corpus/package-json/monorepo/package.json",
+      "line": 8,
+      "endLine": 8,
+      "kind": "noul",
+      "value": 0.8033333333333333,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "script-name-does",
+      "file": "experiments/rule-candidates/a-config-names/corpus/package-json/monorepo/package.json",
+      "line": 9,
+      "endLine": 9,
+      "kind": "noul",
+      "value": 0.11666666666666665,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "script-name-does",
+      "file": "experiments/rule-candidates/a-config-names/corpus/package-json/monorepo/package.json",
+      "line": 10,
+      "endLine": 10,
+      "kind": "noul",
+      "value": 0.26666666666666666,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "script-name-does",
+      "file": "experiments/rule-candidates/a-config-names/corpus/package-json/monorepo/package.json",
+      "line": 11,
+      "endLine": 11,
+      "kind": "noul",
+      "value": 0.5866666666666666,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "script-name-does",
+      "file": "experiments/rule-candidates/a-config-names/corpus/package-json/monorepo/package.json",
+      "line": 12,
+      "endLine": 12,
+      "kind": "noul",
+      "value": 0.07666666666666667,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "script-name-does",
+      "file": "experiments/rule-candidates/a-config-names/corpus/package-json/monorepo/package.json",
+      "line": 13,
+      "endLine": 13,
+      "kind": "noul",
+      "value": 0.07333333333333335,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "openapi-summary-matches-schema",
+      "file": "experiments/rule-candidates/a-config-names/corpus/openapi/catalog.yaml",
+      "line": 9,
+      "endLine": 27,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "openapi-summary-matches-schema",
+      "file": "experiments/rule-candidates/a-config-names/corpus/openapi/catalog.yaml",
+      "line": 29,
+      "endLine": 51,
+      "kind": "noul",
+      "value": 0.9266666666666667,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "openapi-summary-matches-schema",
+      "file": "experiments/rule-candidates/a-config-names/corpus/openapi/catalog.yaml",
+      "line": 55,
+      "endLine": 71,
+      "kind": "noul",
+      "value": 0.3433333333333333,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "openapi-summary-matches-schema",
+      "file": "experiments/rule-candidates/a-config-names/corpus/openapi/catalog.yaml",
+      "line": 73,
+      "endLine": 85,
+      "kind": "noul",
+      "value": 0.11333333333333333,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "openapi-summary-matches-schema",
+      "file": "experiments/rule-candidates/a-config-names/corpus/openapi/catalog.yaml",
+      "line": 89,
+      "endLine": 106,
+      "kind": "noul",
+      "value": 0.8066666666666666,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "workflow-step-name",
+      "file": "experiments/rule-candidates/a-config-names/corpus/workflows/nightly.yml",
+      "line": 15,
+      "endLine": 16,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "workflow-step-name",
+      "file": "experiments/rule-candidates/a-config-names/corpus/workflows/nightly.yml",
+      "line": 18,
+      "endLine": 23,
+      "kind": "noul",
+      "value": 0.04666666666666667,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "workflow-step-name",
+      "file": "experiments/rule-candidates/a-config-names/corpus/workflows/nightly.yml",
+      "line": 25,
+      "endLine": 26,
+      "kind": "noul",
+      "value": 0.58,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "workflow-step-name",
+      "file": "experiments/rule-candidates/a-config-names/corpus/workflows/nightly.yml",
+      "line": 28,
+      "endLine": 33,
+      "kind": "noul",
+      "value": 0.73,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "workflow-step-name",
+      "file": "experiments/rule-candidates/a-config-names/corpus/workflows/nightly.yml",
+      "line": 35,
+      "endLine": 41,
+      "kind": "noul",
+      "value": 0.1366666666666667,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "workflow-step-name",
+      "file": "experiments/rule-candidates/a-config-names/corpus/workflows/nightly.yml",
+      "line": 43,
+      "endLine": 44,
+      "kind": "noul",
+      "value": 0.9533333333333333,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "workflow-step-name",
+      "file": "experiments/rule-candidates/a-config-names/corpus/workflows/nightly.yml",
+      "line": 46,
+      "endLine": 50,
+      "kind": "noul",
+      "value": 0.19666666666666668,
+      "confidence": null,
+      "arm": "bare"
+    }
+  ]
+}

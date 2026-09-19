@@ -1,0 +1,639 @@
+{
+  "$default": "clean",
+  "experiments/rule-candidates/a-config-names/corpus/workflows/ci.yml": [
+    {
+      "line": 19,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional name for actions/checkout",
+      "window": 0
+    },
+    {
+      "line": 22,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional name for actions/setup-node",
+      "window": 0
+    },
+    {
+      "line": 28,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: terse name over npm ci",
+      "window": 0
+    },
+    {
+      "line": 31,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Run tests, runs npm run build",
+      "window": 0
+    },
+    {
+      "line": 34,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: terse 'Test' over npm test with a coverage flag",
+      "window": 0
+    },
+    {
+      "line": 37,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Lint, also runs npm publish",
+      "window": 0
+    },
+    {
+      "line": 44,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Check formatting, runs prettier --write which rewrites files",
+      "window": 0
+    },
+    {
+      "line": 47,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "upload-artifact of coverage/ is what the name says",
+      "window": 0
+    },
+    {
+      "line": 57,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Checkout",
+      "window": 0
+    },
+    {
+      "line": 60,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Cache dependencies, uses actions/checkout to fetch a fixtures repo",
+      "window": 0
+    },
+    {
+      "line": 66,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "actions/cache on the pnpm store path is what the name says",
+      "window": 0
+    },
+    {
+      "line": 72,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: name does not say playwright, but playwright test is the e2e run",
+      "window": 0
+    },
+    {
+      "line": 75,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Upload coverage, uses actions/download-artifact",
+      "window": 0
+    },
+    {
+      "line": 81,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: name summarises a two-line script that builds docs and deploys a preview branch",
+      "window": 0
+    }
+  ],
+  "experiments/rule-candidates/a-config-names/corpus/workflows/release.yml": [
+    {
+      "line": 20,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Checkout, with fetch-depth",
+      "window": 0
+    },
+    {
+      "line": 25,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Setup Node with registry-url",
+      "window": 0
+    },
+    {
+      "line": 31,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: terse Install",
+      "window": 0
+    },
+    {
+      "line": 34,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: vague 'Verify' summarising lint + typecheck + test",
+      "window": 0
+    },
+    {
+      "line": 40,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Bump version' over git config + npm version + push --follow-tags; pushing the bump commit and tag is part of bumping in CI",
+      "window": 0
+    },
+    {
+      "line": 47,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Type check, runs eslint (a linter), not tsc",
+      "window": 0
+    },
+    {
+      "line": 50,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "npm publish is what the name says",
+      "window": 0
+    },
+    {
+      "line": 55,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: terse Notify over a Slack action",
+      "window": 0
+    },
+    {
+      "line": 63,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Clean up workspace, runs gh release create",
+      "window": 0
+    },
+    {
+      "line": 73,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Checkout",
+      "window": 0
+    },
+    {
+      "line": 76,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Publish docs' summarises install + docs build + gh-pages push; the push is the publish",
+      "window": 0
+    },
+    {
+      "line": 84,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: terse 'Deploy' summarises build + s3 sync + cloudfront invalidation",
+      "window": 0
+    }
+  ],
+  "experiments/rule-candidates/a-config-names/corpus/package-json/app/package.json": [
+    {
+      "line": 7,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: terse dev -> vite dev server",
+      "window": 0
+    },
+    {
+      "line": 8,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "build only deletes dist, produces nothing",
+      "window": 0
+    },
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "vite preview is a preview",
+      "window": 0
+    },
+    {
+      "line": 10,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: test -> vitest run, tool name differs from script name",
+      "window": 0
+    },
+    {
+      "line": 11,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: vitest with no args is watch mode",
+      "window": 0
+    },
+    {
+      "line": 12,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "lint runs prettier --write: formats and rewrites, does not lint",
+      "window": 0
+    },
+    {
+      "line": 13,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: fmt is the abbreviation for format; prettier --write formats",
+      "window": 0
+    },
+    {
+      "line": 14,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "typecheck runs eslint, which does not type check",
+      "window": 0
+    },
+    {
+      "line": 15,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: ci is the sum of delegated scripts",
+      "window": 0
+    },
+    {
+      "line": 16,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: prepare -> husky is the conventional lifecycle hook install",
+      "window": 0
+    }
+  ],
+  "experiments/rule-candidates/a-config-names/corpus/package-json/lib/package.json": [
+    {
+      "line": 15,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: prebuild lifecycle hook that clears dist; a lazy rule reads 'build' and sees rm -rf",
+      "window": 0
+    },
+    {
+      "line": 16,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "tsc -p builds",
+      "window": 0
+    },
+    {
+      "line": 17,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "test prints ok and runs no tests",
+      "window": 0
+    },
+    {
+      "line": 18,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: terse check -> biome check",
+      "window": 0
+    },
+    {
+      "line": 19,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: lint:fix says fix, eslint --fix rewrites on purpose",
+      "window": 0
+    },
+    {
+      "line": 20,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "typedoc generates docs",
+      "window": 0
+    },
+    {
+      "line": 21,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "clean also compiles the project after deleting dist",
+      "window": 0
+    },
+    {
+      "line": 22,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: release -> changeset publish, different tool name, same act",
+      "window": 0
+    },
+    {
+      "line": 23,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: postinstall -> patch-package is the conventional hook",
+      "window": 0
+    }
+  ],
+  "experiments/rule-candidates/a-config-names/corpus/package-json/cli/package.json": [
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "start runs the built entry",
+      "window": 0
+    },
+    {
+      "line": 10,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "esbuild bundle is a build",
+      "window": 0
+    },
+    {
+      "line": 11,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: node --test with strip-types is a test runner",
+      "window": 0
+    },
+    {
+      "line": 12,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: e2e -> playwright test",
+      "window": 0
+    },
+    {
+      "line": 13,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "c8 wrapping npm test is a coverage run",
+      "window": 0
+    },
+    {
+      "line": 14,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "cli up is a migration",
+      "window": 0
+    },
+    {
+      "line": 15,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: db:reset is down --all then up",
+      "window": 0
+    },
+    {
+      "line": 16,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "typecheck also stages and commits every change",
+      "window": 0
+    },
+    {
+      "line": 17,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: watch -> node --watch",
+      "window": 0
+    },
+    {
+      "line": 18,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "fly deploy deploys",
+      "window": 0
+    }
+  ],
+  "experiments/rule-candidates/a-config-names/corpus/openapi/users.yaml": [
+    {
+      "line": 13,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says it returns an array of users; the 200 schema is a single user object",
+      "window": 0
+    },
+    {
+      "line": 34,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says idempotent and safe with no side effects; POST that creates, returns 201 + Location and 409 on duplicate",
+      "window": 0
+    },
+    {
+      "line": 64,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: vague 'Fetches a user', true",
+      "window": 0
+    },
+    {
+      "line": 82,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: idempotent claim on a PUT that replaces, true",
+      "window": 0
+    },
+    {
+      "line": 106,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says requires the orgId query parameter; only id in path is declared",
+      "window": 0
+    },
+    {
+      "line": 125,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says returns 204 with no body; responses declare 200 with a JSON body",
+      "window": 0
+    }
+  ],
+  "experiments/rule-candidates/a-config-names/corpus/openapi/billing.yaml": [
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: summary says less than the paginated envelope schema",
+      "window": 0
+    },
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says format accepts csv or json; enum is pdf, xlsx",
+      "window": 0
+    },
+    {
+      "line": 66,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: scope claim is not checkable here; 404 and 409 claims match responses",
+      "window": 0
+    },
+    {
+      "line": 91,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: read-only POST search returning an array; POST is the transport for the query body",
+      "window": 0
+    },
+    {
+      "line": 119,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: rate-limit claim is not checkable; the rest holds",
+      "window": 0
+    },
+    {
+      "line": 149,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says the response has a refunds array and an expand query parameter; neither is declared",
+      "window": 0
+    },
+    {
+      "line": 175,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: admits a side effect, which the POST/202 shape supports",
+      "window": 0
+    }
+  ],
+  "experiments/rule-candidates/a-config-names/corpus/workflows/nightly.yml": [
+    {
+      "line": 15,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Checkout",
+      "window": 0
+    },
+    {
+      "line": 18,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional name for docker/login-action",
+      "window": 0
+    },
+    {
+      "line": 25,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Install dependencies, also runs npm audit fix --force which rewrites package.json and the lockfile with breaking upgrades",
+      "window": 0
+    },
+    {
+      "line": 28,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Bump version, also publishes to npm; publishing is not part of bumping",
+      "window": 0
+    },
+    {
+      "line": 35,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Release' summarises changeset version + publish + push; all three are the release",
+      "window": 0
+    },
+    {
+      "line": 43,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Upload logs, deletes the logs directory",
+      "window": 0
+    },
+    {
+      "line": 46,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: terse name, gh cache delete --all prunes caches",
+      "window": 0
+    }
+  ],
+  "experiments/rule-candidates/a-config-names/corpus/package-json/monorepo/package.json": [
+    {
+      "line": 6,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "test:e2e runs the unit test directory, not e2e",
+      "window": 0
+    },
+    {
+      "line": 7,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "format runs eslint without --fix: reports, does not format",
+      "window": 0
+    },
+    {
+      "line": 8,
+      "label": "bad",
+      "rule": "script-name-does",
+      "reason": "start builds and starts nothing",
+      "window": 0
+    },
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: pretest lifecycle hook building before tests",
+      "window": 0
+    },
+    {
+      "line": 10,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: lint as an umbrella for static checks; tsc --noEmit reports only",
+      "window": 0
+    },
+    {
+      "line": 11,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: npm `version` lifecycle hook, conventional changeset + git add",
+      "window": 0
+    },
+    {
+      "line": 12,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "hard clean: terse gen -> openapi-typescript codegen",
+      "window": 0
+    },
+    {
+      "line": 13,
+      "label": "clean",
+      "rule": "script-name-does",
+      "reason": "bench runs a benchmark script",
+      "window": 0
+    }
+  ],
+  "experiments/rule-candidates/a-config-names/corpus/openapi/catalog.yaml": [
+    {
+      "line": 9,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: cache-lifetime claim is not checkable; q param and array response hold",
+      "window": 0
+    },
+    {
+      "line": 29,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says body must include sku and price; only sku is required and price is not a property (amountCents is)",
+      "window": 0
+    },
+    {
+      "line": 55,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says 404 if no product has that SKU; responses declare only 200 and 410",
+      "window": 0
+    },
+    {
+      "line": 73,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: vague, cannot-be-undone claim is not checkable; 204/404 hold",
+      "window": 0
+    },
+    {
+      "line": 89,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says the response is a flat array; the 200 schema is an object wrapping a categories array",
+      "window": 0
+    }
+  ]
+}

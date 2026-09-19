@@ -1,0 +1,80 @@
+# Family E: consistency among the siblings in one file.
+#
+# Both rules judge the module as a whole (`subject: file`), because the
+# convention a sibling breaks is not written anywhere -- it has to be read off
+# the other siblings. A linter can only check a convention it was told.
+
+- id: module-naming-consistent
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: file
+  state: full
+  axis: file
+  at: 0.7        # uncalibrated
+  rule:
+    kind: program
+  ask: >-
+    This module's public items use different verbs for the same kind of
+    operation.
+  criteria:
+    "true": >-
+      Two or more public items do the same kind of thing -- the same operation
+      applied to different nouns, with the same shape of signature -- yet their
+      names use different verbs for it: synonyms such as get, fetch, load and
+      retrieve for identical lookups; create, make, new and build for identical
+      constructors; set, update, change and modify for identical setters; send
+      beside dispatch for identical deliveries; or a function that returns a
+      boolean answer like its siblings but is named with a command verb
+      (check, verify, validate) where the siblings are named is, has or can.
+      Swap the nouns and the items would be interchangeable; only the verb
+      differs.
+    "false": >-
+      Every difference in verb marks a difference in what the item does, and
+      the difference is visible here: a synchronous read from a cache beside an
+      asynchronous fetch over the network, a lookup by id (get) beside a search
+      by criteria (find), a conventional inverse pair such as parse/stringify
+      or encode/decode, or verbs naming distinct operations such as create,
+      cancel and list. A module with one public item, or whose public items
+      each do a different thing, has nothing to be inconsistent about.
+  note: >-
+    Judge the public items against each other. Private helpers, imports and
+    call edges are evidence of what each public item does, not subjects.
+    Different nouns are expected; the question is only whether the verbs
+    disagree about the same operation.
+
+- id: sibling-deviates
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: file
+  state: full
+  axis: file
+  at: 0.7        # uncalibrated
+  rule:
+    kind: program
+  ask: >-
+    One public item of this module differs in shape from all of its siblings,
+    which agree with each other.
+  criteria:
+    "true": >-
+      The other public items agree with each other on a shape -- the same
+      form of name (a shared prefix or suffix, or all question-shaped is/has/
+      can names), the same parameter order, all async or all sync, the same
+      way of reporting failure (returning a Result or null versus throwing) --
+      and exactly one item does the same kind of work as they do in a
+      different shape, with nothing in the code marking the departure as
+      intended. The deviation is the one item; the rest are the rule.
+    "false": >-
+      Every public item follows the same shape; or the items differ from each
+      other in several ways at once, with no majority form for one item to
+      break (that is inconsistency, not a deviant); or the departure is
+      accounted for by the code: the odd item is a helper the others call or
+      a combinator over them, it is a different kind of thing from its
+      siblings (a type, a factory, a composer, a placeholder) rather than one
+      more of them, the module holds two or more groups that are each
+      internally consistent, or a comment beside the odd item says why it
+      differs.
+  note: >-
+    A difference that follows from a genuinely different operation is not a
+    deviation: a cache read has no reason to be async because its siblings
+    hit the network. Judge whether the one item does the same job as its
+    siblings in a different shape.
