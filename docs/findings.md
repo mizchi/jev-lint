@@ -48,7 +48,14 @@ Cost, whole corpus, all eight rules: **24 requests, 77k input tokens,
 $0.0032, 4.3 seconds** wall clock at concurrency 4. Review mode on a
 four-function diff: **2 requests, $0.00013, 0.7 seconds**.
 
-Read those precision and recall figures as "the rules separate the classes in a
+Aggregated over all eight rules and all 134 subjects: **27 true positives, 0
+false positives, 0 misses, 107 true negatives.**
+
+With the baseline stated, because on an imbalanced set it has to be: a tool that
+**reports nothing at all** scores 79.9% accuracy on this corpus, at zero recall.
+Accuracy is the wrong number here; the pair above is the honest one.
+
+Read the precision and recall figures as "the rules separate the classes in a
 corpus I wrote", not as a generalisation. Section 5 is what happened on code
 nobody planted.
 
