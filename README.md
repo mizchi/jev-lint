@@ -135,14 +135,33 @@ npx jev-lint init                     # writes .jev-lint.yaml, everything commen
 Uncomment `paths:` so `jev-lint check` needs no argument. The API key is read
 from the environment only, never from that file; `apiKey:` in it is an error.
 
-For Claude Code, the repository is also a plugin: it installs the `jev-lint`
-skill (running it, the shipped packs, a rule cookbook, calibration) and two
-commands, `/jev-lint:review` and `/jev-lint:new-rule`:
+### For a coding agent
+
+The repository ships a skill — how to run jev-lint, which shipped packs to
+use, a cookbook of fourteen validated rules, and the calibration procedure —
+so an agent can add jev-lint to a project or write a rule for it without
+reading this README. Two agents that had never seen the tool each wrote a
+working rule from the skill alone on their first try; the gaps they reported
+are folded into it.
+
+As a Claude Code plugin, which also installs `/jev-lint:review` and
+`/jev-lint:new-rule`:
 
 ```
 /plugin marketplace add mizchi/jev-lint
 /plugin install jev-lint@jev-lint
 ```
+
+As a skill for Claude Code, Codex, Cursor and the other agents the
+[skills](https://skills.sh) CLI knows, into the current project:
+
+```bash
+npx skills add mizchi/jev-lint --skill jev-lint
+```
+
+`--skill jev-lint` matters: the repository also carries `jev-lint-repo`, the
+maintainer's skill for changing jev-lint itself, which is not what a user
+wants.
 
 **Review the diff, not the tree.** Review mode judges only the lines a diff
 touched, which is where the findings concentrate anyway, and costs a
