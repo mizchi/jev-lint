@@ -284,8 +284,10 @@ The state can be built two ways, and the choice is not free.
 - **`--group file`** (default) — one state per file: its source, then every
   match in it. The source is amortised over the matches.
 - **`--group rule`** — one state per rule: only what the matcher caught, from
-  anywhere, each item with its enclosing function as context. No file is ever
-  sent whole.
+  anywhere. No file is ever sent whole. Note what this does and does not carry:
+  the `local` arm attaches a match's enclosing function only when the match is a
+  *fragment* inside one, so a rule whose subject is already a whole function
+  (`fn-name-promises`) gets no context at all and is effectively on `bare`.
 - **`--group auto`** — cost both per rule before asking anything, and pick.
   `--explain-schedule` prints what it decided and why.
 

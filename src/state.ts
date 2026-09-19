@@ -226,11 +226,21 @@ export function buildRuleState({
     language: languages.length === 1 ? languages[0]! : languages,
     reviewing:
       "code selected from across one codebase by a single structural matcher, to be judged item by item against the one rule stated in the questions",
-    // The items are unrelated, and the model has to be told so. In the
-    // file-grouped state the neighbours are genuinely context; here they are
-    // just other work that happens to share a request.
-    note_on_independence:
-      "These items come from different files and have nothing to do with one another. Judge each one only on its own merits; do not compare them, rank them against each other, or let one item's quality influence another's.",
+    // Added only when there ARE neighbours.
+    //
+    // It was unconditional, which was wrong twice. In a one-subject state it
+    // asserts something false about a list of one ("these items come from
+    // different files"), and a false statement in the state is a defect
+    // whatever it does to the answer. It also confounded the measurement it
+    // existed to support: comparing a batched run against a one-subject
+    // baseline was supposed to hold the state shape constant and vary only the
+    // neighbour list, and this sentence varied with neither.
+    ...(subjects.length > 1
+      ? {
+          note_on_independence:
+            "These items come from different files and have nothing to do with one another. Judge each one only on its own merits; do not compare them, rank them against each other, or let one item's quality influence another's.",
+        }
+      : {}),
     subjects: subjects.map((s) => {
       const from = s.subjectLine ?? s.line;
       const to = s.subjectEndLine ?? s.endLine;

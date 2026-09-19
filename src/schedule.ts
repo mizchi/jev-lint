@@ -10,8 +10,11 @@
  *               question -- and on a large repository with a narrow rule, that
  *               is the normal case rather than the exception.
  *   RULE axis   one state per rule, carrying only what the matcher caught from
- *               wherever it caught it, each item with its enclosing function as
- *               context. Cost tracks the matches, not the files.
+ *               wherever it caught it. Cost tracks the matches, not the files.
+ *               It carries an enclosing function only where the match is a
+ *               fragment inside one; a rule matching whole functions gets no
+ *               context at all, which makes the arm loss below sharper, not
+ *               milder.
  *
  * Density is what that trade turns on, it differs per rule in the same run, and
  * it is knowable for free: `collectSubjects` has found every match before a

@@ -111,9 +111,13 @@ batching:
                  dense rule is cheap and a rule matching once in a large file
                  pays for the whole file.
   --group rule   One state per rule: only what the matcher caught, from any
-                 number of files, each with its enclosing function as context.
-                 Far fewer requests -- 14.6x fewer planned on tokio -- and no
-                 file ever sent whole, at the cost of accuracy above.
+                 number of files. Far fewer requests -- 14.6x fewer planned on
+                 tokio -- and no file ever sent whole, at the cost of accuracy
+                 above. It carries a match's enclosing function only where the
+                 match is a FRAGMENT inside one, so a rule matching whole
+                 functions gets no context and lands on "bare".
+                 Switching axis also invalidates every cached verdict, because
+                 the axis is part of the cache key.
   --group auto   Cost both axes per rule before asking anything, and pick the
                  cheaper. Opt in when the token bill matters more than the
                  false-positive rate, and re-run "jevlint calibrate" afterwards,

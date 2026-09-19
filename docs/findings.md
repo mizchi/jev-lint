@@ -360,8 +360,17 @@ Confirmed against the live service while building this.
 ## 9. Batching axis: one state per file, or one per rule?
 
 The state was per FILE: send a file's source, ask about every match in it. The
-alternative is per RULE: send only what the matcher caught, from anywhere, each
-item with its enclosing function as context, and never send a file whole.
+alternative is per RULE: send only what the matcher caught, from anywhere, and
+never send a file whole.
+
+One correction to state up front, because an earlier wording of this section got
+it wrong: the rule axis does **not** reliably substitute "each match's enclosing
+function" for the file. `local` attaches an enclosing function only where the
+match is a *fragment* inside one -- when the match IS a named symbol, `local`
+attaches nothing and the subject is effectively on `bare`. Verified against the
+planner's own states: both `fn-name-promises` variants match whole functions, so
+all 79 of their corpus subjects get zero attached context. That makes the arm
+loss below sharper than first described, not milder.
 
 Both are implemented (`--group file`, `--group rule`), a scheduler costs them
 per rule (`--group auto`), and `tools/grouping.ts` measures them.
@@ -417,6 +426,30 @@ Forcing each axis over the whole corpus, 306 subjects, 15 rules:
 
 **The rule axis carries 2.5x the false positives.** The two axes disagree on
 2.9% of decisions.
+
+#### The decomposition below is confounded, and adversarial review caught it
+
+Four independent reviewers refuted the first version of this section with high
+confidence, and two of their objections stand against the measurement itself
+rather than its wording:
+
+- **The solo-vs-batched comparison does not isolate neighbours.** It was meant
+  to hold the state shape constant and vary only the neighbour list, but
+  `buildRuleState` and `buildState` differ in at least four further ways per
+  subject -- the `reviewing` sentence, the `note_on_independence` sentence
+  (which a one-subject state should never have carried), and a `rule` field
+  swapped for a `file` field. So "context held constant" was not true.
+- **The context change is the LARGER perturbation, not the free one.** Against a
+  same-configuration repeat floor of 0.014, the context change moves answers by
+  0.057 mean absolute delta and the neighbour change by 0.049. The first version
+  of this section had that backwards because it read 0 decision flips as 0
+  effect. The honest statement is that the context change moves values more and
+  that neither effect's impact on *decisions* is measurable on 134 subjects.
+
+What survives is the structural argument two sections down, which does not
+depend on the decomposition: the rule axis removes the whole-file arm, and the
+rule that needs it loses it. That was independently confirmed by the vue
+fallback counts and by the corpus false-positive count.
 
 #### Retraction: it is not anchoring
 
@@ -593,4 +626,7 @@ corpus is written.
 | the comment rules | `subject: enclosing` reported findings at the *container's* line, so every match inside one function collapsed onto one reported line and per-line corpus labels could not tell them apart. Report location and judged subject are now separate concerns: the finding points at the match, the question describes the container. |
 | the comment rules | A promoted subject did not tell the question which node inside the container had matched, which is unanswerable when the container holds several candidates. The matched node is now handed over as `matched`. |
 | the scheduler | Optimising tokens alone silently bought the rule axis's extra false positives. The constraint is now structural (file-bearing arms hold their rule) rather than a cost comparison. |
+| adversarial review | `note_on_independence` ("these items come from different files and have nothing to do with one another") was added to EVERY rule-axis state, including a one-subject state where it is simply false. It also confounded the solo-vs-batched comparison it existed to support, which was supposed to vary only the neighbour list. Now added only when there are neighbours. |
+| adversarial review | The docs described the rule axis as carrying each match's enclosing function. False for any rule whose subject is already a named symbol; corrected above and in the usage text. |
+| adversarial review | Switching axis invalidates **every** cached verdict, because the axis is in the cache key: 193 keys under each axis, 0 shared. `prune` exists but the CLI never calls it, so both sets accumulate. This breaks the "commit the cache, CI lints without a key" workflow the README recommends the moment anyone changes `--group`. Documented in the usage text; the CLI still does not prune. |
 | distribution | `astGrepBin()` resolved `../node_modules/.bin/ast-grep`, which does not exist when npm hoists. Verified by installing the packed tarball into a clean project and linting real files through it. |
