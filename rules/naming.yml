@@ -1,0 +1,300 @@
+# Naming coherence: does the code do what it calls itself?
+#
+# This is the pack to start from, and the choice is not arbitrary. A model of
+# this kind is measured to be good at exactly one family of defect -- code that
+# CONTRADICTS THE CONTRACT IT DECLARES ABOUT ITSELF -- and measured to be poor
+# at anything needing knowledge of a specific API's behaviour (whether `.sort()`
+# defaults to lexicographic order, whether a regex without `/g` matches once).
+# The second family belongs to types, compilers and the linters you already run.
+# The first family has no tool at all, because every instance of it is visible
+# only to a reader who understands both the name and the body.
+#
+# Every rule here is a `noul`: an independent predicate with its own cutoff.
+# They are independent because a badly named variable inside a well named
+# function is one problem, not two, and they need separate cutoffs because
+# same-shaped questions have been measured answering their own defect class
+# anywhere between 0.20 and 0.94. A shared threshold throws away the rules that
+# answer quietly.
+#
+# The `at:` values below were fitted to THIS repository's corpus (8 files, 76
+# subjects, Rust and TypeScript) as the midpoint of each rule's own clean/
+# violation gap. They are a starting point on your code, not a calibration for
+# it: a cutoff fitted to one corpus is an opinion about that corpus. Run
+# `jevlint gaps` first -- if a rule's answers are bunched together, no cutoff
+# will help and the sentence needs rewriting -- then `jevlint calibrate
+# --labels` against your own labels.
+#
+# `state:` values are likewise measured rather than chosen. `tools/arms.mjs`
+# reports precision, recall and class separation per (rule, arm); the numbers
+# behind each choice are in docs/findings.md.
+#
+# The matchers over-match on purpose. A matcher is the half that fails
+# SILENTLY: a node it misses is never asked about and shows up in no report.
+# Level 0 of the score scale and a low noul are how the model says "this one is
+# irrelevant", which is cheaper to read than to prevent.
+
+# --------------------------------------------------------------------------
+# 1. Does a function do what its name promises?
+# --------------------------------------------------------------------------
+- id: fn-name-promises
+  languages: [TypeScript, Tsx]
+  kind: noul
+  subject: node
+  # `located`. Every arm separates this rule's classes perfectly on the corpus,
+  # so the choice was made on MARGIN rather than on accuracy: giving the
+  # question the file widened the distance between the clean and defective class
+  # means from 0.65 to 0.81, and a wider margin is a rule whose cutoff matters
+  # less. `full` was marginally wider again (0.82) and costs the state budget of
+  # the symbol table on top of the source, which buys nothing here.
+  #
+  # Worth recording that this contradicts a published measurement on a related
+  # rule shape, where adding the file cut false positives AND increased misses.
+  # It did not reproduce here, and the reason looks like the question: a
+  # reviewer-action score is a judgment the file can dilute, while "does this
+  # name describe this body" is one the file can supply evidence for.
+  state: located
+  at: 0.61
+  severity: warning
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: { field: name, pattern: $NAME }
+      - all:
+          - kind: method_definition
+          - has: { field: name, pattern: $NAME }
+      - all:
+          - kind: variable_declarator
+          - has: { field: name, pattern: $NAME }
+          - has:
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: &fn_ask >-
+    The body of this function does something materially different from what its
+    name promises.
+  criteria: &fn_criteria
+    # Both branches describe situations visible in the function's own text. An
+    # exception phrased in terms of something the subject cannot show -- "unless
+    # the caller needs it" -- makes every answer land mid-scale, which looks
+    # like a threshold problem and is not one.
+    "true": >-
+      Someone who read only the name and the parameter list would be wrong about
+      what this function does: it returns a different kind of thing than the name
+      suggests, it changes state when the name says it only reads or checks, it
+      can fail or return nothing when the name promises a value, it handles only
+      a narrower case than the name claims, or it does substantial work the name
+      does not mention at all.
+    "false": >-
+      The name and parameter list describe what the body actually does. Someone
+      who read only them would not be surprised by the body, even if a longer or
+      more specific name could be imagined.
+
+- id: fn-name-promises-rust
+  language: Rust
+  kind: noul
+  subject: node
+  state: located
+  at: 0.59
+  severity: warning
+  rule:
+    all:
+      - kind: function_item
+      - has: { field: name, pattern: $NAME }
+      # Test functions get their own rule below, which asks a sharper question.
+      - not:
+          follows:
+            kind: attribute_item
+            regex: "test"
+  # Anchors, so the sentence exists once. ast-grep rejects a node kind that is
+  # not in the target grammar, so the matcher has to be per-language -- but the
+  # question does not, and two copies of a question drift.
+  ask: *fn_ask
+  criteria: *fn_criteria
+
+# --------------------------------------------------------------------------
+# 2. Does a variable's name describe the value bound to it?
+# --------------------------------------------------------------------------
+- id: var-name-describes-value
+  languages: [TypeScript, Tsx]
+  kind: noul
+  subject: node
+  # `located`, not `bare`, and this one was MEASURED rather than chosen.
+  #
+  # On `bare` this rule is not separable at any cutoff (precision 0.75): the
+  # subject is the declaration alone, and `const timeoutSeconds = 5000` is only
+  # wrong if you know 5000 is milliseconds -- which is visible where the binding
+  # is USED, not where it is declared. Giving the question the file moved the
+  # class means from 0.54 apart to 0.87 apart and made it separable.
+  #
+  # This is the general rule, and it is not "more context is better": it is that
+  # a question must be able to see its own answer. See docs/findings.md.
+  state: located
+  at: 0.62
+  severity: warning
+  rule:
+    all:
+      - kind: variable_declarator
+      - has: { field: name, pattern: $NAME }
+      - has: { field: value, pattern: $VALUE }
+      # Functions are judged by `fn-name-promises`; this rule is about values.
+      - not:
+          has:
+            any:
+              - kind: arrow_function
+              - kind: function_expression
+  ask: &var_ask >-
+    This binding's name misdescribes the value it is bound to.
+  criteria: &var_criteria
+    "true": >-
+      The name states a type, unit, shape, quantity or meaning that the
+      initializer does not produce: a plural name bound to a single item or a
+      singular name bound to a collection, a name that reads as a boolean bound
+      to something that is not one, a name naming one unit while the value is in
+      another, a name saying it holds a value while it holds a function or a
+      promise, or a name describing a different thing entirely from what the
+      initializer computes.
+    "false": >-
+      The name is an accurate description of what the initializer produces, even
+      if it is terse or a clearer name could be imagined. Being short or generic
+      is not a mismatch.
+
+- id: var-name-describes-value-rust
+  language: Rust
+  kind: noul
+  subject: node
+  # Same measurement as the TypeScript variant above: not separable on `bare`,
+  # separable on `located`, and on `bare` it was also the one rule whose
+  # decision FLIPPED between two runs of the same corpus.
+  state: located
+  at: 0.6
+  severity: warning
+  rule:
+    all:
+      - kind: let_declaration
+      - has: { field: pattern, pattern: $NAME }
+      - has: { field: value, pattern: $VALUE }
+  ask: *var_ask
+  criteria: *var_criteria
+
+# --------------------------------------------------------------------------
+# 3. Does a test verify what its name says it verifies?
+# --------------------------------------------------------------------------
+#
+# The sharpest rule in the pack, because the matcher hands the question both
+# halves of the comparison by name: the title string and the body. A question
+# whose two subjects are named explicitly is answerable; "is this test good" is
+# not.
+- id: test-name-matches-body
+  languages: [TypeScript, Tsx]
+  kind: noul
+  subject: node
+  # `bare` -- the only rule in the pack that keeps the cheapest arm, and the
+  # reason is that its subject already contains both things being compared. The
+  # matcher captures the title and the body, so the file adds no evidence: it
+  # widened the class margin from 0.82 to 0.90, which changes no decision, and
+  # every arm scored precision 1.0 and recall 1.0.
+  #
+  # Staying on `bare` buys something the wider margin does not: a verdict that
+  # depends on nothing outside the test itself. Editing an unrelated test in the
+  # same file cannot change this one's answer, and cannot invalidate its cached
+  # verdict either.
+  state: bare
+  at: 0.6
+  severity: warning
+  rule:
+    any:
+      - pattern: it($TITLE, $BODY)
+      - pattern: test($TITLE, $BODY)
+      - pattern: it($TITLE, $BODY, $TIMEOUT)
+      - pattern: test($TITLE, $BODY, $TIMEOUT)
+      - pattern: it.each($CASES)($TITLE, $BODY)
+  ask: &test_ask >-
+    This test does not verify the behaviour its name describes.
+  criteria: &test_criteria
+    "true": >-
+      What the body actually asserts is materially different from the behaviour
+      named in the title: it checks a different condition, exercises a different
+      case, asserts the opposite outcome, asserts something so weak that the
+      named behaviour would still be broken if it passed, never sets up the case
+      the title names, or asserts nothing at all.
+    "false": >-
+      The assertions in the body check the behaviour the title describes, and
+      would fail if that behaviour were broken.
+
+- id: test-name-matches-body-rust
+  language: Rust
+  kind: noul
+  subject: node
+  state: bare
+  at: 0.54
+  severity: warning
+  rule:
+    all:
+      - kind: function_item
+      - has: { field: name, pattern: $NAME }
+      - follows:
+          kind: attribute_item
+          regex: "test"
+  ask: *test_ask
+  criteria: *test_criteria
+
+# --------------------------------------------------------------------------
+# 4. Is a module named for what it contains?
+# --------------------------------------------------------------------------
+#
+# The one judgment in this pack with no node to point at, and the reason
+# `subject: file` and the `graph` arm exist. A file's text never mentions its
+# own path, so this question is unanswerable from any amount of source -- not
+# because the model is weak but because the evidence is genuinely absent. The
+# subject is the module's OUTLINE: its path, its public items, its imports.
+- id: module-name-describes-contents
+  languages: [TypeScript, Tsx]
+  kind: noul
+  subject: file
+  # `graph`, chosen for robustness rather than for the corpus score. `located`
+  # and `full` had slightly wider margins here, but both put the file's full
+  # text in the state -- and this is the one rule that must work on a
+  # 3000-line file, where the source alone exceeds the 32Ki state budget and the
+  # batch planner would silently step the arm down anyway. `graph` carries the
+  # path, the imports and the symbol table in a few hundred tokens whatever the
+  # file's size, so the rule behaves the same on a large module as on a small
+  # one. Every arm scored precision 1.0 and recall 1.0 on the corpus.
+  state: graph
+  at: 0.59
+  severity: info
+  rule:
+    kind: program
+  ask: &mod_ask >-
+    This module's name does not describe what the module contains.
+  criteria: &mod_criteria
+    "true": >-
+      The filename and path name a subject that the module's public items do not
+      match: the items belong to a different concern than the name states, the
+      name names one thing while the module holds an unrelated assortment, the
+      name is narrower or broader than the items it holds, or the name is a
+      placeholder such as utils, helpers, misc, common or manager for items that
+      share a concern that could be named.
+    "false": >-
+      The filename and path describe what the module's public items are about,
+      closely enough that someone looking for those items would look here.
+  note: >-
+    A module holding one cohesive group of items is not a mismatch merely for
+    holding several of them, and a conventional entry-point name (index, mod,
+    lib, main) is named by its directory rather than by itself.
+
+- id: module-name-describes-contents-rust
+  language: Rust
+  kind: noul
+  subject: file
+  state: graph
+  at: 0.48
+  severity: info
+  rule:
+    kind: source_file
+  ask: *mod_ask
+  criteria: *mod_criteria
+  note: >-
+    A module holding one cohesive group of items is not a mismatch merely for
+    holding several of them, and a conventional entry-point name (index, mod,
+    lib, main) is named by its directory rather than by itself.

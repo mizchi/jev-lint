@@ -1,0 +1,41 @@
+{
+  "name": "jevlint",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A natural-language linter: ast-grep picks the code, a sentence you write is the rule, and Jev returns the verdict",
+  "type": "module",
+  "bin": {
+    "jevlint": "./src/cli.mjs"
+  },
+  "exports": {
+    ".": "./src/run.mjs",
+    "./rules": "./src/rules.mjs",
+    "./gate": "./src/gate.mjs"
+  },
+  "files": [
+    "src",
+    "rules",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node test/test.mjs",
+    "check": "node src/cli.mjs check corpus",
+    "review": "node src/cli.mjs review",
+    "rules": "node src/cli.mjs rules",
+    "gaps": "node src/cli.mjs gaps corpus",
+    "calibrate": "node src/cli.mjs calibrate corpus --labels corpus/labels.json --repeat 3",
+    "arms": "node tools/arms.mjs --repeat 2",
+    "labels": "node corpus/build-labels.mjs",
+    "labels:check": "node corpus/build-labels.mjs --check",
+    "replay": "node src/cli.mjs replay docs/data/calibration.json",
+    "dry": "node src/cli.mjs check corpus --dry-run --cache none",
+    "ci": "npm run labels:check && npm test && npm run replay"
+  },
+  "dependencies": {
+    "@ast-grep/cli": "^0.45.3",
+    "yaml": "^2.9.1"
+  }
+}

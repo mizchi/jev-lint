@@ -1,0 +1,7 @@
+node_modules/
+# The verdict cache. Commit it if you want CI to lint without an API key and
+# reviewers to see the same verdicts you did; leave it ignored if you would
+# rather pay the warm pass on every CI run. Whichever you pick, treat it as
+# trusted input -- anything that can edit it can silence a rule.
+.jevlint-cache.json
+*.tmp
