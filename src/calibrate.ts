@@ -234,7 +234,12 @@ export function stabilityReport(
   for (const run of runs) {
     for (const f of run) {
       if (typeof f.value !== "number") continue;
-      const key = `${f.rule}\u0000${f.file}\u0000${f.line}`;
+      // The TEXT is part of the identity, exactly as in the gap table's merge:
+      // one line can hold several subjects for one rule -- `const a = 1, b = 2`
+      // is two bindings -- and keying on the line alone averages them together,
+      // so their spread, distance and flip counts come out across different
+      // subjects. The gap table was fixed for this; this table was not.
+      const key = `${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
       if (!bySubject.has(key)) bySubject.set(key, { rule: f.rule, file: f.file, line: f.line, values: [] });
       bySubject.get(key)!.values.push(f.value!);
     }

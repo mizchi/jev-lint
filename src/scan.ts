@@ -25,6 +25,7 @@ import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { promisify } from "node:util";
 import YAML from "yaml";
+import { PROBE_PREFIX } from "./types.ts";
 import type {
   AstGrepMatch,
   FileSymbols,
@@ -38,8 +39,8 @@ import type {
 const execFileAsync = promisify(execFile);
 const HERE = dirname(fileURLToPath(import.meta.url));
 
-/** Reserved id prefix. A user rule may not start with this. */
-export const PROBE_PREFIX = "__jevlint_";
+/** Reserved id prefix; `rules.ts` rejects a user rule that starts with it. */
+export { PROBE_PREFIX };
 
 /** ast-grep's own exit code when a scan produced findings. Not an error. */
 const EXIT_FOUND = 1;

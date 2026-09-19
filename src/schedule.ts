@@ -82,6 +82,7 @@
  *     safety threshold -- there is no safe threshold to find.
  */
 import { estimateTokens, planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
+import { USD_PER_MTOK } from "./jev.ts";
 import type { Batch, Grouping, Rule, StateArm, Subject, SymbolIndex } from "./types.ts";
 
 /**
@@ -355,7 +356,7 @@ export function explain(s: Schedule): string {
   out.push("  file-bearing arm (located/full) that the rule axis would have to strip.");
   out.push("");
   const row = (label: string, t: { requests: number; tokens: number }) =>
-    `  ${label.padEnd(16)} ${String(t.requests).padStart(5)} request(s)  ${t.tokens.toLocaleString().padStart(11)} tokens  $${((t.tokens / 1e6) * 0.042).toFixed(5)}`;
+    `  ${label.padEnd(16)} ${String(t.requests).padStart(5)} request(s)  ${t.tokens.toLocaleString().padStart(11)} tokens  $${((t.tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`;
   // All three rows are over the same subject set, and the count is stated.
   // They used to be printed beside a plan built over a different set -- the
   // uncached remainder -- which made them disagree with the run they described

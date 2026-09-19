@@ -31,6 +31,7 @@ import {
 import { ARMS, ARM_BLURB } from "./state.ts";
 import { DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { Cache, DEFAULT_CACHE_PATH } from "./cache.ts";
+import { USD_PER_MTOK } from "./jev.ts";
 import { GROUP_MODES, STATE_ARMS } from "./types.ts";
 import type { Finding, GroupMode, Labels, Rule, RunResult, StateArm, Subject } from "./types.ts";
 import { explain, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
@@ -401,7 +402,7 @@ async function main(argv: string[]): Promise<number> {
       );
     }
     if (result.batches.length > 40) out(`  … and ${result.batches.length - 40} more`);
-    out(`~${tokens.toLocaleString()} input tokens, ~$${((tokens / 1e6) * 0.042).toFixed(5)}`);
+    out(`~${tokens.toLocaleString()} input tokens, ~$${((tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
     const silent = silentRules(result);
     if (silent.length) out(`${silent.length} rule(s) matched nothing: ${silent.join(", ")}`);
     return 0;

@@ -69,8 +69,19 @@ const SUBJECT_TEXT_LIMIT = 4000;
  * Above this the question names it by line range and lets the model find it in
  * the state -- which only works on an arm that carries the source. A line range
  * alone is a weak subject for a short node, so the limit is generous.
+ *
+ * That caveat went unenforced for a long time, and `buildQuestion` now honours
+ * it: on a sourceless arm the code travels with the question however long it
+ * is, truncated rather than omitted. Before that, 111 of this repository's
+ * subjects -- 8% of them -- were asked about code the request did not contain
+ * anywhere. `comment-describes-block` sits on `bare` and matches whole blocks,
+ * so it was the rule most affected, and it is also the one rule that has never
+ * separated on either axis.
  */
 export const INLINE_LIMIT = 900;
+
+/** The arms whose state carries the file's own source. */
+export const SOURCE_BEARING_ARMS = new Set<StateArm>(["located", "full"]);
 
 /**
  * Strip a symbol down to what is worth spending tokens on.
@@ -462,7 +473,7 @@ export function capturedMetavariables(match: AstGrepMatch): Record<string, strin
   return out;
 }
 
-function truncate(text: string): string {
+export function truncate(text: string): string {
   return text.length > SUBJECT_TEXT_LIMIT
     ? `${text.slice(0, SUBJECT_TEXT_LIMIT)}\n/* … truncated … */`
     : text;

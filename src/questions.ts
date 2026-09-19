@@ -25,7 +25,7 @@
  *     exceptions in terms of what the subject itself reveals.
  */
 import { SCORE_LEVELS } from "./rules.ts";
-import { INLINE_LIMIT } from "./state.ts";
+import { INLINE_LIMIT, SOURCE_BEARING_ARMS, truncate } from "./state.ts";
 import type { Answer, Question, Rule, RuleKind, Subject } from "./types.ts";
 
 /** Stable question name, so answers can be matched back positionally. */
@@ -83,6 +83,13 @@ export function buildQuestion(rule: Rule, subject: Subject, id: string): Questio
     delete shared.matched_because;
   } else if (subject.text.length <= INLINE_LIMIT) {
     shared.code = subject.text;
+  } else if (!subject.arm || !SOURCE_BEARING_ARMS.has(subject.arm)) {
+    // Over the inline limit, and the state has no source to point a line range
+    // at. Truncated code beats none: the alternative is a question whose
+    // subject appears nowhere in the request, which is the failure mode this
+    // whole design treats as the most expensive one -- every answer lands
+    // mid-scale and it reads as a threshold problem.
+    shared.code = truncate(subject.text);
   }
 
   if (rule.kind === "noul") {

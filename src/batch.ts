@@ -239,7 +239,13 @@ export function planBatches(
     let current: Subject[] = [];
     let questionTokens = 0;
     for (const s of items) {
-      const cost = estimateTokens(buildQuestion(s.rule, s, questionId(0))) + QUESTION_ENTRY_OVERHEAD;
+      // Sized at the EFFECTIVE arm, because a question's size depends on it:
+      // a subject over the inline limit carries its code only when the state
+      // has no source to point at. Sizing at the declared arm undercounts
+      // exactly the batches that stepped down.
+      const cost =
+        estimateTokens(buildQuestion(s.rule, { ...s, arm: effectiveArm }, questionId(0))) +
+        QUESTION_ENTRY_OVERHEAD;
       // Re-measured per addition, because the subject list is part of the
       // state and therefore not fixed overhead. Both budgets are independent
       // and the state's fills first, so both are checked.

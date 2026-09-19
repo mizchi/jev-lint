@@ -15,6 +15,7 @@ import { mkdtempSync, writeFileSync, rmSync, mkdirSync, existsSync } from "node:
 import { tmpdir } from "node:os";
 import { join, isAbsolute } from "node:path";
 
+import { PROBE_PREFIX } from "../src/types.ts";
 import {
   normalizeRule,
   loadRules,
@@ -272,6 +273,20 @@ test("rules: an out-of-range or mistyped cutoff is rejected per kind", () => {
     "a noul cutoff above 1 must be rejected",
   );
   assert.ok(normalizeRule({ id: "s", language: "TypeScript", rule: {}, ask: "a", at: "2" }).error);
+});
+
+test("rules: a reserved probe id is an error, not a silently dead rule", () => {
+  // The prefix was reserved by comment only. A rule id starting with it had
+  // every match routed into the probe stream, produced no subjects, and showed
+  // up in the report as a `silent` rule with no explanation -- a silent matcher
+  // failure, which is the failure mode this design spends the most effort
+  // avoiding.
+  const r = normalizeRule(
+    { id: `${PROBE_PREFIX}mine`, language: "TypeScript", rule: { kind: "x" }, ask: "a?" },
+    "t",
+  );
+  assert.ok(r.error, "a reserved id must be rejected");
+  assert.match(r.error, /reserved/);
 });
 
 test("rules: an unknown field is an error, so a typo cannot silently do nothing", () => {
@@ -1167,13 +1182,26 @@ test("gate: findings rank by distance past their own cutoff, not by raw value", 
 
 // ----------------------------------------------------------------- cache
 
-test("cache: a key covers the draft and the arm but not the threshold", () => {
+test("cache: a key covers the draft, the arm and the axis, but not the threshold", () => {
   const r = scoreRule();
   const k = verdictKey(r, "located", "TEXT");
   assert.equal(k, verdictKey(scoreRule({ at: 2.9 }), "located", "TEXT"));
   assert.notEqual(k, verdictKey(scoreRule({ ask: "other" }), "located", "TEXT"));
   assert.notEqual(k, verdictKey(r, "bare", "TEXT"));
   assert.notEqual(k, verdictKey(r, "located", "OTHER"));
+  // The axis was in the key and untested, because every call here used the
+  // default. It has to be in it: the same subject at the same arm sits beside
+  // its own file's matches under file grouping and beside unrelated ones under
+  // rule grouping, and those are different questions.
+  assert.notEqual(k, verdictKey(r, "located", "TEXT", "rule"));
+  assert.equal(k, verdictKey(r, "located", "TEXT", "file"));
+
+  // And the arm in the key has to be the arm the question was ASKED at, not
+  // the one the rule asked for. A batch over the state budget steps down, so a
+  // `located` rule can be answered at `local`; filing that answer under the
+  // `located` key served it, later, as the answer to a question nobody asked.
+  // Distinct keys are what make that a miss instead.
+  assert.notEqual(verdictKey(r, "located", "TEXT"), verdictKey(r, "local", "TEXT"));
 });
 
 test("cache: a missing, unreadable, malformed or stale file means no verdict, never a throw", () => {

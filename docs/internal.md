@@ -51,20 +51,20 @@ auditable.
 
 | file | lines | responsibility |
 | --- | --- | --- |
-| `cli.ts` | 701 | flags, commands, wiring. Also `USAGE`, which is a second source of truth for flag docs — change both. |
-| `scan.ts` | 563 | the ast-grep driver: rule translation, structural probes, the symbol table and call graph |
-| `state.ts` | 502 | the five state arms, subject resolution, the module outline |
-| `rules.ts` | 465 | rule schema, validation, defaults, `defaultRulePaths()`, `ruleTextHash()` |
-| `types.ts` | 446 | every shared type. Unions derive from `as const` arrays so the validator and the type cannot diverge. |
-| `batch.ts` | 432 | packing subjects into requests under two token budgets |
-| `calibrate.ts` | 418 | gap report, stability report, cutoff fit, label resolution |
-| `schedule.ts` | 377 | the per-rule axis decision for `--group auto` |
-| `run.ts` | 371 | `collectSubjects`, `run`, `toRecord` |
+| `cli.ts` | 702 | flags, commands, wiring. Also `USAGE`, which is a second source of truth for flag docs — change both. |
+| `scan.ts` | 564 | the ast-grep driver: rule translation, structural probes, the symbol table and call graph |
+| `state.ts` | 513 | the five state arms, subject resolution, the module outline |
+| `rules.ts` | 471 | rule schema, validation, defaults, `defaultRulePaths()`, `ruleTextHash()` |
+| `types.ts` | 458 | every shared type. Unions derive from `as const` arrays so the validator and the type cannot diverge. |
+| `batch.ts` | 438 | packing subjects into requests under two token budgets |
+| `calibrate.ts` | 423 | gap report, stability report, cutoff fit, label resolution |
+| `schedule.ts` | 378 | the per-rule axis decision for `--group auto` |
+| `run.ts` | 386 | `collectSubjects`, `run`, `toRecord` |
 | `report.ts` | 340 | the three output formats and the two report tables |
 | `jev.ts` | 242 | the API client: retry, split-on-too-big, spend accounting |
 | `gate.ts` | 183 | answers + cutoffs → findings. Pure. |
 | `cache.ts` | 175 | the verdict cache and `verdictKey` |
-| `questions.ts` | 139 | one subject → one question payload |
+| `questions.ts` | 146 | one subject → one question payload |
 | `diff.ts` | 131 | unified-diff parsing for review mode |
 
 ### `scan.ts` — the matcher, and the probes
@@ -130,6 +130,9 @@ empty `calls`/`calledBy` arrays.
 | `TEXT_LIKE_LENGTH` | 64 | the prose/label boundary |
 | `QUESTION_ENTRY_OVERHEAD` | 4 | per question, for its record key |
 | `DEFAULT_BATCH_SIZE` | 256 | the self-imposed cap; **not** a server limit |
+| `INLINE_LIMIT` (state.ts) | 900 | above it the code travels with the question only when the arm carries no source |
+| `SUBJECT_TEXT_LIMIT` (state.ts) | 4,000 | the truncation point for a long subject |
+| `USD_PER_MTOK` (jev.ts) | 0.042 | the only place the price is spelled; `--dry-run` and `--explain-schedule` both read it |
 
 What breaks in each direction:
 
@@ -223,6 +226,47 @@ cannot quietly do nothing.
 `defaultRulePaths()` resolves `./rules` first and the installed package's own
 `rules/` second, never both. Merging them would judge someone's code against
 rules they did not write.
+
+## Known imprecisions
+
+Four of these are deliberate and documented in place; the rest are gaps an
+audit of the source found, listed so nobody rediscovers them the expensive way.
+
+- **A cache key does not cover the whole file.** Two subjects with identical
+  text in different files share one verdict, and on the file axis the state was
+  built from one of those files. The dedupe is what makes a repository with
+  duplicated code cost less than its size, and it is a real imprecision: the
+  second file's verdict was formed while looking at the first file's source.
+  Invisible in the output, because each twin prints its own file and line.
+- **A verdict is looked up under the declared arm and stored under the
+  effective one.** They differ when a batch steps down. Storing under the arm
+  the question was asked at is what makes a mismatch a *miss* rather than a
+  wrong answer, at the cost of asking again every run while a file stays over
+  budget.
+- **`margin` is a ratio, not a difference** (`value / at`, gate.ts). It reads
+  like a subtraction and "correcting" it to one would reorder every report. A
+  0.9 answer against a 0.2 cutoff outranks a 2.2 against a 2.0, which is the
+  point — cross-rule ranking has to be scale-free.
+- **`batch.file` and `batch.language` mean different things per axis.** On the
+  file axis `file` is a path; on the rule axis it is a synthetic label,
+  `"<rule.id> (N file(s))"`, and it flows into error rows, the json output and
+  the progress callback. `language` is the first subject's even when a rule-axis
+  batch spans languages, while the state itself correctly carries an array.
+  Code that treats either as authoritative works on one axis only.
+- **The symbol list's sort order is an undeclared precondition.**
+  `enclosingSymbol` and `pickEnclosing` both `break` on the first symbol
+  starting after the target, which is only correct because `buildSymbols`
+  sorted start-ascending and end-descending. Filtering, appending to or
+  hand-building a `FileSymbols` gives silently wrong enclosing symbols rather
+  than an error. `enclosingChain` re-sorts defensively; the other two do not.
+- **`replay` reconstructs rules with empty matchers and nulled user-facing
+  fields**, which is correct for re-gating recorded answers but means any new
+  gate behaviour reading `rule.message` or `rule.unsureBelow` behaves
+  differently under replay. `npm run ci` ends in a replay, so a divergence
+  surfaces as a confusing CI difference rather than a test failure.
+- **The estimator's constants are tested for direction, never for value.** A
+  wrong ratio passes CI, and the same `estimateTokens` is what `--dry-run`
+  quotes a bill with.
 
 ## Build contract
 

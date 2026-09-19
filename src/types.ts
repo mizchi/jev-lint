@@ -54,6 +54,18 @@ export type Grouping = (typeof GROUPINGS)[number];
 export const GROUP_MODES = ["file", "rule", "auto"] as const;
 export type GroupMode = (typeof GROUP_MODES)[number];
 
+/**
+ * Reserved rule-id prefix, for the structural probes `scan.ts` emits.
+ *
+ * Here rather than in `scan.ts` so that `rules.ts` can reject a user rule that
+ * starts with it without importing the scanner. Before that check existed the
+ * prefix was reserved by comment only: a rule id beginning with it had every
+ * match routed into the probe stream, produced no subjects, and appeared in
+ * the report as a `silent` rule with no explanation -- a silent matcher
+ * failure, which is the one thing this design spends the most effort avoiding.
+ */
+export const PROBE_PREFIX = "__jevlint_";
+
 export const SEVERITIES = ["hint", "info", "warning", "error"] as const;
 export type Severity = (typeof SEVERITIES)[number];
 

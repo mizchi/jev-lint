@@ -363,7 +363,7 @@ high** — a bound to budget against, not a quote.
 ## 6. Accuracy on real code
 
 Both packs over this repository's own TypeScript (`src`, `tools`, `test`,
-`corpus/build-labels.ts`): **1,390 subjects, 65 requests, ~1.02M input tokens,
+`corpus/build-labels.ts`): **1,403 subjects, 65 requests, ~1.02M input tokens,
 $0.043, 18s of request time, under 5 seconds of wall clock.** Seven of the
 fifteen rules fire; the eight Rust-only rules match nothing and say so.
 
@@ -394,42 +394,52 @@ called every one of those tests covered.
 On unlabeled real code `gaps` is useless — a gap needs two classes, and real
 source is 99.8% clean, so it prints `rewrite` for every rule that fires. What
 *is* informative is the distance from the highest clean answer to the cutoff.
-Over three passes on 1,390 subjects, averaged per subject:
+Over three passes on 1,403 subjects, averaged per subject:
 
 | rule | subjects | median | highest clean | cutoff | headroom | over |
 | --- | --- | --- | --- | --- | --- | --- |
-| `test-name-describes-code` | 93 | 0.09 | 0.31 | 0.95 | +0.64 | 0 |
-| `fn-name-promises` | 151 | 0.13 | 0.50 | 0.76 | +0.26 | 0 |
-| `comment-describes-block` | 141 | 0.22 | 0.76 | 0.97 | +0.21 | 0 |
-| `comment-describes-declaration` | 95 | 0.14 | 0.63 | 0.83 | +0.20 | 0 |
-| `module-name-describes-contents` | 19 | 0.19 | 0.55 | 0.62 | +0.07 | 0 |
-| `var-name-describes-value` | 798 | 0.10 | 0.56 | 0.61 | +0.05 | 0 |
-| `test-name-verifies-claim` | 93 | 0.18 | 0.52 | 0.54 | **+0.02** | 2 |
+| `test-name-describes-code` | 94 | 0.09 | 0.28 | 0.95 | +0.67 | 0 |
+| `fn-name-promises` | 151 | 0.13 | 0.49 | 0.76 | +0.27 | 0 |
+| `comment-describes-block` | 149 | 0.20 | 0.75 | 0.97 | +0.22 | 0 |
+| `comment-describes-declaration` | 95 | 0.14 | 0.62 | 0.83 | +0.21 | 0 |
+| `test-name-verifies-claim` | 94 | 0.16 | 0.44 | 0.54 | +0.10 | 1 |
+| `module-name-describes-contents` | 19 | 0.18 | 0.55 | 0.62 | +0.07 | 0 |
+| `var-name-describes-value` | 801 | 0.10 | 0.55 | 0.61 | **+0.06** | 2 |
 
-The rule with the least headroom holds the entire residue. That is the
+The two rules with the least headroom hold the entire residue. That is the
 predictive value of the column: a corpus-fitted cutoff sits where the corpus's
-clean band ended, and real code's clean band goes higher — here to within 0.02
-of the cutoff, which leaves nothing between a clean answer and a reported one.
+clean band ended, and real code's clean band goes higher.
 
 ### The residue, and what it is not
 
-Two of 1,390 subjects are over their cutoff on the three-pass mean, at +0.13
-and +0.07, and both are tests whose names I read as accurate:
-`batch: no splittable batch exceeds either ceiling` and `batch/rule: every
-subject lands in exactly one batch, grouped per rule`. The second survived
-three rounds of strengthening — placement checked by identity, batch count,
-rule purity, and a guard against a planner that groups nothing — and is still
-flagged. It is the one finding here I am confident is simply wrong.
+Three of 1,403 subjects are over their cutoff on the three-pass mean, and two
+of them by less than 0.01: two `var-name-describes-value` hits on test bindings
+named for the case under test (`const unpinned = scoreRule(...)`, `const
+asViolation = decide(...)`), which is idiomatic in tests and which I read as
+wrong, and one `test-name-verifies-claim` hit sitting exactly on its cutoff.
 
-Single passes report 3, 4 and 3 findings on identical code; the three-pass mean
-reports 2. Pass-to-pass spread per subject is a median of 0.010 and a p90 of
-0.050, with a maximum of 0.220 — so single passes both over- and under-report
-near a cutoff, and the mean is the honest unit.
+Single passes report a stable 2 findings each; the three-pass mean names 3.
+Averaging is therefore not the same as reporting less — two subjects sit within
+0.01 of their cutoff from either side. Pass-to-pass spread per subject is a
+median of 0.010 and a p90 of 0.050, with a maximum of 0.300, so a decision that
+close is not a verdict.
+
+**Part of the earlier residue was a bug in the tool rather than in the rules.**
+A subject over 900 characters on an arm carrying no file source was asked about
+with no code in the question at all — the `INLINE_LIMIT` comment had always said
+the line-range fallback "only works on an arm that carries the source", and
+nothing enforced it. That was **111 subjects, 8% of them.** Fixing it dropped
+the per-pass residue from 3–4 findings to 2 and took
+`test-name-verifies-claim`'s headroom from +0.02 to +0.10. It did **not** rescue
+`comment-describes-block`, the rule most affected by it and the one rule that
+has never separated on either axis: refitting after the fix still gives
+precision 0.67 at best. So the missing code was a real defect and not that
+rule's problem.
 
 I looked for a mechanism and **did not find one.** The obvious hypothesis was
 that compound or universal test names read as under-verified whatever the body
-does. Grouping all 93 `test-name-verifies-claim` subjects by how many claims
-their name makes refutes it — the means are flat:
+does. Grouping all 92 `test-name-verifies-claim` subjects measured at the time
+by how many claims their name makes refutes it — the means are flat:
 
 | claims in the name | n | mean | median | over 0.54 |
 | --- | --- | --- | --- | --- |
@@ -443,10 +453,10 @@ only in the tail — 0.251 against 0.196, with medians of 0.19 and 0.16, on 23
 samples against 69 — which is too thin to call a mechanism. Compound names
 appear at both the top and the bottom of the ranking.
 
-So the honest account of the residue is the unglamorous one: a cutoff of 0.54,
-fitted where the corpus's clean band ended, against a real clean band reaching
-0.52. No rule-level pattern, and the remedy is the standing one — refit on your
-own code, starting with this rule.
+So the honest account of what is left is the unglamorous one: cutoffs fitted
+where the corpus's clean band ended, against real clean bands that go higher. No
+rule-level pattern, and the remedy is the standing one — refit on your own code,
+starting with the two rules at the bottom of the headroom table.
 
 ### The false negative worth knowing about
 

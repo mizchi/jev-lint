@@ -264,8 +264,14 @@ export async function run({
   await mapLimit(batches, concurrency, async (batch, i) => {
     try {
       const res = await jev.askSplitting(batch.state, batch.questions);
-      batch.subjects.forEach((s, qi) => {
-        const answer = readAnswer(res.answers, questionId(qi), s.rule.kind);
+      batch.subjects.forEach((s) => {
+        // `s.id`, not the loop index: `makeBatch` assigned these ids and built
+        // the state from the same numbering, so reading them back is what
+        // couples an answer to its subject. Re-deriving from the index works
+        // only while nothing ever reorders or filters `batch.subjects`, and
+        // fails silently if anything does -- every id still well-formed, every
+        // answer attributed to the wrong subject.
+        const answer = readAnswer(res.answers, s.id ?? questionId(0), s.rule.kind);
         // One verdict answers for every subject that shared its key.
         //
         // `arm: batch.arm` is not redundant. The twins come from the
@@ -278,7 +284,16 @@ export async function run({
           results.push({ subject: { ...twin, arm: batch.arm }, answer, cached: false });
         }
         if (answer && cachePath) {
-          cache.set(s.key!, answer, {
+          // Stored under the arm the question was ACTUALLY asked at, which is
+          // not always the arm it was looked up under: `s.key` carries the arm
+          // the rule asked for, and a batch over the state budget steps down.
+          // Keying the answer on the declared arm filed a `local` verdict as
+          // the answer to a `located` question, and served it as one the next
+          // time the file was small enough not to degrade. A miss is the right
+          // outcome there -- that question has never been asked.
+          const storeKey =
+            batch.arm === s.arm ? s.key! : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s));
+          cache.set(storeKey, answer, {
             rule: s.rule.id,
             draft: ruleTextHash(s.rule),
             arm: batch.arm,

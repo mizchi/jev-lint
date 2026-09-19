@@ -32,6 +32,7 @@ import {
   GROUPINGS,
   KINDS,
   LANGUAGES,
+  PROBE_PREFIX,
   STATE_ARMS,
   SUBJECTS,
   type Grouping,
@@ -178,6 +179,11 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
   }
   const id = typeof raw.id === "string" ? raw.id.trim() : "";
   if (id === "") return { error: `${where}: missing \`id\`` };
+  if (id.startsWith(PROBE_PREFIX)) {
+    return {
+      error: `${where}: id may not start with \`${PROBE_PREFIX}\`, which is reserved for structural probes`,
+    };
+  }
 
   // One rule, several grammars.
   //
