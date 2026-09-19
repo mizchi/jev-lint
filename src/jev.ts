@@ -76,7 +76,19 @@ export interface JevOptions {
   onRequest?: ((body: string) => void) | null;
 }
 
-export class Jev {
+/**
+ * What the runner needs from a client: the one call it makes, and the three
+ * things it reads back for the report and the cache. `Jev` is the real one;
+ * a test hands in an object with these four members and no network.
+ */
+export interface AskClient {
+  model: string;
+  servedModel: string | null;
+  readonly spent: Spend;
+  askSplitting(state: unknown, questions: Record<string, Question>): Promise<SystemOneResponse>;
+}
+
+export class Jev implements AskClient {
   apiKey: string;
   baseUrl: string;
   model: string;
@@ -114,6 +126,21 @@ export class Jev {
     this.retried = 0;
     this.splits = 0;
     this.servedModel = null;
+  }
+
+  /**
+   * What a failed status means for the caller.
+   *
+   * `too_big` is the one 400 a caller can fix by sending less; naming it is
+   * what lets askSplitting recover instead of dropping the batch. `auth` is
+   * anything the account has to fix -- a bad key (401, 403) or no credit
+   * (402) -- and it is the same answer for every batch and every pass, so the
+   * runner stops on the first one rather than collecting it 69 times.
+   */
+  static classify(status: number, body: string): JevErrorKind {
+    if (status === 400 && body.includes("max_tokens_exceeded")) return "too_big";
+    if (status === 401 || status === 402 || status === 403) return "auth";
+    return "other";
   }
 
   get spent(): Spend {
@@ -181,16 +208,9 @@ export class Jev {
         return parsed;
       }
 
-      // The one 400 a caller can fix by sending less. Naming it is what lets
-      // askSplitting recover instead of dropping the whole batch.
-      const tooBig = res.status === 400 && text.includes("max_tokens_exceeded");
       last = new JevError(`HTTP ${res.status}: ${text.slice(0, 240)}`, {
         status: res.status,
-        kind: tooBig
-          ? "too_big"
-          : res.status === 401 || res.status === 403
-            ? "auth"
-            : "other",
+        kind: Jev.classify(res.status, text),
       });
       const transient = res.status === 429 || res.status >= 500;
       if (!transient || attempt === this.retries) break;

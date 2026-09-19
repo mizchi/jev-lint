@@ -1810,6 +1810,50 @@ await testAsync("jev: no API key is an auth error, not a crash mid-run", async (
   );
 });
 
+test("jev: a billing refusal is an auth error, since retrying will not help", () => {
+  // 402 came back on every one of 69 requests in a run -- 23 batches times 3
+  // passes -- because it was classified `other`, and `other` is per batch.
+  assert.equal(Jev.classify(402, ""), "auth");
+  assert.equal(Jev.classify(401, ""), "auth");
+  assert.equal(Jev.classify(403, ""), "auth");
+  assert.equal(Jev.classify(400, "max_tokens_exceeded"), "too_big");
+  assert.equal(Jev.classify(400, "bad json"), "other");
+  assert.equal(Jev.classify(500, ""), "other");
+});
+
+await testAsync("run: an auth error stops the run instead of failing every batch and every pass", async () => {
+  // A key that does not work on the first batch does not work on the other
+  // twenty-two, or on the next two passes. Sending them anyway is 69 failed
+  // requests for one cause, a wall of identical error rows, and -- with
+  // retries and backoff -- minutes of waiting for nothing. The subjects still
+  // come back without a verdict, and the one error is still reported.
+  const { run } = await import("../src/run.ts");
+  const rule = scoreRule({ id: "r", rule: { kind: "function_declaration" } });
+  let calls = 0;
+  const client = {
+    model: "fake",
+    servedModel: null,
+    spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
+    askSplitting: async () => {
+      calls += 1;
+      throw new JevError("HTTP 402: no credits", { status: 402, kind: "auth" });
+    },
+  };
+  const result = await run({
+    rules: [rule],
+    paths: ["corpus/ts"],
+    cachePath: null,
+    retry: 3,
+    concurrency: 1,
+    client,
+  });
+  assert.ok(result.subjects.length > 3, "the corpus must produce several batches");
+  assert.equal(calls, 1, "one refusal is enough; nothing after it should be sent");
+  assert.equal(result.errors?.length, 1, "and reported once, not once per batch");
+  assert.match(result.errors![0]!.error, /402/);
+  assert.equal(result.stats.missing, result.subjects.length, "every subject is missing, none is clean");
+});
+
 await testAsync("jev: an empty question set costs nothing and makes no request", async () => {
   let called = false;
   const jev = new Jev({ apiKey: "k", onRequest: () => (called = true) });

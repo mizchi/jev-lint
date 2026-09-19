@@ -15,7 +15,7 @@
  * at once, instead of once per rule per file.
  */
 import { readFileSync } from "node:fs";
-import { Jev, mapLimit } from "./jev.ts";
+import { Jev, JevError, mapLimit, type AskClient } from "./jev.ts";
 import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.ts";
 import { resolveSubject } from "./state.ts";
 import { questionId, readAnswer } from "./questions.ts";
@@ -206,6 +206,8 @@ export interface RunOptions {
    */
   retry?: number;
   onProgress?: ((p: { done: number; total: number; file: string }) => void) | null;
+  /** A client to ask through instead of a fresh `Jev`; for tests that fake the API. */
+  client?: AskClient | null;
 }
 
 export async function run({
@@ -227,6 +229,7 @@ export async function run({
   cwd = process.cwd(),
   retry = 1,
   onProgress = null,
+  client = null,
 }: RunOptions): Promise<RunResult> {
   const started = Date.now();
   const passes = Number.isInteger(retry) && retry > 0 ? retry : 1;
@@ -313,8 +316,13 @@ export async function run({
     };
   }
 
-  const jev = new Jev({ apiKey, model });
+  const jev: AskClient = client ?? new Jev({ apiKey, model });
   const errors: RunError[] = [];
+  // Set by the first error that no retry, split or later batch can fix. Once
+  // it is, the remaining batches and passes are not sent: they would fail
+  // the same way, and 69 rows saying "no credits" report nothing that one
+  // row does not.
+  let refused: JevError | null = null;
 
   /**
    * One pass over every batch.
@@ -328,6 +336,7 @@ export async function run({
     const out: Scored[] = [];
     await mapLimit(batches, concurrency, async (batch, i) => {
     try {
+      if (refused) throw refused;
       const res = await jev.askSplitting(batch.state, batch.questions);
       batch.subjects.forEach((s) => {
         // `s.id`, not the loop index: `makeBatch` assigned these ids and built
@@ -368,11 +377,17 @@ export async function run({
         }
       });
     } catch (err: unknown) {
-      errors.push({
-        file: batch.file,
-        subjects: batch.subjects.length,
-        error: String((err as Error)?.message ?? err),
-      });
+      const isRefusal = err instanceof JevError && err.kind === "auth";
+      // The refusal is reported once, on the batch that met it; the batches
+      // skipped because of it are not errors of their own.
+      if (!refused || !isRefusal) {
+        errors.push({
+          file: batch.file,
+          subjects: batch.subjects.length,
+          error: String((err as Error)?.message ?? err),
+        });
+      }
+      if (isRefusal && !refused) refused = err;
       // Fail open: a failed batch yields no verdicts, which the gate records as
       // `missing` rather than as a clean bill of health.
       for (const s of batch.subjects) {
@@ -387,7 +402,10 @@ export async function run({
   };
 
   const perPass: Scored[][] = [];
-  for (let pass = 0; pass < passes; pass += 1) perPass.push(await askOnce());
+  for (let pass = 0; pass < passes; pass += 1) {
+    if (refused) break;
+    perPass.push(await askOnce());
+  }
   const asked = passes === 1 ? (perPass[0] ?? []) : mergePasses(perPass, cutoffs);
   results.push(...asked);
 
