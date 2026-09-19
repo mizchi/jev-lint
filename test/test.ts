@@ -11,7 +11,7 @@
  * land on "no verdict" rather than on an exception.
  */
 import { strict as assert } from "node:assert";
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync, existsSync, realpathSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync, existsSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, isAbsolute } from "node:path";
 
@@ -1894,6 +1894,33 @@ await testAsync("end to end: the shipped pack finds the corpus defects it is fit
   const fileSubjects = subjects.filter((s) => s.rule.subject === "file");
   assert.ok(fileSubjects.length >= 8);
   assert.ok(fileSubjects.every((s) => s.isOutline && s.text.startsWith("path: ")));
+});
+
+await testAsync("end to end: every cookbook recipe loads and matches its fixture", async () => {
+  // The cookbook is the part of the plugin a reader copies from, so a recipe
+  // that does not load, or names a node kind the grammar does not have, is a
+  // shipped defect. Every ```yaml block in it is written to a temp dir, loaded
+  // as a rule file, and run over test/fixtures/cookbook, which holds one
+  // instance of each shape. A fragment that is not a whole rule is fenced
+  // ```yml in the cookbook, precisely so this picks up the complete ones only.
+  const { collectSubjects } = await import("../src/run.ts");
+  const md = readFileSync("skills/jev-lint/references/cookbook.md", "utf8");
+  const blocks = [...md.matchAll(/```yaml\n([\s\S]*?)```/g)].map((m) => m[1]!);
+  assert.ok(blocks.length >= 8, `expected the cookbook to hold recipes, found ${blocks.length} yaml blocks`);
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cookbook-"));
+  try {
+    blocks.forEach((b, i) => writeFileSync(join(dir, `recipe-${i}.yml`), b));
+    const { rules, errors } = loadRules([dir]);
+    assert.deepEqual(errors, [], "every recipe must load");
+    const { subjects } = await collectSubjects({ rules, paths: ["test/fixtures/cookbook"] });
+    const byRule = new Map<string, number>();
+    for (const s of subjects) byRule.set(s.rule.id, (byRule.get(s.rule.id) ?? 0) + 1);
+    for (const r of rules) {
+      assert.ok((byRule.get(r.id) ?? 0) > 0, `cookbook recipe ${r.id} matched nothing in the fixture`);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 await testAsync("end to end: overlapping grammars produce one subject per node", async () => {

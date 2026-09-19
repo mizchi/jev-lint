@@ -1,0 +1,13 @@
+{
+  "name": "jev-lint",
+  "version": "0.1.0",
+  "description": "Lint the things a linter cannot: names that drifted from their implementation, comments that became false, tests that do not verify what they claim. ast-grep picks the code, one sentence is the rule, a model answers it. Includes the shipped rule packs, a cookbook for writing your own, and the calibration procedure.",
+  "author": {
+    "name": "mizchi",
+    "url": "https://github.com/mizchi"
+  },
+  "homepage": "https://github.com/mizchi/jev-lint",
+  "repository": "https://github.com/mizchi/jev-lint",
+  "license": "MIT",
+  "keywords": ["lint", "ast-grep", "code-review", "naming", "comments", "typescript", "rust"]
+}

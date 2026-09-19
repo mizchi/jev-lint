@@ -135,6 +135,15 @@ npx jev-lint init                     # writes .jev-lint.yaml, everything commen
 Uncomment `paths:` so `jev-lint check` needs no argument. The API key is read
 from the environment only, never from that file; `apiKey:` in it is an error.
 
+For Claude Code, the repository is also a plugin: it installs the `jev-lint`
+skill (running it, the shipped packs, a rule cookbook, calibration) and two
+commands, `/jev-lint:review` and `/jev-lint:new-rule`:
+
+```
+/plugin marketplace add mizchi/jev-lint
+/plugin install jev-lint@jev-lint
+```
+
 **In CI, use review mode.** It judges only the lines a diff touched, which is
 where the findings concentrate anyway, and it costs a fraction of a cent:
 
@@ -234,7 +243,7 @@ Then check it does something:
 
 ```bash
 jev-lint rules                                      # loaded, or the validation error
-jev-lint check src --dry-run                        # how many subjects the matcher finds
+jev-lint check src --dry-run --show-subjects        # which nodes it found, with captures
 jev-lint check src --at catch-hides-failure=2 --retry 3   # a score runs 0-3
 ```
 

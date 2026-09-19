@@ -8,5 +8,7 @@
     "noEmit": true,
     "rootDir": "."
   },
-  "include": ["src", "test", "tools", "corpus/build-labels.ts"]
+  "include": ["src", "test", "tools", "corpus/build-labels.ts"],
+  // Matcher fixtures, not programs: they exist to be parsed, not to compile.
+  "exclude": ["test/fixtures"]
 }
