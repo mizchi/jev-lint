@@ -103,9 +103,16 @@ const TEXT_LIKE_LENGTH = 64;
 export const STATE_MARGIN = 1.25;
 export const REQUEST_MARGIN = 1.1;
 
-/** What the planner may spend, as opposed to what a request may carry. */
-const STATE_BUDGET = Math.floor(MAX_STATE_TOKENS / STATE_MARGIN);
-const REQUEST_BUDGET = Math.floor(MAX_REQUEST_TOKENS / REQUEST_MARGIN);
+/**
+ * What the planner may spend, as opposed to what a request may carry.
+ *
+ * Exported so the tests can assert against these and not the ceilings: a
+ * planner packing to MAX_STATE_TOKENS exactly passes a ceiling assertion and
+ * loses verdicts in production, which is the regression the margins exist to
+ * prevent.
+ */
+export const STATE_BUDGET = Math.floor(MAX_STATE_TOKENS / STATE_MARGIN);
+export const REQUEST_BUDGET = Math.floor(MAX_REQUEST_TOKENS / REQUEST_MARGIN);
 
 /**
  * Input-token estimate for a JSON payload, by shape.
@@ -169,11 +176,13 @@ const QUESTION_ENTRY_OVERHEAD = 4;
  *   - every subject lands in exactly one batch
  *   - no batch is empty
  *   - no batch holds more than `batchSize` subjects
- *   - no batch's estimated total exceeds MAX_REQUEST_TOKENS, unless it holds a
+ *   - no batch's estimated total exceeds REQUEST_BUDGET, unless it holds a
  *     single subject that cannot be split further
- *   - no batch's STATE exceeds MAX_STATE_TOKENS, under the same exception
+ *   - no batch's STATE exceeds STATE_BUDGET, under the same exception
  *
- * The planner packs to a margin under each of those, not up to them: see
+ * The budgets, not the ceilings: the planner packs to a margin under
+ * MAX_REQUEST_TOKENS and MAX_STATE_TOKENS, and the tests assert the margin,
+ * so packing to the ceiling is a test failure and not a lost verdict. See
  * STATE_MARGIN and REQUEST_MARGIN.
  *
  * A file whose SOURCE alone exceeds the state budget is the one case that

@@ -33,7 +33,7 @@ paths + rules
   │  questions.ts buildQuestion()   one Subject's question
   │
   ├─ jev.ts      askSplitting()     one request per batch, halving on too_big
-  │              readAnswer()       response → {value, confidence, kind} | null
+  │  questions.ts readAnswer()      response → {value, confidence, kind} | null
   │  run.ts      mergePasses()      --retry n: n answers per subject → the mean,
   │                                 plus how many passes crossed the cutoff
   │
@@ -53,25 +53,29 @@ auditable.
 
 ## Modules
 
-| file | lines | responsibility |
-| --- | --- | --- |
-| `cli.ts` | 702 | flags, commands, wiring. Also `USAGE`, which is a second source of truth for flag docs — change both. |
-| `scan.ts` | 564 | the ast-grep driver: rule translation, structural probes, the symbol table and call graph |
-| `state.ts` | 513 | the five state arms, subject resolution, the module outline |
-| `rules.ts` | 471 | rule schema, validation, defaults, `defaultRulePaths()`, `ruleTextHash()` |
-| `types.ts` | 458 | every shared type. Unions derive from `as const` arrays so the validator and the type cannot diverge. |
-| `batch.ts` | 438 | packing subjects into requests under two token budgets |
-| `calibrate.ts` | 423 | gap report, stability report, cutoff fit, label resolution |
-| `schedule.ts` | 378 | the per-rule axis decision for `--group auto` |
-| `run.ts` | 386 | `collectSubjects`, `run`, `toRecord` |
-| `report.ts` | 340 | the three output formats and the two report tables |
-| `jev.ts` | 242 | the API client: retry, split-on-too-big, spend accounting |
-| `gate.ts` | 183 | answers + cutoffs → findings. Pure. |
-| `cache.ts` | 175 | the verdict cache and `verdictKey` |
-| `questions.ts` | 146 | one subject → one question payload |
-| `diff.ts` | 131 | unified-diff parsing for review mode |
-| `ignore.ts` | 116 | `jev-lint-ignore-file` and `-next-line`, parsed from raw text |
-| `config.ts` | 333 | `.jev-lint.yaml`: discovery, validation, and the flag-beats-file merge |
+Largest first. No line counts: the last table of them was stale for more than
+half the files by the time an audit read it, and `wc -l src/*.ts` is always
+right.
+
+| file | responsibility |
+| --- | --- |
+| `cli.ts` | flags, commands, wiring. Also `USAGE`, which is a second source of truth for flag docs — change both. |
+| `scan.ts` | the ast-grep driver: rule translation, structural probes, the symbol table and call graph |
+| `run.ts` | `collectSubjects`, `run`, `mergePasses`, `toRecord` |
+| `state.ts` | the five state arms, subject resolution, the module outline |
+| `rules.ts` | rule schema, validation, defaults, `defaultRulePaths()`, `ruleTextHash()` |
+| `types.ts` | every shared type. Unions derive from `as const` arrays so the validator and the type cannot diverge. |
+| `batch.ts` | packing subjects into requests under two token budgets |
+| `calibrate.ts` | gap report, stability report, cutoff fit, label resolution |
+| `report.ts` | the three output formats and the two report tables |
+| `schedule.ts` | the per-rule axis decision for `--group auto` |
+| `config.ts` | `.jev-lint.yaml`: discovery, validation, and the flag-beats-file merge |
+| `jev.ts` | the API client: retry, split-on-too-big, spend accounting |
+| `gate.ts` | answers + cutoffs → findings. Pure. |
+| `cache.ts` | the verdict cache and `verdictKey` |
+| `questions.ts` | one subject → one question payload, and `readAnswer()` for the reply |
+| `diff.ts` | unified-diff parsing for review mode |
+| `ignore.ts` | `jev-lint-ignore-file` and `-next-line`, parsed from raw text |
 
 ### `scan.ts` — the matcher, and the probes
 
@@ -162,6 +166,13 @@ What breaks in each direction:
 4. no batch's estimated total exceeds the request budget, unless it holds a
    single subject that cannot be split further
 5. no batch's state exceeds the state budget, under the same exception
+
+The tests assert 4 and 5 against `REQUEST_BUDGET` and `STATE_BUDGET`, exported
+for that purpose, and not against the ceilings. They used to assert the
+ceilings, which a planner packing to `MAX_STATE_TOKENS` exactly would have
+passed while losing verdicts on the server — the margins were the one thing in
+this table no test checked. Swapping the planner's budgets for the ceilings now
+fails two tests, and that swap is the regression the margins exist to catch.
 
 **The arm is chosen by the state's irreducible floor**, what one subject alone
 costs, not by the whole group. A file with much *source* has to step down,
@@ -257,14 +268,17 @@ Every component is load-bearing:
 
 | in the key | so that |
 | --- | --- |
-| `ruleTextHash` | editing the sentence is editing the question; an old verdict must not answer a new one |
+| `ruleTextHash` | editing the sentence is editing the question; an old verdict must not answer a new one. The matcher is in it too, with `constraints` and `utils`: the node kind it selects and the names it captures go into the question, and neither is in `subjectText` |
 | `arm` | the same subject at a different arm was shown different evidence |
 | `group` | file grouping puts a subject next to its own file's matches, rule grouping next to unrelated ones |
 | `subjectText` | not the line number, which moves for free |
 
 **`at` is deliberately excluded**, which is what makes recalibration free:
 changing a cutoff invalidates nothing. `ruleTextHash` covers everything the
-model is shown and nothing else.
+model is shown and nothing else — which is why the matcher went in: it is
+shown, as `node` and `matcher_captured`, and until it was hashed a matcher
+edit that changed what was captured served the old question's verdicts. Object
+key order is canonicalised first, so re-spelling a matcher is not a new draft.
 
 Consequence worth knowing: switching `--group` invalidates every entry, and the
 CLI never calls `Cache.prune()`, so the file grows. The cache is also **trusted
@@ -355,7 +369,7 @@ change that alters gating or fitting fails CI without an API key.
 
 ## Testing
 
-`test/test.ts` is 101 checks, no API key, no network, run directly by Node. It
+`test/test.ts` needs no API key and no network, and is run directly by Node. It
 is a single file on purpose: the assertions are cheap and the suite is read as
 documentation of the invariants.
 

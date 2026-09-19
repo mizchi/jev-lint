@@ -11,7 +11,7 @@
  * land on "no verdict" rather than on an exception.
  */
 import { strict as assert } from "node:assert";
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync, existsSync } from "node:fs";
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync, existsSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, isAbsolute } from "node:path";
 
@@ -32,8 +32,9 @@ import {
   planBatches,
   planRuleBatches,
   estimateTokens,
-  MAX_REQUEST_TOKENS,
   MAX_STATE_TOKENS,
+  STATE_BUDGET,
+  REQUEST_BUDGET,
   STATE_MARGIN,
   REQUEST_MARGIN,
   DEFAULT_BATCH_SIZE,
@@ -345,9 +346,33 @@ test("rules: the draft hash covers what the model sees and excludes the threshol
   assert.notEqual(ruleTextHash(base), ruleTextHash(scoreRule({ note: "an exception" })));
   assert.notEqual(ruleTextHash(base), ruleTextHash(scoreRule({ subject: "enclosing" })));
   assert.notEqual(ruleTextHash(base), ruleTextHash(scoreRule({ state: "bare" })));
+  // The matcher too. It reaches the model as the question's `node` field and
+  // as `matcher_captured`, and neither is in the subject text the verdict key
+  // hashes -- so a matcher edit that changes what is captured would otherwise
+  // serve the verdicts of the old question. Same for what shapes the matcher.
+  assert.notEqual(ruleTextHash(base), ruleTextHash(scoreRule({ rule: { pattern: "fetch($URL, $$$)" } })));
+  assert.notEqual(
+    ruleTextHash(base),
+    ruleTextHash(scoreRule({ constraints: { URL: { regex: "^'" } } })),
+  );
+  assert.notEqual(
+    ruleTextHash(base),
+    ruleTextHash(scoreRule({ utils: { "is-call": { kind: "call_expression" } } })),
+  );
+  // But only the matcher's meaning, not its spelling: reordering YAML keys is
+  // not a new draft.
+  assert.equal(
+    ruleTextHash(scoreRule({ rule: { kind: "call_expression", pattern: "fetch($$$)" } })),
+    ruleTextHash(scoreRule({ rule: { pattern: "fetch($$$)", kind: "call_expression" } })),
+  );
 });
 
-test("rules: a shared YAML anchor gives two language variants the same draft hash", () => {
+test("rules: two language variants sharing an anchor still hash apart, on the matcher", () => {
+  // They used to share a hash, and a test asserted it. The property was
+  // decorative: the verdict key has the id in it, so the variants never shared
+  // a cache entry anyway -- and a hash that ignores the matcher is a hash that
+  // serves stale verdicts after a matcher edit. The anchors still work; they
+  // just do not buy a shared hash.
   const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
   try {
     writeFileSync(
@@ -370,7 +395,9 @@ test("rules: a shared YAML anchor gives two language variants the same draft has
     const { rules, errors } = loadRules([dir]);
     assert.deepEqual(errors, []);
     assert.equal(rules.length, 2);
-    assert.equal(ruleTextHash(rules[0]!), ruleTextHash(rules[1]!));
+    assert.equal(rules[0]!.ask, rules[1]!.ask, "the anchor is honoured");
+    assert.deepEqual(rules[0]!.criteria, rules[1]!.criteria);
+    assert.notEqual(ruleTextHash(rules[0]!), ruleTextHash(rules[1]!));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -711,7 +738,7 @@ test("batch: every subject lands in exactly one batch and none is empty", () => 
 // split. Named "no batch exceeds the request ceiling", jev-lint kept flagging it
 // at 0.54-0.62 against a 0.54 cutoff, and on that reading it was right -- the
 // gap was between the name and the contract, not in the assertions.
-test("batch: no splittable batch exceeds either ceiling", () => {
+test("batch: no splittable batch exceeds either budget", () => {
   const subjects = manySubjects(400, { text: "x".repeat(800) });
   const batches = planBatches(subjects, {
     sources: new Map([["a.ts", "source"]]),
@@ -730,15 +757,21 @@ test("batch: no splittable batch exceeds either ceiling", () => {
   // the second weakness jev-lint found here (0.74 against a 0.54 cutoff): the
   // name says no batch, and a one-subject batch over the ceiling is exactly
   // the case the planner is allowed to emit only when it cannot split further.
+  //
+  // Against the BUDGETS, not the ceilings. The ceilings are what the server
+  // enforces; the budgets are the ceilings less the margin that absorbs the
+  // estimate's undercount. A planner that packed to the ceiling would pass a
+  // ceiling assertion here and lose verdicts on the server, which is the exact
+  // regression the margins were added to stop -- so it has to fail here.
   for (const b of batches) {
     if (b.subjects.length === 1) continue; // irreducible: nothing left to split
     assert.ok(
-      b.estimatedTokens <= MAX_REQUEST_TOKENS,
-      `batch of ${b.subjects.length} estimated ${b.estimatedTokens}`,
+      b.estimatedTokens <= REQUEST_BUDGET,
+      `batch of ${b.subjects.length} estimated ${b.estimatedTokens}, over the ${REQUEST_BUDGET} budget`,
     );
     assert.ok(
-      estimateTokens(b.state) <= MAX_STATE_TOKENS,
-      `state of a ${b.subjects.length}-subject batch estimated ${estimateTokens(b.state)}`,
+      estimateTokens(b.state) <= STATE_BUDGET,
+      `state of a ${b.subjects.length}-subject batch estimated ${estimateTokens(b.state)}, over the ${STATE_BUDGET} budget`,
     );
   }
 });
@@ -756,7 +789,7 @@ test("batch: many matches split the batch; only much source degrades the arm", (
   for (const b of fromManyMatches) {
     assert.equal(b.arm, "bare");
     assert.equal(b.degraded, null, "splitting is not a loss of context and must not be reported as one");
-    assert.ok(estimateTokens(b.state) <= MAX_STATE_TOKENS);
+    assert.ok(estimateTokens(b.state) <= STATE_BUDGET, "split, and split to the budget, not the ceiling");
   }
 
   const fromHugeSource = planBatches(manySubjects(2, { arm: "located" }), {
@@ -921,8 +954,8 @@ test("batch/rule: the cap is honoured and the state budget closes a batch", () =
   for (const b of wide) {
     if (b.subjects.length > 1) {
       assert.ok(
-        b.estimatedTokens <= MAX_REQUEST_TOKENS,
-        `batch of ${b.subjects.length} on arm ${b.arm} estimated ${b.estimatedTokens}`,
+        b.estimatedTokens <= REQUEST_BUDGET,
+        `batch of ${b.subjects.length} on arm ${b.arm} estimated ${b.estimatedTokens}, over the ${REQUEST_BUDGET} budget`,
       );
     }
   }
@@ -949,8 +982,8 @@ test("batch/rule: the cap is honoured and the state budget closes a batch", () =
   for (const b of deep) {
     if (b.subjects.length > 1) {
       assert.ok(
-        b.estimatedTokens <= MAX_REQUEST_TOKENS,
-        `local batch of ${b.subjects.length} estimated ${b.estimatedTokens}`,
+        b.estimatedTokens <= REQUEST_BUDGET,
+        `local batch of ${b.subjects.length} estimated ${b.estimatedTokens}, over the ${REQUEST_BUDGET} budget`,
       );
     }
   }
@@ -960,16 +993,16 @@ test("batch/rule: the cap is honoured and the state budget closes a batch", () =
   // is at its own ceiling while the request total is nowhere near its own.
   const bound = deep.find((b) => b.subjects.length > 1)!;
   assert.ok(
-    estimateTokens(bound.state) <= MAX_STATE_TOKENS,
-    `state ${estimateTokens(bound.state)} must stay under its own budget`,
+    estimateTokens(bound.state) <= STATE_BUDGET,
+    `state ${estimateTokens(bound.state)} must stay under its own budget of ${STATE_BUDGET}`,
   );
   assert.ok(
-    estimateTokens(bound.state) > MAX_STATE_TOKENS / 2,
+    estimateTokens(bound.state) > STATE_BUDGET / 2,
     "and must be near it, or something other than the state closed this batch",
   );
   assert.ok(
-    bound.estimatedTokens < MAX_REQUEST_TOKENS * 0.9,
-    `the request budget must have room left (${bound.estimatedTokens}), or it is what bound`,
+    bound.estimatedTokens < REQUEST_BUDGET * 0.9,
+    `the request budget must have room left (${bound.estimatedTokens} of ${REQUEST_BUDGET}), or it is what bound`,
   );
 });
 
@@ -2180,7 +2213,9 @@ test("config: naming the rules in the file means they are not the packaged ones"
 });
 
 test("config: the file is found by walking up, and only names jev-lint's own", () => {
-  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
+  // Resolved, because `process.cwd()` is: on macOS the temp dir is a symlink
+  // under /var and cwd reports the /private/var target.
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-lint-cfg-")));
   const here = process.cwd();
   try {
     mkdirSync(join(dir, "a", "b"), { recursive: true });

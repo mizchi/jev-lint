@@ -365,6 +365,13 @@ export function cutoffFor(rule: Rule, overrides: Record<string, number> = {}): n
  * wording must never answer for the new one. The hash covers everything the
  * model is shown and nothing else: `at` is deliberately excluded, because
  * re-calibrating a threshold must not cost a single request.
+ *
+ * The matcher is in it because the matcher is shown, indirectly: the node kind
+ * it selects and the names it captures go into the question, and neither is
+ * in the subject text the verdict key hashes. `constraints` and `utils` shape
+ * the same match, so they go in with it. The cost is that a matcher edit
+ * re-asks that rule's questions, which is the right cost: the old verdicts
+ * answered a question with different captures in it.
  */
 export function ruleTextHash(rule: Rule): string {
   return createHash("sha256")
@@ -377,10 +384,27 @@ export function ruleTextHash(rule: Rule): string {
         rule.criteria ? `${rule.criteria.true}\n${rule.criteria.false}` : "",
         rule.subject,
         rule.state,
+        canonical(rule.matcher),
+        canonical(rule.constraints),
+        canonical(rule.utils),
       ].join("\n"),
     )
     .digest("hex")
     .slice(0, 12);
+}
+
+/**
+ * JSON with object keys sorted at every depth, so two spellings of the same
+ * matcher -- YAML keys in a different order, a rule built in memory -- hash the
+ * same. Arrays keep their order: in ast-grep, `all: [a, b]` and `all: [b, a]`
+ * differ in which match wins.
+ */
+function canonical(value: unknown): string {
+  return JSON.stringify(value, (_k, v) =>
+    v && typeof v === "object" && !Array.isArray(v)
+      ? Object.fromEntries(Object.entries(v as Record<string, unknown>).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)))
+      : v,
+  ) ?? "";
 }
 
 /** Load every rule from a YAML file, a directory of them, or a list of paths. */

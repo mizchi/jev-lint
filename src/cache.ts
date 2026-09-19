@@ -11,10 +11,10 @@
  *
  *     sha256(schema, rule draft, arm, grouping, subject text)
  *
- * so editing a rule's sentence invalidates that rule's verdicts and nothing
- * else, moving a function between files keeps its verdict, and -- deliberately
- * -- changing a THRESHOLD invalidates nothing at all. Recalibration must be
- * free, or it will not be done.
+ * so editing a rule's sentence or its matcher invalidates that rule's verdicts
+ * and nothing else, moving a function between files keeps its verdict, and --
+ * deliberately -- changing a THRESHOLD invalidates nothing at all.
+ * Recalibration must be free, or it will not be done.
  *
  * What is NOT in the key is the rest of the file, even though the file is in
  * the state on the `located` and `full` arms. That is a known and accepted

@@ -668,8 +668,8 @@ rule or invent a finding. Keep it next to your rule files in review, not in a
 build-artifact directory. Commit it and CI lints without an API key and
 reviewers see the verdicts you saw; leave it ignored and CI pays for a fresh
 pass each run. Changing a **cutoff** invalidates nothing, by design, so
-recalibration is free; changing a rule's *sentence*, its arm, or the batching
-axis invalidates the verdicts that depended on them.
+recalibration is free; changing a rule's *sentence*, its matcher, its arm, or
+the batching axis invalidates the verdicts that depended on them.
 
 ## Limits
 
