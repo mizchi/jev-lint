@@ -142,10 +142,11 @@ Environment: `TYPESAFEAI_API_KEY` (required for anything that asks),
 `TYPESAFEAI_BASE_URL`, `JEVLINT_AST_GREP`.
 
 Two lines of output are never noise. **`N rules matched nothing`** is the only
-place a dead matcher is visible — check it before trusting a clean run; on a
-TypeScript-only repository expect 8 of the 15 shipped rules there, because they
-are the Rust variants. **`N without a verdict`** means requests failed, and a
-run with failures never reads as a clean repository.
+place a dead matcher is visible — check it before trusting a clean run. On a
+TypeScript-only repository expect 8 of the 15 shipped rules there: the 7 Rust
+variants, plus `comment-describes-declaration-js`, which exists because
+JavaScript has no type declarations to match. **`N without a verdict`** means
+requests failed, and a run with failures never reads as a clean repository.
 
 ## Writing a rule
 
@@ -412,16 +413,20 @@ packs are **1,403 subjects, 65 requests, $0.043 and under five seconds** of wall
 clock. That is roughly **3 cents per 1,000 subjects**, and `--dry-run` quotes
 about 9% high, so treat it as a bound rather than a price.
 
-It found **nine real defects in 8,132 lines of TypeScript**:
+Over several rounds it found, in 8,132 lines of TypeScript, **22 sites worth
+changing**:
 
-| what it caught | how many |
+| what it caught | sites |
 | --- | --- |
-| comments that had become false | 2 |
-| tests that did not verify the behaviour their own names claimed | 6 |
-| bindings named for their input rather than their value | 6 |
+| comments that had become false | 3 |
+| tests that did not verify the behaviour their own names claimed | 7 |
+| bindings named for their input rather than their value | 12 |
 
-Nothing there is what a compiler, a linter or coverage reports; coverage called
-every one of those tests covered. Details, including two worth quoting, are in
+Those are individual sites, not independent discoveries — the twelve bindings
+are one defect made twelve times, and a single round's findings were 11, of
+which 9 were real. Nothing there is what a compiler, a linter or coverage
+reports; coverage called every one of those tests covered. Details, including
+two worth quoting, are in
 [docs/deepdive.md](docs/deepdive.md#6-accuracy-on-real-code).
 
 ### Roughly one finding in five was wrong
@@ -458,7 +463,7 @@ but the distance from the highest *clean* answer to the cutoff:
 | `module-name-describes-contents` | 19 | 0.18 | 0.55 | 0.62 | +0.07 |
 | `var-name-describes-value` | 801 | 0.10 | 0.55 | 0.61 | **+0.06** |
 
-The two rules at the bottom hold the entire residue. That is what a
+The two rules at the bottom of the table hold the entire residue. That is what a
 corpus-fitted cutoff does: it sits where the corpus's clean band ended, and real
 code's clean band goes higher. Those two are the rules to refit first on your
 own code.

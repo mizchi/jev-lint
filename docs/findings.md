@@ -7,7 +7,7 @@ the parts that went wrong and the parts that were later retracted. Against
 **Read in order, and note that later sections supersede earlier ones where they
 conflict.** Sections 1-8 record the tool at 8 rules over a 10-file corpus, with
 `.mjs` sources and a single batching axis. Sections 9-11 are the current state:
-15 rules across three packs, a 13-file corpus, TypeScript sources, and two
+15 rules across two packs, a 13-file corpus, TypeScript sources, and two
 batching axes. Section 12 lists what is still unmeasured, and section 13 is the
 tool applied to its own source, which is where its four worst bugs were found.
 Where a number changed, the later one is the live one and the earlier one is
@@ -27,18 +27,19 @@ npm test              # 99 checks, no API key
 npm run typecheck     # the full type surface, including tools and tests
 ```
 
-The recorded runs, each replayable with `jevlint replay <path> --labels
-corpus/labels.json`:
+The recorded runs. The five marked below are `jevlint-run-1` records and
+replay with `jevlint replay <path> --labels corpus/labels.json`; the two tool
+outputs and the cache have their own shapes and do not:
 
 | record | what it holds |
 | --- | --- |
-| `calibration.json` | the shipped 15-rule fit, file axis (sections 1, 4, 10) |
-| `calibration-rule-axis.json` | the naming pack refitted on the rule axis (section 9) |
-| `calibration-rule-axis-comments.json` | the comment pack, likewise |
+| `calibration.json` | **replays.** the shipped 15-rule fit, file axis (sections 1, 4, 10) |
+| `calibration-rule-axis.json` | **replays.** the naming pack refitted on the rule axis (section 9) |
+| `calibration-rule-axis-comments.json` | **replays.** the comment pack, likewise |
 | `grouping.json` | the axis comparison (section 9) |
 | `grouping-refit.json` | the same comparison with each axis at its own cutoffs |
 | `arms.json` | four state arms (section 3) |
-| `self-lint-before.json` / `self-lint-after.json` | this repository judged before and after section 13's fixes |
+| `self-lint-before.json` / `self-lint-after.json` | **replay.** this repository judged before and after section 13's fixes |
 | `self-lint-cache.json` | the 737 verdicts behind section 5, kept as a cache |
 
 ---
@@ -168,7 +169,7 @@ Which differs per rule, and the corpus shows all three cases:
 | rule | evidence lives | arm | why |
 | --- | --- | --- | --- |
 | `test-name-matches-body` | in the subject | `bare` | the matcher captures the title AND the body; every arm scores 1.00/1.00, so `bare` wins on cache stability — an unrelated edit in the same file cannot change this verdict |
-| `fn-name-promises` | mostly in the subject | `located` | all arms separate perfectly; the file widens the margin 0.65 → 0.81, and a wider margin is a rule whose cutoff matters less |
+| `fn-name-promises` | mostly in the subject | `located` | all arms separate perfectly; the file widens the class separation 0.70 → 0.83 and the gap 0.27 → 0.50 (`arms.json`), and a wider gap is a rule whose cutoff matters less |
 | `var-name-describes-value` | in the *usage* | `located` | not separable without it |
 | `module-name-describes-contents` | nowhere local | `graph` | a file's text never mentions its own path |
 
@@ -953,19 +954,26 @@ them changed the tests' *power*, not their style:
   point in favour of `review` mode on a diff and against `check` on a whole
   repository: the rules find fresh mistakes, and old code has had its names
   argued over already.
-- **The residue flickers.** After the fixes, consecutive passes over identical
-  code report 1, 2 and 3 findings, drawn from a pool of four borderline tests at
-  0.55–0.70 against a 0.54 cutoff. One finding is stable across every pass and I
-  disagree with it: `batch/rule: every subject lands in exactly one batch,
-  grouped per rule` now verifies placement by identity, batch count, grouping
-  and rule purity, and is still flagged at 0.65–0.70. That is a false positive
+- **The residue flickers, and part of it was this tool's own bug.** At the time
+  of writing this section, consecutive passes over identical code reported 1, 2
+  and 3 findings from a pool of four borderline tests, and
+  `batch/rule: every subject lands in exactly one batch, grouped per rule` was
+  stable across every pass at 0.65 against a 0.54 cutoff — a false positive
   three rounds of strengthening could not clear.
+
+  It cleared later, and not by strengthening the test. A source audit found that
+  a subject over `INLINE_LIMIT` on an arm carrying no file source was asked
+  about with **no code in the question at all** — 111 subjects, 8% of them, and
+  the test rules sit on `bare`. With the code supplied, the per-pass residue
+  became a stable 2 and `test-name-verifies-claim`'s headroom went from +0.02 to
+  +0.10. See `docs/deepdive.md` §6 for the current figures; the ones in this
+  section are the ones that were true when it was written.
 - **So the cutoff is the adopter's job, again.** `test-name-verifies-claim`'s
-  clean band on this repository has a median of 0.18 and a tail to 0.70, while
-  its corpus-fitted cutoff is 0.54. The flags are genuine outliers against that
-  median — the rule is pointing somewhere real — but anyone running this on
-  their own tests should expect to refit, exactly as section 4 says and as this
-  section demonstrates on the author's own code.
+  clean band on this repository had a median of 0.18 and a tail to 0.70 against
+  a corpus-fitted cutoff of 0.54 when this was written; after the fix above the
+  tail is 0.44. Either way the conclusion holds and is the one section 4 states:
+  a cutoff fitted to someone else's corpus sits where *their* clean band ended,
+  so expect to refit.
 - **A state over budget still loses its verdicts.** The planner now avoids that
   case by margin rather than recovering from it. The fix is for the client to
   step the arm down and retry when question-splitting is exhausted, which needs

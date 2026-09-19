@@ -71,7 +71,7 @@ export const DEFAULT_BATCH_SIZE = 256;
  * planner needs lives in STATE_MARGIN and REQUEST_MARGIN instead, because this
  * same estimate is what `--dry-run` prices a run with: ratios chosen
  * pessimistically enough to plan safely overstated a real run's bill by 22%.
- * Even so, a dry run reads about 10% high in aggregate -- it is a bound to
+ * Even so, a dry run reads about 9% high in aggregate -- it is a bound to
  * budget against, not a quote.
  */
 const CHARS_PER_TOKEN_TEXT = 3.4;

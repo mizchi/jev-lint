@@ -16,23 +16,30 @@ what it is for. Where a number here has a history, the history is there.
 
 ## Re-deriving any of this without spending anything
 
-Every conclusion below rests on a recorded run, and a record replays for free
-with no API key:
+Every conclusion below rests on a recorded run. Five of the records are run
+records, which replay for free with no API key:
 
 ```bash
 jevlint replay docs/data/<record>.json --labels corpus/labels.json
 ```
 
-| record | what it holds |
-| --- | --- |
-| `calibration.json` | the shipped 15-rule fit, file axis |
-| `calibration-rule-axis.json` | the naming pack refitted on the rule axis |
-| `calibration-rule-axis-comments.json` | the comment pack, likewise |
-| `grouping.json` | the file-vs-rule axis comparison |
-| `grouping-refit.json` | the same comparison with each axis at its own cutoffs |
-| `arms.json` | four state arms over the whole corpus |
-| `self-lint-before.json`, `self-lint-after.json` | this repository judged before and after the fixes of §6 |
-| `self-lint-cache.json` | 737 verdicts from an earlier self-lint, kept as a cache |
+| record | replays | what it holds |
+| --- | --- | --- |
+| `calibration.json` | yes | the shipped 15-rule fit, file axis |
+| `calibration-rule-axis.json` | yes | the naming pack refitted on the rule axis |
+| `calibration-rule-axis-comments.json` | yes | the comment pack, likewise |
+| `self-lint-before.json` | yes | this repository before the fixes of §6 |
+| `self-lint-after.json` | yes | and after them |
+| `grouping.json` | no | the file-vs-rule axis comparison, as `tools/grouping.ts` writes it |
+| `grouping-refit.json` | no | the same comparison with each axis at its own cutoffs |
+| `arms.json` | no | four state arms over the whole corpus, as `tools/arms.ts` writes it |
+| `self-lint-cache.json` | no | 737 verdicts from an earlier self-lint, kept as a verdict cache |
+
+The four that do not replay are not run records: the two tool outputs carry
+their own shape and the cache carries the older `jevlint-1` schema. They are
+still readable — every number quoted from them below was derived with `node`
+over the JSON, and the derivation is in this document rather than hidden in a
+script.
 
 A cutoff is a claim about a specific set of answers. Keeping the record is what
 makes the claim checkable later, and what stops a recalibration from silently
@@ -96,7 +103,7 @@ Which differs per rule, and the corpus shows all three cases:
 | rule | evidence lives | arm | why |
 | --- | --- | --- | --- |
 | the test rules | in the subject | `bare` | the matcher captures the title *and* the body, so the arm adds nothing; `bare` then wins on cache stability, since an unrelated edit in the same file cannot move the verdict |
-| `fn-name-promises` | mostly in the subject | `located` | all arms separate; the file widens the margin 0.65 → 0.81, and a wider margin is a rule whose cutoff matters less |
+| `fn-name-promises` | mostly in the subject | `located` | all arms separate; the file widens the class separation 0.70 → 0.83 and the gap 0.27 → 0.50, and a wider gap is a rule whose cutoff matters less |
 | `var-name-describes-value` | in the *usage* | `located` | not separable without it |
 
 **One caveat on that first row.** `arms.json` measured the *pre-split* pack:
@@ -480,8 +487,10 @@ summary lines**, not by any rule it ran:
 1. `6 batch(es) fell back from `bare` to `bare`` — not a fallback at all. The
    planner probed the arm against the state for every match in a file at once,
    so a file was degraded for having many *matches* rather than much *source*.
-   Fixing it restored `located` for about 1,000 subjects per run that had been
-   judged at `local`.
+   Fixing it restored `located` for the 222 subjects per run that had been
+   judged at `local` (`self-lint-before.json` counts them; the ~1,000 figure an
+   earlier write-up gave was the TOTAL on `located` afterwards, not the number
+   restored).
 2. The accurate planner then lost 100 verdicts to `max_tokens_exceeded`, and the
    reproduction showed the request refused *with a single question attached* —
    so it was the state, which no split can shrink.
@@ -507,7 +516,9 @@ The largest gaps, kept as a list so nothing is quietly assumed:
   longer exists.
 - **The axis has never been compared with the arm held constant**, so "the axis
   moves verdicts" and "the arm moves verdicts" are not separated.
-- **Review mode has never been measured per axis**, and it is the mode to use.
+- **Review mode has been measured only on the file axis** (2 requests,
+  $0.00015 on a one-function diff), never on the rule axis, and it is the mode
+  to use.
 - **A state over budget still loses its verdicts.** The planner avoids that case
   by margin rather than recovering from it. The fix is for the client to step
   the arm down and retry when question-splitting is exhausted, which needs a
