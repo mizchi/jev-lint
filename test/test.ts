@@ -705,10 +705,15 @@ test("state: reserved captures are hidden and long ones truncated", () => {
         NAME: { text: "loadUser" },
         BIG: { text: "y".repeat(2000) },
       },
-      multi: { ARGS: [{ text: "a" }, { text: "b" }] },
+      // ast-grep's own bookkeeping for a relational sub-match (`has`, `inside`):
+      // the text of whatever the sub-rule matched, under a name no rule wrote.
+      // It reached the model as `matcher_captured.secondary` on 62 of the
+      // corpus's 276 subjects before `--show-subjects` made it visible.
+      multi: { ARGS: [{ text: "a" }, { text: "b" }], secondary: [{ text: "loadUser" }] },
     },
   });
   assert.equal(c.JEVNAME, undefined);
+  assert.equal(c.secondary, undefined, "ast-grep's internal capture is not the rule's");
   assert.equal(c.NAME, "loadUser");
   assert.ok(c.BIG.length <= 601);
   assert.equal(c.ARGS, "a, b");

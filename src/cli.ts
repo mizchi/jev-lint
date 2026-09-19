@@ -67,6 +67,7 @@ interface Options {
   force: boolean;
   dryRun: boolean;
   showMissing: boolean;
+  showSubjects: boolean;
   color: boolean;
   quiet: boolean;
   paths: string[];
@@ -114,6 +115,9 @@ options:
       --force              ignore cached verdicts
       --dry-run            plan and price the run without asking anything
       --show-missing       list subjects that got no verdict
+      --show-subjects      with --dry-run: list every subject the matchers found,
+                           with its node kind and captures -- the free way to
+                           see what a rule would ask about, and about what
       --no-color           plain output
       --quiet              findings only
 
@@ -187,6 +191,7 @@ function parseArgs(argv: string[]): Options {
     force: false,
     dryRun: false,
     showMissing: false,
+    showSubjects: false,
     color: process.stdout.isTTY === true && !process.env.NO_COLOR,
     quiet: false,
     paths: [],
@@ -296,6 +301,9 @@ function parseArgs(argv: string[]): Options {
         break;
       case "--show-missing":
         opts.showMissing = true;
+        break;
+      case "--show-subjects":
+        opts.showSubjects = true;
         break;
       case "--no-color":
         opts.color = false;
@@ -507,6 +515,22 @@ async function main(argv: string[]): Promise<number> {
     }
     if (result.batches.length > 40) out(`  … and ${result.batches.length - 40} more`);
     out(`~${tokens.toLocaleString()} input tokens, ~$${((tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
+    // A count says the matcher fired; it does not say on what. Listing the
+    // subjects is how a rule author checks that a matcher found the four
+    // predicates and not the loader, and that `$NAME` captured a name -- the
+    // two things a wrong matcher gets wrong while producing a plausible count.
+    if (opts.showSubjects) {
+      out("");
+      out(`${result.subjects.length} subject(s):`);
+      for (const s of result.subjects) {
+        const where = s.line === s.endLine ? `${s.line}` : `${s.line}-${s.endLine}`;
+        const caps = s.captured && Object.keys(s.captured).length > 0
+          ? "  " + Object.entries(s.captured).map(([k, v]) => `$${k}=${JSON.stringify(v)}`).join(" ")
+          : "";
+        const judged = s.promoted ? `  judged: ${s.rule.subject}` : "";
+        out(`  ${s.file}:${where}  ${s.rule.id}  ${s.nodeKind}${judged}${caps}`);
+      }
+    }
     // A dry run is what someone checks a suppression with -- it is the free way
     // to confirm an ignore comment covers what they meant it to.
     if (result.ignored && (result.ignored.subjects > 0 || result.ignored.files.length > 0)) {
@@ -551,7 +575,7 @@ function cmdRules(opts: Options, out: Log, log: Log): number {
   for (const e of errors) log(`rule error: ${e}`);
   for (const r of rules) {
     out(
-      `${r.id}\n  ${r.language}  kind=${r.kind}  subject=${r.subject}  arm=${r.state}  cutoff=${cutoffFor(r, opts.at).toFixed(2)}  severity=${r.severity}`,
+      `${r.id}\n  ${r.languages.join(", ")}  kind=${r.kind}  subject=${r.subject}  arm=${r.state}  cutoff=${cutoffFor(r, opts.at).toFixed(2)}  severity=${r.severity}`,
     );
     out(`  ask: ${r.ask}`);
     if (r.note) out(`  note (model only): ${r.note}`);

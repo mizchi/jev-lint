@@ -460,18 +460,28 @@ export function capturedMetavariables(match: AstGrepMatch): Record<string, strin
   const out: Record<string, string> = {};
   const single = match.metaVariables?.single ?? {};
   for (const [k, v] of Object.entries(single)) {
-    if (k === "JEVNAME" || k.startsWith("_")) continue;
+    if (RESERVED_CAPTURES.has(k) || k.startsWith("_")) continue;
     if (typeof v?.text !== "string") continue;
     out[k] = v.text.length > 600 ? `${v.text.slice(0, 600)}…` : v.text;
   }
   const multi = match.metaVariables?.multi ?? {};
   for (const [k, list] of Object.entries(multi)) {
     if (!Array.isArray(list) || list.length === 0) continue;
-    if (k === "JEVNAME" || k.startsWith("_")) continue;
+    if (RESERVED_CAPTURES.has(k) || k.startsWith("_")) continue;
     out[k] = list.map((n) => n.text).join(", ").slice(0, 600);
   }
   return out;
 }
+
+/**
+ * Captures no rule wrote. `JEVNAME` is this tool's probe marker; `secondary`
+ * is ast-grep's record of what a relational sub-rule (`has`, `inside`,
+ * `follows`, `precedes`) matched, emitted on every composite match. Neither
+ * is something the sentence refers to, and the second one reached the model
+ * as a capture on a quarter of the corpus before it was noticed -- a
+ * duplicate of `$NAME` or `$VALUE` under a name that means nothing to it.
+ */
+const RESERVED_CAPTURES = new Set(["JEVNAME", "secondary"]);
 
 export function truncate(text: string): string {
   return text.length > SUBJECT_TEXT_LIMIT
