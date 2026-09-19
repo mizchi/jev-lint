@@ -681,6 +681,27 @@ test("state: the module outline carries path, visibility split and imports", () 
   assert.match(out, /imports:/);
 });
 
+test("state: the outline carries each symbol's signature, not only its name", () => {
+  // The file-consistency candidates could not run on `graph`: whether one
+  // export returns a Result while its siblings throw, or takes (ctx, input)
+  // while the rest take (input, ctx), is a fact about signatures, and the
+  // outline had names and line numbers only. They had to carry the whole
+  // source instead. The signature is the text up to the body, one line,
+  // whitespace collapsed, capped -- what a reader scans in a file's fold.
+  const entry = sampleEntry();
+  entry.symbols[0]!.text = "export async function outer(\n  ctx: Ctx,\n  input: Input,\n): Promise<Result<Out>> {\n  return inner(ctx);\n}";
+  entry.symbols[1]!.text = "const inner = (ctx: Ctx) => {\n  throw new Error();\n};";
+  const out = renderOutline("src/api/user.ts", entry);
+  assert.match(out, /outer \(function, lines 1-20\): export async function outer\( ctx: Ctx, input: Input, \): Promise<Result<Out>>/);
+  assert.match(out, /inner \(function, lines 5-9\): const inner = \(ctx: Ctx\) =>/);
+  assert.doesNotMatch(out, /return inner/, "the body stays out of the outline");
+  // A very long signature is cut, so one generic monster cannot blow the state budget.
+  entry.symbols[0]!.text = `function outer(${"a: number, ".repeat(60)}) {}`;
+  const cut = renderOutline("src/api/user.ts", entry).split("\n").find((l) => l.includes("outer ("))!;
+  assert.ok(cut.length < 260, `signature line should be capped, got ${cut.length}`);
+  assert.match(cut, /…$/);
+});
+
 test("state: a module with no named items says so rather than rendering nothing", () => {
   const out = renderOutline("src/empty.ts", {
     language: "TypeScript",

@@ -209,7 +209,7 @@ text.
 | `bare` | the matched code and the file's name | cheapest, and the only arm immune to unrelated edits in the same file |
 | `local` | + each match's enclosing function, deduplicated | — |
 | `located` | + the whole file source | — |
-| `graph` | + path identity, imports, symbol table with call edges; **no source** | small at any file size |
+| `graph` | + path identity, imports, symbol table with each symbol's signature and call edges; **no source** | small at any file size |
 | `full` | source and graph | hits the 32Ki state budget soonest |
 
 **This is not a quality knob.** More context is not better; it is a choice of

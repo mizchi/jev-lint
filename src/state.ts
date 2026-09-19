@@ -500,6 +500,28 @@ export function truncate(text: string): string {
  * not change it. Renaming a local, fixing a comment, reordering statements: all
  * of them leave this outline, and therefore the cached verdict, untouched.
  */
+/** Longer than this and a signature is cut; one generic monster must not eat the state budget. */
+const SIGNATURE_LIMIT = 200;
+
+/**
+ * A symbol's signature: its text up to the body, on one line.
+ *
+ * The outline used to carry names and line numbers only, which is enough to
+ * ask whether a module is named for what it holds and not enough to ask
+ * whether its exports agree with each other -- one returning a Result while
+ * the rest throw, one taking (ctx, input) while the rest take (input, ctx).
+ * Those are facts about signatures, and without them the file-consistency
+ * rules had to carry the whole source. Up to the first `{` is the signature
+ * for a function, class, impl, interface or object; a `=>` arrow with an
+ * expression body has no `{`, so a line break ends it instead.
+ */
+export function signatureOf(text: string): string {
+  const brace = text.indexOf("{");
+  const head = brace >= 0 ? text.slice(0, brace) : (text.split("\n")[0] ?? "");
+  const oneLine = head.replace(/\s+/g, " ").trim();
+  return oneLine.length > SIGNATURE_LIMIT ? `${oneLine.slice(0, SIGNATURE_LIMIT)}…` : oneLine;
+}
+
 export function renderOutline(file: string, entry: FileSymbols | null): string {
   const id = moduleIdentity(file);
   const lines = [`path: ${id.path}`];
@@ -512,7 +534,12 @@ export function renderOutline(file: string, entry: FileSymbols | null): string {
   const tests = symbols.filter((s) => s.isTest);
 
   const render = (list: SymbolInfo[]) =>
-    list.map((s) => `${s.name} (${s.role}, lines ${s.line}-${s.endLine})`).join("\n  ");
+    list
+      .map((s) => {
+        const sig = signatureOf(s.text);
+        return `${s.name} (${s.role}, lines ${s.line}-${s.endLine})${sig ? `: ${sig}` : ""}`;
+      })
+      .join("\n  ");
 
   if (exported.length) lines.push(`public API:\n  ${render(exported)}`);
   if (local.length) lines.push(`private to this module:\n  ${render(local)}`);
