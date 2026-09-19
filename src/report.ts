@@ -284,8 +284,8 @@ const round = (n: unknown) => (typeof n === "number" ? Math.round(n * 1000) / 10
 /** The gap table -- the first thing to read when authoring rules. */
 export function formatGaps(rows: GapRow[], { color = true }: { color?: boolean } = {}): string {
   const c = palette(color);
-  const head = ["rule", "kind", "matched", "reported", "cutoff", "median", "gap", "suggest", "verdict"];
-  const widths = [28, 5, 7, 8, 6, 6, 5, 7, 7];
+  const head = ["rule", "kind", "matched", "reported", "cutoff", "median", "top<at", "head", "gap", "suggest", "verdict"];
+  const widths = [28, 5, 7, 8, 6, 6, 6, 6, 5, 7, 7];
   const lines: string[] = [head.map((h, i) => h.padEnd(widths[i]!)).join(" ")];
   lines.push(c.dim(widths.map((w) => "-".repeat(w)).join(" ")));
 
@@ -305,6 +305,8 @@ export function formatGaps(rows: GapRow[], { color = true }: { color?: boolean }
       String(r.reported),
       r.at.toFixed(2),
       r.median === null ? "-" : r.median.toFixed(2),
+      r.highestBelow === null ? "-" : r.highestBelow.toFixed(2),
+      r.headroom === null ? "-" : `+${r.headroom.toFixed(2)}`,
       r.matches > 1 ? r.gap.toFixed(2) : "-",
       r.matches > 1 ? String(r.suggested) : "-",
       r.verdict,
@@ -327,6 +329,19 @@ export function formatGaps(rows: GapRow[], { color = true }: { color?: boolean }
   );
   lines.push("  silent   the matcher never fired. Loosen it; it cannot be seen failing anywhere else.");
   lines.push("  thin     too few matches to judge. Not a pass.");
+  lines.push("");
+  lines.push(
+    c.bold("On unlabeled code, read `head` instead."),
+  );
+  lines.push(
+    "  A gap needs two classes and real source is ~99.8% clean, so `verdict` says `rewrite` for",
+  );
+  lines.push(
+    "  everything and means nothing there. `top<at` is the highest answer still under the cutoff and",
+  );
+  lines.push(
+    "  `head` is the clearance above it -- which is what predicts the next false positive.",
+  );
   return lines.join("\n");
 }
 

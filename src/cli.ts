@@ -14,7 +14,7 @@
  *   rules     list the loaded rules and every validation error
  *   replay    re-score a recorded run under different cutoffs, for free
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { loadRules, cutoffFor, defaultRulePaths } from "./rules.ts";
 import { run, collectSubjects, toRecord } from "./run.ts";
 import { changedRanges, changedFiles } from "./diff.ts";
@@ -31,7 +31,8 @@ import {
 import { ARMS, ARM_BLURB } from "./state.ts";
 import { DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { Cache, DEFAULT_CACHE_PATH } from "./cache.ts";
-import { USD_PER_MTOK } from "./jev.ts";
+import { USD_PER_MTOK, API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_MODEL, fromEnv } from "./jev.ts";
+import { CONFIG_NAMES, applyConfig, findConfig, initialConfig, loadConfig } from "./config.ts";
 import { GROUP_MODES, STATE_ARMS } from "./types.ts";
 import type { Finding, GroupMode, Labels, Rule, RunResult, StateArm, Subject } from "./types.ts";
 import { explain, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
@@ -44,6 +45,9 @@ interface Options {
   rulesAreShipped: boolean;
   /** How many times to ask everything, to see which findings reproduce. */
   retry: number;
+  /** An explicit config path, "none" to ignore any file, or null to search. */
+  config: string | null;
+  baseUrl: string | null;
   cache: string;
   arm: StateArm | null;
   group: GroupMode;
@@ -80,8 +84,12 @@ usage:
   jev-lint calibrate [paths...]    repeat runs, and fit cutoffs if labels exist
   jev-lint rules                   list loaded rules and validation errors
   jev-lint replay <record.json>    re-score a recorded run, no requests
+  jev-lint init                   write a .jev-lint.yaml to start from
 
 options:
+      --config <path>      config file (default: nearest .jev-lint.yaml,
+                           searching upwards); --no-config ignores it
+      --base-url <url>     the API endpoint (default ${DEFAULT_BASE_URL})
   -R, --rules <path>       rule file or directory (repeatable; default ./rules,
                            else the packs inside the installed package)
   -r, --retry <n>          ask everything n times and report what reproduces
@@ -142,9 +150,15 @@ batching:
   scheduler will not overrule. Pin any rule whose cutoff you calibrated.
 
 environment:
-  TYPESAFEAI_API_KEY       required for anything that asks
-  TYPESAFEAI_BASE_URL      override the API endpoint
-  JEV_LINT_AST_GREP         path to an ast-grep binary
+  ${API_KEY_VARS[0]}         required for anything that asks
+  ${API_KEY_VARS[1]}       accepted as a fallback
+  ${BASE_URL_VARS[0]}        override the API endpoint
+  JEV_LINT_MODEL           override the model
+  JEV_LINT_AST_GREP        path to an ast-grep binary
+
+  A flag beats .jev-lint.yaml, and the file beats these defaults. The API key
+  is read from the environment only -- never from the config file, which
+  belongs in version control.
 `;
 
 function parseArgs(argv: string[]): Options {
@@ -152,6 +166,8 @@ function parseArgs(argv: string[]): Options {
     rules: [],
     rulesAreShipped: false,
     retry: 1,
+    config: null,
+    baseUrl: null,
     cache: DEFAULT_CACHE_PATH,
     arm: null,
     group: "file",
@@ -190,6 +206,17 @@ function parseArgs(argv: string[]): Options {
       case "-r":
       case "--retry":
         opts.retry = Number(need(i, a));
+        i += 1;
+        break;
+      case "--config":
+        opts.config = need(i, a);
+        i += 1;
+        break;
+      case "--no-config":
+        opts.config = "none";
+        break;
+      case "--base-url":
+        opts.baseUrl = need(i, a);
         i += 1;
         break;
       case "-c":
@@ -308,6 +335,44 @@ function parseArgs(argv: string[]): Options {
   return opts;
 }
 
+/**
+ * `jev-lint init`: write a config to start from.
+ *
+ * Refuses to overwrite without `--force`, because the file it would replace is
+ * the one holding someone's calibrated cutoffs.
+ */
+function cmdInit(opts: Options, out: Log, log: Log): number {
+  const target = opts.config && opts.config !== "none" ? opts.config : CONFIG_NAMES[0];
+  if (existsSync(target) && !opts.force) {
+    log(`${target} already exists; pass --force to overwrite it`);
+    return 2;
+  }
+  try {
+    writeFileSync(target, initialConfig());
+  } catch (err: unknown) {
+    log(`could not write ${target}: ${String(err).slice(0, 160)}`);
+    return 2;
+  }
+
+  out(`wrote ${target}`);
+  out("");
+  const key = fromEnv(API_KEY_VARS);
+  if (key) {
+    out(`${API_KEY_VARS[0]} is set. Next:`);
+  } else {
+    out(`Set your API key, then run:`);
+    out(`  export ${API_KEY_VARS[0]}=...`);
+  }
+  out(`  npx jev-lint check src --dry-run   # what it would ask, and the price`);
+  out(`  npx jev-lint check src             # ask it`);
+  out("");
+  out("Everything in the file is commented out, so it changes nothing until you");
+  out("uncomment a line. The shipped rules' cutoffs were fitted to this");
+  out("package's own corpus -- see `jev-lint gaps` and `jev-lint calibrate`");
+  out("before trusting them on your code.");
+  return 0;
+}
+
 function loadOrDie(opts: Options, log: Log): { rules: Rule[]; errors: string[] } | null {
   const { rules, errors } = loadRules(opts.rules);
   // Judging someone's code against packaged rules is reasonable; doing it
@@ -344,6 +409,29 @@ async function main(argv: string[]): Promise<number> {
 
   const log: Log = (s) => process.stderr.write(`${s}\n`);
   const out: Log = (s) => process.stdout.write(`${s}\n`);
+
+  if (command === "init") return cmdInit(opts, out, log);
+
+  // A flag beats the file and the file beats the built-in default, which is the
+  // only order that lets a project commit a configuration and still let someone
+  // override one setting for one run. `explicit` is how that is enforced: it
+  // records which flags were actually PASSED, since a parsed default is
+  // indistinguishable from one the user typed.
+  const explicit = new Set(rest.filter((a) => a.startsWith("-")));
+  const configPath =
+    opts.config === "none" ? null : (opts.config ?? findConfig());
+  if (opts.config && opts.config !== "none" && !existsSync(opts.config)) {
+    log(`config not found: ${opts.config}`);
+    return 2;
+  }
+  const { config, errors: configErrors } = loadConfig(configPath);
+  // Loudly, and fatally. A config with a typo in it is a configuration that
+  // does something other than what it says, which is worse than no config.
+  for (const e of configErrors) log(`config error: ${e}`);
+  if (configErrors.length > 0) return 2;
+  applyConfig(opts, config, explicit);
+  if (configPath && !opts.quiet) log(`using ${configPath}`);
+
   const cachePath = opts.cache === "none" ? null : opts.cache;
 
   if (command === "rules") return cmdRules(opts, out, log);

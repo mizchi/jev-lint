@@ -44,6 +44,18 @@ export interface GapRow {
   suggested: number;
   verdict: "works" | "move" | "rewrite" | "silent" | "thin";
   values: number[];
+  /**
+   * The highest answer still BELOW the cutoff, and how far below it sits.
+   *
+   * On a labeled corpus this is a footnote. On real code it is the whole
+   * report: a gap needs two classes and real source is about 99.8% clean, so
+   * `verdict` says `rewrite` for every rule that fires and means nothing.
+   * Headroom is what predicts the next false positive -- the two rules with the
+   * least of it held the entire residue on this repository -- and it needs no
+   * labels at all.
+   */
+  highestBelow: number | null;
+  headroom: number | null;
 }
 
 export interface StabilitySubject {
@@ -157,6 +169,7 @@ export function gapReport(
     const scale = rule.kind === "score" ? 3 : 1;
     const { gap, low, high } = widestGap(values);
     const reported = answers.filter((a) => a.value! >= at).length;
+    const below = values.filter((v) => v < at);
     // "Wide" has to be relative to the scale: 0.5 is narrow on a 0-3 score and
     // half the range on a 0-1 noul.
     const wide = gap >= 0.25 * scale;
@@ -197,6 +210,8 @@ export function gapReport(
       suggested: gap > 0 && low !== null && high !== null ? round2((low + high) / 2) : at,
       verdict,
       values: values.slice().sort((a, b) => b - a),
+      highestBelow: below.length ? Math.max(...below) : null,
+      headroom: below.length ? round2(at - Math.max(...below)) : null,
     });
   }
   return rows;

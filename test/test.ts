@@ -53,7 +53,14 @@ import {
   toAstGrepRule,
 } from "../src/scan.ts";
 import { formatGithub, formatJson, formatPretty, silentRules } from "../src/report.ts";
-import { Jev, JevError } from "../src/jev.ts";
+import { Jev, JevError, API_KEY_VARS, DEFAULT_BASE_URL, fromEnv } from "../src/jev.ts";
+import {
+  applyConfig,
+  findConfig,
+  initialConfig,
+  loadConfig,
+  type Configurable,
+} from "../src/config.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules } from "../src/ignore.ts";
 import { mergePasses } from "../src/run.ts";
 import type {
@@ -2036,6 +2043,187 @@ test("retry: confidences are averaged over the passes that had one", () => {
   assert.ok(Math.abs(merged[0]!.answer!.confidence! - 0.7) < 0.001);
   const none = mergePasses([pass(2.5, null), pass(2.5, null)], {});
   assert.equal(none[0]!.answer!.confidence, null);
+});
+
+
+// ------------------------------------------------- .jev-lint.yaml
+
+const writeConfig = (dir: string, body: string): string => {
+  const p = join(dir, ".jev-lint.yaml");
+  writeFileSync(p, body);
+  return p;
+};
+
+const configurable = (over: Partial<Configurable> = {}): Configurable => ({
+  rules: [],
+  rulesAreShipped: false,
+  paths: [],
+  cache: ".jev-lint-cache.json",
+  model: null,
+  baseUrl: null,
+  group: "file",
+  arm: null,
+  concurrency: 4,
+  batchSize: 256,
+  ruleBatchCap: 32,
+  retry: 1,
+  unsureBelow: null,
+  at: {},
+  ...over,
+});
+
+test("config: a valid file parses into every setting it names", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
+  try {
+    const p = writeConfig(
+      dir,
+      [
+        "rules: my-rules",
+        "paths: [src, lib]",
+        "cache: none",
+        "model: jev-1.13.0",
+        "baseUrl: https://proxy.example/v1",
+        "apiKeyEnv: MY_KEY",
+        "group: rule",
+        "arm: bare",
+        "concurrency: 2",
+        "retry: 3",
+        "unsureBelow: 0.4",
+        "at:",
+        "  fn-name-promises: 0.8",
+      ].join("\n"),
+    );
+    const { config, errors } = loadConfig(p);
+    assert.deepEqual(errors, []);
+    assert.deepEqual(config.rules, ["my-rules"], "a bare string becomes a one-item list");
+    assert.deepEqual(config.paths, ["src", "lib"]);
+    assert.equal(config.cache, null, "`none` disables the cache");
+    assert.equal(config.baseUrl, "https://proxy.example/v1");
+    assert.equal(config.group, "rule");
+    assert.equal(config.arm, "bare");
+    assert.equal(config.retry, 3);
+    assert.equal(config.unsureBelow, 0.4);
+    assert.deepEqual(config.at, { "fn-name-promises": 0.8 });
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("config: an API key in the file is an error, not a silently ignored field", () => {
+  // A config file belongs in version control and a secret does not. Ignoring
+  // the field would leave someone believing the key was picked up.
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
+  try {
+    const { config, errors } = loadConfig(writeConfig(dir, "apiKey: sk-secret\n"));
+    assert.equal(errors.length, 1);
+    assert.match(errors[0]!, /not supported/);
+    assert.match(errors[0]!, /apiKeyEnv/, "and it says what to do instead");
+    assert.equal(Object.keys(config).length, 0, "nothing is taken from it");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("config: an unknown key, a bad value and bad YAML are all reported", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
+  try {
+    assert.match(loadConfig(writeConfig(dir, "concurency: 4\n")).errors[0]!, /not a known setting/);
+    assert.match(loadConfig(writeConfig(dir, "group: sideways\n")).errors[0]!, /must be one of/);
+    assert.match(loadConfig(writeConfig(dir, "retry: 0\n")).errors[0]!, /positive integer/);
+    assert.match(loadConfig(writeConfig(dir, "arm: wide\n")).errors[0]!, /must be null or one of/);
+    assert.match(loadConfig(writeConfig(dir, "unsureBelow: 2\n")).errors[0]!, /0 to 1/);
+    assert.match(loadConfig(writeConfig(dir, "at: [1, 2]\n")).errors[0]!, /mapping of rule id/);
+    assert.match(loadConfig(writeConfig(dir, "at:\n  r: yes\n")).errors[0]!, /must be a number/);
+    assert.match(loadConfig(writeConfig(dir, "- a\n- b\n")).errors[0]!, /not a mapping/);
+    assert.match(loadConfig(writeConfig(dir, "a: [unclosed\n")).errors.length ? "ok" : "", /ok/);
+    // An empty file is valid and sets nothing.
+    assert.deepEqual(loadConfig(writeConfig(dir, "\n")).errors, []);
+    assert.deepEqual(loadConfig(writeConfig(dir, "\n")).config, {});
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("config: a flag beats the file, and the file beats the default", () => {
+  // The precedence that lets a project commit a config and still be overridden
+  // for one run. `explicit` is why it works: `concurrency` is already 4 before
+  // any file is read, so comparing against the default would let the file win
+  // over a flag that happened to match it.
+  const config = { concurrency: 2, group: "rule" as const, retry: 5 };
+
+  const fromFile = configurable();
+  applyConfig(fromFile, config, new Set());
+  assert.equal(fromFile.concurrency, 2, "the file beats the built-in default");
+  assert.equal(fromFile.group, "rule");
+  assert.equal(fromFile.retry, 5);
+
+  const fromFlag = configurable({ concurrency: 8, retry: 1 });
+  applyConfig(fromFlag, config, new Set(["--concurrency", "-r"]));
+  assert.equal(fromFlag.concurrency, 8, "a flag beats the file");
+  assert.equal(fromFlag.retry, 1, "including its short form");
+  assert.equal(fromFlag.group, "rule", "and leaves the settings it did not name");
+});
+
+test("config: per-rule cutoffs merge, so a flag overrides one and keeps the rest", () => {
+  const opts = configurable({ at: { "fn-name-promises": 0.5 } });
+  applyConfig(opts, { at: { "fn-name-promises": 0.99, "var-name-describes-value": 0.42 } }, new Set(["--at"]));
+  assert.deepEqual(opts.at, { "fn-name-promises": 0.5, "var-name-describes-value": 0.42 });
+});
+
+test("config: naming the rules in the file means they are not the packaged ones", () => {
+  // Otherwise the run would announce that it fell back to the packaged packs
+  // while actually using the project's, which is the confusing half of both.
+  const opts = configurable({ rules: ["/pkg/rules"], rulesAreShipped: true });
+  applyConfig(opts, { rules: ["my-rules"] }, new Set());
+  assert.deepEqual(opts.rules, ["my-rules"]);
+  assert.equal(opts.rulesAreShipped, false);
+});
+
+test("config: the file is found by walking up, and only names jev-lint's own", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
+  const here = process.cwd();
+  try {
+    mkdirSync(join(dir, "a", "b"), { recursive: true });
+    process.chdir(join(dir, "a", "b"));
+    assert.equal(findConfig(), null, "nothing above a temp dir");
+    writeConfig(dir, "concurrency: 2\n");
+    assert.equal(findConfig(), join(dir, ".jev-lint.yaml"), "found two levels up");
+  } finally {
+    process.chdir(here);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("config: the file init writes is valid, and sets nothing until uncommented", () => {
+  // A starter config that errors, or that silently changes behaviour, is worse
+  // than none.
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
+  try {
+    const { config, errors } = loadConfig(writeConfig(dir, initialConfig()));
+    assert.deepEqual(errors, [], "the shipped starter config must parse clean");
+    assert.deepEqual(config, {}, "and change nothing until a line is uncommented");
+    assert.match(initialConfig(), /apiKeyEnv/, "and it must say where the key goes");
+    assert.ok(!/^\s*apiKey:/m.test(initialConfig()), "and never suggest putting the key in it");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("jev: the key and the endpoint prefer TYPESAFE_ and fall back to TYPESAFEAI_", () => {
+  // The prevailing spelling wins, and an environment that only has the older
+  // name keeps working -- an existing setup should not become a config error.
+  assert.deepEqual(API_KEY_VARS, ["TYPESAFE_API_KEY", "TYPESAFEAI_API_KEY"]);
+  assert.equal(fromEnv(API_KEY_VARS, { TYPESAFEAI_API_KEY: "old" }), "old");
+  assert.equal(fromEnv(API_KEY_VARS, { TYPESAFE_API_KEY: "new", TYPESAFEAI_API_KEY: "old" }), "new");
+  assert.equal(fromEnv(API_KEY_VARS, { TYPESAFE_API_KEY: "   ", TYPESAFEAI_API_KEY: "old" }), "old",
+    "blank is not set");
+  assert.equal(fromEnv(API_KEY_VARS, {}), null);
+});
+
+test("jev: the endpoint is configurable and a trailing slash does not double up", () => {
+  assert.equal(new Jev({ apiKey: "k" }).baseUrl, DEFAULT_BASE_URL);
+  assert.equal(new Jev({ apiKey: "k", baseUrl: "https://proxy.example/v1/" }).baseUrl,
+    "https://proxy.example/v1", "or the request path would contain //");
 });
 
 process.stdout.write(`\n${passed} passed, ${failed} failed\n`);

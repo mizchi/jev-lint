@@ -58,12 +58,48 @@ specific API's behaviour — that `.sort()` defaults to lexicographic order, tha
 a regex without `/g` matches once. Those belong to your existing tools. Use this
 for the other half, which has no tool at all.
 
+## Quick start
+
+Nothing to install:
+
+```bash
+export TYPESAFE_API_KEY=...
+npx -y jev-lint check src --dry-run   # what it would ask, and the price
+npx -y jev-lint check src             # ask it
+```
+
+`--dry-run` costs nothing and makes no request, so run it first: it prints how
+many subjects your code produces, how many requests that is and what they would
+cost. On this repository, 1,403 subjects is about five cents.
+
+Then, when you want to keep settings:
+
+```bash
+npx -y jev-lint init                  # writes .jev-lint.yaml
+```
+
+Everything in that file is commented out, so it changes nothing until you
+uncomment a line. What you will most likely want in it is `paths`, so
+`jev-lint check` needs no argument, and `at:` once you have calibrated a cutoff
+against your own code.
+
+| where a setting comes from | wins over |
+| --- | --- |
+| a command-line flag | everything |
+| `.jev-lint.yaml`, nearest one searching upwards | the built-in defaults |
+| the built-in default | — |
+
+**`TYPESAFE_API_KEY` is read from the environment only, never from the config
+file** — that file belongs in version control and a secret does not. Writing
+`apiKey:` into it is a hard error rather than a quietly ignored field.
+`TYPESAFEAI_API_KEY` is accepted as a fallback, and `apiKeyEnv:` in the config
+names a different variable to read. `--base-url` or `baseUrl:` points the whole
+tool at a proxy or a self-hosted endpoint.
+
 ## Install
 
 ```bash
-npm install jev-lint
-export TYPESAFEAI_API_KEY=...
-npx jev-lint check src
+npm install --save-dev jev-lint
 ```
 
 Node 20+, two runtime dependencies (`@ast-grep/cli` and `yaml`). The matcher is
@@ -73,7 +109,7 @@ shipped packs cover Rust, TypeScript, TSX and JavaScript.
 Rules are read from `./rules` when that directory exists, and otherwise from the
 packs inside the installed package — which it says on stdout when it happens,
 because their cutoffs were fitted to this package's corpus and not to your code.
-`-r/--rules <path>` overrides both and is repeatable.
+`-R/--rules <path>` overrides both and is repeatable.
 
 ### From this repository
 
@@ -99,6 +135,7 @@ jev-lint calibrate corpus --labels corpus/labels.json --repeat 3 --record run.js
 jev-lint rules                      # what loaded, and every validation error
 jev-lint replay run.json            # re-score a recorded run under new cutoffs, free
 jev-lint replay run.json --labels corpus/labels.json   # ...and re-fit them, free
+jev-lint init                       # write a .jev-lint.yaml to start from
 
 jev-lint check src --dry-run        # plan and price it without asking anything
 ```
@@ -139,8 +176,12 @@ failed and nothing was reported.
 | `--model <id>` | Jev model |
 | `--quiet` / `--no-color` | |
 
-Environment: `TYPESAFEAI_API_KEY` (required for anything that asks),
-`TYPESAFEAI_BASE_URL`, `JEV_LINT_AST_GREP`.
+| `--config <path>` | config file (default: the nearest `.jev-lint.yaml`, searching upwards); `--no-config` ignores it |
+| `--base-url <url>` | the API endpoint, for a proxy or a self-hosted deployment |
+
+Environment: **`TYPESAFE_API_KEY`** (required for anything that asks), with
+`TYPESAFEAI_API_KEY` accepted as a fallback; `TYPESAFE_BASE_URL`,
+`JEV_LINT_MODEL`, `JEV_LINT_AST_GREP`.
 
 Two lines of output are never noise. **`N rules matched nothing`** is the only
 place a dead matcher is visible — check it before trusting a clean run. On a
@@ -456,14 +497,32 @@ claim false. A vague or redundant comment is not a defect.
 
 Each rule ships in a Rust and an ECMAScript variant sharing one sentence, so
 **on a single-language repository about half the pack will report "matched
-nothing"**. Of the 15, **12 reach precision 1.00 and recall 1.00 on the corpus**
-with no decision flips across passes, and **3 do not separate at any cutoff**:
-`test-name-describes-code-rust` (precision 0.67), and both
-`comment-describes-block` rules, which **ship saying so** — cutoffs parked at
-the top of the observed range, `severity: info` so they cannot fail a build,
-and a note recording what was tried. Parked is not silenced: the Rust variant
-fires on the corpus at exactly its 0.94 cutoff, and refitting after the
-missing-code fix below still gives it precision 0.67 at best.
+nothing"**.
+
+Of the 15, **12 reach precision 1.00 and recall 1.00 on the corpus** with no
+decision flips across passes. Read that with the positive counts beside it,
+because they are small: those 12 rest on **41 labelled defects between them**,
+and the per-rule count is 6, 6, 5, 4, 4, 4, 3, 3, 2, 2, 1, 1. The two
+`module-name-describes-contents` rules have **one labelled defect each** and
+ship at `severity: info` for that reason; `comment-describes-declaration-js`
+has two and the tool's own gap report calls it `thin` — "too few matches to
+judge. Not a pass."
+
+**3 do not separate at any cutoff**, and a fourth joins them on the rule axis:
+
+| rule | measured | ships |
+| --- | --- | --- |
+| `comment-describes-block` | precision 0.67 | `info`, with a note saying so |
+| `comment-describes-block-rust` | recall 0.50 | `info`, with a note saying so |
+| `test-name-describes-code-rust` | precision 0.67 | **`warning`**, with a note saying so |
+| `fn-name-promises-rust` | 1.00/1.00 on the file axis, no separating cutoff on the **rule** axis | `warning`, pinned to the file axis |
+
+The block rules' cutoffs are parked at the top of the observed range, which is
+not the same as silenced: the Rust variant fires on the corpus at exactly its
+0.94 cutoff. And `test-name-describes-code-rust` fails by *inversion*, not by a
+bad threshold — a test that is clean for this rule answers higher than the
+genuine defect — so its TypeScript twin, which clears by 0.035 on 7 subjects,
+should be read as unproven rather than as a separate result.
 Read the 12 as "these rules separate the classes in a corpus the author wrote",
 against the baseline that **a tool reporting nothing at all scores 83.0%
 accuracy on that corpus** (229 of its 276 subjects are clean), at zero recall.
@@ -473,9 +532,10 @@ pair with the raw counts is the honest one.
 ## What to expect
 
 Run on this repository's own TypeScript — `src`, `tools`, `test` — the shipped
-packs are **1,403 subjects, 65 requests, $0.043 and under five seconds** of wall
-clock. That is roughly **3 cents per 1,000 subjects**, and `--dry-run` quotes
-about 9% high, so treat it as a bound rather than a price.
+packs are **1,403 subjects, 67 requests, 1.12M input tokens, $0.047 and under
+five seconds** of wall clock (`docs/data/self-lint-after.json`). That is roughly
+**3 cents per 1,000 subjects**, and `--dry-run` quotes about 9% high, so treat
+it as a bound rather than a price.
 
 Over several rounds it found, in 8,132 lines of TypeScript, **22 sites worth
 changing**:
@@ -493,12 +553,19 @@ reports; coverage called every one of those tests covered. Details, including
 two worth quoting, are in
 [docs/deepdive.md](docs/deepdive.md#6-accuracy-on-real-code).
 
-### Roughly one finding in five was wrong
+### About one finding in five was wrong
 
-**Read every finding against the code before believing it.** Of 11 findings in
-one round, 9 were real and 2 were not. That is the honest rate on unlabeled
-code, and it is the single most important number here: this is a tool for
-generating candidates for a human to judge, not verdicts to act on.
+**Read every finding against the code before believing it.** In one round, 11
+findings were reported and I judged 9 real and 2 wrong.
+
+Three caveats on that number, because it is the most quotable one here and the
+weakest: it is **one round**, on **one repository**, judged by the person who
+wrote both the rules and the code. It is a self-assessment, not a measurement
+against labels — the only labelled accuracy figures anywhere in this project are
+the corpus ones above. Treat it as an order of magnitude and nothing finer.
+
+What it is enough to establish is the posture: **this generates candidates for a
+human to judge, not verdicts to act on.**
 
 When you disagree with a finding it is usually one of three things, and only the
 third means the tool is wrong:
@@ -527,6 +594,13 @@ but the distance from the highest *clean* answer to the cutoff:
 | `module-name-describes-contents` | 19 | 0.18 | 0.55 | 0.62 | +0.07 |
 | `var-name-describes-value` | 801 | 0.10 | 0.55 | 0.61 | **+0.06** |
 
+`jev-lint` prints those two columns itself, and the table above is one free
+command — no API key, the three recorded passes averaged:
+
+```bash
+jev-lint replay docs/data/self-lint-after.json
+```
+
 The two rules at the bottom of the table hold the entire residue. That is what a
 corpus-fitted cutoff does: it sits where the corpus's clean band ended, and real
 code's clean band goes higher. Those two are the rules to refit first on your
@@ -544,19 +618,22 @@ person.
 
 Two honest notes about that residue:
 
-- **There is no describable pattern to it.** The obvious hypothesis — that
+- **Some of it was a bug in this tool, not in the rules — and I published "no
+  describable pattern" before finding it.** A subject over 900 characters on an
+  arm that carries no file source was asked about with **no code in the question
+  at all**: 111 of this repository's subjects, 8% of them, concentrated in
+  exactly the long test bodies the residue consisted of. Fixing it dropped the
+  per-pass residue from 3–4 findings to a stable 2 and tripled
+  `test-name-verifies-claim`'s headroom. It did *not* rescue
+  `comment-describes-block`, the rule most affected, which still does not
+  separate. So the first explanation of a residue is worth distrusting,
+  including this one.
+- **What is left has no pattern I can name.** The obvious hypothesis — that
   compound or universal test names read as under-verified whatever the body does
   — is refuted: grouping all 94 `test-name-verifies-claim` subjects by how many
   claims their name makes gives flat means of 0.18–0.23. The unglamorous
-  explanation is the right one: a cutoff fitted where the corpus's clean band
-  ended, against a real clean band that goes higher.
-- **Some of it was a bug in this tool, not in the rules.** A subject over 900
-  characters on an arm that carries no file source used to be asked about with
-  **no code in the question at all** — 111 of this repository's subjects, 8% of
-  them. Fixing that dropped the per-pass residue from 3–4 findings to a stable
-  2 and tripled `test-name-verifies-claim`'s headroom. It did *not* rescue
-  `comment-describes-block`, which was the rule most affected and still does
-  not separate.
+  explanation is the one that fits: a cutoff fitted where the corpus's clean
+  band ended, against a real clean band that goes higher.
 - **It runs in both directions.** Before those fixes the highest
   `comment-describes-declaration` answer here was 0.76 against a 0.83 cutoff —
   a **missed** defect, and a real one: a doc comment separated from its function

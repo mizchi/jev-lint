@@ -43,7 +43,11 @@ is most of the work:
 
 ## Running it
 
+Set `TYPESAFE_API_KEY` in the environment — never in the config file, which
+belongs in version control. `TYPESAFEAI_API_KEY` is accepted as a fallback.
+
 ```bash
+npx -y jev-lint init                # write .jev-lint.yaml (everything commented out)
 jev-lint check src                  # judge whole files
 jev-lint review --base main         # judge only what the diff touched
 jev-lint gaps src                   # per-rule separation — on a LABELED corpus
@@ -55,6 +59,12 @@ jev-lint check src --dry-run        # plan and price without asking anything
 
 Exit codes: `0` clean, `1` findings, `2` configuration error, `3` requests
 failed and nothing was reported.
+
+**Settings come from `.jev-lint.yaml`** (the nearest one, searching upwards),
+and a flag beats the file. `--no-config` ignores it. An unknown key or a bad
+value in it is a fatal error rather than a silent no-op, for the same reason an
+unknown rule field is. `baseUrl:` or `--base-url` moves the tool to a proxy or
+a self-hosted endpoint.
 
 **Reach for `review`, not `check`.** Review mode keeps only matches whose
 subject overlaps a changed line. It is where the rules earn their keep: the

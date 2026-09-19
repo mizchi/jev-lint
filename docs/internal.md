@@ -71,6 +71,7 @@ auditable.
 | `questions.ts` | 146 | one subject → one question payload |
 | `diff.ts` | 131 | unified-diff parsing for review mode |
 | `ignore.ts` | 116 | `jev-lint-ignore-file` and `-next-line`, parsed from raw text |
+| `config.ts` | 333 | `.jev-lint.yaml`: discovery, validation, and the flag-beats-file merge |
 
 ### `scan.ts` — the matcher, and the probes
 
@@ -221,6 +222,30 @@ Two rules there:
   network look like an unstable rule.
 - **The mean is left unrounded and the spread is rounded.** The mean decides,
   and rounding a decision input can flip it; the spread is only printed.
+
+### `config.ts` — the precedence, and the two refusals
+
+`applyConfig` takes the set of flags that were **actually passed**, not the
+parsed options. That is the whole mechanism: `opts.concurrency` is already 4
+before any file is read, so a merge that compared against the default would let
+the file win over a flag that happened to match it.
+
+Two things the file will not do, both enforced as errors rather than as silent
+drops:
+
+- **`apiKey:` is rejected.** A config file belongs in version control and a
+  secret does not. `apiKeyEnv:` names the variable instead, which is a
+  location rather than a secret.
+- **An unknown key is rejected**, and a bad value with it, and the run exits 2.
+  A configuration that quietly does something other than what it says is worse
+  than no configuration — the same argument as for an unknown rule field.
+
+`at:` merges rather than replaces, so `--at one=0.5` overrides that rule and
+leaves the file's other cutoffs standing.
+
+The starter file `init` writes is entirely commented out, and a test asserts
+both that it parses clean and that it sets nothing — a starter config that
+errors, or that silently changes behaviour, is worse than none.
 
 ### `cache.ts` — what a key must cover
 

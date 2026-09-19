@@ -221,11 +221,16 @@
   languages: [TypeScript, Tsx, JavaScript, Jsx]
   kind: noul
   subject: node
-  # `bare` -- the only rule in the pack that keeps the cheapest arm, and the
-  # reason is that its subject already contains both things being compared. The
-  # matcher captures the title and the body, so the file adds no evidence: it
-  # widened the class margin from 0.82 to 0.90, which changes no decision, and
-  # every arm scored precision 1.0 and recall 1.0.
+  # `bare` -- the cheapest arm, because this subject already contains both
+  # things being compared: the matcher captures the title and the body, so the
+  # file adds no evidence.
+  #
+  # INHERITED, not measured for this rule. The arm sweep in docs/data/arms.json
+  # covers the PRE-SPLIT pack, where `test-name-matches-body` scored precision
+  # 1.0 and recall 1.0 on every arm and the file widened its class separation
+  # from 0.82 to 0.90 without changing a decision. That rule no longer exists;
+  # it became this one and `test-name-verifies-claim`, and neither successor has
+  # been re-measured across arms. Re-run `tools/arms.ts` before relying on it.
   #
   # Staying on `bare` buys something the wider margin does not: a verdict that
   # depends on nothing outside the test itself. Editing an unrelated test in the
@@ -267,6 +272,24 @@
   subject: node
   state: bare
   at: 0.93
+  # DOES NOT SEPARATE, and ships at `warning` anyway -- so read its findings
+  # rather than acting on them.
+  #
+  # Measured precision 0.67, recall 1.00 (2 true, 1 false, 0 missed) on both
+  # batching axes, from docs/data/calibration.json and
+  # calibration-rule-axis.json. The mechanism is an inversion, not a threshold:
+  # corpus/rust/store_test.rs:33 is clean FOR THIS RULE -- it is the
+  # weak-assertion defect belonging to `test-name-verifies-claim` -- and answers
+  # 0.95, HIGHER than the genuine wrong-case defect at :25, which answers 0.93.
+  # No cutoff separates an inverted pair.
+  #
+  # Kept at `warning` rather than dropped to `info` because its two true
+  # positives are the defect class this pack exists for, and its one false
+  # positive is a test that really is weak, just weak in the other rule's sense.
+  # The TypeScript variant is the same question and clears by only 0.035 on 7
+  # subjects, so treat that one as unproven too rather than as a separate
+  # result.
+  #
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -285,11 +308,14 @@
   languages: [TypeScript, Tsx, JavaScript, Jsx]
   kind: noul
   subject: node
-  # `bare` -- the only arm in the pack kept at the cheapest setting, because
-  # this subject already contains both things being compared. The matcher
-  # captures the title and the body, so the file adds no evidence: it widened
-  # the class margin from 0.82 to 0.90, which changed no decision, and every
-  # arm scored precision 1.0 and recall 1.0.
+  # `bare` -- the cheapest arm, because this subject already contains both
+  # things being compared: the matcher captures the title and the body, so the
+  # file adds no evidence.
+  #
+  # INHERITED, not measured for this rule -- see the same note on
+  # `test-name-describes-code` above. docs/data/arms.json covers the pre-split
+  # `test-name-matches-body`, not this rule, and this is the rule holding most
+  # of the residue on real code, so the inheritance is worth closing.
   #
   # Staying on `bare` buys something the wider margin does not: a verdict that
   # depends on nothing outside the test itself. Editing an unrelated test in the
@@ -348,6 +374,13 @@
   # path, the imports and the symbol table in a few hundred tokens whatever the
   # file's size, so the rule behaves the same on a large module as on a small
   # one. Every arm scored precision 1.0 and recall 1.0 on the corpus.
+  #
+  # `severity: info`, and the reason is the sample rather than the score: that
+  # 1.0/1.0 rests on exactly ONE labelled defect (the corpus has one misnamed
+  # module per language). One positive cannot establish a cutoff, and on real
+  # code this rule has the second-thinnest headroom of the pack -- +0.07, its
+  # top answer being the same file in every self-lint record. Raise it to
+  # `warning` once you have several labelled cases of your own.
   state: graph
   at: 0.62
   # Calibrated on the file axis; pinned so the scheduler cannot move it.

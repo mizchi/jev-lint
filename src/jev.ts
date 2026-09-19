@@ -24,6 +24,26 @@ import type { Question, Spend, SystemOneResponse } from "./types.ts";
 export const DEFAULT_BASE_URL = "https://api.typesafe.ai";
 export const DEFAULT_MODEL = "jev-latest";
 
+/**
+ * Where the key and the endpoint come from, in order.
+ *
+ * `TYPESAFE_*` first because that is the prevailing spelling; `TYPESAFEAI_*`
+ * stays as a fallback so an existing environment keeps working without an edit.
+ * Both are read rather than one aliased to the other, so a shell that has only
+ * the older name set is not a configuration error.
+ */
+export const API_KEY_VARS = ["TYPESAFE_API_KEY", "TYPESAFEAI_API_KEY"] as const;
+export const BASE_URL_VARS = ["TYPESAFE_BASE_URL", "TYPESAFEAI_BASE_URL"] as const;
+
+/** First of these variables that is set and non-empty. */
+export function fromEnv(names: readonly string[], env = process.env): string | null {
+  for (const n of names) {
+    const v = env[n];
+    if (typeof v === "string" && v.trim() !== "") return v.trim();
+  }
+  return null;
+}
+
 /** Published input price, USD per million input tokens. Output is not billed. */
 export const USD_PER_MTOK = 0.042;
 
@@ -79,8 +99,8 @@ export class Jev {
     timeoutMs = 60_000,
     onRequest = null,
   }: JevOptions = {}) {
-    this.apiKey = apiKey ?? process.env.TYPESAFEAI_API_KEY ?? "";
-    this.baseUrl = baseUrl ?? process.env.TYPESAFEAI_BASE_URL ?? DEFAULT_BASE_URL;
+    this.apiKey = apiKey ?? fromEnv(API_KEY_VARS) ?? "";
+    this.baseUrl = (baseUrl ?? fromEnv(BASE_URL_VARS) ?? DEFAULT_BASE_URL).replace(/\/+$/, "");
     this.model = model ?? process.env.JEV_LINT_MODEL ?? DEFAULT_MODEL;
     this.retries = retries;
     this.timeoutMs = timeoutMs;
@@ -115,7 +135,7 @@ export class Jev {
   /** One request: one state, N questions, N answers. */
   async ask(state: unknown, questions: Record<string, Question>): Promise<SystemOneResponse> {
     if (!this.apiKey) {
-      throw new JevError("no API key; set TYPESAFEAI_API_KEY", { kind: "auth" });
+      throw new JevError(`no API key; set ${API_KEY_VARS[0]}`, { kind: "auth" });
     }
     const names = Object.keys(questions);
     if (names.length === 0) return { answers: {}, usage: { input_tokens: 0 } };
