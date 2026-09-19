@@ -1,8 +1,8 @@
 # Internals
 
 How the code works, for changing it. [README](../README.md) is how to use it,
-[deepdive.md](deepdive.md) is what is known and why, [findings.md](findings.md)
-is the notebook.
+[reference.md](reference.md) is every flag and field, [deepdive.md](deepdive.md)
+is what is known and why, [findings.md](findings.md) is the notebook.
 
 Read this before editing anything under `src/`. Most of the non-obvious
 decisions here were bought with a measurement, and the file comments say which.

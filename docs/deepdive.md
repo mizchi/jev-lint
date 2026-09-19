@@ -2,11 +2,12 @@
 
 Everything measured about jev-lint that is **still true**, organised by topic.
 
-Three other documents, so you can pick the right one:
+Four other documents, so you can pick the right one:
 
 | | |
 | --- | --- |
 | [README](../README.md) | how to use it |
+| [reference.md](reference.md) | every flag and field, calibration in full, the batching axis, what to expect on real code |
 | this file | what is known, and the evidence for it |
 | [internal.md](internal.md) | how the code works, for changing it |
 | [findings.md](findings.md) | the notebook: how it was learned, in order, including the wrong turns and three retracted claims |
