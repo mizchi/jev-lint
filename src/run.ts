@@ -20,7 +20,7 @@ import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.ts";
 import { resolveSubject } from "./state.ts";
 import { questionId, readAnswer } from "./questions.ts";
 import { planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
-import { schedule, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
+import { schedule, planMixed, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
 import { Cache, verdictKey } from "./cache.ts";
 import { gate } from "./gate.ts";
 import { touchesChange } from "./diff.ts";
@@ -229,12 +229,14 @@ export async function run({
     toAsk.push(s);
   }
 
-  // Under `auto`, re-plan over only the subjects that still need asking: the
-  // schedule above was costed over all of them, and a cache hit changes the
-  // density the decision rests on.
+  // Under `auto`, plan the remainder against the axis assignment that was
+  // ALREADY decided over all subjects. Re-scheduling here would decide again on
+  // a smaller set and reach a different answer -- and since the axis is part of
+  // the cache key, a verdict would then be stored under the key of an axis it
+  // was not asked on.
   const batches =
     group === "auto"
-      ? schedule(toAsk, rules, { sources, symbols, batchSize, ruleBatchCap }).batches
+      ? planMixed(toAsk, plan!.fileAxisRules, { sources, symbols, batchSize, ruleBatchCap })
       : planBatches(toAsk, { batchSize, sources, symbols, group });
 
   if (dryRun) {
@@ -265,14 +267,21 @@ export async function run({
       batch.subjects.forEach((s, qi) => {
         const answer = readAnswer(res.answers, questionId(qi), s.rule.kind);
         // One verdict answers for every subject that shared its key.
+        //
+        // `arm: batch.arm` is not redundant. The twins come from the
+        // pre-planning subject list and still carry the arm their RULE asked
+        // for; the batch carries the arm the question was actually asked at,
+        // after any step-down. Recording the declared one made every rule-axis
+        // finding, cache entry and replay record claim `located` for a question
+        // asked at `local`.
         for (const twin of wanted.get(s.key!) ?? [s]) {
-          results.push({ subject: twin, answer, cached: false });
+          results.push({ subject: { ...twin, arm: batch.arm }, answer, cached: false });
         }
         if (answer && cachePath) {
           cache.set(s.key!, answer, {
             rule: s.rule.id,
             draft: ruleTextHash(s.rule),
-            arm: s.arm,
+            arm: batch.arm,
             file: s.file,
             line: s.line,
           });
@@ -288,7 +297,7 @@ export async function run({
       // `missing` rather than as a clean bill of health.
       for (const s of batch.subjects) {
         for (const twin of wanted.get(s.key!) ?? [s]) {
-          results.push({ subject: twin, answer: null, cached: false });
+          results.push({ subject: { ...twin, arm: batch.arm }, answer: null, cached: false });
         }
       }
     }

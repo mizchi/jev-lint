@@ -26,7 +26,14 @@ import {
 } from "../src/rules.ts";
 import { buildQuestion, questionId, readAnswer } from "../src/questions.ts";
 import { buildState, resolveSubject, renderOutline, capturedMetavariables } from "../src/state.ts";
-import { planBatches, estimateTokens, MAX_REQUEST_TOKENS, DEFAULT_BATCH_SIZE } from "../src/batch.ts";
+import {
+  planBatches,
+  planRuleBatches,
+  estimateTokens,
+  MAX_REQUEST_TOKENS,
+  DEFAULT_BATCH_SIZE,
+} from "../src/batch.ts";
+import { schedule, planMixed, explain } from "../src/schedule.ts";
 import { decide, gate, describe as describeFinding } from "../src/gate.ts";
 import { Cache, verdictKey } from "../src/cache.ts";
 import { parseUnifiedDiff, touchesChange } from "../src/diff.ts";
@@ -713,6 +720,202 @@ test("batch: the token estimate is pessimistic rather than optimistic", () => {
   assert.ok(estimateTokens(text) >= 1000);
   assert.equal(estimateTokens(""), 0);
   assert.ok(estimateTokens({ a: "b" }) > 0);
+});
+
+// ------------------------------------------------- batch: the rule axis
+
+test("batch/rule: every subject lands in exactly one batch, grouped per rule", () => {
+  const a = scoreRule({ id: "a" });
+  const b = scoreRule({ id: "b" });
+  const subjects = [
+    ...manySubjects(5, { rule: a, file: "x.ts" }),
+    ...manySubjects(7, { rule: b, file: "y.ts" }),
+    ...manySubjects(3, { rule: a, file: "z.ts" }),
+  ];
+  const batches = planRuleBatches(subjects, { symbols: new Map() });
+  assert.equal(
+    batches.reduce((n, x) => n + x.subjects.length, 0),
+    15,
+  );
+  assert.ok(batches.every((x) => x.subjects.length > 0));
+  // A rule-axis state is one rule's matches, so a batch never mixes rules --
+  // the questions in it share one sentence and one criteria block.
+  for (const x of batches) {
+    assert.equal(new Set(x.subjects.map((s) => s.rule.id)).size, 1);
+    assert.equal(x.group, "rule");
+  }
+  // And it DOES mix files, which is the entire point of the axis.
+  const spanning = batches.find((x) => new Set(x.subjects.map((s) => s.file)).size > 1);
+  assert.ok(spanning, "a rule-axis batch should span files");
+});
+
+test("batch/rule: the cap is honoured and the state budget closes a batch", () => {
+  const subjects = manySubjects(100, { arm: "bare" });
+  const capped = planRuleBatches(subjects, { batchSize: 8, symbols: new Map() });
+  assert.ok(capped.every((b) => b.subjects.length <= 8));
+  assert.equal(capped.reduce((n, b) => n + b.subjects.length, 0), 100);
+
+  // Two different budgets close a rule-axis batch, and which one depends on the
+  // arm -- a distinction worth pinning, because the code lives in the QUESTIONS
+  // and only `local` context lives in the state.
+  //
+  // On `bare`, the state barely grows per subject, so the REQUEST budget binds.
+  const wide = planRuleBatches(manySubjects(400, { arm: "bare", text: "x".repeat(3000) }), {
+    batchSize: 256,
+    symbols: new Map(),
+  });
+  assert.ok(wide.length > 1, "big questions must close a batch on the request budget");
+  for (const b of wide) {
+    if (b.subjects.length > 1) {
+      assert.ok(
+        b.estimatedTokens <= MAX_REQUEST_TOKENS,
+        `batch of ${b.subjects.length} on arm ${b.arm} estimated ${b.estimatedTokens}`,
+      );
+    }
+  }
+  assert.equal(wide.reduce((n, b) => n + b.subjects.length, 0), 400);
+
+  // On `local`, each subject contributes its enclosing function to the state,
+  // so the STATE budget binds -- and it binds first, being half the size.
+  const deep = planRuleBatches(
+    Array.from({ length: 60 }, (_, i) =>
+      subjectOf({
+        arm: "local",
+        line: i + 1,
+        endLine: i + 1,
+        text: `call${i}()`,
+        // Distinct per subject, or the state deduplicates them into one entry.
+        context: `function ctx${i}() { ${"y".repeat(3000)} }`,
+        contextName: `ctx${i}`,
+      }),
+    ),
+    { batchSize: 256, symbols: new Map() },
+  );
+  assert.ok(deep.length > 1, "accumulated context must close a batch on the state budget");
+  assert.equal(deep.reduce((n, b) => n + b.subjects.length, 0), 60);
+  for (const b of deep) {
+    if (b.subjects.length > 1) {
+      assert.ok(
+        b.estimatedTokens <= MAX_REQUEST_TOKENS,
+        `local batch of ${b.subjects.length} estimated ${b.estimatedTokens}`,
+      );
+    }
+  }
+});
+
+test("batch/rule: a file-bearing arm is recorded as degraded, with its reason", () => {
+  // This is the axis's real cost, so it must be visible rather than silent.
+  const batches = planRuleBatches(manySubjects(4, { arm: "located" }), { symbols: new Map() });
+  assert.ok(batches.length > 0);
+  for (const b of batches) {
+    assert.equal(b.arm, "local", "located cannot survive a state that spans files");
+    assert.ok(b.degraded, "the step-down must be recorded");
+    assert.equal(b.degraded!.from, "located");
+    assert.equal(b.degraded!.to, "local");
+    assert.match(b.degraded!.reason, /spans files/);
+  }
+});
+
+test("batch: a batch stamps its effective arm onto its subjects", () => {
+  // Downstream consumers read subject.arm -- the finding, the cache provenance,
+  // the replay record. Leaving the rule's DECLARED arm there made every
+  // rule-axis verdict claim `located` for a question asked at `local`.
+  const ruleAxis = planRuleBatches(manySubjects(3, { arm: "located" }), { symbols: new Map() });
+  for (const b of ruleAxis) {
+    assert.ok(b.subjects.every((s) => s.arm === b.arm));
+    assert.ok(b.subjects.every((s) => s.arm === "local"));
+  }
+  const fileAxis = planBatches(manySubjects(3, { arm: "located" }), {
+    sources: new Map([["a.ts", "source"]]),
+    symbols: new Map(),
+  });
+  for (const b of fileAxis) assert.ok(b.subjects.every((s) => s.arm === b.arm));
+});
+
+// ------------------------------------------------------- the scheduler
+
+test("schedule: a file-bearing arm holds its rule on the file axis", () => {
+  // The constraint that protects accuracy. It is structural: the rule axis
+  // cannot carry a file, so a rule whose evidence IS the file would lose it.
+  const needsFile = scoreRule({ id: "needs-file", state: "located" });
+  const fine = scoreRule({ id: "fine", state: "bare" });
+  const s = schedule(
+    [
+      ...manySubjects(4, { rule: needsFile, arm: "located", file: "a.ts" }),
+      ...manySubjects(4, { rule: fine, arm: "bare", file: "b.ts" }),
+    ],
+    [needsFile, fine],
+    { sources: new Map(), symbols: new Map() },
+  );
+  const held = s.decisions.find((d) => d.rule === "needs-file")!;
+  assert.equal(held.axis, "file");
+  assert.equal(held.pinned, true);
+  assert.match(held.reason, /needs the file/);
+  // A rule with no file-bearing arm is left for cost to decide.
+  assert.equal(s.decisions.find((d) => d.rule === "fine")!.pinned, false);
+});
+
+test("schedule: a rule's own axis pin is never overruled", () => {
+  const pinnedToRule = scoreRule({ id: "pinned", state: "bare", axis: "rule" });
+  const s = schedule(manySubjects(4, { rule: pinnedToRule, arm: "bare" }), [pinnedToRule], {
+    sources: new Map(),
+    symbols: new Map(),
+  });
+  const d = s.decisions[0]!;
+  assert.equal(d.axis, "rule");
+  assert.equal(d.pinned, true);
+  assert.match(d.reason, /pinned/);
+});
+
+test("schedule: the axis decision does not depend on what was cached", () => {
+  // The axis is part of the cache key, so deciding it again on the uncached
+  // remainder would store a verdict under the key of an axis it was not asked
+  // on. Measured flipping both movable rules at 50%, 25% and 10% remaining.
+  const r = scoreRule({ id: "free", state: "bare" });
+  const all = manySubjects(40, { rule: r, arm: "bare" });
+  const ctx = { sources: new Map(), symbols: new Map() };
+  const full = schedule(all, [r], ctx);
+  for (const remaining of [20, 10, 4]) {
+    const partial = schedule(all.slice(0, remaining), [r], ctx);
+    assert.deepEqual(
+      [...partial.fileAxisRules].sort(),
+      [...full.fileAxisRules].sort(),
+      `axis assignment moved with ${remaining} subjects remaining`,
+    );
+  }
+});
+
+test("schedule: planMixed puts each subject on exactly one axis", () => {
+  const a = scoreRule({ id: "a", state: "bare" });
+  const b = scoreRule({ id: "b", state: "bare" });
+  const subjects = [
+    ...manySubjects(5, { rule: a, arm: "bare", file: "a.ts" }),
+    ...manySubjects(5, { rule: b, arm: "bare", file: "b.ts" }),
+  ];
+  const batches = planMixed(subjects, new Set(["a"]), {
+    sources: new Map([["a.ts", "s"], ["b.ts", "s"]]),
+    symbols: new Map(),
+  });
+  assert.equal(batches.reduce((n, x) => n + x.subjects.length, 0), 10);
+  const aBatches = batches.filter((x) => x.subjects[0]!.rule.id === "a");
+  const bBatches = batches.filter((x) => x.subjects[0]!.rule.id === "b");
+  assert.ok(aBatches.every((x) => x.group !== "rule"), "rule a was assigned the file axis");
+  assert.ok(bBatches.every((x) => x.group === "rule"), "rule b was left on the rule axis");
+});
+
+test("schedule: its cost report covers the same subjects as its plan", () => {
+  // The three cost rows used to be printed beside a plan built over a different
+  // subject set, and disagreed with it by 16% on tokio.
+  const r = scoreRule({ id: "r", state: "bare" });
+  const subjects = manySubjects(12, { rule: r, arm: "bare" });
+  const s = schedule(subjects, [r], { sources: new Map(), symbols: new Map() });
+  assert.equal(s.plannedOver, 12);
+  assert.equal(
+    s.chosen.tokens,
+    s.batches.reduce((a, b) => a + b.estimatedTokens, 0),
+  );
+  assert.equal(s.chosen.requests, s.batches.length);
+  assert.match(explain(s), /over 12 subject\(s\)/);
 });
 
 // ------------------------------------------------------------------ gate

@@ -147,6 +147,19 @@ export interface RuleDecision {
 export interface Schedule {
   batches: Batch[];
   decisions: RuleDecision[];
+  /**
+   * The rules assigned to the file axis.
+   *
+   * Exposed so one decision can be reused. The runner has to decide the axis
+   * over ALL subjects (the axis is part of the cache key, so it must not depend
+   * on what happened to be cached) and then plan over only the uncached
+   * remainder. Re-running the scheduler on the remainder gave a different
+   * answer -- measured flipping both movable rules at 50%, 25% and 10%
+   * remaining -- which stored a verdict under the other axis's key.
+   */
+  fileAxisRules: Set<string>;
+  /** How many subjects the figures below were computed over. */
+  plannedOver: number;
   /** What the two single-axis plans would have cost, for comparison. */
   allFile: { requests: number; tokens: number };
   allRule: { requests: number; tokens: number };
@@ -303,6 +316,8 @@ export function schedule(
   return {
     batches,
     decisions,
+    fileAxisRules: onFileAxis,
+    plannedOver: subjects.length,
     allFile: totals(allFileBatches),
     allRule: totals(allRuleBatches),
     chosen: totals(batches),
@@ -341,6 +356,11 @@ export function explain(s: Schedule): string {
   out.push("");
   const row = (label: string, t: { requests: number; tokens: number }) =>
     `  ${label.padEnd(16)} ${String(t.requests).padStart(5)} request(s)  ${t.tokens.toLocaleString().padStart(11)} tokens  $${((t.tokens / 1e6) * 0.042).toFixed(5)}`;
+  // All three rows are over the same subject set, and the count is stated.
+  // They used to be printed beside a plan built over a different set -- the
+  // uncached remainder -- which made them disagree with the run they described
+  // by 16% on tokio.
+  out.push(`  over ${s.plannedOver} subject(s):`);
   out.push(row("all file axis", s.allFile));
   out.push(row("all rule axis", s.allRule));
   out.push(row("scheduled", s.chosen));

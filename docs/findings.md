@@ -377,15 +377,24 @@ per rule (`--group auto`), and `tools/grouping.ts` measures them.
 
 ### Scale: a round-trip saving, not really a cost saving
 
-Planned with `--dry-run`, which costs nothing:
+Planned with `--dry-run`, which costs nothing. **These are the shipped
+configuration** -- both packs loaded, at the shipped `--rule-batch-cap 32`:
 
-| | file axis | rule axis | |
+| | file axis | rule axis @32 | rule axis @256 |
 | --- | --- | --- | --- |
-| tokio, 799 Rust files, 7,583 subjects | 786 req / 4.23M tok | **54 req** / 3.37M tok | 14.6x fewer requests, 20% fewer tokens |
-| vue, 484 TS files, 19,659 subjects | 1,153 req / 10.23M tok | **147 req** / 9.43M tok | 7.8x fewer requests, **8.4%** fewer tokens |
+| tokio, 10,886 subjects | 896 req / 5.94M tok | **268 req** / 5.02M tok | 80 req / 4.97M tok |
+| vue, 19,659 subjects | 1,739 req / 15.01M tok | **671 req** / 14.26M tok | 222 req / 14.15M tok |
 
-Requests collapse by 8-15x; dollars fall by 8-20%. Since the API prices tokens,
-**the rule axis buys latency and rate-limit headroom, not money.**
+At the shipped cap that is **3.3x and 2.6x fewer requests, for 15.5% and 5.0%
+fewer tokens.** Since the API prices tokens, the rule axis buys latency and
+rate-limit headroom, not money.
+
+**Correction.** An earlier version of this section quoted "14.6x fewer requests,
+20% fewer tokens" and "8-15x / 8-20%". Those figures were the naming pack only,
+on tokio only, at an uncapped batch of 256 -- a configuration nobody runs, since
+`DEFAULT_RULE_BATCH_CAP` is 32 and `rules/comments.yml` loads by default. Adding
+the second pack and the cap roughly quarters the request saving. The direction
+survives; the magnitude was overstated by 3-4x.
 
 And the token saving is almost entirely one thing. On vue, 583 file-axis batches
 hold 1-2 subjects — 50.6% of all requests but only 6.3% of tokens — and that
@@ -630,3 +639,106 @@ corpus is written.
 | adversarial review | The docs described the rule axis as carrying each match's enclosing function. False for any rule whose subject is already a named symbol; corrected above and in the usage text. |
 | adversarial review | Switching axis invalidates **every** cached verdict, because the axis is in the cache key: 193 keys under each axis, 0 shared. `prune` exists but the CLI never calls it, so both sets accumulate. This breaks the "commit the cache, CI lints without a key" workflow the README recommends the moment anyone changes `--group`. Documented in the usage text; the CLI still does not prune. |
 | distribution | `astGrepBin()` resolved `../node_modules/.bin/ast-grep`, which does not exist when npm hoists. Verified by installing the packed tarball into a clean project and linting real files through it. |
+
+---
+
+## 12. What is still not measured
+
+A completeness critique over this repository named fifteen gaps and twelve
+overclaims. Several were acted on in section 11 and in the corrections above.
+The ones that remain are listed here, because a gap named in a document is a
+gap a reader can weigh, and a gap left out reads as coverage.
+
+Ordered by how much each would change the decision to prefer one batching axis.
+
+1. **No labeled accuracy measurement on any large repository, on either axis.**
+   Every accuracy figure here comes from `corpus/` — 13 files. All tokio and vue
+   work is dry-run cost only. Worse, `tools/grouping.ts` resolves an unlabeled
+   subject to `clean`, so any precision or recall column it prints for an
+   unlabeled repository is arithmetic over fabricated labels. **Do not quote
+   accuracy for tokio or vue from this repository; none was measured.** The fix
+   is a labeled slice of each repo, sampled stratified on the file-axis score
+   and oversampling the ±0.10 cutoff band where every observed flip lives.
+
+2. **The `local` arm has never been measured.** `docs/data/arms.json` covers
+   `bare`, `located`, `graph` and `full`; the string `local` does not appear in
+   it. That is the arm the rule axis actually substitutes, so the load-bearing
+   claim of section 3 — not separable on `bare`, separable on `located` —
+   brackets it on both sides and says nothing about it. `tools/arms.ts` already
+   accepts it (`--arms bare,local,located,graph,full`, about $0.03).
+
+3. **The axis has never been compared with the arm held constant.** Every
+   file-vs-rule comparison changes the arm and the neighbour set together, so
+   the 4 → 10 false positives cannot be attributed between them. The clean
+   control runs today: `--arm local --group file` against `--arm local --group
+   rule`. This matters because the scheduler's whole design assumes the axis is
+   verdict-neutral once the arm is held — an assumption that has not been
+   tested.
+
+4. **No cutoff has ever been fitted on the rule axis.** All 15 `at:` values were
+   fitted on the file axis, and each rule now says so. So "the rule axis carries
+   2.5× the false positives" conflates the axis with *using file-axis cutoffs on
+   rule-axis answers*, which is a different and cheaper problem.
+   `calibrate --group rule` would separate them for about $0.02.
+
+5. **No accuracy measurement at the shipped cap.** The sweep used
+   1/4/16/64/256 — never 32, which is what ships.
+
+6. **Review mode was never measured on either axis**, and it is the mode the
+   documentation recommends for CI. A rule-axis run's request floor is the
+   number of firing rules, so below roughly three changed files it costs *more*
+   round trips than the file axis, and that gets worse as a pack grows. The
+   full-scan figures do not transfer to the per-pull-request regime.
+
+7. **The `--arm` override inverts the cost conclusion.** With `--arm bare` on
+   the corpus, the rule axis costs *more* than the file axis. And because the
+   scheduler's protection keys off the arms the subjects carry, `--arm bare`
+   removes it entirely for any pack without explicit `axis:` pins.
+
+8. **Neighbour composition is not in the cache key**, and batches are built from
+   subjects sorted by file and line — so rule-axis batch-mates are contiguous
+   file blocks, not a random sample. The cross-file interaction question was
+   therefore never tested against a randomised partition, which is the only
+   clean way to vary neighbours and nothing else.
+
+9. **Switching axis invalidates the whole cache.** The axis is in the key, so
+   the two axes share none of their 193 keys on the corpus, and the CLI never
+   calls `Cache.prune()`. Committing the cache — which the README recommends so
+   CI can lint without a key — breaks the first time anyone changes `--group`.
+   Documented in the usage text; not fixed.
+
+10. **No failure mode has been exercised on the rule axis.** A failed batch
+    nulls every subject in it, so blast radius scales with subjects per request.
+    Nothing has exercised rate limiting at the concurrency the axis is meant to
+    unlock, and a rule-axis batch is named only `<rule-id> (N file(s))`, so an
+    operator cannot tell which files lost verdicts.
+
+11. **Wall clock at scale was never measured**, and latency is the only benefit
+    of the rule axis that survived the cost analysis. The only timing data is
+    the corpus.
+
+12. **`note_on_independence` has never been ablated.** It is the only mitigation
+    for crowding in the rule-axis state. If it is what keeps the axis usable its
+    effect size should be known; if it does nothing it is prose in every state.
+
+Two further overclaims worth stating plainly rather than burying:
+
+- **"Flips start at batch 4, so there is no safe sub-threshold"** names a
+  threshold where 4 was simply the smallest batch tested, on 3 flips against a
+  same-configuration noise floor of 1.
+- **The anchoring retraction is asserted with the same statistical power as the
+  claim it retracts.** Flip counts at or below the pass-to-pass floor cannot
+  establish absence any more than presence. And it does not reconcile its own
+  counterexample: one tokio subject moved 0.535 across partitions with a
+  within-configuration spread of ≤0.02, which is a partition moving a verdict.
+  The honest position is that neither the effect nor its absence is established
+  at this sample size, and that the structural arm argument is what the
+  scheduler should rest on — which is what it now does.
+
+The scheduler's live effect on the shipped configuration is also worth stating:
+because every calibrated rule pins `axis: file`, **`auto` moves only the two
+`comment-describes-block` rules — the two nobody has calibrated.** Meanwhile
+`module-name-describes-contents`, the one rule whose `graph` arm survives the
+switch untouched and which showed the largest per-rule saving (377 → 4 requests,
+−52.7% tokens on tokio), is pinned shut. That is the safe default working as
+designed and it is also, on this configuration, close to a no-op.

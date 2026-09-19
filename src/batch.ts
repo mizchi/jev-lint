@@ -59,6 +59,20 @@ export function estimateTokens(value: unknown): number {
 }
 
 /**
+ * What one question costs on top of its own text, as a member of the questions
+ * record.
+ *
+ * The planner sizes questions one at a time while the request serializes them
+ * as a record, so each entry also carries `,"q0000":` -- about ten characters.
+ * Ignoring it made the planner undercount by roughly three tokens per
+ * question, which is invisible on a small batch and put a 246-question batch
+ * 464 tokens over the 64Ki ceiling. Rounded up, because the whole estimator is
+ * deliberately pessimistic: overshooting costs a slightly smaller batch, and
+ * undershooting costs a round trip to discover.
+ */
+const QUESTION_ENTRY_OVERHEAD = 4;
+
+/**
  * Group subjects into requests.
  *
  * Batching is per (file, arm) because the state is per (file, arm): two
@@ -133,7 +147,7 @@ export function planBatches(
     let current: Subject[] = [];
     let tokens = stateTokens;
     for (const s of items) {
-      const cost = estimateTokens(buildQuestion(s.rule, s, questionId(0)));
+      const cost = estimateTokens(buildQuestion(s.rule, s, questionId(0))) + QUESTION_ENTRY_OVERHEAD;
       const full =
         current.length >= cap || (current.length > 0 && tokens + cost > MAX_REQUEST_TOKENS);
       if (full) {
@@ -161,7 +175,13 @@ function makeBatch(
 ): Batch {
   // Question ids are assigned per batch, so a subject's id is only meaningful
   // together with its batch. The state is built with the same ids.
-  const numbered: Subject[] = subjects.map((s, i) => ({ ...s, id: questionId(i) }));
+  //
+  // `arm` is overwritten with the batch's EFFECTIVE arm, which is the whole
+  // point: a subject whose rule asked for `located` but whose batch stepped
+  // down to `graph` was judged at `graph`, and every downstream consumer --
+  // the finding, the cache provenance, the replay record -- must say so rather
+  // than repeat what the rule wanted.
+  const numbered: Subject[] = subjects.map((s, i) => ({ ...s, id: questionId(i), arm }));
   const state = stateFor(numbered);
   const questions: Record<string, Question> = {};
   for (const s of numbered) questions[s.id!] = buildQuestion(s.rule, s, s.id!);
@@ -199,9 +219,15 @@ function stepDown(arm: StateArm): StateArm[] {
  *
  * The difference from file-grouped planning is not cosmetic. There, the state
  * is a file and its size is FIXED however many questions share it, so the
- * planner measures it once and treats it as overhead. Here every subject added
- * grows the state, so the state budget has to be re-checked on each addition --
- * and the state budget, not the request budget, is what closes a batch.
+ * planner measures it once and treats it as overhead. Here a subject can grow
+ * the state, so the budget is re-checked on each addition.
+ *
+ * Which budget actually closes a batch depends on the arm, and it is worth
+ * being precise because an earlier version of this comment was not: the matched
+ * CODE travels in the questions, not the state, so on `bare` the state barely
+ * grows per subject and the 64Ki request budget binds. Only `local` puts
+ * anything per-subject in the state -- the enclosing function, deduplicated --
+ * and there the 32Ki state budget binds first, being half the size.
  *
  * `located` is deliberately not offered under this grouping. It would mean
  * putting every touched file's full source into one state, which is both the
@@ -250,7 +276,7 @@ export function planRuleBatches(
       });
       const stateTokens = estimateTokens(probeState);
       const questionTokens = next.reduce(
-        (a, x) => a + estimateTokens(buildQuestion(x.rule, x, questionId(0))),
+        (a, x) => a + estimateTokens(buildQuestion(x.rule, x, questionId(0))) + QUESTION_ENTRY_OVERHEAD,
         0,
       );
       const overState = stateTokens > MAX_STATE_TOKENS;
@@ -278,7 +304,10 @@ function makeRuleBatch(
   symbols: SymbolIndex | null | undefined,
   degraded: ArmFallback | null,
 ): Batch {
-  const numbered: Subject[] = subjects.map((s, i) => ({ ...s, id: questionId(i) }));
+  // Same as makeBatch: the effective arm replaces the declared one. This is
+  // where it mattered most -- rule grouping substitutes `local` for `located`
+  // for the majority of subjects, and every finding used to claim `located`.
+  const numbered: Subject[] = subjects.map((s, i) => ({ ...s, id: questionId(i), arm }));
   const state = buildRuleState({ rule, arm, symbols, subjects: numbered });
   const questions: Record<string, Question> = {};
   for (const s of numbered) questions[s.id!] = buildQuestion(s.rule, s, s.id!);

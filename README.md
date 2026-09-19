@@ -291,10 +291,19 @@ The state can be built two ways, and the choice is not free.
 - **`--group auto`** — cost both per rule before asking anything, and pick.
   `--explain-schedule` prints what it decided and why.
 
-Planned on real repositories with `--dry-run` (free), the rule axis collapses
-requests **8–15×** — 786 → 54 on tokio, 1,153 → 147 on vue — but tokens only
-fall 8–20%. Since the API prices tokens, **it buys latency and rate-limit
-headroom, not money.**
+Planned on real repositories with `--dry-run` (free), **both shipped packs, at
+the cap that actually ships** (`--rule-batch-cap 32`):
+
+| | file axis | rule axis @32 | |
+| --- | --- | --- | --- |
+| tokio, 10,886 subjects | 896 req / 5.94M tok | **268 req** / 5.02M tok | 3.3× fewer requests, −15.5% tokens |
+| vue, 19,659 subjects | 1,739 req / 15.01M tok | **671 req** / 14.26M tok | 2.6× fewer requests, −5.0% tokens |
+
+At an uncapped batch of 256 it is 11.2×/−16.2% and 7.8×/−5.7% — those are the
+numbers an earlier version of this section quoted, and they describe a
+configuration nobody runs. Since the API prices tokens, **the rule axis buys
+latency and rate-limit headroom, not money**, and at the shipped cap it buys
+less of both than the uncapped figures suggest.
 
 And it costs accuracy. Over 306 corpus subjects the two axes disagree on 2.9% of
 decisions, and the rule axis carries **2.5× the false positives** (4 → 10 with

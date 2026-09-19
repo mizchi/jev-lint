@@ -129,10 +129,29 @@ export function formatPretty(
   }
   const degraded = (result.batches ?? []).filter((b) => b.degraded);
   if (degraded.length > 0) {
+    // Grouped by the reason the planner recorded, not by a hardcoded one. The
+    // hardcoded message named the state budget, which is only one of the two
+    // causes -- rule grouping strips a file-bearing arm for a different reason
+    // entirely, and that was the majority case whenever it was used.
+    const byReason = new Map<string, { batches: number; subjects: number; from: string; to: string }>();
+    for (const b of degraded) {
+      const d = b.degraded!;
+      const key = `${d.from}\u0000${d.to}\u0000${d.reason}`;
+      const e = byReason.get(key) ?? { batches: 0, subjects: 0, from: d.from, to: d.to };
+      e.batches += 1;
+      e.subjects += b.subjects.length;
+      byReason.set(key, e);
+    }
+    for (const [key, e] of byReason) {
+      const reason = key.split("\u0000")[2];
+      out.push(
+        c.yellow(
+          `${e.batches} batch(es) / ${e.subjects} subject(s) fell back from \`${e.from}\` to \`${e.to}\`: ${reason}`,
+        ),
+      );
+    }
     out.push(
-      c.yellow(
-        `${degraded.length} batch(es) fell back to a leaner state arm (file too large for the 32Ki state budget)`,
-      ),
+      c.yellow("  A step-down is a real loss of context; those verdicts answered a leaner question."),
     );
   }
   return out.join("\n");
@@ -164,6 +183,16 @@ export function formatJson(result: ReportInput): string {
         message: f.message ?? f.ask,
       })),
       stats: result.stats,
+      degraded: (result.batches ?? [])
+        .filter((b) => b.degraded)
+        .map((b) => ({
+          file: b.file,
+          rule: b.rule ?? null,
+          subjects: b.subjects.length,
+          from: b.degraded!.from,
+          to: b.degraded!.to,
+          reason: b.degraded!.reason,
+        })),
       silentRules: silentRules(result),
       spent: result.spent,
       errors: result.errors ?? [],
@@ -196,6 +225,17 @@ export function formatGithub(result: ReportInput): string {
   if (result.stats.missing > 0) {
     out.push(
       `::warning title=jevlint::${result.stats.missing} subject(s) got no verdict; this run is incomplete`,
+    );
+  }
+  // Degradation belongs in the CI format too: a verdict answered at a leaner
+  // arm than the rule asked for is a weaker verdict, and this is the format the
+  // documentation tells people to run.
+  const degraded = (result.batches ?? []).filter((b) => b.degraded);
+  if (degraded.length > 0) {
+    const subjects = degraded.reduce((a, b) => a + b.subjects.length, 0);
+    const reasons = [...new Set(degraded.map((b) => b.degraded!.reason))].join("; ");
+    out.push(
+      `::warning title=jevlint::${subjects} subject(s) in ${degraded.length} batch(es) were judged at a leaner state arm than their rule asked for (${reasons})`,
     );
   }
   return out.join("\n");
