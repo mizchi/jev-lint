@@ -2105,10 +2105,11 @@ await testAsync("evals: a suite runs its rule over its cases, records every pass
   }
 });
 
-test("evals: two records of one suite compare case by case, whatever produced them", () => {
+test("evals: comparing two records names the case that got worse, and only that one", () => {
   // Two models, two days, two revisions of a sentence: the comparison is the
   // same as against a baseline, except that neither side is the contract, so
-  // a changed question is reported rather than refused.
+  // a changed question is reported rather than refused (that part is the
+  // command's, above the module, and is not asserted here).
   const rules = [evalRule("a", 0.5)];
   const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
     { line: 1, label: "bad" as const, rule: "a", window: 0 },
