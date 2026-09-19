@@ -7,15 +7,15 @@ what it claims.
 ```
 corpus/ts/cart.ts
      21  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.93  cutoff 0.76  arm located
+         fn-name-promises  0.93  cutoff 0.83  arm located
 
 corpus/ts/cart.test.ts
      27  flag       This test would still pass if the behaviour its name claims were broken.
-         test-name-verifies-claim  0.95  cutoff 0.54  arm bare
+         test-name-verifies-claim  0.95  cutoff 0.53  arm bare
 
 corpus/ts/session_store.ts
      20  flag       The comment above this code claims something that is not true of the code.
-         comment-describes-declaration  0.97  cutoff 0.83  arm located
+         comment-describes-declaration  0.97  cutoff 0.75  arm located
 
 45 finding(s), 276 subject(s), 0 cached
 37 request(s), 155,249 input tokens, $0.00652, 6848 ms
@@ -71,7 +71,7 @@ This is the shipped `fn-name-promises`, abridged:
     "false": >-
       The name and parameter list describe what the body actually does.
   state: located
-  at: 0.76
+  at: 0.83
 ```
 
 The matcher is exact, free and runs locally; it decides **which code is looked
@@ -81,7 +81,7 @@ model built to score a statement about a piece of text rather than to chat.
 No parser can say whether `applyDiscount` also saves the cart; a reader who
 sees the name and the body can, and so can the model, with the file for
 context. `state: located` is that file, `kind: noul` says the answer is a
-probability that the statement holds, and `at: 0.76` is the cutoff fitted to
+probability that the statement holds, and `at: 0.83` is the cutoff fitted to
 a labelled corpus.
 
 What makes that affordable is batching. The matches in a file travel together
@@ -202,29 +202,29 @@ cached, on a laptop over a home connection, recorded in
 
 | | |
 | --- | --- |
-| subjects judged | 1,639 |
+| subjects judged | 1,681 |
 | requests | 65, at concurrency 4 |
-| input tokens | 941,123 |
-| output tokens | 30,200 |
-| price | $0.0395 |
+| input tokens | 964,513 |
+| output tokens | 30,960 |
+| price | $0.0405 |
 | wall clock | 6.9 s (26.1 s of request time, summed) |
 | model | `jev-1.13.0`, 2026-09-19 |
-| findings | 4 |
+| findings | 5 |
 
 That is 2.4 cents per 1,000 subjects. `--dry-run` on the same tree estimated
-1,049,592 input tokens, 11.5% above what the server billed, so a dry run is a
+1,076,545 input tokens, 11.6% above what the server billed, so a dry run is a
 bound to budget against rather than a quote. A `review` of one commit's diff
 is a different order: the commits behind this README's last rewrite plan to
 44,059 tokens, $0.002.
 
-The four findings are what to expect from a tool tuned on a corpus and run
-on real code: a counter named `passed` holding a number, which reads as a
-boolean and was renamed; two bindings within 0.03 of the cutoff, left alone;
-and one test the tool is wrong about, stable at 0.69 across runs. A pass
-made just before this one also caught a test whose name promised "exactly
-one batch" while its body only counted placements — fixed, and the verdict
-moved off the cutoff in this run. `jev-lint replay
-docs/data/self-lint-2026-09-19.json` reproduces the table with no API key.
+The five findings are what to expect from a tool tuned on a corpus and run
+on real code: three bindings and one test within 0.05 of their cutoffs, left
+alone, and one test the tool is wrong about, stable at 0.65–0.69 across three
+passes. Two earlier passes the same day found a test whose name promised
+"exactly one batch" while its body only counted placements — fixed, and off
+the cutoff since — and a counter named `passed` holding a number, renamed.
+`jev-lint replay docs/data/self-lint-2026-09-19.json` reproduces the table
+with no API key.
 
 ## Rules
 

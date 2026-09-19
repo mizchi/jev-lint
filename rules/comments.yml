@@ -45,7 +45,7 @@
   # its callers or about a type declared elsewhere in the file, so the file is
   # where the confirmation lives. `tools/arms.ts` settles it.
   state: located
-  at: 0.83
+  at: 0.75
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -101,7 +101,7 @@
   kind: noul
   subject: node
   state: located
-  at: 0.59
+  at: 0.6
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -130,7 +130,7 @@
   kind: noul
   subject: node
   state: located
-  at: 0.54
+  at: 0.57
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -205,7 +205,7 @@
   # Not silenced, though: on this repository's own corpus the Rust variant lands
   # exactly on its cutoff, and a 0.98 has been seen on the rule axis. Turn it on
   # properly by lowering `at` once you have measured it on your own comments.
-  at: 0.97
+  at: 0.96
   severity: info
   rule:
     all:
@@ -260,7 +260,7 @@
   state: bare
   # Not calibrated; see the note on `comment-describes-block`. Measured gap 0.05
   # over three subjects, cutoff parked above every observed answer.
-  at: 0.94
+  at: 0.92
   severity: info
   rule:
     all:

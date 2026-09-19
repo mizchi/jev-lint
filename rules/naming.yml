@@ -53,7 +53,7 @@
   # reviewer-action score is a judgment the file can dilute, while "does this
   # name describe this body" is one the file can supply evidence for.
   state: located
-  at: 0.76
+  at: 0.83
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -97,7 +97,7 @@
   kind: noul
   subject: node
   state: located
-  at: 0.68
+  at: 0.66
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -134,7 +134,7 @@
   # This is the general rule, and it is not "more context is better": it is that
   # a question must be able to see its own answer. See docs/findings.md.
   state: located
-  at: 0.61
+  at: 0.62
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -173,7 +173,7 @@
   # separable on `located`, and on `bare` it was also the one rule whose
   # decision FLIPPED between two runs of the same corpus.
   state: located
-  at: 0.6
+  at: 0.59
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -237,7 +237,7 @@
   # same file cannot change this one's answer, and cannot invalidate its cached
   # verdict either.
   state: bare
-  at: 0.95
+  at: 0.93
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -322,7 +322,7 @@
   # same file cannot change this one's answer, and cannot invalidate its cached
   # verdict either.
   state: bare
-  at: 0.54
+  at: 0.53
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -345,7 +345,7 @@
   kind: noul
   subject: node
   state: bare
-  at: 0.54
+  at: 0.53
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning

@@ -95,7 +95,7 @@ is used.
   kind: noul
   subject: node
   state: located
-  at: 0.76
+  at: 0.83
   rule:
     any:
       - all:
@@ -132,7 +132,7 @@ is used.
   kind: noul
   subject: node
   state: located
-  at: 0.68
+  at: 0.66
   rule:
     all:
       - kind: function_item
@@ -257,7 +257,7 @@ need it, sharing the sentence by anchor.
   kind: noul
   subject: node
   state: located
-  at: 0.61
+  at: 0.62
   rule:
     all:
       - kind: variable_declarator
@@ -300,7 +300,7 @@ the right thing and still not establish it.
   kind: noul
   subject: node
   state: bare
-  at: 0.95
+  at: 0.93
   rule: &test_matcher
     any:
       - pattern: it($TITLE, $BODY)
@@ -327,7 +327,7 @@ the right thing and still not establish it.
   kind: noul
   subject: node
   state: bare
-  at: 0.54
+  at: 0.53
   rule: *test_matcher
   ask: >-
     This test would still pass if the behaviour its name claims were broken.
@@ -360,7 +360,7 @@ and the matched node is the code it is about.
   kind: noul
   subject: node
   state: located
-  at: 0.83
+  at: 0.75
   rule:
     any:
       - all:

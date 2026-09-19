@@ -26,11 +26,12 @@ jev-lint replay docs/data/<record>.json --labels corpus/labels.json
 
 | record | replays | what it holds |
 | --- | --- | --- |
-| `calibration.json` | yes | the shipped 15-rule fit, file axis |
+| `calibration.json` | yes | the shipped 15-rule fit, file axis — re-recorded 2026-09-19 14:24 UTC after the `secondary` capture fix, at the refit cutoffs; see the note below |
 | `calibration-rule-axis.json` | yes | the naming pack refitted on the rule axis |
 | `calibration-rule-axis-comments.json` | yes | the comment pack, likewise |
 | `self-lint-before.json` | yes | this repository before the fixes of §6 |
 | `self-lint-after.json` | yes | and after them |
+| `self-lint-2026-09-19.json` | yes | a later full pass over `src`, `tools`, `test/test.ts`, the one the README's cost table quotes |
 | `grouping.json` | no | the file-vs-rule axis comparison, as `tools/grouping.ts` writes it |
 | `grouping-refit.json` | no | the same comparison with each axis at its own cutoffs |
 | `arms.json` | no | four state arms over the whole corpus, as `tools/arms.ts` writes it |
@@ -45,6 +46,17 @@ script.
 A cutoff is a claim about a specific set of answers. Keeping the record is what
 makes the claim checkable later, and what stops a recalibration from silently
 rewriting history.
+
+**The refit of 2026-09-19.** `--show-subjects`, run on the shipped packs the
+first time it existed, showed ast-grep's `secondary` bookkeeping capture
+going out to the model as `matcher_captured.secondary` on 62 of the corpus's
+276 subjects. Removing it changes the question for those subjects, so the
+packs were refit: every `at:` moved by 0.08 or less (`fn-name-promises`
+0.76 → 0.83 was the largest, its clean band having risen to 0.75), no
+labelled decision changed, 12 rules still reach 1.00/1.00, and repeating the
+fit moved it by 0.02 or less. The tables in §2–§6 that quote a cutoff were
+made at the earlier values and are left as recorded; the earlier
+`calibration.json` is in git history before that date.
 
 ## 1. What the model is good at, and what it is not
 

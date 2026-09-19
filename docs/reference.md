@@ -398,16 +398,25 @@ judge. Not a pass."
 | rule | measured | ships |
 | --- | --- | --- |
 | `comment-describes-block` | precision 0.67 | `info`, with a note saying so |
-| `comment-describes-block-rust` | recall 0.50 | `info`, with a note saying so |
+| `comment-describes-block-rust` | precision 0.67 | `info`, with a note saying so |
 | `test-name-describes-code-rust` | precision 0.67 | **`warning`**, with a note saying so |
 | `fn-name-promises-rust` | 1.00/1.00 on the file axis, no separating cutoff on the **rule** axis | `warning`, pinned to the file axis |
 
 The block rules' cutoffs are parked at the top of the observed range, which is
-not the same as silenced: the Rust variant fires on the corpus at exactly its
-0.94 cutoff. And `test-name-describes-code-rust` fails by *inversion*, not by a
-bad threshold — a test that is clean for this rule answers higher than the
-genuine defect — so its TypeScript twin, which clears by 0.035 on 7 subjects,
-should be read as unproven rather than as a separate result.
+not the same as silenced: on the Rust variant two corpus subjects sit within
+0.01 of its 0.92 cutoff and flip between passes. And
+`test-name-describes-code-rust` fails by *inversion*, not by a bad threshold —
+a test that is clean for this rule answers higher than the genuine defect — so
+its TypeScript twin, which clears by 0.02 on 7 subjects, should be read as
+unproven rather than as a separate result.
+
+The cutoffs in `rules/*.yml` were refit on 2026-09-19 after a fix to what the
+model is shown (an ast-grep bookkeeping capture had been going out beside the
+real ones on a quarter of the subjects), recorded in
+`docs/data/calibration.json`. Every rule moved by 0.08 or less, no labelled
+decision changed, and the refit itself moved by 0.02 or less when repeated —
+the midpoint of a gap slides for free. The measurements below that quote a
+cutoff were made at the earlier values, and say which.
 Read the 12 as "these rules separate the classes in a corpus the author wrote",
 against the baseline that **a tool reporting nothing at all scores 83.0%
 accuracy on that corpus** (229 of its 276 subjects are clean), at zero recall.
@@ -416,11 +425,14 @@ pair with the raw counts is the honest one.
 
 ## What to expect
 
-Run on this repository's own TypeScript — `src`, `tools`, `test` — the shipped
-packs are **1,403 subjects, 67 requests, 1.12M input tokens, $0.047 and under
-five seconds** of wall clock (`docs/data/self-lint-after.json`). That is roughly
-**3 cents per 1,000 subjects**, and `--dry-run` quotes about 9% high, so treat
-it as a bound rather than a price.
+The figures in this section are from `docs/data/self-lint-after.json`,
+recorded 2026-09-19 12:34 at the cutoffs shipped then; the [README's cost
+table](../README.md#what-a-full-run-costs) has a later full pass, and the
+current cutoffs are in `rules/`. Run on this repository's own TypeScript —
+`src`, `tools`, `test` — the shipped packs were **1,403 subjects, 67
+requests, 1.12M input tokens, $0.047 and under five seconds** of wall clock.
+That is roughly **3 cents per 1,000 subjects**, and `--dry-run` quotes about
+9% high, so treat it as a bound rather than a price.
 
 Over several rounds it found, in 8,132 lines of TypeScript, **22 sites worth
 changing**:
