@@ -1,0 +1,59 @@
+# jev-lint configuration. Every setting here is a DEFAULT: a command-line flag
+# of the same name overrides it, so a project can commit this and still let
+# someone change one thing for one run.
+#
+# Delete anything you do not need -- an absent setting takes the built-in
+# default, which is what the comment after it shows.
+
+# Where the rules come from. With no `rules` here and no ./rules directory,
+# the packs inside the installed package are used -- and their cutoffs were
+# fitted to that package's corpus, not to your code, so calibrate before
+# trusting them: https://github.com/mizchi/jev-lint#calibrating
+# rules: [rules]
+
+# What `jev-lint check` looks at when given no paths.
+# corpus/ is excluded on purpose: it holds the labelled defects the cutoffs
+# were fitted to, and linting it only re-finds them.
+paths: [src, tools, test]
+
+# The verdict cache. `none` disables it. Treat it as trusted input: anything
+# that can edit it can silence a rule or invent a finding.
+# cache: .jev-lint-cache.json
+
+# The model, and the endpoint it is asked at. Point `baseUrl` at a proxy or a
+# self-hosted deployment to move the whole tool off the default service.
+# model: jev-latest
+# baseUrl: https://api.typesafe.ai
+
+# Which environment variable holds the API key. The key itself must NEVER go in
+# this file -- it belongs in version control and a secret does not.
+# apiKeyEnv: TYPESAFE_API_KEY
+
+# One state per file (accurate, the default) or one per rule (fewer requests,
+# and a cutoff that has to be refitted). `auto` costs both and picks.
+# group: file
+
+# Override every rule's state arm. Almost always wrong to set: the arm is
+# measured per rule, and forcing `bare` silently removes the evidence from the
+# rules whose evidence is the file.
+# arm: null
+
+# Parallel requests, subjects per request, subjects per rule-axis request.
+# concurrency: 4
+# batchSize: 256
+# ruleBatchCap: 32
+
+# Ask everything n times and decide on the mean. Above 1 the cache is bypassed,
+# because a cached answer reproduces itself.
+# retry: 1
+
+# Confidence below which a finding is worded as a question for a human rather
+# than as a verdict. Confidence routes; it never suppresses.
+# unsureBelow: 0.55
+
+# Per-rule cutoffs, overriding whatever the rule file says. Fit these against
+# your own labelled corpus -- `jev-lint calibrate --labels` -- rather than
+# guessing: a cutoff is a claim about a specific set of answers.
+# at:
+#   fn-name-promises: 0.76
+#   var-name-describes-value: 0.61

@@ -88,8 +88,8 @@ What makes that affordable is batching. The matches in a file travel together
 in a request that carries the file once and each question only as its own
 text, packed under a token budget the planner measures before sending.
 `--dry-run` prints the plan and the price for your code without sending
-anything. On this repository's own source one full pass is 1,403 subjects in
-67 requests for about five cents.
+anything. What one full pass over this repository costs is in
+[What a full run costs](#what-a-full-run-costs).
 
 ## What it is not
 
@@ -176,6 +176,28 @@ clean repository.
 
 Every flag, and the config file's precedence, is in
 [docs/reference.md](docs/reference.md#commands-and-flags).
+
+## What a full run costs
+
+This repository lints itself: `.jev-lint.yaml` points the shipped packs at
+`src`, `tools` and `test` (8,000-odd lines of TypeScript), and `corpus/` is
+excluded because it holds the labelled defects. One full pass, every rule,
+nothing cached, as recorded in `docs/data/self-lint-after.json`:
+
+| | |
+| --- | --- |
+| subjects judged | 1,403 |
+| requests | 67, at concurrency 4 |
+| input tokens | 1,123,043 |
+| output tokens | 26,068 |
+| price | $0.047 |
+| request time, summed | 18.4 s |
+| model | `jev-1.13.0`, 2026-09-19 |
+
+That is about 3 cents per 1,000 subjects. `--dry-run` estimates a few percent
+above what the server bills, so it is a bound to budget against rather than a
+quote. A `review` of one commit's diff is a different order: the commits
+behind this README's last rewrite plan to 44,059 tokens, $0.002.
 
 ## Rules
 
