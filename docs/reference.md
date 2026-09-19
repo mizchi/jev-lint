@@ -581,7 +581,7 @@ the batching axis invalidates the verdicts that depended on them.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **The cutoffs are fitted to 13 files.** Version 0.1.0, one recorded corpus.
+- **The cutoffs are fitted to 13 files.** Version 0.2.0, one recorded corpus.
   Expect to refit; see [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.
