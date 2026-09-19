@@ -2262,5 +2262,190 @@
       "window": 0,
       "reason": "hard clean: \"renders the receipt for a single-item order\" labels the input of the snapshot and asserts no property"
     }
+  ],
+  "corpus/ts/modules/user_repository.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "getUser / fetchOrder / loadCart / retrieveInvoice are four identical by-id SQL lookups with the same signature; four verbs for one operation."
+    },
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-name-describes-contents",
+      "window": 1000000,
+      "reason": "named for users, holds lookups for users, orders, carts and invoices alike; a cross-rule defect the naming-consistency corpus happened to contain"
+    }
+  ],
+  "corpus/ts/modules/factories.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "createOrder / makeInvoice / newCustomer / buildShipment are four identical plain-object constructors; four verbs for one operation."
+    }
+  ],
+  "corpus/ts/modules/permissions.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "checkAdmin is a boolean predicate like isValid / hasPermission / canEdit / isOwner but named as a command."
+    }
+  ],
+  "corpus/ts/modules/settings.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "updateTheme / setLocale / changeTimezone / modifyDensity / setFontScale are five identical immutable setters; four verbs for one operation."
+    }
+  ],
+  "corpus/ts/modules/notifications.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "sendEmail / sendSms / sendWebhook / dispatchPush are four identical deliveries with the same signature; dispatch is a synonym of send here."
+    }
+  ],
+  "corpus/ts/modules/product_source.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: fetchProduct (async, network via ./http), getProduct (sync, cache via ./cache), loadProduct (cache then network) are three different operations; the verbs carry that difference."
+    }
+  ],
+  "corpus/ts/modules/codec.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: encodeFrame/decodeFrame (bytes) and parseHeader/stringifyHeader (text) are two conventional inverse pairs for two different representations."
+    }
+  ],
+  "corpus/ts/modules/rate_limiter.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: one public item (createRateLimiter); private helpers refill/takeOne are not siblings to compare."
+    }
+  ],
+  "corpus/ts/modules/order_service.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: getOrder (by id, throws) vs findOrdersByCustomer (by criteria, list) is the conventional get/find split; createOrder/cancelOrder/listOrders are distinct operations."
+    }
+  ],
+  "corpus/ts/modules/handlers.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: all six exports are handle* with different nouns; verbs agree."
+    }
+  ],
+  "corpus/ts/modules/project_files.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: all five are read* with different nouns; verbs agree."
+    }
+  ],
+  "corpus/ts/modules/commands.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: all five are run* with different nouns; verbs agree."
+    }
+  ],
+  "corpus/ts/modules/auth_routes.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: every export uses the same word handle/handler; the disagreement is in position (suffix vs prefix), not in the verb chosen for the operation."
+    }
+  ],
+  "corpus/ts/modules/validators.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: validate* for five checks and fail() for constructing the error they return; different operations, different verbs."
+    }
+  ],
+  "corpus/ts/modules/sync.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: diff* (sync, returns Change[]) and push* (async, returns PushReport) are two operations; verbs match operations."
+    }
+  ],
+  "corpus/ts/modules/jobs.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: purge / rebuild / send / rotate / compact are distinct jobs, not one operation under several verbs; noopJob is a placeholder."
+    },
+    {
+      "line": 13,
+      "label": "bad",
+      "rule": "var-name-describes-value",
+      "window": 0,
+      "reason": "`users` is bound to a query result whose .rows are the users, not to users"
+    }
+  ],
+  "corpus/ts/modules/middleware.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: middleware names are nouns/adjectives for what they do (requestId, noCache, timing) plus compose; there is no repeated operation under different verbs."
+    }
+  ],
+  "corpus/ts/modules/preferences.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "hard clean: load/save are the file-level pair (async, path), get/set the in-memory pair (sync, prefs object); two conventional pairs at two layers, plus reset. A lazy rule flags get vs load as synonyms."
+    }
+  ],
+  "corpus/ts/modules/lookups.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "module-naming-consistent",
+      "window": 1000000,
+      "reason": "five identical by-id lookups; four are get*, loadInvoice uses a synonym for the same operation."
+    }
   ]
 }

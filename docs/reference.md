@@ -355,7 +355,7 @@ refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
 
 ## The shipped packs
 
-Six packs, 21 rules. The two below carry an ECMAScript and a Rust variant
+Six packs, 22 rules. The two below carry an ECMAScript and a Rust variant
 sharing one sentence; the other four are ECMAScript or JSON only.
 
 **`rules/naming.yml`** — does the code do what it calls itself?
@@ -367,6 +367,15 @@ sharing one sentence; the other four are ECMAScript or JSON only.
 | `test-name-describes-code` | does this test's code do what its name says? |
 | `test-name-verifies-claim` | would it still pass if the named behaviour broke? |
 | `module-name-describes-contents` | is this module named for what it contains? |
+| `module-naming-consistent` | do this module's exports name the same kind of operation with the same words? |
+
+`module-naming-consistent` is the one rule that reads a convention off the
+file instead of being told it: the outline carries every export's signature,
+so four synonyms for one lookup are visible in one state, and a sync `get`
+beside an async `fetch` is not a mismatch because the signatures say why.
+It ships at `severity: info`. Its sibling `sibling-deviates` — one export
+breaks a pattern the rest follow — separates only as a `score` and only for
+signature-level deviations, and stays in `experiments/rule-candidates/e-file-consistency/`.
 
 The two test rules are **nested, not orthogonal** — a test that exercises the
 wrong case also fails to establish its name — which is why both fire on the
@@ -442,10 +451,10 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 ### What the cutoffs are worth
 
 On a TypeScript-only repository the seven Rust variants and
-`comment-describes-declaration-js` report "matched nothing": 8 of the 21.
+`comment-describes-declaration-js` report "matched nothing": 8 of the 22.
 
-Of the 21, **20 reach precision 1.00 and recall 1.00 on the corpus**
-(`docs/data/calibration.json`, 631 subjects, three passes). Read that with
+Of the 22, **21 reach precision 1.00 and recall 1.00 on the corpus**
+(`docs/data/calibration.json`, 857 subjects, three passes). Read that with
 the positive counts beside them, because they are small: per rule, 14, 9, 7,
 6, 6, 6, 6, 6, 5, 5, 5, 4, 4, 4, 4, 3, 2, 2, 2, 1, 1 labelled defects. The
 two `module-name-describes-contents` rules have one each and ship at
@@ -480,9 +489,9 @@ and the merge of the four new packs' corpora. Between the two, `fn-name-promises
 moved 0.76 → 0.86 as its clean band rose with 45 more named functions in the
 corpus, and no other shipped rule moved by more than 0.08. The measurements
 below that quote a cutoff were made at the earlier values, and say which.
-Read the 20 as "these rules separate the classes in a corpus the author and
+Read the 21 as "these rules separate the classes in a corpus the author and
 five agents wrote", against the baseline that **a tool reporting nothing at
-all scores about 85% accuracy on that corpus** — most of its 625 subjects are
+all scores about 88% accuracy on that corpus** — most of its 857 subjects are
 clean — at zero recall.
 Accuracy is the wrong number on a set that imbalanced; the precision and recall
 pair with the raw counts is the honest one.

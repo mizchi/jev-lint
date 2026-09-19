@@ -1,6 +1,6 @@
 # Using the shipped rules
 
-jev-lint ships six packs, 21 rules, in the npm package's `rules/` directory.
+jev-lint ships six packs, 22 rules, in the npm package's `rules/` directory.
 They are the rules to start from: each one has a cutoff fitted to a labelled
 corpus, a `state` arm chosen by measurement, and a `criteria` block that took
 several rounds to get right. Write your own only for a convention they do not
@@ -17,6 +17,7 @@ cover — see [cookbook.md](cookbook.md).
 | `test-name-describes-code` | does this test's code do what its name says? | `it(...)` / `test(...)` calls | `bare` |
 | `test-name-verifies-claim` | would this test still pass if the behaviour its name claims were broken? | same | `bare` |
 | `module-name-describes-contents` | is this module named for what it contains? | the file, as an outline | `graph` |
+| `module-naming-consistent` | do the exports name the same kind of operation with the same words? | the file, as an outline with signatures | `graph` |
 
 **`comments.yml`** — is the comment still true?
 
@@ -56,7 +57,7 @@ One axis only — is the claim false.
 The naming and comment rules each have an ECMAScript variant (`TypeScript, Tsx, JavaScript, Jsx`) and a
 Rust variant (`-rust`) sharing one sentence; `comment-describes-declaration`
 also has a `-js` variant, because JavaScript has no type declarations to
-match. **On a TypeScript-only repository 8 of the 21 rules report "matched
+match. **On a TypeScript-only repository 8 of the 22 rules report "matched
 nothing"** — the seven Rust variants and the `-js` one. That line is expected
 there, and nowhere else.
 
@@ -161,8 +162,8 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted to a corpus of 625 subjects (Rust, TypeScript, JavaScript, JSON), three
-passes. Of the 21 rules, 20 reach precision and recall 1.00 on it — resting
+Fitted to a corpus of 857 subjects (Rust, TypeScript, JavaScript, JSON), three
+passes. Of the 22 rules, 21 reach precision and recall 1.00 on it — resting
 on fewer than ten labelled defects each, all but one, so read that as
 "separates the classes in a small corpus", not as a guarantee. One does not
 separate and ships with a note in the pack saying what it misses:

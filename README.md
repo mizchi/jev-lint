@@ -228,7 +228,7 @@ docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules
 
-Six packs ship in `rules/`, 21 rules, used when the project has no `rules/`
+Six packs ship in `rules/`, 22 rules, used when the project has no `rules/`
 directory of its own. The naming and comment rules exist in an ECMAScript
 and a Rust variant sharing one sentence; the rest are ECMAScript or JSON.
 
@@ -241,6 +241,7 @@ and a Rust variant sharing one sentence; the rest are ECMAScript or JSON.
 | `test-name-describes-code` | does this test's code do what its name says? |
 | `test-name-verifies-claim` | would this test still pass if the behaviour its name claims were broken? |
 | `module-name-describes-contents` | is this module named for what it contains? |
+| `module-naming-consistent` | do this module's exports name the same kind of operation with the same words? |
 
 **`guarantees.yml`** — the name makes a specific promise; does the body keep it?
 
@@ -282,12 +283,12 @@ general question does not.
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On the corpus the cutoffs were fitted to, 20 of the 21 rules reach precision
+On the corpus the cutoffs were fitted to, 21 of the 22 rules reach precision
 and recall 1.00; the one that does not ships with a note in the pack saying
 what it misses. The counts behind those numbers are small — under ten
 labelled defects per rule — and the full table, with what the packs found on
 this repository's own code and on an unseen one, is in
-[docs/reference.md](docs/reference.md#the-shipped-packs). Nine more rules
+[docs/reference.md](docs/reference.md#the-shipped-packs). Eight more rules
 were built and measured the same way and not shipped; their reports are in
 `experiments/rule-candidates/`.
 
