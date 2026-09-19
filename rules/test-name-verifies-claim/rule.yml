@@ -29,7 +29,20 @@
   # 0.52 rather than the midpoint: the quietest defect ("hides the discount
   # row when no discount applies", snapshot only) answers 0.53-0.56 across
   # passes, and the cutoff has to sit under its band.
-  at: 0.52
+  #
+  # Re-measured on evals/ after the suite grew to 31 defects and 52 cleans
+  # (16 labelled hard) and a note was added -- see the note below. With it,
+  # every defect but one answers 0.76 and up and every clean but one 0.44 and
+  # under. The two exceptions both sit at 0.54: profile.test.ts:164, a
+  # label-only snapshot title ("matches the snapshot with a pending email
+  # change") that the model half-reads as a claim about the pending email,
+  # and inventory.test.ts:77, a title saying "reserves" over a body that
+  # restocks, which `test-name-describes-code` catches at 0.89 and this rule
+  # half-catches. No cutoff separates a clean and a defect at the same value.
+  # 0.62 chooses precision: the clean is passed with 0.08 to spare, the
+  # adjacent-name defect is left to the other rule, and the next real file's
+  # clean band, which sits higher than a corpus's, has 0.18 of room.
+  at: 0.62
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -42,6 +55,24 @@
       - pattern: it.each($CASES)($TITLE, $BODY)
   ask: &verifies_ask >-
     This test would still pass if the behaviour its name claims were broken.
+  # The note is what moved the label-only snapshot cleans ("renders", "matches
+  # the snapshot for a three-item order") from 0.50-0.55 to 0.32-0.41 while
+  # keeping the snapshot-under-a-claim defects at 0.55-0.76. Two things were
+  # tried and measured worse: a criteria rewrite that spelled the snapshot
+  # reasoning out in the true branch lifted EVERY snapshot test to 0.59-0.76,
+  # label-only ones included; and rephrasing the ask as "the assertions do
+  # not establish what the name claims" made "renders the error state when
+  # the request fails" read as a label (0.48, a miss) and two exact-order
+  # cleans wobble to 0.48-0.49. A longer note naming "with/for/of some state"
+  # as input-labelling lifted the Rust label-only cleans to 0.50-0.54.
+  note: &verifies_note >-
+    Two things to read for. A snapshot records whatever the output was: under
+    a name that claims a specific property of the output (a row hidden, a
+    footer omitted, a hint shown, a format) it establishes nothing about that
+    property, while under a name that only says renders, or snapshot, or
+    labels the variant rendered, it is the whole claim. And a body whose named
+    operation is never called, or whose named case is never set up,
+    establishes nothing however exact its assertion is.
   criteria: &verifies_criteria
     "true": >-
       The body does not establish what the name claims: it asserts nothing at
@@ -62,7 +93,14 @@
   kind: noul
   subject: node
   state: bare
-  at: 0.53
+  # Fitted 0.53-0.56 across two runs on evals/ (17 defects, 18 cleans of which 9 are labelled hard,
+  # 3 passes, 0 flips): clean top 0.50 (a label-only snapshot name,
+  # `digest_snapshot_three_items`), lowest defects 0.61 (a title claiming a
+  # reversal over a body that posts; the above-ten case never set up; a
+  # snapshot under a claim that a footer is omitted). The gap is 0.11 and the
+  # cutoff sits in its middle; the snapshot axis is what keeps it narrow, in
+  # both directions, and is the same limit the TypeScript variant has.
+  at: 0.54
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -74,4 +112,5 @@
           kind: attribute_item
           regex: "test"
   ask: *verifies_ask
+  note: *verifies_note
   criteria: *verifies_criteria

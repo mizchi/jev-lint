@@ -53,7 +53,17 @@
   # reviewer-action score is a judgment the file can dilute, while "does this
   # name describe this body" is one the file can supply evidence for.
   state: located
-  at: 0.82
+  # 0.55, refitted 2026-09-20 on this rule's own evals (11 defects, 24 cleans, 3
+  # passes): clean tops at 0.37 (`consume`, a boolean-returning mutator),
+  # defects start at 0.66 (`getJob` that creates). Fitted midpoint 0.52; set
+  # above it because on six unseen agent-cluster files the clean band reached
+  # 0.50 (a `checkRateLimit` that bumps its counter, a `call*` that sets
+  # globals before calling). The earlier 0.82 was fitted to a corpus whose
+  # defects were all outrageous (a predicate returning a string); the quieter
+  # real-world defects added since -- a getter that creates, a loader that
+  # writes, a `retry` that tries once, a `toJSON` that clears state -- answer
+  # at 0.66-0.87 and were all missed at 0.82.
+  at: 0.55
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -83,20 +93,36 @@
     "true": >-
       Someone who read only the name and the parameter list would be wrong about
       what this function does: it returns a different kind of thing than the name
-      suggests, it changes state when the name says it only reads or checks, it
+      suggests (a count that is a list, a predicate that is a number), it changes
+      state when the name says it only reads, checks, looks up or serialises, it
       can fail or return nothing when the name promises a value, it handles only
-      a narrower case than the name claims, or it does substantial work the name
-      does not mention at all.
+      a narrower case than the name claims, it never performs an effect or
+      repetition the name names (a drain or remove that leaves the container as
+      it was, a retry that tries once), it computes something no reading of the
+      name accounts for, or it does substantial work the name does not mention
+      at all, such as writing what it was asked to read.
     "false": >-
       The name and parameter list describe what the body actually does. Someone
       who read only them would not be surprised by the body, even if a longer or
-      more specific name could be imagined.
+      more specific name could be imagined. A terse or conventional name (run,
+      handle, take, len, fmt, toString, a getter) that the body fits is not a
+      violation, and a comment inside the body that is wrong about the body is a
+      wrong comment, not a wrong name.
 - id: fn-name-promises-rust
   language: Rust
   kind: noul
   subject: node
+  # `located` re-measured 2026-09-20 against `local` on the enlarged evals:
+  # `local` dropped `retry` from 0.77 to 0.52 and raised the top clean from
+  # 0.47 to 0.60. The file is what lets the model see that a `drain` removes
+  # nothing and that a `count_failed` returns what `take` hands out.
   state: located
-  at: 0.68
+  # 0.57, refitted 2026-09-20 (10 defects, 29 cleans, 3 passes): clean tops at
+  # 0.48 (`settle`, which carries a stale comment), defects start at 0.66
+  # (`summarize` in backoff.rs, a vague name over a nonsense sum -- the weakest
+  # contradiction in the corpus and the one that keeps the headroom at 0.09 a
+  # side instead of 0.10). The next defect is at 0.76.
+  at: 0.57
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning

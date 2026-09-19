@@ -8,24 +8,36 @@
   # `enclosing`, unlike the other two: whether "Saved" is honest is a fact
   # about the whole flow, and judging the function with the message as the
   # matched piece kept the enqueue-then-"Saved" case at 0.88 where `node`
-  # dropped it to 0.53. Caveat: jev-lint keys twin subjects on the enclosing
-  # function's text, so two messages in one function currently share one
-  # verdict; keep one user-facing message per function until that is fixed.
+  # dropped it to 0.53. Since the promoted-subject key includes the match,
+  # two messages in one function are two questions; the evals now hold
+  # "Saving…"/"Saved", a bad success toast beside its honest .catch, and a
+  # progress message beside an enqueue-only "finished", each judged on its own.
+  #
+  # Re-derived (experiments/reports/improve-ui-message-honest): 55 subjects,
+  # 17 bad, 38 clean. Bad band 0.76-0.94, clean band 0.06-0.50, fitted
+  # midpoint 0.63, 0 flips over 3 passes. The one class that used to miss --
+  # a specific cause named for a branch that other causes also reach, outside
+  # a catch -- is now in the criteria and answers 0.86-0.88.
   subject: enclosing
   state: local
-  at: 0.62
+  at: 0.63
   rule:
     any:
       # toast("..."), notify("..."), alert("..."), showMessage("..."),
-      # setStatus("..."), setMessage("...")
+      # setStatus("..."), setMessage("..."), setNotice("...")
       - all:
           - any:
               - pattern: $FN($MSG, $$$REST)
               - pattern: $FN($MSG)
           - has:
               field: function
-              regex: "^(toast|notify|alert|showMessage|showToast|showNotification|showAlert|enqueueSnackbar|setStatus|setMessage|setError|setSuccess|setFeedback)$"
+              # React state setters by prefix: `setNotice`, `setBanner`, `setStatusText`
+              # all carry a message; an exact list missed most real names.
+              regex: "^(toast|notify|alert|showMessage|showToast|showNotification|showAlert|enqueueSnackbar|set(Status|Message|Msg|Error|Success|Feedback|Notice|Banner|Toast|Flash)\\w*)$"
       # toast.success("..."), message.error("..."), notification.open("...")
+      # `message` is also a common string variable; its string methods
+      # (`message.includes(...)`) are not calls that show anything and are
+      # kept out by the KIND constraint below.
       - all:
           - any:
               - pattern: $UI.$KIND($MSG, $$$REST)
@@ -54,6 +66,26 @@
                   all:
                     - has: { field: key, regex: "^(message|msg|error|detail|status)$" }
                     - has: { field: value, pattern: $MSG }
+      # jsonResponse({ error: "..." }, 400): a local helper that builds the
+      # response, common in Workers-style code where there is no `res`.
+      - all:
+          - kind: call_expression
+          - has:
+              field: function
+              regex: "^(jsonResponse|errorResponse|jsonError|sendJson|respondJson|json)$"
+          - has:
+              field: arguments
+              has:
+                kind: object
+                has:
+                  kind: pair
+                  all:
+                    - has: { field: key, regex: "^(message|msg|error|detail|status)$" }
+                    - has: { field: value, pattern: $MSG }
+  constraints:
+    KIND:
+      not:
+        regex: "^(includes|startsWith|endsWith|indexOf|match|test|replace|replaceAll|trim|split|slice|substring|toLowerCase|toUpperCase|localeCompare|concat|padStart|padEnd)$"
   ask: >-
     This message ($MSG), shown to the user, tells them something other than
     what the surrounding code actually did.
@@ -67,9 +99,12 @@
       express failure and did not look at it; it claims a specific, stronger
       fact than what was done, such as "permanently deleted" when the code
       only marks a record; it reports an action the code never performed at
-      all; or, in a catch, it names one specific cause such as a network
-      failure or an expired link when the block also receives failures of
-      another kind that the code above visibly raises.
+      all; or it names one specific cause when the branch it sits on is
+      visibly reached by other causes too: a catch that names a network
+      failure when the try block also throws a validation error, or a
+      condition joined with || that names only one of its alternatives, such
+      as calling a link expired when the same branch is taken for a token
+      that is missing or already used.
     "false": >-
       The message matches what the code did and knows. An awaited call that
       either completed or threw counts as done, whether or not its return
@@ -77,7 +112,9 @@
       enqueuing is honest. Naming a soft action by its usual word, such as
       archived, closed or cancelled for a record that was flagged rather than
       destroyed, is honest unless the message adds a claim the code does not
-      make. A generic failure message in a generic catch is honest. A
+      make. A generic failure message in a generic catch is honest, and so is
+      a message that covers every cause of its branch, such as "no longer
+      valid" for a token that is missing, used or expired. A
       progress message such as "Saving" before the operation is honest. A
       message that is vague, terse or could be more specific is not a
       violation, and a message that restates the intent of the call it

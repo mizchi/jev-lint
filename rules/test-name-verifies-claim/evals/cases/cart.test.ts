@@ -73,7 +73,7 @@ describe("cart", () => {
   });
 
   // guards against, above an ordinary first statement.
-  it("does not double-count an item listed twice", () => {
+  it("counts an item listed twice once per occurrence", () => {
     // Found in production: a duplicated line item was summed once per
     // occurrence, which is correct, but the fixture here once shared an id and
     // the old dedupe-by-id dropped one. Both occurrences must count.

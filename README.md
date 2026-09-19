@@ -71,7 +71,7 @@ This is the shipped `fn-name-promises`, abridged:
     "false": >-
       The name and parameter list describe what the body actually does.
   state: located
-  at: 0.86
+  at: 0.55
 ```
 
 The matcher is exact, free and runs locally; it decides **which code is looked
@@ -81,7 +81,7 @@ model built to score a statement about a piece of text rather than to chat.
 No parser can say whether `applyDiscount` also saves the cart; a reader who
 sees the name and the body can, and so can the model, with the file for
 context. `state: located` is that file, `kind: noul` says the answer is a
-probability that the statement holds, and `at: 0.86` is the cutoff fitted to
+probability that the statement holds, and `at: 0.55` is the cutoff fitted to
 a labelled corpus.
 
 What makes that affordable is batching. The matches in a file travel together
@@ -304,17 +304,18 @@ general question does not.
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On the corpus the cutoffs were fitted to, 17 of the 23 rules reach precision
-and recall 1.00 at their shipped cutoffs; the six that do not ship with a
-note in the pack saying what they miss. The counts behind those numbers are
-small — under ten labelled defects per rule — and the corpus is marker-free:
-an earlier version carried `// DEFECT: named seconds, holds milliseconds`
-above each defect, inside the file the model was shown, and the fits it
-produced were better than the rules. The full table, with what the packs
-found on this repository's own code and on an unseen one, is in
+On their own evals, 20 of the 23 rules reach precision and recall 1.00 at
+their shipped cutoffs; the three that do not each miss one labelled defect
+the rule cannot see, and the rule file says which. The evals are small —
+197 labelled defects across the 23, two to thirty-one per rule — and they
+are marker-free: an earlier version carried `// DEFECT: named seconds, holds
+milliseconds` above each defect, inside the file the model was shown, and
+the fits it produced were better than the rules. `jev-lint eval --replay`
+re-derives every number with no request. The full table, with what the
+packs found on this repository's own code and on an unseen one, is in
 [docs/reference.md](docs/reference.md#the-shipped-packs). Seven more rules
-were built and measured the same way and not shipped; their reports are in
-`experiments/rule-candidates/`.
+were built and measured the same way and are not shipped yet; they live in
+`experiments/rule-candidates/` under the same layout.
 
 ## Adding your rule
 

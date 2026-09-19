@@ -23,7 +23,20 @@
   # The general rule stands, sharpened: a question must be able to see its
   # own answer, and the corpus must not hand it the answer either.
   state: located
-  at: 0.6
+  # Refitted 2026-09-20 on the widened evals (12 defects, 30 explicit hard
+  # cleans, 57 subjects) after the `note` below was added and iterated four
+  # times: the hard cleans (a fixture list named `ok`, a provenance name, a
+  # conventional counter, a plural on a count read from a call, a test
+  # response named for its scenario) top out at 0.35; the defects the model
+  # finds start at 0.61. 0.5 is a little above the midpoint. Two labelled
+  # defects sit below or across it on purpose: a name on the success branch
+  # of a union result (`flat` holding a rejection, 0.20-0.27) and one field
+  # of a record bound under another field's name (`userIds` from
+  # displayName, 0.12-0.87 across passes on identical input). The unit case
+  # `timeoutSeconds = 5000` answers 0.73-0.84 now that the file compares it
+  # with an `elapsedMs`; beside a bare setTimeout it stayed at 0.13. See
+  # experiments/reports/improve-var-name-describes-value/REPORT.md.
+  at: 0.5
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -53,6 +66,29 @@
       The name is an accurate description of what the initializer produces, even
       if it is terse or a clearer name could be imagined. Being short or generic
       is not a mismatch.
+  note: &var_note >-
+    Compare the name with the initializer and with every use of the binding in
+    this file; a mismatch is one the code shows. It counts when the binding is
+    used as a different kind of thing from what the name says (a boolean name on
+    a value compared with a string, a number or a variant; a path name on
+    contents that are split into lines; a result name on a promise that is
+    pushed or awaited; a unit suffix on a value the code converts from or
+    compares with another unit); when the initializer selects a different
+    element, part or field from the one the name names (the first element
+    under a name meaning the last, the piece before a separator under a name
+    meaning the piece after it, one field of a record under the name of
+    another of its fields); or when the name asserts success or presence and
+    the code then reads the value as a failure or an absence. It does not
+    count when the name is a convention rather than a claim: a plural name on
+    a number, which names the count of those things whether the number is a
+    literal or comes from a call; a short accumulator, index or buffer name;
+    a collection named for its role such as a set of seen items or a list of
+    pending work; a list of test inputs named for the class they belong to
+    and paired with the opposite class; a test binding named for the scenario
+    it exercises, such as the
+    response to the unauthorized request or to the request missing a field,
+    which reads as an adjective and holds the result of that scenario; or a
+    name that gives the value's role or provenance rather than its type.
 - id: var-name-describes-value-rust
   language: Rust
   kind: noul
@@ -61,7 +97,18 @@
   # separable on `located`, and on `bare` it was also the one rule whose
   # decision FLIPPED between two runs of the same corpus.
   state: located
-  at: 0.47
+  # Refitted 2026-09-20 with the TypeScript variant (10 defects, 13 explicit
+  # hard cleans, 23 subjects): cleans top at 0.25-0.39 across runs (`lines`
+  # bound to a count is the highest), the stable defects start at 0.61. The
+  # unit case, `timeout_seconds` passed to Duration::from_millis, answers
+  # 0.75-0.81 now that the code names the unit; beside a same-valued
+  # `timeout_millis` with nothing naming either unit it was the clean one
+  # that got flagged (0.83). Three defects wobble across any cutoff between
+  # 0.4 and 0.6 on identical input: `domain` bound to the piece before '@'
+  # (0.47-0.71), `bytes` bound to a String (0.32-0.72) and `ids` bound to
+  # names (0.13-0.60). 0.5 flags the first two on the mean and misses `ids`;
+  # no cutoff holds all three steady, so this is the residue, not a fit.
+  at: 0.5
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -72,3 +119,4 @@
       - has: { field: value, pattern: $VALUE }
   ask: *var_ask
   criteria: *var_criteria
+  note: *var_note

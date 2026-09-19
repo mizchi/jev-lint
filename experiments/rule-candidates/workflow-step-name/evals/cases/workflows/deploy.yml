@@ -1,0 +1,132 @@
+name: Deploy Cluster
+
+on:
+  push:
+    branches: [staging, production]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Deploy target
+        type: choice
+        options: [staging, production]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-staging:
+    if: github.ref == 'refs/heads/staging' || inputs.target == 'staging'
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      WORKER_API_TOKEN_STAGING: ${{ secrets.WORKER_API_TOKEN_STAGING }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.27.0
+
+      - name: Setup just
+        uses: taiki-e/install-action@just
+
+      - name: Setup MoonBit
+        uses: chawyehsu/setup-moonup@v1
+
+      - name: Verify MoonBit
+        run: moon version --all
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build MoonBit JS modules
+        run: pnpm build
+
+      - name: Release gate
+        run: just release-check
+
+      - name: Ensure staging queues
+        run: |
+          set -euo pipefail
+          queue_exists() {
+            pnpm exec wrangler queues list | grep -Fxq "$1"
+          }
+          if ! queue_exists jobs-staging; then
+            pnpm exec wrangler queues create jobs-staging
+          fi
+          if ! queue_exists jobs-staging-dlq; then
+            pnpm exec wrangler queues create jobs-staging-dlq
+          fi
+
+      - name: Ensure staging token is configured
+        run: |
+          set -euo pipefail
+          if [ -z "${WORKER_API_TOKEN_STAGING:-}" ]; then
+            echo "WORKER_API_TOKEN_STAGING is required"
+            exit 1
+          fi
+
+      - name: Sync staging API token
+        run: |
+          set -euo pipefail
+          printf %s "$WORKER_API_TOKEN_STAGING" | pnpm exec wrangler secret put API_TOKEN --config apps/worker/wrangler.jsonc --env staging
+          printf %s "$WORKER_API_TOKEN_STAGING" | pnpm exec wrangler secret put API_TOKEN --config apps/relay/wrangler.jsonc --env staging
+
+      - name: Check production queues
+        run: |
+          set -euo pipefail
+          if ! pnpm exec wrangler queues list | grep -Fxq jobs; then
+            pnpm exec wrangler queues create jobs
+          fi
+
+      - name: Run unit tests
+        run: |
+          pnpm test
+          pnpm exec wrangler deploy --config apps/worker/wrangler.jsonc --env staging
+
+      - name: Deploy staging cluster
+        run: just release-cluster-staging
+
+      - name: Smoke test staging
+        run: just smoke-control-plane-production --retry 3 --json
+
+  deploy-production:
+    if: github.ref == 'refs/heads/production' || inputs.target == 'production'
+    runs-on: ubuntu-latest
+    environment: production
+    needs: deploy-staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Sync production API token
+        run: |
+          set -euo pipefail
+          printf %s "$WORKER_API_TOKEN_PROD" | pnpm exec wrangler secret put API_TOKEN --config apps/worker/wrangler.jsonc
+          pnpm exec wrangler deploy --config apps/worker/wrangler.jsonc
+        env:
+          WORKER_API_TOKEN_PROD: ${{ secrets.WORKER_API_TOKEN_PROD }}
+
+      - name: Run migrations
+        run: |
+          pnpm exec wrangler d1 migrations apply cluster-db --remote
+          pnpm exec wrangler d1 execute cluster-db --remote --file=./seeds/demo-accounts.sql
+
+      - name: Push image
+        run: |
+          docker build -t ghcr.io/acme/worker:${{ github.sha }} .
+          docker push ghcr.io/acme/worker:${{ github.sha }}
+
+      - name: Comment deployment URL
+        run: gh pr comment ${{ github.event.number }} --body "Deployed to https://worker.acme.example"
+        env:
+          GH_TOKEN: ${{ github.token }}

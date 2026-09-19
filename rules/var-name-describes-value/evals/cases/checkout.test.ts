@@ -5,7 +5,7 @@ import { Cart } from "./cart.ts";
 import { checkout, cancelOrder, reserveLineItems } from "./checkout.ts";
 import * as inventory from "./inventory.ts";
 import { ordersRepo } from "./orders-repo.ts";
-import { getOrderStatus, submitPayment } from "./payments-client.ts";
+import { getOrderStatus, postCharge, submitPayment } from "./payments-client.ts";
 import { isCouponActive } from "./coupons.ts";
 
 vi.mock("./discount.ts", () => ({
@@ -139,5 +139,25 @@ describe("payments client", () => {
         body: JSON.stringify({ orderId: "ord_1", amountCents: 9000, currency: "USD" }),
       }),
     );
+  });
+});
+
+describe("payments API auth", () => {
+  it("rejects a charge without a token, and accepts one with it", async () => {
+    const unauthorized = await postCharge({ orderId: "ord_1", amountCents: 9000 }, {});
+    expect(unauthorized.status).toBe(401);
+    await expect(unauthorized.json()).resolves.toEqual({ ok: false, error: "unauthorized" });
+
+    const authorized = await postCharge(
+      { orderId: "ord_1", amountCents: 9000 },
+      { authorization: "Bearer test-token" },
+    );
+    expect(authorized.status).toBe(201);
+  });
+
+  it("rejects a charge that is missing its order id", async () => {
+    const missingOrder = await postCharge({ amountCents: 9000 }, { authorization: "Bearer test-token" });
+    expect(missingOrder.status).toBe(400);
+    await expect(missingOrder.json()).resolves.toEqual({ ok: false, error: "missing field: orderId" });
   });
 });

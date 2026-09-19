@@ -65,7 +65,7 @@ export function bumpHits(id: string): number | null {
 
 export function prune(limit: number): number {
   let removed = 0;
-  // Sort so the newest sessions are kept.
+  // Sort so the sessions that expire last are the ones kept.
   const ordered = [...sessions.values()].sort((a, b) => a.expiresAt - b.expiresAt);
   for (const s of ordered.slice(limit)) {
     sessions.delete(s.id);

@@ -476,26 +476,37 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 On a TypeScript-only repository the seven Rust variants and
 `comment-describes-declaration-js` report "matched nothing": 8 of the 23.
 
-Of the 23, **17 reach precision 1.00 and recall 1.00 at their shipped cutoffs
+Of the 23, **20 reach precision 1.00 and recall 1.00 at their shipped cutoffs
 on their own evals** (`rules/*/evals/baseline.json`, three passes each,
 decisions on the mean; `jev-lint eval --replay` re-derives every number below
-with no request). Read that with
-the positive counts beside them, because they are small: per rule, 14, 9, 7,
-6, 6, 6, 6, 6, 5, 5, 5, 4, 4, 4, 4, 3, 2, 2, 2, 1, 1 labelled defects. The
-two `module-name-describes-contents` rules have one each and ship at
-`severity: info` for that reason; `comment-describes-declaration-js` has two
-and the gap report calls it `thin`.
+with no request). Read that with the positive counts beside them: per rule,
+31, 17, 13, 11, 11, 10, 10, 10, 9, 9, 6, 6, 6, 5, 5, 5, 4, 4, 2, 2, 2, 1, 1
+labelled defects — 197 in all, against 113 before the improvement round of
+2026-09-20, in which six agents each took one or two rules, added hard cases
+drawn from real code, and rewrote criteria until the rule separated or the
+reason it could not was named. The two `module-name-describes-contents`
+rules still have one defect each and ship at `severity: info`;
+`comment-describes-declaration-js` has two.
 
-Six do not, and each pack says what its rule misses:
+Three do not, each by one labelled defect the rule file names:
 
-| rule | at the shipped cutoff | why |
+| rule | at the shipped cutoff | the one it misses |
 | --- | --- | --- |
-| `var-name-describes-value` | recall 0.67 | `timeoutSeconds = 5000` needs API knowledge; one more sits in the wobble band |
-| `fn-name-promises-rust` | recall 0.83 | one defect at 0.62–0.70 across a 0.68 cutoff |
-| `test-name-verifies-claim` | flips | one defect at 0.50–0.53 across a 0.52 cutoff, in or out by the pass |
-| `test-name-describes-code-rust` | precision 0.67 | by inversion: a clean test answers higher than the genuine defect |
-| `comment-describes-block` | recall 0.50 | parked at 0.94 over the preamble band on real code; one defect answers 0.49 |
-| `comment-describes-block-rust` | recall 0.50 | likewise, at 0.90 |
+| `var-name-describes-value` | recall 0.92 | `flat = normalizeRule(bad)` holding a rejection: the claim is about the branch of a union result, visible only in the assertions after it |
+| `var-name-describes-value-rust` | recall 0.90 | a field taken under another field's name, answering 0.10–0.87 on identical input across runs |
+| `comment-describes-block` | recall 0.92 | a comment true of the sort it sits above and false only together with the loop after it (0.52); parked at 0.75 over the band that big test files still produce, since the arm steps down to `local` there and a test callback has no container to promote to |
+
+What the round moved, besides the counts: `fn-name-promises` from 0.82 to
+0.55 — the old cutoff had been fitted to outrageous defects only, and the
+real ones added from a worker and a queue landed at 0.50–0.74 under it;
+`test-name-describes-code` from an "inversion" no cutoff repaired to
+1.00/1.00, because the inverted case was a label error (a test whose body
+calls no sort is not "about the right thing weakly", it is about something
+the code never touches); `comment-describes-block` from recall 0.5 to 0.92
+once its root cause was found — a statement inside a `test(...)` callback
+has no named container, so `subject: enclosing` could not promote it and
+the model was judging one line and its comment; and every rule's clean band
+has hard cases in it that the first corpus did not have.
 
 **The corpus is marker-free, and was not.** Until 2026-09-20 every labelled
 defect in the original thirteen files sat under a comment of the form

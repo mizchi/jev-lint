@@ -108,5 +108,112 @@
       "reason": "hard clean: ensure* that is a pure conversion, nothing to check",
       "window": 0
     }
+  ],
+  "gates.ts": [
+    {
+      "line": 4,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "assertInvariant returns without looking at the condition whenever NODE_ENV is production: the name promises the invariant is asserted, and in production it never is"
+    },
+    {
+      "line": 11,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "validateUpload accepts any file over the scan limit without reading a byte; the large file is the one that was never validated"
+    },
+    {
+      "line": 21,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "verifyChecksum returns true when the hash algorithm is unsupported: the digest was never computed, and the caller reads 'verified'"
+    },
+    {
+      "line": 35,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "ensureSubscribed discards the rejection of subscribe(), so on a refused or failed subscription it resolves normally with nothing ensured"
+    },
+    {
+      "line": 44,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "validateLicenseKey returns valid/enterprise for any key starting with 'dev-' without checking the signature: a shortcut branch that skips the check for a class of inputs"
+    },
+    {
+      "line": 56,
+      "label": "bad",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "assertPositive returns silently for anything that is not a number, so a string or undefined is accepted without the check the name promises. (First written as an early return on NaN, which scored 0.64-0.66: `value <= 0` is already false for NaN, so that early return skipped nothing the check would have caught, and the model was right to be lukewarm; the fixture was rewritten so the shortcut path accepts inputs the check would reject.)"
+    },
+    {
+      "line": 81,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "hard clean: on the catch path the check is not skipped, it is handed to fallbackRateLimit, a helper whose name says it performs the same check, and its answer is returned. Rewritten from agent-cluster apps/bit-relay/worker.ts:396, which the rule flagged at 0.80 on the unseen run; a false positive there"
+    },
+    {
+      "line": 115,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "hard clean: every path compares the proposal against the objective and reports a result; it is the pure fallback for validateAlignment"
+    },
+    {
+      "line": 127,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "hard clean: the catch swallows the module failure but the function then returns the fallback validator's verdict, so the check is performed on every path. Rewritten from agent-cluster apps/agent-worker/worker.ts:6991, flagged at 0.72 on the unseen run; a false positive there"
+    },
+    {
+      "line": 144,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "hard clean: a GET or HEAD has no body, so returning ok with no body is not an unexamined input, there is nothing to examine; every request that has a body is parsed and checked"
+    },
+    {
+      "line": 160,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "hard clean: the early return hands back the result of an earlier evaluation of the same check, not an unexamined acceptance"
+    },
+    {
+      "line": 169,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "hard clean: terse arrow-function assert, one condition, throws on failure"
+    },
+    {
+      "line": 174,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "hard clean: delegates the whole check to argon2.verify, nothing to see in the body"
+    },
+    {
+      "line": 178,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "hard clean: early returns reject, they do not accept; failing closed honours the name"
+    },
+    {
+      "line": 190,
+      "label": "clean",
+      "rule": "guard-name-guards",
+      "window": 0,
+      "reason": "hard clean: every dependency is pinged and the failures reported; the catch records a failure rather than hiding it"
+    }
   ]
 }

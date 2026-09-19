@@ -1,18 +1,540 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-19T17:25:59.939Z",
+  "recorded": "2026-09-19T17:45:33.317Z",
   "model": "jev-1.13.0",
   "suite": "workflow-step-name",
   "rules": [
     {
       "id": "workflow-step-name",
-      "draft": "5d9c745f4917",
-      "at": 0.44
+      "draft": "3b969f99e2c4",
+      "at": 0.62
     }
   ],
   "cutoffs": {},
   "passes": [
     [
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 28,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 31,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 31,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 34,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 37,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 44,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 47,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 60,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 66,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 72,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 75,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 81,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 33,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 36,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 39,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 45,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 48,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 51,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 64,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 72,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 78,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 85,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 90,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 93,
+        "endLine": 94,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 111,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 119,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 124,
+        "endLine": 127,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 129,
+        "endLine": 133,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 18,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 25,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 28,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 35,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 43,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 46,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 11,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 19,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 57,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 25,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 102,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 15,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 73,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 14,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 28,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 19,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 105,
+        "endLine": 109,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 25,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 30,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 42,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 33,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 36,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 39,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 44,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 47,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 54,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 57,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 60,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 68,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
       {
         "rule": "workflow-step-name",
         "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
@@ -28,7 +550,7 @@
         "line": 25,
         "endLine": 29,
         "kind": "noul",
-        "value": 0.1,
+        "value": 0.09,
         "confidence": null
       },
       {
@@ -37,7 +559,7 @@
         "line": 34,
         "endLine": 38,
         "kind": "noul",
-        "value": 0.09,
+        "value": 0.1,
         "confidence": null
       },
       {
@@ -46,7 +568,621 @@
         "line": 40,
         "endLine": 45,
         "kind": "noul",
-        "value": 0.28,
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 47,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 50,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 55,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 63,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 76,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 84,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 18,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 25,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 28,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 35,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 43,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 46,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 28,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 31,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 31,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 34,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 37,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 44,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 47,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 60,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 66,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 72,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 75,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 81,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 11,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 19,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 57,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 25,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 102,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 15,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 73,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 14,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 28,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 19,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 105,
+        "endLine": 109,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 25,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 30,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 42,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 33,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 36,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 39,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 44,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 47,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 54,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 57,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 60,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 68,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 33,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 36,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 39,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 45,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 48,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 51,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 64,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 72,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 78,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 85,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 90,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 93,
+        "endLine": 94,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 111,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 119,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 124,
+        "endLine": 127,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 129,
+        "endLine": 133,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 20,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 25,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 34,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.26,
         "confidence": null
       },
       {
@@ -64,7 +1200,7 @@
         "line": 50,
         "endLine": 53,
         "kind": "noul",
-        "value": 0.03,
+        "value": 0.04,
         "confidence": null
       },
       {
@@ -72,826 +1208,140 @@
         "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
         "line": 55,
         "endLine": 61,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 63,
-        "endLine": 67,
-        "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 76,
-        "endLine": 82,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 84,
-        "endLine": 91,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 18,
-        "endLine": 23,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 25,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.58,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 28,
-        "endLine": 33,
-        "kind": "noul",
-        "value": 0.76,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 35,
-        "endLine": 41,
-        "kind": "noul",
-        "value": 0.15,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 43,
-        "endLine": 44,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 46,
-        "endLine": 50,
-        "kind": "noul",
-        "value": 0.13,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 19,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 57,
-        "endLine": 58,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 15,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 73,
-        "endLine": 74,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 22,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 28,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 31,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 31,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 34,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.12,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 37,
-        "endLine": 42,
-        "kind": "noul",
-        "value": 0.92,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 44,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.88,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 47,
-        "endLine": 51,
-        "kind": "noul",
-        "value": 0.22,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 60,
-        "endLine": 64,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 66,
-        "endLine": 70,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 72,
-        "endLine": 73,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 75,
-        "endLine": 79,
-        "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 81,
-        "endLine": 87,
-        "kind": "noul",
-        "value": 0.2,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 20,
-        "endLine": 23,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 25,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 34,
-        "endLine": 38,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 40,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.29,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 47,
-        "endLine": 48,
-        "kind": "noul",
-        "value": 0.82,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 50,
-        "endLine": 53,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 55,
-        "endLine": 61,
-        "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 63,
-        "endLine": 67,
-        "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 76,
-        "endLine": 82,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 84,
-        "endLine": 91,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 19,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 57,
-        "endLine": 58,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 15,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 73,
-        "endLine": 74,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 22,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 28,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 31,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 31,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 34,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.12,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 37,
-        "endLine": 42,
-        "kind": "noul",
-        "value": 0.92,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 44,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.88,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 47,
-        "endLine": 51,
-        "kind": "noul",
-        "value": 0.17,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 60,
-        "endLine": 64,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 66,
-        "endLine": 70,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 72,
-        "endLine": 73,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 75,
-        "endLine": 79,
-        "kind": "noul",
-        "value": 0.93,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 81,
-        "endLine": 87,
-        "kind": "noul",
-        "value": 0.23,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 18,
-        "endLine": 23,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 25,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.54,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 28,
-        "endLine": 33,
-        "kind": "noul",
-        "value": 0.72,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 35,
-        "endLine": 41,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 43,
-        "endLine": 44,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 46,
-        "endLine": 50,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 20,
-        "endLine": 23,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 25,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.12,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 34,
-        "endLine": 38,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 40,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.32,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 47,
-        "endLine": 48,
-        "kind": "noul",
-        "value": 0.82,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 50,
-        "endLine": 53,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 55,
-        "endLine": 61,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 63,
-        "endLine": 67,
-        "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 76,
-        "endLine": 82,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 84,
-        "endLine": 91,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 18,
-        "endLine": 23,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 25,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.54,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 28,
-        "endLine": 33,
-        "kind": "noul",
-        "value": 0.72,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 35,
-        "endLine": 41,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 43,
-        "endLine": 44,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 46,
-        "endLine": 50,
-        "kind": "noul",
-        "value": 0.15,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 19,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 57,
-        "endLine": 58,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
-        "line": 15,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 73,
-        "endLine": 74,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 22,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 28,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
-        "line": 31,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 31,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 34,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.13,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 37,
-        "endLine": 42,
-        "kind": "noul",
-        "value": 0.92,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 44,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.88,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 47,
-        "endLine": 51,
-        "kind": "noul",
-        "value": 0.17,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 60,
-        "endLine": 64,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 66,
-        "endLine": 70,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "workflow-step-name",
-        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
-        "line": 72,
-        "endLine": 73,
         "kind": "noul",
         "value": 0.06,
         "confidence": null
       },
       {
         "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 63,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 76,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 84,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 28,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 31,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 31,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 34,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 37,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 44,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 47,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 60,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 66,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 72,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
         "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
         "line": 75,
         "endLine": 79,
@@ -907,13 +1357,508 @@
         "kind": "noul",
         "value": 0.22,
         "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 11,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 19,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/ci.yml",
+        "line": 57,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 25,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 102,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 15,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 73,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 14,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 28,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 19,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 105,
+        "endLine": 109,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 25,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 30,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 42,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 33,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 36,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 39,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 44,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 47,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 54,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 57,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 60,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/checks.yml",
+        "line": 68,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 18,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 25,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 28,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 35,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 43,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/nightly.yml",
+        "line": 46,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 33,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 36,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.44,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 39,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 45,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 48,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 51,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 64,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 72,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 78,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 85,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 90,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 93,
+        "endLine": 94,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 111,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 119,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 124,
+        "endLine": 127,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/deploy.yml",
+        "line": 129,
+        "endLine": 133,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 20,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 25,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 34,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 47,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 50,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 55,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 63,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 76,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "workflow-step-name",
+        "file": "experiments/rule-candidates/workflow-step-name/evals/cases/workflows/release.yml",
+        "line": 84,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
       }
     ]
   ],
   "spent": {
-    "calls": 9,
-    "inputTokens": 48249,
-    "usd": 0.002026458,
-    "ms": 2535
+    "calls": 15,
+    "inputTokens": 126729,
+    "usd": 0.005322618,
+    "ms": 6047
   }
 }

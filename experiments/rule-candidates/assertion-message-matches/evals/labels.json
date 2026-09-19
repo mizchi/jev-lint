@@ -243,5 +243,100 @@
       "rule": "assertion-message-matches",
       "reason": "clean: decodeBase64Utf8 returning null and 'invalid utf-8 content' agree"
     }
+  ],
+  "guards.ts": [
+    {
+      "line": 6,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires when the queue is full (length >= MAX) but says 'underflow'; the term for the other direction, the second case of the wrong-term class"
+    },
+    {
+      "line": 11,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires when now is past expiresAt, an expired lease, but says 'not yet valid', the opposite end of the window"
+    },
+    {
+      "line": 16,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: now < notBefore and 'not yet valid' agree"
+    },
+    {
+      "line": 17,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: now > expiresAt and 'has expired' agree"
+    },
+    {
+      "line": 23,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "nested guard: the outer if established that user exists and the inner fires for the wrong org or role, yet the message says 'not found', which neither condition means"
+    },
+    {
+      "line": 33,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: nested guard whose message names both conditions, 'id is required when strict is set' for strict outside and !input.id inside"
+    },
+    {
+      "line": 42,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires on a negative number but says 'must be a number': a sign check described as a type check"
+    },
+    {
+      "line": 47,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: typeof !== number and 'must be a number' agree"
+    },
+    {
+      "line": 52,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires on a 404 status but says 'timed out': a different failure than the one detected"
+    },
+    {
+      "line": 57,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "clean: index >= length and 'past the end' agree"
+    }
+  ],
+  "options.ts": [
+    {
+      "line": 5,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: 'missing required option' for a string that is empty after trimming; an empty option is a missing one by convention (the agent-cluster normalizeBaseUrl shape, 0.51-0.55 on the unseen run)"
+    },
+    {
+      "line": 23,
+      "window": 0,
+      "label": "clean",
+      "rule": "assertion-message-matches",
+      "reason": "hard clean: 'missing required option' thrown under a required flag after the inline and file paths both returned; the condition is the flag, the message the case it is reached in (the agent-cluster cli.ts:317 shape, 0.49 unseen)"
+    },
+    {
+      "line": 30,
+      "window": 0,
+      "label": "bad",
+      "rule": "assertion-message-matches",
+      "reason": "fires when --port is present but not digits and says 'missing': a value check described as absence"
+    }
   ]
 }

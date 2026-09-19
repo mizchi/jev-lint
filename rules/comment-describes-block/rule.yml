@@ -18,7 +18,24 @@
   languages: [TypeScript, Tsx, JavaScript, Jsx]
   kind: noul
   subject: enclosing
-  state: bare
+  # `located`, not `bare`, and the reason is the finding of the 2026-09-20
+  # pass. A statement inside a `test("...", () => { ... })` callback has no
+  # named container: the arrow function is not a symbol, so `subject:
+  # enclosing` cannot promote it and the model is handed the ONE statement
+  # under the comment and nothing else. On `bare` that is the whole question,
+  # and every preamble -- the comment that opens a test and says what the
+  # test is for, above whatever its first statement happens to be -- reads
+  # as "the code does not do what the comment says": 0.77-0.90 on the evals'
+  # eight real preamble shapes, 0.81-0.93 on this repository's own tests.
+  # Rust tests are named `fn`s, are promoted, and the same shapes answer
+  # 0.20-0.42 on `bare`. `located` gives the TypeScript variant the file, and
+  # with it the body: the same eight preambles answer 0.24-0.79, and with the
+  # criteria below 0.05-0.20.
+  #
+  # Also found while looking: `$DOC` is the LAST line of a multi-line `//`
+  # comment (each line is its own `comment` node), so the note tells the
+  # model where the comment starts.
+  state: located
   # Calibrated late, and the reason is worth keeping.
   #
   # This rule shipped for two versions saying "NOT CALIBRATED": its median was
@@ -33,23 +50,32 @@
   # clean case answers on its own and the classes separate: precision 1,
   # recall 1, midpoint 0.80, on both variants.
   #
-  # Two labelled defects per variant is thin, so it stays at `severity: info`
-  # until the corpus has more inline-comment cases.
-  #
   # Then the corpus lost its `// DEFECT` markers, which had sat directly above
   # each defect saying what was wrong with it, inside the very state this rule
-  # sends. Without them one of the two defects answers 0.96 and the other
-  # 0.49; the Rust variant's answer 0.92 and 0.58. And run on this
-  # repository's own tests the rule reads PREAMBLES -- the comment that opens a
-  # test and says what the whole test is for, above whatever its first
-  # statement happens to be -- at 0.81-0.91. So on real code the clean band
-  # sits above one of the two defects, and no cutoff separates. The cutoff is
-  # parked at 0.94, over the preambles and under the one defect it can still
-  # see, at `severity: info`: the rule reports what it can separate, and the
-  # pack says what it cannot. It needs inline-comment defects whose falsehood
-  # is in the code, not in a label, before it is judged. Lower `at` once you
-  # have measured it on your own comments.
-  at: 0.94
+  # sends. Without them one of the two defects answered 0.96 and the other
+  # 0.49, and on real code the preamble band (0.81-0.91, see above) sat over
+  # the second, so the cutoff was parked at 0.94.
+  #
+  # 2026-09-20: twelve labelled defects and thirteen hard cleans (eight
+  # preambles and section headings, a trailing comment, three why/vague/label
+  # comments), `located`, and criteria that say what the code beneath a
+  # comment is (the run of statements to the next comment), what a preamble
+  # is, and that a trailing comment belongs to the line before it. On the
+  # evals the cleans top out at 0.39 and the defects start at 0.53 (fitted
+  # midpoint 0.46). But `located` steps down to `local` on a test file over
+  # the state budget -- this repository's test/test.ts, agent-cluster's
+  # worker.test.ts -- and `local` carries nothing for a callback either, so
+  # on a big test file the model is back to the lone statement. There the
+  # preambles answer up to 0.63 (four of 99 over 0.50 on test/test.ts). The
+  # cutoff is parked at 0.75: over that band with 0.12 to spare, under
+  # eleven of the twelve defects with 0.08 to spare (the lowest caught, a
+  # unit mismatch, answers 0.83). The one it misses is stated in the evals:
+  # `session_store.ts:69` (0.52), where the comment is true of the sort it
+  # sits above and false only together with the loop after it. Set `at:
+  # 0.45` if your test files fit the state budget; the fix that makes 0.45
+  # right everywhere is in src/state.ts, where a callback passed to `test()`
+  # is not a container.
+  at: 0.75
   severity: info
   rule:
     all:
@@ -71,40 +97,70 @@
       - inside:
           kind: statement_block
           stopBy: end
-  # Reworded after measurement. The first version asked whether the commented
-  # lines "do something other than what the comment says", and answered 0.90 to
-  # 0.96 for everything -- a gap of 0.03, which no cutoff repairs. The wording
-  # below is the declaration rule's, which separates its classes perfectly in
-  # three languages: demand a SPECIFIC contradiction and name what does not
-  # count. See docs/findings.md for whether it worked.
+  # Reworded twice after measurement. The first version asked whether the
+  # commented lines "do something other than what the comment says", and
+  # answered 0.90 to 0.96 for everything -- a gap of 0.03, which no cutoff
+  # repairs. The second was the declaration rule's: demand a SPECIFIC
+  # contradiction and name what does not count. The third, below, also says
+  # what "the code beneath" a comment is -- the run of statements to the next
+  # comment, not the first statement -- which is what a section heading
+  # ("Append two events" above two appends) needs, and names the preamble and
+  # the trailing comment as making no claim. Each clause was measured; see
+  # experiments/reports/improve-comment-describes-block/REPORT.md.
   ask: &block_ask >-
-    The comment marked as matched claims something that is not true of the code
-    it sits above.
+    The comment captured as DOC makes a claim about the code beneath it that
+    the code contradicts.
   criteria: &block_criteria
     "true": >-
-      A specific claim in that comment is contradicted by the code directly
-      beneath it: it states a count, limit or number of attempts that differs
-      from the code's, it names a direction, order, rounding or unit the code
-      does not use, it describes a step or an operation the code does not
-      perform, or it describes something that is no longer there at all.
+      The comment says what the code beneath it does, and the code does
+      something else: a count, limit, number of attempts or delay that differs
+      from the code's, or that the comment fixes to a number while the code
+      takes it from a parameter; a direction, order, sign, rounding or unit that
+      is not the one the code uses; a condition the code tests the other way
+      round; or a step the comment says happens here that the code beneath it
+      does not perform.
     "false": >-
-      Every specific claim in that comment holds for the code beneath it. A
-      comment that merely restates the code, that explains why rather than what,
-      that is vague, or that describes the code loosely but not wrongly, is not
-      a false comment. Only an actual contradiction counts.
+      Every specific claim in the comment holds for the code beneath it. The
+      code beneath a comment is the run of statements from the comment down to
+      the next comment or the end of the block, not the first statement alone:
+      "two events" above two appends is true. A comment that gives a reason
+      outside the code -- a policy, a caller, a server, a past bug -- that says
+      what the whole test or function is for, that describes what other code
+      does, that is vague, or that summarises the code loosely but not wrongly,
+      makes no claim the code can contradict. A comment that states the effect
+      the code beneath it achieves ("so the newest are kept") is a claim about
+      that code, and is judged by what the code does. A comment that sits at
+      the end of a line of code, after that code, belongs to that line, not to
+      the code beneath it. The contradiction has to be visible in the code
+      shown: a comment about setup, a later step, or code that is not shown
+      is not contradicted by a statement that simply does not mention it.
   note: &block_note >-
-    The comment under test is the one captured as DOC. Other comments in the
-    same function are not your concern, and a comment explaining a reason rather
-    than an action has nothing to contradict.
+    The comment under test is the one whose last line is captured as DOC; it
+    may begin several lines above that line, and all of it is the comment.
+    Find that line in the source before judging: if code precedes the comment
+    on its own line, the comment is a trailing remark on that code and makes
+    no claim about the line beneath it. Judge the comment only against the
+    code that follows it. Other comments in the same function are not your
+    concern.
 - id: comment-describes-block-rust
   language: Rust
   kind: noul
   subject: enclosing
   state: bare
-  # See the note on `comment-describes-block`. Without the corpus markers its
-  # two defects answer 0.92 and 0.58; parked at 0.90 over the first, `info`.
-  at: 0.9
+  # `bare` is enough here: a Rust test is a named `fn`, so `subject:
+  # enclosing` promotes every match and the model sees the body. Ten labelled
+  # defects (0.60-0.95) over eight hard cleans (0.06-0.12), fitted midpoint
+  # 0.36; 0.45 for headroom on real code, where 40 subjects in five wasmtime
+  # files answered 0.51 at most (a comment naming QEMU above an `if` that
+  # tests another variable -- a fair candidate) and 0.41 next.
+  at: 0.45
   severity: info
+  # A statement or a block's tail expression that follows a comment, as a
+  # direct child of the block (ast-grep needs a positive kind, so the tail
+  # expression kinds are listed). The earlier list of statement kinds missed
+  # the tail expression -- `// Round down.` above `(secs + 59) / 60` as the
+  # last line of a function -- which in Rust is where a good share of the
+  # commented arithmetic sits. Three of the evals' defects are tail expressions.
   rule:
     all:
       - any:
@@ -115,6 +171,34 @@
           - kind: match_expression
           - kind: let_declaration
           - kind: expression_statement
+          # A block's tail expression: any of these as a direct child of a block.
+          - kind: binary_expression
+          - kind: call_expression
+          - kind: macro_invocation
+          - kind: field_expression
+          - kind: identifier
+          - kind: unary_expression
+          - kind: parenthesized_expression
+          - kind: struct_expression
+          - kind: tuple_expression
+          - kind: index_expression
+          - kind: reference_expression
+          - kind: await_expression
+          - kind: try_expression
+          - kind: return_expression
+          - kind: assignment_expression
+          - kind: compound_assignment_expr
+          - kind: closure_expression
+          - kind: array_expression
+          - kind: range_expression
+          - kind: scoped_identifier
+          - kind: block
+          - kind: unsafe_block
+          - kind: integer_literal
+          - kind: string_literal
+          - kind: boolean_literal
+          - kind: break_expression
+          - kind: continue_expression
       - follows:
           any:
             - kind: line_comment
@@ -122,7 +206,6 @@
           pattern: $DOC
       - inside:
           kind: block
-          stopBy: end
   ask: *block_ask
   criteria: *block_criteria
   note: *block_note

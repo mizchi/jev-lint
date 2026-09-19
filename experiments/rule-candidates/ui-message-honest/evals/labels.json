@@ -41,7 +41,7 @@
       "window": 0,
       "label": "clean",
       "rule": "ui-message-honest",
-      "reason": "hard clean: 'Saving\u2026' as a progress message before the await"
+      "reason": "hard clean: 'Saving…' as a progress message before the await"
     },
     {
       "line": 76,
@@ -205,6 +205,192 @@
       "label": "clean",
       "rule": "ui-message-honest",
       "reason": "hard clean: matcher over-match, a plain-text health response is not a claim about an action"
+    }
+  ],
+  "share.tsx": [
+    {
+      "line": 13,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Saving…' is a progress message before the await; the second message in the same function is judged separately"
+    },
+    {
+      "line": 15,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Saved' after the awaited PATCH completed; the honest sibling of the enqueue-only 'Saved' cases, in a function that also shows 'Saving…'"
+    },
+    {
+      "line": 30,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Shared with your team' is shown before the share request resolves; the code only reports a failure afterwards in .catch"
+    },
+    {
+      "line": 31,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'Sharing failed' in the .catch of the same request; the bad success message sits in the same function and must not drag this one"
+    },
+    {
+      "line": 39,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'Invoice sent' after the awaited POST to /send completed inside the try"
+    },
+    {
+      "line": 41,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Could not send the invoice' in the catch of the send; generic failure for the one operation tried"
+    },
+    {
+      "line": 47,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Comment deleted' when the code only PATCHes hidden: true; the message names a stronger action than the code performed"
+    },
+    {
+      "line": 52,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: the same PATCH hidden: true described as 'Comment hidden', which is what the code did"
+    },
+    {
+      "line": 59,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Exporting…' as a progress message before the enqueue"
+    },
+    {
+      "line": 61,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Export finished' after only queue.add('export-doc'); the export was enqueued, not finished, and the progress message in the same function must not shield it"
+    },
+    {
+      "line": 77,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Saved' via a state setter after queue.add that is not even awaited; nothing was persisted"
+    },
+    {
+      "line": 90,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Review requested. The reviewer will be notified.' after an awaited POST to /reviews restates the call; the notification claim is about another system"
+    },
+    {
+      "line": 97,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: a generic 'Something went wrong while restoring' in the catch of the restore call"
+    },
+    {
+      "line": 100,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'Version restored' after the awaited POST to /restore did not throw"
+    },
+    {
+      "line": 110,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'Renamed' is shown while the PATCH is explicitly not awaited (void) and never checked; the dialog closes before the outcome is known"
+    }
+  ],
+  "admin_handlers.ts": [
+    {
+      "line": 8,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'This invitation has already been accepted' on a branch reached by a missing token, an accepted invite or an expired one: one specific cause named for three visible causes, and not in a catch"
+    },
+    {
+      "line": 19,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: the same three-cause branch described as 'no longer valid', which covers all three"
+    },
+    {
+      "line": 29,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Reindex queued' with 202 after enqueuing is what happened"
+    },
+    {
+      "line": 35,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'Membership not found' on the !membership branch"
+    },
+    {
+      "line": 39,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Member removed' after an awaited update setting removedAt; the soft action named by its usual word"
+    },
+    {
+      "line": 45,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'User not found' on the !user branch"
+    },
+    {
+      "line": 49,
+      "window": 0,
+      "label": "bad",
+      "rule": "ui-message-honest",
+      "reason": "'All personal data has been erased' after only enqueuing a gdpr.anonymize job; nothing was erased yet"
+    },
+    {
+      "line": 55,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'API key not found' when rotate returned nothing"
+    },
+    {
+      "line": 58,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "clean: 'API key rotated' after the awaited rotate returned the new key"
+    },
+    {
+      "line": 66,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Catalog file could not be parsed' in a catch whose try holds only parseCatalog; the one cause is the only cause"
+    },
+    {
+      "line": 70,
+      "window": 0,
+      "label": "clean",
+      "rule": "ui-message-honest",
+      "reason": "hard clean: 'Import started' with 202 after enqueuing the import job"
     }
   ]
 }

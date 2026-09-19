@@ -236,5 +236,254 @@
       "reason": "hard clean: terse name, gh cache delete --all prunes caches",
       "window": 0
     }
+  ],
+  "workflows/deploy.yml": [
+    {
+      "line": 25,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Checkout",
+      "window": 0
+    },
+    {
+      "line": 28,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional name for pnpm/action-setup",
+      "window": 0
+    },
+    {
+      "line": 33,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Setup just' over taiki-e/install-action@just; the action's name is not the tool's",
+      "window": 0
+    },
+    {
+      "line": 36,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional name for a toolchain setup action",
+      "window": 0
+    },
+    {
+      "line": 39,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Verify MoonBit' over moon version --all; printing the version is how the install is verified",
+      "window": 0
+    },
+    {
+      "line": 42,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: terse install over pnpm install --frozen-lockfile",
+      "window": 0
+    },
+    {
+      "line": 45,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: name says what is built, run is the mechanism (pnpm build)",
+      "window": 0
+    },
+    {
+      "line": 48,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Release gate' over an opaque just release-check; the name describes the intent",
+      "window": 0
+    },
+    {
+      "line": 51,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Ensure' names create-if-missing; the script lists and creates only when absent",
+      "window": 0
+    },
+    {
+      "line": 64,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: a shell check that exits 1 when the secret is empty is what 'Ensure ... is configured' says",
+      "window": 0
+    },
+    {
+      "line": 72,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: two wrangler secret put calls are the sync",
+      "window": 0
+    },
+    {
+      "line": 78,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Check production queues, creates the queue when it is missing; a check does not create",
+      "window": 0
+    },
+    {
+      "line": 85,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Run unit tests, also deploys the worker to staging",
+      "window": 0
+    },
+    {
+      "line": 90,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Deploy staging cluster' over an opaque just recipe named for it",
+      "window": 0
+    },
+    {
+      "line": 93,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Smoke test staging, runs the production smoke recipe",
+      "window": 0
+    },
+    {
+      "line": 102,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Checkout",
+      "window": 0
+    },
+    {
+      "line": 105,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Setup Node.js",
+      "window": 0
+    },
+    {
+      "line": 111,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Sync production API token, also deploys the worker after putting the secret",
+      "window": 0
+    },
+    {
+      "line": 119,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Run migrations, also executes a seed file that inserts demo accounts",
+      "window": 0
+    },
+    {
+      "line": 124,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Push image' summarises docker build + docker push; the build is how the image exists to push",
+      "window": 0
+    },
+    {
+      "line": 129,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "gh pr comment with the URL is what the name says",
+      "window": 0
+    }
+  ],
+  "workflows/checks.yml": [
+    {
+      "line": 11,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Checkout",
+      "window": 0
+    },
+    {
+      "line": 14,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional name for pnpm/action-setup",
+      "window": 0
+    },
+    {
+      "line": 19,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: conventional Setup Node.js",
+      "window": 0
+    },
+    {
+      "line": 25,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Setup Deno, uses actions/setup-python",
+      "window": 0
+    },
+    {
+      "line": 30,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: install over pnpm install --frozen-lockfile",
+      "window": 0
+    },
+    {
+      "line": 33,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Fail if lockfile changed' over git diff --exit-code; the name is the intent, the command the mechanism",
+      "window": 0
+    },
+    {
+      "line": 36,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: terse 'Typecheck' over an opaque just typecheck",
+      "window": 0
+    },
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Check types, also runs eslint --fix which rewrites files; a check does not rewrite",
+      "window": 0
+    },
+    {
+      "line": 44,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: terse 'Lint' over biome check, a read-only checker",
+      "window": 0
+    },
+    {
+      "line": 47,
+      "label": "bad",
+      "rule": "workflow-step-name",
+      "reason": "named Build, also commits dist and pushes",
+      "window": 0
+    },
+    {
+      "line": 54,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Assert clean tree' over test -z git status --porcelain; intent vs mechanism",
+      "window": 0
+    },
+    {
+      "line": 57,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Run control plane smoke' over an opaque just recipe with flags",
+      "window": 0
+    },
+    {
+      "line": 60,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "hard clean: 'Wait for preview' over a curl polling loop; the loop is the wait",
+      "window": 0
+    },
+    {
+      "line": 68,
+      "label": "clean",
+      "rule": "workflow-step-name",
+      "reason": "upload-artifact of the junit report is what the name says",
+      "window": 0
+    }
   ]
 }

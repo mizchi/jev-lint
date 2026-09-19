@@ -1,0 +1,310 @@
+openapi: 3.0.3
+info:
+  title: Webhooks API
+  version: 1.2.0
+
+paths:
+  /webhooks:
+    get:
+      operationId: listWebhooks
+      summary: List webhook endpoints
+      description: >-
+        The `status` filter is optional; omit it to list every endpoint
+        regardless of state.
+      parameters:
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [active, disabled]
+        - name: cursor
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: A page of endpoints
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Endpoint"
+                  nextCursor:
+                    type: string
+                    nullable: true
+    post:
+      operationId: createWebhook
+      summary: Register an endpoint
+      description: >-
+        Registers a URL to receive events. Returns 409 if the same URL is
+        already registered for this account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url, events]
+              properties:
+                url: { type: string, format: uri }
+                events:
+                  type: array
+                  items: { type: string }
+      responses:
+        "201":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Endpoint"
+
+  /webhooks/lookup:
+    post:
+      operationId: lookupWebhooks
+      summary: Look up endpoints by URL
+      description: >-
+        Read-only. The body carries the URLs to look up; nothing is stored.
+        Returns the endpoints that match, in the order given.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [urls]
+              properties:
+                urls:
+                  type: array
+                  items: { type: string, format: uri }
+      responses:
+        "200":
+          description: Matching endpoints
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Endpoint"
+
+  /webhooks/{id}:
+    get:
+      operationId: getWebhook
+      summary: Get an endpoint
+      description: Returns the endpoint, or 404 if no endpoint has that id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The endpoint
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Endpoint"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateWebhook
+      summary: Update an endpoint
+      description: >-
+        Partial update: fields omitted from the body are left unchanged.
+        Only `url` and `events` can be changed after registration.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url: { type: string, format: uri }
+                events:
+                  type: array
+                  items: { type: string }
+                active: { type: boolean }
+                description: { type: string }
+      responses:
+        "200":
+          description: The updated endpoint
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Endpoint"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteWebhook
+      summary: Delete an endpoint
+      description: >-
+        Stops deliveries immediately and returns 200 with the deleted
+        endpoint so the caller can re-register it later.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /webhooks/{id}/config:
+    put:
+      operationId: replaceWebhookConfig
+      summary: Replace delivery configuration
+      description: >-
+        Idempotent: replaces the retry and timeout settings with the body as
+        given. Sending the same body twice leaves the endpoint unchanged.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeliveryConfig"
+      responses:
+        "200":
+          description: The stored configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeliveryConfig"
+
+  /webhooks/{id}/secret:
+    get:
+      operationId: getWebhookSecret
+      summary: Get the signing secret
+      description: >-
+        Returns the signing secret. It is shown only once after rotation;
+        later calls return 410 until the secret is rotated again.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The secret
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  secret: { type: string }
+        "410":
+          description: Already retrieved
+    post:
+      operationId: rotateWebhookSecret
+      summary: Rotate the signing secret
+      description: >-
+        Generates a new secret. Responds 400 if the endpoint's URL is not
+        https, since a secret cannot be delivered over plain http.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The new secret
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  secret: { type: string }
+        "422":
+          description: Endpoint URL must be https
+
+  /webhooks/{id}/deliveries:
+    get:
+      operationId: listDeliveries
+      summary: List delivery attempts
+      description: >-
+        Returns the delivery attempts for this endpoint as an array, newest
+        first.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The latest delivery attempt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attemptId: { type: string }
+                  status: { type: string, enum: [pending, delivered, failed] }
+                  attemptedAt: { type: string, format: date-time }
+    delete:
+      operationId: clearDeliveries
+      summary: Clear the delivery log
+      description: Removes every recorded attempt. This cannot be undone.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Cleared
+        "404":
+          description: Not found
+
+  /webhooks/{id}/ping:
+    post:
+      operationId: pingWebhook
+      summary: Ping an endpoint
+      description: >-
+        Sends a synthetic `ping` event and returns 200 with the endpoint's
+        response once it has answered.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "202":
+          description: Ping scheduled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attemptId: { type: string }
+
+components:
+  schemas:
+    Endpoint:
+      type: object
+      properties:
+        id: { type: string }
+        url: { type: string, format: uri }
+        events:
+          type: array
+          items: { type: string }
+        active: { type: boolean }
+    DeliveryConfig:
+      type: object
+      properties:
+        maxRetries: { type: integer }
+        timeoutMs: { type: integer }

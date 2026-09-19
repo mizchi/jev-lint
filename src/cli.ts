@@ -1158,7 +1158,13 @@ function cmdReplay(opts: Options, out: Log, log: Log): number {
 }
 
 main(process.argv.slice(2)).then(
-  (code) => process.exit(code),
+  // Not `process.exit(code)`: when stdout is a pipe, exit discards whatever
+  // has not been flushed yet, and a `--format json` report over a few hundred
+  // subjects is longer than the pipe buffer. Setting the exit code lets the
+  // event loop drain stdout first, and nothing here keeps the loop alive.
+  (code) => {
+    process.exitCode = code;
+  },
   (err: any) => {
     // A rule set ast-grep would not accept, or a missing key, is a
     // configuration mistake: the message is the useful part and a stack trace

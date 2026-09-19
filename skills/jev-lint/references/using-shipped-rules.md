@@ -164,17 +164,15 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted to a corpus of 988 subjects (Rust, TypeScript, JavaScript, JSON), three
-passes. Of the 23 rules, 17 reach precision and recall 1.00 at their shipped
-cutoffs on it — resting on fewer than ten labelled defects each, all but one,
-so read that as "separates the classes in a small corpus", not as a
-guarantee. Six do not, and each pack says what its rule misses:
-`var-name-describes-value` (recall 0.67: a unit mismatch that needs API
-knowledge), `fn-name-promises-rust` (0.83), both `test-name-describes-code`
-variants (precision 0.67), and both `comment-describes-block` variants
-(parked above the real-code clean band, recall 0.5). The corpus is
-marker-free; the fits it produced while `// DEFECT` lines sat above each
-defect were better than the rules.
+Fitted on each rule's own evals (`rules/<id>/evals/`, 197 labelled defects
+across the 23 rules, three passes each). 20 of the 23 reach precision and
+recall 1.00 at their shipped cutoffs; the three that do not each miss one
+labelled defect the rule file names — a binding holding one branch of a
+union result, a Rust field taken under another field's name, an inline
+comment that is only false together with the loop after it. Read all of it
+as "separates the classes in a small set of cases", not as a guarantee. The
+cases are marker-free; the fits produced while `// DEFECT` lines sat above
+each defect were better than the rules.
 
 The four newer packs were also run once over an unseen repository of 1,391
 subjects before shipping; their findings there are in the pack headers.

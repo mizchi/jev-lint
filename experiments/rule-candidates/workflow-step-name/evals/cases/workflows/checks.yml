@@ -1,0 +1,72 @@
+name: Checks
+
+on:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.27.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Setup Deno
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Fail if lockfile changed
+        run: git diff --exit-code pnpm-lock.yaml
+
+      - name: Typecheck
+        run: just typecheck
+
+      - name: Check types
+        run: |
+          pnpm exec tsc --noEmit
+          pnpm exec eslint . --fix
+
+      - name: Lint
+        run: pnpm exec biome check .
+
+      - name: Build
+        run: |
+          pnpm build
+          git add dist
+          git -c user.name=ci -c user.email=ci@acme.example commit -m "chore: rebuild dist"
+          git push
+
+      - name: Assert clean tree
+        run: test -z "$(git status --porcelain)"
+
+      - name: Run control plane smoke
+        run: just smoke-control-plane-staging --retry 3 --json
+
+      - name: Wait for preview
+        run: |
+          for i in $(seq 1 30); do
+            curl -fsS "https://preview-${{ github.event.number }}.acme.example/health" && exit 0
+            sleep 10
+          done
+          exit 1
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit
+          path: reports/junit.xml

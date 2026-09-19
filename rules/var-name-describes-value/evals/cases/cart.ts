@@ -48,9 +48,11 @@ export function removeItem(cart: Cart, id: number): void {
   cart.items = cart.items.filter((item) => item.id !== id);
 }
 
-export function configure(cart: Cart): number {
+export function configure(cart: Cart, startedAt: number): number {
   const timeoutSeconds = 5000;
-  setTimeout(() => cache.delete(cart.currency), timeoutSeconds);
+  const elapsedMs = Date.now() - startedAt;
+  if (elapsedMs > timeoutSeconds) cache.delete(cart.currency);
+  else setTimeout(() => cache.delete(cart.currency), timeoutSeconds - elapsedMs);
 
   const isAdmin = cart.currency;
 

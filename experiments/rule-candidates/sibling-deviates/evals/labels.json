@@ -1,19 +1,129 @@
 {
   "$default": "clean",
+  "handlers.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "failure mode: five handle* return Promise<Result<T>> and report failure with err(); handleArchive returns Promise<Note> and throws for the same not-found case."
+    }
+  ],
+  "project_files.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "async-ness: four read* are async over fs/promises; readSchema does the same file read synchronously with readFileSync and no reason given."
+    }
+  ],
+  "commands.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "parameter order: four commands take (ctx, input); runExport takes (input, ctx) for the same kind of work."
+    }
+  ],
+  "parsers.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "failure mode: four parse* return T | null on bad input; parseVersion does the same regex parse and throws instead."
+    }
+  ],
+  "fetchers.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "failure mode: four fetch* throw on !res.ok and return Promise<T>; fetchPlan returns Promise<Result<Plan>> with err() for the same GET."
+    }
+  ],
+  "formatters.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "async-ness: four pure Intl formatters are plain functions returning string; formatMoney is async and returns Promise<string> for the same pure formatting."
+    }
+  ],
+  "session_events.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "async-ness: four on* handlers are async and await audit.write and metrics.increment; onLogout does the same two calls without await and returns void."
+    }
+  ],
+  "serializers.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "parameter order: four write* take (out, value); writeDate takes (value, out) for the same kind of encode-and-push."
+    }
+  ],
+  "worker_routes.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "parameter order: four handle* take (env, request); handleCancelJob takes (request, env) for the same kind of route handler."
+    }
+  ],
+  "auth_routes.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: one odd item, but only in its name (handleSignup among *Handler); all five share (req, res) => Promise<void>. Naming is module-naming-consistent's subject."
+    }
+  ],
+  "notifications.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: one odd item, but only in its name (dispatchPush among send*); all four share (n) => Promise<DeliveryReceipt>. Naming is module-naming-consistent's subject."
+    }
+  ],
+  "lookups.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: one odd item, but only in its name (loadInvoice among get*); all five share (db, id) => Promise<T | null>. Naming is module-naming-consistent's subject."
+    }
+  ],
+  "permissions.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: one odd item, but only in its name (checkAdmin among is/has/can); all five are (session, ...) => boolean. Naming is module-naming-consistent's subject."
+    }
+  ],
   "user_repository.ts": [
     {
       "line": 1,
       "label": "clean",
       "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "hard clean: inconsistent throughout, no single deviant -- every item differs from every other, so there is no pattern one item breaks."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "hard clean: inconsistent throughout, no single deviant -- every item differs from every other, so there is no pattern one item breaks."
+      "reason": "clean: four verbs for one operation, but every signature has the same shape (db, id) => Promise<T | null>; nothing at the signature level deviates."
     }
   ],
   "factories.ts": [
@@ -22,30 +132,7 @@
       "label": "clean",
       "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "hard clean: four different verbs, no majority pattern for one item to break."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "hard clean: four different verbs, no majority pattern for one item to break."
-    }
-  ],
-  "permissions.ts": [
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates",
-      "window": 1000000,
-      "reason": "four predicates named is*/has*/can*; checkAdmin does the same work (returns boolean) under a command-shaped name, one deviant."
-    },
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "four predicates named is*/has*/can*; checkAdmin does the same work (returns boolean) under a command-shaped name, one deviant."
+      "reason": "clean: four constructor verbs, identical signature shape (plain, returns the record); no signature deviant."
     }
   ],
   "settings.ts": [
@@ -54,30 +141,7 @@
       "label": "clean",
       "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "hard clean: no single deviant -- set* is used twice but three other verbs each once; inconsistency, not a pattern with one exception."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "hard clean: no single deviant -- set* is used twice but three other verbs each once; inconsistency, not a pattern with one exception."
-    }
-  ],
-  "notifications.ts": [
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates",
-      "window": 1000000,
-      "reason": "three send* siblings and one dispatch* doing the same job with the same signature; one deviant in name form."
-    },
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "three send* siblings and one dispatch* doing the same job with the same signature; one deviant in name form."
+      "reason": "clean: five setter verbs, identical signature shape (settings, value) => Settings; no signature deviant."
     }
   ],
   "product_source.ts": [
@@ -85,13 +149,6 @@
       "line": 1,
       "label": "clean",
       "rule": "sibling-deviates",
-      "window": 1000000,
-      "reason": "hard clean: getProduct is the only sync item, but it reads a cache while its siblings hit the network -- the difference follows from the operation."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
       "window": 1000000,
       "reason": "hard clean: getProduct is the only sync item, but it reads a cache while its siblings hit the network -- the difference follows from the operation."
     }
@@ -103,13 +160,6 @@
       "rule": "sibling-deviates",
       "window": 1000000,
       "reason": "hard clean: two groups (frame codec, header codec), each internally consistent; no single deviant."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "hard clean: two groups (frame codec, header codec), each internally consistent; no single deviant."
     }
   ],
   "rate_limiter.ts": [
@@ -117,13 +167,6 @@
       "line": 1,
       "label": "clean",
       "rule": "sibling-deviates",
-      "window": 1000000,
-      "reason": "hard clean: one public item; nothing to deviate from."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
       "window": 1000000,
       "reason": "hard clean: one public item; nothing to deviate from."
     }
@@ -134,78 +177,7 @@
       "label": "clean",
       "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "hard clean: cancelOrder returns void and getOrder throws where find/list do not, but each does a different operation; no one item breaks a shared shape."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "hard clean: cancelOrder returns void and getOrder throws where find/list do not, but each does a different operation; no one item breaks a shared shape."
-    }
-  ],
-  "handlers.ts": [
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates",
-      "window": 1000000,
-      "reason": "five handlers return Promise<Result<T>> and report failure with err(); handleArchive returns Promise<Note> and throws for the same not-found case."
-    },
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "five handlers return Promise<Result<T>> and report failure with err(); handleArchive returns Promise<Note> and throws for the same not-found case."
-    }
-  ],
-  "project_files.ts": [
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates",
-      "window": 1000000,
-      "reason": "four read* functions are async over fs/promises; readSchema does the same file read synchronously with readFileSync and no reason given."
-    },
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "four read* functions are async over fs/promises; readSchema does the same file read synchronously with readFileSync and no reason given."
-    }
-  ],
-  "commands.ts": [
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates",
-      "window": 1000000,
-      "reason": "four commands take (ctx, input); runExport takes (input, ctx) for the same kind of work."
-    },
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "four commands take (ctx, input); runExport takes (input, ctx) for the same kind of work."
-    }
-  ],
-  "auth_routes.ts": [
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates",
-      "window": 1000000,
-      "reason": "four exports are *Handler; handleSignup is the same kind of express handler with the word moved to a prefix."
-    },
-    {
-      "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "four exports are *Handler; handleSignup is the same kind of express handler with the word moved to a prefix."
+      "reason": "hard clean: cancelOrder returns void and getOrder throws where find/list return arrays, but each does a different operation; no one item breaks a shared shape."
     }
   ],
   "validators.ts": [
@@ -213,13 +185,6 @@
       "line": 1,
       "label": "clean",
       "rule": "sibling-deviates",
-      "window": 1000000,
-      "reason": "hard clean: fail() has a different shape from the five validate* items, but it is the helper every one of them calls."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
       "window": 1000000,
       "reason": "hard clean: fail() has a different shape from the five validate* items, but it is the helper every one of them calls."
     }
@@ -230,14 +195,7 @@
       "label": "clean",
       "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "hard clean: two groups of three, each internally consistent (three sync diff*, three async push*); no single deviant."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "hard clean: two groups of three, each internally consistent (three sync diff*, three async push*); no single deviant."
+      "reason": "hard clean: two groups of three, each internally consistent (three sync diff* over (local, remote), three async push*); no single deviant. The closest clean (0.48): pushSnapshot takes (remote, local) where its two push siblings take (remote, changes), a different parameter, not a reordering."
     }
   ],
   "jobs.ts": [
@@ -246,14 +204,7 @@
       "label": "clean",
       "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "hard clean: noopJob is the only sync item, and the comment above it says why (installed in a disabled slot, called before an awaitable context exists) -- a deliberate, documented exception."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "hard clean: noopJob is the only sync item, and the comment above it says why (installed in a disabled slot, called before an awaitable context exists) -- a deliberate, documented exception."
+      "reason": "hard clean: noopJob is the only sync item, and the comment above it says why -- a deliberate, documented exception."
     }
   ],
   "middleware.ts": [
@@ -262,14 +213,7 @@
       "label": "clean",
       "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "hard clean: compose(...stack) differs in shape from the five (req, res, next) middlewares, but it is a combinator over them, a different kind of thing."
-    },
-    {
-      "line": 1,
-      "label": "clean",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "hard clean: compose(...stack) differs in shape from the five (req, res, next) middlewares, but it is a combinator over them, a different kind of thing."
+      "reason": "hard clean: compose(...stack) differs in shape from the five (req, res, next) middlewares, but it is a combinator over them."
     }
   ],
   "preferences.ts": [
@@ -278,30 +222,25 @@
       "label": "clean",
       "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "hard clean: two groups (async load/save on a path; sync get/set on the object) plus resetPreferences, which is a factory for the default; no single deviant."
-    },
+      "reason": "hard clean: two groups (async load/save on a path; sync get/set on the object) plus resetPreferences, a factory for the default; no single deviant."
+    }
+  ],
+  "accounts.ts": [
     {
       "line": 1,
       "label": "clean",
-      "rule": "sibling-deviates-score",
-      "window": 1000000,
-      "reason": "hard clean: two groups (async load/save on a path; sync get/set on the object) plus resetPreferences, which is a factory for the default; no single deviant."
-    }
-  ],
-  "lookups.ts": [
-    {
-      "line": 1,
-      "label": "bad",
       "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "four get* siblings with the same signature; loadInvoice does the same job under a different verb, one deviant in name form."
-    },
+      "reason": "hard clean: getAccountOrThrow throws where four find* return T | null, but its name states the different failure mode and it is built on findAccount."
+    }
+  ],
+  "uploads.ts": [
     {
       "line": 1,
-      "label": "bad",
-      "rule": "sibling-deviates-score",
+      "label": "clean",
+      "rule": "sibling-deviates",
       "window": 1000000,
-      "reason": "four get* siblings with the same signature; loadInvoice does the same job under a different verb, one deviant in name form."
+      "reason": "hard clean: putExport takes an extra optional opts parameter; the shared (bucket, key, body) => Promise<void> shape is intact."
     }
   ]
 }

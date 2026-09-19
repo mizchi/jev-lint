@@ -1,13 +1,13 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-19T17:25:51.156Z",
+  "recorded": "2026-09-19T17:51:02.097Z",
   "model": "jev-1.13.0",
   "suite": "assertion-message-matches",
   "rules": [
     {
       "id": "assertion-message-matches",
-      "draft": "ecb7577f9575",
-      "at": 0.65
+      "draft": "b6b5eb6ba30c",
+      "at": 0.6
     }
   ],
   "cutoffs": {},
@@ -15,11 +15,128 @@
     [
       {
         "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/options.ts",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/options.ts",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/options.ts",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 33,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 42,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 57,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
         "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
         "line": 37,
         "endLine": 37,
         "kind": "noul",
-        "value": 0.83,
+        "value": 0.84,
         "confidence": null
       },
       {
@@ -28,7 +145,7 @@
         "line": 69,
         "endLine": 71,
         "kind": "noul",
-        "value": 0.27,
+        "value": 0.29,
         "confidence": null
       },
       {
@@ -37,7 +154,7 @@
         "line": 117,
         "endLine": 119,
         "kind": "noul",
-        "value": 0.48,
+        "value": 0.42,
         "confidence": null
       },
       {
@@ -51,56 +168,11 @@
       },
       {
         "rule": "assertion-message-matches",
-        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
-        "line": 11,
-        "endLine": 13,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "assertion-message-matches",
-        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
-        "line": 20,
-        "endLine": 22,
-        "kind": "noul",
-        "value": 0.49,
-        "confidence": null
-      },
-      {
-        "rule": "assertion-message-matches",
-        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
-        "line": 32,
-        "endLine": 34,
-        "kind": "noul",
-        "value": 0.72,
-        "confidence": null
-      },
-      {
-        "rule": "assertion-message-matches",
-        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
-        "line": 49,
-        "endLine": 51,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "assertion-message-matches",
-        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
-        "line": 59,
-        "endLine": 61,
-        "kind": "noul",
-        "value": 0.15,
-        "confidence": null
-      },
-      {
-        "rule": "assertion-message-matches",
         "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
         "line": 8,
         "endLine": 8,
         "kind": "noul",
-        "value": 0.9,
+        "value": 0.89,
         "confidence": null
       },
       {
@@ -118,7 +190,7 @@
         "line": 19,
         "endLine": 19,
         "kind": "noul",
-        "value": 0.93,
+        "value": 0.87,
         "confidence": null
       },
       {
@@ -127,7 +199,7 @@
         "line": 24,
         "endLine": 24,
         "kind": "noul",
-        "value": 0.97,
+        "value": 0.96,
         "confidence": null
       },
       {
@@ -136,7 +208,7 @@
         "line": 29,
         "endLine": 29,
         "kind": "noul",
-        "value": 0.05,
+        "value": 0.04,
         "confidence": null
       },
       {
@@ -154,7 +226,7 @@
         "line": 40,
         "endLine": 40,
         "kind": "noul",
-        "value": 0.05,
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -163,7 +235,7 @@
         "line": 47,
         "endLine": 47,
         "kind": "noul",
-        "value": 0.95,
+        "value": 0.97,
         "confidence": null
       },
       {
@@ -172,7 +244,7 @@
         "line": 52,
         "endLine": 52,
         "kind": "noul",
-        "value": 0.45,
+        "value": 0.89,
         "confidence": null
       },
       {
@@ -181,7 +253,7 @@
         "line": 58,
         "endLine": 58,
         "kind": "noul",
-        "value": 0.12,
+        "value": 0.27,
         "confidence": null
       },
       {
@@ -190,7 +262,7 @@
         "line": 64,
         "endLine": 64,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.09,
         "confidence": null
       },
       {
@@ -199,7 +271,7 @@
         "line": 70,
         "endLine": 70,
         "kind": "noul",
-        "value": 0.05,
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -217,7 +289,7 @@
         "line": 86,
         "endLine": 86,
         "kind": "noul",
-        "value": 0.14,
+        "value": 0.15,
         "confidence": null
       },
       {
@@ -226,7 +298,7 @@
         "line": 92,
         "endLine": 92,
         "kind": "noul",
-        "value": 0.39,
+        "value": 0.32,
         "confidence": null
       },
       {
@@ -235,7 +307,7 @@
         "line": 97,
         "endLine": 97,
         "kind": "noul",
-        "value": 0.21,
+        "value": 0.43,
         "confidence": null
       },
       {
@@ -244,7 +316,7 @@
         "line": 103,
         "endLine": 103,
         "kind": "noul",
-        "value": 0.19,
+        "value": 0.11,
         "confidence": null
       },
       {
@@ -253,7 +325,7 @@
         "line": 108,
         "endLine": 110,
         "kind": "noul",
-        "value": 0.09,
+        "value": 0.07,
         "confidence": null
       },
       {
@@ -271,7 +343,7 @@
         "line": 124,
         "endLine": 124,
         "kind": "noul",
-        "value": 0.92,
+        "value": 0.91,
         "confidence": null
       },
       {
@@ -282,16 +354,14 @@
         "kind": "noul",
         "value": 0.09,
         "confidence": null
-      }
-    ],
-    [
+      },
       {
         "rule": "assertion-message-matches",
         "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
         "line": 11,
         "endLine": 13,
         "kind": "noul",
-        "value": 0.07,
+        "value": 0.08,
         "confidence": null
       },
       {
@@ -300,7 +370,7 @@
         "line": 20,
         "endLine": 22,
         "kind": "noul",
-        "value": 0.71,
+        "value": 0.16,
         "confidence": null
       },
       {
@@ -309,7 +379,7 @@
         "line": 32,
         "endLine": 34,
         "kind": "noul",
-        "value": 0.77,
+        "value": 0.75,
         "confidence": null
       },
       {
@@ -318,7 +388,7 @@
         "line": 49,
         "endLine": 51,
         "kind": "noul",
-        "value": 0.1,
+        "value": 0.09,
         "confidence": null
       },
       {
@@ -327,7 +397,36 @@
         "line": 59,
         "endLine": 61,
         "kind": "noul",
-        "value": 0.21,
+        "value": 0.18,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/options.ts",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/options.ts",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/options.ts",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.89,
         "confidence": null
       },
       {
@@ -336,7 +435,7 @@
         "line": 37,
         "endLine": 37,
         "kind": "noul",
-        "value": 0.85,
+        "value": 0.78,
         "confidence": null
       },
       {
@@ -345,7 +444,7 @@
         "line": 69,
         "endLine": 71,
         "kind": "noul",
-        "value": 0.3,
+        "value": 0.34,
         "confidence": null
       },
       {
@@ -354,7 +453,7 @@
         "line": 117,
         "endLine": 119,
         "kind": "noul",
-        "value": 0.48,
+        "value": 0.43,
         "confidence": null
       },
       {
@@ -363,7 +462,7 @@
         "line": 136,
         "endLine": 138,
         "kind": "noul",
-        "value": 0.2,
+        "value": 0.22,
         "confidence": null
       },
       {
@@ -372,7 +471,7 @@
         "line": 8,
         "endLine": 8,
         "kind": "noul",
-        "value": 0.92,
+        "value": 0.9,
         "confidence": null
       },
       {
@@ -381,7 +480,7 @@
         "line": 13,
         "endLine": 13,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.07,
         "confidence": null
       },
       {
@@ -390,7 +489,7 @@
         "line": 19,
         "endLine": 19,
         "kind": "noul",
-        "value": 0.91,
+        "value": 0.78,
         "confidence": null
       },
       {
@@ -426,7 +525,7 @@
         "line": 40,
         "endLine": 40,
         "kind": "noul",
-        "value": 0.07,
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -444,7 +543,7 @@
         "line": 52,
         "endLine": 52,
         "kind": "noul",
-        "value": 0.61,
+        "value": 0.89,
         "confidence": null
       },
       {
@@ -453,7 +552,7 @@
         "line": 58,
         "endLine": 58,
         "kind": "noul",
-        "value": 0.15,
+        "value": 0.27,
         "confidence": null
       },
       {
@@ -462,7 +561,7 @@
         "line": 64,
         "endLine": 64,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -471,7 +570,7 @@
         "line": 70,
         "endLine": 70,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.07,
         "confidence": null
       },
       {
@@ -480,7 +579,7 @@
         "line": 76,
         "endLine": 76,
         "kind": "noul",
-        "value": 0.05,
+        "value": 0.04,
         "confidence": null
       },
       {
@@ -489,7 +588,7 @@
         "line": 86,
         "endLine": 86,
         "kind": "noul",
-        "value": 0.14,
+        "value": 0.16,
         "confidence": null
       },
       {
@@ -498,7 +597,7 @@
         "line": 92,
         "endLine": 92,
         "kind": "noul",
-        "value": 0.32,
+        "value": 0.41,
         "confidence": null
       },
       {
@@ -507,7 +606,7 @@
         "line": 97,
         "endLine": 97,
         "kind": "noul",
-        "value": 0.28,
+        "value": 0.13,
         "confidence": null
       },
       {
@@ -516,7 +615,7 @@
         "line": 103,
         "endLine": 103,
         "kind": "noul",
-        "value": 0.1,
+        "value": 0.23,
         "confidence": null
       },
       {
@@ -525,7 +624,7 @@
         "line": 108,
         "endLine": 110,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.07,
         "confidence": null
       },
       {
@@ -534,7 +633,7 @@
         "line": 115,
         "endLine": 115,
         "kind": "noul",
-        "value": 0.29,
+        "value": 0.15,
         "confidence": null
       },
       {
@@ -543,7 +642,7 @@
         "line": 124,
         "endLine": 124,
         "kind": "noul",
-        "value": 0.92,
+        "value": 0.9,
         "confidence": null
       },
       {
@@ -552,11 +651,299 @@
         "line": 129,
         "endLine": 129,
         "kind": "noul",
-        "value": 0.1,
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 20,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 32,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/runner-config.ts",
+        "line": 59,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 33,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 42,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 57,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.06,
         "confidence": null
       }
     ],
     [
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 37,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 69,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 117,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
+        "line": 136,
+        "endLine": 138,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 33,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 42,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/guards.ts",
+        "line": 57,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/options.ts",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/options.ts",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "assertion-message-matches",
+        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/options.ts",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
       {
         "rule": "assertion-message-matches",
         "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/assertions.ts",
@@ -572,7 +959,7 @@
         "line": 13,
         "endLine": 13,
         "kind": "noul",
-        "value": 0.07,
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -581,7 +968,7 @@
         "line": 19,
         "endLine": 19,
         "kind": "noul",
-        "value": 0.86,
+        "value": 0.88,
         "confidence": null
       },
       {
@@ -608,7 +995,7 @@
         "line": 34,
         "endLine": 34,
         "kind": "noul",
-        "value": 0.95,
+        "value": 0.94,
         "confidence": null
       },
       {
@@ -617,7 +1004,7 @@
         "line": 40,
         "endLine": 40,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.05,
         "confidence": null
       },
       {
@@ -635,7 +1022,7 @@
         "line": 52,
         "endLine": 52,
         "kind": "noul",
-        "value": 0.49,
+        "value": 0.89,
         "confidence": null
       },
       {
@@ -644,7 +1031,7 @@
         "line": 58,
         "endLine": 58,
         "kind": "noul",
-        "value": 0.28,
+        "value": 0.25,
         "confidence": null
       },
       {
@@ -653,7 +1040,7 @@
         "line": 64,
         "endLine": 64,
         "kind": "noul",
-        "value": 0.09,
+        "value": 0.08,
         "confidence": null
       },
       {
@@ -671,7 +1058,7 @@
         "line": 76,
         "endLine": 76,
         "kind": "noul",
-        "value": 0.05,
+        "value": 0.04,
         "confidence": null
       },
       {
@@ -680,7 +1067,7 @@
         "line": 86,
         "endLine": 86,
         "kind": "noul",
-        "value": 0.18,
+        "value": 0.15,
         "confidence": null
       },
       {
@@ -689,7 +1076,7 @@
         "line": 92,
         "endLine": 92,
         "kind": "noul",
-        "value": 0.34,
+        "value": 0.45,
         "confidence": null
       },
       {
@@ -698,7 +1085,7 @@
         "line": 97,
         "endLine": 97,
         "kind": "noul",
-        "value": 0.39,
+        "value": 0.3,
         "confidence": null
       },
       {
@@ -707,7 +1094,7 @@
         "line": 103,
         "endLine": 103,
         "kind": "noul",
-        "value": 0.21,
+        "value": 0.14,
         "confidence": null
       },
       {
@@ -725,7 +1112,7 @@
         "line": 115,
         "endLine": 115,
         "kind": "noul",
-        "value": 0.09,
+        "value": 0.19,
         "confidence": null
       },
       {
@@ -734,7 +1121,7 @@
         "line": 124,
         "endLine": 124,
         "kind": "noul",
-        "value": 0.9,
+        "value": 0.92,
         "confidence": null
       },
       {
@@ -743,43 +1130,7 @@
         "line": 129,
         "endLine": 129,
         "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "assertion-message-matches",
-        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
-        "line": 37,
-        "endLine": 37,
-        "kind": "noul",
-        "value": 0.79,
-        "confidence": null
-      },
-      {
-        "rule": "assertion-message-matches",
-        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
-        "line": 69,
-        "endLine": 71,
-        "kind": "noul",
-        "value": 0.24,
-        "confidence": null
-      },
-      {
-        "rule": "assertion-message-matches",
-        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
-        "line": 117,
-        "endLine": 119,
-        "kind": "noul",
-        "value": 0.49,
-        "confidence": null
-      },
-      {
-        "rule": "assertion-message-matches",
-        "file": "experiments/rule-candidates/assertion-message-matches/evals/cases/fakes.test.ts",
-        "line": 136,
-        "endLine": 138,
-        "kind": "noul",
-        "value": 0.18,
+        "value": 0.08,
         "confidence": null
       },
       {
@@ -788,7 +1139,7 @@
         "line": 11,
         "endLine": 13,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.07,
         "confidence": null
       },
       {
@@ -797,7 +1148,7 @@
         "line": 20,
         "endLine": 22,
         "kind": "noul",
-        "value": 0.5,
+        "value": 0.18,
         "confidence": null
       },
       {
@@ -806,7 +1157,7 @@
         "line": 32,
         "endLine": 34,
         "kind": "noul",
-        "value": 0.77,
+        "value": 0.81,
         "confidence": null
       },
       {
@@ -815,7 +1166,7 @@
         "line": 49,
         "endLine": 51,
         "kind": "noul",
-        "value": 0.1,
+        "value": 0.08,
         "confidence": null
       },
       {
@@ -824,15 +1175,15 @@
         "line": 59,
         "endLine": 61,
         "kind": "noul",
-        "value": 0.21,
+        "value": 0.13,
         "confidence": null
       }
     ]
   ],
   "spent": {
-    "calls": 9,
-    "inputTokens": 88137,
-    "usd": 0.0037017540000000002,
-    "ms": 3965
+    "calls": 15,
+    "inputTokens": 149547,
+    "usd": 0.006280974,
+    "ms": 6615
   }
 }

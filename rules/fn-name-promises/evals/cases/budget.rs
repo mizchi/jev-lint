@@ -58,8 +58,8 @@ impl Budget {
 
     pub fn settle(&mut self) -> i64 {
         // Round the outstanding amount up to whole units.
-        let units = self.spent_cents / 100;
+        let owed = self.spent_cents;
         self.spent_cents = 0;
-        units
+        owed
     }
 }

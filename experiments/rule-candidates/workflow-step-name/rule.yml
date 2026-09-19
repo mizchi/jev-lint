@@ -7,7 +7,13 @@
   kind: noul
   subject: node
   state: bare
-  at: 0.44
+  # Fitted midpoint over 68 subjects (18 bad, 50 clean), 3 passes: bad band
+  # 0.71-0.96, clean band 0.03-0.25 plus one hard clean at 0.53 ("Setup
+  # MoonBit" over chawyehsu/setup-moonup, an installer the model does not
+  # know). The earlier 0.44 was fitted before the criteria named the
+  # second-operation class; those cases (audit fix after install, seed after
+  # migrations) sat at 0.43-0.56 and now sit at 0.79-0.85.
+  at: 0.62
   rule:
     # A step: the mapping directly under a sequence item, holding a `name:`
     # and a `run:` or `uses:`. The mapping is the subject, so the claim and
@@ -33,18 +39,31 @@
       does: the command or action performs a different operation than the
       name states (builds when the name says test, formats when the name says
       lint, checks out when the name says cache, downloads when the name says
-      upload), it rewrites files when the name promises only a check or a
-      verification, or the step also does something consequential --
-      publishes, pushes, deploys, deletes, commits -- that is not part of
-      what the name names.
+      upload, targets production when the name says staging), it changes
+      something when the name promises only a check, verification or
+      assertion -- a "check" that creates what it finds missing or fixes
+      what it finds wrong is a mismatch, because a check changes nothing
+      -- or the script does the named thing and then also a
+      separate operation with an effect of its own that the name does not
+      cover -- a publish after a lint, a deploy after the tests, a seed
+      after the migrations, a forced dependency upgrade after the install, a
+      commit and push after a build. That second operation counts even when
+      it acts on the same thing the named operation did; a flag or option
+      on the named command is not a second operation.
     "false": >-
       The command or action does what the name says. A terse name ("Test",
       "Install"), a conventional name for a well-known action ("Checkout"
       for actions/checkout, "Setup Node" for actions/setup-node), or a name
-      that summarises a multi-line script as one operation is not a
-      mismatch, even when that operation conventionally ends in a commit,
-      push or deploy -- a version bump that pushes its tag, a release that
-      publishes, a preview that deploys to a preview environment.
+      that states the intent while the command is the mechanism that
+      achieves it (a version print as the verification, a polling loop as
+      the wait, a `git diff --exit-code` as the check, an opaque task-runner
+      recipe named for the step) is not a mismatch. A name that summarises a
+      multi-line script as one operation is not a mismatch when every
+      command in the script is part of doing that operation -- a version
+      bump that pushes its bump commit and tag, a release that publishes, a
+      preview that builds before it deploys, an image push that builds the
+      image first, an "ensure" or "provision" that creates only what is
+      missing.
   note: >-
     Judge the name against the `run:` script or the `uses:` action and its
     `with:` inputs only. Whether the step is placed well, or whether it

@@ -37,7 +37,7 @@ export function sumAllQuantities(items: Item[]): number {
 }
 
 export function sumPrices(items: Item[]): number {
-  return items.reduce((acc, item) => acc + item.price * item.qty, 0);
+  return items.reduce((acc, item) => acc + item.price, 0);
 }
 
 export function findItemById(items: Item[], id: number): Item | null {

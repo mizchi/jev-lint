@@ -131,5 +131,91 @@
       "reason": "says the response is a flat array; the 200 schema is an object wrapping a categories array",
       "window": 0
     }
+  ],
+  "openapi/webhooks.yaml": [
+    {
+      "line": 9,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says the status filter is optional; the parameter is declared required: true",
+      "window": 0
+    },
+    {
+      "line": 41,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says 409 if the URL is already registered; responses declare only 201 (promised-but-undeclared status, second sample of the class)",
+      "window": 0
+    },
+    {
+      "line": 68,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: read-only POST lookup returning an array; the body is the query",
+      "window": 0
+    },
+    {
+      "line": 96,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: says 404 if not found, and 404 is declared; the contrast to the undeclared-status defects",
+      "window": 0
+    },
+    {
+      "line": 114,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says only url and events can be changed; the body schema also accepts active and description",
+      "window": 0
+    },
+    {
+      "line": 147,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says returns 200 with the deleted endpoint; responses declare 204 with no body",
+      "window": 0
+    },
+    {
+      "line": 165,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: idempotent claim on a PUT that replaces, true",
+      "window": 0
+    },
+    {
+      "line": 191,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: shown-only-once is not checkable; the 410 it promises is declared",
+      "window": 0
+    },
+    {
+      "line": 213,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says 400 when the URL is not https; the responses declare that condition as 422",
+      "window": 0
+    },
+    {
+      "line": 237,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says the attempts come back as an array; the 200 schema is a single attempt object",
+      "window": 0
+    },
+    {
+      "line": 259,
+      "label": "clean",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "hard clean: cannot-be-undone is not checkable; 204 and 404 hold",
+      "window": 0
+    },
+    {
+      "line": 275,
+      "label": "bad",
+      "rule": "openapi-summary-matches-schema",
+      "reason": "says returns 200 with the endpoint's response once it has answered; responses declare 202 ping scheduled with an attemptId",
+      "window": 0
+    }
   ]
 }

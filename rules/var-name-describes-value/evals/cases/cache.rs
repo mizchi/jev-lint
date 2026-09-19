@@ -4,6 +4,7 @@
 // Labels live in corpus/labels.json with the reason for each.
 
 use std::collections::HashMap;
+use std::time::Duration;
 
 pub struct Store {
     entries: HashMap<String, String>,
@@ -40,19 +41,30 @@ impl Store {
         self.entries.get(key)
     }
 
-    pub fn configure(&self) -> u64 {
+    pub fn configure(&self) -> Duration {
         let timeout_seconds = 30_000u64;
+        let ttl = Duration::from_millis(timeout_seconds);
 
         let is_full = self.entries.len();
 
         let keys = self.entries.keys().next();
 
-        let timeout_millis = 30_000u64;
-
         let entry_count = self.entries.len();
 
-        timeout_seconds + is_full as u64 + keys.map_or(0, |k| k.len()) as u64
-            + timeout_millis
-            + entry_count as u64
+        let retries = 3;
+
+        if is_full > 0 && keys.is_some() && entry_count < retries {
+            return ttl;
+        }
+        ttl
+    }
+
+    pub fn sweep_interval(&self) -> Duration {
+        let timeout_millis = 30_000u64;
+        let n = self.entries.len();
+        if n == 0 {
+            return Duration::from_millis(timeout_millis);
+        }
+        Duration::from_millis(timeout_millis / n as u64)
     }
 }

@@ -155,6 +155,497 @@
       "rule": "test-name-verifies-claim",
       "window": 0,
       "reason": "asserts nothing at all, so nothing it claims is established."
+    },
+    {
+      "line": 76,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: opens with a preamble comment about a past bug; the assertion is the exact doubled sum, which fails if either occurrence is dropped. RENAMED from \"does not double-count an item listed twice\", a title that read as the opposite of the 450 the body expects; the preamble shape is kept"
+    }
+  ],
+  "inventory.test.ts": [
+    {
+      "line": 26,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims an ordering; the body checks only the length, which holds whether or not the sort works"
+    },
+    {
+      "line": 30,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "compound claim; a tie is set up and the exact order asserted"
+    },
+    {
+      "line": 36,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims the cheapest is first; toBeDefined holds for any first element"
+    },
+    {
+      "line": 43,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims the above-ten case; the body never sets it up (three units), so the discount is never exercised"
+    },
+    {
+      "line": 48,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: the title claims only that a discount happens; toBeLessThan(full price) fails if none does"
+    },
+    {
+      "line": 53,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "it.each: each row asserts the exact price"
+    },
+    {
+      "line": 63,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims removal; nothing is removed, so a broken removeItem passes"
+    },
+    {
+      "line": 67,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims a throw; the body expects undefined, so a lookup that never throws passes"
+    },
+    {
+      "line": 71,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: one-word title; the exact name is asserted"
+    },
+    {
+      "line": 77,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims a reservation; reserve is never called"
+    },
+    {
+      "line": 82,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims a warning is logged; no logger is observed"
+    },
+    {
+      "line": 88,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "compound claim; both quantities asserted exactly"
+    },
+    {
+      "line": 94,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "asserts nothing"
+    },
+    {
+      "line": 98,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the throw the title claims is asserted"
+    },
+    {
+      "line": 102,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: setup calls other operations; the exact restored quantity is asserted"
+    },
+    {
+      "line": 112,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims rejection; the body expects the coupon active, so a broken rejection passes"
+    },
+    {
+      "line": 117,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims a rejection on timeout; the gateway resolves and the body expects a capture"
+    },
+    {
+      "line": 122,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: a synonym title; the exact total is asserted"
+    },
+    {
+      "line": 126,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: a negative claim (not read as an empty sku) established by exact equality on the parse result -- the self-lint shape"
+    }
+  ],
+  "ledger_test.rs": [
+    {
+      "line": 19,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "ordering claimed, length checked"
+    },
+    {
+      "line": 25,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "compound claim; exact order asserted"
+    },
+    {
+      "line": 33,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "smallest-first claimed; is_some holds for any first element"
+    },
+    {
+      "line": 39,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "above-ten case claimed, never set up"
+    },
+    {
+      "line": 45,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "hard clean: the title claims only that a discount happens; strict less-than fails if none does"
+    },
+    {
+      "line": 51,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "removal claimed; nothing removed"
+    },
+    {
+      "line": 56,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "panic claimed; None expected"
+    },
+    {
+      "line": 61,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "hard clean: one-word name; exact amount asserted"
+    },
+    {
+      "line": 66,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "reversal claimed; a posting is made and the amount goes up"
+    },
+    {
+      "line": 72,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "warning claimed; no logger observed"
+    },
+    {
+      "line": 80,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "compound claim; both parts asserted"
+    },
+    {
+      "line": 87,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "asserts nothing"
+    },
+    {
+      "line": 92,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "the error variant the title claims is matched"
+    },
+    {
+      "line": 100,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "hard clean: setup reverses first; the exact restored amount is asserted"
+    },
+    {
+      "line": 109,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "rejection claimed; active asserted"
+    },
+    {
+      "line": 115,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "hard clean: synonym name; exact balance asserted"
+    },
+    {
+      "line": 120,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "hard clean: negative claim established by exact equality on the parse result"
+    }
+  ],
+  "profile.test.ts": [
+    {
+      "line": 35,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "quiet: the title claims the stored email is lowercased; the assertion is a call count, so an update storing it as given passes"
+    },
+    {
+      "line": 40,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: the same claim established by toHaveBeenCalledWith carrying the lowercased email"
+    },
+    {
+      "line": 45,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "quiet: the title claims an event name and its payload; toHaveBeenCalled checks neither"
+    },
+    {
+      "line": 50,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: the title claims a non-interaction (no publish) and not.toHaveBeenCalled is exactly that"
+    },
+    {
+      "line": 55,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: the title claims call order; the assertion is on invocation order"
+    },
+    {
+      "line": 61,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the title claims the updated profile is returned; toBeDefined holds for any non-undefined value"
+    },
+    {
+      "line": 74,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "quiet: the title claims a retry; the rejection is swallowed and toHaveBeenCalled holds after one attempt"
+    },
+    {
+      "line": 80,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: opens with a preamble comment; compound claim, and both the call count and the stored url are asserted"
+    },
+    {
+      "line": 91,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: the title claims the interaction itself (once per upload); toHaveBeenCalledTimes(1) is that claim"
+    },
+    {
+      "line": 96,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: compound claim (the previous object, and not the new one); the call count and the argument together cover both halves. Before the count was added the rule answered 0.54 and was right: CalledWith(old) alone allows a second removal"
+    },
+    {
+      "line": 109,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "quiet: the title claims the url is cleared; toHaveBeenCalledWith(id, anything) checks no patch content"
+    },
+    {
+      "line": 114,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: the title claims storage is not touched; not.toHaveBeenCalled is exactly that"
+    },
+    {
+      "line": 128,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the rejection the title claims is asserted, and the write is asserted absent"
+    },
+    {
+      "line": 134,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "quiet: the title claims trimming; a call count establishes nothing about the stored name"
+    },
+    {
+      "line": 139,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: negative claim established by exact equality -- the self-lint shape"
+    },
+    {
+      "line": 143,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the exact tags are asserted"
+    },
+    {
+      "line": 150,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: \"renders the profile card\" claims nothing a snapshot does not establish"
+    },
+    {
+      "line": 154,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: a label-only title over an inline snapshot"
+    },
+    {
+      "line": 164,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "hard clean: \"matches the snapshot\" claims exactly what the assertion checks"
+    },
+    {
+      "line": 168,
+      "label": "bad",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "snapshot only under a specific claim (a verification hint is shown); a card without the hint would be recorded and pass"
+    },
+    {
+      "line": 172,
+      "label": "clean",
+      "rule": "test-name-verifies-claim",
+      "window": 0,
+      "reason": "the placeholder and the absence of an img are asserted"
+    }
+  ],
+  "notify_test.rs": [
+    {
+      "line": 27,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "quiet: the display name is claimed; only the sent count is checked"
+    },
+    {
+      "line": 34,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "recipient and body content are asserted"
+    },
+    {
+      "line": 43,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "hard clean: the title claims the count itself; the count is asserted"
+    },
+    {
+      "line": 50,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "hard clean: a claimed non-interaction established by is_empty on the log"
+    },
+    {
+      "line": 58,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "quiet: every item listed is claimed; only the sent count is checked"
+    },
+    {
+      "line": 65,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "the per-line count the title claims is asserted"
+    },
+    {
+      "line": 73,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "hard clean: a label-only name over a snapshot"
+    },
+    {
+      "line": 78,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "hard clean: \"renders the empty digest\" claims nothing a snapshot does not establish"
+    },
+    {
+      "line": 83,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "snapshot only under a specific claim (the footer is omitted); a digest with the footer would be recorded and pass"
+    },
+    {
+      "line": 88,
+      "label": "bad",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "quiet: a retry is claimed; is_err holds after one attempt or two"
+    },
+    {
+      "line": 100,
+      "label": "clean",
+      "rule": "test-name-verifies-claim-rust",
+      "window": 0,
+      "reason": "the exact error is asserted"
     }
   ]
 }

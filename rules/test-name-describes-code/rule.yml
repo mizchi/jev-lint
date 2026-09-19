@@ -50,7 +50,29 @@
   # same file cannot change this one's answer, and cannot invalidate its cached
   # verdict either.
   state: bare
-  at: 0.95
+  # Fitted 0.72 on evals/ (10 defects, 19 cleans of which 14 are labelled hard,
+  # 3 passes, 0 flips): clean top 0.54, lowest defect 0.89, midpoint 0.71.
+  # Set just above the midpoint for headroom on real code.
+  #
+  # The cutoff used to be 0.95, fitted to two defects and one clean answering
+  # 0.96 -- cart.test.ts:32, "returns items sorted by price" over a body that
+  # counts the fixture. That case was labelled clean for this rule on the
+  # theory that "the code is about items", and the rule's comments called its
+  # 0.96 an inversion. It is not: the body calls no sort, so the name refers
+  # to something the code never touches, which is this rule's own true branch.
+  # It is now labelled a defect, and the case that actually tests the split --
+  # sortByPrice IS called and only the length is checked, inventory.test.ts:26
+  # -- answers 0.53 as a clean. The two rules are nested (a wrong-thing test
+  # also fails to establish its claim), so every defect here is also a defect
+  # for `test-name-verifies-claim`, and this rule's weak-but-right cleans are
+  # that rule's defects.
+  #
+  # What moved the weak-but-right cleans down from 0.74-0.81: the ask now
+  # names what is exercised (operation, input, outcome) rather than "does
+  # something other", and the note says a weak or missing assertion is not a
+  # different outcome. The quietest defect is the adjacent-name one (a title
+  # saying reserves over a body that restocks), at 0.89.
+  at: 0.72
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -62,46 +84,61 @@
       - pattern: test($TITLE, $BODY, $TIMEOUT)
       - pattern: it.each($CASES)($TITLE, $BODY)
   ask: &describes_ask >-
-    The code in this test does something other than what its name says it does.
+    The operation, input or outcome this test's code exercises is not the one
+    its name names.
+  note: &describes_note >-
+    A weak or missing assertion is not a different outcome. The outcome
+    differs only when the code expects something the name contradicts: an
+    ordinary value where the name says throws or rejects, active where it says
+    rejects, the below-threshold price where it says above. A body that calls
+    the named operation on the named input and then checks a length, checks
+    that something exists, or checks nothing, is about the named thing.
   criteria: &describes_criteria
     # Deliberately silent about assertion STRENGTH. A weak assertion about the
     # right thing is the other rule's business, and a criterion that mentioned
     # both would be answering two axes at once.
     "true": >-
-      Reading the name and then the code, they are about different things: the
-      code exercises a different operation, input or case than the name states,
-      it expects the opposite outcome to the one the name implies, the name
-      promises an error or a rejection where the code expects an ordinary value,
-      or the name refers to something the code never touches at all.
+      Reading the name and then the code, they are about different things. The
+      operation the code calls is not the one the name says (a lookup where the
+      name says remove, a post where it says reverse); the input or case the
+      code sets up is not the one the name states (three units where the name
+      says above ten, a non-empty list where it says empty); the outcome the
+      code expects is the opposite of the one the name implies (expecting
+      active where the name says rejects); the name promises a throw, a panic,
+      an error or a rejection where the code expects an ordinary value; or the
+      name refers to something -- a sort, a warning, a log line -- that the
+      code never calls and never checks.
     "false": >-
-      The code is about the thing the name says: the operation it calls, the
-      input it sets up and the outcome it expects are the ones the name
-      describes. It may or may not establish that thing convincingly, which is
-      a separate question.
+      The code calls the operation the name says, on the input the name says,
+      and expects the kind of outcome the name says. That holds however weak
+      the assertion is: a length check, an is_some, a toBeDefined, a bare call
+      with no assertion at all, are still about the named thing, and whether
+      they establish it is a separate question this rule does not ask. A
+      one-word title, a synonym for the operation's name, a compound title
+      whose body covers both parts, and setup that calls other operations
+      before the named one, are all fine.
 - id: test-name-describes-code-rust
   language: Rust
   kind: noul
   subject: node
   state: bare
-  at: 0.93
-  # DOES NOT SEPARATE, and ships at `warning` anyway -- so read its findings
-  # rather than acting on them.
+  # Fitted 0.68 on evals/ (9 defects, 15 cleans of which 12 are labelled hard,
+  # 3 passes, 0 flips): clean top 0.49, lowest defect 0.86. Set a little above
+  # the midpoint for headroom on real code.
   #
-  # Measured precision 0.67, recall 1.00 (2 true, 1 false, 0 missed) on both
-  # batching axes, from docs/data/calibration.json and
-  # calibration-rule-axis.json. The mechanism is an inversion, not a threshold:
-  # corpus/rust/store_test.rs:33 is clean FOR THIS RULE -- it is the
-  # weak-assertion defect belonging to `test-name-verifies-claim` -- and answers
-  # 0.95, HIGHER than the genuine wrong-case defect at :25, which answers 0.93.
-  # No cutoff separates an inverted pair.
-  #
-  # Kept at `warning` rather than dropped to `info` because its two true
-  # positives are the defect class this pack exists for, and its one false
-  # positive is a test that really is weak, just weak in the other rule's sense.
-  # The TypeScript variant is the same question and clears by only 0.035 on 7
-  # subjects, so treat that one as unproven too rather than as a separate
-  # result.
-  #
+  # This variant used to ship at 0.93 with a comment saying it DOES NOT
+  # SEPARATE: precision 0.67 on 2 defects, with store_test.rs:24 ("returns
+  # items sorted by price" over a body that checks the fixture's length)
+  # labelled clean and answering 0.95. Same resolution as the TypeScript
+  # variant above: that test calls no sort, so it is a wrong-thing defect and
+  # is labelled one; the right-thing-weakly case that stays clean is
+  # ledger_test.rs:19, at 0.46. Rust answers its defects more quietly than
+  # TypeScript (the panics-where-None-expected and logs-a-warning shapes sit
+  # at 0.87-0.93 against 0.93-0.96), which is why its cutoff is lower. A Rust
+  # defect written with positional arguments (`bulk_rate(200, 3)`) answered
+  # 0.27 until the fixture named the fields -- the model cannot tell which
+  # argument is the unit count, and neither could a reader.
+  at: 0.70
   # Calibrated on the file axis; pinned so the scheduler cannot move it.
   axis: file
   severity: warning
@@ -113,4 +150,5 @@
           kind: attribute_item
           regex: "test"
   ask: *describes_ask
+  note: *describes_note
   criteria: *describes_criteria
