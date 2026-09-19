@@ -10,10 +10,10 @@ judged, not just listed.
    environment. If not, stop and say so; nothing below can run without it.
 2. Plan first, spend nothing:
    `npx -y jev-lint review $ARGUMENTS --dry-run`
-   With no `--base`, this diffs the uncommitted changes; pass
-   `--base main` (or the branch's merge base) to review a branch. Report the
-   subject count and price. If it is more than a few cents, ask before
-   continuing.
+   With no `--base`, this diffs the uncommitted changes including untracked
+   files; `--staged` diffs what the next commit will contain; `--base main`
+   (or the branch's merge base) reviews a branch. Report the subject count
+   and price. If it is more than a few cents, ask before continuing.
 3. Run it: `npx -y jev-lint review $ARGUMENTS --retry 3`
 4. For every finding, open the code and decide which of three things it is,
    per the jev-lint skill: the code is wrong, the *name* (or comment) is wrong,

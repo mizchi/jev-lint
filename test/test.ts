@@ -40,9 +40,9 @@ import {
   DEFAULT_BATCH_SIZE,
 } from "../src/batch.ts";
 import { schedule, planMixed, explain } from "../src/schedule.ts";
-import { decide, gate, describe as describeFinding } from "../src/gate.ts";
+import { decide, gate, describe as describeFinding, blocks } from "../src/gate.ts";
 import { Cache, verdictKey } from "../src/cache.ts";
-import { parseUnifiedDiff, touchesChange } from "../src/diff.ts";
+import { parseUnifiedDiff, touchesChange, changedRanges, changedFilesUnder } from "../src/diff.ts";
 import { widestGap, gapReport, fitCutoffs, labelFor, stabilityReport } from "../src/calibrate.ts";
 import {
   buildSymbols,
@@ -59,6 +59,7 @@ import {
   applyConfig,
   findConfig,
   initialConfig,
+  initialHook,
   loadConfig,
   type Configurable,
 } from "../src/config.ts";
@@ -67,6 +68,7 @@ import { mergePasses } from "../src/run.ts";
 import type {
   Answer,
   AstGrepMatch,
+  Finding,
   Question,
   FileSymbols,
   Rule,
@@ -2310,6 +2312,86 @@ test("config: the file is found by walking up, and only names jev-lint's own", (
     process.chdir(here);
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+await testAsync("diff: --staged reviews what the commit will contain, and nothing else", async () => {
+  // A pre-commit hook runs `review --staged`. Before this, that also swept in
+  // every untracked file -- not part of the commit -- and, with a configured
+  // `paths:`, scanned the whole tree to discard most of it.
+  const { execFileSync } = await import("node:child_process");
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-lint-git-")));
+  const git = (...args: string[]) =>
+    execFileSync("git", args, { cwd: dir, stdio: "pipe", env: { ...process.env, GIT_AUTHOR_NAME: "t", GIT_AUTHOR_EMAIL: "t@t", GIT_COMMITTER_NAME: "t", GIT_COMMITTER_EMAIL: "t@t" } });
+  try {
+    git("init", "-q");
+    writeFileSync(join(dir, "a.ts"), "export function a() {}\n");
+    git("add", "a.ts");
+    git("commit", "-q", "-m", "base");
+    writeFileSync(join(dir, "a.ts"), "export function a() {}\nexport function b() {}\n");
+    git("add", "a.ts");                                             // staged edit
+    writeFileSync(join(dir, "a.ts"), "export function a() {}\nexport function b() {}\nexport function c() {}\n"); // unstaged on top
+    writeFileSync(join(dir, "new.ts"), "export function n() {}\n");
+    git("add", "new.ts");                                           // staged new file
+    writeFileSync(join(dir, "loose.ts"), "export function l() {}\n"); // untracked
+    const staged = await changedRanges({ staged: true, cwd: dir });
+    assert.deepEqual([...staged.keys()].sort(), ["a.ts", "new.ts"], "the untracked file is not in the commit");
+    assert.deepEqual(staged.get("a.ts"), [[2, 2]], "the unstaged third line is not in the commit either");
+    const working = await changedRanges({ cwd: dir });
+    assert.ok(working.has("loose.ts"), "without --staged, an untracked file is reviewable");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("diff: git's mnemonic prefixes are stripped like the default ones", () => {
+  // With `diff.mnemonicPrefix = true` in the user's git config, a working-tree
+  // diff says `+++ w/src/a.ts` and an index diff `+++ i/src/a.ts`. The parser
+  // stripped only `b/`, so on such a machine `jev-lint review` scanned a file
+  // called `w/src/a.ts`, found nothing, and printed a clean run with every
+  // rule "matched nothing". Found on the author's own machine, after a
+  // session of "review shows nothing, must be a docs-only change".
+  for (const prefix of ["b", "w", "i", "c"]) {
+    const r = parseUnifiedDiff(`--- a/src/a.ts\n+++ ${prefix}/src/a.ts\n@@ -1,0 +2,1 @@\n+x\n`);
+    assert.deepEqual([...r.keys()], ["src/a.ts"], `prefix ${prefix}/`);
+  }
+  // And `--no-prefix` output, which has none.
+  assert.deepEqual([...parseUnifiedDiff("--- src/a.ts\n+++ src/a.ts\n@@ -1,0 +2,1 @@\n+x\n").keys()], ["src/a.ts"]);
+});
+
+test("diff: a configured `paths:` narrows a review to the changed files under it, not the whole tree", () => {
+  const changed = ["src/a.ts", "src/deep/b.ts", "test/t.ts", "docs/x.md", "srcx/c.ts"];
+  assert.deepEqual(changedFilesUnder(changed, []), changed, "no paths: every changed file");
+  assert.deepEqual(changedFilesUnder(changed, ["src"]), ["src/a.ts", "src/deep/b.ts"], "a directory, and not its prefix-twin");
+  assert.deepEqual(changedFilesUnder(changed, ["test/t.ts"]), ["test/t.ts"], "a file names itself");
+  assert.deepEqual(changedFilesUnder(changed, ["./src/", "test"]), ["src/a.ts", "src/deep/b.ts", "test/t.ts"], "spelling does not matter");
+  assert.deepEqual(changedFilesUnder(changed, ["lib"]), [], "nothing under it: nothing to review, not everything");
+});
+
+test("gate: --fail-on decides which findings turn the exit code, and none is a valid answer", () => {
+  const at = (severity: string) => ({ severity }) as unknown as Finding;
+  const findings = [at("hint"), at("info"), at("warning")];
+  assert.equal(blocks(findings, null), true, "by default any finding blocks");
+  assert.equal(blocks(findings, "warning"), true);
+  assert.equal(blocks(findings, "error"), false, "a pre-commit hook can ask to block on `error` only");
+  assert.equal(blocks([...findings, at("error")], "error"), true);
+  assert.equal(blocks([], null), false);
+});
+
+await testAsync("config: the pre-commit hook init writes is a shell script that reviews the staged diff", async () => {
+  const { execFileSync } = await import("node:child_process");
+  const hook = initialHook();
+  assert.ok(hook.startsWith("#!/bin/sh\n"));
+  // `sh -n` parses without running: the hook must at least be valid shell.
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-hook-"));
+  try {
+    writeFileSync(join(dir, "pre-commit"), hook);
+    execFileSync("sh", ["-n", join(dir, "pre-commit")]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+  assert.match(hook, /review --staged/, "it judges what the commit contains, not the working tree");
+  assert.match(hook, /--fail-on error/, "and blocks only on what a rule has earned");
+  assert.match(hook, /TYPESAFE_API_KEY/, "and stands aside on a machine without a key");
 });
 
 test("config: the file init writes is valid, and sets nothing until uncommented", () => {

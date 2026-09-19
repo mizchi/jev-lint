@@ -144,12 +144,27 @@ commands, `/jev-lint:review` and `/jev-lint:new-rule`:
 /plugin install jev-lint@jev-lint
 ```
 
-**In CI, use review mode.** It judges only the lines a diff touched, which is
-where the findings concentrate anyway, and it costs a fraction of a cent:
+**Review the diff, not the tree.** Review mode judges only the lines a diff
+touched, which is where the findings concentrate anyway, and costs a
+fraction of a cent. In CI:
 
 ```bash
 jev-lint review --base "$GITHUB_BASE_REF" --format github
 ```
+
+And before each commit:
+
+```bash
+jev-lint init --pre-commit      # writes .git/hooks/pre-commit
+```
+
+The hook runs `jev-lint review --staged --fail-on error`: only what the
+commit contains, every finding printed, and the commit blocked only by a rule
+with `severity: error`. No shipped rule has it, so out of the box the hook
+is a reviewer that talks and never refuses; raise a rule to `error` once it
+has earned that on your code. Without an API key in the environment it steps
+aside. An existing hook is not overwritten; the one line to add to it is
+printed instead.
 
 Exit codes: `0` clean, `1` findings, `2` configuration error, `3` requests
 failed. With `--format github` a finding is annotated as a `warning` unless

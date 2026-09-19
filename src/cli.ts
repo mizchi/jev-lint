@@ -14,11 +14,13 @@
  *   rules     list the loaded rules and every validation error
  *   replay    re-score a recorded run under different cutoffs, for free
  */
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { execFileSync } from "node:child_process";
 import { loadRules, cutoffFor, defaultRulePaths } from "./rules.ts";
 import { run, collectSubjects, toRecord } from "./run.ts";
-import { changedRanges, changedFiles } from "./diff.ts";
-import { gate } from "./gate.ts";
+import { changedRanges, changedFiles, changedFilesUnder } from "./diff.ts";
+import { gate, blocks } from "./gate.ts";
 import { gapReport, stabilityReport, fitCutoffs } from "./calibrate.ts";
 import {
   formatPretty,
@@ -32,9 +34,9 @@ import { ARMS, ARM_BLURB } from "./state.ts";
 import { DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { Cache, DEFAULT_CACHE_PATH } from "./cache.ts";
 import { USD_PER_MTOK, API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_MODEL, fromEnv } from "./jev.ts";
-import { CONFIG_NAMES, applyConfig, findConfig, initialConfig, loadConfig } from "./config.ts";
-import { GROUP_MODES, STATE_ARMS } from "./types.ts";
-import type { Finding, GroupMode, Labels, Rule, RunResult, StateArm, Subject } from "./types.ts";
+import { CONFIG_NAMES, applyConfig, findConfig, initialConfig, initialHook, loadConfig } from "./config.ts";
+import { GROUP_MODES, SEVERITIES, STATE_ARMS } from "./types.ts";
+import type { Finding, GroupMode, Labels, Rule, RunResult, Severity, StateArm, Subject } from "./types.ts";
 import { explain, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
 import type { ChangedRanges } from "./diff.ts";
 
@@ -55,6 +57,8 @@ interface Options {
   explainSchedule: boolean;
   at: Record<string, number>;
   unsureBelow: number | null;
+  failOn: Severity | null;
+  preCommit: boolean;
   base: string | null;
   staged: boolean;
   format: "pretty" | "json" | "github";
@@ -86,6 +90,7 @@ usage:
   jev-lint rules                   list loaded rules and validation errors
   jev-lint replay <record.json>    re-score a recorded run, no requests
   jev-lint init                   write a .jev-lint.yaml to start from
+  jev-lint init --pre-commit      write a pre-commit hook that reviews the staged diff
 
 options:
       --config <path>      config file (default: nearest .jev-lint.yaml,
@@ -104,7 +109,9 @@ options:
       --at <rule=n>        override one cutoff (repeatable)
       --unsure-below <n>   confidence under which a finding is worded as a question
       --base <ref>         review against a merge base (e.g. --base main)
-      --staged             review only staged changes
+      --staged             review only staged changes, as a pre-commit hook does
+      --fail-on <severity> exit 1 only for findings at or above hint | info |
+                           warning | error (default: any finding)
       --format <fmt>       pretty | json | github
       --concurrency <n>    parallel requests (default 4)
       --batch-size <n>     subjects per request (default ${DEFAULT_BATCH_SIZE})
@@ -179,6 +186,8 @@ function parseArgs(argv: string[]): Options {
     explainSchedule: false,
     at: {},
     unsureBelow: null,
+    failOn: null,
+    preCommit: false,
     base: null,
     staged: false,
     format: "pretty",
@@ -257,6 +266,18 @@ function parseArgs(argv: string[]): Options {
       case "--unsure-below":
         opts.unsureBelow = Number(need(i, a));
         i += 1;
+        break;
+      case "--fail-on": {
+        const v = need(i, a);
+        if (!(SEVERITIES as readonly string[]).includes(v)) {
+          throw new Error(`--fail-on must be one of ${SEVERITIES.join(", ")} (got ${v})`);
+        }
+        opts.failOn = v as Severity;
+        i += 1;
+        break;
+      }
+      case "--pre-commit":
+        opts.preCommit = true;
         break;
       case "--base":
         opts.base = need(i, a);
@@ -350,6 +371,7 @@ function parseArgs(argv: string[]): Options {
  * the one holding someone's calibrated cutoffs.
  */
 function cmdInit(opts: Options, out: Log, log: Log): number {
+  if (opts.preCommit) return cmdInitHook(opts, out, log);
   const target = opts.config && opts.config !== "none" ? opts.config : CONFIG_NAMES[0];
   if (existsSync(target) && !opts.force) {
     log(`${target} already exists; pass --force to overwrite it`);
@@ -378,6 +400,45 @@ function cmdInit(opts: Options, out: Log, log: Log): number {
   out("uncomment a line. The shipped rules' cutoffs were fitted to this");
   out("package's own corpus -- see `jev-lint gaps` and `jev-lint calibrate`");
   out("before trusting them on your code.");
+  return 0;
+}
+
+/**
+ * `init --pre-commit`: write the hook into the repository's hooks directory.
+ *
+ * Asked of git rather than assumed to be `.git/hooks`, because a worktree's
+ * hooks live in the main repository and `core.hooksPath` can move them
+ * anywhere. An existing hook is never overwritten without `--force`: it is
+ * probably husky's or a task runner's, and the right move there is one line
+ * added to it, which is printed.
+ */
+function cmdInitHook(opts: Options, out: Log, log: Log): number {
+  let hooksDir: string;
+  try {
+    hooksDir = execFileSync("git", ["rev-parse", "--git-path", "hooks"], { encoding: "utf8" }).trim();
+  } catch {
+    log("not inside a git repository, so there is nowhere to put a pre-commit hook");
+    return 2;
+  }
+  const target = join(hooksDir, "pre-commit");
+  if (existsSync(target) && !opts.force) {
+    log(`${target} already exists; pass --force to overwrite it, or add this line to it:`);
+    log("  npx -y jev-lint review --staged --fail-on error");
+    return 2;
+  }
+  try {
+    mkdirSync(hooksDir, { recursive: true });
+    writeFileSync(target, initialHook(), { mode: 0o755 });
+  } catch (err: unknown) {
+    log(`could not write ${target}: ${String(err).slice(0, 160)}`);
+    return 2;
+  }
+  out(`wrote ${target}`);
+  out("");
+  out("It reviews the staged diff on every commit, prints what it finds, and");
+  out("blocks only on a rule with `severity: error` -- no shipped rule has it.");
+  out("With no API key in the environment it steps aside. Skip it once with");
+  out("`git commit --no-verify`; remove it by deleting the file.");
   return 0;
 }
 
@@ -454,14 +515,16 @@ async function main(argv: string[]): Promise<number> {
   let diffRanges: ChangedRanges | null = null;
   if (command === "review") {
     diffRanges = await changedRanges({ base: opts.base, staged: opts.staged });
-    const files = changedFiles(diffRanges);
+    // Scan only the changed files: matching the whole tree and discarding
+    // everything outside the diff would cost the same as `check`. Paths given
+    // on the command line or in the config narrow WHICH changed files, they
+    // do not widen the scan back to the tree.
+    const files = changedFilesUnder(changedFiles(diffRanges), paths);
     if (files.length === 0) {
       if (!opts.quiet) out("no changed files");
       return 0;
     }
-    // Scan only the changed files: matching the whole tree and discarding
-    // everything outside the diff would cost the same as `check`.
-    paths = paths.length > 0 ? paths : files;
+    paths = files;
   } else if (paths.length === 0) {
     paths = ["."];
   }
@@ -567,7 +630,7 @@ async function main(argv: string[]): Promise<number> {
   // Exit 1 when something was reported, 0 when clean. A request failure is not
   // a finding, but it must not read as success either -- hence 3.
   if (result.errors?.length && result.findings.length === 0) return 3;
-  return result.findings.length > 0 ? 1 : 0;
+  return blocks(result.findings, opts.failOn) ? 1 : 0;
 }
 
 function cmdRules(opts: Options, out: Log, log: Log): number {
@@ -829,7 +892,7 @@ function cmdReplay(opts: Options, out: Log, log: Log): number {
   }
   const changed = Object.keys(opts.at);
   if (changed.length > 0) out(`cutoffs overridden: ${changed.join(", ")}`);
-  return gated.findings.length > 0 ? 1 : 0;
+  return blocks(gated.findings, opts.failOn) ? 1 : 0;
 }
 
 main(process.argv.slice(2)).then(

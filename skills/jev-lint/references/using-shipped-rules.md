@@ -164,3 +164,9 @@ Review mode judges only the lines the diff touched. Commit
 `.jev-lint-cache.json` if you want reviewers to see the verdicts you saw and
 CI to re-gate without a key; treat it as trusted input in review, since
 anything that edits it can silence a rule.
+
+Locally, `jev-lint init --pre-commit` writes a hook that runs
+`review --staged --fail-on error` on every commit: the staged diff only,
+every finding printed, the commit blocked only by a rule at `severity:
+error`. If a hook already exists (husky, a task runner), it prints the one
+line to add instead of overwriting.

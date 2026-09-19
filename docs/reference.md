@@ -47,7 +47,9 @@ failed and nothing was reported.
 | `--group <how>` | `file` (default), `rule`, `auto` — see [Batching](#batching) |
 | `--rule-batch-cap <n>` | subjects per rule-axis request (default 32) |
 | `--explain-schedule` | print the axis chosen per rule, and why |
-| `--base <ref>` / `--staged` | what `review` diffs against |
+| `--base <ref>` / `--staged` | what `review` diffs against: the merge base with `ref`, or the index (what a commit will contain: no untracked files, no unstaged edits) |
+| `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any finding |
+| `init --pre-commit` | write a hook running `review --staged --fail-on error`; refuses to overwrite an existing hook without `--force` |
 | `--repeat <n>` / `--labels <path>` | `calibrate`: re-ask n times, fit against labels |
 | `--record <path>` | write a replayable run record — do this for anything you will quote |
 | `--force` | ignore cached verdicts |

@@ -68,15 +68,22 @@ which is where findings concentrate and costs a fraction of a cent.
 
 ```bash
 jev-lint review --base "$GITHUB_BASE_REF" --format github   # in CI
+jev-lint init --pre-commit      # hook: review --staged --fail-on error, on every commit
 jev-lint check src --retry 3                                 # decide on the mean of 3 passes
 jev-lint check src --at fn-name-promises=0.8                 # override one cutoff for one run
 jev-lint check src -R my-rules.yml -R rules                  # rule sources, repeatable
 ```
 
 Exit codes: `0` clean, `1` findings, `2` configuration error, `3` requests
-failed. Any finding exits 1 regardless of severity; `--format github`
-annotates `warning` unless the rule says `severity: error`, and no shipped
-rule does.
+failed. Any finding exits 1 unless `--fail-on <severity>` raises the bar;
+`--format github` annotates `warning` unless the rule says `severity:
+error`, and no shipped rule does. The pre-commit hook `init --pre-commit`
+writes uses `--fail-on error`, so it prints everything and blocks nothing
+until a rule has earned `error`; without a key in the environment it steps
+aside. `--staged` reviews what the commit will contain: no untracked files,
+no unstaged edits, though a partially staged file is judged as it is on disk.
+When paths are configured or given, `review` scans only the changed files
+under them, never the whole tree.
 
 **Settings**: `.jev-lint.yaml`, nearest one searching upwards, a flag beats
 it. `paths:` there lets `jev-lint check` take no argument; `rules:` names the

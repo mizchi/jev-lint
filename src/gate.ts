@@ -26,7 +26,8 @@
  *    failed must not look like a clean repository.
  */
 import { cutoffFor, DEFAULT_UNSURE_BELOW, SCORE_LEVEL_NAMES } from "./rules.ts";
-import type { Answer, Finding, GateResult, Subject } from "./types.ts";
+import { SEVERITIES } from "./types.ts";
+import type { Answer, Finding, GateResult, Severity, Subject } from "./types.ts";
 export { MESSAGE_IDS } from "./types.ts";
 
 /** Per-run threshold overrides, both optional. */
@@ -180,4 +181,18 @@ export function describe(finding: Finding): string {
     default:
       return `${where}  ${finding.rule}: ${num}`;
   }
+}
+
+/**
+ * Does this set of findings turn the exit code?
+ *
+ * By default any finding does, which is what `check` in CI wants. A pre-commit
+ * hook wants something narrower: a probabilistic reviewer that can refuse a
+ * commit on a `warning` is one that gets uninstalled, so `--fail-on error`
+ * lets the hook print everything and block only on what a rule has earned.
+ */
+export function blocks(findings: Finding[], failOn: Severity | null): boolean {
+  if (failOn === null) return findings.length > 0;
+  const floor = SEVERITIES.indexOf(failOn);
+  return findings.some((f) => SEVERITIES.indexOf(f.severity) >= floor);
 }

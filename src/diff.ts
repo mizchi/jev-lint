@@ -30,7 +30,10 @@ export function parseUnifiedDiff(text: string): ChangedRanges {
     // numbers the hunk headers refer to.
     if (line.startsWith("+++ ")) {
       const path = line.slice(4).trim();
-      file = path === "/dev/null" ? null : path.replace(/^b\//, "");
+      // git's default prefix is `b/`; with `diff.mnemonicPrefix` it is `w/`
+      // (worktree), `i/` (index) or `c/` (commit). The git invocation below
+      // pins the prefix, but a diff handed in from elsewhere may carry any.
+      file = path === "/dev/null" ? null : path.replace(/^[abciw]\//, "");
       if (file && !byFile.has(file)) byFile.set(file, []);
       continue;
     }
@@ -80,7 +83,13 @@ export async function changedRanges({
   cwd = process.cwd(),
   staged = false,
 }: { base?: string | null; cwd?: string; staged?: boolean } = {}): Promise<ChangedRanges> {
-  const args = ["diff", "--unified=0", "--no-color", "--no-ext-diff", "--diff-filter=d"];
+  // The prefixes are pinned because a user's `diff.mnemonicPrefix` would
+  // otherwise turn them into `w/` and `i/`, and the parser's paths would
+  // match no file.
+  const args = [
+    "diff", "--unified=0", "--no-color", "--no-ext-diff", "--diff-filter=d",
+    "--src-prefix=a/", "--dst-prefix=b/",
+  ];
   if (staged) args.push("--cached");
   if (base) args.push(`${base}...HEAD`);
   else if (!staged) args.push("HEAD");
@@ -88,8 +97,10 @@ export async function changedRanges({
   const ranges = parseUnifiedDiff(text);
 
   // Untracked files never appear in `git diff`, and "new file nobody has added
-  // yet" is a normal state to want reviewed. They count as changed in full.
-  if (!base) {
+  // yet" is a normal state to want reviewed. They count as changed in full --
+  // except under --staged, where the question is what the commit will contain,
+  // and an untracked file is exactly what it will not.
+  if (!base && !staged) {
     let untracked = "";
     try {
       untracked = await git(["ls-files", "--others", "--exclude-standard"], cwd);
@@ -128,4 +139,25 @@ export function changedFiles(
 ): string[] {
   const files = [...ranges.keys()];
   return filter ? files.filter(filter) : files;
+}
+
+/**
+ * The changed files a review should scan when the run also names paths --
+ * from the command line or from `paths:` in the config.
+ *
+ * The intersection, not the configured paths: scanning `src` whole to keep
+ * the three files the diff touched costs the same as `check`, and a
+ * pre-commit hook that costs the same as a full run is one that gets removed.
+ * A directory claims the files under it; a file claims itself; nothing under
+ * any of them means nothing to review, which is a different answer from
+ * "review everything".
+ */
+export function changedFilesUnder(changed: string[], paths: string[]): string[] {
+  if (paths.length === 0) return changed;
+  const norm = (p: string) => p.replace(/^\.\//, "").replace(/\/+$/, "");
+  const roots = paths.map(norm);
+  return changed.filter((f) => {
+    const file = norm(f);
+    return roots.some((r) => file === r || file.startsWith(`${r}/`));
+  });
 }

@@ -331,3 +331,29 @@ export function applyConfig(
   }
   if (opts.baseUrl) process.env[BASE_URL_VARS[0]] = opts.baseUrl;
 }
+
+/**
+ * The pre-commit hook `jev-lint init --pre-commit` installs.
+ *
+ * Three decisions in it. It reviews `--staged`, so it judges what the commit
+ * will contain and not the working tree. It blocks only on `error`, because
+ * a probabilistic reviewer that refuses commits over a `warning` is one that
+ * gets uninstalled -- everything else is printed and the commit goes through.
+ * And with no key in the environment it exits 0 with a note, because a hook
+ * that fails every commit on a machine without the key is worse than none.
+ */
+export function initialHook(): string {
+  return `#!/bin/sh
+# jev-lint pre-commit hook, written by \`jev-lint init --pre-commit\`.
+#
+# Reviews only the staged diff, prints every finding, and blocks the commit
+# only on a rule with \`severity: error\`. Skip it once with
+# \`git commit --no-verify\`. A partially staged file is judged as it is on
+# disk, since the matcher reads files, not the index.
+if [ -z "$TYPESAFE_API_KEY" ] && [ -z "$TYPESAFEAI_API_KEY" ]; then
+  echo "jev-lint: no API key in the environment, skipping the review" >&2
+  exit 0
+fi
+exec npx -y jev-lint review --staged --fail-on error
+`;
+}
