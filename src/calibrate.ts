@@ -22,12 +22,12 @@
  * show. The other three had gaps from 1.79 to 2.16 and their default cutoffs
  * were never touched.
  *
- * So: `jevlint gaps` first. `jevlint calibrate` only once the gaps are wide.
+ * So: `jev-lint gaps` first. `jev-lint calibrate` only once the gaps are wide.
  */
 import { cutoffFor, DEFAULT_SCORE_AT, DEFAULT_NOUL_AT } from "./rules.ts";
 import type { Finding, Labels, Rule } from "./types.ts";
 
-/** One row of the separation report: the table `jevlint gaps` prints. */
+/** One row of the separation report: the table `jev-lint gaps` prints. */
 export interface GapRow {
   rule: string;
   kind: string;

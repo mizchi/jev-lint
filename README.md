@@ -1,4 +1,4 @@
-# jevlint
+# jev-lint
 
 A linter whose rules are sentences.
 
@@ -40,7 +40,7 @@ The division of labour is the whole idea:
 | | who does it | how it fails |
 | --- | --- | --- |
 | `rule:` | ast-grep's matcher — exact, free, no model involved | **silently**: a node it misses is never asked about |
-| `ask:` | Jev, once per matched node | loudly: every answer is visible in `jevlint gaps` |
+| `ask:` | Jev, once per matched node | loudly: every answer is visible in `jev-lint gaps` |
 
 Half of any team's conventions never become lint rules for the same reason: the
 matcher is trivial and the predicate is a week of AST work.
@@ -61,9 +61,9 @@ for the other half, which has no tool at all.
 ## Install
 
 ```bash
-npm install jevlint
+npm install jev-lint
 export TYPESAFEAI_API_KEY=...
-npx jevlint check src
+npx jev-lint check src
 ```
 
 Node 20+, two runtime dependencies (`@ast-grep/cli` and `yaml`). The matcher is
@@ -90,17 +90,17 @@ contract and the module map.
 ## Use
 
 ```bash
-jevlint check src                  # judge whole files
-jevlint review --base main         # judge only what the diff touched
-jevlint review                     # ...or what is uncommitted, including untracked files
+jev-lint check src                  # judge whole files
+jev-lint review --base main         # judge only what the diff touched
+jev-lint review                     # ...or what is uncommitted, including untracked files
 
-jevlint gaps corpus                # per-rule separation -- on a LABELED corpus
-jevlint calibrate corpus --labels corpus/labels.json --repeat 3 --record run.json
-jevlint rules                      # what loaded, and every validation error
-jevlint replay run.json            # re-score a recorded run under new cutoffs, free
-jevlint replay run.json --labels corpus/labels.json   # ...and re-fit them, free
+jev-lint gaps corpus                # per-rule separation -- on a LABELED corpus
+jev-lint calibrate corpus --labels corpus/labels.json --repeat 3 --record run.json
+jev-lint rules                      # what loaded, and every validation error
+jev-lint replay run.json            # re-score a recorded run under new cutoffs, free
+jev-lint replay run.json --labels corpus/labels.json   # ...and re-fit them, free
 
-jevlint check src --dry-run        # plan and price it without asking anything
+jev-lint check src --dry-run        # plan and price it without asking anything
 ```
 
 **Review mode is the one to reach for in CI.** It scans only the changed files
@@ -111,7 +111,7 @@ diff. It is also where the rules earn their keep — findings concentrate in
 freshly written code, because old names have already been argued over.
 
 ```bash
-jevlint review --base "$GITHUB_BASE_REF" --format github
+jev-lint review --base "$GITHUB_BASE_REF" --format github
 ```
 
 Exit codes: `0` clean, `1` findings, `2` configuration error, `3` requests
@@ -119,8 +119,9 @@ failed and nothing was reported.
 
 | flag | |
 | --- | --- |
-| `-r, --rules <path>` | rule file or directory, repeatable (default `./rules`, else the packaged packs) |
-| `-c, --cache <path>` | verdict cache (default `.jevlint-cache.json`; `none` to disable) |
+| `-R, --rules <path>` | rule file or directory, repeatable (default `./rules`, else the packaged packs) |
+| `-r, --retry <n>` | ask everything n times and decide on the mean (default 1) — see [Asking more than once](#asking-more-than-once) |
+| `-c, --cache <path>` | verdict cache (default `.jev-lint-cache.json`; `none` to disable) |
 | `--at <rule=n>` | override one cutoff, repeatable |
 | `--unsure-below <n>` | confidence under which a finding is worded as a question |
 | `--arm <name>` | override every rule's state arm: `bare`, `local`, `located`, `graph`, `full` |
@@ -139,7 +140,7 @@ failed and nothing was reported.
 | `--quiet` / `--no-color` | |
 
 Environment: `TYPESAFEAI_API_KEY` (required for anything that asks),
-`TYPESAFEAI_BASE_URL`, `JEVLINT_AST_GREP`.
+`TYPESAFEAI_BASE_URL`, `JEV_LINT_AST_GREP`.
 
 Two lines of output are never noise. **`N rules matched nothing`** is the only
 place a dead matcher is visible — check it before trusting a clean run. On a
@@ -148,9 +149,67 @@ variants, plus `comment-describes-declaration-js`, which exists because
 JavaScript has no type declarations to match. **`N without a verdict`** means
 requests failed, and a run with failures never reads as a clean repository.
 
+### Silencing a finding
+
+```ts
+// jev-lint-ignore-next-line
+export function summarize(rows: Row[]): Total { … }
+
+// jev-lint-ignore-next-line fn-name-promises, var-name-describes-value
+const x = compute();
+
+// jev-lint-ignore-file comment-describes-block
+```
+
+`jev-lint-ignore-next-line` covers the line after it; `jev-lint-ignore-file`
+covers the file wherever it appears in it. Both take an optional list of rule
+ids, comma- or space-separated, and silence every rule when given none. Any
+comment syntax works — `//`, `#`, `/* */`, `--`, `<!-- -->` — because the marker
+is matched in the file's text rather than its parse tree.
+
+Two things follow from that, and both are deliberate:
+
+- **A marker has to be the first thing on its line**, after whitespace and a
+  comment opener. A string containing the same text is not a marker, which is
+  what stops a test fixture from silencing the file it is written in.
+- **A suppressed subject is never sent**, so a suppression is also the cheapest
+  way to quiet a rule. It is therefore reported: every run prints how many
+  subjects were skipped and how many files were suppressed whole, for the same
+  reason it prints which rules matched nothing. A suppression that names a rule
+  id no rule answers to is called out too — a typo there silences nothing while
+  looking like it did.
+
+### Asking more than once
+
+```bash
+jev-lint check src --retry 3      # or -r 3
+```
+
+The answers are not deterministic, and near a cutoff that matters: measured on
+this repository, per-subject spread across passes has a median of 0.010 and a
+p90 of 0.050, but a maximum of 0.300 — enough to cross one. `--retry n` asks
+everything n times, **decides on the mean**, and reports how many passes agreed:
+
+```
+     72  flag       This binding's name misdescribes the value it is bound to.
+         var-name-describes-value  0.95  cutoff 0.61  arm located  3/3 passes
+     88  flag       This test would still pass if the behaviour its name claims were broken.
+         test-name-verifies-claim  0.57  cutoff 0.54  arm bare  1/3 passes
+         did not reproduce in every pass (spread 0.24) -- decide this one by hand
+```
+
+`3/3` and `1/3` are different claims, and the second is the one
+[not to automate](#anything-near-a-cutoff-belongs-to-a-human). Note two things:
+
+- **The verdict cache is bypassed above 1.** A cached answer reproduces itself,
+  which would measure nothing.
+- **Only the asking repeats.** The matcher and the planner run once, so every
+  pass sends identical states and question ids — which is what makes the
+  answers comparable. It also means n passes cost n times the tokens.
+
 ## Writing a rule
 
-A jevlint rule is an ast-grep rule plus `ask:`.
+A jev-lint rule is an ast-grep rule plus `ask:`.
 
 ```yaml
 - id: fetch-timeout
@@ -279,7 +338,7 @@ Anchors are scoped to one YAML document, which is why a rule file may be a
 
 ## Calibrating
 
-**Read the gap before you touch a threshold.** `jevlint gaps` sorts each rule's
+**Read the gap before you touch a threshold.** `jev-lint gaps` sorts each rule's
 answers and reports the largest step between neighbours:
 
 | verdict | what to do |
@@ -298,7 +357,7 @@ and the **headroom** — see [What to expect](#what-to-expect).
 Then fit against labels:
 
 ```bash
-jevlint calibrate src --labels labels.json --repeat 3 --record run.json
+jev-lint calibrate src --labels labels.json --repeat 3 --record run.json
 ```
 
 `--repeat` re-asks and reports which subjects changed *decision* between
@@ -310,7 +369,7 @@ Cutoffs are **per rule, never shared**. Same-shaped questions have been measured
 answering their own defect class anywhere between 0.20 and 0.94; the quiet ones
 are not broken, they simply never reach a common threshold.
 
-Re-gating is free — `jevlint replay` re-scores a recorded run under new cutoffs
+Re-gating is free — `jev-lint replay` re-scores a recorded run under new cutoffs
 with zero requests, and with `--labels` re-fits them too — so record anything
 you will quote. A cutoff is a claim about a specific set of answers, and whoever
 holds the record can re-derive it without an API key. Without that,
@@ -356,7 +415,7 @@ Three consequences before you switch it on:
    two more false positives out of 276. One rule
    (`fn-name-promises-rust`) has **no separating cutoff at all** on the rule
    axis, because a rule-axis state spans files and so cannot carry one.
-2. **A cutoff belongs to an axis.** Switching means re-fitting — `jevlint replay
+2. **A cutoff belongs to an axis.** Switching means re-fitting — `jev-lint replay
    <record> --labels <labels>` does that for free — and the rule-axis numbers
    are not shippable today, because a rule carries one `at:`, so they have to be
    passed with `--at`.
@@ -560,7 +619,7 @@ axis invalidates the verdicts that depended on them.
 | [docs/deepdive.md](docs/deepdive.md) | everything measured that is still true: arms, cutoffs, the batching axis, the API's real limits, accuracy on real code |
 | [docs/internal.md](docs/internal.md) | how the code works, for changing it: module map, data flow, invariants, every tunable constant |
 | [docs/findings.md](docs/findings.md) | the notebook, in the order it happened, including the wrong turns and four retracted claims |
-| [.claude/skills/jevlint](.claude/skills/jevlint/SKILL.md) | the working procedure, as a skill |
+| [.claude/skills/jev-lint](.claude/skills/jev-lint/SKILL.md) | the working procedure, as a skill |
 
 ## Layout
 

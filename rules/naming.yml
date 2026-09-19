@@ -20,8 +20,8 @@
 # subjects, Rust, TypeScript and JavaScript) as the midpoint of each rule's own
 # clean/violation gap. They are a starting point on your code, not a calibration
 # for it: a cutoff fitted to one corpus is an opinion about that corpus. Run
-# `jevlint gaps` first -- if a rule's answers are bunched together, no cutoff
-# will help and the sentence needs rewriting -- then `jevlint calibrate
+# `jev-lint gaps` first -- if a rule's answers are bunched together, no cutoff
+# will help and the sentence needs rewriting -- then `jev-lint calibrate
 # --labels` against your own labels.
 #
 # `state:` values are likewise measured rather than chosen. `tools/arms.ts`

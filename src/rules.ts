@@ -1,7 +1,7 @@
 /**
  * Rule loading and validation.
  *
- * A jevlint rule is an ast-grep rule with one extra field: `ask`, the
+ * A jev-lint rule is an ast-grep rule with one extra field: `ask`, the
  * natural-language predicate. The division of labour is the entire idea:
  *
  *   rule:   WHICH nodes get judged -- exact, free, no model involved.
@@ -14,7 +14,7 @@
  * Write the matcher to OVER-match on purpose. It is the half that fails
  * SILENTLY: a node the matcher missed is never asked about and never appears in
  * any report, so no threshold can recover it. The sentence is the half that
- * fails loudly -- every score is visible in `jevlint gaps`. Level 0 of the
+ * fails loudly -- every score is visible in `jev-lint gaps`. Level 0 of the
  * score scale ("the rule does not apply to this code at all") exists precisely
  * so the model can say "your matcher caught something irrelevant", which is
  * cheaper to read in a report than to prevent by hand-tightening a matcher.
@@ -63,7 +63,7 @@ export type {
 };
 
 /** Bumped when question construction or the scales change. Part of cache keys. */
-export const SCHEMA = "jevlint-2";
+export const SCHEMA = "jev-lint-2";
 
 
 const LANG_ALIASES: Record<string, Language> = {
@@ -147,7 +147,7 @@ export const DEFAULT_SCORE_AT = 2.0;
  * ranged from 0.20 to 0.94 across eight same-shaped questions, and the two
  * coldest were not broken -- their ranking was fine, they simply never reached
  * a shared threshold. So a single cutoff across noul rules is a bug, and
- * `jevlint calibrate` exists to replace this number per rule.
+ * `jev-lint calibrate` exists to replace this number per rule.
  */
 export const DEFAULT_NOUL_AT = 0.5;
 
@@ -336,9 +336,9 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
  *
  * `./rules` first, because a project's own rules are the point of the tool.
  * Failing that, the packs inside the installed package -- without this,
- * `npm install jevlint && npx jevlint check src` cannot work at all: the
+ * `npm install jev-lint && npx jev-lint check src` cannot work at all: the
  * default was the literal relative path `rules`, the shipped packs live in
- * `node_modules/jevlint/rules`, and every fresh install exited with "no usable
+ * `node_modules/jev-lint/rules`, and every fresh install exited with "no usable
  * rules found in rules". Found by an audit of the README's own install block.
  *
  * Never both. Merging them would silently judge someone's code against rules

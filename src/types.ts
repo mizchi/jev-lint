@@ -64,7 +64,16 @@ export type GroupMode = (typeof GROUP_MODES)[number];
  * the report as a `silent` rule with no explanation -- a silent matcher
  * failure, which is the one thing this design spends the most effort avoiding.
  */
-export const PROBE_PREFIX = "__jevlint_";
+export const PROBE_PREFIX = "__jev-lint_";
+
+/**
+ * What a suppression comment names: the rules it silences, or [] for all of
+ * them.
+ *
+ * An empty list is "everything", not "nothing", because `jev-lint-ignore-file`
+ * with no rule after it is the common case and has to mean the broad thing.
+ */
+export type IgnoreDirective = string[];
 
 export const SEVERITIES = ["hint", "info", "warning", "error"] as const;
 export type Severity = (typeof SEVERITIES)[number];
@@ -355,6 +364,16 @@ export interface Finding {
   captured?: Record<string, string> | null;
   arm?: StateArm;
   level?: string;
+  /**
+   * Present when `--retry` asked more than once: how many passes put this
+   * subject over its cutoff, out of how many asked, and the spread of the
+   * answers. `value` is then the MEAN, which is what the decision used.
+   *
+   * A finding that reproduced in every pass and one that appeared in a single
+   * pass are different claims, and the second is the one the calibration
+   * discipline says not to automate.
+   */
+  passes?: { over: number; of: number; spread: number };
 }
 
 export interface GateStats {
@@ -363,6 +382,16 @@ export interface GateStats {
   missing: number;
   unsure: number;
   byRule: Record<string, number>;
+}
+
+/** What suppression comments removed from a run, for reporting. */
+export interface IgnoreStats {
+  /** Subjects never asked about because a suppression covered them. */
+  subjects: number;
+  /** Files suppressed whole. */
+  files: string[];
+  /** Rule ids named in a suppression that no loaded rule answers to. */
+  unknownRules: string[];
 }
 
 export interface GateResult {
@@ -414,6 +443,9 @@ export interface RunResult extends GateResult {
   stderr?: string;
   skippedByDiff?: number;
   duplicateGrammars?: number;
+  ignored?: IgnoreStats;
+  /** How many times everything was asked; above 1 with `--retry`. */
+  retry?: number;
   /** Present when `group: "auto"`: what the scheduler decided, and why. */
   schedule?: unknown;
   cachedCount: number;

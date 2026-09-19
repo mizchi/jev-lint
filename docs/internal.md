@@ -21,6 +21,8 @@ paths + rules
   │
   ├─ run.ts      collectSubjects()  matches → Subject[] (+ sources, symbols)
   │                                 dedupes, resolves subject mode, picks the arm
+  │  ignore.ts   parseIgnores()     suppressed subjects are dropped HERE, so a
+  │                                 suppression also saves its tokens
   │
   ├─ schedule.ts schedule()         → which axis each rule goes on (only for --group auto)
   │
@@ -32,6 +34,8 @@ paths + rules
   │
   ├─ jev.ts      askSplitting()     one request per batch, halving on too_big
   │              readAnswer()       response → {value, confidence, kind} | null
+  │  run.ts      mergePasses()      --retry n: n answers per subject → the mean,
+  │                                 plus how many passes crossed the cutoff
   │
   ├─ gate.ts     decide() / gate()  answers + cutoffs → Finding[]   (pure, offline)
   │
@@ -44,7 +48,7 @@ consumer of the same `Finding[]`: gap report, stability report, cutoff fit.
 
 **The stage boundary that matters most is `gate.ts`.** Verdicts cost money;
 thresholds are what you will change twenty times. Keeping the gate pure is what
-makes `jevlint replay` possible, and replay is what makes a shipped cutoff
+makes `jev-lint replay` possible, and replay is what makes a shipped cutoff
 auditable.
 
 ## Modules
@@ -66,6 +70,7 @@ auditable.
 | `cache.ts` | 175 | the verdict cache and `verdictKey` |
 | `questions.ts` | 146 | one subject → one question payload |
 | `diff.ts` | 131 | unified-diff parsing for review mode |
+| `ignore.ts` | 116 | `jev-lint-ignore-file` and `-next-line`, parsed from raw text |
 
 ### `scan.ts` — the matcher, and the probes
 
@@ -180,6 +185,42 @@ Two traps, both of them bugs that existed:
   on.
 - **Cost the plan you will run.** The cost report and the plan must be computed
   over the same subject set, or the report describes a run nobody made.
+
+### `ignore.ts` — suppression comments
+
+One anchored regex over the raw text, so a new language needs nothing here. Two
+traps, both of which bit:
+
+- **The rule-id list must not exclude `-` from its character class.** Excluding
+  the closers inline looks right and truncates every shipped rule id at its
+  first hyphen, so `fn-name-promises` silenced a rule called `fn`. The closer is
+  stripped afterwards instead.
+- **The marker must be anchored to the start of the line.** Unanchored, a test
+  fixture containing the marker as a string literal silences the file it is
+  written in — invisibly, because every rule still loads and nothing is
+  reported.
+
+`unknownIgnoredRules` exists because a typo in a suppression fails the worst
+way: the rule keeps firing and the author believes it is handled.
+
+### `run.ts` — asking more than once
+
+`--retry n` loops only the ask phase: the matcher, the planner and the question
+ids are identical across passes, which is what makes the answers comparable.
+`mergePasses` then collapses them to the MEAN, because a single pass both over-
+and under-reports near a cutoff, and keeps `over`/`of` beside it because three
+of three and one of three are different claims.
+
+Two rules there:
+
+- **The cache is bypassed when n > 1**, not merely ignored on read. A cached
+  answer reproduces itself; and writing one pass's answer while the report
+  decided on a mean would leave the cache holding a verdict nobody used.
+- **A pass that returned nothing is not a disagreement.** It is a failed
+  request, which `missing` already reports; counting it would make a flaky
+  network look like an unstable rule.
+- **The mean is left unrounded and the spread is rounded.** The mean decides,
+  and rounding a decision input can flip it; the spread is only printed.
 
 ### `cache.ts` — what a key must cover
 
@@ -301,7 +342,7 @@ Two conventions to keep:
 - **A guard against vacuous passing.** Several planner tests assert that the
   planner actually grouped something before asserting a property of the groups,
   because a planner returning one subject per batch satisfies most such loops
-  trivially. Both of those guards were added after jevlint flagged the test
+  trivially. Both of those guards were added after jev-lint flagged the test
   names for promising more than the bodies checked.
 
 For anything involving verdicts, record and replay rather than mocking the API:

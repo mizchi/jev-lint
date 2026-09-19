@@ -24,12 +24,14 @@ import { schedule, planMixed, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./sc
 import { Cache, verdictKey } from "./cache.ts";
 import { gate } from "./gate.ts";
 import { touchesChange } from "./diff.ts";
-import { ruleTextHash } from "./rules.ts";
+import { ruleTextHash, cutoffFor } from "./rules.ts";
+import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
 import type {
   Answer,
   Batch,
   Grouping,
   GroupMode,
+  IgnoreStats,
   Rule,
   RunError,
   RunResult,
@@ -61,6 +63,7 @@ export interface CollectResult {
   stderr: string;
   skippedByDiff: number;
   duplicateGrammars: number;
+  ignored: IgnoreStats;
 }
 
 export async function collectSubjects({
@@ -88,20 +91,34 @@ export async function collectSubjects({
     return text;
   };
 
+  // Suppression comments are read once per file, from the source `readSource`
+  // already has to load. Applied here rather than at the gate so an ignored
+  // subject is never sent: a suppression is the cheapest way to quiet a rule.
+  const ignoresFor = new Map<string, FileIgnores>();
+  const readIgnores = (file: string): FileIgnores => {
+    let ig = ignoresFor.get(file);
+    if (!ig) {
+      ig = parseIgnores(readSource(file));
+      ignoresFor.set(file, ig);
+    }
+    return ig;
+  };
+
   const subjects: Subject[] = [];
   let skippedByDiff = 0;
   let duplicateGrammars = 0;
+  let ignoredSubjects = 0;
   // One node, one rule, one question -- however many grammars claimed the file.
   //
   // ast-grep's grammars have overlapping file extensions: `.js` and `.mjs` are
   // claimed by BOTH `JavaScript` and `Jsx`, so a rule listing both languages
   // matches every JavaScript file twice and reports every finding twice. The
-  // per-grammar rule ids differ, but the jevlint rule and the node are the
+  // per-grammar rule ids differ, but the jev-lint rule and the node are the
   // same, so identity is (file, byte range, rule) and not the ast-grep id.
   const seenNodes = new Set<string>();
   for (const m of matches) {
     // Matches come back tagged with the per-grammar id the emitter used, which
-    // maps back to the one jevlint rule that owns the sentence.
+    // maps back to the one jev-lint rule that owns the sentence.
     const rule = byId.get(baseRuleId(m.ruleId));
     if (!rule) continue;
     const identity = `${m.file}\u0000${m.range.byteOffset.start}\u0000${m.range.byteOffset.end}\u0000${rule.id}`;
@@ -114,6 +131,10 @@ export async function collectSubjects({
     const resolved = resolveSubject(m, rule, entry);
     if (diffRanges && !touchesChange(diffRanges, m.file, resolved.line, resolved.endLine)) {
       skippedByDiff += 1;
+      continue;
+    }
+    if (isIgnored(readIgnores(m.file), resolved.line, rule.id)) {
+      ignoredSubjects += 1;
       continue;
     }
     readSource(m.file);
@@ -131,7 +152,22 @@ export async function collectSubjects({
     (a, b) => a.file.localeCompare(b.file) || a.line - b.line || a.rule.id.localeCompare(b.rule.id),
   );
 
-  return { subjects, symbols, sources, matches, stderr, skippedByDiff, duplicateGrammars };
+  const ignored: IgnoreStats = {
+    subjects: ignoredSubjects,
+    files: [...ignoresFor.entries()].filter(([, ig]) => ig.file !== null).map(([f]) => f).sort(),
+    unknownRules: unknownIgnoredRules(ignoresFor.values(), rules.map((r) => r.id)),
+  };
+
+  return {
+    subjects,
+    symbols,
+    sources,
+    matches,
+    stderr,
+    skippedByDiff,
+    duplicateGrammars,
+    ignored,
+  };
 }
 
 /**
@@ -160,6 +196,15 @@ export interface RunOptions {
   model?: string | null;
   apiKey?: string | null;
   cwd?: string;
+  /**
+   * Ask everything this many times and decide on the mean.
+   *
+   * 1 is one pass and the default. Above 1, the verdict CACHE IS BYPASSED --
+   * reading it would make every pass after the first reproduce itself, which
+   * measures nothing. The matcher runs once either way: what is being tested is
+   * the model's reproducibility, not ast-grep's.
+   */
+  retry?: number;
   onProgress?: ((p: { done: number; total: number; file: string }) => void) | null;
 }
 
@@ -180,10 +225,18 @@ export async function run({
   model = null,
   apiKey = null,
   cwd = process.cwd(),
+  retry = 1,
   onProgress = null,
 }: RunOptions): Promise<RunResult> {
   const started = Date.now();
-  const { subjects, symbols, sources, stderr, skippedByDiff, duplicateGrammars } = await collectSubjects({
+  const passes = Number.isInteger(retry) && retry > 0 ? retry : 1;
+  // A cached answer reproduces itself, so reproduction testing cannot use the
+  // cache. Bypassed rather than merely ignored on read: writing one pass's
+  // answer while deciding on the mean of several would leave the cache holding
+  // a verdict the report never used.
+  const useCache = passes === 1 ? cachePath : null;
+
+  const { subjects, symbols, sources, stderr, skippedByDiff, duplicateGrammars, ignored } = await collectSubjects({
     rules,
     paths,
     arm,
@@ -191,7 +244,7 @@ export async function run({
     cwd,
   });
 
-  const cache = cachePath ? Cache.load(cachePath) : new Cache(null);
+  const cache = useCache ? Cache.load(useCache) : new Cache(null);
   // Under `auto` the axis is decided per rule, and the axis is part of what
   // the model saw -- so the cache key needs the axis this subject actually
   // took, not the mode that was requested.
@@ -212,11 +265,11 @@ export async function run({
   // Identical subject text under the same rule draft is one question however
   // many times it occurs, so a repository with duplicated code costs less than
   // its size suggests.
-  const results: Array<{ subject: Subject; answer: Answer | null; cached: boolean }> = [];
+  const results: Scored[] = [];
   const toAsk: Subject[] = [];
   const wanted = new Map<string, Subject[]>();
   for (const s of keyed) {
-    const hit = force || !cachePath ? null : cache.get(s.key, s.rule.kind);
+    const hit = force || !useCache ? null : cache.get(s.key, s.rule.kind);
     if (hit) {
       results.push({ subject: s, answer: hit, cached: true });
       continue;
@@ -250,6 +303,8 @@ export async function run({
       stderr,
       skippedByDiff,
       duplicateGrammars,
+      ignored,
+      retry: passes,
       schedule: plan,
       cachedCount: results.length,
       spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
@@ -261,7 +316,17 @@ export async function run({
   const jev = new Jev({ apiKey, model });
   const errors: RunError[] = [];
 
-  await mapLimit(batches, concurrency, async (batch, i) => {
+  /**
+   * One pass over every batch.
+   *
+   * Called once per `retry`. The matcher and the planner ran once above, so
+   * what repeats is only the asking -- the batches, the states and the question
+   * ids are identical across passes, which is what makes the answers
+   * comparable.
+   */
+  const askOnce = async (): Promise<Scored[]> => {
+    const out: Scored[] = [];
+    await mapLimit(batches, concurrency, async (batch, i) => {
     try {
       const res = await jev.askSplitting(batch.state, batch.questions);
       batch.subjects.forEach((s) => {
@@ -281,9 +346,9 @@ export async function run({
         // finding, cache entry and replay record claim `located` for a question
         // asked at `local`.
         for (const twin of wanted.get(s.key!) ?? [s]) {
-          results.push({ subject: { ...twin, arm: batch.arm }, answer, cached: false });
+          out.push({ subject: { ...twin, arm: batch.arm }, answer, cached: false });
         }
-        if (answer && cachePath) {
+        if (answer && useCache) {
           // Stored under the arm the question was ACTUALLY asked at, which is
           // not always the arm it was looked up under: `s.key` carries the arm
           // the rule asked for, and a batch over the state budget steps down.
@@ -312,14 +377,35 @@ export async function run({
       // `missing` rather than as a clean bill of health.
       for (const s of batch.subjects) {
         for (const twin of wanted.get(s.key!) ?? [s]) {
-          results.push({ subject: { ...twin, arm: batch.arm }, answer: null, cached: false });
+          out.push({ subject: { ...twin, arm: batch.arm }, answer: null, cached: false });
         }
       }
     }
     onProgress?.({ done: i + 1, total: batches.length, file: batch.file });
-  });
+    });
+    return out;
+  };
 
-  if (cachePath) cache.save({ model: jev.servedModel ?? jev.model });
+  const perPass: Scored[][] = [];
+  for (let pass = 0; pass < passes; pass += 1) perPass.push(await askOnce());
+  const asked = passes === 1 ? (perPass[0] ?? []) : mergePasses(perPass, cutoffs);
+  results.push(...asked);
+
+  if (useCache) cache.save({ model: jev.servedModel ?? jev.model });
+
+  const gated = gate(results, { cutoffs, unsureBelow });
+  // Attached by identity rather than by position: `gate` happens to map 1:1
+  // over its input, and relying on that is the same coupling that once
+  // attributed every answer to the wrong subject.
+  if (passes > 1) {
+    const stability = new Map(
+      asked.filter((r) => r.stability).map((r) => [identify(r.subject), r.stability!]),
+    );
+    for (const f of gated.all) {
+      const st = stability.get(`${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`);
+      if (st) f.passes = st;
+    }
+  }
 
   return {
     rules,
@@ -335,9 +421,86 @@ export async function run({
     cachedCount: results.filter((r) => r.cached).length,
     spent: jev.spent,
     servedModel: jev.servedModel,
-    ...gate(results, { cutoffs, unsureBelow }),
+    ignored,
+    retry: passes,
+    ...gated,
     elapsedMs: Date.now() - started,
   };
+}
+
+/** One subject's verdict, plus how it behaved across `--retry` passes. */
+export interface Scored {
+  subject: Subject;
+  answer: Answer | null;
+  cached: boolean;
+  stability?: { over: number; of: number; spread: number };
+}
+
+/** Identity for matching one subject across passes, and to its finding. */
+function identify(s: Subject): string {
+  return `${s.rule.id}\u0000${s.file}\u0000${s.line}\u0000${s.text ?? ""}`;
+}
+
+/**
+ * Collapse several passes into one verdict per subject: the MEAN answer, plus
+ * how many passes put it over its cutoff.
+ *
+ * The mean is what decides, because a single pass both over- and under-reports
+ * near a cutoff -- measured on this repository, per-subject spread has a median
+ * of 0.010 and a p90 of 0.050 but a maximum of 0.300, which is enough to cross
+ * one. The `over`/`of` pair is kept because "three of three" and "one of three"
+ * are different claims and the second is the one not to automate.
+ *
+ * A pass that returned no answer at all is not counted as a disagreement: it is
+ * a failed request, and `missing` already says so.
+ */
+export function mergePasses(perPass: Scored[][], cutoffs: Record<string, number>): Scored[] {
+  const acc = new Map<string, { subject: Subject; values: number[]; confidences: number[]; kind?: Answer["kind"]; nulls: number }>();
+  for (const pass of perPass) {
+    for (const r of pass) {
+      const key = identify(r.subject);
+      let e = acc.get(key);
+      if (!e) {
+        e = { subject: r.subject, values: [], confidences: [], nulls: 0 };
+        acc.set(key, e);
+      }
+      if (!r.answer) {
+        e.nulls += 1;
+        continue;
+      }
+      e.values.push(r.answer.value);
+      if (typeof r.answer.confidence === "number") e.confidences.push(r.answer.confidence);
+      e.kind = r.answer.kind;
+    }
+  }
+
+  const mean = (xs: number[]): number => xs.reduce((a, b) => a + b, 0) / xs.length;
+  const out: Scored[] = [];
+  for (const e of acc.values()) {
+    if (e.values.length === 0) {
+      out.push({ subject: e.subject, answer: null, cached: false });
+      continue;
+    }
+    const at = cutoffFor(e.subject.rule, cutoffs);
+    out.push({
+      subject: e.subject,
+      answer: {
+        value: mean(e.values),
+        confidence: e.confidences.length > 0 ? mean(e.confidences) : null,
+        kind: e.kind ?? e.subject.rule.kind,
+      },
+      cached: false,
+      stability: {
+        over: e.values.filter((v) => v >= at).length,
+        of: e.values.length,
+        // Rounded because it is a diagnostic that gets printed, and float
+        // noise in it reads as false precision. The MEAN is deliberately left
+        // raw: it decides, and rounding a decision input can flip it.
+        spread: Math.round((Math.max(...e.values) - Math.min(...e.values)) * 1000) / 1000,
+      },
+    });
+  }
+  return out;
 }
 
 /**
@@ -353,7 +516,7 @@ export function toRecord(
   { arm, cutoffs, unsureBelow }: { arm: StateArm | null; cutoffs: Record<string, number>; unsureBelow: number | null },
 ): Record<string, unknown> {
   return {
-    schema: "jevlint-run-1",
+    schema: "jev-lint-run-1",
     recorded: new Date().toISOString(),
     model: result.servedModel ?? null,
     arm,

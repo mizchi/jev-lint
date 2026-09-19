@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * jevlint -- a natural-language linter.
+ * jev-lint -- a natural-language linter.
  *
  * ast-grep decides WHICH code gets looked at. A sentence you write decides
  * WHETHER it is a problem. Jev answers the sentence, in one batched request per
@@ -42,6 +42,8 @@ interface Options {
   rules: string[];
   /** True when `rules` is the installed package's own packs, not the project's. */
   rulesAreShipped: boolean;
+  /** How many times to ask everything, to see which findings reproduce. */
+  retry: number;
   cache: string;
   arm: StateArm | null;
   group: GroupMode;
@@ -69,18 +71,22 @@ interface Options {
 
 type Log = (s: string) => void;
 
-const USAGE = `jevlint -- lint rules written as sentences, judged by a model
+const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
-  jevlint check [paths...]        judge whole files
-  jevlint review [paths...]       judge only what the diff touched
-  jevlint gaps [paths...]         per-rule separation report (read this first)
-  jevlint calibrate [paths...]    repeat runs, and fit cutoffs if labels exist
-  jevlint rules                   list loaded rules and validation errors
-  jevlint replay <record.json>    re-score a recorded run, no requests
+  jev-lint check [paths...]        judge whole files
+  jev-lint review [paths...]       judge only what the diff touched
+  jev-lint gaps [paths...]         per-rule separation report (read this first)
+  jev-lint calibrate [paths...]    repeat runs, and fit cutoffs if labels exist
+  jev-lint rules                   list loaded rules and validation errors
+  jev-lint replay <record.json>    re-score a recorded run, no requests
 
 options:
-  -r, --rules <path>       rule file or directory (repeatable; default ./rules)
+  -R, --rules <path>       rule file or directory (repeatable; default ./rules,
+                           else the packs inside the installed package)
+  -r, --retry <n>          ask everything n times and report what reproduces
+                           (default 1). Above 1 the verdict cache is bypassed,
+                           since a cached answer reproduces itself.
   -c, --cache <path>       verdict cache (default ${DEFAULT_CACHE_PATH}; "none" to disable)
       --arm <name>         override every rule's state arm: ${ARMS.join(" | ")}
       --group <how>        file (default) | rule | auto -- see below
@@ -128,7 +134,7 @@ batching:
                  the axis is part of the cache key.
   --group auto   Cost both axes per rule before asking anything, and pick the
                  cheaper. Opt in when the token bill matters more than the
-                 false-positive rate, and re-run "jevlint calibrate" afterwards,
+                 false-positive rate, and re-run "jev-lint calibrate" afterwards,
                  because a cutoff fitted on one axis is not fitted for the
                  other. --explain-schedule shows what it decided and why.
 
@@ -138,13 +144,14 @@ batching:
 environment:
   TYPESAFEAI_API_KEY       required for anything that asks
   TYPESAFEAI_BASE_URL      override the API endpoint
-  JEVLINT_AST_GREP         path to an ast-grep binary
+  JEV_LINT_AST_GREP         path to an ast-grep binary
 `;
 
 function parseArgs(argv: string[]): Options {
   const opts: Options = {
     rules: [],
     rulesAreShipped: false,
+    retry: 1,
     cache: DEFAULT_CACHE_PATH,
     arm: null,
     group: "file",
@@ -175,9 +182,14 @@ function parseArgs(argv: string[]): Options {
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
     switch (a) {
-      case "-r":
+      case "-R":
       case "--rules":
         opts.rules.push(need(i, a));
+        i += 1;
+        break;
+      case "-r":
+      case "--retry":
+        opts.retry = Number(need(i, a));
         i += 1;
         break;
       case "-c":
@@ -290,6 +302,9 @@ function parseArgs(argv: string[]): Options {
   if (!Number.isInteger(opts.ruleBatchCap) || opts.ruleBatchCap < 1) {
     throw new Error(`--rule-batch-cap must be a positive integer`);
   }
+  if (!Number.isInteger(opts.retry) || opts.retry < 1) {
+    throw new Error(`--retry must be a positive integer (1 asks once)`);
+  }
   return opts;
 }
 
@@ -379,6 +394,7 @@ async function main(argv: string[]): Promise<number> {
     dryRun: opts.dryRun,
     concurrency: opts.concurrency,
     batchSize: opts.batchSize,
+    retry: opts.retry,
     model: opts.model,
   });
 
@@ -403,6 +419,22 @@ async function main(argv: string[]): Promise<number> {
     }
     if (result.batches.length > 40) out(`  … and ${result.batches.length - 40} more`);
     out(`~${tokens.toLocaleString()} input tokens, ~$${((tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
+    // A dry run is what someone checks a suppression with -- it is the free way
+    // to confirm an ignore comment covers what they meant it to.
+    if (result.ignored && (result.ignored.subjects > 0 || result.ignored.files.length > 0)) {
+      out(
+        `${result.ignored.subjects} subject(s) skipped by jev-lint-ignore comments` +
+          (result.ignored.files.length ? `, ${result.ignored.files.length} file(s) whole` : ""),
+      );
+    }
+    if (result.ignored?.unknownRules.length) {
+      log(
+        `jev-lint-ignore comment(s) name a rule that does not exist: ${result.ignored.unknownRules.join(", ")}`,
+      );
+    }
+    if (result.retry && result.retry > 1) {
+      out(`--retry ${result.retry}: every request above would be made ${result.retry} times`);
+    }
     const silent = silentRules(result);
     if (silent.length) out(`${silent.length} rule(s) matched nothing: ${silent.join(", ")}`);
     return 0;
@@ -618,7 +650,7 @@ function cmdReplay(opts: Options, out: Log, log: Log): number {
     log(`could not read ${path}: ${String(err).slice(0, 160)}`);
     return 2;
   }
-  if (record.schema !== "jevlint-run-1") {
+  if (record.schema !== "jev-lint-run-1") {
     log(`${path}: unexpected schema ${record.schema}`);
     return 2;
   }
@@ -696,7 +728,7 @@ main(process.argv.slice(2)).then(
     // only buries it. Anything else is a bug here, and then the stack is what
     // someone needs.
     const configError = err?.name === "AstGrepError" || err?.kind === "auth";
-    process.stderr.write(`jevlint: ${configError ? err.message : (err?.stack ?? err)}\n`);
+    process.stderr.write(`jev-lint: ${configError ? err.message : (err?.stack ?? err)}\n`);
     process.exit(2);
   },
 );

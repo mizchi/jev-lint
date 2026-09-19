@@ -81,7 +81,7 @@ export class Jev {
   }: JevOptions = {}) {
     this.apiKey = apiKey ?? process.env.TYPESAFEAI_API_KEY ?? "";
     this.baseUrl = baseUrl ?? process.env.TYPESAFEAI_BASE_URL ?? DEFAULT_BASE_URL;
-    this.model = model ?? process.env.JEVLINT_MODEL ?? DEFAULT_MODEL;
+    this.model = model ?? process.env.JEV_LINT_MODEL ?? DEFAULT_MODEL;
     this.retries = retries;
     this.timeoutMs = timeoutMs;
     /** Called with each request body before it is sent, for leak assertions. */

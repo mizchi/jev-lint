@@ -19,7 +19,7 @@
  * What is NOT in the key is the rest of the file, even though the file is in
  * the state on the `located` and `full` arms. That is a known and accepted
  * imprecision: keying on whole-file content would invalidate every verdict in
- * a file on every keystroke, which is not a cache. `jevlint check --force` is
+ * a file on every keystroke, which is not a cache. `jev-lint check --force` is
  * the escape hatch.
  *
  * Three properties the rest of the tool relies on:
@@ -40,7 +40,7 @@ import { dirname } from "node:path";
 import { SCHEMA, ruleTextHash } from "./rules.ts";
 import type { Answer, CacheEntry, Grouping, Rule, RuleKind, StateArm } from "./types.ts";
 
-export const DEFAULT_CACHE_PATH = ".jevlint-cache.json";
+export const DEFAULT_CACHE_PATH = ".jev-lint-cache.json";
 
 export function verdictKey(
   rule: Rule,
@@ -129,7 +129,7 @@ export class Cache {
       value: answer.value,
       confidence: answer.confidence ?? null,
       kind: answer.kind,
-      // Provenance is for humans reading the file and for `jevlint gaps`;
+      // Provenance is for humans reading the file and for `jev-lint gaps`;
       // nothing keys on it.
       ...provenance,
       at: new Date().toISOString(),

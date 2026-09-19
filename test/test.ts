@@ -4,7 +4,7 @@
  * where a test says so.
  *
  * What gets tested here is chosen deliberately. The model's accuracy is
- * measured by `jevlint calibrate` against a labeled corpus, not asserted here --
+ * measured by `jev-lint calibrate` against a labeled corpus, not asserted here --
  * a probabilistic answer has no expected value to assert. What IS asserted is
  * everything around it, and above all the FAILURE PATHS: a review tool that can
  * break a build is worse than no review tool, so every way this can fail has to
@@ -54,6 +54,8 @@ import {
 } from "../src/scan.ts";
 import { formatGithub, formatJson, formatPretty, silentRules } from "../src/report.ts";
 import { Jev, JevError } from "../src/jev.ts";
+import { parseIgnores, isIgnored, unknownIgnoredRules } from "../src/ignore.ts";
+import { mergePasses } from "../src/run.ts";
 import type {
   Answer,
   AstGrepMatch,
@@ -166,13 +168,13 @@ const subjectOf = (over: Partial<Subject> = {}): Subject => ({
 test("rules: a project's own ./rules wins, and a fresh install still finds the packs", () => {
   // Every fresh install used to exit 2 with "no usable rules found in rules":
   // the default was the literal relative path `rules`, and the shipped packs
-  // live in `node_modules/jevlint/rules`, so `npm install jevlint && npx
-  // jevlint check src` could not work at all. An audit of the README's own
+  // live in `node_modules/jev-lint/rules`, so `npm install jev-lint && npx
+  // jev-lint check src` could not work at all. An audit of the README's own
   // install block caught it. Both directions are pinned, because the wrong one
   // silently judges someone's code against cutoffs fitted to a corpus their
   // code has never seen.
   const here = process.cwd();
-  const dir = mkdtempSync(join(tmpdir(), "jevlint-rules-"));
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-rules-"));
   try {
     process.chdir(dir);
     const [fallback, isShipped] = defaultRulePaths();
@@ -339,7 +341,7 @@ test("rules: the draft hash covers what the model sees and excludes the threshol
 });
 
 test("rules: a shared YAML anchor gives two language variants the same draft hash", () => {
-  const dir = mkdtempSync(join(tmpdir(), "jevlint-test-"));
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
   try {
     writeFileSync(
       join(dir, "p.yml"),
@@ -368,7 +370,7 @@ test("rules: a shared YAML anchor gives two language variants the same draft has
 });
 
 test("rules: a duplicate id is reported and a missing path is reported", () => {
-  const dir = mkdtempSync(join(tmpdir(), "jevlint-test-"));
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
   try {
     const body = "id: dup\nlanguage: TypeScript\nrule: {kind: program}\nask: a\n";
     writeFileSync(join(dir, "a.yml"), body);
@@ -699,7 +701,7 @@ test("batch: every subject lands in exactly one batch and none is empty", () => 
 
 // The name carries the planner's exception, because the body has to: a batch
 // holding ONE subject is allowed over the ceiling, there being nothing left to
-// split. Named "no batch exceeds the request ceiling", jevlint kept flagging it
+// split. Named "no batch exceeds the request ceiling", jev-lint kept flagging it
 // at 0.54-0.62 against a 0.54 cutoff, and on that reading it was right -- the
 // gap was between the name and the contract, not in the assertions.
 test("batch: no splittable batch exceeds either ceiling", () => {
@@ -712,13 +714,13 @@ test("batch: no splittable batch exceeds either ceiling", () => {
   // returned one subject per batch would satisfy the loop vacuously and this
   // test would pass while verifying nothing about the ceiling.
   //
-  // This weakness was found by running jevlint on its own test suite:
+  // This weakness was found by running jev-lint on its own test suite:
   // `test-name-matches-body` scored the original 0.68-0.73 across runs against
   // a 0.69 cutoff, for precisely this reason. The model was right.
   const multi = batches.filter((b) => b.subjects.length > 1);
   assert.ok(multi.length > 0, "the planner must actually group subjects for this to test anything");
   // And then EVERY batch, not just the grouped ones. Checking only `multi` was
-  // the second weakness jevlint found here (0.74 against a 0.54 cutoff): the
+  // the second weakness jev-lint found here (0.74 against a 0.54 cutoff): the
   // name says no batch, and a one-subject batch over the ceiling is exactly
   // the case the planner is allowed to emit only when it cannot split further.
   for (const b of batches) {
@@ -735,7 +737,7 @@ test("batch: no splittable batch exceeds either ceiling", () => {
 });
 
 test("batch: many matches split the batch; only much source degrades the arm", () => {
-  // The distinction the planner got wrong until jevlint was run on it. The arm
+  // The distinction the planner got wrong until jev-lint was run on it. The arm
   // is decided by the part of a state a split cannot shrink, so:
   //   many subjects, small file -> split, arm intact
   //   one subject, huge file    -> cannot split, arm steps down
@@ -857,7 +859,7 @@ test("batch/rule: every subject lands in exactly one batch, grouped per rule", (
   const batches = planRuleBatches(subjects, { symbols: new Map() });
   // Counting to 15 was the whole check here, and a count cannot see "exactly
   // one": a subject duplicated into two batches while another is dropped still
-  // totals 15. jevlint flagged the name against the body for that (0.77 on a
+  // totals 15. jev-lint flagged the name against the body for that (0.77 on a
   // 0.54 cutoff), so the subjects are now identified rather than tallied.
   const placements = new Map<string, number>();
   for (const x of batches) {
@@ -872,7 +874,7 @@ test("batch/rule: every subject lands in exactly one batch, grouped per rule", (
   }
   assert.ok(batches.every((x) => x.subjects.length > 0));
   // "Grouped" has to mean something: 15 batches of one subject each would
-  // satisfy every assertion above and group nothing. jevlint kept flagging the
+  // satisfy every assertion above and group nothing. jev-lint kept flagging the
   // name over this even after the placement check went in, and it was right.
   assert.ok(
     batches.some((x) => x.subjects.length > 1),
@@ -947,7 +949,7 @@ test("batch/rule: the cap is honoured and the state budget closes a batch", () =
   }
   // Which budget closed it is the actual claim in this test's name, and
   // "a batch closed" does not establish it -- the request budget would have
-  // closed one too. jevlint flagged the name over exactly that, so: the state
+  // closed one too. jev-lint flagged the name over exactly that, so: the state
   // is at its own ceiling while the request total is nowhere near its own.
   const bound = deep.find((b) => b.subjects.length > 1)!;
   assert.ok(
@@ -1018,7 +1020,7 @@ test("schedule: a file-bearing arm holds its rule on the file axis", () => {
 
 test("schedule: a rule's own axis pin is never overruled", () => {
   // "Never overruled" is only shown by a case the scheduler decides the other
-  // way on its own. jevlint flagged the earlier version for asserting the pin
+  // way on its own. jev-lint flagged the earlier version for asserting the pin
   // held without establishing that, and writing the stronger version found the
   // assumed premise to be false: for a rule on a lean arm the rule axis is
   // ALWAYS cheaper, since the file axis pays one request per file for exactly
@@ -1124,7 +1126,7 @@ test("gate: low confidence changes the message and never suppresses the finding"
 
 test("gate: a per-rule unsureBelow overrides the run-wide one", () => {
   // Both directions, because one of them does not distinguish "overrides" from
-  // "whichever is higher wins" -- which is what jevlint flagged the one-case
+  // "whichever is higher wins" -- which is what jev-lint flagged the one-case
   // version for. A per-rule value BELOW the run-wide one has to win too.
   const raised = scoreRule({ at: 2, unsureBelow: 0.9 });
   const asUnsure = decide(
@@ -1205,7 +1207,7 @@ test("cache: a key covers the draft, the arm and the axis, but not the threshold
 });
 
 test("cache: a missing, unreadable, malformed or stale file means no verdict, never a throw", () => {
-  const dir = mkdtempSync(join(tmpdir(), "jevlint-test-"));
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
   try {
     const fromMissingFile = Cache.load(join(dir, "nope.json"));
     assert.equal(fromMissingFile.get("k", "score"), null);
@@ -1236,7 +1238,7 @@ test("cache: an entry of the wrong kind is a miss, not a wrong answer", () => {
 });
 
 test("cache: a round trip through disk preserves verdicts, and prune drops orphans", () => {
-  const dir = mkdtempSync(join(tmpdir(), "jevlint-test-"));
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
   try {
     const path = join(dir, "c.json");
     const c = new Cache(path);
@@ -1507,7 +1509,7 @@ test("calibrate: stability reports a flip only when the decision changes", () =>
 
 // ------------------------------------------------------------------ scan
 
-test("scan: emitted rules are valid ast-grep rules with jevlint fields stripped", () => {
+test("scan: emitted rules are valid ast-grep rules with jev-lint fields stripped", () => {
   const r = scoreRule({ at: 2, note: "x" });
   const emitted = toAstGrepRule(r, "TypeScript");
   assert.deepEqual(Object.keys(emitted).sort(), ["id", "language", "message", "rule", "severity"]);
@@ -1551,10 +1553,10 @@ test("scan: constraints and utils pass through untouched", () => {
 test("scan: symbols come out nested, visibility resolved, with call edges", () => {
   // Two containers, an export wrapper and an import, as the probes report them.
   const probes: AstGrepMatch[] = [
-    probeMatch("__jevlint_c0_TypeScript", "a.ts", "TypeScript", "function outer() { return inner(); }", 7, 60, 0, 4, "outer"),
-    probeMatch("__jevlint_c0_TypeScript", "a.ts", "TypeScript", "function inner() { return 1; }", 70, 100, 6, 8, "inner"),
-    probeMatch("__jevlint_e0_TypeScript", "a.ts", "TypeScript", "export function outer() {}", 0, 60, 0, 4),
-    probeMatch("__jevlint_i0_TypeScript", "a.ts", "TypeScript", 'import { db } from "./db";', 200, 226, 10, 10),
+    probeMatch("__jev-lint_c0_TypeScript", "a.ts", "TypeScript", "function outer() { return inner(); }", 7, 60, 0, 4, "outer"),
+    probeMatch("__jev-lint_c0_TypeScript", "a.ts", "TypeScript", "function inner() { return 1; }", 70, 100, 6, 8, "inner"),
+    probeMatch("__jev-lint_e0_TypeScript", "a.ts", "TypeScript", "export function outer() {}", 0, 60, 0, 4),
+    probeMatch("__jev-lint_i0_TypeScript", "a.ts", "TypeScript", 'import { db } from "./db";', 200, 226, 10, 10),
   ];
   const syms = buildSymbols(probes, ["TypeScript"]);
   const entry = syms.get("a.ts")!;
@@ -1571,7 +1573,7 @@ test("scan: two symbols sharing a name do not form a call edge with each other",
   // Rust's `struct Cache` and `impl Cache` share one name.
   const mk = (role: string, start: number, end: number): AstGrepMatch =>
     probeMatch(
-      role === "struct" ? "__jevlint_c2_Rust" : "__jevlint_c1_Rust",
+      role === "struct" ? "__jev-lint_c2_Rust" : "__jev-lint_c1_Rust",
       "a.rs",
       "Rust",
       role === "struct" ? "pub struct Cache { }" : "impl Cache { }",
@@ -1585,15 +1587,15 @@ test("scan: two symbols sharing a name do not form a call edge with each other",
   for (const s of syms.get("a.rs")!.symbols) {
     assert.deepEqual(s.calls, [], `${s.role} must not call itself by name`);
     // An edge has two halves and only one was checked, so a bug that recorded
-    // the reverse direction passed. jevlint flagged the name over that.
+    // the reverse direction passed. jev-lint flagged the name over that.
     assert.deepEqual(s.calledBy, [], `${s.role} must not be called by its own name`);
   }
   // And the absence above has to mean "no edge", not "no graph": the same
   // machinery must still connect two symbols with DIFFERENT names.
   const twoNamedItems = buildSymbols(
     [
-      probeMatch("__jevlint_c0_Rust", "b.rs", "Rust", "pub fn caller() { callee() }", 0, 28, 0, 0, "caller"),
-      probeMatch("__jevlint_c0_Rust", "b.rs", "Rust", "pub fn callee() {}", 30, 48, 2, 2, "callee"),
+      probeMatch("__jev-lint_c0_Rust", "b.rs", "Rust", "pub fn caller() { callee() }", 0, 28, 0, 0, "caller"),
+      probeMatch("__jev-lint_c0_Rust", "b.rs", "Rust", "pub fn callee() {}", 30, 48, 2, 2, "callee"),
     ],
     ["Rust"],
   ).get("b.rs")!;
@@ -1601,16 +1603,16 @@ test("scan: two symbols sharing a name do not form a call edge with each other",
 });
 
 test("scan: every symbol has call arrays, including ones excluded from the graph", () => {
-  // "Every symbol" on a single symbol was what jevlint flagged here: the one
+  // "Every symbol" on a single symbol was what jev-lint flagged here: the one
   // case tested was the excluded one, so the claim about the rest was carried
   // by the name alone. Both classes are present now.
   // What "excluded" means here is `role: module`: `computeCalls` builds edges
   // only between named non-module symbols, so a module is the one kind that
   // never appears in the graph and still has to carry the arrays.
   const probes: AstGrepMatch[] = [
-    probeMatch("__jevlint_c5_Rust", "a.rs", "Rust", "mod tests { }", 0, 13, 0, 0, "tests"),
-    probeMatch("__jevlint_c0_Rust", "a.rs", "Rust", "pub fn f() { g() }", 20, 38, 2, 2, "f"),
-    probeMatch("__jevlint_c0_Rust", "a.rs", "Rust", "pub fn g() {}", 40, 53, 4, 4, "g"),
+    probeMatch("__jev-lint_c5_Rust", "a.rs", "Rust", "mod tests { }", 0, 13, 0, 0, "tests"),
+    probeMatch("__jev-lint_c0_Rust", "a.rs", "Rust", "pub fn f() { g() }", 20, 38, 2, 2, "f"),
+    probeMatch("__jev-lint_c0_Rust", "a.rs", "Rust", "pub fn g() {}", 40, 53, 4, 4, "g"),
   ];
   const entry = buildSymbols(probes, ["Rust"]).get("a.rs")!;
   assert.equal(entry.symbols.length, 3);
@@ -1630,7 +1632,7 @@ test("scan: every symbol has call arrays, including ones excluded from the graph
 
 test("scan: Rust visibility and test markers come from the item's own text", () => {
   const mk = (text: string): AstGrepMatch =>
-    probeMatch("__jevlint_c0_Rust", "a.rs", "Rust", text, 0, text.length, 0, 0, "f");
+    probeMatch("__jev-lint_c0_Rust", "a.rs", "Rust", text, 0, text.length, 0, 0, "f");
   const pub = buildSymbols([mk("pub fn f() {}")], ["Rust"]).get("a.rs")!.symbols[0]!;
   const priv = buildSymbols([mk("fn f() {}")], ["Rust"]).get("a.rs")!.symbols[0]!;
   const test_ = buildSymbols([mk("#[cfg(test)] mod f {}")], ["Rust"]).get("a.rs")!.symbols[0]!;
@@ -1640,6 +1642,56 @@ test("scan: Rust visibility and test markers come from the item's own text", () 
 });
 
 // ---------------------------------------------------------------- report
+
+test("report: a finding that did not reproduce in every pass says so", () => {
+  // The whole point of --retry. A finding the mean reports but only some passes
+  // did is the case the calibration discipline says to route to a person, so it
+  // cannot look identical to one that reproduced three times out of three.
+  const rule = noulRule({ id: "n", at: 0.6 });
+  const stable = decide(subjectOf({ rule, file: "a.ts", line: 1 }), {
+    value: 0.9,
+    confidence: null,
+    kind: "noul",
+  });
+  stable.passes = { over: 3, of: 3, spread: 0.01 };
+  const flaky = decide(subjectOf({ rule, file: "a.ts", line: 2 }), {
+    value: 0.62,
+    confidence: null,
+    kind: "noul",
+  });
+  flaky.passes = { over: 1, of: 3, spread: 0.24 };
+
+  const text = formatPretty(
+    { findings: [stable, flaky], all: [stable, flaky], stats: gate([]).stats, retry: 3 } as never,
+    { color: false },
+  );
+  assert.match(text, /3\/3 passes/);
+  assert.match(text, /1\/3 passes/);
+  assert.match(text, /did not reproduce in every pass \(spread 0\.24\)/);
+  assert.equal(
+    (text.match(/did not reproduce/g) ?? []).length,
+    1,
+    "only the one that actually flickered",
+  );
+});
+
+test("report: a suppression is reported, and so is one naming a missing rule", () => {
+  // A suppression removes a subject before it is asked about, so nothing else
+  // in the output would show that a rule had been quieted.
+  const text = formatPretty(
+    {
+      findings: [],
+      all: [],
+      stats: gate([]).stats,
+      ignored: { subjects: 4, files: ["b.ts"], unknownRules: ["fn-name-promisez"] },
+    } as never,
+    { color: false },
+  );
+  assert.match(text, /4 subject\(s\) skipped by jev-lint-ignore comments/);
+  assert.match(text, /1 file\(s\) suppressed whole: b\.ts/);
+  assert.match(text, /name a rule that does not exist: fn-name-promisez/);
+  assert.match(text, /suppress nothing/);
+});
 
 test("report: rules that produced no subject are listed", () => {
   const fired = scoreRule({ id: "fired" });
@@ -1678,7 +1730,7 @@ test("report: an incomplete run says so in every format", () => {
   const result = { ...g, rules: [] as Rule[], subjects: [] as Subject[], elapsedMs: 1 };
   assert.match(formatGithub(result), /this run is incomplete/);
   assert.equal(JSON.parse(formatJson(result)).stats.missing, 1);
-  // The third format. This assertion was missing, and jevlint's own
+  // The third format. This assertion was missing, and jev-lint's own
   // `test-name-matches-body` flagged the title's "every format" against a body
   // that checked two of three (0.64 against a 0.69 cutoff -- under it, but for
   // a correct reason).
@@ -1777,7 +1829,7 @@ await testAsync("end to end: the shipped pack finds the corpus defects it is fit
   // The one test that touches ast-grep. It asserts the MATCHING and the
   // plumbing, never a verdict: no request is made, so there is no answer to
   // assert. That the rules separate their classes is measured by
-  // `jevlint calibrate`, and recorded in docs/data/calibration.json.
+  // `jev-lint calibrate`, and recorded in docs/data/calibration.json.
   const { collectSubjects } = await import("../src/run.ts");
   const { rules } = loadRules(["rules"]);
   const { subjects } = await collectSubjects({ rules, paths: ["corpus"] });
@@ -1804,7 +1856,7 @@ await testAsync("end to end: overlapping grammars produce one subject per node",
   // rule listing them matched every node twice and reported every finding
   // twice. Found by running this tool on its own source.
   const { collectSubjects } = await import("../src/run.ts");
-  const dir = mkdtempSync(join(tmpdir(), "jevlint-test-"));
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
   try {
     // `.mjs` deliberately: the whole point is that this extension is claimed by
     // BOTH the JavaScript and Jsx grammars. A `.ts` file is claimed by
@@ -1829,6 +1881,161 @@ await testAsync("end to end: overlapping grammars produce one subject per node",
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+
+// ------------------------------------------------- suppression comments
+
+test("ignore: a file-level marker with no rule named suppresses every rule", () => {
+  const ig = parseIgnores(["// jev-lint-ignore-file", "const a = 1;"].join("\n"));
+  assert.deepEqual(ig.file, []);
+  assert.equal(isIgnored(ig, 2, "any-rule"), true);
+  assert.equal(isIgnored(ig, 999, "another-rule"), true);
+});
+
+test("ignore: a marker naming rules suppresses only those", () => {
+  const ig = parseIgnores("// jev-lint-ignore-file fn-name-promises, var-name-describes-value\n");
+  assert.deepEqual(ig.file, ["fn-name-promises", "var-name-describes-value"]);
+  assert.equal(isIgnored(ig, 1, "fn-name-promises"), true);
+  assert.equal(isIgnored(ig, 1, "var-name-describes-value"), true);
+  assert.equal(isIgnored(ig, 1, "comment-describes-declaration"), false);
+});
+
+test("ignore: next-line targets the line after the marker, and only that line", () => {
+  const ig = parseIgnores(
+    ["const a = 1;", "// jev-lint-ignore-next-line", "const b = 2;", "const c = 3;"].join("\n"),
+  );
+  assert.equal(isIgnored(ig, 3, "r"), true, "line 3 is the one after the marker on line 2");
+  assert.equal(isIgnored(ig, 2, "r"), false, "not the marker's own line");
+  assert.equal(isIgnored(ig, 4, "r"), false, "and not the one after that");
+});
+
+test("ignore: a marker in a string is not a suppression", () => {
+  // The trap this anchoring exists for. These tests write the marker as string
+  // literals, so an unanchored pattern would let THIS file silence itself --
+  // and a self-suppressing test file is invisible: every rule still loads,
+  // nothing is reported, and the run looks clean.
+  const ig = parseIgnores(
+    [
+      `const marker = "// jev-lint-ignore-file";`,
+      `writeFileSync(f, "// jev-lint-ignore-next-line");`,
+      "const t = `// jev-lint-ignore-file`;",
+      `  "// jev-lint-ignore-file",`,
+      "const x = 1;",
+    ].join("\n"),
+  );
+  assert.equal(ig.file, null, "no file-level suppression from a string literal");
+  assert.equal(ig.lines.size, 0, "and no line-level one either");
+});
+
+test("ignore: every comment opener the shipped languages use", () => {
+  for (const line of [
+    "// jev-lint-ignore-file",
+    "# jev-lint-ignore-file",
+    "/* jev-lint-ignore-file */",
+    " * jev-lint-ignore-file",
+    "-- jev-lint-ignore-file",
+    "<!-- jev-lint-ignore-file -->",
+    "    // jev-lint-ignore-file",
+    "//jev-lint-ignore-file",
+    "// jev-lint-ignore-file:",
+  ]) {
+    const ig = parseIgnores(`${line}\nconst a = 1;`);
+    assert.notEqual(ig.file, null, `${line} should suppress the file`);
+    assert.deepEqual(ig.file, [], `${line} should name no rules`);
+  }
+});
+
+test("ignore: a closing comment token is not read as a rule id", () => {
+  // `/* jev-lint-ignore-file */` must not suppress a rule called `*/`.
+  assert.deepEqual(parseIgnores("/* jev-lint-ignore-file */\nx").file, []);
+  assert.deepEqual(parseIgnores("<!-- jev-lint-ignore-file -->\nx").file, []);
+  assert.deepEqual(parseIgnores("/* jev-lint-ignore-file fn-name-promises */\nx").file, [
+    "fn-name-promises",
+  ]);
+});
+
+test("ignore: markers union, and a bare one widens a narrow one", () => {
+  const ig = parseIgnores(
+    ["// jev-lint-ignore-file rule-a", "// jev-lint-ignore-file rule-b", "x"].join("\n"),
+  );
+  assert.deepEqual(ig.file, ["rule-a", "rule-b"]);
+  const widened = parseIgnores(
+    ["// jev-lint-ignore-file rule-a", "// jev-lint-ignore-file", "x"].join("\n"),
+  );
+  assert.deepEqual(widened.file, [], "a marker naming nothing means everything");
+});
+
+test("ignore: a suppression naming a rule that does not exist is reported", () => {
+  // A typo here is invisible in the worst way: the rule it meant to quiet keeps
+  // firing and the author believes it is handled.
+  const ig = parseIgnores("// jev-lint-ignore-next-line fn-name-promiseS, real-rule\nx");
+  const unknown = unknownIgnoredRules([ig], ["real-rule", "fn-name-promises"]);
+  assert.deepEqual(unknown, ["fn-name-promiseS"]);
+  assert.deepEqual(unknownIgnoredRules([ig], ["real-rule", "fn-name-promiseS"]), []);
+});
+
+test("ignore: a file with no marker costs nothing", () => {
+  const ig = parseIgnores("const a = 1;\nconst b = 2;\n");
+  assert.equal(ig.file, null);
+  assert.equal(ig.lines.size, 0);
+});
+
+// ------------------------------------------------- --retry, and the mean
+
+test("retry: the mean decides, and the pass count is kept beside it", () => {
+  const rule = noulRule({ id: "n", at: 0.6 });
+  const s = subjectOf({ rule, file: "a.ts", line: 1 });
+  const pass = (v: number) => [{ subject: s, answer: { value: v, confidence: null, kind: "noul" as const }, cached: false }];
+  // 0.7 / 0.5 / 0.7 -> mean 0.633, over its 0.6 cutoff in 2 of 3 passes.
+  const merged = mergePasses([pass(0.7), pass(0.5), pass(0.7)], {});
+  assert.equal(merged.length, 1);
+  assert.ok(Math.abs(merged[0]!.answer!.value - 0.6333) < 0.001, "the mean, not the last pass");
+  assert.deepEqual(merged[0]!.stability, { over: 2, of: 3, spread: 0.2 });
+});
+
+test("retry: a failed pass is not counted as a disagreement", () => {
+  // A missing answer is a failed request, which `missing` already reports.
+  // Counting it as a pass that disagreed would make a flaky network look like
+  // an unstable rule.
+  const rule = noulRule({ id: "n", at: 0.5 });
+  const s = subjectOf({ rule, file: "a.ts", line: 1 });
+  const ok = [{ subject: s, answer: { value: 0.9, confidence: null, kind: "noul" as const }, cached: false }];
+  const failed = [{ subject: s, answer: null, cached: false }];
+  const merged = mergePasses([ok, failed, ok], {});
+  assert.deepEqual(merged[0]!.stability, { over: 2, of: 2, spread: 0 });
+  assert.equal(merged[0]!.answer!.value, 0.9);
+});
+
+test("retry: a subject no pass answered stays missing rather than becoming zero", () => {
+  const s = subjectOf({ rule: noulRule({ id: "n" }), file: "a.ts", line: 1 });
+  const merged = mergePasses([[{ subject: s, answer: null, cached: false }]], {});
+  assert.equal(merged[0]!.answer, null);
+  assert.equal(merged[0]!.stability, undefined);
+  // And the gate turns that into a counted `missing`, not a clean bill.
+  assert.equal(gate(merged).stats.missing, 1);
+});
+
+test("retry: an override cutoff is what the pass count is measured against", () => {
+  const rule = noulRule({ id: "n", at: 0.9 });
+  const s = subjectOf({ rule, file: "a.ts", line: 1 });
+  const pass = (v: number) => [{ subject: s, answer: { value: v, confidence: null, kind: "noul" as const }, cached: false }];
+  const atRule = mergePasses([pass(0.7), pass(0.8)], {});
+  assert.equal(atRule[0]!.stability!.over, 0, "neither pass reaches the rule's 0.9");
+  const atOverride = mergePasses([pass(0.7), pass(0.8)], { n: 0.6 });
+  assert.equal(atOverride[0]!.stability!.over, 2, "both reach an overridden 0.6");
+});
+
+test("retry: confidences are averaged over the passes that had one", () => {
+  const rule = scoreRule({ id: "s", at: 2 });
+  const s = subjectOf({ rule, file: "a.ts", line: 1 });
+  const pass = (v: number, c: number | null) => [
+    { subject: s, answer: { value: v, confidence: c, kind: "score" as const }, cached: false },
+  ];
+  const merged = mergePasses([pass(2.5, 0.8), pass(2.5, 0.6), pass(2.5, null)], {});
+  assert.ok(Math.abs(merged[0]!.answer!.confidence! - 0.7) < 0.001);
+  const none = mergePasses([pass(2.5, null), pass(2.5, null)], {});
+  assert.equal(none[0]!.answer!.confidence, null);
 });
 
 process.stdout.write(`\n${passed} passed, ${failed} failed\n`);

@@ -71,11 +71,19 @@ export function formatPretty(
           ? `${f.value!.toFixed(2)}/3${typeof f.confidence === "number" ? ` conf ${f.confidence.toFixed(2)}` : ""}`
           : f.value!.toFixed(2);
       out.push(`  ${loc}  ${tag}  ${what}`);
+      const repro = f.passes ? `  ${f.passes.over}/${f.passes.of} passes` : "";
       out.push(
-        `         ${c.dim(`${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  arm ${f.arm}`)}`,
+        `         ${c.dim(`${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  arm ${f.arm}${repro}`)}`,
       );
       if (f.messageId === "unsure") {
         out.push(`         ${c.yellow("worth a human look rather than a fix")}`);
+      }
+      // A finding the mean reports but not every pass did is exactly the case
+      // the calibration discipline says not to automate.
+      if (f.passes && f.passes.over < f.passes.of) {
+        out.push(
+          `         ${c.yellow(`did not reproduce in every pass (spread ${f.passes.spread.toFixed(2)}) -- decide this one by hand`)}`,
+        );
       }
     }
     out.push("");
@@ -102,11 +110,33 @@ export function formatPretty(
     out.push("");
   }
 
+  const ignored = result.ignored;
+  if (ignored && (ignored.subjects > 0 || ignored.files.length > 0)) {
+    // Loud for the same reason a silent matcher is: a suppression removes a
+    // subject before it is ever asked about, so nothing else in the output
+    // would show that a rule had been quieted.
+    const where = ignored.files.length
+      ? ` (${ignored.files.length} file(s) suppressed whole: ${ignored.files.slice(0, 3).join(", ")}${ignored.files.length > 3 ? ", …" : ""})`
+      : "";
+    out.push(c.dim(`${ignored.subjects} subject(s) skipped by jev-lint-ignore comments${where}`));
+    out.push("");
+  }
+  if (ignored?.unknownRules.length) {
+    out.push(
+      c.yellow(
+        `${ignored.unknownRules.length} jev-lint-ignore comment(s) name a rule that does not exist: ${ignored.unknownRules.join(", ")}`,
+      ),
+    );
+    out.push(c.yellow("  Those suppress nothing, and the rule they meant keeps firing."));
+    out.push("");
+  }
+
   const bits = [
     `${stats.reported} finding(s)`,
     `${stats.subjects} subject(s)`,
     `${result.cachedCount ?? 0} cached`,
   ];
+  if (result.retry && result.retry > 1) bits.push(`${result.retry} passes, deciding on the mean`);
   if (stats.unsure) bits.push(`${stats.unsure} unsure`);
   if (stats.missing) bits.push(c.yellow(`${stats.missing} without a verdict`));
   if (result.skippedByDiff) bits.push(c.dim(`${result.skippedByDiff} outside the diff`));
@@ -180,6 +210,7 @@ export function formatJson(result: ReportInput): string {
         kind: f.kind,
         level: f.level ?? null,
         arm: f.arm,
+        passes: f.passes ?? null,
         message: f.message ?? f.ask,
       })),
       stats: result.stats,
@@ -194,6 +225,8 @@ export function formatJson(result: ReportInput): string {
           reason: b.degraded!.reason,
         })),
       silentRules: silentRules(result),
+      ignored: result.ignored ?? null,
+      retry: result.retry ?? 1,
       spent: result.spent,
       errors: result.errors ?? [],
       elapsedMs: result.elapsedMs,
@@ -225,7 +258,7 @@ export function formatGithub(result: ReportInput): string {
   }
   if (result.stats.missing > 0) {
     out.push(
-      `::warning title=jevlint::${result.stats.missing} subject(s) got no verdict; this run is incomplete`,
+      `::warning title=jev-lint::${result.stats.missing} subject(s) got no verdict; this run is incomplete`,
     );
   }
   // Degradation belongs in the CI format too: a verdict answered at a leaner
@@ -236,7 +269,7 @@ export function formatGithub(result: ReportInput): string {
     const subjects = degraded.reduce((a, b) => a + b.subjects.length, 0);
     const reasons = [...new Set(degraded.map((b) => b.degraded!.reason))].join("; ");
     out.push(
-      `::warning title=jevlint::${subjects} subject(s) in ${degraded.length} batch(es) were judged at a leaner state arm than their rule asked for (${reasons})`,
+      `::warning title=jev-lint::${subjects} subject(s) in ${degraded.length} batch(es) were judged at a leaner state arm than their rule asked for (${reasons})`,
     );
   }
   return out.join("\n");

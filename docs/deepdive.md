@@ -1,6 +1,6 @@
 # Deep dive
 
-Everything measured about jevlint that is **still true**, organised by topic.
+Everything measured about jev-lint that is **still true**, organised by topic.
 
 Three other documents, so you can pick the right one:
 
@@ -20,7 +20,7 @@ Every conclusion below rests on a recorded run. Five of the records are run
 records, which replay for free with no API key:
 
 ```bash
-jevlint replay docs/data/<record>.json --labels corpus/labels.json
+jev-lint replay docs/data/<record>.json --labels corpus/labels.json
 ```
 
 | record | replays | what it holds |
@@ -36,7 +36,7 @@ jevlint replay docs/data/<record>.json --labels corpus/labels.json
 | `self-lint-cache.json` | no | 737 verdicts from an earlier self-lint, kept as a verdict cache |
 
 The four that do not replay are not run records: the two tool outputs carry
-their own shape and the cache carries the older `jevlint-1` schema. They are
+their own shape and the cache carries the older `jev-lint-1` schema. They are
 still readable — every number quoted from them below was derived with `node`
 over the JSON, and the derivation is in this document rather than hidden in a
 script.
@@ -53,7 +53,7 @@ looked at, a sentence decides *whether* it is a problem.
 | | who does it | how it fails |
 | --- | --- | --- |
 | `rule:` | ast-grep — exact, free, no model | **silently**: a node it misses is never asked about |
-| `ask:` | the model, once per matched node | loudly: every answer appears in `jevlint gaps` |
+| `ask:` | the model, once per matched node | loudly: every answer appears in `jev-lint gaps` |
 
 Measured shape of the model's competence: it is good at code that
 **contradicts a contract it declares about itself** — a name against a body, a
@@ -128,7 +128,7 @@ Two consequences worth holding on to:
 
 ### The gap, not the cutoff
 
-`jevlint gaps` sorts each rule's answers and reports the largest step between
+`jev-lint gaps` sorts each rule's answers and reports the largest step between
 neighbours, because that step is what a threshold is choosing between:
 
 | verdict | meaning |
@@ -151,7 +151,7 @@ On the 13-file corpus, **12 of the 15 rules reach precision 1.00 and recall
 at all**: both `comment-describes-block` rules, which ship saying so, and
 `test-name-describes-code-rust`, which sits at precision 0.67. (An earlier
 write-up said 13 of 15; recounting from `calibration.json` gives 12, and the
-count is reproducible with `jevlint replay docs/data/calibration.json --labels
+count is reproducible with `jev-lint replay docs/data/calibration.json --labels
 corpus/labels.json`.) Read the 12 as "the rules separate the classes in a
 corpus I wrote", not as a generalisation, and note the baseline it has to be
 read against: on an imbalanced set, **a tool that reports nothing at

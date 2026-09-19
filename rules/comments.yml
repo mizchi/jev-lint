@@ -189,7 +189,7 @@
   #
   # What is NOT established is whether the rule is broken or merely untested:
   # three subjects is below what the gap statistic can speak to, which is why
-  # `jevlint gaps` now calls this `thin` rather than `rewrite`. The corpus needs
+  # `jev-lint gaps` now calls this `thin` rather than `rewrite`. The corpus needs
   # inline-comment cases before the question is judged.
   #
   # Until then the cutoff sits at the top of the observed range, so the rule

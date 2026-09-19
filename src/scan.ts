@@ -217,7 +217,7 @@ function probeRules(languages: Language[]): ProbeRule[] {
 }
 
 /**
- * Separator between a jevlint rule id and the grammar an emitted ast-grep rule
+ * Separator between a jev-lint rule id and the grammar an emitted ast-grep rule
  * was specialised for. ast-grep ids must be unique, but a multi-language rule
  * is ONE rule as far as cutoffs, drafts and the cache are concerned, so the
  * suffix is stripped again when matches come back.
@@ -233,14 +233,14 @@ export function baseRuleId(astGrepId: string): string {
   return i < 1 ? astGrepId : astGrepId.slice(0, i);
 }
 
-/** Strip jevlint-only fields; what is left is a valid ast-grep rule. */
+/** Strip jev-lint-only fields; what is left is a valid ast-grep rule. */
 export function toAstGrepRule(rule: Rule, language: Language): Record<string, unknown> {
   const out: Record<string, unknown> = {
     id: astGrepRuleId(rule.id, language),
     language,
     // ast-grep requires a message; ours is never shown to a user (the finding
     // text is built from the rule's own `ask`), so it is only a marker.
-    message: "jevlint",
+    message: "jev-lint",
     severity: "hint",
     rule: rule.matcher,
   };
@@ -273,7 +273,7 @@ export function emitRuleFile(rules: Rule[], languages: Language[]): string {
     }
   }
   for (const { __probe, ...r } of probeRules(languages)) {
-    docs.push({ ...r, message: "jevlint-probe" });
+    docs.push({ ...r, message: "jev-lint-probe" });
   }
   return docs.map((d) => YAML.stringify(d)).join("---\n");
 }
@@ -290,7 +290,7 @@ export function emitRuleFile(rules: Rule[], languages: Language[]): string {
  * with the user's shell.
  */
 function astGrepBin(): string {
-  if (process.env.JEVLINT_AST_GREP) return process.env.JEVLINT_AST_GREP;
+  if (process.env.JEV_LINT_AST_GREP) return process.env.JEV_LINT_AST_GREP;
 
   const candidates: string[] = [];
   try {
@@ -336,7 +336,7 @@ export async function runAstGrep(
     return { matches: [], probes: [], stderr: "" };
   }
   const languages = ruleLanguages(rules);
-  const dir = mkdtempSync(join(tmpdir(), "jevlint-"));
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-"));
   const rulePath = join(dir, "rules.yml");
   try {
     writeFileSync(rulePath, emitRuleFile(rules, languages));

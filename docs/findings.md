@@ -27,8 +27,8 @@ npm test              # 101 checks, no API key
 npm run typecheck     # the full type surface, including tools and tests
 ```
 
-The recorded runs. The five marked below are `jevlint-run-1` records and
-replay with `jevlint replay <path> --labels corpus/labels.json`; the two tool
+The recorded runs. The five marked below are `jev-lint-run-1` records and
+replay with `jev-lint replay <path> --labels corpus/labels.json`; the two tool
 outputs and the cache have their own shapes and do not:
 
 | record | what it holds |
@@ -219,7 +219,7 @@ the price of measuring this instead of guessing it.
 
 ## 4. Calibration: read the gap, and beware an easy corpus
 
-`jevlint gaps` sorts each rule's answers and reports the largest step between
+`jev-lint gaps` sorts each rule's answers and reports the largest step between
 neighbours. That number, not the cutoff, is what says whether calibration can
 help at all:
 
@@ -260,13 +260,13 @@ itself is now in `corpus/ts/shipping.ts` permanently.
 
 Not the numbers. The procedure:
 
-1. Write the sentence. Run `jevlint gaps`. If the gap is narrow, rewrite the
+1. Write the sentence. Run `jev-lint gaps`. If the gap is narrow, rewrite the
    sentence; do not touch a threshold.
 2. Check the question can see its own answer from the subject. If it cannot,
    change the arm or the subject, not the cutoff.
 3. Label a corpus, and make sure it contains the *hard* clean cases, not only
    the obvious ones. This is the step that actually decides the cutoff.
-4. Fit with `jevlint calibrate --labels`, which places the cutoff at the
+4. Fit with `jev-lint calibrate --labels`, which places the cutoff at the
    midpoint of the clean/defect gap rather than just above the clean band. A
    cutoff fitted to the edge of the observed clean set sits exactly on the
    boundary it was meant to clear.
@@ -302,7 +302,7 @@ report. Coverage would have called both tests covered.
 
 The first of those also sat *inside the model's own wobble band*: 0.73 on one
 run, 0.68 on the next, across a 0.69 cutoff. That is precisely the case
-`jevlint calibrate`'s stability table exists to surface, and precisely the case
+`jev-lint calibrate`'s stability table exists to surface, and precisely the case
 not to automate on. It belongs in front of a person, which — at `severity:
 warning` — is where it goes.
 
@@ -479,7 +479,7 @@ axes disagree on 1.4% of decisions (4 of 276), mean absolute delta 0.059.
 The corpus-wide table above mixes the comment rules' marker contamination
 (section 10) back in. Fitting each pack on the corpus it was calibrated
 against, forced onto the rule axis, isolates what refitting actually buys —
-free, from the records, with `jevlint replay <record> --labels corpus/labels.json`:
+free, from the records, with `jev-lint replay <record> --labels corpus/labels.json`:
 
 | rule | arm here | n | at shipped | refit | what changed |
 | --- | --- | --- | --- | --- | --- |
@@ -519,7 +519,7 @@ free, from the records, with `jevlint replay <record> --labels corpus/labels.jso
    file-bearing rule (`FILE_BEARING_ARMS`) and why both packs pin `axis: file`.
 
 So the rule axis is usable on this corpus **if you refit for it**, with one rule
-that should stay on the file axis whatever the token bill says. `jevlint replay
+that should stay on the file axis whatever the token bill says. `jev-lint replay
 <record> --labels <labels>` exists for exactly this: a cutoff is a claim about a
 specific set of answers, and anyone holding the record can re-derive it for
 free, on either axis, without an API key.
@@ -910,7 +910,7 @@ itself, each one surfaced by a number in its own output that did not make sense:
    rather than a quote.
 
 A fifth observation is about the tool's own advice. The README says to read
-`jevlint gaps` first. On this repository it prints **`rewrite` for all seven
+`jev-lint gaps` first. On this repository it prints **`rewrite` for all seven
 rules that fired** — because a gap needs two classes and real code is 99.8%
 clean, so there is nothing on the far side of the gap to separate from. The
 medians are the informative part there (`var-name-describes-value` sits at 0.10

@@ -3,7 +3,7 @@
  *
  * Everything here is pure and runs offline. That separation is the point --
  * verdicts are what cost money, and thresholds are what you will change twenty
- * times while calibrating. Re-gating a recorded run is free, so `jevlint
+ * times while calibrating. Re-gating a recorded run is free, so `jev-lint
  * replay` can re-score yesterday's answers under today's cutoffs without a
  * single request.
  *

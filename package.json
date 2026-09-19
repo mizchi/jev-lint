@@ -1,5 +1,5 @@
 {
-  "name": "jevlint",
+  "name": "jev-lint",
   "version": "0.1.0",
   "description": "A natural-language linter: ast-grep picks the code, a sentence you write is the rule, and Jev returns the verdict",
   "keywords": [
@@ -15,17 +15,18 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mizchi/ast-grep-jev.git"
+    "url": "git+https://github.com/mizchi/jev-lint.git"
   },
   "bugs": {
-    "url": "https://github.com/mizchi/ast-grep-jev/issues"
+    "url": "https://github.com/mizchi/jev-lint/issues"
   },
+  "homepage": "https://github.com/mizchi/jev-lint#readme",
   "type": "module",
   "engines": {
     "node": ">=20"
   },
   "bin": {
-    "jevlint": "dist/cli.js"
+    "jev-lint": "dist/cli.js"
   },
   "main": "./dist/run.js",
   "types": "./dist/run.d.ts",

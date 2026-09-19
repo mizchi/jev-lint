@@ -1,9 +1,9 @@
 ---
-name: jevlint
-description: "Use this skill when working with jevlint — a linter whose rules are one-sentence predicates judged by a model, with ast-grep as the matcher. Covers running it, writing a new rule, calibrating a cutoff against a labeled corpus, and building the evaluation loop that keeps a rule honest. Triggers: running `jevlint`, editing `rules/*.yml`, adding a rule pack, choosing a `state` arm or a `subject`, reading `jevlint gaps`, setting or moving an `at:` cutoff, labelling a corpus under `corpus/`, interpreting a run record in `docs/data/`, or any question about why a rule fires, misses, or cannot be separated. Also use it before claiming a rule 'works' — this skill defines what that requires."
+name: jev-lint
+description: "Use this skill when working with jev-lint — a linter whose rules are one-sentence predicates judged by a model, with ast-grep as the matcher. Covers running it, writing a new rule, calibrating a cutoff against a labeled corpus, and building the evaluation loop that keeps a rule honest. Triggers: running `jev-lint`, editing `rules/*.yml`, adding a rule pack, choosing a `state` arm or a `subject`, reading `jev-lint gaps`, setting or moving an `at:` cutoff, labelling a corpus under `corpus/`, interpreting a run record in `docs/data/`, or any question about why a rule fires, misses, or cannot be separated. Also use it before claiming a rule 'works' — this skill defines what that requires."
 ---
 
-# jevlint
+# jev-lint
 
 A rule is an ast-grep matcher plus one sentence. **ast-grep decides which code
 gets looked at; the sentence decides whether it is a problem; Jev answers the
@@ -15,7 +15,7 @@ is most of the work:
 | | who does it | how it fails |
 | --- | --- | --- |
 | `rule:` | ast-grep — exact, free, no model | **silently**: a node it misses is never asked about |
-| `ask:` | the model, once per matched node | loudly: every answer shows up in `jevlint gaps` |
+| `ask:` | the model, once per matched node | loudly: every answer shows up in `jev-lint gaps` |
 
 ## Non-negotiables
 
@@ -37,20 +37,20 @@ is most of the work:
    broken code occupy the same confidence band. A low-confidence verdict over
    the cutoff is still reported — worded as a question for a human.
 5. **Record every run you draw a conclusion from.** A cutoff is a claim about a
-   specific set of answers. `jevlint calibrate --record path.json` then
-   `jevlint replay path.json --labels corpus/labels.json` re-derives the fit
+   specific set of answers. `jev-lint calibrate --record path.json` then
+   `jev-lint replay path.json --labels corpus/labels.json` re-derives the fit
    for free, with no API key, forever.
 
 ## Running it
 
 ```bash
-jevlint check src                  # judge whole files
-jevlint review --base main         # judge only what the diff touched
-jevlint gaps src                   # per-rule separation — on a LABELED corpus
-jevlint calibrate corpus --labels corpus/labels.json --repeat 3 --record r.json
-jevlint rules                      # what loaded, and every validation error
-jevlint replay r.json --labels corpus/labels.json   # re-score and re-fit, free
-jevlint check src --dry-run        # plan and price without asking anything
+jev-lint check src                  # judge whole files
+jev-lint review --base main         # judge only what the diff touched
+jev-lint gaps src                   # per-rule separation — on a LABELED corpus
+jev-lint calibrate corpus --labels corpus/labels.json --repeat 3 --record r.json
+jev-lint rules                      # what loaded, and every validation error
+jev-lint replay r.json --labels corpus/labels.json   # re-score and re-fit, free
+jev-lint check src --dry-run        # plan and price without asking anything
 ```
 
 Exit codes: `0` clean, `1` findings, `2` configuration error, `3` requests
@@ -67,6 +67,26 @@ Two lines of output that are never noise:
   Check it before trusting a clean run.
 - **`N batch(es) fell back from X to Y`** and **`N without a verdict`** — those
   verdicts answered a leaner question, or no question at all.
+
+### Silencing, and asking twice
+
+```ts
+// jev-lint-ignore-next-line                       all rules, next line only
+// jev-lint-ignore-next-line fn-name-promises      just that rule
+// jev-lint-ignore-file comment-describes-block    that rule, whole file
+```
+
+Any comment syntax; the marker must be the first thing on its line. A
+suppressed subject is never sent, so every run reports how many were skipped —
+and reports a suppression naming a rule id that does not exist, which silences
+nothing while looking like it did.
+
+**`--retry n` (`-r n`) asks everything n times and decides on the mean**, then
+prints `3/3 passes` or `1/3 passes` per finding. Use it for any decision near a
+cutoff: measured spread is a median of 0.010 but a maximum of 0.300, which is
+enough to cross one. It bypasses the verdict cache, because a cached answer
+reproduces itself, and it costs n times the tokens. **`-R` is `--rules`**; `-r`
+is retry.
 
 ## Writing a new rule
 
@@ -190,7 +210,7 @@ Share it with an anchor rather than copying: copies drift, and a drifted copy is
 a cache that never hits. Anchors are scoped to one YAML document, which is why a
 rule file may be a *list* as well as a `---` stream.
 
-Then `jevlint rules` to confirm it loaded, and `--dry-run` to price it.
+Then `jev-lint rules` to confirm it loaded, and `--dry-run` to price it.
 
 ## Calibration
 
@@ -233,10 +253,10 @@ node --experimental-strip-types corpus/build-labels.ts        # derives labels.j
 node --experimental-strip-types corpus/build-labels.ts --check # CI: labels in sync
 
 # 2. fit, repeatedly, and record
-jevlint calibrate corpus --labels corpus/labels.json --repeat 3 --record r.json
+jev-lint calibrate corpus --labels corpus/labels.json --repeat 3 --record r.json
 
 # 3. re-derive for free, forever
-jevlint replay r.json --labels corpus/labels.json
+jev-lint replay r.json --labels corpus/labels.json
 ```
 
 `--repeat` reports which subjects changed *decision* between passes. A wobbly
@@ -284,7 +304,7 @@ reaches production with a cutoff fitted to a corpus that flattered it.
    a tool reporting nothing scored 79.9% accuracy on this corpus. Report
    precision and recall with the true-positive/false-positive/miss counts, never
    accuracy alone.
-2. **Write the rule to over-match, and confirm it fired.** `jevlint rules`, then
+2. **Write the rule to over-match, and confirm it fired.** `jev-lint rules`, then
    the "matched nothing" line.
 3. **`gaps` first, on the labeled corpus.** Act on the verdict. `rewrite` sends
    you back to the subject, not to the thesaurus.
@@ -294,7 +314,8 @@ reaches production with a cutoff fitted to a corpus that flattered it.
    higher.** This is the step that finds the hole.
 6. **Set the cutoff for headroom, not at the midpoint.** Where the gap is
    narrow, the midpoint is a coin flip on the next unseen sample.
-7. **Average repeated passes when deciding anything near a cutoff.** Measured on
+7. **Average repeated passes when deciding anything near a cutoff** — that is
+   what `--retry n` is for, and it reports which findings reproduced. Measured on
    1,403 real subjects: pass-to-pass spread is a median of 0.010 and a p90 of
    0.050, but the maximum is 0.300 — so a single pass over-reports and
    under-reports different subjects, and a three-pass mean is the honest unit.
@@ -306,7 +327,7 @@ reaches production with a cutoff fitted to a corpus that flattered it.
 
 ### Judging the tool's output
 
-Read every finding against the code before believing it. When jevlint was run on
+Read every finding against the code before believing it. When jev-lint was run on
 its own source — 1,403 subjects, 65 requests, $0.043 — one round produced 11 findings
 of which **9 were real and 2 were wrong**, and the four worst bugs of that
 exercise were found by *distrusting its own summary lines*, not by any rule it
