@@ -5,20 +5,24 @@ A linter whose rules are sentences.
 ```
 corpus/ts/cart.ts
      21  flag       The body of this function does something materially different from what its name promises.
-             fn-name-promises  0.95  cutoff 0.67  arm located
-     65  flag       This binding's name misdescribes the value it is bound to.
-             var-name-describes-value  0.95  cutoff 0.59  arm located
+             fn-name-promises  0.95  cutoff 0.76  arm located
+     72  flag       This binding's name misdescribes the value it is bound to.
+             var-name-describes-value  0.93  cutoff 0.61  arm located
 
 corpus/ts/cart.test.ts
-     26  flag       This test does not verify the behaviour its name describes.
-             test-name-matches-body  0.98  cutoff 0.69  arm bare
+     27  flag       This test would still pass if the behaviour its name claims were broken.
+             test-name-verifies-claim  0.93  cutoff 0.54  arm bare
+
+corpus/ts/session_store.ts
+     20  flag       The comment above this code claims something that is not true of the code.
+             comment-describes-declaration  0.97  cutoff 0.83  arm located
 
 corpus/ts/utils.ts
       1  flag       This module's name does not describe what the module contains.
-             module-name-describes-contents  0.84  cutoff 0.59  arm graph
+             module-name-describes-contents  0.86  cutoff 0.62  arm graph
 
-27 finding(s), 134 subject(s)
-24 request(s), 76,643 input tokens, $0.00322, 4313 ms
+44 finding(s), 276 subject(s), 0 cached
+37 request(s), 155,249 input tokens, $0.00652, 6811 ms
 ```
 
 **[ast-grep](https://ast-grep.github.io) decides which code gets looked at. A
@@ -61,21 +65,22 @@ Node 20+, two runtime dependencies (`@ast-grep/cli` and `yaml`). The matcher is
 the real `ast-grep` binary, so every language it supports is available — the
 shipped packs cover Rust, TypeScript, TSX and JavaScript.
 
+Rules are read from `./rules` when that directory exists, and otherwise from the
+packs inside the installed package — which it says on stdout when it happens,
+because their cutoffs were fitted to this package's corpus and not to your code.
+`-r/--rules <path>` overrides both and is repeatable.
+
 ### From this repository
 
 ```bash
 npm install
 npm run build          # tsc -> dist/, with .d.ts and source maps
-npm run ci             # labels + typecheck + 96 tests + build + offline replay and refit
+npm run ci             # labels + typecheck + 100 tests + build + offline replay
 npm test               # no API key needed
 ```
 
-Source is TypeScript and ships compiled. The source imports `./x.ts` and the
-emit rewrites those to `./x.js`, so the same files run three ways with no
-divergence: through `tsc` for the published build, through
-`node --experimental-strip-types` for development with no build step, and from
-`dist/` once installed. `erasableSyntaxOnly` is on to keep that true — anything
-TypeScript cannot simply erase is a compile error here.
+Source is TypeScript and ships compiled; `docs/internal.md` has the build
+contract and the module map.
 
 ## Use
 
@@ -84,8 +89,8 @@ jevlint check src                  # judge whole files
 jevlint review --base main         # judge only what the diff touched
 jevlint review                     # ...or what is uncommitted, including untracked files
 
-jevlint gaps src                   # per-rule separation -- read this before any threshold
-jevlint calibrate src --labels corpus/labels.json --repeat 3
+jevlint gaps corpus                # per-rule separation -- on a LABELED corpus
+jevlint calibrate corpus --labels corpus/labels.json --repeat 3 --record run.json
 jevlint rules                      # what loaded, and every validation error
 jevlint replay run.json            # re-score a recorded run under new cutoffs, free
 jevlint replay run.json --labels corpus/labels.json   # ...and re-fit them, free
@@ -93,15 +98,48 @@ jevlint replay run.json --labels corpus/labels.json   # ...and re-fit them, free
 jevlint check src --dry-run        # plan and price it without asking anything
 ```
 
-Review mode is the one to reach for in CI. It scans only the changed files and
-keeps only the matches whose subject overlaps a changed line, so a
-four-function diff costs **2 requests and $0.00013**. Exit codes: `0` clean,
-`1` findings, `2` configuration error, `3` requests failed and nothing was
-reported.
+**Review mode is the one to reach for in CI.** It scans only the changed files
+and keeps only the matches whose subject overlaps a changed line, so a
+four-function diff costs about two requests. It is also where the rules earn
+their keep: findings concentrate in freshly written code, because old names have
+already been argued over.
 
 ```bash
 jevlint review --base "$GITHUB_BASE_REF" --format github
 ```
+
+Exit codes: `0` clean, `1` findings, `2` configuration error, `3` requests
+failed and nothing was reported.
+
+| flag | |
+| --- | --- |
+| `-r, --rules <path>` | rule file or directory, repeatable (default `./rules`, else the packaged packs) |
+| `-c, --cache <path>` | verdict cache (default `.jevlint-cache.json`; `none` to disable) |
+| `--at <rule=n>` | override one cutoff, repeatable |
+| `--unsure-below <n>` | confidence under which a finding is worded as a question |
+| `--arm <name>` | override every rule's state arm: `bare`, `local`, `located`, `graph`, `full` |
+| `--group <how>` | `file` (default), `rule`, `auto` — see [Batching](#batching) |
+| `--rule-batch-cap <n>` | subjects per rule-axis request (default 32) |
+| `--explain-schedule` | print the axis chosen per rule, and why |
+| `--base <ref>` / `--staged` | what `review` diffs against |
+| `--repeat <n>` / `--labels <path>` | `calibrate`: re-ask n times, fit against labels |
+| `--record <path>` | write a replayable run record — do this for anything you will quote |
+| `--force` | ignore cached verdicts |
+| `--dry-run` | plan and price without asking anything |
+| `--show-missing` | list subjects that got no verdict |
+| `--format <fmt>` | `pretty`, `json`, `github` |
+| `--concurrency <n>` / `--batch-size <n>` | default 4 and 256 |
+| `--model <id>` | Jev model |
+| `--quiet` / `--no-color` | |
+
+Environment: `TYPESAFEAI_API_KEY` (required for anything that asks),
+`TYPESAFEAI_BASE_URL`, `JEVLINT_AST_GREP`.
+
+Two lines of output are never noise. **`N rules matched nothing`** is the only
+place a dead matcher is visible — check it before trusting a clean run; on a
+TypeScript-only repository expect 8 of the 15 shipped rules there, because they
+are the Rust variants. **`N without a verdict`** means requests failed, and a
+run with failures never reads as a clean repository.
 
 ## Writing a rule
 
@@ -126,13 +164,13 @@ A jevlint rule is an ast-grep rule plus `ask:`.
 | `ask` | required | the predicate, one sentence |
 | `language` / `languages` | required | one grammar, or several |
 | `kind` | `score` (default) or `noul` | see below |
-| `criteria` | `noul` only | `{true: ..., false: ...}` |
+| `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria` |
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `subject` | `node` (default), `enclosing`, `file` | what code is judged |
-| `state` | `bare`, `located` (default), `graph`, `full` | what the model also sees |
+| `state` | `bare`, `local`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context for the model only |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
-| `severity` | `warning` (default) … `error` | `error` fails a build; earn it first |
+| `severity` | `hint`, `info`, `warning` (default), `error` | `error` fails a build; earn it first |
 
 ### `score` or `noul`
 
@@ -145,12 +183,15 @@ written about", which is cheaper to read in a report than to prevent by
 hand-tightening a matcher. A score also returns a **confidence**, which is what
 lets an uncertain verdict be routed to a human instead of dropped.
 
+**`noul`** for an independent predicate — *whether* something holds. Returns a
+bare probability and no confidence, and gets its own cutoff. Its `criteria`
+**must** be nested under `criteria:`; a flat `{true, false}` returns HTTP 200
+with the criteria silently discarded, so the schema rejects it before it can
+reach the wire.
+
 Asking an ordered conclusion as a `choice` is the mistake this avoids: the
 ordering is thrown away, adjacent levels split the probability mass, and the
 result arrives as a low confidence indistinguishable from real uncertainty.
-
-**`noul`** for an independent predicate — *whether* something holds. Returns a
-bare probability and no confidence, and gets its own cutoff.
 
 ### `subject`: what the question is about
 
@@ -173,7 +214,8 @@ text.
 
 | arm | carries | cost |
 | --- | --- | --- |
-| `bare` | the matched code and the file's name | cheapest |
+| `bare` | the matched code and the file's name | cheapest, and the only arm immune to unrelated edits in the same file |
+| `local` | + each match's enclosing function, deduplicated | — |
 | `located` | + the whole file source | — |
 | `graph` | + path identity, imports, symbol table with call edges; **no source** | small at any file size |
 | `full` | source and graph | hits the 32Ki state budget soonest |
@@ -183,12 +225,13 @@ which error you would rather have. The rule that works:
 
 > Give the question the least context that still contains the answer.
 
-Measured on the corpus, `var-name-describes-value` is **not separable at any
-cutoff** on `bare` and fully separable on `located` — because `const
+Measured, and load-bearing: `var-name-describes-value` is **not separable at any
+cutoff** on `bare` and fully separable on `located`, because `const
 timeoutSeconds = 5000` is only wrong if you know 5000 is milliseconds, and that
-is visible where the binding is *used*. Meanwhile `test-name-matches-body`
-scores 1.00/1.00 on every arm, because the matcher already hands it both the
-title and the body. `tools/arms.ts` measures this per rule -- four arms, two passes each, about two cents.
+is visible where the binding is *used*. So forcing `--arm bare` to save money
+destroys the rules the shipped packs were calibrated on. `tools/arms.ts`
+measures this per rule — four arms, two passes, about two cents. The full
+evidence is in [docs/deepdive.md](docs/deepdive.md#2-state-the-arm-is-not-a-quality-knob).
 
 ### Matcher captures are the sharpest state available
 
@@ -196,15 +239,18 @@ A rule that captures `$NAME` and `$TITLE` has told the question exactly which
 two things it is comparing, and they reach the model by name. "Does this body do
 what `$NAME` promises" is answerable; "is this well named" is not. This is why
 the naming pack captures names rather than relying on the model to find the same
-pair in the text.
+pair in the text — and why the comment rules use `follows:` with a pattern,
+which propagates its capture into metavariables, so `$DOC` names the claim and
+the matched node is the code.
 
 ### One sentence, several grammars
 
 `languages: [TypeScript, Tsx]` works when the matcher is valid in both. Rust and
 TypeScript spell the same structural idea with different node kinds, and
-ast-grep **rejects** a kind absent from the target grammar — so those need two
-matchers. Share the sentence with a YAML anchor rather than copying it, since
-copies drift and a drifted copy is a cache that never hits:
+ast-grep **rejects** a kind absent from the target grammar — and one rejected
+rule fails the whole scan — so those need two matchers. Share the sentence with
+a YAML anchor rather than copying it, since copies drift and a drifted copy is a
+cache that never hits:
 
 ```yaml
 - id: fn-name-promises
@@ -229,50 +275,46 @@ Anchors are scoped to one YAML document, which is why a rule file may be a
 **Read the gap before you touch a threshold.** `jevlint gaps` sorts each rule's
 answers and reports the largest step between neighbours:
 
-```
-rule                         kind  matched reported cutoff median gap   suggest verdict
-fn-name-promises             noul  26      6        0.67   0.10   0.55  0.65    works
-var-name-describes-value     noul  42      3        0.59   0.10   0.67  0.61    works
-test-name-matches-body       noul  7       4        0.69   0.95   0.48  0.71    works
-```
-
 | verdict | what to do |
 | --- | --- |
 | `works` | nothing. Any cutoff inside the gap gives the same answers. |
 | `move` | set the cutoff to `suggest`. The rule discriminates; the threshold is misplaced. |
 | `rewrite` | the answers are not separated. **No cutoff helps.** Rewrite the sentence — and first check it is not asking for something the subject cannot show. |
 | `silent` | the matcher never fired. Loosen it; this is the only place that is visible. |
-| `thin` | too few matches to judge. Not a pass. |
+| `thin` | under 6 matches. Not a pass. |
+
+**`gaps` is for a labeled corpus, not for your repository.** A gap needs two
+classes and real code is ~99.8% clean, so on real source it prints `rewrite` for
+every rule that fires, which means nothing. There, read the per-rule **median**
+and the **headroom** — see [What to expect](#what-to-expect).
 
 Then fit against labels:
 
 ```bash
-jevlint calibrate src --labels labels.json --repeat 3
+jevlint calibrate src --labels labels.json --repeat 3 --record run.json
 ```
 
 `--repeat` re-asks and reports which subjects changed *decision* between
 passes. A rule can have a wobbly score and a perfectly stable decision, if the
-wobble happens far from the cutoff — that is the good case. A decision sitting
-inside the wobble band should not be automated; route it to a person.
+wobble happens far from the cutoff — that is the good case. **A decision sitting
+inside the wobble band should not be automated; route it to a person.**
 
 Cutoffs are **per rule, never shared**. Same-shaped questions have been measured
 answering their own defect class anywhere between 0.20 and 0.94; the quiet ones
 are not broken, they simply never reach a common threshold.
 
 Re-gating is free — `jevlint replay` re-scores a recorded run under new cutoffs
-with zero requests, and with `--labels` re-fits them too — so a recorded run
-also pins the numbers in any report you publish. Without that, recalibrating
-silently rewrites history. It is also how a cutoff stays auditable: the number
-is a claim about a specific set of answers, and whoever holds the record can
-re-derive it without an API key.
+with zero requests, and with `--labels` re-fits them too — so record anything
+you will quote. A cutoff is a claim about a specific set of answers, and whoever
+holds the record can re-derive it without an API key. Without that,
+recalibrating silently rewrites history.
 
 ### The corpus is the investment
 
-The thresholds shipped in `rules/naming.yml` are fitted to `corpus/`, which
-makes them an opinion about that corpus and a starting point on your code.
-Build your own: label defects as comments next to the code
-(`// DEFECT (rule-id): reason`) and let `corpus/build-labels.ts` derive the
-JSON, so line numbers cannot drift.
+The thresholds shipped in `rules/*.yml` are fitted to `corpus/`, which makes them
+an opinion about that corpus and a starting point on your code. Build your own:
+label defects as comments next to the code (`// DEFECT (rule-id): reason`) and
+let `corpus/build-labels.ts` derive the JSON, so line numbers cannot drift.
 
 And make sure it contains the **hard** clean cases. The first version of this
 corpus had clean cases that were all trivially clean, topping out at 0.36
@@ -281,7 +323,7 @@ by a wide margin, until the first unseen function produced a false positive at
 0.69. A hole for a class the corpus does not contain is invisible from inside
 the corpus, however good the numbers look.
 
-## Batching: one state per file, or one per rule?
+## Batching
 
 The state can be built two ways, and the choice is not free.
 
@@ -291,44 +333,33 @@ The state can be built two ways, and the choice is not free.
   anywhere. No file is ever sent whole. Note what this does and does not carry:
   the `local` arm attaches a match's enclosing function only when the match is a
   *fragment* inside one, so a rule whose subject is already a whole function
-  (`fn-name-promises`) gets no context at all and is effectively on `bare`.
+  gets no context at all and is effectively on `bare`.
 - **`--group auto`** — cost both per rule before asking anything, and pick.
   `--explain-schedule` prints what it decided and why.
 
-Planned on real repositories with `--dry-run` (free), **both shipped packs, at
-the cap that actually ships** (`--rule-batch-cap 32`):
+Planned on real repositories with `--dry-run`, both packs, at the shipped cap:
+the rule axis is **3.3× fewer requests and 15.5% fewer tokens on tokio**, 2.6×
+and 5.0% on vue. Since the API prices tokens, it buys **latency and rate-limit
+headroom, not money**.
 
-| | file axis | rule axis @32 | |
-| --- | --- | --- | --- |
-| tokio, 10,886 subjects | 896 req / 5.94M tok | **268 req** / 5.02M tok | 3.3× fewer requests, −15.5% tokens |
-| vue, 19,659 subjects | 1,739 req / 15.01M tok | **671 req** / 14.26M tok | 2.6× fewer requests, −5.0% tokens |
+Three consequences before you switch it on:
 
-At an uncapped batch of 256 it is 11.2×/−16.2% and 7.8×/−5.7% — those are the
-numbers an earlier version of this section quoted, and they describe a
-configuration nobody runs. Since the API prices tokens, **the rule axis buys
-latency and rate-limit headroom, not money**, and at the shipped cap it buys
-less of both than the uncapped figures suggest.
+1. **It costs a little accuracy.** On the corpus the two axes disagree on 1.4%
+   of decisions, and the residue after refitting is one fewer true positive and
+   two more false positives out of 276. One rule
+   (`fn-name-promises-rust`) has **no separating cutoff at all** on the rule
+   axis, because a rule-axis state spans files and so cannot carry one.
+2. **A cutoff belongs to an axis.** Switching means re-fitting — `jevlint replay
+   <record> --labels <labels>` does that for free — and the rule-axis numbers
+   are not shippable today, because a rule carries one `at:`, so they have to be
+   passed with `--at`.
+3. **It invalidates the whole verdict cache**, since the axis is part of the key.
+   That breaks the commit-the-cache workflow below until the next full run.
 
-And it costs accuracy — less than first reported, and mostly through the
-**cutoff**. Over 276 corpus subjects the two axes disagree on 1.4% of decisions.
-Judged at the shipped cutoffs, which were fitted on the file axis, the rule axis
-scores 42/2/5 against the file axis's 43/1/4. Refit on its own answers it
-recovers most of that (44/3/3 against 45/1/2): **1 fewer true positive and 2
-more false positives out of 276**, on too few events to size. An earlier version
-of this section said "2.5× the false positives"; that compared two axes at one
-axis's cutoffs, and is retracted.
-
-The residue is structural. A rule-axis state spans files, so it cannot carry
-one, and the `located` arm degrades to `local` — which removes the evidence from
-exactly the rules whose evidence is the file. One rule, `fn-name-promises-rust`,
-separates cleanly on the file axis and has **no separating cutoff** on the rule
-axis: fitting cannot put a missing file back.
-
-So the accurate axis is the default, the cheap one is opt-in, the scheduler
-refuses to move a rule on a file-bearing arm, and switching axis means
-refitting — `jevlint replay <record> --labels <labels>` does that for free from a
-recorded run. Pin any rule you calibrated with `axis: file`. Full numbers, including a retracted anchoring claim, in
-[docs/findings.md](docs/findings.md#9-batching-axis-one-state-per-file-or-one-per-rule).
+So the accurate axis is the default, the cheap one is opt-in, and the scheduler
+refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
+`axis: file`. Full numbers in
+[docs/deepdive.md](docs/deepdive.md#4-the-batching-axis).
 
 ## The shipped packs
 
@@ -344,8 +375,7 @@ recorded run. Pin any rule you calibrated with `axis: file`. Full numbers, inclu
 
 The two test rules are **nested, not orthogonal** — a test that exercises the
 wrong case also fails to establish its name — which is why both fire on the
-wrong-case class and only one fires on weak assertions. Splitting them was worth
-it because a finding can now name which kind it is.
+wrong-case class and only one fires on weak assertions.
 
 **`rules/comments.yml`** — is the comment still true?
 
@@ -354,52 +384,102 @@ it because a finding can now name which kind it is.
 | `comment-describes-declaration` | does the comment above this declaration still hold? |
 | `comment-describes-block` | does a comment inside a body describe the lines under it? |
 
-A comment is a claim in the one notation nothing checks. The matcher pairs the
-comment with the code using `follows:` with a pattern — **a `follows` capture
-propagates to metavariables** — so `$DOC` names the claim and the matched node
-is the code. Both halves named, which is what makes these sharp.
+A comment is a claim in the one notation nothing checks. Deliberately *not*
+asked: style, redundancy, whether a comment should exist. One axis only — is the
+claim false. A vague or redundant comment is not a defect.
 
-Deliberately *not* asked: style, redundancy, whether a comment should exist. One
-axis only, is the claim false. A vague or redundant comment is not a defect.
+Each rule ships in a Rust and an ECMAScript variant sharing one sentence, so
+**on a single-language repository about half the pack will report "matched
+nothing"**. Of the 15, **12 reach precision 1.00 and recall 1.00 on the corpus**
+with no decision flips across passes, and **3 do not separate at any cutoff**:
+`test-name-describes-code-rust` (precision 0.67), and both
+`comment-describes-block` rules, which **ship saying so** — cutoffs parked above
+every observed answer, `severity: info`, and a note recording what was tried.
+Read the 12 as "these rules separate the classes in a corpus the author wrote",
+against the baseline that **a tool reporting nothing at all scores 79.9%
+accuracy on that corpus**, at zero recall.
 
-Each rule ships in a Rust and an ECMAScript variant, sharing one sentence
-through a YAML anchor. **13 of 15 reach precision 1.00 and recall 1.00** on the
-corpus with no decision flips across passes. The two `comment-describes-block`
-rules do not separate and **ship saying so** — cutoffs parked above every
-observed answer, `severity: info`, and a note recording what was tried.
+## What to expect
 
-### Run on itself
+Run on this repository's own TypeScript — `src`, `tools`, `test` — the shipped
+packs are **1,378 subjects, 65 requests, $0.043 and under five seconds** of wall
+clock. That is roughly **3 cents per 1,000 subjects**, and `--dry-run` quotes
+about 9% high, so treat it as a bound rather than a price.
 
-Both packs over this repository's own TypeScript — `src`, `tools`, `test` —
-is **1,377 subjects, 65 requests, $0.043 and under five seconds** of wall clock.
-It found **nine real defects in about 13,000 lines**, and a fifth of what it
-reported was wrong:
+It found **nine real defects in about 13,000 lines**:
 
 | what it caught | how many |
 | --- | --- |
 | comments that had become false | 2 |
 | tests that did not verify the behaviour their own names claimed | 6 |
 | bindings named for their input rather than their value | 6 |
-| findings I read and disagreed with | 2 of 11 |
 
-Two are worth quoting. `formatGithub`'s doc comment opened with "Everything is
-emitted as `notice` or `warning`, never `error`" while the first line of its
-body passes `error` through — and the rest of the same comment explained how to
-opt into that. And "a rule's own axis pin is never overruled" turned out to
-assert the pin without establishing that the scheduler wanted the other axis;
-writing the stronger version **disproved an assumption in the scheduler's own
-design notes.** Nothing a compiler, a linter or coverage would report: coverage
-called every one of those tests covered.
+Nothing there is what a compiler, a linter or coverage reports; coverage called
+every one of those tests covered. Details, including two worth quoting, are in
+[docs/deepdive.md](docs/deepdive.md#6-accuracy-on-real-code).
 
-The honest half of the result is that the tool's four worst bugs that round were
-found by *reading its output*, not by its rules — a "fell back from `bare` to
-`bare`" line that cannot mean anything, and the lost verdicts and mis-measured
-token estimator behind it. Section 13 of the findings has the whole exercise,
-including the residue it still reports and I still disagree with.
+### Roughly one finding in five was wrong
 
-**[docs/findings.md](docs/findings.md)** has everything measured, including the
-three defects the tool found in the corpus I had labelled clean, the bugs it and
-the tests found in itself, the retracted claims, and the API's real limits.
+**Read every finding against the code before believing it.** Of 11 findings in
+one round, 9 were real and 2 were not. That is the honest rate on unlabeled
+code, and it is the single most important number here: this is a tool for
+generating candidates for a human to judge, not verdicts to act on.
+
+When you disagree with a finding it is usually one of three things, and only the
+third means the tool is wrong:
+
+1. **The rule is right and the code is wrong** — most often, in this experience.
+2. **The rule is right and the *name* is wrong.** A test called "no batch
+   exceeds the ceiling" whose body legitimately exempts one-subject batches is
+   not a weak test; it is a name that overclaims.
+3. **The rule is wrong.** Then add the case to your corpus as a labeled clean
+   example and refit. A false positive that is not in the corpus will come back.
+
+### Headroom predicts your next false positive
+
+After fixing the nine, three passes over identical code leave **5 of 1,378
+subjects over their cutoff, all within 0.11 of it**. The useful diagnostic is
+not the count but the distance from the highest *clean* answer to the cutoff:
+
+| rule | subjects | median | highest clean | cutoff | headroom |
+| --- | --- | --- | --- | --- | --- |
+| `test-name-describes-code` | 92 | 0.09 | 0.25 | 0.95 | +0.70 |
+| `fn-name-promises` | 150 | 0.13 | 0.50 | 0.76 | +0.26 |
+| `comment-describes-block` | 138 | 0.24 | 0.76 | 0.97 | +0.21 |
+| `comment-describes-declaration` | 95 | 0.14 | 0.63 | 0.83 | +0.20 |
+| `module-name-describes-contents` | 19 | 0.19 | 0.56 | 0.62 | +0.06 |
+| `test-name-verifies-claim` | 92 | 0.17 | 0.46 | 0.54 | **+0.08** |
+| `var-name-describes-value` | 792 | 0.10 | 0.57 | 0.61 | **+0.04** |
+
+The two rules with the least headroom hold the entire residue. That is what a
+corpus-fitted cutoff does: it sits where the corpus's clean band ended, and real
+code's clean band goes higher.
+
+### The residue flickers, and averaging is the fix
+
+Consecutive passes over identical code report between 2 and 6 findings. Per
+subject, pass-to-pass spread is a median of 0.010 and a p90 of 0.050 — but the
+maximum is 0.260, which is enough to cross a cutoff. **Average three passes
+before deciding anything near a cutoff**; on this repository a single pass
+reports 2–6 findings and the three-pass mean reports 5.
+
+Two honest notes about that residue:
+
+- **There is no describable pattern to it.** The obvious hypothesis — that
+  compound or universal test names read as under-verified whatever the body does
+  — is refuted: grouping all 92 `test-name-verifies-claim` subjects by how many
+  claims their name makes gives flat means of 0.18–0.23. The unglamorous
+  explanation is the right one: a cutoff of 0.54 fitted where the corpus's clean
+  band ended, against a real clean band with a tail to 0.66.
+- **It runs in both directions.** The same measurement found a *missed* defect:
+  the highest `comment-describes-declaration` answer on this repository was 0.76
+  against a 0.83 cutoff, and it was real — a doc comment separated from its
+  function by an interface declaration, documenting the wrong thing. The cutoff
+  missed it by 0.07.
+
+So: **expect to refit on your own code.** That is not a disclaimer, it is the
+documented procedure, and `replay --labels` makes it free once you have a
+record.
 
 ## How it behaves when things go wrong
 
@@ -411,23 +491,21 @@ failure path lands on "no verdict":
   failures never reads as a clean repository.**
 - A malformed rule is dropped with a reason, printed loudly. A rule that
   silently failed to load looks exactly like a rule that found nothing.
-- A file whose **source** is too large for the 32Ki state budget steps down to
-  a leaner arm, and says it did. A file with many *matches* is split instead —
+- A file whose **source** is too large for the 32Ki state budget steps down to a
+  leaner arm, and says it did. A file with many *matches* is split instead —
   that is not a loss of context and is not reported as one.
 - `max_tokens_exceeded` halves the question set and retries. That rescues a
-  request over budget and **cannot rescue a state over budget**, since every
-  half still carries the same state, so the planner packs to 1.25x under the
-  state budget and 1.1x under the request budget. The token estimator is
-  measured per payload shape against the server's own accounting: source runs
-  3.37 characters per token, per-subject metadata records 2.18, and a single
-  ratio for both lost 100 verdicts in one run. `--dry-run` quotes with the same
-  estimator and reads about 9% high — a bound to budget against, not a quote.
+  request over budget and **cannot rescue a state over budget**, since every half
+  still carries the same state, so the planner packs to a margin under each
+  budget. An over-budget state loses its verdicts, and they are counted.
 
 The verdict cache is **trusted input**: anything that can edit it can silence a
 rule or invent a finding. Keep it next to your rule files in review, not in a
 build-artifact directory. Commit it and CI lints without an API key and
 reviewers see the verdicts you saw; leave it ignored and CI pays for a fresh
-pass each run.
+pass each run. Changing a **cutoff** invalidates nothing, by design, so
+recalibration is free; changing a rule's *sentence*, its arm, or the batching
+axis invalidates the verdicts that depended on them.
 
 ## Limits
 
@@ -442,47 +520,42 @@ pass each run.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **`jevlint gaps` is for a labeled corpus, not for your repository.** A gap
-  needs two classes, and real code is ~99.8% clean, so on this repository's own
-  source it prints `rewrite` for every rule that fires. Read the per-rule
-  medians there instead.
-- **Expect to refit on your own code.** On this repository's test suite
-  `test-name-verifies-claim` has a clean-band median of 0.18 and a tail to 0.70,
-  against a corpus-fitted cutoff of 0.54.
+- **The cutoffs are fitted to 13 files.** Version 0.1.0, one recorded corpus.
+  Expect to refit; see [What to expect](#what-to-expect).
+- **No accuracy was ever measured on a large repository.** The tokio and vue
+  figures above are planning cost only. Do not quote precision from them.
+
+## Further reading
+
+| | |
+| --- | --- |
+| [docs/deepdive.md](docs/deepdive.md) | everything measured that is still true: arms, cutoffs, the batching axis, the API's real limits, accuracy on real code |
+| [docs/internal.md](docs/internal.md) | how the code works, for changing it: module map, data flow, invariants, every tunable constant |
+| [docs/findings.md](docs/findings.md) | the notebook, in the order it happened, including the wrong turns and four retracted claims |
+| [.claude/skills/jevlint](.claude/skills/jevlint/SKILL.md) | the working procedure, as a skill |
 
 ## Layout
 
 ```
-src/types.ts        the shared type surface; unions derived from const arrays
-src/rules.ts        rule schema and validation; the draft hash
-src/scan.ts         the ast-grep driver, and the structural probes
-src/state.ts        the arms, subject resolution, module outlines
-src/questions.ts    score and noul question construction
-src/batch.ts        token-aware batch planning, both axes
-src/schedule.ts     per-rule axis choice, and the constraint that limits it
-src/gate.ts         answers -> findings. Pure, offline, free to re-run
-src/cache.ts        content-addressed verdicts. Never throws
-src/diff.ts         review mode
-src/calibrate.ts    gaps, stability, threshold fitting
-src/report.ts       pretty / json / github
-src/run.ts          the runner
-tools/arms.ts       the state-arm experiment
-tools/grouping.ts   the batching-axis experiment
-corpus/             labeled corpus; labels derived from in-code markers
-test/test.ts        86 checks, no API key
+src/            the tool: scan -> state -> questions -> gate -> report
+rules/          the shipped packs
+corpus/         the labeled corpus the cutoffs are fitted to
+tools/          the experiments: arms.ts, grouping.ts
+docs/data/      recorded runs, each replayable with no API key
+test/test.ts    100 checks, no API key needed
 ```
+
+`docs/internal.md` has the module-by-module map.
 
 ## Prior art
 
-The idea of a lint rule whose predicate is a sentence, and much of what is known
-about using Jev well — questions in one batched request, per-question cutoffs,
-confidence as routing rather than a gate, reading the gap instead of the
-threshold, record/replay — comes from
-[mizchi/jev-playground](https://github.com/mizchi/jev-playground), in particular
-its `eslint-plugin-jev` experiment and `docs/practice.md`. This is an
-independent implementation on a different substrate: ast-grep instead of ESLint,
-so matchers are relational and multi-language; a runner of its own instead of a
-plugin, so there is no synchronous-callback problem to work around; diff-scoped
-review; and state arms as an explicit measured axis. Where a measurement here
-disagrees with one there, [docs/findings.md](docs/findings.md) says so and says
-why.
+The idea of asking a model a lint question comes from
+[mizchi/jev-playground](https://github.com/mizchi/jev-playground)'s
+`eslint-plugin-jev`. What is different here: relational multi-language matchers
+instead of single-node ESLint selectors, a custom runner instead of ESLint's
+synchronous per-file callback, diff-scoped review mode, the state arm as a
+measured axis rather than a fixed choice, and record/replay so a threshold is
+auditable. The calibration discipline — gap before threshold, per-rule cutoffs,
+confidence routes rather than gates — comes from its `docs/practice.md`.
+
+MIT.

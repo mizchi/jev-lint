@@ -23,8 +23,9 @@
  * reason is reported loudly, because a rule that silently failed to load looks
  * exactly like a rule that found nothing.
  */
-import { readFileSync, readdirSync, statSync } from "node:fs";
-import { basename, extname, join } from "node:path";
+import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
+import { basename, dirname, extname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import YAML from "yaml";
 import {
@@ -324,6 +325,26 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
 }
 
 /** The cutoff actually in force for a rule, after config overrides. */
+/**
+ * Where rules come from when `-r` was not given.
+ *
+ * `./rules` first, because a project's own rules are the point of the tool.
+ * Failing that, the packs inside the installed package -- without this,
+ * `npm install jevlint && npx jevlint check src` cannot work at all: the
+ * default was the literal relative path `rules`, the shipped packs live in
+ * `node_modules/jevlint/rules`, and every fresh install exited with "no usable
+ * rules found in rules". Found by an audit of the README's own install block.
+ *
+ * Never both. Merging them would silently judge someone's code against rules
+ * they did not write, and a duplicate id would be dropped as a rule error.
+ */
+export function defaultRulePaths(): [string[], boolean] {
+  if (existsSync(resolve("rules"))) return [["rules"], false];
+  // dist/cli.js and src/cli.ts are both one directory below the package root.
+  const shipped = join(dirname(fileURLToPath(import.meta.url)), "..", "rules");
+  return existsSync(shipped) ? [[shipped], true] : [["rules"], false];
+}
+
 export function cutoffFor(rule: Rule, overrides: Record<string, number> = {}): number {
   const override = overrides[rule.id];
   if (typeof override === "number") return override;

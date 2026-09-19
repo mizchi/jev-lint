@@ -11,9 +11,9 @@
  * land on "no verdict" rather than on an exception.
  */
 import { strict as assert } from "node:assert";
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from "node:fs";
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, isAbsolute } from "node:path";
 
 import {
   normalizeRule,
@@ -21,6 +21,7 @@ import {
   cutoffFor,
   ruleTextHash,
   normalizeLanguage,
+  defaultRulePaths,
   SCORE_LEVELS,
   DEFAULT_SCORE_AT,
 } from "../src/rules.ts";
@@ -160,6 +161,34 @@ const subjectOf = (over: Partial<Subject> = {}): Subject => ({
 });
 
 // ---------------------------------------------------------------- rules
+
+test("rules: a project's own ./rules wins, and a fresh install still finds the packs", () => {
+  // Every fresh install used to exit 2 with "no usable rules found in rules":
+  // the default was the literal relative path `rules`, and the shipped packs
+  // live in `node_modules/jevlint/rules`, so `npm install jevlint && npx
+  // jevlint check src` could not work at all. An audit of the README's own
+  // install block caught it. Both directions are pinned, because the wrong one
+  // silently judges someone's code against cutoffs fitted to a corpus their
+  // code has never seen.
+  const here = process.cwd();
+  const dir = mkdtempSync(join(tmpdir(), "jevlint-rules-"));
+  try {
+    process.chdir(dir);
+    const [fallback, isShipped] = defaultRulePaths();
+    assert.equal(isShipped, true, "no ./rules here, so the packaged packs must be used");
+    assert.ok(isAbsolute(fallback[0]!), "and by absolute path, since the cwd is not the package");
+    assert.ok(existsSync(fallback[0]!), `${fallback[0]} must exist`);
+    assert.ok(loadRules(fallback).rules.length > 0, "and must actually load");
+
+    mkdirSync(join(dir, "rules"));
+    const [local, stillShipped] = defaultRulePaths();
+    assert.deepEqual(local, ["rules"], "a project's own rules win once they exist");
+    assert.equal(stillShipped, false);
+  } finally {
+    process.chdir(here);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
 
 test("rules: a minimal score rule is valid and defaults are the documented ones", () => {
   const r = scoreRule();
@@ -653,7 +682,12 @@ test("batch: every subject lands in exactly one batch and none is empty", () => 
   assert.ok(batches.every((b) => b.subjects.length <= DEFAULT_BATCH_SIZE));
 });
 
-test("batch: no batch exceeds the request ceiling", () => {
+// The name carries the planner's exception, because the body has to: a batch
+// holding ONE subject is allowed over the ceiling, there being nothing left to
+// split. Named "no batch exceeds the request ceiling", jevlint kept flagging it
+// at 0.54-0.62 against a 0.54 cutoff, and on that reading it was right -- the
+// gap was between the name and the contract, not in the assertions.
+test("batch: no splittable batch exceeds either ceiling", () => {
   const subjects = manySubjects(400, { text: "x".repeat(800) });
   const batches = planBatches(subjects, {
     sources: new Map([["a.ts", "source"]]),
@@ -979,23 +1013,23 @@ test("schedule: a rule's own axis pin is never overruled", () => {
   const options = { sources: new Map<string, string>(), symbols: new Map() };
 
   const unpinned = scoreRule({ id: "same-shape", state: "bare" });
-  const wouldBe = schedule(layout(unpinned), [unpinned], options).decisions[0]!;
-  assert.equal(wouldBe.axis, "rule", "the premise: cost prefers the rule axis for this shape");
-  assert.equal(wouldBe.pinned, false);
+  const byCostAlone = schedule(layout(unpinned), [unpinned], options).decisions[0]!;
+  assert.equal(byCostAlone.axis, "rule", "the premise: cost prefers the rule axis for this shape");
+  assert.equal(byCostAlone.pinned, false);
 
   const pinnedToFile = scoreRule({ id: "pinned-file", state: "bare", axis: "file" });
-  const held = schedule(layout(pinnedToFile), [pinnedToFile], options).decisions[0]!;
-  assert.equal(held.axis, "file", "the pin wins against the cheaper axis");
-  assert.equal(held.pinned, true);
-  assert.match(held.reason, /pinned/);
+  const againstCost = schedule(layout(pinnedToFile), [pinnedToFile], options).decisions[0]!;
+  assert.equal(againstCost.axis, "file", "the pin wins against the cheaper axis");
+  assert.equal(againstCost.pinned, true);
+  assert.match(againstCost.reason, /pinned/);
 
   // And a pin in the direction cost already agrees with is still recorded as a
   // pin, not as a cost decision that happened to match.
   const pinnedToRule = scoreRule({ id: "pinned-rule", state: "bare", axis: "rule" });
-  const agreed = schedule(layout(pinnedToRule), [pinnedToRule], options).decisions[0]!;
-  assert.equal(agreed.axis, "rule");
-  assert.equal(agreed.pinned, true);
-  assert.match(agreed.reason, /pinned/);
+  const withCost = schedule(layout(pinnedToRule), [pinnedToRule], options).decisions[0]!;
+  assert.equal(withCost.axis, "rule");
+  assert.equal(withCost.pinned, true);
+  assert.match(withCost.reason, /pinned/);
 });
 
 test("schedule: the axis decision does not depend on what was cached", () => {
@@ -1145,18 +1179,18 @@ test("cache: a key covers the draft and the arm but not the threshold", () => {
 test("cache: a missing, unreadable, malformed or stale file means no verdict, never a throw", () => {
   const dir = mkdtempSync(join(tmpdir(), "jevlint-test-"));
   try {
-    const missing = Cache.load(join(dir, "nope.json"));
-    assert.equal(missing.get("k", "score"), null);
+    const fromMissingFile = Cache.load(join(dir, "nope.json"));
+    assert.equal(fromMissingFile.get("k", "score"), null);
 
     writeFileSync(join(dir, "bad.json"), "{not json");
-    const bad = Cache.load(join(dir, "bad.json"));
-    assert.equal(bad.get("k", "score"), null);
-    assert.ok(bad.loadError);
+    const fromMalformedFile = Cache.load(join(dir, "bad.json"));
+    assert.equal(fromMalformedFile.get("k", "score"), null);
+    assert.ok(fromMalformedFile.loadError);
 
     writeFileSync(join(dir, "old.json"), JSON.stringify({ schema: "ancient", entries: { k: { value: 3 } } }));
-    const old = Cache.load(join(dir, "old.json"));
-    assert.equal(old.get("k", "score"), null);
-    assert.ok(old.loadError);
+    const fromStaleSchema = Cache.load(join(dir, "old.json"));
+    assert.equal(fromStaleSchema.get("k", "score"), null);
+    assert.ok(fromStaleSchema.loadError);
 
     // A directory is unreadable as a file.
     mkdirSync(join(dir, "adir"));

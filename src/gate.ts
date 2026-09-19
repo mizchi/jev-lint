@@ -29,16 +29,22 @@ import { cutoffFor, DEFAULT_UNSURE_BELOW, SCORE_LEVEL_NAMES } from "./rules.ts";
 import type { Answer, Finding, GateResult, Subject } from "./types.ts";
 export { MESSAGE_IDS } from "./types.ts";
 
-/**
- * Decide one subject. Returns a finding or null.
- *
- * `answer` is `{value, confidence, kind}` from `readAnswer`, or null.
- */
+/** Per-run threshold overrides, both optional. */
 export interface GateOptions {
   cutoffs?: Record<string, number>;
   unsureBelow?: number | null;
 }
 
+/**
+ * Decide one subject. Always returns a finding, whose `reported` says whether
+ * it is one anyone should see.
+ *
+ * Never null, and that matters: a subject with no usable answer becomes a
+ * finding with `messageId: "missing"` so a run where requests failed cannot
+ * read as a clean repository.
+ *
+ * `answer` is `{value, confidence, kind}` from `readAnswer`, or null.
+ */
 export function decide(
   subject: Subject,
   answer: Answer | null,

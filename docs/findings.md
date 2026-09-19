@@ -11,10 +11,13 @@ conflict.** Sections 1-8 record the tool at 8 rules over a 10-file corpus, with
 batching axes. Section 12 lists what is still unmeasured, and section 13 is the
 tool applied to its own source, which is where its four worst bugs were found.
 Where a number changed, the later one is the live one and the earlier one is
-left standing because how it changed is part of the evidence. Three claims are
-explicitly **retracted** — two from sections 1-4 in section 9, and section 9's
-own "2.5x the false positives" inside section 9. They are marked rather than
-deleted.
+left standing because how it changed is part of the evidence. Four claims are
+explicitly **retracted**, and every one of them is section 9 retracting its own
+earlier wording: the "2.5x the false positives" figure, anchoring as the
+explanation for batch flips, the "14.6x fewer requests" scale figures, and the
+description of what the `local` arm substitutes. They are marked in place
+rather than deleted. Section 12 then walks the anchoring retraction partly
+back, on the grounds that it claims more power than its sample size has.
 
 Re-derive the tables without spending anything:
 
@@ -46,7 +49,8 @@ Eight rules over two languages, fitted to the 10-file corpus. The rule names
 `test-name-matches-body*` were later split into `test-name-describes-code*` and
 `test-name-verifies-claim*` (section 10), and every cutoff below was refitted
 once the corpus grew to 13 files and the file axis became explicit. The shape of
-the result held: 13 of 15 rules at precision 1.0 and recall 1.0.
+the result held, though the count did not: recounting the current run gives
+12 of 15 rules at precision 1.0 and recall 1.0, with 3 not separating at all.
 
 | rule | language | cutoff | precision | recall | clean band | defect band |
 | --- | --- | --- | --- | --- | --- | --- |

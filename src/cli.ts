@@ -15,7 +15,7 @@
  *   replay    re-score a recorded run under different cutoffs, for free
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { loadRules, cutoffFor } from "./rules.ts";
+import { loadRules, cutoffFor, defaultRulePaths } from "./rules.ts";
 import { run, collectSubjects, toRecord } from "./run.ts";
 import { changedRanges, changedFiles } from "./diff.ts";
 import { gate } from "./gate.ts";
@@ -39,6 +39,8 @@ import type { ChangedRanges } from "./diff.ts";
 /** Everything the command line can set. */
 interface Options {
   rules: string[];
+  /** True when `rules` is the installed package's own packs, not the project's. */
+  rulesAreShipped: boolean;
   cache: string;
   arm: StateArm | null;
   group: GroupMode;
@@ -141,6 +143,7 @@ environment:
 function parseArgs(argv: string[]): Options {
   const opts: Options = {
     rules: [],
+    rulesAreShipped: false,
     cache: DEFAULT_CACHE_PATH,
     arm: null,
     group: "file",
@@ -269,7 +272,11 @@ function parseArgs(argv: string[]): Options {
         opts.paths.push(a);
     }
   }
-  if (opts.rules.length === 0) opts.rules = ["rules"];
+  if (opts.rules.length === 0) {
+    const [paths, shipped] = defaultRulePaths();
+    opts.rules = paths;
+    opts.rulesAreShipped = shipped;
+  }
   if (opts.arm && !STATE_ARMS.includes(opts.arm)) {
     throw new Error(`--arm must be one of ${ARMS.join(", ")}`);
   }
@@ -287,6 +294,13 @@ function parseArgs(argv: string[]): Options {
 
 function loadOrDie(opts: Options, log: Log): { rules: Rule[]; errors: string[] } | null {
   const { rules, errors } = loadRules(opts.rules);
+  // Judging someone's code against packaged rules is reasonable; doing it
+  // without saying so is not, because their cutoffs were fitted to a corpus
+  // this code has never seen.
+  if (opts.rulesAreShipped && rules.length > 0) {
+    log(`no ./rules directory: using the ${rules.length} packaged rule(s) from ${opts.rules[0]}`);
+    log(`their cutoffs were fitted to this package's own corpus -- see docs/deepdive.md`);
+  }
   // Loudly, always. A rule that failed to load reports nothing, which is
   // indistinguishable from a rule that found nothing wrong.
   for (const e of errors) log(`rule error: ${e}`);
