@@ -1,0 +1,7048 @@
+{
+  "schema": "jev-lint-run-1",
+  "recorded": "2026-09-20T10:51:46.926Z",
+  "model": "jev-1.13.0",
+  "arm": null,
+  "cutoffs": {
+    "param-name-describes-use": 0.42
+  },
+  "unsureBelow": null,
+  "spent": {
+    "calls": 26,
+    "inputTokens": 795647,
+    "outputTokens": 12084,
+    "ms": 26543,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.033417174,
+    "wallMs": 1403
+  },
+  "rules": [
+    {
+      "id": "param-name-describes-use",
+      "kind": "noul",
+      "ask": "This parameter's name ($NAME) misdescribes how the function's body uses it.",
+      "note": "Only the parameter in `matched` is judged; the function's other parameters are separate subjects and the surrounding code is context. Read every use of that parameter in the body: which argument position it fills and what that position means (the first argument of slice is a start index, the argument of setTimeout is milliseconds), what it is compared with or concatenated to and on which side, what it is multiplied or divided by, which fields are read from it, and whether it is called. The type annotation is not the evidence -- it type-checks either way -- the name is the claim and what the body does with the value is the evidence. A body that only passes the parameter on, stores it, or returns it shows nothing against the name.",
+      "draft": "ad3818669308",
+      "at": 0.7,
+      "state": "local",
+      "subject": "enclosing",
+      "severity": "warning",
+      "language": "TypeScript"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1349,
+      "endLine": 1349,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 797,
+      "endLine": 797,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 798,
+      "endLine": 798,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 798,
+      "endLine": 798,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/ignore.ts",
+      "line": 67,
+      "endLine": 67,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/ignore.ts",
+      "line": 79,
+      "endLine": 79,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/ignore.ts",
+      "line": 80,
+      "endLine": 80,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/ignore.ts",
+      "line": 99,
+      "endLine": 99,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/ignore.ts",
+      "line": 99,
+      "endLine": 99,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/ignore.ts",
+      "line": 99,
+      "endLine": 99,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/ignore.ts",
+      "line": 100,
+      "endLine": 100,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/ignore.ts",
+      "line": 113,
+      "endLine": 113,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/ignore.ts",
+      "line": 114,
+      "endLine": 114,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 462,
+      "endLine": 462,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 462,
+      "endLine": 462,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 464,
+      "endLine": 464,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 707,
+      "endLine": 707,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 728,
+      "endLine": 728,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 739,
+      "endLine": 739,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 751,
+      "endLine": 751,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 27,
+      "endLine": 27,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 27,
+      "endLine": 27,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 36,
+      "endLine": 36,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 36,
+      "endLine": 36,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 53,
+      "endLine": 53,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 53,
+      "endLine": 53,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 53,
+      "endLine": 53,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 54,
+      "endLine": 54,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 56,
+      "endLine": 56,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 90,
+      "endLine": 90,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 91,
+      "endLine": 91,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 92,
+      "endLine": 92,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 93,
+      "endLine": 93,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/text.ts",
+      "line": 93,
+      "endLine": 93,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 345,
+      "endLine": 345,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 354,
+      "endLine": 354,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 354,
+      "endLine": 354,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 360,
+      "endLine": 360,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 360,
+      "endLine": 360,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 370,
+      "endLine": 370,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 383,
+      "endLine": 383,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 384,
+      "endLine": 384,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 394,
+      "endLine": 394,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 413,
+      "endLine": 413,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 32,
+      "endLine": 32,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 52,
+      "endLine": 52,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 52,
+      "endLine": 52,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 52,
+      "endLine": 52,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 90,
+      "endLine": 90,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 90,
+      "endLine": 90,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 90,
+      "endLine": 90,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 103,
+      "endLine": 103,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 103,
+      "endLine": 103,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 103,
+      "endLine": 103,
+      "kind": "noul",
+      "value": 0.45,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 163,
+      "endLine": 163,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 164,
+      "endLine": 164,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 165,
+      "endLine": 165,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 186,
+      "endLine": 186,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/questions.ts",
+      "line": 186,
+      "endLine": 186,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 54,
+      "endLine": 54,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 54,
+      "endLine": 54,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 70,
+      "endLine": 70,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 71,
+      "endLine": 71,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 142,
+      "endLine": 142,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 143,
+      "endLine": 143,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 146,
+      "endLine": 146,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 146,
+      "endLine": 146,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 148,
+      "endLine": 148,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 153,
+      "endLine": 153,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 161,
+      "endLine": 161,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 162,
+      "endLine": 162,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 164,
+      "endLine": 164,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 169,
+      "endLine": 169,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 169,
+      "endLine": 169,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 185,
+      "endLine": 185,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 224,
+      "endLine": 224,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 224,
+      "endLine": 224,
+      "kind": "noul",
+      "value": 0.32,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 227,
+      "endLine": 227,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/gate.ts",
+      "line": 230,
+      "endLine": 230,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 61,
+      "endLine": 61,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 82,
+      "endLine": 82,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 98,
+      "endLine": 98,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 118,
+      "endLine": 118,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 122,
+      "endLine": 122,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 131,
+      "endLine": 131,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 163,
+      "endLine": 163,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 297,
+      "endLine": 297,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 298,
+      "endLine": 298,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 299,
+      "endLine": 299,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/config.ts",
+      "line": 301,
+      "endLine": 301,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 48,
+      "endLine": 48,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 49,
+      "endLine": 49,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 50,
+      "endLine": 50,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 51,
+      "endLine": 51,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 52,
+      "endLine": 52,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 81,
+      "endLine": 81,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 91,
+      "endLine": 91,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 119,
+      "endLine": 119,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 119,
+      "endLine": 119,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 136,
+      "endLine": 136,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 136,
+      "endLine": 136,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 136,
+      "endLine": 136,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cache.ts",
+      "line": 174,
+      "endLine": 174,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 25,
+      "endLine": 25,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 57,
+      "endLine": 57,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 58,
+      "endLine": 58,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 58,
+      "endLine": 58,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 68,
+      "endLine": 68,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 68,
+      "endLine": 68,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 110,
+      "endLine": 110,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 119,
+      "endLine": 119,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 120,
+      "endLine": 120,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 121,
+      "endLine": 121,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 122,
+      "endLine": 122,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 137,
+      "endLine": 137,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 155,
+      "endLine": 155,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 155,
+      "endLine": 155,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 157,
+      "endLine": 157,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 159,
+      "endLine": 159,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/diff.ts",
+      "line": 161,
+      "endLine": 161,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 180,
+      "endLine": 180,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 182,
+      "endLine": 182,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 182,
+      "endLine": 182,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 195,
+      "endLine": 195,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 196,
+      "endLine": 196,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 199,
+      "endLine": 199,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 200,
+      "endLine": 200,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 216,
+      "endLine": 216,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 217,
+      "endLine": 217,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 227,
+      "endLine": 227,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 248,
+      "endLine": 248,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 248,
+      "endLine": 248,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 291,
+      "endLine": 291,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 292,
+      "endLine": 292,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 311,
+      "endLine": 311,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 228,
+      "endLine": 228,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 249,
+      "endLine": 249,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 262,
+      "endLine": 262,
+      "kind": "noul",
+      "value": 0.39,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 265,
+      "endLine": 265,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 290,
+      "endLine": 290,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 333,
+      "endLine": 333,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 338,
+      "endLine": 338,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 338,
+      "endLine": 338,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 353,
+      "endLine": 353,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 341,
+      "endLine": 341,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 342,
+      "endLine": 342,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 342,
+      "endLine": 342,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 353,
+      "endLine": 353,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 361,
+      "endLine": 361,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/schedule.ts",
+      "line": 361,
+      "endLine": 361,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 123,
+      "endLine": 123,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 127,
+      "endLine": 127,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 141,
+      "endLine": 141,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 141,
+      "endLine": 141,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 206,
+      "endLine": 206,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 228,
+      "endLine": 228,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 228,
+      "endLine": 228,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 249,
+      "endLine": 249,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 269,
+      "endLine": 269,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 269,
+      "endLine": 269,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 292,
+      "endLine": 292,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 293,
+      "endLine": 293,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 294,
+      "endLine": 294,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 295,
+      "endLine": 295,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 296,
+      "endLine": 296,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 297,
+      "endLine": 297,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 307,
+      "endLine": 307,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 307,
+      "endLine": 307,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 324,
+      "endLine": 324,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 364,
+      "endLine": 364,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 400,
+      "endLine": 400,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 404,
+      "endLine": 404,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 400,
+      "endLine": 400,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 404,
+      "endLine": 404,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 423,
+      "endLine": 423,
+      "kind": "noul",
+      "value": 0.26,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 429,
+      "endLine": 429,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 430,
+      "endLine": 430,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 431,
+      "endLine": 431,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 432,
+      "endLine": 432,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 433,
+      "endLine": 433,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 438,
+      "endLine": 438,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 444,
+      "endLine": 444,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/batch.ts",
+      "line": 438,
+      "endLine": 438,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 40,
+      "endLine": 40,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 40,
+      "endLine": 40,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 58,
+      "endLine": 58,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 131,
+      "endLine": 131,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 147,
+      "endLine": 147,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 148,
+      "endLine": 148,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 149,
+      "endLine": 149,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 157,
+      "endLine": 157,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 163,
+      "endLine": 163,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 169,
+      "endLine": 169,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 169,
+      "endLine": 169,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 176,
+      "endLine": 176,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 184,
+      "endLine": 184,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 189,
+      "endLine": 189,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 189,
+      "endLine": 189,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 194,
+      "endLine": 194,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 206,
+      "endLine": 206,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 293,
+      "endLine": 293,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 293,
+      "endLine": 293,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 318,
+      "endLine": 318,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 318,
+      "endLine": 318,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 405,
+      "endLine": 405,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 405,
+      "endLine": 405,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 418,
+      "endLine": 418,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 435,
+      "endLine": 435,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 435,
+      "endLine": 435,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 435,
+      "endLine": 435,
+      "kind": "noul",
+      "value": 0.31,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 440,
+      "endLine": 440,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 443,
+      "endLine": 443,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 443,
+      "endLine": 443,
+      "kind": "noul",
+      "value": 0.27,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 448,
+      "endLine": 448,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 453,
+      "endLine": 453,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 454,
+      "endLine": 454,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/jev.ts",
+      "line": 455,
+      "endLine": 455,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 66,
+      "endLine": 66,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 66,
+      "endLine": 66,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 87,
+      "endLine": 87,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 87,
+      "endLine": 87,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 90,
+      "endLine": 90,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 132,
+      "endLine": 132,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 132,
+      "endLine": 132,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 159,
+      "endLine": 159,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 160,
+      "endLine": 160,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 161,
+      "endLine": 161,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 168,
+      "endLine": 168,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 169,
+      "endLine": 169,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 170,
+      "endLine": 170,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 180,
+      "endLine": 180,
+      "kind": "noul",
+      "value": 0.41,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 183,
+      "endLine": 183,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 184,
+      "endLine": 184,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 197,
+      "endLine": 197,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 197,
+      "endLine": 197,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 214,
+      "endLine": 214,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 214,
+      "endLine": 214,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 214,
+      "endLine": 214,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 226,
+      "endLine": 226,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 233,
+      "endLine": 233,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 250,
+      "endLine": 250,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 284,
+      "endLine": 284,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 285,
+      "endLine": 285,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 286,
+      "endLine": 286,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 287,
+      "endLine": 287,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 291,
+      "endLine": 291,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 292,
+      "endLine": 292,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 296,
+      "endLine": 296,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 326,
+      "endLine": 326,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 326,
+      "endLine": 326,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 340,
+      "endLine": 340,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 364,
+      "endLine": 364,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 370,
+      "endLine": 370,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 379,
+      "endLine": 379,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/paired.ts",
+      "line": 394,
+      "endLine": 394,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 65,
+      "endLine": 65,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 65,
+      "endLine": 65,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 79,
+      "endLine": 79,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 79,
+      "endLine": 79,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 82,
+      "endLine": 82,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 91,
+      "endLine": 91,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 100,
+      "endLine": 100,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 100,
+      "endLine": 100,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 100,
+      "endLine": 100,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 103,
+      "endLine": 103,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 104,
+      "endLine": 104,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 133,
+      "endLine": 133,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 134,
+      "endLine": 134,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 135,
+      "endLine": 135,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 137,
+      "endLine": 137,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 137,
+      "endLine": 137,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 139,
+      "endLine": 139,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 177,
+      "endLine": 177,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 177,
+      "endLine": 177,
+      "kind": "noul",
+      "value": 0.29,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 177,
+      "endLine": 177,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 177,
+      "endLine": 177,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 178,
+      "endLine": 178,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 180,
+      "endLine": 180,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 184,
+      "endLine": 184,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 202,
+      "endLine": 202,
+      "kind": "noul",
+      "value": 0.45,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 202,
+      "endLine": 202,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 202,
+      "endLine": 202,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 205,
+      "endLine": 205,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 206,
+      "endLine": 206,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 222,
+      "endLine": 222,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 240,
+      "endLine": 240,
+      "kind": "noul",
+      "value": 0.58,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 242,
+      "endLine": 242,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 243,
+      "endLine": 243,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 255,
+      "endLine": 255,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 281,
+      "endLine": 281,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 285,
+      "endLine": 285,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 285,
+      "endLine": 285,
+      "kind": "noul",
+      "value": 0.63,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/commits.ts",
+      "line": 286,
+      "endLine": 286,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 89,
+      "endLine": 89,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 215,
+      "endLine": 215,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 92,
+      "endLine": 92,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 110,
+      "endLine": 110,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 170,
+      "endLine": 170,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 193,
+      "endLine": 193,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 188,
+      "endLine": 188,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 188,
+      "endLine": 188,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 194,
+      "endLine": 194,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 194,
+      "endLine": 194,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 209,
+      "endLine": 209,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 209,
+      "endLine": 209,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 343,
+      "endLine": 343,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 345,
+      "endLine": 345,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 351,
+      "endLine": 351,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 435,
+      "endLine": 435,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 435,
+      "endLine": 435,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 439,
+      "endLine": 439,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 502,
+      "endLine": 502,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 502,
+      "endLine": 502,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 522,
+      "endLine": 522,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 522,
+      "endLine": 522,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 541,
+      "endLine": 541,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 544,
+      "endLine": 544,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 543,
+      "endLine": 543,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 571,
+      "endLine": 571,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 572,
+      "endLine": 572,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 573,
+      "endLine": 573,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 574,
+      "endLine": 574,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 575,
+      "endLine": 575,
+      "kind": "noul",
+      "value": 0.28,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 608,
+      "endLine": 608,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 609,
+      "endLine": 609,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 610,
+      "endLine": 610,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 611,
+      "endLine": 611,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 653,
+      "endLine": 653,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 670,
+      "endLine": 670,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 670,
+      "endLine": 670,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 690,
+      "endLine": 690,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 690,
+      "endLine": 690,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/run.ts",
+      "line": 690,
+      "endLine": 690,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 50,
+      "endLine": 50,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 108,
+      "endLine": 108,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 126,
+      "endLine": 126,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 147,
+      "endLine": 147,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 234,
+      "endLine": 234,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 239,
+      "endLine": 239,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 239,
+      "endLine": 239,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 258,
+      "endLine": 258,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 266,
+      "endLine": 266,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 249,
+      "endLine": 249,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 258,
+      "endLine": 258,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 266,
+      "endLine": 266,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 286,
+      "endLine": 286,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 286,
+      "endLine": 286,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 290,
+      "endLine": 290,
+      "kind": "noul",
+      "value": 0.28,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 296,
+      "endLine": 296,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 296,
+      "endLine": 296,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 318,
+      "endLine": 318,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 329,
+      "endLine": 329,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 330,
+      "endLine": 330,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 333,
+      "endLine": 333,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 333,
+      "endLine": 333,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 343,
+      "endLine": 343,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 397,
+      "endLine": 397,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 398,
+      "endLine": 398,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 432,
+      "endLine": 432,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 433,
+      "endLine": 433,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 464,
+      "endLine": 464,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 465,
+      "endLine": 465,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 468,
+      "endLine": 468,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 469,
+      "endLine": 469,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 471,
+      "endLine": 471,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 488,
+      "endLine": 488,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 488,
+      "endLine": 488,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 526,
+      "endLine": 526,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 526,
+      "endLine": 526,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 549,
+      "endLine": 549,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 554,
+      "endLine": 554,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 573,
+      "endLine": 573,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 588,
+      "endLine": 588,
+      "kind": "noul",
+      "value": 0.29,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 589,
+      "endLine": 589,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 590,
+      "endLine": 590,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 605,
+      "endLine": 605,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 606,
+      "endLine": 606,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 607,
+      "endLine": 607,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 610,
+      "endLine": 610,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 611,
+      "endLine": 611,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 611,
+      "endLine": 611,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 622,
+      "endLine": 622,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/scan.ts",
+      "line": 625,
+      "endLine": 625,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 106,
+      "endLine": 106,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 108,
+      "endLine": 108,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 111,
+      "endLine": 111,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 111,
+      "endLine": 111,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 117,
+      "endLine": 117,
+      "kind": "noul",
+      "value": 0.26,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 117,
+      "endLine": 117,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 153,
+      "endLine": 153,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 153,
+      "endLine": 153,
+      "kind": "noul",
+      "value": 0.27,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 153,
+      "endLine": 153,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 159,
+      "endLine": 159,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 165,
+      "endLine": 165,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 180,
+      "endLine": 180,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 181,
+      "endLine": 181,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 182,
+      "endLine": 182,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 183,
+      "endLine": 183,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 185,
+      "endLine": 185,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 187,
+      "endLine": 187,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 219,
+      "endLine": 219,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 202,
+      "endLine": 202,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 202,
+      "endLine": 202,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 206,
+      "endLine": 206,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 206,
+      "endLine": 206,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 209,
+      "endLine": 209,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 209,
+      "endLine": 209,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 213,
+      "endLine": 213,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 220,
+      "endLine": 220,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 221,
+      "endLine": 221,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 222,
+      "endLine": 222,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 223,
+      "endLine": 223,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 232,
+      "endLine": 232,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 235,
+      "endLine": 235,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 236,
+      "endLine": 236,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 236,
+      "endLine": 236,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 217,
+      "endLine": 217,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 243,
+      "endLine": 243,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 254,
+      "endLine": 254,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 255,
+      "endLine": 255,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 258,
+      "endLine": 258,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 259,
+      "endLine": 259,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 260,
+      "endLine": 260,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 284,
+      "endLine": 284,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 285,
+      "endLine": 285,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 300,
+      "endLine": 300,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 310,
+      "endLine": 310,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 310,
+      "endLine": 310,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 311,
+      "endLine": 311,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 312,
+      "endLine": 312,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 312,
+      "endLine": 312,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 325,
+      "endLine": 325,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 342,
+      "endLine": 342,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/evals.ts",
+      "line": 342,
+      "endLine": 342,
+      "kind": "noul",
+      "value": 0.27,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 100,
+      "endLine": 100,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 148,
+      "endLine": 148,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 164,
+      "endLine": 164,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 182,
+      "endLine": 182,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 214,
+      "endLine": 214,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 265,
+      "endLine": 265,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 300,
+      "endLine": 300,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 343,
+      "endLine": 343,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 343,
+      "endLine": 343,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 345,
+      "endLine": 345,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 349,
+      "endLine": 349,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 349,
+      "endLine": 349,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 350,
+      "endLine": 350,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 350,
+      "endLine": 350,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 369,
+      "endLine": 369,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 370,
+      "endLine": 370,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 371,
+      "endLine": 371,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 460,
+      "endLine": 460,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 469,
+      "endLine": 469,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 469,
+      "endLine": 469,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 469,
+      "endLine": 469,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 470,
+      "endLine": 470,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 474,
+      "endLine": 474,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 475,
+      "endLine": 475,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 476,
+      "endLine": 476,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 477,
+      "endLine": 477,
+      "kind": "noul",
+      "value": 0.3,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 504,
+      "endLine": 504,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 516,
+      "endLine": 516,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 531,
+      "endLine": 531,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 580,
+      "endLine": 580,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 587,
+      "endLine": 587,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 587,
+      "endLine": 587,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 593,
+      "endLine": 593,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 609,
+      "endLine": 609,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 610,
+      "endLine": 610,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 611,
+      "endLine": 611,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 612,
+      "endLine": 612,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 614,
+      "endLine": 614,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 620,
+      "endLine": 620,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 622,
+      "endLine": 622,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 628,
+      "endLine": 628,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 628,
+      "endLine": 628,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 628,
+      "endLine": 628,
+      "kind": "noul",
+      "value": 0.3,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 628,
+      "endLine": 628,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 673,
+      "endLine": 673,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 673,
+      "endLine": 673,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 673,
+      "endLine": 673,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 686,
+      "endLine": 686,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/state.ts",
+      "line": 694,
+      "endLine": 694,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 124,
+      "endLine": 124,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 126,
+      "endLine": 126,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 126,
+      "endLine": 126,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 153,
+      "endLine": 153,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 154,
+      "endLine": 154,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 157,
+      "endLine": 157,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 167,
+      "endLine": 167,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 171,
+      "endLine": 171,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 212,
+      "endLine": 212,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 172,
+      "endLine": 172,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 212,
+      "endLine": 212,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 220,
+      "endLine": 220,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 222,
+      "endLine": 222,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 222,
+      "endLine": 222,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 227,
+      "endLine": 227,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 243,
+      "endLine": 243,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 244,
+      "endLine": 244,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 247,
+      "endLine": 247,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 267,
+      "endLine": 267,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 280,
+      "endLine": 280,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 268,
+      "endLine": 268,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 275,
+      "endLine": 275,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 294,
+      "endLine": 294,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 275,
+      "endLine": 275,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 292,
+      "endLine": 292,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 293,
+      "endLine": 293,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 294,
+      "endLine": 294,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 301,
+      "endLine": 301,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 323,
+      "endLine": 323,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 323,
+      "endLine": 323,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 323,
+      "endLine": 323,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 336,
+      "endLine": 336,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 336,
+      "endLine": 336,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 337,
+      "endLine": 337,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 337,
+      "endLine": 337,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 377,
+      "endLine": 377,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 377,
+      "endLine": 377,
+      "kind": "noul",
+      "value": 0.46,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 379,
+      "endLine": 379,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 379,
+      "endLine": 379,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 379,
+      "endLine": 379,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 390,
+      "endLine": 390,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 391,
+      "endLine": 391,
+      "kind": "noul",
+      "value": 0.49,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 414,
+      "endLine": 414,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 415,
+      "endLine": 415,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 416,
+      "endLine": 416,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/calibrate.ts",
+      "line": 417,
+      "endLine": 417,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 993,
+      "endLine": 993,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1031,
+      "endLine": 1031,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1004,
+      "endLine": 1004,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1005,
+      "endLine": 1005,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1007,
+      "endLine": 1007,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1008,
+      "endLine": 1008,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1009,
+      "endLine": 1009,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1009,
+      "endLine": 1009,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1018,
+      "endLine": 1018,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1019,
+      "endLine": 1019,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1020,
+      "endLine": 1020,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1021,
+      "endLine": 1021,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1022,
+      "endLine": 1022,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1023,
+      "endLine": 1023,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1024,
+      "endLine": 1024,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1025,
+      "endLine": 1025,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1038,
+      "endLine": 1038,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1038,
+      "endLine": 1038,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1042,
+      "endLine": 1042,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1043,
+      "endLine": 1043,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1071,
+      "endLine": 1071,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1071,
+      "endLine": 1071,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1071,
+      "endLine": 1071,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1132,
+      "endLine": 1132,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1197,
+      "endLine": 1197,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1198,
+      "endLine": 1198,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1199,
+      "endLine": 1199,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1200,
+      "endLine": 1200,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1201,
+      "endLine": 1201,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1242,
+      "endLine": 1242,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1258,
+      "endLine": 1258,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1258,
+      "endLine": 1258,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1258,
+      "endLine": 1258,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1279,
+      "endLine": 1279,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1310,
+      "endLine": 1310,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1287,
+      "endLine": 1287,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1288,
+      "endLine": 1288,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1346,
+      "endLine": 1346,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 24,
+      "endLine": 24,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 25,
+      "endLine": 25,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 26,
+      "endLine": 26,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 27,
+      "endLine": 27,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 28,
+      "endLine": 28,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 29,
+      "endLine": 29,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 30,
+      "endLine": 30,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 33,
+      "endLine": 33,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 37,
+      "endLine": 37,
+      "kind": "noul",
+      "value": 0.66,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 39,
+      "endLine": 39,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 43,
+      "endLine": 43,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 44,
+      "endLine": 44,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 45,
+      "endLine": 45,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 46,
+      "endLine": 46,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 50,
+      "endLine": 50,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 67,
+      "endLine": 67,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 67,
+      "endLine": 67,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 205,
+      "endLine": 205,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 113,
+      "endLine": 113,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 121,
+      "endLine": 121,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 236,
+      "endLine": 236,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 239,
+      "endLine": 239,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 240,
+      "endLine": 240,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 245,
+      "endLine": 245,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 247,
+      "endLine": 247,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 247,
+      "endLine": 247,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 256,
+      "endLine": 256,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 257,
+      "endLine": 257,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 269,
+      "endLine": 269,
+      "kind": "noul",
+      "value": 0.29,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 274,
+      "endLine": 274,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 278,
+      "endLine": 278,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 279,
+      "endLine": 279,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 306,
+      "endLine": 306,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 307,
+      "endLine": 307,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 338,
+      "endLine": 338,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 367,
+      "endLine": 367,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 369,
+      "endLine": 369,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 370,
+      "endLine": 370,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 369,
+      "endLine": 369,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 378,
+      "endLine": 378,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 382,
+      "endLine": 382,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 385,
+      "endLine": 385,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 389,
+      "endLine": 389,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 389,
+      "endLine": 389,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 414,
+      "endLine": 414,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 390,
+      "endLine": 390,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 393,
+      "endLine": 393,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 394,
+      "endLine": 394,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 395,
+      "endLine": 395,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 396,
+      "endLine": 396,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 397,
+      "endLine": 397,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 414,
+      "endLine": 414,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 450,
+      "endLine": 450,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 458,
+      "endLine": 458,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 458,
+      "endLine": 458,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 464,
+      "endLine": 464,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/report.ts",
+      "line": 461,
+      "endLine": 461,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 164,
+      "endLine": 164,
+      "kind": "noul",
+      "value": 0.23,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 169,
+      "endLine": 169,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 173,
+      "endLine": 173,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 181,
+      "endLine": 181,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 181,
+      "endLine": 181,
+      "kind": "noul",
+      "value": 0.4,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 265,
+      "endLine": 265,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 268,
+      "endLine": 268,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 394,
+      "endLine": 394,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 420,
+      "endLine": 420,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 435,
+      "endLine": 435,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 448,
+      "endLine": 448,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 465,
+      "endLine": 465,
+      "kind": "noul",
+      "value": 0.26,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 466,
+      "endLine": 466,
+      "kind": "noul",
+      "value": 0.4,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 476,
+      "endLine": 476,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 488,
+      "endLine": 488,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 492,
+      "endLine": 492,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 512,
+      "endLine": 512,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 560,
+      "endLine": 560,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 560,
+      "endLine": 560,
+      "kind": "noul",
+      "value": 0.32,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 565,
+      "endLine": 565,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 570,
+      "endLine": 570,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 581,
+      "endLine": 581,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 577,
+      "endLine": 577,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 589,
+      "endLine": 589,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 599,
+      "endLine": 599,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 599,
+      "endLine": 599,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 624,
+      "endLine": 624,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 653,
+      "endLine": 653,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 654,
+      "endLine": 654,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 654,
+      "endLine": 654,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 669,
+      "endLine": 669,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 704,
+      "endLine": 704,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 704,
+      "endLine": 704,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 726,
+      "endLine": 726,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 726,
+      "endLine": 726,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 743,
+      "endLine": 743,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 772,
+      "endLine": 772,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/rules.ts",
+      "line": 785,
+      "endLine": 785,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 232,
+      "endLine": 232,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 275,
+      "endLine": 275,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 275,
+      "endLine": 275,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 490,
+      "endLine": 490,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 490,
+      "endLine": 490,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 490,
+      "endLine": 490,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 533,
+      "endLine": 533,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 533,
+      "endLine": 533,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 533,
+      "endLine": 533,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 533,
+      "endLine": 533,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 574,
+      "endLine": 574,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 574,
+      "endLine": 574,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 594,
+      "endLine": 594,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 609,
+      "endLine": 609,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 610,
+      "endLine": 610,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 619,
+      "endLine": 619,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 766,
+      "endLine": 766,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 664,
+      "endLine": 664,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 668,
+      "endLine": 668,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 705,
+      "endLine": 705,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 766,
+      "endLine": 766,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 821,
+      "endLine": 821,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 856,
+      "endLine": 856,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 856,
+      "endLine": 856,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 856,
+      "endLine": 856,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 908,
+      "endLine": 908,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 932,
+      "endLine": 932,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 960,
+      "endLine": 960,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 960,
+      "endLine": 960,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 960,
+      "endLine": 960,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 976,
+      "endLine": 976,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 986,
+      "endLine": 986,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 987,
+      "endLine": 987,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 987,
+      "endLine": 987,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 989,
+      "endLine": 989,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 1037,
+      "endLine": 1037,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 990,
+      "endLine": 990,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 990,
+      "endLine": 990,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "param-name-describes-use",
+      "file": "src/cli.ts",
+      "line": 990,
+      "endLine": 990,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "local"
+    }
+  ]
+}

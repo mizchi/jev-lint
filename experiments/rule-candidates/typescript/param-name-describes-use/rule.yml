@@ -1,0 +1,111 @@
+# --------------------------------------------------------------------------
+# Does a parameter's name describe how the body uses it?
+# --------------------------------------------------------------------------
+# The parameter cousin of var-name-describes-value. A binding's initializer
+# is one half of that comparison; a parameter has no initializer, so the
+# only evidence is what the body does with it -- sends `userId` as an email
+# address, indexes with `items.sku`, multiplies `timeoutMs` by 1000, counts
+# up to `isEnabled`. A type checker sees none of it: every one of those
+# type-checks. The claim is the name, the evidence is the use.
+#
+# `subject: enclosing`: the parameter is the match and the function around
+# it is what is judged, with the finding reported at the parameter. `state:
+# local` is what the brief asked for; for an `enclosing` subject the local
+# arm adds nothing over `bare` (the enclosing function IS the subject), so
+# it is the same request. Each parameter of one function is its own subject,
+# and the state's `matched` says which one the question is about.
+#
+# TypeScript and Tsx only: the JavaScript grammar has no `required_parameter`
+# node (an untyped parameter is a bare `identifier` inside
+# `formal_parameters`), and ast-grep rejects a kind absent from the grammar.
+id: param-name-describes-use
+languages: [ TypeScript, Tsx ]
+kind: noul
+subject: enclosing
+state: local
+# Fitted 2026-09-20 on fixtures/ (91 subjects on distinct lines: 8 defects,
+# 83 cleans of which 27 are labelled hard; 3 passes, 0 flips at this
+# cutoff, max spread 0.08). Corpus cleans top out at 0.38 (`at`, a cutoff
+# parameter) and 0.37 (`maxLength` used with `- 1`); defects start at 0.56
+# (`userIds` read as `userIds[0]` and handed to a session lookup -- a
+# compound case) and the rest sit at 0.71-0.95. Corpus midpoint 0.47.
+# On 701 unseen parameters (this repository's src/, one pass) the clean
+# band reaches 0.47 -- `fixtures: string`, a directory named for what it
+# holds, and `id` used as a subject id -- and the one answer above it,
+# `palette(color: boolean)` at 0.67, is a noun used as a flag and arguably
+# a finding. 0.50 sits between the unseen clean top and the defect floor
+# with 0.03 and 0.06 of headroom: enough to separate this corpus, not
+# enough to ship. Cookbook recipe, not a shipped cutoff.
+at: 0.50
+axis: file
+severity: warning
+rule:
+  all:
+    - any:
+        - kind: required_parameter
+        - kind: optional_parameter
+    # A destructured parameter has no single name to make a claim; a rest
+    # parameter's name is a collection by construction. Both are left to
+    # the parser, so only a plain identifier is a subject.
+    - has: { field: pattern, kind: identifier, pattern: $NAME }
+    # Parameters of a function that has a body. A parameter in a type
+    # signature (`handler: (payload: unknown) => void`, a method in a type
+    # literal) is a `required_parameter` too, and has no use to judge.
+    - inside:
+        kind: formal_parameters
+        inside:
+          any:
+            - kind: function_declaration
+            - kind: function_expression
+            - kind: arrow_function
+            - kind: method_definition
+            - kind: generator_function_declaration
+            - kind: generator_function
+ask: >-
+  This parameter's name ($NAME) misdescribes how the function's body uses it.
+criteria:
+  "true": >-
+    The body uses the parameter as a different kind of thing from what its
+    name says: an id, key or handle name for a value the body sends, displays,
+    splits or validates as an address, email or text; a plural name for a
+    value the body reads fields from as one item, or a singular name for a
+    value it iterates; a name that reads as a yes-or-no (is*, has*, enabled)
+    for a value the body counts up to, compares numerically or does
+    arithmetic on; a name that states a unit for a value the body treats as
+    another unit -- a *Ms parameter multiplied by 1000 before a timer or
+    printed with an "s" suffix, a *Seconds parameter handed straight to a
+    millisecond timer; an options, config or settings name for a value the
+    body passes as a single scalar; a name that says where the value goes --
+    prefix, suffix, head, tail, start, end, first, last -- for a value the
+    body puts or looks for in the other place (a prefix appended after the
+    string, checked with endsWith); or a name that says what the value
+    bounds -- limit, max, count, size -- for a value the body uses as a
+    position instead (the start index of a slice, an offset to skip).
+  "false": >-
+    The body uses the parameter as the thing the name says, even when the name
+    is short, conventional or could be more specific: x, i, n, cb, fn, req,
+    res, next, key, path and the like are fine when the use fits; a parameter
+    forwarded to another call, stored, returned or spread unchanged is used as
+    its name says; a leading-underscore parameter declares itself unused; a
+    plural name on a repository, store, table, client, map, directory or file
+    that holds or serves those things (users for a user repository, sessions
+    for a session store, fixtures for the directory the fixtures are read
+    from) is named for what it holds and is used as that container; a short
+    name taken from the surrounding code's own vocabulary (at for a cutoff, n
+    for a count, spec for a range) is fine when the body uses it as that; a
+    name for what the caller supplies -- retries, force, limit, ttl -- that
+    the body uses to size a loop, skip a step, cap a result or set a timer is
+    honoured; and a number with no unit in its name converted with * 1000 or
+    / 1000 is not a mismatch, since the name claimed no unit.
+note: >-
+  Only the parameter in `matched` is judged; the function's other parameters
+  are separate subjects and the surrounding code is context. Read every use
+  of that parameter in the body: which argument position it fills and what
+  that position means (the first argument of slice is a start index, the
+  argument of setTimeout is milliseconds), what it is compared with or
+  concatenated to and on which side, what it is multiplied or divided by,
+  which fields are read from it, and whether it is called. The type
+  annotation is not the evidence -- it type-checks either way -- the name is
+  the claim and what the body does with the value is the evidence. A body
+  that only passes the parameter on, stores it, or returns it shows nothing
+  against the name.

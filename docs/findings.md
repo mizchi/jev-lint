@@ -1271,6 +1271,9 @@ requests for the round.
 | `log-message-matches-event` | ts | SHIP | 0.62 | 0.17 / 0.17 |
 | `safety-comment-holds` | rs | COOKBOOK | 0.58 | recall 0.89; an `unreachable_unchecked` whose slot a release empties sits at 0.50–0.56 |
 | `query-name-describes-sql` | text | SHIP | 0.61 | 0.31 / 0.30 |
+| `describe-names-subject` | ts | SHIP | 0.45 | 0.25 / 0.28 |
+| `param-name-describes-use` | ts | COOKBOOK | 0.50 | 0.08 on the corpus, 0.03 on 701 unseen parameters |
+| `migration-name-describes-change` | ts | COOKBOOK | 0.60 | corpus 0.31 / 0.20; on 107 real knex migrations 4 right, 3 arguable, 4 needing domain knowledge, and no cutoff separates those |
 
 Three of the four recipes the cookbook had carried for months separated
 on a corpus at the first or second sentence; the doc-contract family took

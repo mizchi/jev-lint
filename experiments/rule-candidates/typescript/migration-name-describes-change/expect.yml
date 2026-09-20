@@ -1,0 +1,136 @@
+default: clean
+fixtures/migrations/20240301120000_add_index_to_users_email.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named add_index_to_users_email; up creates that index and also drops the legacy_login column, a destructive change the name never mentions."
+fixtures/migrations/003-drop-legacy-orders.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named drop-legacy-orders; up renames legacy_orders to orders_archive and indexes it. Nothing is dropped; the data is kept under another name."
+fixtures/migrations/20240415093000_add_column_phone_to_customers.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named add_column_phone; up alters the existing phone column's type and nullability and adds nothing."
+fixtures/migrations/20240501000000_seed_default_roles.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named seed_default_roles; up creates the roles table and adds a role_id column to users before inserting the rows. A seed that alters schema."
+fixtures/migrations/1714000000000-AddStatusToInvoices.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named AddStatusToInvoices; up adds status to payments, not invoices. Wrong table."
+fixtures/migrations/20240610000000_remove_unused_sessions_table.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named remove_unused_sessions_table; up deletes expired rows and adds an index on the table that is supposedly removed. The table stays."
+fixtures/migrations/20250105000000_add_soft_delete_to_projects.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named add_soft_delete_to_projects; up adds deleted_at and its index, and also drops the project_snapshots table, which the name hides."
+fixtures/migrations/20240320150000_split_name_column.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: three steps -- add first_name and last_name, backfill from name, drop name -- and the name split_name_column summarises all three faithfully, including the drop."
+fixtures/migrations/007-add-idempotency-key-to-payments.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: the unique constraint on the new column is part of adding an idempotency key; the down drops both."
+fixtures/migrations/20240805000000_issue_1234_add_currency_to_orders.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: an issue number in the name is not a claim; up adds currency to orders."
+fixtures/migrations/20240901000000_add_tags_table.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: the name says add, the body says createTable; the same operation under a different verb."
+fixtures/migrations/20240915000000_drop_deprecated_columns_from_users.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "up drops three columns from users; the plural name covers them."
+fixtures/migrations/20241001000000_rename_customers_to_accounts.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: the rename also drops and recreates the email index under the new table name, which is part of renaming, not a hidden change."
+fixtures/migrations/1720000000000-BackfillOrderTotals.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: a data-only migration named backfill, with a down that restores nothing because the values are derived; the empty down is not a mismatch."
+fixtures/migrations/20241101000000_make_email_unique.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: make_email_unique is done by adding a unique index; a different wording for the same operation."
+fixtures/migrations/20241201000000_create_audit_log.js:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "JavaScript exports.up shape; up creates the audit_log table with an index on it."
+fixtures/migrations/20250201000000_orders_indexes.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: a vague name (orders_indexes) that is nonetheless true; up adds two indexes on orders and nothing else."
+fixtures/migrations/20250320000000_revert_add_currency_to_orders.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: the name contains 'add' and up drops the column, because the name says revert; reverting an add is a drop."
+fixtures/migrations/20250410000000_rename_column_status_to_state_on_jobs.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: a rename implemented as add state, copy from status, drop status, with the comment saying why; a multi-step change the name summarises faithfully."
+fixtures/migrations/20250301000000_add_user_preferences.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: the name says add (a feature, not 'table') and up creates the user_preferences table with its foreign key; the FK is part of the table."
+fixtures/migrations/20250315000000_fix_orders_total_type.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "'fix ... type' is vague but true: up widens total_cents to bigint."
+fixtures/migrations/20250401000000_add_not_null_to_users_email.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named add_not_null_to_users_email; up backfills nulls and sets a default but never sets NOT NULL. The promised constraint is missing."
+fixtures/migrations/20250420000000_add_index_on_orders_customer.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named add_index_on_orders_customer; the index is created on order_lines, not orders. Wrong table, kysely form of the AddStatusToInvoices case."
+fixtures/migrations/20250501000000_backfill_user_slugs.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named backfill_user_slugs, which is data only; up also adds a unique index on slug, a schema change and a constraint the name hides."
+fixtures/migrations/20250601000000_add_notifications.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: a feature name; up creates the notifications table and adds one notification column each to users and settings. Three tables, all for the feature. Shaped after Directus's add-notifications / add-shares, which fired at 0.65-0.82 on the unseen run under attempt 2."
+fixtures/migrations/20250615000000_appearance.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: a bare topic name with no verb; up replaces theme with appearance columns on users and defaults on settings, dropping theme on the way. Every change is the appearance feature. Shaped after Directus's themes.ts, which fired at 0.74 on the unseen run under attempt 2."
+fixtures/migrations/20250701000000_add_comments.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "a feature name whose up also deletes every row of activity, a table the comments feature does not account for. Shaped after Directus's add-deployment-webhooks, which deletes all deployment runs."

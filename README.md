@@ -285,10 +285,10 @@ docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules
 
-53 rules ship in `rules/`, one directory per language and one per rule
+54 rules ship in `rules/`, one directory per language and one per rule
 under it, each with the cases that prove it, used when the project has no
 `rules/` directory of its own. Two languages are first tier — `typescript`
-(20 rules, admitting TypeScript, Tsx, JavaScript and Jsx) and `rust` (8) —
+(21 rules, admitting TypeScript, Tsx, JavaScript and Jsx) and `rust` (8) —
 and every rule under them carries fixtures, expectations and an accepted
 baseline. `python` (12) and `go` (9) are second tier: ported from the
 TypeScript rules with the same sentence, calibrated to the same bar, not
@@ -330,6 +330,7 @@ general question does not.
 | --- | --- |
 | `test-mocks-subject` | is the behaviour the title claims performed by a stub, with the assertion reading the stub back? |
 | `snapshot-only-behaviour-claim` | does the title claim a property that a whole-render snapshot does not isolate? |
+| `describe-names-subject` | does a `describe("X")` block's title name what the tests inside it exercise? |
 | `tests-cover-failure-paths` | does this exported function have a failure path — a throw, a rejection, an error result, a guard — that none of the file's related tests reaches? The one rule on the `paired` arm, which carries excerpts of those tests |
 
 **Comments** — is the comment still true?
@@ -360,16 +361,16 @@ general question does not.
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On their own evals, 46 of the 53 rules reach precision and recall 1.00 at
+On their own evals, 47 of the 54 rules reach precision and recall 1.00 at
 their shipped cutoffs; the seven that do not each miss one labelled defect
 the rule cannot see, and the rule file says which. The evals are small —
-391 labelled defects across the 53, one to thirty-one per rule — and they
+401 labelled defects across the 54, one to thirty-one per rule — and they
 are marker-free: an earlier version carried `// DEFECT: named seconds, holds
 milliseconds` above each defect, inside the file the model was shown, and
 the fits it produced were better than the rules. `jev-lint eval --replay`
 re-derives every number with no request. The full table, with what the
 packs found on this repository's own code and on an unseen one, is in
-[docs/reference.md](docs/reference.md#the-shipped-packs). Sixteen more
+[docs/reference.md](docs/reference.md#the-shipped-packs). Eighteen more
 rules were built and measured the same way and are not shipped; they live
 in `experiments/rule-candidates/<lang>/` under the same layout, each with
 the report that says why.

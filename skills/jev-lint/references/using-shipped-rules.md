@@ -1,6 +1,6 @@
 # Using the shipped rules
 
-jev-lint ships 53 rules in the npm package's `rules/` directory, one
+jev-lint ships 54 rules in the npm package's `rules/` directory, one
 directory per rule under its language (`rules/typescript/<id>/`,
 `rules/rust/<id>/`, …) with `rule.yml`, the `fixtures/` that prove it and
 `expect.yml`.
@@ -180,8 +180,8 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted on each rule's own fixtures (`rules/<lang>/<id>/`, 391 labelled defects
-across the 53 rules, three passes each). 46 of the 53 reach precision and
+Fitted on each rule's own fixtures (`rules/<lang>/<id>/`, 401 labelled defects
+across the 54 rules, three passes each). 47 of the 54 reach precision and
 recall 1.00 at their shipped cutoffs; the seven that do not each miss one
 labelled defect the rule file names — a binding holding one branch of a
 union result, a Rust field taken under another field's name, an inline

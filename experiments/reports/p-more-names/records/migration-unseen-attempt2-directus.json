@@ -1,0 +1,1108 @@
+{
+  "schema": "jev-lint-run-1",
+  "recorded": "2026-09-20T11:00:24.126Z",
+  "model": "jev-1.13.0",
+  "arm": null,
+  "cutoffs": {
+    "migration-name-describes-change": 0.54
+  },
+  "unsureBelow": null,
+  "spent": {
+    "calls": 107,
+    "inputTokens": 169896,
+    "outputTokens": 2568,
+    "ms": 38879,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.007135632,
+    "wallMs": 1474
+  },
+  "rules": [
+    {
+      "id": "migration-name-describes-change",
+      "kind": "noul",
+      "ask": "This migration file's name misdescribes the change its up migration makes.",
+      "note": "Judge the up function against the words of the file name, whatever style the migration uses -- a query builder chain, a schema callback, a QueryRunner call or a raw SQL string. The down function is the inverse by convention and says nothing about the name; a down that undoes more or less than up is not this rule's question. Numbers and ticket ids in the name carry no claim. The question is whether someone reading only the file name in a migration list would be surprised by what up changes.",
+      "draft": "409a493b0ebc",
+      "at": 0.7,
+      "state": "located",
+      "subject": "file",
+      "severity": "warning",
+      "language": "TypeScript"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210626A-change-filesize-bigint.ts",
+      "line": 1,
+      "endLine": 27,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20201028A-remove-collection-foreign-keys.ts",
+      "line": 1,
+      "endLine": 56,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20201029B-remove-system-collections.ts",
+      "line": 1,
+      "endLine": 100,
+      "kind": "noul",
+      "value": 0.33,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210518A-add-foreign-key-constraints.ts",
+      "line": 1,
+      "endLine": 161,
+      "kind": "noul",
+      "value": 0.56,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210331A-add-refresh-interval.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210907A-webhooks-collections-not-null.ts",
+      "line": 1,
+      "endLine": 18,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210510A-restructure-relations.ts",
+      "line": 1,
+      "endLine": 37,
+      "kind": "noul",
+      "value": 0.26,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20201105B-change-webhook-url-type.ts",
+      "line": 1,
+      "endLine": 16,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210519A-add-system-fk-triggers.ts",
+      "line": 1,
+      "endLine": 185,
+      "kind": "noul",
+      "value": 0.73,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210304A-remove-locked-fields.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210716A-add-conditions-to-fields.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210721A-add-default-folder.ts",
+      "line": 1,
+      "endLine": 23,
+      "kind": "noul",
+      "value": 0.32,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210521A-add-collections-icon-color.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.37,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210312A-webhooks-collections-text.ts",
+      "line": 1,
+      "endLine": 16,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210608A-add-deep-clone-config.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210805B-change-image-metadata-structure.ts",
+      "line": 1,
+      "endLine": 104,
+      "kind": "noul",
+      "value": 0.1,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210506A-rename-interfaces.ts",
+      "line": 1,
+      "endLine": 83,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210422A-remove-files-interface.ts",
+      "line": 1,
+      "endLine": 10,
+      "kind": "noul",
+      "value": 0.68,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210415A-make-filesize-nullable.ts",
+      "line": 1,
+      "endLine": 21,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210910A-move-module-setup.ts",
+      "line": 1,
+      "endLine": 22,
+      "kind": "noul",
+      "value": 0.49,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210811A-add-geometry-config.ts",
+      "line": 1,
+      "endLine": 16,
+      "kind": "noul",
+      "value": 0.49,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210225A-add-relations-sort-field.ts",
+      "line": 1,
+      "endLine": 38,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210416A-add-collections-accountability.ts",
+      "line": 1,
+      "endLine": 16,
+      "kind": "noul",
+      "value": 0.21,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210803A-add-required-to-fields.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.34,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210802A-replace-groups.ts",
+      "line": 1,
+      "endLine": 53,
+      "kind": "noul",
+      "value": 0.51,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210831A-remove-limit-column.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210903A-add-auth-provider.ts",
+      "line": 1,
+      "endLine": 47,
+      "kind": "noul",
+      "value": 0.84,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210805A-update-groups.ts",
+      "line": 1,
+      "endLine": 37,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20201029A-remove-system-relations.ts",
+      "line": 1,
+      "endLine": 129,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210525A-add-insights.ts",
+      "line": 1,
+      "endLine": 36,
+      "kind": "noul",
+      "value": 0.69,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20201105A-add-cascade-system-relations.ts",
+      "line": 1,
+      "endLine": 137,
+      "kind": "noul",
+      "value": 0.53,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20201029C-remove-system-fields.ts",
+      "line": 1,
+      "endLine": 1651,
+      "kind": "noul",
+      "value": 0.2,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20211009A-add-auth-data.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210924A-add-collection-organization.ts",
+      "line": 1,
+      "endLine": 26,
+      "kind": "noul",
+      "value": 0.73,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20211016A-add-webhook-headers.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20211230A-add-project-descriptor.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210929A-rename-login-action.ts",
+      "line": 1,
+      "endLine": 18,
+      "kind": "noul",
+      "value": 0.28,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210927B-replace-m2m-interface.ts",
+      "line": 1,
+      "endLine": 20,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220314A-add-translation-strings.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220325B-add-default-language.ts",
+      "line": 1,
+      "endLine": 31,
+      "kind": "noul",
+      "value": 0.85,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20211103A-set-unique-to-user-token.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20211118A-add-notifications.ts",
+      "line": 1,
+      "endLine": 33,
+      "kind": "noul",
+      "value": 0.65,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20211211A-add-shares.ts",
+      "line": 1,
+      "endLine": 51,
+      "kind": "noul",
+      "value": 0.82,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220308A-add-bookmark-icon-and-color.ts",
+      "line": 1,
+      "endLine": 16,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20211007A-update-presets.ts",
+      "line": 1,
+      "endLine": 140,
+      "kind": "noul",
+      "value": 0.33,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220303A-remove-default-project-color.ts",
+      "line": 1,
+      "endLine": 23,
+      "kind": "noul",
+      "value": 0.12,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220402A-remove-default-value-panel-icon.ts",
+      "line": 1,
+      "endLine": 23,
+      "kind": "noul",
+      "value": 0.28,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20211103B-update-special-geometry.ts",
+      "line": 1,
+      "endLine": 24,
+      "kind": "noul",
+      "value": 0.16,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20211104A-remove-collections-listing.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220429D-drop-non-null-from-sender-of-notifications.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220429A-add-flows.ts",
+      "line": 1,
+      "endLine": 89,
+      "kind": "noul",
+      "value": 0.42,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220325A-fix-typecast-flags.ts",
+      "line": 1,
+      "endLine": 51,
+      "kind": "noul",
+      "value": 0.17,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220323A-add-field-validation.ts",
+      "line": 1,
+      "endLine": 16,
+      "kind": "noul",
+      "value": 0.13,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220614A-rename-hook-trigger-to-event.ts",
+      "line": 1,
+      "endLine": 10,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220801A-update-notifications-timestamp-column.ts",
+      "line": 1,
+      "endLine": 20,
+      "kind": "noul",
+      "value": 0.25,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220429C-drop-non-null-from-ip-of-activity.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220802A-add-custom-aspect-ratios.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20230401A-update-material-icons.ts",
+      "line": 1,
+      "endLine": 27,
+      "kind": "noul",
+      "value": 0.55,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220322A-rename-field-typecast-flags.ts",
+      "line": 1,
+      "endLine": 84,
+      "kind": "noul",
+      "value": 0.3,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220826A-add-origin-to-accountability.ts",
+      "line": 1,
+      "endLine": 22,
+      "kind": "noul",
+      "value": 0.76,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20230525A-add-preview-settings.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.3,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20230823A-add-content-versioning.ts",
+      "line": 1,
+      "endLine": 51,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20231010A-add-extensions.ts",
+      "line": 1,
+      "endLine": 13,
+      "kind": "noul",
+      "value": 0.08,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20231215A-add-focalpoints.ts",
+      "line": 1,
+      "endLine": 16,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20220429B-add-color-to-insights-icon.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.82,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240311A-deprecate-webhooks.ts",
+      "line": 1,
+      "endLine": 159,
+      "kind": "noul",
+      "value": 0.39,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20230927A-themes.ts",
+      "line": 1,
+      "endLine": 61,
+      "kind": "noul",
+      "value": 0.74,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240305A-change-useragent-type.ts",
+      "line": 1,
+      "endLine": 26,
+      "kind": "noul",
+      "value": 0.09,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20231009B-update-panel-options.ts",
+      "line": 1,
+      "endLine": 103,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240716A-update-files-date-fields.ts",
+      "line": 1,
+      "endLine": 38,
+      "kind": "noul",
+      "value": 0.37,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20230721A-require-shares-fields.ts",
+      "line": 1,
+      "endLine": 70,
+      "kind": "noul",
+      "value": 0.24,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20230526A-migrate-translation-strings.ts",
+      "line": 1,
+      "endLine": 85,
+      "kind": "noul",
+      "value": 0.37,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240204A-marketplace.ts",
+      "line": 1,
+      "endLine": 130,
+      "kind": "noul",
+      "value": 0.74,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20231009A-update-csv-fields-to-text.ts",
+      "line": 1,
+      "endLine": 62,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240924A-migrate-legacy-comments.ts",
+      "line": 1,
+      "endLine": 94,
+      "kind": "noul",
+      "value": 0.37,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210920A-webhooks-url-not-null.ts",
+      "line": 1,
+      "endLine": 29,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240909B-consolidate-content-versioning.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.61,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240515A-add-session-window.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.41,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240817A-update-icon-fields-length.ts",
+      "line": 1,
+      "endLine": 71,
+      "kind": "noul",
+      "value": 0.34,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240806A-permissions-policies.ts",
+      "line": 1,
+      "endLine": 354,
+      "kind": "noul",
+      "value": 0.49,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240909A-separate-comments.ts",
+      "line": 1,
+      "endLine": 75,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240701A-add-tus-data.ts",
+      "line": 1,
+      "endLine": 16,
+      "kind": "noul",
+      "value": 0.22,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240422A-public-registration.ts",
+      "line": 1,
+      "endLine": 23,
+      "kind": "noul",
+      "value": 0.15,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20210927A-replace-fields-group.ts",
+      "line": 1,
+      "endLine": 69,
+      "kind": "noul",
+      "value": 0.38,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240122A-add-report-url-fields.ts",
+      "line": 1,
+      "endLine": 18,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20250609A-license-banner.ts",
+      "line": 1,
+      "endLine": 20,
+      "kind": "noul",
+      "value": 0.37,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20250718A-add-direction.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20251012A-add-field-searchable.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20250813A-add-mcp.ts",
+      "line": 1,
+      "endLine": 22,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20250224A-visual-editor.ts",
+      "line": 1,
+      "endLine": 49,
+      "kind": "noul",
+      "value": 0.32,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20250613A-add-project-id.ts",
+      "line": 1,
+      "endLine": 31,
+      "kind": "noul",
+      "value": 0.18,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20240924B-populate-versioning-deltas.ts",
+      "line": 1,
+      "endLine": 44,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20251103A-add-ai-settings.ts",
+      "line": 1,
+      "endLine": 18,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20251224A-remove-webhooks.ts",
+      "line": 1,
+      "endLine": 23,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20251028A-add-retention-indexes.ts",
+      "line": 1,
+      "endLine": 51,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260128A-add-collaborative-editing.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260204A-add-deployment.ts",
+      "line": 1,
+      "endLine": 38,
+      "kind": "noul",
+      "value": 0.31,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20251014A-add-project-owner.ts",
+      "line": 1,
+      "endLine": 46,
+      "kind": "noul",
+      "value": 0.89,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260312A-add-ai-translation-settings.ts",
+      "line": 1,
+      "endLine": 18,
+      "kind": "noul",
+      "value": 0.05,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260110A-add-ai-provider-settings.ts",
+      "line": 1,
+      "endLine": 41,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260512B-add-mcp-oauth.ts",
+      "line": 1,
+      "endLine": 117,
+      "kind": "noul",
+      "value": 0.35,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260113A-add-revisions-index.ts",
+      "line": 1,
+      "endLine": 50,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260507A-add-licensing.ts",
+      "line": 1,
+      "endLine": 24,
+      "kind": "noul",
+      "value": 0.83,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/run.ts",
+      "line": 1,
+      "endLine": 149,
+      "kind": "noul",
+      "value": 0.19,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260217A-null-item-versions.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.14,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260211A-add-deployment-webhooks.ts",
+      "line": 1,
+      "endLine": 46,
+      "kind": "noul",
+      "value": 0.83,
+      "confidence": null,
+      "arm": "located"
+    },
+    {
+      "rule": "migration-name-describes-change",
+      "file": "/Users/mz/ghq/github.com/ubugeeei-prod/vize/tests/_fixtures/_git/directus/api/src/database/migrations/20260512A-add-autosave-revision-interval.ts",
+      "line": 1,
+      "endLine": 14,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "located"
+    }
+  ]
+}

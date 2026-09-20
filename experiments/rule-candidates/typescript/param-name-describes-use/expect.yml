@@ -1,0 +1,170 @@
+default: clean
+fixtures/notify.ts:
+  - line: 7
+    label: bad
+    window: 0
+    reason: "userId is validated with includes('@'), sent as `to:` and split at '@' for a greeting: the body uses it as an email address, not an id."
+  - line: 22
+    label: clean
+    window: 0
+    reason: "hard clean: users is a UserRepository, a plural name on the thing that holds users; the body calls users.get. Fired at 0.78 on attempt 1 before the false branch named this shape."
+  - line: 23
+    label: clean
+    window: 0
+    reason: "hard clean: the twin of line 7; userId is looked up in the repository and the email comes from the user record."
+  - line: 36
+    label: bad
+    window: 0
+    reason: "options is handed to setInterval as the interval: a single number, not an options object."
+  - line: 45
+    label: clean
+    window: 0
+    reason: "hard clean: the twin of line 36; optional options merged over defaults and read field by field."
+  - line: 58
+    label: clean
+    window: 0
+    reason: "hard clean: handler is stored in a set and never called here; registering a callback is using it as a handler."
+  - line: 72
+    label: clean
+    window: 0
+    reason: "event is forwarded field by field to emit; used as the event it says it is."
+fixtures/timing.ts:
+  - line: 3
+    label: bad
+    window: 0
+    reason: "timeoutMs is multiplied by 1000 to make the deadline and printed with an 's' suffix: the body treats it as seconds while the name says milliseconds."
+  - line: 16
+    label: clean
+    window: 0
+    reason: "hard clean: the twin of line 3; timeoutMs goes straight to setTimeout, which takes milliseconds."
+  - line: 29
+    label: clean
+    window: 0
+    reason: "hard clean: ttl has no unit in its name; multiplying by 1000 for setTimeout is how seconds become milliseconds and contradicts nothing."
+  - line: 39
+    label: clean
+    window: 0
+    reason: "hard clean: ttlSeconds * 1000 into setTimeout is the correct conversion for a seconds parameter."
+  - line: 49
+    label: clean
+    window: 0
+    reason: "hard clean: retries names what the caller supplies and the body uses it to size the retry loop (attempt <= retries)."
+  - line: 10
+    label: clean
+    window: 0
+    reason: "r is a one-letter resolve callback in a sleep; conventional and called as one."
+fixtures/cart.ts:
+  - line: 5
+    label: bad
+    window: 0
+    reason: "items is read as one product (items.sku, items.price) and pushed as a single line; a plural name on a single item."
+  - line: 18
+    label: clean
+    window: 0
+    reason: "hard clean: the twin of line 5; items is iterated."
+  - line: 28
+    label: bad
+    window: 0
+    reason: "isEnabled is the upper bound of a for loop that spawns workers: a count, not a yes-or-no."
+  - line: 37
+    label: bad
+    window: 0
+    reason: "prefix is checked with endsWith and appended after the name: the body uses it as a suffix."
+  - line: 45
+    label: bad
+    window: 0
+    reason: "limit is passed as the start of slice, so the body drops the first `limit` rows and returns the rest: an offset, not a cap."
+  - line: 52
+    label: clean
+    window: 0
+    reason: "hard clean: the twin of line 45; limit caps the slice length and offset starts it."
+  - line: 60
+    label: clean
+    window: 0
+    reason: "hard clean: force names the caller's intent and the body uses it to skip the cache read; a boolean used as one."
+  - line: 7
+    label: clean
+    window: 0
+    reason: "l is a one-letter find callback parameter for a line; conventional."
+  - line: 79
+    label: clean
+    window: 0
+    reason: "taxRate with a default, multiplied in as a rate."
+fixtures/routes.ts:
+  - line: 5
+    label: clean
+    window: 0
+    reason: "hard clean: _req declares itself unused; res is used to respond."
+  - line: 9
+    label: clean
+    window: 0
+    reason: "hard clean: req, res, next -- the conventional express triple, each used as such."
+  - line: 23
+    label: clean
+    window: 0
+    reason: "hard clean: cb is a node-style callback, called with (err) and (null, data)."
+  - line: 25
+    label: clean
+    window: 0
+    reason: "err and data in a node-style callback, forwarded to cb."
+  - line: 43
+    label: clean
+    window: 0
+    reason: "path is joined under baseDir or accepted as absolute; used as a path. The destructured first parameter is not a subject."
+  - line: 62
+    label: clean
+    window: 0
+    reason: "url is forwarded unchanged to res.redirect."
+  - line: 69
+    label: bad
+    window: 0
+    reason: "userIds is plural and the body reads only userIds[0], and hands it to db.sessions.get as if it were a session id: a list of user ids used as one session id."
+fixtures/api.ts:
+  - line: 6
+    label: clean
+    window: 0
+    reason: "hard clean: id is interpolated into a URL path and an error message; an id used as an id, even though the body treats it as text."
+  - line: 14
+    label: clean
+    window: 0
+    reason: "hard clean: timeoutMs / 1000 for display in seconds is the correct conversion from the unit the name states; the twin of timing.ts:3, which multiplies."
+  - line: 21
+    label: clean
+    window: 0
+    reason: "hard clean: count is used as a truthiness guard and then printed as a count; a number tested for zero is still a count."
+  - line: 31
+    label: clean
+    window: 0
+    reason: "hard clean: items[0] behind a length check is reading a collection; the twin of routes.ts:69 where the plural is used as one id of another kind."
+  - line: 40
+    label: clean
+    window: 0
+    reason: "tags with an empty-object default, iterated as entries."
+  - line: 48
+    label: clean
+    window: 0
+    reason: "hard clean: onDone is never called by name but is passed to .then, which calls it; forwarded as a callback."
+  - line: 55
+    label: clean
+    window: 0
+    reason: "before is a date used as an upper bound on createdAt; used as the boundary it names."
+  - line: 56
+    label: clean
+    window: 0
+    reason: "dryRun with a default, used to return early before writing."
+  - line: 72
+    label: clean
+    window: 0
+    reason: "maxLength caps the slice length (with room for the ellipsis); a bound used as a bound."
+  - line: 79
+    label: clean
+    window: 0
+    reason: "hard clean: fixtures is the path of the directory the fixtures are read from; a plural name on a container. Taken from src/commits.ts patchRepo(fixtures), which fired at 0.58-0.63 on the unseen run under attempt 2."
+  - line: 88
+    label: clean
+    window: 0
+    reason: "answers is iterated; used as the list it names."
+  - line: 89
+    label: clean
+    window: 0
+    reason: "hard clean: at is a cutoff, compared against each value; a terse name from the code's own vocabulary. Taken from src/calibrate.ts score(answers, at), which fired at 0.49 on the unseen run under attempt 2."

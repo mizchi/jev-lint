@@ -1,0 +1,111 @@
+# --------------------------------------------------------------------------
+# Does a migration file's name describe the change its `up` makes?
+# --------------------------------------------------------------------------
+# The migrations cousin of module-name-describes-contents. A migration's
+# file name is the one line of it that ever appears in a migration table, a
+# deploy log or a code review list, and it is a claim about the schema
+# change: "add index to users email", "drop legacy orders". The claim fails
+# when `up` also drops a column the name never mentions, renames instead of
+# dropping, or alters a type under a name that says "add column". A linter
+# can find `up`; it cannot read a Kysely builder chain, a knex callback, a
+# TypeORM QueryRunner call and a raw SQL string as the same operation and
+# compare that to a snake_case sentence.
+#
+# `subject: file` because the file's text never mentions its own name, and
+# `state: located` rather than `graph`: the outline lists `up` and `down`
+# with their signatures and nothing of what they do, and the graph carries
+# no source, so the SQL strings and builder calls only arrive with the file
+# source. A migration file is small, so the located state costs little.
+# The matcher requires an `up` in one of the shapes the ORMs use, so a
+# non-migration file in the same tree is not a subject.
+id: migration-name-describes-change
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+subject: file
+state: located
+# Fitted 2026-09-20 on fixtures/migrations/ (27 files: 11 defects, 16 cleans
+# of which 10 are labelled hard; 3 passes, 0 flips, max spread 0.14 on the
+# TypeORM wrong-table case). Cleans top out at 0.27 (rename_customers_to_
+# accounts, which also recreates the email index) and 0.25 (appearance, a
+# bare topic name over an add/copy/drop); defects start at 0.82 and reach
+# 0.96. Corpus midpoint 0.54. Set at 0.60 because of the unseen run: on 107
+# real knex migrations (Directus) the clean band is not under 0.27 -- a
+# feature-named migration whose table the file cannot connect to the name
+# (add-color-to-insights-icon on directus_dashboards, 0.85; add-origin-to-
+# accountability on activity and sessions, 0.60) answers inside the corpus's
+# defect band, beside real hidden drops and deletes at 0.71-0.89. 0.60
+# keeps 0.33 of headroom over the corpus cleans and 0.22 under its defects;
+# on the unseen run it changes nothing (two of the eleven sit at exactly
+# 0.60), and it does not separate the domain-knowledge cases, which no
+# cutoff does. Cookbook recipe.
+at: 0.60
+axis: file
+severity: warning
+rule:
+  kind: program
+  has:
+    stopBy: end
+    any:
+      # export async function up(db) {}
+      - all:
+          - kind: function_declaration
+          - has: { field: name, regex: "^up$" }
+      # export const up = async (db) => {}
+      - all:
+          - kind: variable_declarator
+          - has: { field: name, regex: "^up$" }
+      # class X implements MigrationInterface { async up(runner) {} }
+      # export default { async up(qi) {} }
+      - all:
+          - kind: method_definition
+          - has: { field: name, regex: "^up$" }
+      # module.exports = { up: async (qi) => {} }
+      - all:
+          - kind: pair
+          - has: { field: key, regex: "^up$" }
+      # exports.up = function (knex) {}
+      - all:
+          - kind: assignment_expression
+          - has: { field: left, regex: "\\.up$" }
+ask: >-
+  This migration file's name misdescribes the change its up migration makes.
+criteria:
+  "true": >-
+    The file name states one operation on one thing and the up function does
+    something else or something more: it names an add, create or index and
+    the body also drops, renames or changes the type of something the name
+    does not mention; it names a drop or removal and the body renames,
+    archives or deletes rows instead of dropping; when the name names a
+    specific table, column or index, the one the body touches is a different
+    one (a name saying one table while the column or index goes on another); it names a column addition and the body alters an existing
+    column instead; it names a constraint (not null, unique, foreign key)
+    that the body never actually adds, however much it prepares for it; or
+    it names a seed, backfill or data fix, which is data only, and the body
+    also creates or alters a table, index or constraint -- a unique index
+    added after a backfill is a schema change the name hides.
+  "false": >-
+    The up function does what the name says and nothing the name would hide.
+    A name that summarises a multi-step change is faithful when every step
+    serves it (split_name_column covering add two columns, backfill, drop the
+    old one; a rename done as add, copy, drop; rename_x_to_y also renaming
+    x's index); a different verb for the same operation is faithful (create
+    and add for a new table, make unique and add a unique index, remove and
+    drop, revert_add and drop); a supporting index, default, not-null or
+    foreign key on the very column or table the name says it adds is part of
+    adding it; a name that names a feature, module or topic rather than a table
+    or column (add_shares, add_notifications, themes, marketplace) claims
+    only that every change serves that feature, so creating its tables,
+    adding its columns to several related tables, and reshaping the columns
+    that feature replaces are all what the name says, and no single table is
+    the wrong one; and a timestamp, sequence number or ticket reference in
+    the name is not a claim.
+note: >-
+  Judge the up function against the words of the file name, whatever style
+  the migration uses -- a query builder chain, a schema callback, a
+  QueryRunner call or a raw SQL string. The down function is the inverse by
+  convention and says nothing about the name; a down that undoes more or
+  less than up is not this rule's question. Numbers and ticket ids in the
+  name carry no claim. Under a feature name the question is not how many
+  tables are touched but whether something is dropped, deleted or altered
+  that the feature does not account for. The question is whether someone reading only the
+  file name in a migration list would be surprised by what up changes.

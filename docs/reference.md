@@ -436,7 +436,7 @@ refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
 
 ## The shipped packs
 
-53 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
+54 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
 grouped here by what they ask. Which languages each exists in:
 
 | rule | typescript | rust | python | go | other |
@@ -458,6 +458,7 @@ grouped here by what they ask. Which languages each exists in:
 | `must-name-panics` | | | | ✓ | |
 | `test-mocks-subject` | ✓ | | | | |
 | `snapshot-only-behaviour-claim` | ✓ | | | | |
+| `describe-names-subject` | ✓ | | | | |
 | `tests-cover-failure-paths` | ✓ | | ✓ | ✓ | |
 | `log-level-matches-event` | ✓ | | ✓ | | |
 | `log-message-matches-event` | ✓ | | | | |
@@ -543,6 +544,7 @@ separates on four defects and is not shipped on that count. Reports in
 | --- | --- |
 | `test-mocks-subject` | is the behaviour the title claims performed by a stub, with the assertion reading the stub's canned value back? |
 | `snapshot-only-behaviour-claim` | does the title claim a property (an ordering, a hidden row, a branch) that a whole-render snapshot does not isolate? |
+| `describe-names-subject` | does a `describe("X")` block's title name the function, module or behaviour the tests inside it exercise? |
 | `tests-cover-failure-paths` | does this exported function declare a failure path — a throw, a rejection, an error result, a guard that refuses an input — that none of the related tests reaches? |
 
 Both need `state: located`: a `vi.mock` at the top of the file is what makes
@@ -632,7 +634,7 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 On a one-language repository every other language's rules are idle, and
 the report says so in one line rather than listing them as silent.
 
-Of the 53, **46 reach precision 1.00 and recall 1.00 at their shipped cutoffs
+Of the 54, **47 reach precision 1.00 and recall 1.00 at their shipped cutoffs
 on their own fixtures** (`rules/*/*/baseline.json`, three passes each,
 decisions on the mean; `jev-lint eval --replay` re-derives every number below
 with no request). Read that with the positive counts beside them: per rule,
@@ -894,8 +896,8 @@ the batching axis invalidates the verdicts that depended on them.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **The cutoffs are fitted to small evals.** 179 labelled fixtures, 391
-  labelled defects across 53 rules, one to thirty-one per rule. Expect to refit; see
+- **The cutoffs are fitted to small evals.** 185 labelled fixtures, 401
+  labelled defects across 54 rules, one to thirty-one per rule. Expect to refit; see
   [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.

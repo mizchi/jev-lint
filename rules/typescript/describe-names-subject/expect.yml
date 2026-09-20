@@ -1,0 +1,139 @@
+default: clean
+fixtures/config.test.ts:
+  - line: 7
+    label: bad
+    window: 0
+    reason: "titled parseConfig; every test calls loadConfig and nothing in the block references parseConfig. Whether loadConfig parses internally is not visible in the block, so the title names a function the tests never reach."
+  - line: 33
+    label: clean
+    window: 0
+    reason: "hard clean: outer block named for the class, which beforeEach constructs; the tests sit in nested blocks named for its methods."
+  - line: 39
+    label: clean
+    window: 0
+    reason: "hard clean: nested block named for a method; tests call loader.load, the instance coming from the outer beforeEach."
+  - line: 51
+    label: clean
+    window: 0
+    reason: "nested block named for a method; the test calls loader.watch."
+  - line: 63
+    label: clean
+    window: 0
+    reason: "hard clean: title is a file name; the tests exercise two exports of that file."
+  - line: 79
+    label: clean
+    window: 0
+    reason: "hard clean: title is a condition, not a symbol; every test sets up that condition (an unreadable file) and observes loadConfig's failure."
+fixtures/checkout.test.ts:
+  - line: 9
+    label: clean
+    window: 0
+    reason: "hard clean: a feature title (discount codes) honoured through the public entry point checkout(cart, { code }); every test passes a code and observes its effect on the total."
+  - line: 27
+    label: bad
+    window: 0
+    reason: "titled CartService (a class); every test calls the free function computeTotals and nothing constructs or references CartService."
+  - line: 47
+    label: bad
+    window: 0
+    reason: "titled removeItem; both tests call addItem only and assert line counts. removeItem never appears in the block."
+  - line: 59
+    label: clean
+    window: 0
+    reason: "hard clean: tests call a local wrapper `usd` defined inside the block that calls formatMoney; the named function is reached through the wrapper."
+  - line: 75
+    label: clean
+    window: 0
+    reason: "tests call addItem; the second also calls removeItem to check the inverse, which is still about addItem."
+fixtures/retry.test.ts:
+  - line: 6
+    label: bad
+    window: 0
+    reason: "titled retry; every test calls backoffDelay and checks a delay number. No test retries anything, no function retries, and `retry` is never referenced."
+  - line: 24
+    label: clean
+    window: 0
+    reason: "hard clean: titled for the class HttpClient; every test builds one through the factory createHttpClient and exercises its get/post."
+  - line: 54
+    label: clean
+    window: 0
+    reason: "hard clean: a behaviour title (rate limiting) honoured through createLimiter(...).tryAcquire; each test sets up a limit and observes refusal or admission."
+  - line: 78
+    label: clean
+    window: 0
+    reason: "describe.skip arm; tests call withTimeout."
+  - line: 88
+    label: clean
+    window: 0
+    reason: "hard clean: a sentence title naming retry and a signal; the test calls retry with a signal and observes that it stops."
+fixtures/users.test.ts:
+  - line: 12
+    label: bad
+    window: 0
+    reason: "titled deleteUser; every test calls deactivateUser and asserts the row is still there with status inactive -- the tests exercise a different operation with the opposite effect on the row."
+  - line: 30
+    label: bad
+    window: 0
+    reason: "titled validateEmail; every test calls normalizeEmail and checks the transformed string. Validation never happens in the block."
+  - line: 44
+    label: clean
+    window: 0
+    reason: "hard clean: outer block named for the class; the instance is created in a file-level beforeEach and the nested blocks call its methods."
+  - line: 45
+    label: clean
+    window: 0
+    reason: "nested block named for a method; tests call repo.findByEmail."
+  - line: 55
+    label: clean
+    window: 0
+    reason: "nested block named for a method; the test calls repo.create."
+  - line: 62
+    label: clean
+    window: 0
+    reason: "hard clean: a feature title (password reset) honoured through two public functions of other names, requestReset and completeReset."
+  - line: 74
+    label: clean
+    window: 0
+    reason: "describe.each with a templated title naming parseDuration; the test calls parseDuration."
+  - line: 84
+    label: clean
+    window: 0
+    reason: "hard clean: a sentence title naming deleteUser; two of three tests call deleteUser and check the row is gone, one test touches validateEmail on the way."
+fixtures/services.test.ts:
+  - line: 12
+    label: clean
+    window: 0
+    reason: "hard clean: the named middleware is never called directly; it is mounted with app.use and exercised through HTTP requests to the app. Referenced and reached."
+  - line: 29
+    label: clean
+    window: 0
+    reason: "hard clean: titled Scheduler; the tests construct FakeClockScheduler, a test double named as a Scheduler, and exercise scheduling (at/advance)."
+  - line: 50
+    label: clean
+    window: 0
+    reason: "hard clean: the tests call sortByPrice and assert only a length and non-mutation. Weak assertions are test-name-verifies-claim's finding; the block is about the named function."
+  - line: 67
+    label: clean
+    window: 0
+    reason: "hard clean: the named function is called only in beforeEach; every test observes its result. Set-up counts as exercising."
+  - line: 83
+    label: bad
+    window: 0
+    reason: "titled createOrder; every test calls createOrderDraft, a differently named sibling with a longer name, and one test asserts the draft is not persisted. createOrder never appears."
+  - line: 100
+    label: bad
+    window: 0
+    reason: "titled UserService.findById; both tests call service.findByEmail. Right class, wrong method, never findById."
+  - line: 116
+    label: bad
+    window: 0
+    reason: "titled cache eviction; every cache has max 100 and holds at most one key, so no test ever fills the cache and nothing is evicted. The named behaviour never happens."
+fixtures/forms.test.tsx:
+  - line: 6
+    label: clean
+    window: 0
+    reason: "titled for a component in JSX form; every test renders <LoginForm />."
+  - line: 23
+    label: bad
+    window: 0
+    reason: "titled LoginForm validation; every test renders <SignupForm /> and checks signup-only fields (confirmation, length). LoginForm is never rendered."
