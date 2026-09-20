@@ -363,6 +363,7 @@ export async function run({
       effectiveAxis(s),
       s.promoted ? (s.matchText ?? null) : null,
       contextKey(s, s.arm),
+      s.captured,
     ),
   }));
 
@@ -473,7 +474,7 @@ export async function run({
           const storeKey =
             batch.arm === s.arm
               ? s.key!
-              : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null, contextKey(s, batch.arm));
+              : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null, contextKey(s, batch.arm), s.captured);
           cache.set(storeKey, answer, {
             rule: s.rule.id,
             draft: ruleTextHash(s.rule),

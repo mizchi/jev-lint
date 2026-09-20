@@ -654,6 +654,12 @@ async function main(argv: string[]): Promise<number> {
   // would. The first positional is the rule when it names one; with --file
   // and no such id in the file, it is a path like the rest.
   let rules: Rule[];
+  // The commit range, when one was given as a positional: only ever from
+  // the command line. The config's `paths:` fill `opts.paths` when no
+  // positional was given, and a path is not a range -- `commits --base
+  // <ref>` with `paths: [src]` in the config once judged every commit that
+  // touched `src`.
+  let rangeArg: string | undefined = argPaths[0];
   if (command === "run") {
     const [head, ...tail] = opts.paths;
     const shipped = shippedRulesPath();
@@ -665,6 +671,7 @@ async function main(argv: string[]): Promise<number> {
       picked = selectRules({ file: opts.file, shipped, projectRules: project });
       paths = opts.paths;
     }
+    rangeArg = argPaths.length > 0 ? paths[0] : undefined;
     for (const e of picked.errors) log(`rule error: ${e}`);
     for (const w of picked.warnings) log(`rule warning: ${w}`);
     if (picked.rules.length === 0) return 2;
@@ -709,7 +716,7 @@ async function main(argv: string[]): Promise<number> {
     // The range is a positional (`main..HEAD`), else `--base <ref>`, else
     // what is not yet pushed. A repository with no upstream and no `--base`
     // has no default worth guessing at.
-    const range = opts.paths[0] ?? (opts.base ? `${opts.base}..HEAD` : defaultRange());
+    const range = rangeArg ?? (opts.base ? `${opts.base}..HEAD` : defaultRange());
     if (!range) {
       log("commits: no range. Give one (`main..HEAD`), or --base <ref>, or set an upstream");
       return 2;

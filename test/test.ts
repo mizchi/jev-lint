@@ -34,7 +34,7 @@ import { buildState, resolveSubject, renderOutline, capturedMetavariables, widen
 import { execFileSync } from "node:child_process";
 import { splitBlocks, textSubjects, findTextFiles, MAX_BLOCK_CHARS } from "../src/text.ts";
 import { listCommits, commitDiff, commitSubjects, commitFixtureSubjects, patchRepo, squashSubjects, MAX_DIFF_CHARS } from "../src/commits.ts";
-import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET } from "../src/paired.ts";
+import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, inSourceTests, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET } from "../src/paired.ts";
 import {
   planBatches,
   planRuleBatches,
@@ -2043,6 +2043,17 @@ test("cache: on an arm that shows context, identical text in different contexts 
   const second = { ...first, line: 20 };
   assert.notEqual(contextKey(first, "bare"), contextKey(second, "bare"));
   assert.equal(contextKey(first, "bare"), contextKey({ ...first, line: 112, subjectLine: 110 }, "bare"), "the same offset after the file grew above it");
+  // A test's suites are in its question on every arm, so they are in the key
+  // on every arm: one title under two describes is two questions, and a
+  // test with no describe above it keys as before.
+  const under = subjectOf({ file: "src/a.test.ts", enclosing: { name: "cart", role: "suite", path: ["cart"] } });
+  const deeper = subjectOf({ file: "src/a.test.ts", enclosing: { name: "removeItem", role: "suite", path: ["cart", "removeItem"] } });
+  const top = subjectOf({ file: "src/a.test.ts", enclosing: null });
+  for (const arm of ["bare", "local", "located"] as StateArm[]) {
+    assert.notEqual(contextKey(under, arm), contextKey(deeper, arm), `${arm}: two paths, two questions`);
+  }
+  assert.equal(contextKey(top, "bare"), null);
+  assert.equal(contextKey({ ...under, enclosing: { name: "cart", role: "suite" } }, "bare"), null, "no path, nothing on bare");
 });
 
 test("cache: a key covers the draft, the arm and the axis, but not the threshold", () => {
@@ -2065,6 +2076,19 @@ test("cache: a key covers the draft, the arm and the axis, but not the threshold
   // `located` key served it, later, as the answer to a question nobody asked.
   // Distinct keys are what make that a miss instead.
   assert.notEqual(verdictKey(r, "located", "TEXT"), verdictKey(r, "local", "TEXT"));
+  // What the matcher captured is in the question by name -- for a comment
+  // rule the comment IS the claim -- so it is in the key. Found by running
+  // the tool on itself: a comment rewritten to be true kept its old verdict
+  // at the same 0.73 through two runs, because the declaration under it
+  // had not changed.
+  assert.notEqual(
+    verdictKey(r, "located", "TEXT", "file", null, null, { DOC: "// returns null" }),
+    verdictKey(r, "located", "TEXT", "file", null, null, { DOC: "// throws" }),
+  );
+  assert.equal(
+    verdictKey(r, "located", "TEXT", "file", null, null, { DOC: "// throws" }),
+    verdictKey(r, "located", "TEXT", "file", null, null, { DOC: "// throws" }),
+  );
 
   // A promoted subject (`subject: enclosing`) has the enclosing function as
   // its text and the match as `matchText`, and the question carries BOTH. Two
@@ -2770,6 +2794,16 @@ await testAsync("scan: a test inside nested describes carries the whole path, an
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("paired: the in-source block is cut where its braces balance, and a module without one has none", () => {
+  assert.equal(inSourceTests("export const a = 1;\n"), null);
+  const block = "if (import.meta.vitest) {\n  it('x', () => { expect(1).toBe(1); });\n}\n";
+  assert.equal(inSourceTests(`export const a = 1;\n${block}export const b = 2;\n`), block.trimEnd());
+  // A stray `}` in a string ends the block there; a stray `{` runs it to the end of the file.
+  assert.equal(inSourceTests("if (import.meta.vitest) {\n  const s = '}';\n  it('y', () => {});\n}\n"), "if (import.meta.vitest) {\n  const s = '}");
+  const open = "if (import.meta.vitest) {\n  const s = '{';\n  it('z', () => {});\n}\n";
+  assert.equal(inSourceTests(open), open);
 });
 
 test("paired: a file with vitest in-source tests is its own related test", () => {
@@ -4094,6 +4128,39 @@ await testAsync("config: the pre-commit hook init writes is a shell script that 
   assert.match(hook, /review --staged/, "it judges what the commit contains, not the working tree");
   assert.match(hook, /--fail-on error/, "and blocks only on what a rule has earned");
   assert.match(hook, /TYPESAFE_API_KEY/, "and stands aside on a machine without a key");
+});
+
+await testAsync("cli: `commits --base <ref>` with `paths:` in the config judges the range, not the paths", async () => {
+  // Found by running the tool on itself: `.jev-lint.yaml` names `paths:
+  // [src, ...]`, and `commits --base v0.4.1` judged 52 commits "in src" --
+  // the config's first path had become the git range. The range is a
+  // command-line positional or --base; a config path is never one.
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-commits-cfg-")));
+  const git = (args: string[]) => execFileSync("git", args, { cwd: dir, stdio: "pipe" }).toString();
+  try {
+    git(["init", "-q", "-b", "main"]);
+    git(["config", "user.email", "t@example.com"]);
+    git(["config", "user.name", "t"]);
+    mkdirSync(join(dir, "src"));
+    for (const n of [1, 2, 3]) {
+      writeFileSync(join(dir, "src/a.ts"), `export const a = ${n};\n`);
+      git(["add", "src/a.ts"]);
+      git(["commit", "-q", "-m", `commit ${n}`]);
+    }
+    const base = git(["rev-parse", "HEAD~1"]).trim();
+    writeFileSync(join(dir, ".jev-lint.yaml"), "paths: [src]\n");
+    const cli = join(realpathSync("."), "src/cli.ts");
+    const shipped = join(realpathSync("."), "rules");
+    const out = execFileSync("node", ["--experimental-strip-types", cli, "commits", "--base", base, "--dry-run", "--cache", "none", "-R", shipped, "--no-color"], {
+      cwd: dir,
+      stdio: "pipe",
+      env: { ...process.env, TYPESAFE_API_KEY: "x" },
+    }).toString();
+    assert.match(out, new RegExp(`1 commit\\(s\\) in ${base}\\.\\.HEAD`), out);
+    assert.doesNotMatch(out, /in src/, out);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 await testAsync("config: the pre-push hook judges the commits about to be pushed, and steps aside without an upstream", async () => {

@@ -54,12 +54,14 @@ export const DEFAULT_CACHE_PATH = ".jev-lint-cache.json";
  * and is rebuilt, instead of every entry silently missing and the file
  * carrying its dead weight forever.
  */
-export const CACHE_SCHEMA = "jev-lint-cache-3";
+export const CACHE_SCHEMA = "jev-lint-cache-4";
 
 /**
  * What a subject's question shows beyond its text, at this arm: the part of
  * the key that keeps two identical nodes in different surroundings apart.
- * Null on `bare`, where the text is all there is.
+ * On `bare` that is only what the question carries without the file -- a
+ * promoted match's offset in its container, a test's suites -- and null
+ * when there is none of that, where the text is all there is.
  */
 export function contextKey(
   subject: Pick<Subject, "file" | "context" | "enclosing" | "promoted" | "line" | "subjectLine">,
@@ -87,6 +89,7 @@ export function verdictKey(
   group: Grouping = "file",
   matchText: string | null = null,
   context: string | null = null,
+  captured: Record<string, string> | null = null,
 ): string {
   // `group` is in the key because it changes what the model saw. The same
   // subject at the same arm sits next to its own file's other matches under
@@ -106,8 +109,15 @@ export function verdictKey(
   // at every arm, and a `logger.info("cache hit")` pasted into the miss
   // branch answered exactly what its twin in the hit branch did. `contextKey`
   // decides it per arm; it only ever matters where the model can see it.
+  //
+  // `captured` is what the matcher picked out by name, which the question
+  // carries beside the code: `$DOC` for a comment rule, `$TITLE` for a test
+  // rule. A comment rewritten above an unchanged declaration is a new
+  // question -- the comment is the claim -- and keyed on the declaration's
+  // text alone it kept the old verdict through every run.
+  const captures = captured ? Object.keys(captured).sort().map((k) => `${k}=${captured[k]}`).join("\u0000") : "";
   return createHash("sha256")
-    .update([CACHE_SCHEMA, rule.id, ruleTextHash(rule), arm, group, subjectText, matchText ?? "", context ?? ""].join("\n"))
+    .update([CACHE_SCHEMA, rule.id, ruleTextHash(rule), arm, group, subjectText, matchText ?? "", context ?? "", captures].join("\n"))
     .digest("hex")
     .slice(0, 24);
 }

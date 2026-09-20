@@ -25,6 +25,20 @@ change are in [docs/findings.md](docs/findings.md).
 - A module with vitest in-source tests is its own related test on the
   `paired` arm; `tests-cover-failure-paths` has a fixture for it.
 
+### Fixed
+
+- `commits --base <ref>` with `paths:` in the config judged every commit
+  touching the first path -- the config's path had become the git range.
+  Found by running the tool on its own history: 52 commits "in src" for
+  four since the last release. The range is a positional or `--base`, and
+  a config path is never one.
+- A verdict was keyed on the subject's text and its context, not on what
+  the matcher captured, so a comment rewritten above an unchanged
+  declaration kept the old verdict through every run -- for a comment rule
+  the comment is the claim. Captures are in the key; the cache schema is
+  `jev-lint-cache-4`, and a cache from 0.4.x is dropped loudly and rebuilt
+  by one warm run.
+
 ### Changed
 
 - The node kind of a test subject is `test` (a suite's, `test suite`),

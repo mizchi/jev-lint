@@ -165,9 +165,11 @@ export function relatedTests(
 const IN_SOURCE_OPENER = /^[ \t]*if\s*\(\s*import\.meta\.vitest\s*\)\s*\{/m;
 
 /**
- * The `if (import.meta.vitest) { ... }` block of a module, braces balanced
- * from the opener, or null when the module has none. Braces inside strings
- * are counted too; a block cut short by one is still the tests, shorter.
+ * The `if (import.meta.vitest) { ... }` block of a module, from its opener
+ * to the brace that closes it, or null when the module has no such block.
+ * Braces are counted textually, strings and comments included: a stray `}`
+ * returns the block cut short there, and a stray `{` returns everything
+ * from the opener to the end of the file.
  */
 export function inSourceTests(source: string): string | null {
   const m = IN_SOURCE_OPENER.exec(source);
