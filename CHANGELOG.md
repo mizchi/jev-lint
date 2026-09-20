@@ -73,6 +73,14 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Changed
 
+- `Rule` is a discriminated union: `RuleBase & RuleJudgment & RuleSource`,
+  where a `kind: noul` rule carries `criteria` and a `kind: score` rule
+  `levels`, and a matcher rule carries `matcher` / `constraints` / `utils`
+  while a `commit` rule carries none and a `block` rule `split` /
+  `extensions`. Narrowing on `rule.kind` and `rule.subject` replaces the
+  `!` assertions; `normalizeRule` is three validators (base, judgment,
+  source) that assemble it. A commit or block rule's `matcher` is null, not
+  `{}`; the draft hash treats it as before, so no baseline retired.
 - `src/cli.ts` (1,418 lines, `main` alone 278) is `src/cli/`: one module
   per step -- `args`, `context`, `select`, `targets`, `check`, `dry-run`
   -- and one per command, with `main.ts` only the order they happen in.

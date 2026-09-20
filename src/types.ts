@@ -159,27 +159,24 @@ export interface NoulCriteria {
   false: Criterion;
 }
 
-/** A validated, normalized rule. */
-export interface Rule {
+/**
+ * A validated, normalized rule: what every rule has, and then what its kind
+ * and its subject decide. `Rule` is the intersection, so the fields a
+ * `kind: noul` rule has (`criteria`) and a `kind: score` rule has
+ * (`levels`), or a matcher rule has (`matcher`, `constraints`, `utils`), a
+ * commit rule lacks and a block rule has instead (`split`, `extensions`),
+ * narrow on `rule.kind` and `rule.subject`. The other part's fields are
+ * present as null rather than absent, so a reader that does not narrow
+ * still sees one shape.
+ */
+export interface RuleBase {
   id: string;
   /** The first of `languages`; kept for display and single-language callers. */
   language: Language;
   languages: Language[];
-  matcher: Matcher;
-  constraints: Record<string, unknown> | null;
-  utils: Record<string, unknown> | null;
   ask: string;
   /** Context for the model only. Never shown in a finding. */
   note: string | null;
-  kind: RuleKind;
-  /** Present exactly when `kind` is `noul`. */
-  criteria: NoulCriteria | null;
-  /**
-   * A score rule's own ordered rubric, clean to worst, in place of the
-   * shared four-level scale; null takes the shared one. `at` then runs
-   * 0..levels-1.
-   */
-  levels: string[] | null;
   /** The rule's own cutoff, or null to take the default for its kind. */
   at: number | null;
   /**
@@ -188,7 +185,6 @@ export interface Rule {
    * on the shipped evals no visible defect falls under.
    */
   loose: number | null;
-  subject: SubjectMode;
   state: StateArm;
   /**
    * Pin this rule to a batching axis, overruling the scheduler.
@@ -211,13 +207,6 @@ export interface Rule {
    */
   explain: Record<string, string> | null;
   /**
-   * A `subject: block` rule's header regex, matched at the start of each
-   * line; its named groups are the block's captures. null on other rules.
-   */
-  split: string | null;
-  /** The file extensions a `subject: block` rule applies to. null on other rules. */
-  extensions: string[] | null;
-  /**
    * The language directory the rule was loaded from under the shipped
    * layout (`rules/<lang>/<id>/rule.yml`), or null for any other rule
    * file. With the id, the rule's identity: `rust/fn-name-promises`.
@@ -226,6 +215,66 @@ export interface Rule {
   /** Where it was loaded from. Absent on rules built in memory. */
   source?: string;
   pack?: string;
+}
+
+/** What the answer is: a probability that the statement holds, or a level on a rubric. */
+export type RuleJudgment =
+  | {
+      kind: "noul";
+      /** The two branches; must be nested under `criteria` on the wire. */
+      criteria: NoulCriteria;
+      levels: null;
+    }
+  | {
+      kind: "score";
+      criteria: null;
+      /**
+       * The rule's own ordered rubric, clean to worst, in place of the
+       * shared four-level scale; null takes the shared one. `at` then runs
+       * 0..levels-1.
+       */
+      levels: string[] | null;
+    };
+
+/** Where the subjects come from: an ast-grep matcher, git, or a text file split at a header. */
+export type RuleSource =
+  | {
+      subject: "node" | "enclosing" | "file";
+      matcher: Matcher;
+      constraints: Record<string, unknown> | null;
+      utils: Record<string, unknown> | null;
+      split: null;
+      extensions: null;
+    }
+  | {
+      subject: "commit";
+      matcher: null;
+      constraints: null;
+      utils: null;
+      split: null;
+      extensions: null;
+    }
+  | {
+      subject: "block";
+      matcher: null;
+      constraints: null;
+      utils: null;
+      /**
+       * The header regex, matched at the start of each line; its named
+       * groups are the block's captures. null takes the whole file as one block.
+       */
+      split: string | null;
+      /** The file extensions the rule applies to. */
+      extensions: string[];
+    };
+
+export type Rule = RuleBase & RuleJudgment & RuleSource;
+
+/** A rule whose subjects ast-grep finds: the only kind with a matcher. */
+export type MatcherRule = Rule & { subject: "node" | "enclosing" | "file" };
+
+export function isMatcherRule(rule: Rule): rule is MatcherRule {
+  return rule.subject !== "commit" && rule.subject !== "block";
 }
 
 /** `normalizeRule` returns one or the other, never both, and never throws. */

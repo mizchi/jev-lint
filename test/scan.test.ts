@@ -7,10 +7,12 @@ import { buildQuestion } from "../src/questions.ts";
 import { normalizeRule, loadRules } from "../src/rules.ts";
 import { buildSymbols, emitRuleFile, astGrepRuleId, baseRuleId, toAstGrepRule } from "../src/scan.ts";
 import type { AstGrepMatch } from "../src/types.ts";
+import { isMatcherRule } from "../src/types.ts";
 import { probeMatch, test, testAsync, scoreRule, noulRule } from "./helpers.ts";
 
 test("scan: emitted rules are valid ast-grep rules with jev-lint fields stripped", () => {
   const r = scoreRule({ at: 2, note: "x" });
+  assert.ok(isMatcherRule(r));
   const emitted = toAstGrepRule(r, "TypeScript");
   assert.deepEqual(Object.keys(emitted).sort(), ["id", "language", "message", "rule", "severity"]);
   assert.equal(emitted.ask, undefined);
@@ -45,6 +47,7 @@ test("scan: constraints and utils pass through untouched", () => {
     utils: { helper: { kind: "identifier" } },
     ask: "a",
   }).rule!;
+  assert.ok(isMatcherRule(r));
   const emitted = toAstGrepRule(r, "TypeScript");
   assert.deepEqual(emitted.constraints, { A: { regex: "^this$" } });
   assert.deepEqual(emitted.utils, { helper: { kind: "identifier" } });

@@ -65,7 +65,7 @@ right.
 | `run.ts` | `collectSubjects`, `run`, `mergePasses`, `buildRecord` |
 | `state.ts` | the five state arms, subject resolution, the module outline |
 | `rules.ts` | rule schema, validation, defaults, `defaultRulePaths()`, `ruleTextHash()` |
-| `types.ts` | every shared type. Unions derive from `as const` arrays so the validator and the type cannot diverge. |
+| `types.ts` | every shared type. Unions derive from `as const` arrays so the validator and the type cannot diverge. `Rule` is `RuleBase & RuleJudgment & RuleSource`: the fields a kind or a subject has, and the other's as null, narrow on `rule.kind` and `rule.subject`; `isMatcherRule` is the guard for the rules ast-grep runs. |
 | `batch.ts` | packing subjects into requests under two token budgets |
 | `calibrate.ts` | gap report, stability report, cutoff fit, label resolution |
 | `report.ts` | the three output formats and the two report tables |

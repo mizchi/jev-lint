@@ -25,9 +25,10 @@ import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { promisify } from "node:util";
 import YAML from "yaml";
-import { PROBE_PREFIX } from "./types.ts";
+import { PROBE_PREFIX, isMatcherRule } from "./types.ts";
 import { referencedBuiltinUtils, suiteCallRule, testCallRule } from "./testcalls.ts";
 import type {
+  MatcherRule,
   AstGrepMatch,
   FileSymbols,
   Language,
@@ -271,7 +272,7 @@ export function baseRuleId(astGrepId: string): string {
 }
 
 /** Strip jev-lint-only fields; what is left is a valid ast-grep rule. */
-export function toAstGrepRule(rule: Rule, language: Language): Record<string, unknown> {
+export function toAstGrepRule(rule: MatcherRule, language: Language): Record<string, unknown> {
   const out: Record<string, unknown> = {
     id: astGrepRuleId(rule.id, language),
     language,
@@ -307,8 +308,8 @@ export function ruleLanguages(rules: Rule[]): Language[] {
 }
 
 /** The rules ast-grep runs: everything but the commit and block rules, whose subjects come from git and from text. */
-export function astGrepRules(rules: Rule[]): Rule[] {
-  return rules.filter((r) => r.subject !== "commit" && r.subject !== "block");
+export function astGrepRules(rules: Rule[]): MatcherRule[] {
+  return rules.filter(isMatcherRule);
 }
 
 export function emitRuleFile(rules: Rule[], languages: Language[]): string {

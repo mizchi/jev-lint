@@ -105,7 +105,7 @@ export function textSubjects(
   for (const rule of rules) {
     if (rule.subject !== "block") continue;
     const header = rule.split ? new RegExp(rule.split) : null;
-    for (const file of findTextFiles(paths, rule.extensions ?? [], cwd, index)) {
+    for (const file of findTextFiles(paths, rule.extensions, cwd, index)) {
       let source: string;
       try {
         source = read(file);

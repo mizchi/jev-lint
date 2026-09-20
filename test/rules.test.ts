@@ -111,7 +111,7 @@ test("rules: a commit rule has no matcher, only the Git grammar, and never reach
   assert.equal(error, undefined, error ?? "");
   assert.equal(rule!.subject, "commit");
   assert.deepEqual(rule!.languages, ["Git"]);
-  assert.deepEqual(rule!.matcher, {}, "no matcher, and none required");
+  assert.equal(rule!.matcher, null, "no matcher, and none required");
   assert.equal(rule!.state, "bare", "the diff is the state; there is no file to locate in");
   const bad = (over: Record<string, unknown>): string =>
     normalizeRule({ id: "c", language: "Git", subject: "commit", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, ...over }).error ?? "";

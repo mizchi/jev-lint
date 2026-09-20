@@ -42,8 +42,11 @@ import {
   type Language,
   type NoulCriteria,
   type Rule,
+  type RuleBase,
+  type RuleJudgment,
   type RuleKind,
   type RuleResult,
+  type RuleSource,
   type Severity,
   type StateArm,
   type SubjectMode,
@@ -219,111 +222,15 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
   if (languages.length === 0) return { error: `${id}: \`languages\` is empty` };
   const language = languages[0];
 
-  // A commit rule has no matcher and only the Git pseudo-grammar; every
-  // other rule has a matcher and never that grammar. Decided before the
-  // matcher is required, so a commit rule is not asked for one.
-  const isCommit = raw.subject === "commit";
-  const isBlock = raw.subject === "block";
-  const hasGit = languages.includes("Git");
-  const hasText = languages.includes("Text");
-  if (isCommit && (!hasGit || languages.length !== 1)) {
-    return { error: `${id}: a \`subject: commit\` rule is \`language: Git\` and nothing else (got ${languages.join(", ")})` };
-  }
-  if (!isCommit && hasGit) {
-    return { error: `${id}: \`Git\` is the grammar of \`subject: commit\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
-  }
-  if (isBlock && (!hasText || languages.length !== 1)) {
-    return { error: `${id}: a \`subject: block\` rule is \`language: Text\` and nothing else (got ${languages.join(", ")})` };
-  }
-  if (!isBlock && hasText) {
-    return { error: `${id}: \`Text\` is the grammar of \`subject: block\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
-  }
-  let split: string | null = null;
-  let extensions: string[] | null = null;
-  if (isCommit) {
-    if (raw.rule !== undefined) {
-      return { error: `${id}: a \`subject: commit\` rule takes no matcher; its subjects are commits, not nodes` };
-    }
-    if (raw.state !== undefined && raw.state !== "bare") {
-      return { error: `${id}: a \`subject: commit\` rule is \`state: bare\`; the diff is its state and there is no file to locate in` };
-    }
-  } else if (isBlock) {
-    // A block rule's matcher is its header regex; the files it reads are
-    // named by extension, since no grammar claims them.
-    if (raw.rule !== undefined) {
-      return { error: `${id}: a \`subject: block\` rule takes no matcher; \`split\` is how it finds its blocks` };
-    }
-    // `split` is optional: without it the whole file is one block, which
-    // is how a document is judged as a whole.
-    if (raw.split !== undefined) {
-      if (typeof raw.split !== "string" || raw.split.trim() === "") {
-        return { error: `${id}: \`split\` must be a regex matched at the start of each line, with named groups for the captures; leave it out to take the whole file as one block` };
-      }
-      try {
-        new RegExp(raw.split);
-      } catch (err: unknown) {
-        return { error: `${id}: \`split\` is not a valid regex: ${String((err as Error).message)}` };
-      }
-      split = raw.split;
-    }
-    if (!Array.isArray(raw.extensions) || raw.extensions.length === 0 || raw.extensions.some((e: unknown) => typeof e !== "string" || e.trim() === "")) {
-      return { error: `${id}: a \`subject: block\` rule needs \`extensions\`, a non-empty list such as [sql]` };
-    }
-    extensions = raw.extensions.map((e: string) => e.trim().replace(/^\./, ""));
-    if (raw.state !== undefined && raw.state !== "bare" && raw.state !== "located") {
-      return { error: `${id}: a \`subject: block\` rule is \`state: bare\` or \`located\`; a text file has no graph` };
-    }
-  } else {
-    if (raw.split !== undefined || raw.extensions !== undefined) {
-      return { error: `${id}: \`split\` and \`extensions\` belong to \`subject: block\` rules` };
-    }
-    if (raw.rule === undefined || raw.rule === null) {
-      return { error: `${id}: missing \`rule\` (the ast-grep matcher)` };
-    }
-    if (typeof raw.rule !== "object" || Array.isArray(raw.rule)) {
-      return { error: `${id}: \`rule\` must be a mapping, not ${typeof raw.rule}` };
-    }
-  }
+  const source = normalizeSource(raw, id, languages);
+  if ("error" in source) return { error: source.error };
 
   const ask = typeof raw.ask === "string" ? raw.ask.trim() : "";
   if (ask === "") return { error: `${id}: missing \`ask\` (the predicate, one sentence)` };
 
-  const kind = raw.kind === undefined ? "score" : raw.kind;
-  if (!KINDS.includes(kind)) {
-    return { error: `${id}: \`kind\` must be ${KINDS.join(" or ")} (got ${JSON.stringify(kind)})` };
-  }
-
-  let criteria = null;
-  if (kind === "noul") {
-    // A noul's criteria MUST be nested under `criteria`. Sending `true`/`false`
-    // at the top level of the question gets a 200 back with the criteria
-    // silently discarded -- the only visible symptom is a smaller token count.
-    // Validating the shape here is what keeps that mistake out of the wire.
-    const c = raw.criteria;
-    if (c === undefined || c === null) {
-      return { error: `${id}: \`kind: noul\` needs \`criteria: {true: ..., false: ...}\`` };
-    }
-    if (typeof c !== "object" || Array.isArray(c)) {
-      return { error: `${id}: \`criteria\` must be a mapping with \`true\` and \`false\`` };
-    }
-    const trueBranch = normalizeCriterion(c.true ?? c["true"], `${id}: \`criteria.true\``);
-    if (trueBranch.error) return { error: trueBranch.error };
-    const falseBranch = normalizeCriterion(c.false ?? c["false"], `${id}: \`criteria.false\``);
-    if (falseBranch.error) return { error: falseBranch.error };
-    criteria = { true: trueBranch.criterion!, false: falseBranch.criterion! };
-  } else if (raw.criteria !== undefined) {
-    return { error: `${id}: \`criteria\` only applies to \`kind: noul\`; a score rule uses the shared scale` };
-  }
-
-  // A score rule's own rubric, in place of the shared scale.
-  let levels: string[] | null = null;
-  if (raw.levels !== undefined) {
-    if (kind !== "score") return { error: `${id}: \`levels\` only applies to \`kind: score\`` };
-    if (!Array.isArray(raw.levels) || raw.levels.length < 2 || raw.levels.some((l: unknown) => typeof l !== "string" || l.trim() === "")) {
-      return { error: `${id}: \`levels\` must be a list of two or more non-empty strings, clean to worst` };
-    }
-    levels = raw.levels.map((l: string) => l.trim());
-  }
+  const judgment = normalizeJudgment(raw, id);
+  if ("error" in judgment) return { error: judgment.error };
+  const { kind, levels } = judgment;
 
   const at = raw.at === undefined ? null : raw.at;
   if (at !== null && typeof at !== "number") {
@@ -347,12 +254,7 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     }
   }
 
-  const subject = raw.subject === undefined ? "node" : raw.subject;
-  if (!SUBJECTS.includes(subject)) {
-    return { error: `${id}: \`subject\` must be ${SUBJECTS.join(" or ")}` };
-  }
-
-  const state = raw.state === undefined ? (isCommit || isBlock ? "bare" : "located") : raw.state;
+  const state = raw.state === undefined ? (source.subject === "commit" || source.subject === "block" ? "bare" : "located") : raw.state;
   if (!STATE_ARMS.includes(state)) {
     return { error: `${id}: \`state\` must be one of ${STATE_ARMS.join(", ")}` };
   }
@@ -410,35 +312,154 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     return { error: `${id}: unknown field(s) ${unknown.join(", ")}` };
   }
 
-  return {
-    rule: {
-      id,
-      language,
-      languages,
-      matcher: raw.rule ?? {},
-      constraints: raw.constraints ?? null,
-      utils: raw.utils ?? null,
-      ask,
-      note,
-      kind,
-      criteria,
-      levels,
-      at,
-      loose,
-      subject,
-      state,
-      axis,
-      severity,
-      unsureBelow,
-      message: typeof raw.message === "string" ? raw.message : null,
-      docs: typeof raw.docs === "string" ? raw.docs : null,
-      tags: Array.isArray(raw.tags) ? raw.tags.filter((t: unknown) => typeof t === "string") : [],
-      explain,
-      split,
-      extensions,
-      languageDir: null,
-    },
+  const base: RuleBase = {
+    id,
+    language,
+    languages,
+    ask,
+    note,
+    at,
+    loose,
+    state,
+    axis,
+    severity,
+    unsureBelow,
+    message: typeof raw.message === "string" ? raw.message : null,
+    docs: typeof raw.docs === "string" ? raw.docs : null,
+    tags: Array.isArray(raw.tags) ? raw.tags.filter((t: unknown) => typeof t === "string") : [],
+    explain,
+    languageDir: null,
   };
+  return { rule: { ...base, ...judgment, ...source } };
+}
+
+/**
+ * Where the rule's subjects come from, by `subject`: an ast-grep matcher
+ * for `node` / `enclosing` / `file`, git for `commit`, a text file split
+ * at a header for `block`. Each has the grammar and the fields of its
+ * kind and none of another's -- a commit rule with a matcher, a node
+ * rule with `extensions`, are errors here, not silences.
+ */
+function normalizeSource(raw: any, id: string, languages: Language[]): RuleSource | { error: string } {
+  const subject = raw.subject === undefined ? "node" : raw.subject;
+  if (!SUBJECTS.includes(subject)) {
+    return { error: `${id}: \`subject\` must be ${SUBJECTS.join(" or ")}` };
+  }
+  // A commit rule has no matcher and only the Git pseudo-grammar; every
+  // other rule has a matcher and never that grammar. Decided before the
+  // matcher is required, so a commit rule is not asked for one.
+  const isCommit = subject === "commit";
+  const isBlock = subject === "block";
+  const hasGit = languages.includes("Git");
+  const hasText = languages.includes("Text");
+  if (isCommit && (!hasGit || languages.length !== 1)) {
+    return { error: `${id}: a \`subject: commit\` rule is \`language: Git\` and nothing else (got ${languages.join(", ")})` };
+  }
+  if (!isCommit && hasGit) {
+    return { error: `${id}: \`Git\` is the grammar of \`subject: commit\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
+  }
+  let split: string | null = null;
+  let extensions: string[] = [];
+  if (isBlock && (!hasText || languages.length !== 1)) {
+    return { error: `${id}: a \`subject: block\` rule is \`language: Text\` and nothing else (got ${languages.join(", ")})` };
+  }
+  if (!isBlock && hasText) {
+    return { error: `${id}: \`Text\` is the grammar of \`subject: block\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
+  }
+  if (isCommit) {
+    if (raw.rule !== undefined) {
+      return { error: `${id}: a \`subject: commit\` rule takes no matcher; its subjects are commits, not nodes` };
+    }
+    if (raw.state !== undefined && raw.state !== "bare") {
+      return { error: `${id}: a \`subject: commit\` rule is \`state: bare\`; the diff is its state and there is no file to locate in` };
+    }
+  } else if (isBlock) {
+    // A block rule's matcher is its header regex; the files it reads are
+    // named by extension, since no grammar claims them.
+    if (raw.rule !== undefined) {
+      return { error: `${id}: a \`subject: block\` rule takes no matcher; \`split\` is how it finds its blocks` };
+    }
+    // `split` is optional: without it the whole file is one block, which
+    // is how a document is judged as a whole.
+    if (raw.split !== undefined) {
+      if (typeof raw.split !== "string" || raw.split.trim() === "") {
+        return { error: `${id}: \`split\` must be a regex matched at the start of each line, with named groups for the captures; leave it out to take the whole file as one block` };
+      }
+      try {
+        new RegExp(raw.split);
+      } catch (err: unknown) {
+        return { error: `${id}: \`split\` is not a valid regex: ${String((err as Error).message)}` };
+      }
+      split = raw.split;
+    }
+    if (!Array.isArray(raw.extensions) || raw.extensions.length === 0 || raw.extensions.some((e: unknown) => typeof e !== "string" || e.trim() === "")) {
+      return { error: `${id}: a \`subject: block\` rule needs \`extensions\`, a non-empty list such as [sql]` };
+    }
+    extensions = raw.extensions.map((e: string) => e.trim().replace(/^\./, ""));
+    if (raw.state !== undefined && raw.state !== "bare" && raw.state !== "located") {
+      return { error: `${id}: a \`subject: block\` rule is \`state: bare\` or \`located\`; a text file has no graph` };
+    }
+  } else {
+    if (raw.split !== undefined || raw.extensions !== undefined) {
+      return { error: `${id}: \`split\` and \`extensions\` belong to \`subject: block\` rules` };
+    }
+    if (raw.rule === undefined || raw.rule === null) {
+      return { error: `${id}: missing \`rule\` (the ast-grep matcher)` };
+    }
+    if (typeof raw.rule !== "object" || Array.isArray(raw.rule)) {
+      return { error: `${id}: \`rule\` must be a mapping, not ${typeof raw.rule}` };
+    }
+  }
+
+  if (isCommit) return { subject: "commit", matcher: null, constraints: null, utils: null, split: null, extensions: null };
+  if (isBlock) return { subject: "block", matcher: null, constraints: null, utils: null, split, extensions };
+  return { subject, matcher: raw.rule, constraints: raw.constraints ?? null, utils: raw.utils ?? null, split: null, extensions: null };
+}
+
+/**
+ * What the answer is, by `kind`: a noul carries its two criteria and no
+ * rubric; a score may carry its own rubric and never criteria.
+ */
+function normalizeJudgment(raw: any, id: string): RuleJudgment | { error: string } {
+  const kind = raw.kind === undefined ? "score" : raw.kind;
+  if (!KINDS.includes(kind)) {
+    return { error: `${id}: \`kind\` must be ${KINDS.join(" or ")} (got ${JSON.stringify(kind)})` };
+  }
+
+  let criteria = null;
+  if (kind === "noul") {
+    // A noul's criteria MUST be nested under `criteria`. Sending `true`/`false`
+    // at the top level of the question gets a 200 back with the criteria
+    // silently discarded -- the only visible symptom is a smaller token count.
+    // Validating the shape here is what keeps that mistake out of the wire.
+    const c = raw.criteria;
+    if (c === undefined || c === null) {
+      return { error: `${id}: \`kind: noul\` needs \`criteria: {true: ..., false: ...}\`` };
+    }
+    if (typeof c !== "object" || Array.isArray(c)) {
+      return { error: `${id}: \`criteria\` must be a mapping with \`true\` and \`false\`` };
+    }
+    const trueBranch = normalizeCriterion(c.true ?? c["true"], `${id}: \`criteria.true\``);
+    if (trueBranch.error) return { error: trueBranch.error };
+    const falseBranch = normalizeCriterion(c.false ?? c["false"], `${id}: \`criteria.false\``);
+    if (falseBranch.error) return { error: falseBranch.error };
+    criteria = { true: trueBranch.criterion!, false: falseBranch.criterion! };
+  } else if (raw.criteria !== undefined) {
+    return { error: `${id}: \`criteria\` only applies to \`kind: noul\`; a score rule uses the shared scale` };
+  }
+
+  // A score rule's own rubric, in place of the shared scale.
+  let levels: string[] | null = null;
+  if (raw.levels !== undefined) {
+    if (kind !== "score") return { error: `${id}: \`levels\` only applies to \`kind: score\`` };
+    if (!Array.isArray(raw.levels) || raw.levels.length < 2 || raw.levels.some((l: unknown) => typeof l !== "string" || l.trim() === "")) {
+      return { error: `${id}: \`levels\` must be a list of two or more non-empty strings, clean to worst` };
+    }
+    levels = raw.levels.map((l: string) => l.trim());
+  }
+
+  if (kind === "noul") return { kind, criteria: criteria!, levels: null };
+  return { kind, criteria: null, levels };
 }
 
 /**
@@ -654,7 +675,9 @@ export function ruleTextHash(rule: Rule): string {
         ...(rule.levels ? [canonical(rule.levels)] : []),
         rule.subject,
         rule.state,
-        canonical(rule.matcher),
+        // A commit or block rule has no matcher; hashed as the empty one it
+        // carried before the type said so, so no baseline retired.
+        canonical(rule.matcher ?? {}),
         canonical(rule.constraints),
         canonical(rule.utils),
         // Only on a block rule: appending an empty line for every other rule

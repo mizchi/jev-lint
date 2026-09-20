@@ -74,7 +74,7 @@ export function buildQuestion(rule: Rule, subject: Subject, id: string): Questio
       // gets a 200 back with the criteria silently discarded; the only symptom
       // is a smaller input-token count. `rules.ts` validates the shape so the
       // mistake cannot reach the wire.
-      criteria: { true: rule.criteria!.true, false: rule.criteria!.false },
+      criteria: { true: rule.criteria.true, false: rule.criteria.false },
     };
   }
 

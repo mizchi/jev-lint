@@ -32,7 +32,7 @@ export function cmdReplay(opts: Options, out: Log, log: Log): number {
   // against a rewritten sentence would silently mix two questions.
   const rules: Rule[] = record.rules.map((r: any) => ({
     ...r,
-    matcher: {},
+    matcher: r.subject === "commit" || r.subject === "block" ? null : {},
     criteria: null,
     unsureBelow: null,
     message: null,
