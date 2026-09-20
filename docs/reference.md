@@ -195,9 +195,14 @@ problem and is not one.
 - `node` — the matched node. Right for "this `fetch` has no timeout".
 - `enclosing` — the containing function. Right for "this `catch` hides a
   failure", where the predicate needs the body around the match.
-- `file` — the module, presented as an **outline**: its path, its public items,
-  its imports. The only way to ask "is this module named for what it contains",
-  because a file's text never mentions its own path.
+- `file` — the module, presented as an **outline**: its path, its public items
+  with their signatures, its private items, its imports. A symbol declared
+  inside another (a method, a helper closed over by the function that uses
+  it) is listed indented under its container, not as a sibling of it. The
+  outline is capped at 16,000 characters — every export is kept, the private
+  list is cut from the end and says how many it left out — so a module of
+  any size gets a verdict. The only way to ask "is this module named for
+  what it contains", because a file's text never mentions its own path.
 
 ### `state`: what else the model sees
 

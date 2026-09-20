@@ -148,6 +148,7 @@ empty `calls`/`calledBy` arrays.
 | `DEFAULT_BATCH_SIZE` | 256 | the self-imposed cap; **not** a server limit |
 | `INLINE_LIMIT` (state.ts) | 900 | above it the code travels with the question only when the arm carries no source |
 | `SUBJECT_TEXT_LIMIT` (state.ts) | 4,000 | the truncation point for a long subject |
+| `OUTLINE_TEXT_LIMIT` (state.ts) | 16,000 | the cap on a module outline: every export, then private symbols until the budget, then "… and N more private symbols not shown". A 25k-line module rendered at 127,000 characters and got no verdict; ordinary modules render under 12,000 |
 | `USD_PER_MTOK` (jev.ts) | 0.042 | the only place the price is spelled; `--dry-run` and `--explain-schedule` both read it |
 
 What breaks in each direction:

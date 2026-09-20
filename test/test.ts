@@ -27,7 +27,7 @@ import {
   DEFAULT_SCORE_AT,
 } from "../src/rules.ts";
 import { buildQuestion, questionId, readAnswer } from "../src/questions.ts";
-import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture } from "../src/state.ts";
+import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture, OUTLINE_TEXT_LIMIT } from "../src/state.ts";
 import {
   planBatches,
   planRuleBatches,
@@ -678,7 +678,9 @@ test("state: the module outline carries path, visibility split and imports", () 
   const out = renderOutline("src/api/user.ts", sampleEntry());
   assert.match(out, /path: src\/api\/user\.ts/);
   assert.match(out, /public API:[\s\S]*outer/);
-  assert.match(out, /private to this module:[\s\S]*inner/);
+  // `inner` sits inside `outer`'s byte range, so it is rendered under it.
+  assert.match(out, /outer \(function[^\n]*\n    inner \(function/);
+  assert.doesNotMatch(out, /private to this module/);
   assert.match(out, /imports:/);
 });
 
@@ -701,6 +703,76 @@ test("state: the outline carries each symbol's signature, not only its name", ()
   const cut = renderOutline("src/api/user.ts", entry).split("\n").find((l) => l.includes("outer ("))!;
   assert.ok(cut.length < 260, `signature line should be capped, got ${cut.length}`);
   assert.match(cut, /…$/);
+});
+
+test("state: an outline nests a symbol under the symbol that contains it", () => {
+  // Everything inside an `export` range is marked exported, which is right
+  // for "is this symbol reachable from outside" and wrong for an outline
+  // that lists "public API" flat: a 25k-line module showed 14 public items
+  // of which 9 were methods of two classes and a `log` declared INSIDE
+  // `createLogger`. To a rule asking whether one public function deviates
+  // from its siblings, a nested helper is not a sibling. A contained symbol
+  // is rendered indented under its container, in whichever section the
+  // container is in.
+  const sym = (name: string, role: string, start: number, end: number, exported: boolean) => ({
+    name, role, start, end, line: start, endLine: end, text: `${role} ${name}() {}`, exported, isTest: false, calls: [], calledBy: [],
+  });
+  const out = renderOutline("src/logger.ts", {
+    language: "TypeScript",
+    imports: [],
+    exportRanges: [],
+    symbols: [
+      sym("createLogger", "function", 0, 100, true),
+      sym("log", "function", 10, 50, true),
+      sym("Room", "class", 200, 400, true),
+      sym("fetch", "method", 210, 300, true),
+      sym("helper", "function", 500, 600, false),
+      sym("inner", "function", 510, 550, false),
+    ],
+  });
+  const lines = out.split("\n");
+  const at = (name: string) => lines.find((l) => l.trim().startsWith(`${name} (`))!;
+  assert.match(at("createLogger"), /^  createLogger/);
+  assert.match(at("log"), /^    log \(function/, "a nested function is indented under its container");
+  assert.match(at("fetch"), /^    fetch \(method/, "a method is indented under its class");
+  assert.match(at("inner"), /^    inner \(function/);
+  const publicSection = out.slice(out.indexOf("public API:"), out.indexOf("private to this module:"));
+  assert.equal((publicSection.match(/^  \w/gm) ?? []).length, 2, "two top-level public items: createLogger and Room");
+  assert.match(out, /private to this module:\n  helper \(function[^\n]*\n    inner/);
+});
+
+test("state: an outline is capped, exports first, and says what it left out", () => {
+  // A 25k-line module in an unseen repository (950 symbols, 759 of them
+  // functions) rendered a 127k-character outline -- 38k tokens, over the
+  // state ceiling on its own -- and got no verdict at all: the server
+  // refused it and halving the questions cannot shrink a single subject.
+  // The cap keeps every export and drops private symbols from the end,
+  // saying how many; an outline that cannot fit at all still reaches the
+  // model, and one that fits is rendered exactly as before.
+  const entry = sampleEntry();
+  entry.symbols = [];
+  for (let i = 0; i < 1500; i += 1) {
+    entry.symbols.push({
+      name: i < 20 ? `pub${i}` : `helper${i}`,
+      role: "function",
+      start: i * 100,
+      end: i * 100 + 90,
+      line: i * 4 + 1,
+      endLine: i * 4 + 3,
+      text: `function ${i < 20 ? `pub${i}` : `helper${i}`}(input: Input, options: Options): Promise<Result<Output>> {}`,
+      exported: i < 20,
+      isTest: false,
+      calls: [],
+      calledBy: [],
+    });
+  }
+  const out = renderOutline("src/big.ts", entry);
+  assert.ok(out.length <= OUTLINE_TEXT_LIMIT + 200, `outline should be capped near ${OUTLINE_TEXT_LIMIT}, got ${out.length}`);
+  for (let i = 0; i < 20; i += 1) assert.match(out, new RegExp(`pub${i} \\(function`), "every export survives the cap");
+  assert.match(out, /helper20 \(function/, "the first private symbols are kept");
+  assert.match(out, /and \d+ more private symbols not shown/, "the cut is stated with its count");
+  assert.doesNotMatch(out, /helper1499/, "the tail is what goes");
+  assert.match(out, /imports:/, "imports are kept: they are short and the cheapest evidence of what a module is");
 });
 
 test("state: a module with no named items says so rather than rendering nothing", () => {

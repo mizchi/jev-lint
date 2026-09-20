@@ -504,6 +504,23 @@ export function truncate(text: string): string {
 const SIGNATURE_LIMIT = 200;
 
 /**
+ * Longer than this and an outline is cut, private symbols first, from the end.
+ *
+ * Four times the subject limit, and the reason it is not the subject limit is
+ * the distribution: this repository's largest module (`src/cli.ts`, 27
+ * symbols) renders at 4,000 characters and an unseen repository's ordinary
+ * modules at up to 12,000, so a cap that touched them would take evidence from
+ * the file-consistency rules on exactly the modules with enough siblings to
+ * deviate. What it is for is the module that is not ordinary: a 25k-line
+ * worker with 950 symbols rendered at 127,000 characters -- 38k tokens, over
+ * the state ceiling on its own -- and got no verdict, because the server
+ * refused the request and halving the questions cannot shrink one subject.
+ * Every export is kept; the private list is cut and says by how much, so the
+ * model knows it is looking at a part.
+ */
+export const OUTLINE_TEXT_LIMIT = 16_000;
+
+/**
  * A symbol's signature: its text up to the body, on one line.
  *
  * The outline used to carry names and line numbers only, which is enough to
@@ -529,22 +546,68 @@ export function renderOutline(file: string, entry: FileSymbols | null): string {
     lines.push(`this file is named by its directory, so its subject is: ${id.named_by_directory}`);
   }
   const symbols = (entry?.symbols ?? []).filter((s) => s.name);
-  const exported = symbols.filter((s) => s.exported);
-  const local = symbols.filter((s) => !s.exported && !s.isTest);
-  const tests = symbols.filter((s) => s.isTest);
+  // A symbol declared inside another -- a method, a helper closed over by
+  // the function that uses it -- is listed under its container, not beside
+  // it. Everything inside an `export` range is marked exported, which is
+  // right for reachability and wrong for a flat "public API" list: a nested
+  // `log` is not a sibling of the exported `createLogger` that declares it,
+  // and a rule asking whether one export deviates from its siblings was
+  // being shown that it is. The symbols come sorted by start, widest first,
+  // so a stack of open ranges gives each one its depth.
+  const depthOf = new Map<SymbolInfo, number>();
+  const open: SymbolInfo[] = [];
+  for (const s of symbols) {
+    while (open.length > 0 && open[open.length - 1]!.end < s.end) open.pop();
+    depthOf.set(s, open.length);
+    open.push(s);
+  }
+  const top = symbols.filter((s) => depthOf.get(s) === 0);
+  const exported = top.filter((s) => s.exported);
+  const local = top.filter((s) => !s.exported && !s.isTest);
+  const tests = top.filter((s) => s.isTest);
 
-  const render = (list: SymbolInfo[]) =>
-    list
-      .map((s) => {
-        const sig = signatureOf(s.text);
-        return `${s.name} (${s.role}, lines ${s.line}-${s.endLine})${sig ? `: ${sig}` : ""}`;
-      })
+  const renderOne = (s: SymbolInfo) => {
+    const sig = signatureOf(s.text);
+    const indent = "  ".repeat(depthOf.get(s) ?? 0);
+    return `${indent}${s.name} (${s.role}, lines ${s.line}-${s.endLine})${sig ? `: ${sig}` : ""}`;
+  };
+  // A top-level symbol with everything declared inside it, one line each.
+  const renderTree = (s: SymbolInfo) =>
+    symbols
+      .filter((o) => o === s || (o.start >= s.start && o.end <= s.end && (depthOf.get(o) ?? 0) > 0))
+      .map(renderOne)
       .join("\n  ");
+  // Rendered within a character budget: as many entries as fit, then a line
+  // saying how many did not. Exports are rendered before the budget is
+  // consulted, so the cap only ever falls on the private and test lists.
+  const section = (title: string, list: SymbolInfo[], what: string, budget: number) => {
+    const out: string[] = [];
+    let used = 0;
+    for (const s of list) {
+      const line = renderTree(s);
+      if (used + line.length > budget && out.length > 0) break;
+      out.push(line);
+      used += line.length + 3;
+    }
+    const left = list.length - out.length;
+    if (left > 0) out.push(`… and ${left} more ${what} not shown`);
+    return { text: `${title}:\n  ${out.join("\n  ")}`, used };
+  };
 
-  if (exported.length) lines.push(`public API:\n  ${render(exported)}`);
-  if (local.length) lines.push(`private to this module:\n  ${render(local)}`);
-  if (tests.length) lines.push(`tests:\n  ${render(tests)}`);
-  if (entry?.imports?.length) lines.push(`imports:\n  ${entry.imports.join("\n  ")}`);
+  const imports = entry?.imports?.length ? `imports:\n  ${entry.imports.join("\n  ")}` : null;
+  let budget = OUTLINE_TEXT_LIMIT - (imports?.length ?? 0);
+  if (exported.length) {
+    const s = section("public API", exported, "exported symbols", Infinity);
+    lines.push(s.text);
+    budget -= s.used;
+  }
+  if (local.length) {
+    const s = section("private to this module", local, "private symbols", budget);
+    lines.push(s.text);
+    budget -= s.used;
+  }
+  if (tests.length) lines.push(section("tests", tests, "tests", budget).text);
+  if (imports) lines.push(imports);
   if (symbols.length === 0) lines.push("this module declares no named items");
   return lines.join("\n");
 }
