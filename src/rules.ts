@@ -223,13 +223,23 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
   // other rule has a matcher and never that grammar. Decided before the
   // matcher is required, so a commit rule is not asked for one.
   const isCommit = raw.subject === "commit";
+  const isBlock = raw.subject === "block";
   const hasGit = languages.includes("Git");
+  const hasText = languages.includes("Text");
   if (isCommit && (!hasGit || languages.length !== 1)) {
     return { error: `${id}: a \`subject: commit\` rule is \`language: Git\` and nothing else (got ${languages.join(", ")})` };
   }
   if (!isCommit && hasGit) {
     return { error: `${id}: \`Git\` is the grammar of \`subject: commit\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
   }
+  if (isBlock && (!hasText || languages.length !== 1)) {
+    return { error: `${id}: a \`subject: block\` rule is \`language: Text\` and nothing else (got ${languages.join(", ")})` };
+  }
+  if (!isBlock && hasText) {
+    return { error: `${id}: \`Text\` is the grammar of \`subject: block\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
+  }
+  let split: string | null = null;
+  let extensions: string[] | null = null;
   if (isCommit) {
     if (raw.rule !== undefined) {
       return { error: `${id}: a \`subject: commit\` rule takes no matcher; its subjects are commits, not nodes` };
@@ -237,7 +247,32 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     if (raw.state !== undefined && raw.state !== "bare") {
       return { error: `${id}: a \`subject: commit\` rule is \`state: bare\`; the diff is its state and there is no file to locate in` };
     }
+  } else if (isBlock) {
+    // A block rule's matcher is its header regex; the files it reads are
+    // named by extension, since no grammar claims them.
+    if (raw.rule !== undefined) {
+      return { error: `${id}: a \`subject: block\` rule takes no matcher; \`split\` is how it finds its blocks` };
+    }
+    if (typeof raw.split !== "string" || raw.split.trim() === "") {
+      return { error: `${id}: a \`subject: block\` rule needs \`split\`, a regex matched at the start of each line, with named groups for the captures` };
+    }
+    try {
+      new RegExp(raw.split);
+    } catch (err: unknown) {
+      return { error: `${id}: \`split\` is not a valid regex: ${String((err as Error).message)}` };
+    }
+    split = raw.split;
+    if (!Array.isArray(raw.extensions) || raw.extensions.length === 0 || raw.extensions.some((e: unknown) => typeof e !== "string" || e.trim() === "")) {
+      return { error: `${id}: a \`subject: block\` rule needs \`extensions\`, a non-empty list such as [sql]` };
+    }
+    extensions = raw.extensions.map((e: string) => e.trim().replace(/^\./, ""));
+    if (raw.state !== undefined && raw.state !== "bare" && raw.state !== "located") {
+      return { error: `${id}: a \`subject: block\` rule is \`state: bare\` or \`located\`; a text file has no graph` };
+    }
   } else {
+    if (raw.split !== undefined || raw.extensions !== undefined) {
+      return { error: `${id}: \`split\` and \`extensions\` belong to \`subject: block\` rules` };
+    }
     if (raw.rule === undefined || raw.rule === null) {
       return { error: `${id}: missing \`rule\` (the ast-grep matcher)` };
     }
@@ -303,7 +338,7 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     return { error: `${id}: \`subject\` must be ${SUBJECTS.join(" or ")}` };
   }
 
-  const state = raw.state === undefined ? (isCommit ? "bare" : "located") : raw.state;
+  const state = raw.state === undefined ? (isCommit || isBlock ? "bare" : "located") : raw.state;
   if (!STATE_ARMS.includes(state)) {
     return { error: `${id}: \`state\` must be one of ${STATE_ARMS.join(", ")}` };
   }
@@ -354,7 +389,7 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
   const known = new Set([
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
     "note", "kind", "criteria", "at", "subject", "state", "axis", "severity",
-    "message", "unsureBelow", "docs", "tags", "explain", "loose",
+    "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
   if (unknown.length > 0) {
@@ -384,6 +419,8 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
       docs: typeof raw.docs === "string" ? raw.docs : null,
       tags: Array.isArray(raw.tags) ? raw.tags.filter((t: unknown) => typeof t === "string") : [],
       explain,
+      split,
+      extensions,
       languageDir: null,
     },
   };
@@ -598,6 +635,9 @@ export function ruleTextHash(rule: Rule): string {
         canonical(rule.matcher),
         canonical(rule.constraints),
         canonical(rule.utils),
+        // Only on a block rule: appending an empty line for every other rule
+        // retired every baseline the day this landed.
+        ...(rule.split ? [rule.split] : []),
       ].join("\n"),
     )
     .digest("hex")

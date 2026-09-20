@@ -29,12 +29,14 @@ export const LANGUAGES = [
   "Bash", "C", "Cpp", "CSharp", "Css", "Dart", "Elixir", "Go", "Haskell",
   "Html", "Java", "JavaScript", "Json", "Jsx", "Kotlin", "Lua", "Php",
   "Python", "Ruby", "Rust", "Scala", "Solidity", "Swift", "Tsx", "TypeScript",
-  "Yaml", "Git",
+  "Yaml", "Git", "Text",
 ] as const;
 export type Language = (typeof LANGUAGES)[number];
 
 /** The one language that is not a grammar. */
 export const COMMIT_LANGUAGE: Language = "Git";
+/** The other: a `subject: block` rule's, whose subjects are blocks of a text file split at a header line. */
+export const TEXT_LANGUAGE: Language = "Text";
 
 /**
  * The shipped layout: `rules/<lang>/<id>/rule.yml`. A language directory
@@ -48,6 +50,7 @@ export const LANGUAGE_DIRS: Record<string, readonly Language[]> = {
   javascript: ["JavaScript", "Jsx"],
   rust: ["Rust"],
   git: ["Git"],
+  text: ["Text"],
 };
 
 /**
@@ -67,7 +70,7 @@ export type RuleKind = (typeof KINDS)[number];
  * with no ast-grep matcher: the message is the subject and the diff is the
  * state, both from git.
  */
-export const SUBJECTS = ["node", "enclosing", "file", "commit"] as const;
+export const SUBJECTS = ["node", "enclosing", "file", "commit", "block"] as const;
 export type SubjectMode = (typeof SUBJECTS)[number];
 
 /** Which sections of state accompany the questions. */
@@ -200,6 +203,13 @@ export interface Rule {
    * holds. Never part of the verdict question, so never part of the draft.
    */
   explain: Record<string, string> | null;
+  /**
+   * A `subject: block` rule's header regex, matched at the start of each
+   * line; its named groups are the block's captures. null on other rules.
+   */
+  split: string | null;
+  /** The file extensions a `subject: block` rule applies to. null on other rules. */
+  extensions: string[] | null;
   /**
    * The language directory the rule was loaded from under the shipped
    * layout (`rules/<lang>/<id>/rule.yml`), or null for any other rule

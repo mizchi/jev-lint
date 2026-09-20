@@ -15,6 +15,7 @@
  * at once, instead of once per rule per file.
  */
 import { readFileSync } from "node:fs";
+import { isAbsolute, join } from "node:path";
 import { Jev, JevError, mapLimit, DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
 import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.ts";
 import { resolveSubject, widenCommentCapture } from "./state.ts";
@@ -28,6 +29,7 @@ import { ruleTextHash, cutoffFor } from "./rules.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
 import { pairTests, type RelatedTest } from "./paired.ts";
 import { commitSubjects, squashSubjects } from "./commits.ts";
+import { textSubjects } from "./text.ts";
 import type {
   Answer,
   Batch,
@@ -91,7 +93,9 @@ export async function collectSubjects({
     if (sources.has(file)) return sources.get(file)!;
     let text = "";
     try {
-      text = readFileSync(file, "utf8");
+      // ast-grep reports paths relative to the cwd it was run in, which is
+      // not always the process's.
+      text = readFileSync(isAbsolute(file) ? file : join(cwd, file), "utf8");
     } catch {
       text = "";
     }
@@ -159,6 +163,16 @@ export async function collectSubjects({
       ...resolved,
       captured,
     });
+  }
+
+  // Block rules: text files split at a header line, beside what ast-grep
+  // found. Read through `readSource` so the `located` state has the file.
+  for (const s of textSubjects(rules, paths, cwd, (file) => readSource(file))) {
+    if (diffRanges && !touchesChange(diffRanges, s.file, s.line, s.endLine)) {
+      skippedByDiff += 1;
+      continue;
+    }
+    subjects.push({ ...s, arm: arm ?? s.rule.state });
   }
 
   // The `paired` arm's evidence lives in other files, found once per run.

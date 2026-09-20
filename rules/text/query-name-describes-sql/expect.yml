@@ -1,0 +1,18 @@
+default: clean
+fixtures/users.sql:
+  - { line: 3, label: bad, window: 0, reason: "`ByEmail` promises a filter on email; the SQL filters on id" }
+  - { line: 9, label: clean, window: 0, reason: "hard clean: terse `GetUser` over a by-id lookup, with the file's tenant scope" }
+  - { line: 15, label: bad, window: 0, reason: "`Active` promises a status filter; the SQL has none (its sibling ListUsers has deleted_at IS NULL, this one does not even have that)" }
+  - { line: 21, label: clean, window: 0, reason: "hard clean: the deleted_at scope is not something `ListUsers` had to say" }
+  - { line: 27, label: clean, window: 0, reason: "hard clean: a count with the standard scope" }
+  - { line: 30, label: clean, window: 0, reason: "hard clean: `DeleteUser` over a soft delete -- the file's reads exclude deleted_at IS NULL, so setting deleted_at is what delete means here" }
+  - { line: 34, label: clean, window: 0, reason: "hard clean: `Upsert` is the conventional verb for INSERT ... ON CONFLICT DO UPDATE" }
+fixtures/orders.sql:
+  - { line: 3, label: bad, window: 0, reason: "`Latest` promises the most recent; ORDER BY placed_at ASC LIMIT 1 returns the oldest" }
+  - { line: 10, label: clean, window: 0, reason: "clean: the DESC LIMIT 1 the name promises" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean: the join to fill display_name is more than the name says, and nothing it says is false" }
+  - { line: 24, label: bad, window: 0, reason: "`Count` promises a number and the tag :many promises rows; the SQL returns the rows and no count -- name and tag disagree with the SQL and with each other" }
+  - { line: 29, label: bad, window: 0, reason: "`Get` promises a read; the SQL deletes the row (RETURNING does not make a DELETE a read)" }
+  - { line: 32, label: clean, window: 0, reason: "hard clean: `Touch` is the conventional name for bumping updated_at" }
+  - { line: 35, label: bad, window: 0, reason: "`Invoices` names an entity the SQL does not touch; it reads orders" }
+  - { line: 41, label: clean, window: 0, reason: "hard clean: a sum over paid orders, named as a sum" }

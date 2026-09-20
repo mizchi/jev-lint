@@ -31,6 +31,7 @@ import {
 import { buildQuestion, buildExplainQuestion, questionId, readAnswer, readChoice } from "../src/questions.ts";
 import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture, OUTLINE_TEXT_LIMIT } from "../src/state.ts";
 import { execFileSync } from "node:child_process";
+import { splitBlocks, textSubjects } from "../src/text.ts";
 import { listCommits, commitDiff, commitSubjects, commitFixtureSubjects, patchRepo, squashSubjects, MAX_DIFF_CHARS } from "../src/commits.ts";
 import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET } from "../src/paired.ts";
 import {
@@ -2658,6 +2659,94 @@ await testAsync("run: --loose reaches every format as a section of its own, and 
   assert.equal(json.review.length, loose.review.length);
   assert.equal(json.review[0].messageId, "review");
   assert.equal(json.findings.length, loose.findings.length, "and never mixed into the findings");
+});
+
+// ------------------------------------------------------------------ text
+
+const blockRule = (over: Record<string, unknown> = {}): Rule =>
+  normalizeRule({
+    id: "query-name-describes-sql",
+    language: "Text",
+    subject: "block",
+    split: "^-- name: (?<NAME>\\w+) :(?<KIND>\\w+)",
+    extensions: ["sql"],
+    kind: "noul",
+    state: "bare",
+    ask: "This query's name ($NAME) misdescribes what the SQL does.",
+    criteria: { true: "y", false: "n" },
+    at: 0.5,
+    ...over,
+  }).rule!;
+
+test("rules: a block rule splits text files by a header regex, and is Text only", () => {
+  const r = blockRule();
+  assert.equal(r.subject, "block");
+  assert.deepEqual(r.languages, ["Text"]);
+  assert.equal(r.split, "^-- name: (?<NAME>\\w+) :(?<KIND>\\w+)");
+  assert.deepEqual(r.extensions, ["sql"]);
+  const bad = (over: Record<string, unknown>): string =>
+    normalizeRule({ id: "b", language: "Text", subject: "block", split: "^x", extensions: ["sql"], kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, ...over }).error ?? "";
+  assert.match(bad({ split: undefined }), /split/, "the header regex is required");
+  assert.match(bad({ split: "(" }), /regex/, "and must compile");
+  assert.match(bad({ extensions: [] }), /extensions/, "so is at least one extension");
+  assert.match(bad({ language: "TypeScript" }), /Text/, "a block rule is Text only");
+  assert.match(bad({ subject: "node" }), /block/, "and Text is for block rules only");
+  assert.match(bad({ rule: { kind: "x" } }), /matcher/, "no matcher on a block rule");
+  assert.match(bad({ state: "graph" }), /bare|located/, "the state is bare or located: there is no graph of a text file");
+  // Never reaches ast-grep.
+  assert.ok(!emitRuleFile([r], ruleLanguages([r])).includes("Text"));
+});
+
+test("text: a file splits into blocks at each header, each block named by the header's groups", () => {
+  const src = [
+    "-- queries for users",
+    "",
+    "-- name: GetUserByEmail :one",
+    "SELECT * FROM users WHERE id = $1;",
+    "",
+    "-- name: ListUsers :many",
+    "SELECT * FROM users",
+    "ORDER BY created_at;",
+  ].join("\n");
+  const blocks = splitBlocks(src, /^-- name: (?<NAME>\w+) :(?<KIND>\w+)/);
+  assert.equal(blocks.length, 2, "the preamble before the first header is not a block");
+  assert.equal(blocks[0]!.line, 3);
+  assert.equal(blocks[0]!.endLine, 4, "a block runs to the line before the next header, minus the blank lines between");
+  assert.deepEqual(blocks[0]!.captured, { NAME: "GetUserByEmail", KIND: "one" });
+  assert.equal(blocks[0]!.text, "-- name: GetUserByEmail :one\nSELECT * FROM users WHERE id = $1;");
+  assert.equal(blocks[1]!.endLine, 8);
+  assert.equal(blocks[1]!.text.split("\n").length, 3);
+  assert.deepEqual(splitBlocks("no headers here", /^-- name: (?<NAME>\w+)/), []);
+});
+
+await testAsync("run: block rules take their subjects from text files beside ast-grep's, and located carries the file", async () => {
+  const { collectSubjects } = await import("../src/run.ts");
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-text-")));
+  try {
+    mkdirSync(join(dir, "db"));
+    writeFileSync(join(dir, "db/users.sql"), "-- name: GetUser :one\nSELECT 1;\n\n-- name: DeleteUser :exec\nDELETE FROM users WHERE id = $1;\n");
+    writeFileSync(join(dir, "db/notes.txt"), "-- name: NotSql :one\nignored\n");
+    writeFileSync(join(dir, "a.ts"), "export function f() {}\n");
+    const block = blockRule({ state: "located" });
+    const ordinary = scoreRule({ rule: { kind: "function_declaration" } });
+    const { subjects, sources } = await collectSubjects({ rules: [block, ordinary], paths: ["."], cwd: dir });
+    const texts = subjects.filter((s) => s.rule.subject === "block");
+    assert.equal(texts.length, 2, "two headers in the .sql file; the .txt is not in extensions");
+    assert.equal(subjects.filter((s) => s.rule.id === "r").length, 1, "and the ast-grep rule still ran");
+    assert.deepEqual(texts.map((s) => s.captured.NAME), ["GetUser", "DeleteUser"]);
+    assert.equal(texts[1]!.line, 4);
+    assert.equal(texts[0]!.file, "db/users.sql");
+    assert.equal(texts[0]!.nodeKind, "block");
+    assert.equal(texts[0]!.arm, "located");
+    assert.ok(sources.get("db/users.sql")?.includes("DELETE FROM"), "the file is read once for the located state");
+    const [batch] = planBatches(texts, { sources });
+    assert.ok(String(batch!.state.source).includes("-- name: GetUser"), "located carries the whole file");
+    const q = batch!.questions[batch!.subjects[0]!.id!]!;
+    assert.deepEqual(q.instructions.matcher_captured, { NAME: "GetUser", KIND: "one" });
+    assert.equal(q.instructions.matched_because, undefined, "no loose matcher to caveat");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 // ---------------------------------------------------------------- commits

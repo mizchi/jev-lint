@@ -325,9 +325,9 @@ export function ruleLanguages(rules: Rule[]): Language[] {
   return out;
 }
 
-/** The rules ast-grep runs: everything but the commit rules. */
+/** The rules ast-grep runs: everything but the commit and block rules, whose subjects come from git and from text. */
 export function astGrepRules(rules: Rule[]): Rule[] {
-  return rules.filter((r) => r.subject !== "commit");
+  return rules.filter((r) => r.subject !== "commit" && r.subject !== "block");
 }
 
 export function emitRuleFile(rules: Rule[], languages: Language[]): string {

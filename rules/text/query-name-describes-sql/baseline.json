@@ -1,0 +1,433 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T10:46:10.860Z",
+  "model": "jev-1.13.0",
+  "suite": "text/query-name-describes-sql",
+  "rules": [
+    {
+      "id": "query-name-describes-sql",
+      "draft": "78ca038c33b3",
+      "at": 0.61
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 3,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 9,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 15,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 21,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 27,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 34,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 3,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 10,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 17,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 24,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 29,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 32,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 35,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 41,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 3,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 9,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 15,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 21,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 27,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 34,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 3,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 10,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 17,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 24,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 29,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 32,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 35,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 41,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 3,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 9,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 15,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 21,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 27,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/users.sql",
+        "line": 34,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 3,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 10,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 17,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 24,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 29,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 32,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 35,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "query-name-describes-sql",
+        "file": "rules/text/query-name-describes-sql/fixtures/orders.sql",
+        "line": 41,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 30207,
+    "usd": 0.0012686940000000001,
+    "ms": 773
+  }
+}

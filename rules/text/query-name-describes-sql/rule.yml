@@ -1,0 +1,58 @@
+# Queries: a name that says what the SQL does.
+#
+# sqlc, and every catalog like it, puts a claim above each query:
+# `-- name: GetUserByEmail :one`. The name is what every caller reads and
+# the generated function is called; the SQL is what runs. A name that says
+# "by email" over a `WHERE id = $1`, a `Get*` that deletes, a `List*` that
+# returns one row, a `Count*` that returns rows: the same class as a
+# function name over the wrong body, in a file no grammar parses.
+#
+# `subject: block`: the file is split at every `-- name:` line, the header's
+# groups are the captures, and the block -- header to the line before the
+# next -- is the subject. `state: located` carries the file, so a name that
+# is consistent with its siblings' vocabulary reads as such.
+
+id: query-name-describes-sql
+language: Text
+subject: block
+split: "^-- name: (?<NAME>\\w+) :(?<KIND>\\w+)"
+extensions: [sql]
+kind: noul
+state: located
+# 0.61, fitted 2026-09-20 on the fixtures (16 queries: 6 defects, 9 cleans of
+# which 5 hard, 3 passes). Defects answer 0.91-0.96 (ByEmail over id, Latest
+# over ASC, Count :many returning rows, Get that deletes, Invoices over
+# orders, Active without a filter). Cleans top at 0.30 (`DeleteUser` as a
+# soft delete -- 0.68 while an identical `SoftDeleteUser` sat beside it in
+# the corpus, which made the convention argument the corpus's own fault;
+# with the twin gone and the note saying what delete means where reads
+# exclude deleted_at, 0.30), then 0.27 (a sum named as a sum). Midpoint.
+at: 0.61
+ask: >-
+  This query's name ($NAME) misdescribes the SQL under it.
+criteria:
+  "true": >-
+    Someone who read only the name would be wrong about what the query does:
+    the filter, join or ordering the name promises is not the one the SQL
+    has (by email over a WHERE on id; latest over ORDER BY ASC; active over
+    no status filter), the verb is wrong (a Get that updates or deletes, a
+    List that inserts, a Count that returns rows), the cardinality the name
+    or its :one/:many tag implies is not what the SQL returns, or the name
+    names a table or entity the SQL does not touch.
+  "false": >-
+    The name describes what the SQL does. A terse name (GetUser, ListOrders)
+    over a query that does that; a name that says less than the SQL (a Get
+    that also joins a related table to fill a field) as long as what it says
+    is true; a name whose verb is the catalog's convention (Upsert for INSERT
+    ... ON CONFLICT, Touch for an UPDATE of updated_at); a query whose extra
+    filter is a standard scope (deleted_at IS NULL, tenant_id = $1) the whole
+    file applies.
+note: >-
+  Judge the name against the SQL, not the SQL on its own merits. The :one /
+  :many / :exec tag is part of the claim. A standard scope every query in
+  the file applies is not something a name has to mention. Where the
+  file's reads exclude rows by deleted_at, a Delete that sets deleted_at is
+  what delete means in that file, not a misnamed update. Parameter numbers
+  are positional and say nothing about meaning; the column they compare
+  against is what does.
+axis: file

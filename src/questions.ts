@@ -135,7 +135,10 @@ function subjectFields(rule: Rule, subject: Subject, id: string): Record<string,
   // Telling the model the matcher is loose is what makes level 0 usable: it is
   // the model's way of saying the matcher caught something irrelevant, which is
   // cheaper to read in a report than to prevent by hand-tightening a matcher.
-  shared.matched_because = "this code was selected by a deliberately loose structural matcher, which may have caught something the rule was not written about";
+  // A block was selected by its header, not by a loose matcher.
+  if (subject.nodeKind !== "block") {
+    shared.matched_because = "this code was selected by a deliberately loose structural matcher, which may have caught something the rule was not written about";
+  }
 
   if (subject.isOutline) {
     // Not labelled `code`, because it is not code: calling it that invites the
