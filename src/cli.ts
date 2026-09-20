@@ -660,7 +660,10 @@ async function main(argv: string[]): Promise<number> {
     for (const w of picked.warnings) log(`rule warning: ${w}`);
     if (picked.rules.length === 0) return 2;
     rules = picked.rules;
-    opts.paths = paths;
+    // The id took the first positional, so the config's `paths:` -- which
+    // applies only when no positional was given -- was skipped. Without
+    // this, `run <id>` scanned the whole tree while `check` scanned `paths:`.
+    opts.paths = paths.length > 0 ? paths : (config.paths ?? []);
     if (!opts.quiet) log(`run: ${rules.map((r) => (r.languageDir ? `${r.languageDir}/${r.id}` : r.id)).join(", ")} from ${picked.from}`);
     // A commit rule's subjects are commits, so `run` with one is `commits`
     // and the positional after the id is a range. Mixing the two kinds in

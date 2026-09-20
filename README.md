@@ -172,8 +172,8 @@ reading this README. Two agents that had never seen the tool each wrote a
 working rule from the skill alone on their first try; the gaps they reported
 are folded into it.
 
-As a Claude Code plugin, which also installs `/jev-lint:review` and
-`/jev-lint:new-rule`:
+As a Claude Code plugin, which also installs `/jev-lint:review`,
+`/jev-lint:commits` and `/jev-lint:new-rule`:
 
 ```
 /plugin marketplace add mizchi/jev-lint
