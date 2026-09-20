@@ -304,9 +304,10 @@ export function toAstGrepRule(rule: Rule, language: Language): Record<string, un
  * The probes do not add any: `probeRules` is given this list and emits probes
  * FOR these languages, so there is nothing to union in here.
  */
+/** The grammars a rule set needs probed: never `Git`, which is not one. */
 export function ruleLanguages(rules: Rule[]): Language[] {
   const out: Language[] = [];
-  for (const r of rules) {
+  for (const r of astGrepRules(rules)) {
     for (const l of r.languages ?? [r.language]) {
       if (!out.includes(l)) out.push(l);
     }
@@ -314,9 +315,14 @@ export function ruleLanguages(rules: Rule[]): Language[] {
   return out;
 }
 
+/** The rules ast-grep runs: everything but the commit rules. */
+export function astGrepRules(rules: Rule[]): Rule[] {
+  return rules.filter((r) => r.subject !== "commit");
+}
+
 export function emitRuleFile(rules: Rule[], languages: Language[]): string {
   const docs: Array<Record<string, unknown>> = [];
-  for (const rule of rules) {
+  for (const rule of astGrepRules(rules)) {
     for (const language of rule.languages ?? [rule.language]) {
       docs.push(toAstGrepRule(rule, language));
     }
@@ -382,7 +388,7 @@ export async function runAstGrep(
   paths: string[],
   { cwd = process.cwd(), maxBuffer = 512 * 1024 * 1024 } = {},
 ): Promise<ScanResult> {
-  if (rules.length === 0 || paths.length === 0) {
+  if (astGrepRules(rules).length === 0 || paths.length === 0) {
     return { matches: [], probes: [], stderr: "" };
   }
   const languages = ruleLanguages(rules);

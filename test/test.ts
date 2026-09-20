@@ -50,6 +50,7 @@ import {
   enclosingSymbol,
   moduleIdentity,
   emitRuleFile,
+  ruleLanguages,
   astGrepRuleId,
   baseRuleId,
   toAstGrepRule,
@@ -262,6 +263,37 @@ test("rules: cutoffFor prefers lang/id over id, and both over the rule's own", (
   assert.equal(cutoffFor(rule, { r: 2.5 }), 2.5, "the id applies to every language");
   assert.equal(cutoffFor(rule, { r: 2.5, "rust/r": 2.9 }), 2.9, "the language-qualified one wins");
   assert.equal(cutoffFor(rule, { "typescript/r": 2.9 }), 1.5, "another language's override is not this rule's");
+});
+
+test("rules: a commit rule has no matcher, only the Git grammar, and never reaches ast-grep", () => {
+  // A commit is not an AST node. `subject: commit` is the one subject with
+  // no ast-grep matcher: the runner builds its subjects from git instead.
+  const { rule, error } = normalizeRule({
+    id: "commit-message-describes-diff",
+    language: "Git",
+    subject: "commit",
+    kind: "noul",
+    ask: "The message claims something the diff does not do.",
+    criteria: { true: "y", false: "n" },
+  });
+  assert.equal(error, undefined, error ?? "");
+  assert.equal(rule!.subject, "commit");
+  assert.deepEqual(rule!.languages, ["Git"]);
+  assert.deepEqual(rule!.matcher, {}, "no matcher, and none required");
+  assert.equal(rule!.state, "bare", "the diff is the state; there is no file to locate in");
+  const bad = (over: Record<string, unknown>): string =>
+    normalizeRule({ id: "c", language: "Git", subject: "commit", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, ...over }).error ?? "";
+  assert.match(bad({ language: "TypeScript" }), /Git/, "a commit rule is Git only");
+  assert.match(bad({ subject: "node" }), /commit/, "and Git is for commit rules only");
+  assert.match(bad({ rule: { kind: "x" } }), /matcher/, "a matcher on a commit rule is a mistake, not ignored");
+  assert.match(bad({ state: "located" }), /bare/, "and so is another arm");
+  // ast-grep never sees it: a rule file with a commit rule and an ordinary
+  // rule emits only the ordinary one, and Git is not a grammar to probe.
+  const ordinary = scoreRule();
+  const emitted = emitRuleFile([rule!, ordinary], ruleLanguages([rule!, ordinary]));
+  assert.ok(!emitted.includes("Git"), "Git must not be emitted as a language");
+  assert.ok(!emitted.includes("commit-message-describes-diff"));
+  assert.deepEqual(ruleLanguages([rule!, ordinary]), ["TypeScript"]);
 });
 
 test("rules: a minimal score rule is valid and defaults are the documented ones", () => {

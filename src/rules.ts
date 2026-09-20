@@ -219,11 +219,31 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
   if (languages.length === 0) return { error: `${id}: \`languages\` is empty` };
   const language = languages[0];
 
-  if (raw.rule === undefined || raw.rule === null) {
-    return { error: `${id}: missing \`rule\` (the ast-grep matcher)` };
+  // A commit rule has no matcher and only the Git pseudo-grammar; every
+  // other rule has a matcher and never that grammar. Decided before the
+  // matcher is required, so a commit rule is not asked for one.
+  const isCommit = raw.subject === "commit";
+  const hasGit = languages.includes("Git");
+  if (isCommit && (!hasGit || languages.length !== 1)) {
+    return { error: `${id}: a \`subject: commit\` rule is \`language: Git\` and nothing else (got ${languages.join(", ")})` };
   }
-  if (typeof raw.rule !== "object" || Array.isArray(raw.rule)) {
-    return { error: `${id}: \`rule\` must be a mapping, not ${typeof raw.rule}` };
+  if (!isCommit && hasGit) {
+    return { error: `${id}: \`Git\` is the grammar of \`subject: commit\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
+  }
+  if (isCommit) {
+    if (raw.rule !== undefined) {
+      return { error: `${id}: a \`subject: commit\` rule takes no matcher; its subjects are commits, not nodes` };
+    }
+    if (raw.state !== undefined && raw.state !== "bare") {
+      return { error: `${id}: a \`subject: commit\` rule is \`state: bare\`; the diff is its state and there is no file to locate in` };
+    }
+  } else {
+    if (raw.rule === undefined || raw.rule === null) {
+      return { error: `${id}: missing \`rule\` (the ast-grep matcher)` };
+    }
+    if (typeof raw.rule !== "object" || Array.isArray(raw.rule)) {
+      return { error: `${id}: \`rule\` must be a mapping, not ${typeof raw.rule}` };
+    }
   }
 
   const ask = typeof raw.ask === "string" ? raw.ask.trim() : "";
@@ -283,7 +303,7 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     return { error: `${id}: \`subject\` must be ${SUBJECTS.join(" or ")}` };
   }
 
-  const state = raw.state === undefined ? "located" : raw.state;
+  const state = raw.state === undefined ? (isCommit ? "bare" : "located") : raw.state;
   if (!STATE_ARMS.includes(state)) {
     return { error: `${id}: \`state\` must be one of ${STATE_ARMS.join(", ")}` };
   }
@@ -346,7 +366,7 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
       id,
       language,
       languages,
-      matcher: raw.rule,
+      matcher: raw.rule ?? {},
       constraints: raw.constraints ?? null,
       utils: raw.utils ?? null,
       ask,

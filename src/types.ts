@@ -19,14 +19,22 @@
 
 // ---------------------------------------------------------------- vocabulary
 
-/** Languages the ast-grep CLI has built in. */
+/**
+ * Languages the ast-grep CLI has built in, plus one that is not a grammar:
+ * `Git`, the pseudo-language of a `subject: commit` rule, whose subjects
+ * come from `git log` rather than from a parse. It is never handed to
+ * ast-grep; `scan.ts` filters it out of every rule file and probe list.
+ */
 export const LANGUAGES = [
   "Bash", "C", "Cpp", "CSharp", "Css", "Dart", "Elixir", "Go", "Haskell",
   "Html", "Java", "JavaScript", "Json", "Jsx", "Kotlin", "Lua", "Php",
   "Python", "Ruby", "Rust", "Scala", "Solidity", "Swift", "Tsx", "TypeScript",
-  "Yaml",
+  "Yaml", "Git",
 ] as const;
 export type Language = (typeof LANGUAGES)[number];
+
+/** The one language that is not a grammar. */
+export const COMMIT_LANGUAGE: Language = "Git";
 
 /**
  * The shipped layout: `rules/<lang>/<id>/rule.yml`. A language directory
@@ -39,6 +47,7 @@ export const LANGUAGE_DIRS: Record<string, readonly Language[]> = {
   typescript: ["TypeScript", "Tsx", "JavaScript", "Jsx"],
   javascript: ["JavaScript", "Jsx"],
   rust: ["Rust"],
+  git: ["Git"],
 };
 
 /**
@@ -53,8 +62,12 @@ export const TIER_ONE = ["typescript", "rust"] as const;
 export const KINDS = ["score", "noul"] as const;
 export type RuleKind = (typeof KINDS)[number];
 
-/** What code the question is actually about. */
-export const SUBJECTS = ["node", "enclosing", "file"] as const;
+/**
+ * What code the question is actually about. `commit` is the one subject
+ * with no ast-grep matcher: the message is the subject and the diff is the
+ * state, both from git.
+ */
+export const SUBJECTS = ["node", "enclosing", "file", "commit"] as const;
 export type SubjectMode = (typeof SUBJECTS)[number];
 
 /** Which sections of state accompany the questions. */
