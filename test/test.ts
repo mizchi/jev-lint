@@ -73,7 +73,7 @@ import {
 } from "../src/config.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules } from "../src/ignore.ts";
 import { mergePasses } from "../src/run.ts";
-import { discoverEvals, scoreEval, compareEvals, relocateLabels, runEval, readEvalRecord, draftsChanged, loadSuite, evalCorpus } from "../src/evals.ts";
+import { discoverEvals, scoreEval, compareEvals, relocateLabels, relocateRecord, runEval, readEvalRecord, draftsChanged, loadSuite, evalCorpus } from "../src/evals.ts";
 import type {
   Answer,
   AstGrepMatch,
@@ -652,6 +652,15 @@ test("rules: every tier-one shipped rule has fixtures, an expect file and an acc
     }
   }
   assert.ok(rules.some((r) => r.languageDir === "typescript") && rules.some((r) => r.languageDir === "rust"));
+});
+
+await testAsync("RULES.md is what tools/rules-md.ts generates from rules/", async () => {
+  // The page is derived, never edited: a rule added, moved or refitted
+  // without `npm run rules:md` fails here rather than shipping a list that
+  // no longer matches the directory it describes.
+  const { renderRulesMd } = await import("../tools/rules-md.ts");
+  const generated = renderRulesMd("rules", process.cwd());
+  assert.equal(readFileSync("RULES.md", "utf8"), generated, "RULES.md is stale: run `npm run rules:md`");
 });
 
 test("rules: the shipped pack loads with no errors", () => {
@@ -3151,6 +3160,23 @@ test("evals: a rule directory with expect.yml is an eval suite, and neither it n
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("evals: a baseline moves with its suite, keyed on what follows fixtures/", () => {
+  // A rule promoted out of experiments/ carried its old paths in its
+  // baseline, every labelled case then read as unlabelled, and --replay
+  // could not tell: it compares decisions with the ones accepted, not
+  // with the labels. Nine Go rules shipped that way before RULES.md's
+  // generator scored them at precision 0.00.
+  const suite = { name: "typescript/a", dir: "rules/typescript/a", ruleFile: "rules/typescript/a/rule.yml", fixtures: "rules/typescript/a/fixtures", expect: "rules/typescript/a/expect.yml", baseline: "", last: "" };
+  const record = {
+    schema: "jev-lint-eval-1", recorded: "2026-09-20", model: null, suite: "typescript/a", rules: [], cutoffs: {},
+    passes: [[{ rule: "a", file: "experiments/rule-candidates/typescript/a/fixtures/sub/x.ts", line: 1, value: 0.9, confidence: null }]],
+    spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
+  };
+  const moved = relocateRecord(record as never, suite);
+  assert.equal(moved.passes[0]![0]!.file, "rules/typescript/a/fixtures/sub/x.ts");
+  assert.equal(relocateRecord({ ...record, passes: [[{ ...record.passes[0]![0]!, file: "elsewhere/x.ts" }]] } as never, suite).passes[0]![0]!.file, "elsewhere/x.ts", "a path with no fixtures/ is left alone");
 });
 
 test("evals: expectations are written relative to the rule directory and resolved to the paths a run reports", () => {

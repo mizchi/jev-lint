@@ -62,6 +62,7 @@
     "rules",
     "!rules/**/last.json",
     "README.md",
+    "RULES.md",
     "LICENSE"
   ],
   "scripts": {
@@ -73,6 +74,8 @@
     "check": "node --experimental-strip-types src/cli.ts check",
     "review": "node --experimental-strip-types src/cli.ts review",
     "rules": "node --experimental-strip-types src/cli.ts rules",
+    "rules:md": "node --experimental-strip-types tools/rules-md.ts",
+    "rules:md:check": "node --experimental-strip-types tools/rules-md.ts --check",
     "eval": "node --experimental-strip-types src/cli.ts eval --repeat 3",
     "eval:replay": "node --experimental-strip-types src/cli.ts eval --replay",
     "arms": "node --experimental-strip-types tools/arms.ts --repeat 2",

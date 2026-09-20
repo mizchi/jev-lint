@@ -285,6 +285,10 @@ docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules
 
+The full list, with every rule's cutoff, state, fixtures and its precision
+and recall at the shipped cutoff, is [RULES.md](RULES.md), generated from
+`rules/` by `npm run rules:md` and checked by the test suite.
+
 54 rules ship in `rules/`, one directory per language and one per rule
 under it, each with the cases that prove it, used when the project has no
 `rules/` directory of its own. Two languages are first tier — `typescript`

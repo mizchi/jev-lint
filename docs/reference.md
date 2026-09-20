@@ -436,6 +436,12 @@ refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
 
 ## The shipped packs
 
+The mechanical list — every rule, its configuration, its fixtures and its
+precision and recall at the shipped cutoff, re-derived from the accepted
+baselines — is [RULES.md](../RULES.md), written by `tools/rules-md.ts`
+(`npm run rules:md`; `npm run rules:md:check` fails when it is stale, and
+so does `npm test`). What follows is the prose.
+
 54 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
 grouped here by what they ask. Which languages each exists in:
 

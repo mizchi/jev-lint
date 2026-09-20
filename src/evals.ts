@@ -26,7 +26,7 @@
  * they are resolved to the paths a run reports before scoring.
  */
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import { basename, dirname, join } from "node:path";
+import { basename, dirname, join, sep } from "node:path";
 import YAML from "yaml";
 import { fitCutoffs, labelFor } from "./calibrate.ts";
 import { cutoffFor, languageDirGrammars, loadRules, ruleTextHash } from "./rules.ts";
@@ -297,13 +297,36 @@ export interface EvalRecord {
   spent: { calls: number; inputTokens: number; usd: number; ms: number };
 }
 
-export function readEvalRecord(path: string): EvalRecord | null {
+export function readEvalRecord(path: string, suite?: EvalSuite): EvalRecord | null {
   try {
     const r = JSON.parse(readFileSync(path, "utf8")) as EvalRecord;
-    return r?.schema === "jev-lint-eval-1" && Array.isArray(r.passes) ? r : null;
+    if (r?.schema !== "jev-lint-eval-1" || !Array.isArray(r.passes)) return null;
+    return suite ? relocateRecord(r, suite) : r;
   } catch {
     return null;
   }
+}
+
+/**
+ * A record's answers, re-keyed to where the suite lives now.
+ *
+ * A baseline records fixture paths as the run reported them, relative to
+ * the repository root, so a rule promoted from experiments/rule-candidates/
+ * into rules/ carried paths its own expectations no longer matched -- and
+ * `--replay` did not notice, since it compares decisions with the ones
+ * accepted, not with the labels. Everything after `fixtures/` is what
+ * identifies a case; the prefix is where the suite happened to be.
+ */
+export function relocateRecord(record: EvalRecord, suite: EvalSuite): EvalRecord {
+  const here = suite.fixtures.split(sep).join("/");
+  const move = (file: string): string => {
+    const at = file.split(sep).join("/").lastIndexOf("/fixtures/");
+    return at < 0 ? file : `${here}${file.slice(at + "/fixtures".length)}`;
+  };
+  return {
+    ...record,
+    passes: record.passes.map((pass) => pass.map((a) => ({ ...a, file: move(a.file) }))),
+  };
 }
 
 /** Has any rule's question changed since this record was taken? */

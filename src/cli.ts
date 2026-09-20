@@ -870,7 +870,7 @@ async function cmdEval(opts: Options, out: Log, log: Log): Promise<number> {
       failed += 1;
       continue;
     }
-    const baselineRecord = readEvalRecord(suite.baseline);
+    const baselineRecord = readEvalRecord(suite.baseline, suite);
     let record: EvalRecord | null = null;
     if (opts.replay) {
       if (!baselineRecord) {
@@ -880,7 +880,7 @@ async function cmdEval(opts: Options, out: Log, log: Log): Promise<number> {
       }
       record = baselineRecord;
     } else if (opts.accept && opts.acceptLast) {
-      record = readEvalRecord(suite.last);
+      record = readEvalRecord(suite.last, suite);
       if (!record) {
         log(`${suite.name}: no last run to accept`);
         failed += 1;
