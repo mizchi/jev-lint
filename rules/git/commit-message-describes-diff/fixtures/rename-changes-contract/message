@@ -1,0 +1,3 @@
+Rename fetchUser to loadUser
+
+Every other reader in the repo module is loadX; make this one match.

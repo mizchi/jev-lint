@@ -1,0 +1,4 @@
+[
+  { "id": "o1", "customerId": "c1", "totalCents": 100, "placedAt": "2026-01-01T00:00:00Z" },
+  { "id": "o2", "customerId": "c1", "totalCents": 200, "placedAt": "2026-01-02T00:00:00Z" }
+]

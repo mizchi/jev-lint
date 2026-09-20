@@ -1,0 +1,4 @@
+Refactor the HTTP client, no behaviour change
+
+get and post duplicated the header construction and the fetch call;
+pull both into a private request helper.

@@ -1,0 +1,3 @@
+Add --json to the report subcommand
+
+CI posts the findings as annotations and was parsing the text table.

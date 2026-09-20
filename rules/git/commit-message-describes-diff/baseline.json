@@ -1,0 +1,460 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:54:15.266Z",
+  "model": "jev-1.13.0",
+  "suite": "git/commit-message-describes-diff",
+  "rules": [
+    {
+      "id": "commit-message-describes-diff",
+      "draft": "f8682af992d5",
+      "at": 0.65
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/fix-pagination-off-by-one",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/rename-changes-contract",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/also-in-body",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/add-coupon",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/version-bump-alongside",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/wrong-cause",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/mechanical-rename",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/flag-plus-strict-off",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/revert-add-coupon",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/refactor-keeps-default",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/refactor-changes-timeout",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/extract-pricing-module",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/intent-over-mechanism",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/remove-legacy-exporter",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/test-added-test-deleted",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/fix-that-adds-a-feature",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/remove-legacy-exporter",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/refactor-changes-timeout",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/add-coupon",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/version-bump-alongside",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/mechanical-rename",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/fix-pagination-off-by-one",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/rename-changes-contract",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/also-in-body",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/revert-add-coupon",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/test-added-test-deleted",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/intent-over-mechanism",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/flag-plus-strict-off",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/fix-that-adds-a-feature",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/extract-pricing-module",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/refactor-keeps-default",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/wrong-cause",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/refactor-changes-timeout",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/revert-add-coupon",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/version-bump-alongside",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/remove-legacy-exporter",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/rename-changes-contract",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/refactor-keeps-default",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/fix-that-adds-a-feature",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/intent-over-mechanism",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/also-in-body",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/add-coupon",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/mechanical-rename",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/flag-plus-strict-off",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/test-added-test-deleted",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/extract-pricing-module",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/fix-pagination-off-by-one",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "commit-message-describes-diff",
+        "file": "rules/git/commit-message-describes-diff/fixtures/wrong-cause",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 48,
+    "inputTokens": 74592,
+    "usd": 0.0031328640000000004,
+    "ms": 1230
+  }
+}

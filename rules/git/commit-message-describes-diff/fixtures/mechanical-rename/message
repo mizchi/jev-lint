@@ -1,0 +1,5 @@
+Rename Order.customerId to Order.buyerId
+
+The field holds the account that placed the order, and customers can
+order on behalf of another account; "customer" was read as the recipient
+twice this month.

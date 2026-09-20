@@ -1,0 +1,3 @@
+Fix the crash when the cart is empty
+
+Support reported checkout returning a 500 instead of the empty-cart page.

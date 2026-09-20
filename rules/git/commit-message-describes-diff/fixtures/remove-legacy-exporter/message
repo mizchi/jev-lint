@@ -1,0 +1,3 @@
+Remove the legacy CSV exporter
+
+Nothing has called it since the v2 exporter shipped in 2.0.

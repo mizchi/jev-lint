@@ -1,0 +1,6 @@
+Revert "Add coupon codes to the cart"
+
+This reverts commit 3f2c1a9e0b7d4c6a8f1e2d3c4b5a69788796a5b4.
+
+The SAVE10 rule was shipped before the coupon table existed; it comes
+back once codes are read from there.

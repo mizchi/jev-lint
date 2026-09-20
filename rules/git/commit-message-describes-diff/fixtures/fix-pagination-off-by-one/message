@@ -1,0 +1,4 @@
+Fix the off-by-one in paginate
+
+The page number is 1-based but the slice start treated it as 0-based, so
+page 1 showed the second page and the last page was always empty.

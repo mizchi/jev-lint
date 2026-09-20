@@ -1,5 +1,37 @@
 default: clean
+
+# bad: the message lies about the diff
 fixtures/fix-that-adds-a-feature:
   - { line: 1, label: bad, window: 0, reason: "the message says a fix to `total`; the diff leaves `total` untouched and adds `applyCoupon`" }
+fixtures/remove-legacy-exporter:
+  - { line: 1, label: bad, window: 0, reason: "the message says the exporter is removed; the diff adds a @deprecated JSDoc and leaves the function and its re-export in place" }
+fixtures/refactor-changes-timeout:
+  - { line: 1, label: bad, window: 0, reason: "the message says no behaviour change; in the middle of the rename and the extracted helper the default timeout goes from 30s to 10s" }
+fixtures/rename-changes-contract:
+  - { line: 1, label: bad, window: 0, reason: "the message says a rename; the renamed function also stops returning null on a miss and throws NotFoundError, and the handler's 404 branch is deleted" }
+fixtures/test-added-test-deleted:
+  - { line: 1, label: bad, window: 0, reason: "the message says a test is added; the diff also deletes the abort-signal test, which nothing mentions" }
+fixtures/wrong-cause:
+  - { line: 1, label: bad, window: 0, reason: "the message attributes the fix to an empty cart; the empty-cart guard already existed and is untouched, the diff guards a null session.user" }
+fixtures/flag-plus-strict-off:
+  - { line: 1, label: bad, window: 0, reason: "the message describes the --json flag; the diff also turns off `strict` in tsconfig.json, which nothing mentions" }
+
+# hard clean: a lazy rule would flag these
 fixtures/add-coupon:
   - { line: 1, label: clean, window: 0, reason: "the message names the feature and the body its rule; the diff is exactly that" }
+fixtures/extract-pricing-module:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a three-word subject over a five-file diff; every function moves and none changes" }
+fixtures/also-in-body:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the diff has a second change (a log-line word); the body's 'while here' names it" }
+fixtures/mechanical-rename:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: five files touched, every hunk is the one rename the subject line names" }
+fixtures/refactor-keeps-default:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the same refactor as refactor-changes-timeout with the 30s default kept; the helper extraction and the rename are the no-behaviour-change the message claims" }
+fixtures/intent-over-mechanism:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the message states an intent (safe under concurrent calls) and the diff a mechanism (a mutex plus a double check) that serves it; a new file appears that the message never names" }
+fixtures/version-bump-alongside:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the --json flag the message names, plus a version bump in Cargo.toml and the matching Cargo.lock line, which a message need not mention" }
+fixtures/revert-add-coupon:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a revert whose diff is the exact inverse of the commit it names; the diff deletes a feature and the subject line says so only through the Revert convention" }
+fixtures/fix-pagination-off-by-one:
+  - { line: 1, label: clean, window: 0, reason: "a fix that is exactly the fix: the message names an off-by-one in paginate and the diff changes the slice start" }

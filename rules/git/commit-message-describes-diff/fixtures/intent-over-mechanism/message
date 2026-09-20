@@ -1,0 +1,5 @@
+Make token refresh safe under concurrent calls
+
+Two requests that both saw an expired token both refreshed it, and the
+provider revokes the earlier access token when a later refresh lands, so
+the first request failed with 401 on a token it had just been handed.

@@ -1,0 +1,6 @@
+Cap the retry backoff at 30 seconds
+
+With maxAttempts 10 and a 1s base the ninth wait was over four minutes.
+
+While here, the giving-up log line said "attempt" where it meant
+"attempts".

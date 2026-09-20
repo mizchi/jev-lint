@@ -1,0 +1,4 @@
+Add --json to the report command
+
+CI wants to post the findings as annotations; give it a machine-readable
+form instead of parsing the text table.
