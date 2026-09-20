@@ -206,20 +206,20 @@ export function describe(finding: Finding): string {
 
   const scale = finding.kind === "score" ? `/${finding.scale ?? 3}` : "";
   const num = `${finding.value.toFixed(2)}${scale}`;
-  const conf =
+  const confidenceNote =
     typeof finding.confidence === "number" ? `, confidence ${finding.confidence.toFixed(2)}` : "";
-  const cut = `cutoff ${finding.at.toFixed(2)}`;
+  const cutoffNote = `cutoff ${finding.at.toFixed(2)}`;
   const what = finding.message ?? finding.ask;
 
   switch (finding.messageId) {
     case "violation":
-      return `${where}  ${finding.rule}: ${what} (${finding.level}, ${num}${conf}; ${cut})`;
+      return `${where}  ${finding.rule}: ${what} (${finding.level}, ${num}${confidenceNote}; ${cutoffNote})`;
     case "unsure":
-      return `${where}  ${finding.rule}: would push back on this but is not sure -- worth a human look rather than a fix: ${what} (${num}${conf}; ${cut})`;
+      return `${where}  ${finding.rule}: would push back on this but is not sure -- worth a human look rather than a fix: ${what} (${num}${confidenceNote}; ${cutoffNote})`;
     case "flag":
-      return `${where}  ${finding.rule}: ${what} (${num}; ${cut})`;
+      return `${where}  ${finding.rule}: ${what} (${num}; ${cutoffNote})`;
     case "review":
-      return `${where}  ${finding.rule}: under its cutoff but over the loose floor -- worth a reader's look, not a finding: ${what} (${num}${conf}; ${cut})`;
+      return `${where}  ${finding.rule}: under its cutoff but over the loose floor -- worth a reader's look, not a finding: ${what} (${num}${confidenceNote}; ${cutoffNote})`;
     default:
       return `${where}  ${finding.rule}: ${num}`;
   }
@@ -236,8 +236,8 @@ export function describe(finding: Finding): string {
 export function blocks(findings: Finding[], failOn: Severity | null): boolean {
   // A `review` row from the loose band handed here by mistake must not turn
   // a build, whatever list it came in.
-  const reported = findings.filter((f) => f.messageId !== "review");
-  if (failOn === null) return reported.length > 0;
+  const counted = findings.filter((f) => f.messageId !== "review");
+  if (failOn === null) return counted.length > 0;
   const floor = SEVERITIES.indexOf(failOn);
-  return reported.some((f) => SEVERITIES.indexOf(f.severity) >= floor);
+  return counted.some((f) => SEVERITIES.indexOf(f.severity) >= floor);
 }

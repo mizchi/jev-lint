@@ -96,14 +96,14 @@ test("scan: two symbols sharing a name do not form a call edge with each other",
   }
   // And the absence above has to mean "no edge", not "no graph": the same
   // machinery must still connect two symbols with DIFFERENT names.
-  const twoNamedItems = buildSymbols(
+  const linked = buildSymbols(
     [
       probeMatch("__jev-lint_c0_Rust", "b.rs", "Rust", "pub fn caller() { callee() }", 0, 28, 0, 0, "caller"),
       probeMatch("__jev-lint_c0_Rust", "b.rs", "Rust", "pub fn callee() {}", 30, 48, 2, 2, "callee"),
     ],
     ["Rust"],
   ).get("b.rs")!;
-  assert.deepEqual(twoNamedItems.symbols.find((s) => s.name === "caller")!.calls, ["callee"]);
+  assert.deepEqual(linked.symbols.find((s) => s.name === "caller")!.calls, ["callee"]);
 });
 
 test("scan: every symbol has call arrays, including ones excluded from the graph", () => {

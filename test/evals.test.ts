@@ -120,8 +120,8 @@ test("evals: comparing with a baseline names the cases that got worse, and a cha
   assert.deepEqual(diff.improvements, []);
   assert.deepEqual(diff.added.map((c) => c.line), [5], "a new subject the baseline never saw is reported, not judged");
   assert.equal(diff.ok, false);
-  const same = compareEvals(before, before, { draftChanged: false });
-  assert.equal(same.ok, true);
+  const unchanged = compareEvals(before, before, { draftChanged: false });
+  assert.equal(unchanged.ok, true);
   // A rule whose sentence, criteria or matcher changed since the baseline is
   // a different question; its baseline answers cannot say anything about it.
   const stale = compareEvals(before, before, { draftChanged: true });

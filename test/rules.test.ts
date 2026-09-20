@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join, isAbsolute } from "node:path";
 import { decide, describe as describeFinding } from "../src/gate.ts";
 import { buildQuestion } from "../src/questions.ts";
-import { normalizeRule, loadRules, cutoffFor, ruleTextHash, normalizeLanguage, ruleSources, USER_RULES_DIR, applyRuleSettings, shippedRulesPath, selectRules, DEFAULT_SCORE_AT, scaleOf } from "../src/rules.ts";
+import { normalizeRule, loadRules, cutoffFor, ruleTextHash, normalizeLanguage, ruleSources, USER_RULES_DIR, applyRuleSettings, languageDirGrammars, shippedRulesPath, selectRules, DEFAULT_SCORE_AT, scaleOf } from "../src/rules.ts";
 import { emitRuleFile, ruleLanguages } from "../src/scan.ts";
 import { explain } from "../src/schedule.ts";
 import { PROBE_PREFIX, LANGUAGE_DIRS, TIER_ONE } from "../src/types.ts";
@@ -544,4 +544,14 @@ test("rules: the shipped pack loads with no errors", () => {
   for (const r of rules) {
     assert.equal(typeof r.at, "number", `${r.id} should ship with a fitted cutoff`);
   }
+});
+
+test("rules: a rules path that does not exist is a load error, and a directory that is no language admits nothing", () => {
+  const { rules, errors } = loadRules(["/nonexistent/rules"]);
+  assert.deepEqual(rules, []);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0]!, /nonexistent/);
+  assert.equal(languageDirGrammars("experimental"), null, "not a language: a rule under it has no language directory");
+  assert.deepEqual(languageDirGrammars("rust"), ["Rust"]);
+  assert.ok(languageDirGrammars("typescript")!.includes("Tsx"), "the listed family");
 });

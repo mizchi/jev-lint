@@ -194,10 +194,10 @@ await testAsync("cli: init writes the starter config once, and replay refuses wh
     const before = said.length;
     assert.equal(cmdRules(parseArgs(["-R", join(realpathSync("."), "rules", "git")], { color: false }), out, log), 0);
     assert.ok(said.slice(before).some((s) => s.startsWith("git/commit-message-describes-diff")));
-    const broken = join(dir, "rules.yml");
-    writeFileSync(broken, "id: x\nlanguage: TypeScript\n");
+    const brokenPath = join(dir, "rules.yml");
+    writeFileSync(brokenPath, "id: x\nlanguage: TypeScript\n");
     const beforeBroken = said.length;
-    assert.equal(cmdRules(parseArgs(["-R", broken], { color: false }), out, log), 2);
+    assert.equal(cmdRules(parseArgs(["-R", brokenPath], { color: false }), out, log), 2);
     assert.ok(said.slice(beforeBroken).some((s) => /^rule error: /.test(s)), "the error is named, before the listing");
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -239,6 +239,22 @@ await testAsync("cli: init --pre-commit writes the hook where git keeps hooks, o
     }
   } finally {
     process.chdir(here);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("cli: the labels file for a fit is read once and its absence is said, not thrown", async () => {
+  const { readLabels } = await import("../src/cli/cmd-calibrate.ts");
+  const said: string[] = [];
+  assert.equal(readLabels(null, (s) => void said.push(s)), null);
+  assert.equal(said.length, 0, "no path, nothing to say");
+  assert.equal(readLabels("/nonexistent/labels.json", (s) => void said.push(s)), null);
+  assert.match(said[0]!, /could not read labels/);
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-labels-")));
+  try {
+    writeFileSync(join(dir, "labels.json"), JSON.stringify({ $default: "clean" }));
+    assert.deepEqual(readLabels(join(dir, "labels.json"), (s) => void said.push(s)), { $default: "clean" });
+  } finally {
     rmSync(dir, { recursive: true, force: true });
   }
 });

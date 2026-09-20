@@ -1,3 +1,4 @@
+// jev-lint-ignore-file tests-cover-failure-paths
 /**
  * Fixture builders, shared by the test files: one valid rule, subject,
  * symbol table, repository or config with the fields a test names

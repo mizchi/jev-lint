@@ -44,7 +44,7 @@ function project(): { dir: string; rules: string; src: string } {
   return { dir, rules, src: join(dir, "src") };
 }
 
-/** The model of this file: `liar` lies (0.9), nothing else does (0.1); every body scores 1. */
+/** The model of this file: `liar` lies (0.9), noChange else does (0.1); every body scores 1. */
 const judge = (instructions: Record<string, unknown>): number => {
   const captured = (instructions.matcher_captured ?? {}) as Record<string, string>;
   if ("statement" in instructions) return captured.NAME === "liar" ? 0.9 : 0.1;
@@ -70,7 +70,7 @@ await testAsync("commands: check reports the finding, exits 1, and --fail-on / -
     assert.equal(run.client.spent.calls, 1, "two rules, one file, one request");
     // Findings under the severity asked for do not fail the build.
     assert.equal((await cli(["check", src, ...base, "--fail-on", "error"])).code, 0);
-    // A dry run asks nothing, prices the plan, and prices each rule.
+    // A dry run asks noChange, prices the plan, and prices each rule.
     const dry = await cli(["check", src, ...base, "--dry-run"]);
     assert.equal(dry.code, 0);
     assert.equal(dry.client.spent.calls, 0);
@@ -166,7 +166,7 @@ await testAsync("commands: eval asks, accepts a baseline, replays it for free, a
       assert.match(first.out, /name-lies\s+0\.5\s+1\s+0\s+0\s+1\.00\s+1\.00/, "P 1.00 R 1.00 at the shipped cutoff");
       const replay = await cli(["eval", "typescript/name-lies", "--no-config", "--replay"]);
       assert.equal(replay.code, 0, replay.out + replay.log);
-      assert.equal(replay.client.spent.calls, 0, "a replay asks nothing");
+      assert.equal(replay.client.spent.calls, 0, "a replay asks noChange");
       assert.match(replay.out, /all as shipped/);
       // The sentence changed: the baseline answered another question.
       writeFileSync(join(suite, "rule.yml"), readFileSync(join(suite, "rule.yml"), "utf8").replace("lies.", "misleads."));
@@ -202,13 +202,13 @@ await testAsync("commands: review judges only what the diff touched, and commits
       const report = JSON.parse(review.out);
       assert.deepEqual(report.findings.map((f: { line: number }) => f.line), [5]);
       assert.ok(review.client.asked.every((q) => !String(JSON.stringify(q)).includes('"honest"')), "the unchanged function was not asked about");
-      const nothing = await cli(["review", "--base", "HEAD", ...base]);
-      assert.equal(nothing.code, 0);
-      assert.match(nothing.out, /no changed files/);
-      const nothingJson = await cli(["review", "--base", "HEAD", ...base, "--json"]);
-      assert.equal(nothingJson.code, 0);
-      assert.deepEqual(JSON.parse(nothingJson.out).findings, [], "one document, empty, where JSON was asked for");
-      // The commit rule, answered low: the range is judged and nothing reported.
+      const noChange = await cli(["review", "--base", "HEAD", ...base]);
+      assert.equal(noChange.code, 0);
+      assert.match(noChange.out, /no changed files/);
+      const noChangeJson = await cli(["review", "--base", "HEAD", ...base, "--json"]);
+      assert.equal(noChangeJson.code, 0);
+      assert.deepEqual(JSON.parse(noChangeJson.out).findings, [], "one document, empty, where JSON was asked for");
+      // The commit rule, answered low: the range is judged and noChange reported.
       const commitRules = join(realpathSync(here), "rules", "git");
       const commits = await cli(["commits", "HEAD~1..HEAD", "--no-config", "--cache", "none", "-R", commitRules, "--no-color"], fakeClient(() => 0.2));
       assert.equal(commits.code, 0, commits.out + commits.log);
@@ -222,7 +222,7 @@ await testAsync("commands: review judges only what the diff touched, and commits
   }
 });
 
-await testAsync("commands: eval and calibrate say what they cannot read, and exit 2 where nothing can run", async () => {
+await testAsync("commands: eval and calibrate say what they cannot read, and exit 2 where noChange can run", async () => {
   const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-commands-refuse-")));
   try {
     const none = await cli(["eval", join(dir, "nowhere"), "--no-config"]);
@@ -269,22 +269,22 @@ await testAsync("commands: eval and calibrate say what they cannot read, and exi
   }
 });
 
-await testAsync("commands: --json gives every command one JSON document on stdout, and nothing else there", async () => {
+await testAsync("commands: --json gives every command one JSON document on stdout, and noChange else there", async () => {
   // A consumer parses stdout. Whatever a command says for a reader goes to
   // stderr under --json, and the document carries what the text carried.
   const { dir, rules, src } = project();
-  const one = (s: string): Record<string, any> => {
+  const parseOne = (s: string): Record<string, any> => {
     const doc = JSON.parse(s);
     assert.equal(typeof doc, "object");
     return doc;
   };
   try {
     const base = ["--no-config", "--cache", "none", "-R", rules, "--no-color", "--json"];
-    const check = one((await cli(["check", src, ...base])).out);
+    const check = parseOne((await cli(["check", src, ...base])).out);
     assert.equal(check.findings.length, 1);
     assert.equal(check.stats.byFile[join(src, "a.ts")].subjects, 4);
 
-    const dry = one((await cli(["check", src, ...base, "--dry-run"])).out);
+    const dry = parseOne((await cli(["check", src, ...base, "--dry-run"])).out);
     assert.equal(dry.dryRun, true);
     assert.equal(dry.requests, 1);
     assert.equal(dry.subjects, 4);
@@ -292,29 +292,29 @@ await testAsync("commands: --json gives every command one JSON document on stdou
     assert.deepEqual(dry.byRule.map((r: { rule: string }) => r.rule).sort(), ["body-short", "name-lies"]);
     assert.equal(dry.batches[0].arm, "located");
 
-    const listed = one((await cli(["rules", ...base])).out);
+    const listed = parseOne((await cli(["rules", ...base])).out);
     assert.deepEqual(listed.rules.map((r: { id: string }) => r.id), ["name-lies", "body-short"]);
     assert.equal(listed.rules[0].cutoff, 0.5);
     assert.deepEqual(listed.errors, []);
 
-    const gaps = one((await cli(["gaps", src, ...base])).out);
+    const gaps = parseOne((await cli(["gaps", src, ...base])).out);
     assert.ok(Array.isArray(gaps.gaps) && gaps.gaps.some((r: { rule: string }) => r.rule === "name-lies"));
     assert.equal(gaps.stats.subjects, 4);
 
     const labels = join(dir, "labels.json");
     writeFileSync(labels, JSON.stringify({ $default: "clean", [join(src, "a.ts")]: [{ line: 5, label: "bad", window: 0, rule: "name-lies" }] }));
-    const cal = one((await cli(["calibrate", src, ...base, "--repeat", "2", "--labels", labels])).out);
+    const cal = parseOne((await cli(["calibrate", src, ...base, "--repeat", "2", "--labels", labels])).out);
     assert.equal(cal.passes, 2);
     assert.ok(cal.gaps.length === 2 && cal.stability.rows.length === 2 && cal.stability.runs === 2);
     assert.equal(cal.fits.find((f: { rule: string }) => f.rule === "name-lies").fitted, 0.5);
 
     const record = join(dir, "run.json");
     await cli(["check", src, ...base.filter((a) => a !== "--json"), "--record", record]);
-    const replay = one((await cli(["replay", record, "--no-config", "--json"])).out);
+    const replay = parseOne((await cli(["replay", record, "--no-config", "--json"])).out);
     assert.equal(replay.findings.length, 1);
     assert.ok(Array.isArray(replay.gaps));
 
-    const init = one((await cli(["init", "--config", join(dir, "new.yaml"), "--json"])).out);
+    const init = parseOne((await cli(["init", "--config", join(dir, "new.yaml"), "--json"])).out);
     assert.equal(init.wrote, join(dir, "new.yaml"));
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -335,15 +335,15 @@ await testAsync("commands: eval --json is one document too, for a run, a dry run
     const here = process.cwd();
     process.chdir(dir);
     try {
-      const one = (s: string) => JSON.parse(s);
-      const dry = one((await cli(["eval", "typescript/name-lies", "--no-config", "--json", "--dry-run", "--repeat", "1"])).out);
+      const parseOne = (s: string) => JSON.parse(s);
+      const dry = parseOne((await cli(["eval", "typescript/name-lies", "--no-config", "--json", "--dry-run", "--repeat", "1"])).out);
       assert.equal(dry.suites[0].plan.requests, 1);
-      const run = one((await cli(["eval", "typescript/name-lies", "--no-config", "--json", "--repeat", "1", "--accept"])).out);
+      const run = parseOne((await cli(["eval", "typescript/name-lies", "--no-config", "--json", "--repeat", "1", "--accept"])).out);
       assert.equal(run.failed, 0);
       assert.equal(run.suites[0].score.rules[0].precision, 1);
-      const replay = one((await cli(["eval", "typescript/name-lies", "--no-config", "--json", "--replay"])).out);
+      const replay = parseOne((await cli(["eval", "typescript/name-lies", "--no-config", "--json", "--replay"])).out);
       assert.equal(replay.suites[0].ok, true);
-      const cmp = one((await cli(["eval", "--compare", join(suite, "baseline.json"), join(suite, "baseline.json"), "--no-config", "-R", dir, "--json"])).out);
+      const cmp = parseOne((await cli(["eval", "--compare", join(suite, "baseline.json"), join(suite, "baseline.json"), "--no-config", "-R", dir, "--json"])).out);
       assert.equal(cmp.diff.regressions.length, 0);
       assert.equal(cmp.a.passes, 1);
     } finally {
@@ -371,7 +371,7 @@ await testAsync("commands: since 0.5 a config picks its rules by id, .jev-lint/r
     assert.match(all.log, /no config: running all \d+ packaged rule/);
     assert.ok(Object.keys(JSON.parse(all.out).stats.byRule).length >= 1);
     assert.ok(all.client.asked.some((q) => String(JSON.stringify(q)).includes("body is too short")), "the project's own rule ran");
-    // A config that names no rules runs nothing, and says what to write.
+    // A config that names no rules runs noChange, and says what to write.
     writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\n");
     const none = await cli(["check", "--cache", "none"]);
     assert.equal(none.code, 2);
@@ -385,12 +385,12 @@ await testAsync("commands: since 0.5 a config picks its rules by id, .jev-lint/r
     assert.equal(report.findings[0].severity, "error");
     assert.equal(report.findings[0].cutoff, 0.5);
     assert.ok(!some.client.asked.some((q) => String(JSON.stringify(q)).includes("name promises")), "a rule turned off is not asked");
-    // Everything off is nothing to run, and said.
+    // Everything off is noChange to run, and said.
     writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nrules:\n  body-short: off\n");
     const off = await cli(["check", "--cache", "none"]);
     assert.equal(off.code, 2);
     assert.match(off.log, /turns every rule off/);
-    // A misspelt id is an error, not a rule that quietly found nothing.
+    // A misspelt id is an error, not a rule that quietly found noChange.
     writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nrules:\n  body-shrot: on\n");
     const typo = await cli(["check", "--cache", "none"]);
     assert.equal(typo.code, 2);

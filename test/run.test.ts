@@ -274,11 +274,11 @@ await testAsync("run: commits mode judges a range with the commit rules only, an
     assert.equal(result.subjects.length, 2, "two commits, one commit rule; the ordinary rule made no subject");
     assert.equal(seen.length, 2, "one request per commit");
     assert.equal(result.findings.length, 1);
-    const [f] = result.findings;
-    assert.match(f!.file, /^[0-9a-f]{40}$/);
-    assert.equal(f!.line, 1);
+    const [commitFinding] = result.findings;
+    assert.match(commitFinding!.file, /^[0-9a-f]{40}$/);
+    assert.equal(commitFinding!.line, 1);
     const pretty = formatPretty(result, { color: false });
-    assert.match(pretty, new RegExp(`${f!.file.slice(0, 8)}  "Remove the cart entirely"`), "the commit is named by short sha and subject line");
+    assert.match(pretty, new RegExp(`${commitFinding!.file.slice(0, 8)}  "Remove the cart entirely"`), "the commit is named by short sha and subject line");
     assert.match(formatGithub(result), /title=commit-message-describes-diff/);
     assert.equal(JSON.parse(formatJson(result)).findings[0].commit.subject, "Remove the cart entirely");
     // Dry run lists the commits and asks nothing.

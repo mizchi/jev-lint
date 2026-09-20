@@ -56,9 +56,9 @@ test("config: a valid file parses into every setting it names", () => {
     const opts = configurable();
     applyConfig(opts, { exclude: config.exclude }, new Set());
     assert.deepEqual(opts.exclude, ["src/fixtures"]);
-    const flagged = configurable({ exclude: ["other"] });
-    applyConfig(flagged, { exclude: config.exclude }, new Set(["--exclude"]));
-    assert.deepEqual(flagged.exclude, ["other"], "the flag wins over the file");
+    const withFlag = configurable({ exclude: ["other"] });
+    applyConfig(withFlag, { exclude: config.exclude }, new Set(["--exclude"]));
+    assert.deepEqual(withFlag.exclude, ["other"], "the flag wins over the file");
     assert.equal(config.baseUrl, "https://proxy.example/v1");
     assert.equal(config.group, "rule");
     assert.equal(config.arm, "bare");

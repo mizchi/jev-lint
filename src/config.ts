@@ -89,13 +89,13 @@ export interface LoadedConfig {
 export function findConfig(from: string = process.cwd()): string | null {
   let dir = resolve(from);
   for (;;) {
-    const present = CONFIG_NAMES.map((name) => join(dir, name)).filter((p) => existsSync(p));
-    if (present.length > 1) {
+    const configsHere = CONFIG_NAMES.map((name) => join(dir, name)).filter((p) => existsSync(p));
+    if (configsHere.length > 1) {
       throw new Error(
-        `${present.length} config files in ${dir}: ${present.map((p) => basename(p)).join(", ")} -- keep one config file per directory; jev-lint will not guess which is in force`,
+        `${configsHere.length} config files in ${dir}: ${configsHere.map((p) => basename(p)).join(", ")} -- keep one config file per directory; jev-lint will not guess which is in force`,
       );
     }
-    if (present.length === 1) return present[0]!;
+    if (configsHere.length === 1) return configsHere[0]!;
     const up = dirname(dir);
     if (up === dir) return null;
     dir = up;

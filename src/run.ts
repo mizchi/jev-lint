@@ -109,7 +109,7 @@ export async function collectSubjects({
   // already has to load. Applied here rather than at the gate so an ignored
   // subject is never sent: a suppression is the cheapest way to quiet a rule.
   const ignoresFor = new Map<string, FileIgnores>();
-  const ignoresOf = (file: string): FileIgnores => {
+  const ignoresIn = (file: string): FileIgnores => {
     let ig = ignoresFor.get(file);
     if (!ig) {
       ig = parseIgnores(readSource(file));
@@ -151,7 +151,7 @@ export async function collectSubjects({
       skippedByDiff += 1;
       continue;
     }
-    if (isIgnored(ignoresOf(m.file), resolved.line, rule.id)) {
+    if (isIgnored(ignoresIn(m.file), resolved.line, rule.id)) {
       ignoredSubjects += 1;
       continue;
     }
