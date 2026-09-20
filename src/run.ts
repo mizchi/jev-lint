@@ -260,6 +260,12 @@ export interface RunOptions {
    * on the finding, for the reader; it decides nothing.
    */
   explain?: boolean;
+  /**
+   * List the band under each cutoff for a reader: at most this many
+   * subjects (Infinity for all), closest to their cutoff first. The same
+   * answers cut at a second line, so it costs no request.
+   */
+  loose?: number | null;
 }
 
 export async function run({
@@ -283,6 +289,7 @@ export async function run({
   onProgress = null,
   client = null,
   explain = false,
+  loose = null,
 }: RunOptions): Promise<RunResult> {
   const started = Date.now();
   const passes = Number.isInteger(retry) && retry > 0 ? retry : 1;
@@ -365,7 +372,7 @@ export async function run({
       schedule: plan,
       cachedCount: results.length,
       spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
-      ...gate(results, { cutoffs, unsureBelow }),
+      ...gate(results, { cutoffs, unsureBelow, loose }),
       elapsedMs: Date.now() - started,
     };
   }
@@ -470,7 +477,7 @@ export async function run({
 
   if (useCache) cache.save({ model: jev.servedModel ?? jev.model });
 
-  const gated = gate(results, { cutoffs, unsureBelow });
+  const gated = gate(results, { cutoffs, unsureBelow, loose });
   if (explain && !refused) await explainFindings(gated.findings, batches, jev, errors);
   // Attached by identity rather than by position: `gate` happens to map 1:1
   // over its input, and relying on that is the same coupling that once

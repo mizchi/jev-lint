@@ -78,7 +78,12 @@ export type IgnoreDirective = string[];
 export const SEVERITIES = ["hint", "info", "warning", "error"] as const;
 export type Severity = (typeof SEVERITIES)[number];
 
-export const MESSAGE_IDS = ["violation", "unsure", "flag", "missing"] as const;
+/**
+ * `review` is the one that is not a finding: a subject under its cutoff but
+ * over the rule's loose floor, listed for a reader when the run asked for
+ * it with `--loose`, never counted and never blocking.
+ */
+export const MESSAGE_IDS = ["violation", "unsure", "flag", "missing", "review"] as const;
 export type MessageId = (typeof MESSAGE_IDS)[number];
 
 // --------------------------------------------------------------------- rules
@@ -133,6 +138,12 @@ export interface Rule {
   criteria: NoulCriteria | null;
   /** The rule's own cutoff, or null to take the default for its kind. */
   at: number | null;
+  /**
+   * The floor of the `--loose` band: under the cutoff but at or over this,
+   * the subject is listed for a reader. null means half the cutoff, which
+   * on the shipped evals no visible defect falls under.
+   */
+  loose: number | null;
   subject: SubjectMode;
   state: StateArm;
   /**
@@ -427,6 +438,8 @@ export interface GateStats {
   reported: number;
   missing: number;
   unsure: number;
+  /** Subjects in the `--loose` band; 0 when the run did not ask for it. */
+  review: number;
   byRule: Record<string, number>;
 }
 
@@ -452,6 +465,12 @@ export interface UnpairedStats {
 export interface GateResult {
   findings: Finding[];
   all: Finding[];
+  /**
+   * The `--loose` band, closest to its cutoff first, capped at what the run
+   * asked for. Apart from `findings` so nothing that reads findings -- the
+   * exit code, `--fail-on`, the counts -- ever sees one.
+   */
+  review: Finding[];
   stats: GateStats;
 }
 

@@ -27,13 +27,33 @@
  */
 import { cutoffFor, DEFAULT_UNSURE_BELOW, SCORE_LEVEL_NAMES } from "./rules.ts";
 import { SEVERITIES } from "./types.ts";
-import type { Answer, Finding, GateResult, Severity, Subject } from "./types.ts";
+import type { Answer, Finding, GateResult, Rule, Severity, Subject } from "./types.ts";
 export { MESSAGE_IDS } from "./types.ts";
 
-/** Per-run threshold overrides, both optional. */
+/** Per-run threshold overrides, all optional. */
 export interface GateOptions {
   cutoffs?: Record<string, number>;
   unsureBelow?: number | null;
+  /**
+   * List the band under each cutoff for a reader: at most this many
+   * subjects, closest to their cutoff first. null or undefined is off.
+   */
+  loose?: number | null;
+}
+
+/**
+ * The floor of a rule's `--loose` band: its own `loose:`, else half its
+ * cutoff in force.
+ *
+ * Half is not a tuned number; it is where the shipped evals put it. Across
+ * the 24 shipped rules no defect a rule can see sits under half its cutoff,
+ * and about one clean subject in twenty sits over -- so the band catches
+ * what the rule would ever catch and costs a reader one look per twenty
+ * subjects. A rule that has measured its own clean band can say so.
+ */
+export function looseFloor(rule: Rule, cutoffs: Record<string, number> = {}): number {
+  if (typeof rule.loose === "number") return rule.loose;
+  return cutoffFor(rule, cutoffs) / 2;
 }
 
 /**
@@ -49,7 +69,7 @@ export interface GateOptions {
 export function decide(
   subject: Subject,
   answer: Answer | null,
-  { cutoffs = {}, unsureBelow }: GateOptions = {},
+  { cutoffs = {}, unsureBelow, loose = null }: GateOptions = {},
 ): Finding {
   const rule = subject.rule;
   const at = cutoffFor(rule, cutoffs);
@@ -94,7 +114,11 @@ export function decide(
   };
 
   if (answer.value < at) {
-    return { ...base, messageId: null, reported: false };
+    // Under the cutoff. With `--loose`, the top of that range is listed for
+    // a reader; it is still not reported, so nothing that counts findings
+    // or turns the exit code can see it.
+    const review = loose !== null && answer.value >= looseFloor(rule, cutoffs);
+    return { ...base, messageId: review ? "review" : null, reported: false };
   }
 
   if (answer.kind === "score") {
@@ -118,21 +142,24 @@ export function gate(
   options: GateOptions = {},
 ): GateResult {
   const all = results.map(({ subject, answer }) => decide(subject, answer, options));
-  const findings = all.filter((f) => f.reported);
-  findings.sort(
-    (a, b) =>
-      (b.margin ?? 0) - (a.margin ?? 0) ||
-      a.file.localeCompare(b.file) ||
-      a.line - b.line,
-  );
+  const byMargin = (a: Finding, b: Finding) =>
+    (b.margin ?? 0) - (a.margin ?? 0) || a.file.localeCompare(b.file) || a.line - b.line;
+  const findings = all.filter((f) => f.reported).sort(byMargin);
+  // The band, ranked the same way -- margin is value over cutoff, so under
+  // the cutoff it ranks by how close -- and capped at what was asked for.
+  // Over the cap, the ones dropped are the ones furthest from a cutoff.
+  const cap = options.loose ?? 0;
+  const review = all.filter((f) => f.messageId === "review").sort(byMargin).slice(0, Math.max(0, cap));
   return {
     findings,
     all,
+    review,
     stats: {
       subjects: all.length,
       reported: findings.length,
       missing: all.filter((f) => f.messageId === "missing").length,
       unsure: all.filter((f) => f.messageId === "unsure").length,
+      review: review.length,
       byRule: countBy(findings, (f) => f.rule),
     },
   };
@@ -178,6 +205,8 @@ export function describe(finding: Finding): string {
       return `${where}  ${finding.rule}: would push back on this but is not sure -- worth a human look rather than a fix: ${what} (${num}${conf}; ${cut})`;
     case "flag":
       return `${where}  ${finding.rule}: ${what} (${num}; ${cut})`;
+    case "review":
+      return `${where}  ${finding.rule}: under its cutoff but over the loose floor -- worth a reader's look, not a finding: ${what} (${num}${conf}; ${cut})`;
     default:
       return `${where}  ${finding.rule}: ${num}`;
   }
@@ -192,7 +221,10 @@ export function describe(finding: Finding): string {
  * lets the hook print everything and block only on what a rule has earned.
  */
 export function blocks(findings: Finding[], failOn: Severity | null): boolean {
-  if (failOn === null) return findings.length > 0;
+  // A `review` row from the loose band handed here by mistake must not turn
+  // a build, whatever list it came in.
+  const reported = findings.filter((f) => f.messageId !== "review");
+  if (failOn === null) return reported.length > 0;
   const floor = SEVERITIES.indexOf(failOn);
-  return findings.some((f) => SEVERITIES.indexOf(f.severity) >= floor);
+  return reported.some((f) => SEVERITIES.indexOf(f.severity) >= floor);
 }

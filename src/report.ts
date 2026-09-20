@@ -92,6 +92,20 @@ export function formatPretty(
     out.push("");
   }
 
+  // The `--loose` band, after the findings and apart from them: what a
+  // reader might look at next, never what the run is reporting.
+  const review = result.review ?? [];
+  if (review.length > 0) {
+    out.push(
+      c.bold(`${review.length} subject(s) under a cutoff but over its loose floor -- for a reader, not findings:`),
+    );
+    for (const f of review) {
+      const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
+      out.push(c.dim(`  ${f.file}:${f.line}  ${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  ${f.message ?? f.ask}`));
+    }
+    out.push("");
+  }
+
   if (showMissing) {
     const missing = all.filter((f) => f.messageId === "missing");
     for (const f of missing) out.push(c.grey(`  ${describe(f)}`));
@@ -153,6 +167,7 @@ export function formatPretty(
   ];
   if (result.retry && result.retry > 1) bits.push(`${result.retry} passes, deciding on the mean`);
   if (stats.unsure) bits.push(`${stats.unsure} unsure`);
+  if (stats.review) bits.push(c.dim(`${stats.review} for a reader (--loose)`));
   if (stats.missing) bits.push(c.yellow(`${stats.missing} without a verdict`));
   if (result.skippedByDiff) bits.push(c.dim(`${result.skippedByDiff} outside the diff`));
   out.push(bits.join(", "));
@@ -211,26 +226,30 @@ export function silentRules(result: Partial<ReportInput>): string[] {
 }
 
 export function formatJson(result: ReportInput): string {
+  const row = (f: Finding) => ({
+    rule: f.rule,
+    severity: f.severity,
+    messageId: f.messageId,
+    file: f.file,
+    line: f.line,
+    endLine: f.endLine,
+    value: f.value,
+    confidence: f.confidence,
+    explanation: f.explanation ?? null,
+    cutoff: f.at,
+    margin: round(f.margin),
+    kind: f.kind,
+    level: f.level ?? null,
+    arm: f.arm,
+    passes: f.passes ?? null,
+    message: f.message ?? f.ask,
+  });
   return JSON.stringify(
     {
-      findings: result.findings.map((f) => ({
-        rule: f.rule,
-        severity: f.severity,
-        messageId: f.messageId,
-        file: f.file,
-        line: f.line,
-        endLine: f.endLine,
-        value: f.value,
-        confidence: f.confidence,
-        explanation: f.explanation ?? null,
-        cutoff: f.at,
-        margin: round(f.margin),
-        kind: f.kind,
-        level: f.level ?? null,
-        arm: f.arm,
-        passes: f.passes ?? null,
-        message: f.message ?? f.ask,
-      })),
+      findings: result.findings.map(row),
+      // The `--loose` band, same shape, its own key: a consumer that reads
+      // `findings` sees nothing new.
+      review: (result.review ?? []).map(row),
       stats: result.stats,
       degraded: (result.batches ?? [])
         .filter((b) => b.degraded)
@@ -274,6 +293,14 @@ export function formatGithub(result: ReportInput): string {
     const body = `${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}]`;
     out.push(
       `::${level} file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(title)}::${escape(body)}`,
+    );
+  }
+  // The `--loose` band as notices: visible in the checks tab, never a
+  // warning, never a failure.
+  for (const f of result.review ?? []) {
+    const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
+    out.push(
+      `::notice file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(`${f.rule} (loose)`)}::${escape(`${f.message ?? f.ask} [${num}, under cutoff ${f.at.toFixed(2)}; for a reader]`)}`,
     );
   }
   if (result.stats.missing > 0) {

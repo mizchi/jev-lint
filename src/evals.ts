@@ -79,6 +79,8 @@ export interface RuleScore {
   flips: number;
   fitted: number | null;
   fitReason: string;
+  /** The highest mean a labelled-clean subject reached: the floor a `loose:` should clear. */
+  cleanTop: number | null;
 }
 
 export interface EvalScore {
@@ -206,6 +208,9 @@ export function scoreEval(
       flips: mine.filter((c) => c.flip).length,
       fitted: fit?.fitted ?? null,
       fitReason: fit?.reason ?? "no labelled cases",
+      cleanTop: mine.some((c) => c.label !== "bad")
+        ? round(Math.max(...mine.filter((c) => c.label !== "bad").map((c) => c.mean)))
+        : null,
     };
   });
   return { rules: ruleScores, cases };

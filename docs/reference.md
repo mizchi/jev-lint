@@ -47,6 +47,7 @@ failed and nothing was reported.
 | `--group <how>` | `file` (default), `rule`, `auto` — see [Batching](#batching) |
 | `--rule-batch-cap <n>` | subjects per rule-axis request (default 32) |
 | `--explain` | after the verdicts, ask each finding which of its rule's `explain:` labels names why; one extra request per batch with findings — see [Rule fields](#rule-fields) |
+| `--loose [n]` | also list the band under each cutoff — at or over the rule's `loose:` floor, else half its cutoff — for a reader, closest to the cutoff first, at most n. Never a finding: not counted, never fails, and costs no request — see [A second line for a reader](#a-second-line-for-a-reader) |
 | `--explain-schedule` | print the axis chosen per rule, and why |
 | `--base <ref>` / `--staged` | what `review` diffs against: the merge base with `ref`, or the index (what a commit will contain: no untracked files, no unstaged edits) |
 | `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any finding |
@@ -164,6 +165,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `kind` | `score` (default) or `noul` | see below |
 | `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
+| `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
 | `subject` | `node` (default), `enclosing`, `file` | what code is judged |
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context for the model only |
@@ -692,6 +694,35 @@ The two rules at the bottom of the table hold the entire residue. That is what a
 corpus-fitted cutoff does: it sits where the corpus's clean band ended, and real
 code's clean band goes higher. Those two are the rules to refit first on your
 own code.
+
+### A second line for a reader
+
+`--loose` is the two-stage shape: the model as a cheap screen with a low
+line for recall, and a reader — a person, or an agent running
+`/jev-lint:review` — behind it for precision. The screen costs nothing
+extra, because it is the same answers cut at a second line; the reader is
+the expensive stage, which is why the band is capped and ranked.
+
+The default floor is half the cutoff, and it is a measurement rather than a
+guess. On the 24 shipped rules' own evals, no defect a rule can see answers
+under half its cutoff (the one that does is the `var-name-describes-value`
+miss its rule file already names), and about one clean subject in twenty
+answers over it — so the band holds everything the rule would ever catch
+and asks a reader for one look per twenty subjects. A rule that has
+measured its own clean band can set `loose:` just above it; `jev-lint eval`
+prints that number as `cleanTop`.
+
+What the band is **not** is a threshold to fail on. A ratio of the score is
+the wrong shape for that: the noise is additive (a few hundredths, rarely
+0.3) and the signal is a level shift across a fitted cutoff, so "half the
+score" fails a build on a clean subject that moved from 0.06 to 0.12 and
+passes one where a planted lie moved a file's mean from 0.14 to 0.21.
+Measured on this repository: a function rewritten to always return `true`
+and write a file went from 0.09 to 0.95 under `fn-name-promises`, its
+unchanged neighbours moved by at most 0.03 — and one unchanged helper that
+exists to feed it moved 0.13 → 0.42, which is the `located` arm reading a
+changed file. Fail on the cutoff, with `--retry 3` and its `passes`; read
+the band.
 
 ### Anything near a cutoff belongs to a human
 

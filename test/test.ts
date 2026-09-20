@@ -41,7 +41,7 @@ import {
   DEFAULT_BATCH_SIZE,
 } from "../src/batch.ts";
 import { schedule, planMixed, explain } from "../src/schedule.ts";
-import { decide, gate, describe as describeFinding, blocks } from "../src/gate.ts";
+import { decide, gate, describe as describeFinding, blocks, looseFloor } from "../src/gate.ts";
 import { Cache, verdictKey } from "../src/cache.ts";
 import { parseUnifiedDiff, touchesChange, changedRanges, changedFilesUnder } from "../src/diff.ts";
 import { widestGap, gapReport, fitCutoffs, labelFor, stabilityReport } from "../src/calibrate.ts";
@@ -330,6 +330,18 @@ test("rules: `explain` is a closed mapping of at least two labels, and not part 
   assert.match(bad({ a: "", b: "y" }), /explain\.a/, "a label needs a description");
   assert.match(bad(["a", "b"]), /mapping/, "a list has no labels");
   assert.match(bad({ a: 1, b: "y" }), /explain\.a/);
+});
+
+test("rules: `loose` is a floor under the cutoff, and not part of the draft", () => {
+  assert.equal(noulRule({ at: 0.6, loose: 0.4 }).loose, 0.4);
+  assert.equal(noulRule().loose, null);
+  assert.equal(ruleTextHash(noulRule({ at: 0.6 })), ruleTextHash(noulRule({ at: 0.6, loose: 0.4 })), "a floor, like a cutoff, is free to move");
+  const bad = (over: Record<string, unknown>): string =>
+    normalizeRule({ id: "n", language: "Rust", kind: "noul", rule: { kind: "x" }, ask: "a", criteria: { true: "y", false: "n" }, at: 0.6, ...over }).error ?? "";
+  assert.match(bad({ loose: 0.6 }), /below/, "equal to the cutoff is not a band");
+  assert.match(bad({ loose: 0.7 }), /below/);
+  assert.match(bad({ loose: -0.1 }), /between/);
+  assert.match(bad({ loose: "half" }), /number/);
 });
 
 test("rules: criteria on a score rule is rejected (it uses the shared scale)", () => {
@@ -1665,6 +1677,42 @@ test("gate: a noul fires on its own cutoff and has no unsure variant", () => {
   assert.equal(over.messageId, "flag");
 });
 
+test("gate: --loose reports the band under the cutoff for a reader, and never as a finding", () => {
+  // A subject between the loose floor and the cutoff is a candidate for a
+  // reader, not a finding: it does not count, does not turn the exit code,
+  // and is listed apart. The floor is the rule's `loose:`, else half its
+  // cutoff -- measured on the shipped evals, no defect a rule can see sits
+  // under half its cutoff, and about one clean subject in twenty sits over.
+  const rule = noulRule({ at: 0.6 });
+  assert.equal(looseFloor(rule), 0.3);
+  assert.equal(looseFloor(noulRule({ at: 0.6, loose: 0.45 })), 0.45, "a declared floor wins");
+  assert.equal(looseFloor(rule, { n: 0.8 }), 0.4, "and follows an overridden cutoff");
+
+  const at = (v: number, loose: number | null) =>
+    decide(subjectOf({ rule }), { value: v, confidence: null, kind: "noul" }, { loose });
+  assert.equal(at(0.45, null).messageId, null, "without --loose nothing changes");
+  assert.equal(at(0.45, Infinity).messageId, "review");
+  assert.equal(at(0.45, Infinity).reported, false, "a review candidate is not a finding");
+  assert.equal(at(0.29, Infinity).messageId, null, "under the floor is clean");
+  assert.equal(at(0.61, Infinity).messageId, "flag", "over the cutoff is what it always was");
+  assert.match(describeFinding(at(0.45, Infinity)), /under its cutoff/);
+
+  // In a run they come back apart, ranked by how close to the cutoff, capped.
+  const results = [0.35, 0.55, 0.45, 0.7, 0.1].map((v, i) => ({
+    subject: subjectOf({ rule, line: i + 1, endLine: i + 1 }),
+    answer: { value: v, confidence: null, kind: "noul" as const },
+  }));
+  const loose = gate(results, { loose: 2 });
+  assert.equal(loose.findings.length, 1, "the 0.7 is the only finding");
+  assert.deepEqual(loose.review.map((f) => f.value), [0.55, 0.45], "two of the three in the band, closest first");
+  assert.equal(loose.stats.review, 2);
+  assert.equal(loose.stats.reported, 1, "the count CI reads is untouched");
+  assert.ok(!blocks(loose.review, null), "and they never block");
+  const tight = gate(results, {});
+  assert.deepEqual(tight.review, []);
+  assert.equal(tight.stats.review, 0);
+});
+
 test("gate: cutoffs are per rule and an override wins over the rule's own", () => {
   const r = noulRule({ at: 0.7 });
   assert.equal(cutoffFor(r), 0.7);
@@ -2381,6 +2429,40 @@ await testAsync("run: --explain asks a second question of the findings only, and
   assert.ok(plain.findings.every((f) => f.explanation === undefined));
 });
 
+await testAsync("run: --loose reaches every format as a section of its own, and costs no request", async () => {
+  const { run } = await import("../src/run.ts");
+  const rule = scoreRule({ id: "r", rule: { kind: "function_declaration" }, at: 2.0 });
+  let calls = 0;
+  const client = {
+    model: "fake",
+    servedModel: null,
+    spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
+    askSplitting: async (_state: unknown, questions: Record<string, unknown>) => {
+      calls += 1;
+      const answers: Record<string, unknown> = {};
+      let i = 0;
+      // A spread of answers: some over 2.0, some in [1.0, 2.0), some under.
+      for (const id of Object.keys(questions)) answers[id] = { type: "score", score: [2.5, 1.5, 0.5][i++ % 3], confidence: 0.9 };
+      return { answers, usage: { input_tokens: 1 } };
+    },
+  };
+  const opts = { rules: [rule], paths: ["rules/fn-name-promises/evals/cases"], cachePath: null, client };
+  const loose = await run({ ...opts, loose: Infinity });
+  const before = calls;
+  const tight = await run(opts);
+  assert.equal(calls, before * 2, "the band is a second line on the same answers, not a second request");
+  assert.equal(loose.findings.length, tight.findings.length, "findings are identical");
+  assert.ok(loose.review.length > 0 && tight.review.length === 0);
+  assert.ok(loose.review.every((f) => f.value! >= 1.0 && f.value! < 2.0));
+  const pretty = formatPretty(loose, { color: false });
+  assert.match(pretty, new RegExp(`${loose.review.length} subject\\(s\\) under a cutoff but over its loose floor`));
+  assert.match(formatGithub(loose), /::notice .*loose/);
+  const json = JSON.parse(formatJson(loose));
+  assert.equal(json.review.length, loose.review.length);
+  assert.equal(json.review[0].messageId, "review");
+  assert.equal(json.findings.length, loose.findings.length, "and never mixed into the findings");
+});
+
 await testAsync("run: an auth error stops the run instead of failing every batch and every pass", async () => {
   // A key that does not work on the first batch does not work on the other
   // twenty-two, or on the next two passes. Sending them anyway is 69 failed
@@ -2598,6 +2680,7 @@ test("evals: a suite is scored at the SHIPPED cutoff on the mean of its passes, 
   assert.equal(a.flips, 1, "and it is a flip: in on two passes, out on one");
   assert.equal(a.subjects, 4, "unlabelled subjects count as clean, as in a corpus");
   assert.ok(typeof a.fitted === "number", "the fit is reported beside the shipped cutoff");
+  assert.equal(a.cleanTop, 0.2, "and the top of the clean band, which is what a `loose:` floor should clear");
   const c = score.cases.find((c) => c.line === 2)!;
   assert.equal(c.label, "bad");
   assert.equal(c.decision, "flag");

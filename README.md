@@ -105,6 +105,10 @@ than pretending otherwise:
   the findings that did not reproduce in every pass as ones to decide by hand.
   Retries are cheap: the matcher and the plan run once and only the asking
   repeats.
+- **`--loose`** lists what answered under a cutoff but over half of it — a
+  band that, on the shipped rules' own evals, holds every defect a rule can
+  see and one clean subject in twenty — for a reader, never as a finding. It
+  costs no request. `/jev-lint:review` reads that band after the findings.
 - **Cutoffs are yours to fit.** `jev-lint gaps` shows whether a rule separates
   clean code from defects at all; `jev-lint calibrate --labels` fits the cutoff
   to code you have labelled; `jev-lint replay` re-scores a recorded run under

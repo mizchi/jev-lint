@@ -71,6 +71,7 @@ interface Options {
   ruleBatchCap: number;
   explainSchedule: boolean;
   explain: boolean;
+  loose: number | null;
   at: Record<string, number>;
   unsureBelow: number | null;
   failOn: Severity | null;
@@ -131,6 +132,10 @@ options:
                            rule's explain: labels names why (one extra
                            request per batch with findings; nothing under a
                            cutoff is asked)
+      --loose [n]          also list the band under each cutoff -- at or over
+                           the rule's loose: floor, else half its cutoff -- for
+                           a reader, closest to the cutoff first, at most n.
+                           Never a finding: does not count, does not fail. Free.
       --explain-schedule   print the axis chosen per rule, and why
       --at <rule=n>        override one cutoff (repeatable)
       --unsure-below <n>   confidence under which a finding is worded as a question
@@ -215,6 +220,7 @@ function parseArgs(argv: string[]): Options {
     ruleBatchCap: DEFAULT_RULE_BATCH_CAP,
     explainSchedule: false,
     explain: false,
+    loose: null,
     at: {},
     unsureBelow: null,
     failOn: null,
@@ -288,6 +294,18 @@ function parseArgs(argv: string[]): Options {
       case "--explain":
         opts.explain = true;
         break;
+      case "--loose": {
+        // An optional count: `--loose 20` caps the band, `--loose` alone
+        // lists all of it. The next argument is the count only if it is one.
+        const next = argv[i + 1];
+        if (next !== undefined && /^\d+$/.test(next)) {
+          opts.loose = Number(next);
+          i += 1;
+        } else {
+          opts.loose = Infinity;
+        }
+        break;
+      }
       case "--explain-schedule":
         opts.explainSchedule = true;
         break;
@@ -611,6 +629,7 @@ async function main(argv: string[]): Promise<number> {
     batchSize: opts.batchSize,
     retry: opts.retry,
     explain: opts.explain,
+    loose: opts.loose,
     model: opts.model,
   });
 
@@ -870,11 +889,11 @@ function formatEvalSuite(
   const lines: string[] = [];
   const passes = record.passes.length;
   lines.push(`${suite.name}  (${suite.dir}; ${replay ? "baseline" : "run"} of ${record.recorded.slice(0, 10)}, ${passes} pass(es))`);
-  lines.push(`  ${"rule".padEnd(36)} ${"at".padEnd(5)} ${"tp".padStart(3)} ${"fp".padStart(3)} ${"fn".padStart(3)}  ${"P".padEnd(5)} ${"R".padEnd(5)} ${"flips".padEnd(5)} fitted`);
+  lines.push(`  ${"rule".padEnd(36)} ${"at".padEnd(5)} ${"tp".padStart(3)} ${"fp".padStart(3)} ${"fn".padStart(3)}  ${"P".padEnd(5)} ${"R".padEnd(5)} ${"flips".padEnd(5)} ${"cleanTop".padEnd(8)} fitted`);
   const fmt = (n: number | null) => (n === null ? "-" : n.toFixed(2));
   for (const r of score.rules) {
     lines.push(
-      `  ${r.rule.padEnd(36)} ${String(r.at).padEnd(5)} ${String(r.tp).padStart(3)} ${String(r.fp).padStart(3)} ${String(r.fn).padStart(3)}  ${fmt(r.precision).padEnd(5)} ${fmt(r.recall).padEnd(5)} ${String(r.flips).padEnd(5)} ${r.fitted ?? "-"}  ${r.fitReason}`,
+      `  ${r.rule.padEnd(36)} ${String(r.at).padEnd(5)} ${String(r.tp).padStart(3)} ${String(r.fp).padStart(3)} ${String(r.fn).padStart(3)}  ${fmt(r.precision).padEnd(5)} ${fmt(r.recall).padEnd(5)} ${String(r.flips).padEnd(5)} ${String(r.cleanTop ?? "-").padEnd(8)} ${r.fitted ?? "-"}  ${r.fitReason}`,
     );
   }
   const rel = (f: string) => relative(suite.cases, f);
@@ -921,6 +940,7 @@ function cmdRules(opts: Options, out: Log, log: Log): number {
     out(`  ask: ${r.ask}`);
     if (r.note) out(`  note (model only): ${r.note}`);
     if (r.explain) out(`  explain (--explain): ${Object.keys(r.explain).join(" | ")}`);
+    if (r.loose !== null) out(`  loose floor (--loose): ${r.loose}`);
     out(`  from: ${r.source}`);
   }
   out("");
@@ -1139,7 +1159,7 @@ function cmdReplay(opts: Options, out: Log, log: Log): number {
   }));
 
   const cutoffs = { ...(record.cutoffs ?? {}), ...opts.at };
-  const gated = gate(results, { cutoffs, unsureBelow: opts.unsureBelow ?? record.unsureBelow });
+  const gated = gate(results, { cutoffs, unsureBelow: opts.unsureBelow ?? record.unsureBelow, loose: opts.loose });
   const result = {
     ...gated,
     rules,

@@ -264,6 +264,19 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     return { error: `${id}: \`at\` must be between 0 and ${max} for \`kind: ${kind}\`` };
   }
 
+  // The `--loose` floor. Strictly under the cutoff, or the band is empty.
+  const loose = raw.loose === undefined ? null : raw.loose;
+  if (loose !== null) {
+    if (typeof loose !== "number") return { error: `${id}: \`loose\` must be a number` };
+    if (loose < 0 || loose > max) {
+      return { error: `${id}: \`loose\` must be between 0 and ${max} for \`kind: ${kind}\`` };
+    }
+    const cutoff = at ?? (kind === "score" ? DEFAULT_SCORE_AT : DEFAULT_NOUL_AT);
+    if (loose >= cutoff) {
+      return { error: `${id}: \`loose\` (${loose}) must be below the cutoff (${cutoff}); it is the floor of the band under it` };
+    }
+  }
+
   const subject = raw.subject === undefined ? "node" : raw.subject;
   if (!SUBJECTS.includes(subject)) {
     return { error: `${id}: \`subject\` must be ${SUBJECTS.join(" or ")}` };
@@ -320,7 +333,7 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
   const known = new Set([
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
     "note", "kind", "criteria", "at", "subject", "state", "axis", "severity",
-    "message", "unsureBelow", "docs", "tags", "explain",
+    "message", "unsureBelow", "docs", "tags", "explain", "loose",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
   if (unknown.length > 0) {
@@ -340,6 +353,7 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
       kind,
       criteria,
       at,
+      loose,
       subject,
       state,
       axis,
