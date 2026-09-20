@@ -470,6 +470,9 @@ and sharing one sentence across grammars are in
 
 ## Further reading
 
+[CHANGELOG.md](CHANGELOG.md) has every release; [RULES.md](RULES.md) every
+shipped rule with its fit.
+
 | | |
 | --- | --- |
 | [docs/reference.md](docs/reference.md) | every flag and field, calibration in full, the batching axis, what to expect on real code, limits |

@@ -63,6 +63,7 @@
     "rules/README.md",
     "README.md",
     "RULES.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
