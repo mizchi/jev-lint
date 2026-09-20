@@ -49,6 +49,7 @@ import { schedule, planMixed, explain } from "../src/schedule.ts";
 import { decide, gate, describe as describeFinding, blocks, looseFloor } from "../src/gate.ts";
 import { Cache, verdictKey, contextKey } from "../src/cache.ts";
 import { parseUnifiedDiff, touchesChange, changedRanges, changedFilesUnder } from "../src/diff.ts";
+import { renamedRuleHint } from "../src/ignore.ts";
 import { widestGap, gapReport, fitCutoffs, labelFor, stabilityReport } from "../src/calibrate.ts";
 import {
   buildSymbols,
@@ -1190,6 +1191,17 @@ test("report: a language with no files is one idle line, not a list of dead matc
   const pretty = formatPretty({ ...result, findings: [], all: [], review: [], stats: { subjects: 1, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {} } }, { color: false });
   assert.match(pretty, /no files for python \(2 rules\)/);
   assert.match(pretty, /1 rule\(s\) matched nothing: typescript\/b/);
+});
+
+test("ignore: a suppression naming a pre-0.3 language-suffixed id is told the new name", () => {
+  // `fn-name-promises-rust` became `rust/fn-name-promises`, and a comment
+  // naming it now suppresses nothing. The unknown-rule line says so and
+  // names the id that works, instead of leaving a reader to guess.
+  const known = ["fn-name-promises", "comment-describes-declaration", "var-name-describes-value"];
+  assert.equal(renamedRuleHint("fn-name-promises-rust", known), "fn-name-promises (the -rust suffix went in 0.3.0; the id names every language)");
+  assert.equal(renamedRuleHint("comment-describes-declaration-js", known), "comment-describes-declaration (the -js suffix went in 0.3.0; the id names every language)");
+  assert.equal(renamedRuleHint("no-such-rule-rust", known), null, "a suffix on an unknown base is not a rename");
+  assert.equal(renamedRuleHint("fn-name-promises", known), null);
 });
 
 // ---------------------------------------------------------------- paired

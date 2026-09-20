@@ -14,6 +14,7 @@
  *     than left to be inferred from an absence.
  */
 import { describe } from "./gate.ts";
+import { renamedRuleHint } from "./ignore.ts";
 import type { Finding, ReportInput } from "./types.ts";
 import type { GapRow, StabilityReport } from "./calibrate.ts";
 
@@ -150,7 +151,12 @@ export function formatPretty(
   if (ignored?.unknownRules.length) {
     out.push(
       c.yellow(
-        `${ignored.unknownRules.length} jev-lint-ignore comment(s) name a rule that does not exist: ${ignored.unknownRules.join(", ")}`,
+        `${ignored.unknownRules.length} jev-lint-ignore comment(s) name a rule that does not exist: ${ignored.unknownRules
+          .map((id) => {
+            const hint = renamedRuleHint(id, (result.rules ?? []).map((r) => r.id));
+            return hint ? `${id} -> ${hint}` : id;
+          })
+          .join(", ")}`,
       ),
     );
     out.push(c.yellow("  Those suppress nothing, and the rule they meant keeps firing."));

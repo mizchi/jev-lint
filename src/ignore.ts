@@ -121,3 +121,16 @@ export function unknownIgnoredRules(
   }
   return [...unknown].sort();
 }
+
+/**
+ * The new name of a suppressed id that no longer exists, when it is one of
+ * the pre-0.3 language variants: `fn-name-promises-rust` is
+ * `rust/fn-name-promises` now, and the plain id names every language.
+ * Null when the id is unknown for some other reason.
+ */
+export function renamedRuleHint(id: string, ruleIds: Iterable<string>): string | null {
+  const m = /^(.+)-(rust|js)$/.exec(id);
+  if (!m) return null;
+  const known = new Set(ruleIds);
+  return known.has(m[1]!) ? `${m[1]} (the -${m[2]} suffix went in 0.3.0; the id names every language)` : null;
+}

@@ -908,6 +908,24 @@ the batching axis invalidates the verdicts that depended on them.
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.
 
+## Upgrading from 0.2
+
+- **Rule ids lost their language suffix.** `fn-name-promises-rust` is
+  `rust/fn-name-promises`; the plain id names every language. A
+  `jev-lint-ignore fn-name-promises-rust` comment now suppresses nothing,
+  and the "names a rule that does not exist" line says what to write
+  instead. `--at fn-name-promises-rust=n` is `--at rust/fn-name-promises=n`.
+- **Your own rule files are unchanged**: a flat `rules/*.yml` loads as it
+  did. Only rules placed as `rules/<lang>/<id>/rule.yml` get the language
+  directory's checks and fixtures; `labels.json` there is `expect.yml`.
+- **The committed verdict cache misses once** for every rule not on the
+  `bare` arm, because 0.3.1 keys a verdict on the context the arm shows
+  and not on the subject's text alone. One warm run refills it.
+- **A `check` walks the tree for tests and `.sql` files** once each per
+  run, for the `paired` arm and the `subject: block` rule, skipping
+  `node_modules` and the usual build directories. On a repository with
+  neither there is nothing to find and the walk is the only cost.
+
 ## Layout
 
 ```
