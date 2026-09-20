@@ -84,6 +84,17 @@ test("paired: related tests are ranked by stem, then directory, capped, and neve
   assert.ok(importsModule('import { a } from "src/cart/cart"', "src/cart/cart.ts", "test/a.test.ts"), "root-relative alias");
   assert.ok(importsModule('import { a } from "@/cart/cart"', "src/cart/cart.ts", "test/a.test.ts"), "@ alias");
   assert.ok(!importsModule('import { a } from "lib/cart/cart"', "src/cart/cart.ts", "test/a.test.ts"), "a different tree");
+  // One hop: a test that drives an entry point which imports the module is
+  // that module's test too. This repository's command modules are exercised
+  // through `main.ts` and were reported as having no test at all.
+  const hop = new Map([
+    ["src/cli/main.ts", 'import { cmdCheck } from "./cmd-check.ts";\nimport { x } from "../rules.ts";'],
+    ["src/cli/cmd-check.ts", 'import { run } from "../run.ts";'],
+  ]);
+  const readHop = (p: string) => hop.get(p) ?? "";
+  assert.ok(importsModule('import { main } from "../src/cli/main.ts"', "src/cli/cmd-check.ts", "test/commands.test.ts", readHop), "through main");
+  assert.ok(!importsModule('import { main } from "../src/cli/main.ts"', "src/run.ts", "test/commands.test.ts", readHop), "one hop, not two");
+  assert.ok(!importsModule('import { main } from "../src/cli/main.ts"', "src/cli/cmd-check.ts", "test/commands.test.ts"), "and only when the sources can be read");
   // A module named by its directory pairs on the directory's name, and on
   // the mirrored `cart/index.test.ts`.
   const byDir = relatedTestFiles("src/cart/index.ts", tests);

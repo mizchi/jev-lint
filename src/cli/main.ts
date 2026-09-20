@@ -6,7 +6,7 @@
  * resolve the targets, run -- and the rest take the options as parsed.
  */
 import { readFileSync } from "node:fs";
-import { parseArgs, USAGE, type Log } from "./args.ts";
+import { parseArgs, USAGE, type Deps, type Log } from "./args.ts";
 import { cmdCalibrate, cmdGaps } from "./cmd-calibrate.ts";
 import { cmdCheck } from "./cmd-check.ts";
 import { resolveContext } from "./context.ts";
@@ -17,7 +17,7 @@ import { cmdRules } from "./cmd-rules.ts";
 import { selectForRun } from "./select.ts";
 import { resolveTargets } from "./targets.ts";
 
-export async function main(argv: string[]): Promise<number> {
+export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   let command = argv[0] && !argv[0].startsWith("-") ? argv[0] : "check";
   const rest = argv[0] && !argv[0].startsWith("-") ? argv.slice(1) : argv;
   let opts;
@@ -43,8 +43,9 @@ export async function main(argv: string[]): Promise<number> {
     return 0;
   }
 
-  const log: Log = (s) => process.stderr.write(`${s}\n`);
-  const out: Log = (s) => process.stdout.write(`${s}\n`);
+  const log: Log = deps.log ?? ((s) => process.stderr.write(`${s}\n`));
+  const out: Log = deps.out ?? ((s) => process.stdout.write(`${s}\n`));
+  const client = deps.client ?? null;
 
   if (command === "init") return cmdInit(opts, out, log);
 
@@ -54,7 +55,7 @@ export async function main(argv: string[]): Promise<number> {
 
   if (command === "rules") return cmdRules(opts, out, log);
   if (command === "replay") return cmdReplay(opts, out, log);
-  if (command === "eval") return cmdEval({ ...opts, paths: argPaths }, out, log);
+  if (command === "eval") return cmdEval({ ...opts, paths: argPaths }, out, log, client);
 
   const selected = selectForRun(command, opts, config, argPaths, log);
   if (!selected) return 2;
@@ -65,12 +66,12 @@ export async function main(argv: string[]): Promise<number> {
   if ("exit" in targets) return targets.exit;
   const { paths, diffRanges } = targets;
 
-  if (command === "gaps") return cmdGaps({ rules, paths, diffRanges, opts, cachePath, out, log });
-  if (command === "calibrate") return cmdCalibrate({ rules, paths, diffRanges, opts, cachePath, out, log });
+  if (command === "gaps") return cmdGaps({ rules, paths, diffRanges, opts, cachePath, client, out, log });
+  if (command === "calibrate") return cmdCalibrate({ rules, paths, diffRanges, opts, cachePath, client, out, log });
   if (command !== "check" && command !== "review" && command !== "commits") {
     log(`unknown command \`${command}\``);
     process.stderr.write(USAGE);
     return 2;
   }
-  return cmdCheck(rules, targets, opts, cachePath, out, log);
+  return cmdCheck(rules, targets, opts, cachePath, out, log, client);
 }

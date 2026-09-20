@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { Cache } from "../cache.ts";
 import { gapReport, stabilityReport, fitCutoffs } from "../calibrate.ts";
 import type { ChangedRanges } from "../diff.ts";
-import { USD_PER_MTOK } from "../jev.ts";
+import { USD_PER_MTOK, type AskClient } from "../jev.ts";
 import { formatGaps, formatStability } from "../report.ts";
 import { run, buildRecord } from "../run.ts";
 import type { Finding, Labels, Rule, RunResult } from "../types.ts";
@@ -17,11 +17,12 @@ export interface CommandArgs {
   diffRanges: ChangedRanges | null;
   opts: Options;
   cachePath: string | null;
+  client?: AskClient | null;
   out: Log;
   log: Log;
 }
 
-export async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, out, log }: CommandArgs): Promise<number> {
+export async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, client = null, out, log }: CommandArgs): Promise<number> {
   const result = await run({
     rules,
     paths,
@@ -36,6 +37,7 @@ export async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, out, 
     concurrency: opts.concurrency,
     batchSize: opts.batchSize,
     model: opts.model,
+    client,
     dryRun: opts.dryRun,
   });
   const gapsCache = result.cache as Cache | undefined;
@@ -61,7 +63,7 @@ export async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, out, 
   return rows.some((r) => r.verdict === "rewrite" || r.verdict === "silent") ? 1 : 0;
 }
 
-export async function cmdCalibrate({ rules, paths, diffRanges, opts, out, log }: CommandArgs): Promise<number> {
+export async function cmdCalibrate({ rules, paths, diffRanges, opts, client = null, out, log }: CommandArgs): Promise<number> {
   const repeat = Math.max(1, opts.repeat);
   const runs: Finding[][] = [];
   let last: RunResult | null = null;
@@ -84,6 +86,7 @@ export async function cmdCalibrate({ rules, paths, diffRanges, opts, out, log }:
       concurrency: opts.concurrency,
       batchSize: opts.batchSize,
       model: opts.model,
+      client,
     });
     runs.push(r.all);
     last = r;

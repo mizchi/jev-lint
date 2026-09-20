@@ -6,7 +6,7 @@ import { writeFileSync } from "node:fs";
 import { relative } from "node:path";
 import { compareEvals, discoverEvals, draftsChanged, loadSuite, planEval, readEvalRecord, recordedAts, runEval, scoreEval } from "../evals.ts";
 import type { CaseScore, EvalDiff, EvalRecord, EvalScore, EvalSuite } from "../evals.ts";
-import { USD_PER_MTOK } from "../jev.ts";
+import { USD_PER_MTOK, type AskClient } from "../jev.ts";
 import type { Options, Log } from "./args.ts";
 
 /**
@@ -21,7 +21,7 @@ import type { Options, Log } from "./args.ts";
  * requests. Exit 1 on a regression or a stale baseline, so the gate can
  * fail a build.
  */
-export async function cmdEval(opts: Options, out: Log, log: Log): Promise<number> {
+export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClient | null = null): Promise<number> {
   if (opts.compare) return cmdEvalCompare(opts, out, log);
   const roots = opts.paths.length > 0 ? opts.paths : opts.rules;
   const suites = discoverEvals(roots);
@@ -73,6 +73,7 @@ export async function cmdEval(opts: Options, out: Log, log: Log): Promise<number
           cutoffs: opts.at,
           concurrency: opts.concurrency,
           model: opts.model,
+          client,
           log: (line) => {
             if (!opts.quiet) log(line);
           },

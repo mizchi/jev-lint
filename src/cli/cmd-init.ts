@@ -60,7 +60,8 @@ export function cmdInit(opts: Options, out: Log, log: Log): number {
 export function cmdInitHook(opts: Options, out: Log, log: Log, which: "pre-commit" | "pre-push"): number {
   let hooksDir: string;
   try {
-    hooksDir = execFileSync("git", ["rev-parse", "--git-path", "hooks"], { encoding: "utf8" }).trim();
+    // git's own "not a git repository" is caught and reworded below.
+    hooksDir = execFileSync("git", ["rev-parse", "--git-path", "hooks"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
   } catch {
     log(`not inside a git repository, so there is nowhere to put a ${which} hook`);
     return 2;

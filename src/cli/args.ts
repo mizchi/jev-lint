@@ -4,6 +4,7 @@
  * the terminal's colour and a `--message-file` are read by `main`.
  */
 import { DEFAULT_BATCH_SIZE } from "../batch.ts";
+import type { AskClient } from "../jev.ts";
 import { DEFAULT_CACHE_PATH } from "../cache.ts";
 import { API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_CONCURRENCY } from "../jev.ts";
 import { defaultRulePaths } from "../rules.ts";
@@ -65,6 +66,18 @@ export interface Options {
 }
 
 export type Log = (s: string) => void;
+
+/**
+ * What a command reaches the world through, injectable: the model client
+ * (`null` builds a `Jev` from the environment), and the two output streams.
+ * A test hands in a client that answers without a network and collects
+ * what was printed, and runs a command exactly as the terminal would.
+ */
+export interface Deps {
+  client?: AskClient | null;
+  out?: Log;
+  log?: Log;
+}
 
 export const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 

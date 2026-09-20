@@ -10,34 +10,42 @@
  * break a build is worse than no review tool, so every way this can fail has to
  * land on "no verdict" rather than on an exception.
  *
- * One file per module under test, run in this order; `harness.ts` holds the
- * harness and `builders.ts` the fixture builders. `npm test <substring>` runs the tests
- * whose name contains it.
+ * One file per module under test, run in this order and one at a time --
+ * imported dynamically, because static imports of modules with top-level
+ * `await` are evaluated in parallel, and a test that changes the working
+ * directory then changes it under another file's test. `harness.ts` holds
+ * the harness and `builders.ts` the fixture builders. `npm test <substring>`
+ * runs the tests whose name contains it.
  */
-import "./rules.test.ts";
-import "./questions.test.ts";
-import "./state.test.ts";
-import "./report.test.ts";
-import "./ignore.test.ts";
-import "./files.test.ts";
-import "./paired.test.ts";
-import "./batch.test.ts";
-import "./schedule.test.ts";
-import "./gate.test.ts";
-import "./cache.test.ts";
-import "./diff.test.ts";
-import "./calibrate.test.ts";
-import "./scan.test.ts";
-import "./jev.test.ts";
-import "./run.test.ts";
-import "./text.test.ts";
-import "./commits.test.ts";
-import "./evals.test.ts";
-import "./retry.test.ts";
-import "./config.test.ts";
-import "./cost.test.ts";
-import "./testcalls.test.ts";
-import "./cli.test.ts";
 import { report } from "./harness.ts";
+
+const files = [
+  "rules",
+  "questions",
+  "state",
+  "report",
+  "ignore",
+  "files",
+  "paired",
+  "batch",
+  "schedule",
+  "gate",
+  "cache",
+  "diff",
+  "calibrate",
+  "scan",
+  "jev",
+  "run",
+  "text",
+  "commits",
+  "evals",
+  "retry",
+  "config",
+  "cost",
+  "testcalls",
+  "commands",
+  "cli",
+];
+for (const f of files) await import(`./${f}.test.ts`);
 
 report();

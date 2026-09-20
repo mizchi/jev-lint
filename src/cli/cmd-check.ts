@@ -4,6 +4,7 @@
  */
 import { writeFileSync } from "node:fs";
 import { Cache } from "../cache.ts";
+import type { AskClient } from "../jev.ts";
 import { blocks } from "../gate.ts";
 import { formatGithub, formatJson, formatPretty } from "../report.ts";
 import { run, buildRecord } from "../run.ts";
@@ -20,6 +21,7 @@ export async function cmdCheck(
   cachePath: string | null,
   out: Log,
   log: Log,
+  client: AskClient | null = null,
 ): Promise<number> {
   const result = await run({
     rules,
@@ -40,6 +42,7 @@ export async function cmdCheck(
     explain: opts.explain,
     loose: opts.loose,
     model: opts.model,
+    client,
     commits: commitsRange ? { range: commitsRange, ...(opts.squash ? { squash: opts.message! } : {}) } : null,
   });
 

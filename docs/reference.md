@@ -307,7 +307,10 @@ text.
 file**. A test file is related when its name contains the module's stem
 (`cart.ts` ↔ `cart.test.ts`, `test/cart.test.ts`, `__tests__/cart.spec.ts`)
 or when it imports the module — the second is what pairs a repository whose
-tests all live in one file, and a name match outranks an import. Of the
+tests all live in one file, and a name match outranks an import. One hop
+of imports is followed: a test that drives an entry point (`main.ts`, an
+`index`) which imports the module is that module's test too. One hop and
+not a walk, since two hops from a test reach most of a tree. Of the
 related files, the four that name the most of what is being asked about
 travel — the subjects' own names first, then the module's other exports —
 and the excerpt budget (8,000 characters for one subject in the file,

@@ -59,7 +59,7 @@ right.
 
 | file | responsibility |
 | --- | --- |
-| `cli.ts`, `cli/` | the entry, and one module per step: `args.ts` (every flag, `USAGE` -- a second source of truth for flag docs, change both), `context.ts` (the config, found and folded in), `select.ts` (which rules: loaded, or `run`'s one), `targets.ts` (which files, or which commits), `cmd-check.ts` + `dry-run.ts` (the run and its report, or its plan), and `cmd-eval.ts`, `cmd-calibrate.ts`, `cmd-replay.ts`, `cmd-init.ts`, `cmd-rules.ts` for those commands -- `cmd-` so that none shares a stem with the module it drives, which is what the `paired` arm pairs on; `main.ts` is only the order |
+| `cli.ts`, `cli/` | the entry, and one module per step -- `main(argv, deps)` takes the model client and the two output streams, so a test runs a command as the terminal would, with a client that answers without a network (`test/commands.test.ts`): `args.ts` (every flag, `USAGE` -- a second source of truth for flag docs, change both), `context.ts` (the config, found and folded in), `select.ts` (which rules: loaded, or `run`'s one), `targets.ts` (which files, or which commits), `cmd-check.ts` + `dry-run.ts` (the run and its report, or its plan), and `cmd-eval.ts`, `cmd-calibrate.ts`, `cmd-replay.ts`, `cmd-init.ts`, `cmd-rules.ts` for those commands -- `cmd-` so that none shares a stem with the module it drives, which is what the `paired` arm pairs on; `main.ts` is only the order |
 | `cost.ts` | a plan's price per rule: each rule's questions, and its share of every batch's state |
 | `scan.ts` | the ast-grep driver: rule translation, structural probes, the symbol table and call graph |
 | `run.ts` | `collectSubjects`, `run`, `mergePasses`, `buildRecord` |

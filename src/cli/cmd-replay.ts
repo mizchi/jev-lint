@@ -66,28 +66,34 @@ export function cmdReplay(opts: Options, out: Log, log: Log): number {
     cachedCount: 0,
   };
 
-  if (opts.format === "json") out(formatJson(result));
-  else if (opts.format === "github") out(formatGithub(result));
-  else out(formatPretty(result, { color: opts.color, showMissing: opts.showMissing, summary: opts.summary }));
-
   // A `calibrate --repeat n` record carries every pass, and its top-level
   // `answers` is only the last one. The gap and fit tables average the passes,
   // exactly as calibrate did when it printed them -- scoring one pass here
   // would make a replayed table disagree with the one the cutoff came from.
   const passes: Finding[][] = Array.isArray(record.passes) ? record.passes : [];
   const analysed = passes.length > 0 ? mergeRuns(passes) : (gated.all as Finding[]);
+  const gaps = gapReport(analysed, rules, { cutoffs });
+  const trailer = [
+    `replayed ${record.answers.length} recorded answer(s) from ${record.recorded} (model ${record.model ?? "unknown"}), 0 requests`,
+    ...(passes.length > 1 ? [`gap and fit tables are the mean of ${passes.length} recorded pass(es)`] : []),
+    ...(Object.keys(opts.at).length > 0 ? [`cutoffs overridden: ${Object.keys(opts.at).join(", ")}`] : []),
+  ];
 
+  if (opts.format === "json") {
+    // One document on stdout, and nothing after it: the gap rows are in
+    // it, and what a reader would want said goes to stderr. The tables
+    // used to follow the JSON, and a consumer parsing it got two documents.
+    out(JSON.stringify({ ...JSON.parse(formatJson(result)), gaps }, null, 2));
+    emitFits(opts.labels, analysed, rules, log, log);
+    for (const line of trailer) log(line);
+    return blocks(gated.findings, opts.failOn) ? 1 : 0;
+  }
+  if (opts.format === "github") out(formatGithub(result));
+  else out(formatPretty(result, { color: opts.color, showMissing: opts.showMissing, summary: opts.summary }));
   out("");
-  out(formatGaps(gapReport(analysed, rules, { cutoffs }), { color: opts.color }));
+  out(formatGaps(gaps, { color: opts.color }));
   out("");
   emitFits(opts.labels, analysed, rules, out, log);
-  out(
-    `replayed ${record.answers.length} recorded answer(s) from ${record.recorded} (model ${record.model ?? "unknown"}), 0 requests`,
-  );
-  if (passes.length > 1) {
-    out(`gap and fit tables are the mean of ${passes.length} recorded pass(es)`);
-  }
-  const changed = Object.keys(opts.at);
-  if (changed.length > 0) out(`cutoffs overridden: ${changed.join(", ")}`);
+  for (const line of trailer) out(line);
   return blocks(gated.findings, opts.failOn) ? 1 : 0;
 }

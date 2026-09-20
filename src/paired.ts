@@ -159,7 +159,7 @@ export function relatedTests(
       const mirrored = segments.includes(name);
       const byName =
         names(base).includes(name) || (id.named_by_directory !== null && mirrored && names(base).includes(own));
-      const byImport = !byName && readSource !== undefined && importsModule(readSource(t), file, t);
+      const byImport = !byName && readSource !== undefined && importsModule(readSource(t), file, t, readSource);
       const byDir = dir !== "" && lower.startsWith(dir);
       const via: RelatedTest["via"] = byName ? "name" : "import";
       // A file named for the module outranks one that merely imports it:
@@ -211,9 +211,10 @@ export function inSourceTests(source: string): string | null {
  * the module's path. A bare package name is not a module in this
  * repository.
  */
-export function importsModule(source: string, file: string, from: string): boolean {
+export function importsModule(source: string, file: string, from: string, readSource?: (path: string) => string): boolean {
   const target = modulePaths(file);
   const base = dirname(from.split(sep).join("/"));
+  const relative: string[] = [];
   for (const m of source.matchAll(IMPORT_SPECIFIER)) {
     const spec = (m[1] ?? m[2] ?? "").split(sep).join("/");
     if (!spec.includes("/")) continue;
@@ -221,9 +222,21 @@ export function importsModule(source: string, file: string, from: string): boole
     if (spec.startsWith(".")) {
       const resolved = posix.normalize(posix.join(base, bare));
       if (target.has(resolved)) return true;
+      relative.push(resolved + (/\.[A-Za-z0-9]+$/.test(spec) ? spec.slice(spec.lastIndexOf(".")) : ""));
     } else {
       const alias = bare.replace(/^@\//, "");
       if ([...target].some((t) => t === alias || t.endsWith(`/${alias}`))) return true;
+    }
+  }
+  // One hop: a test that drives an entry point -- `main.ts`, an `index` --
+  // which imports the module is that module's test too. One hop and not a
+  // walk, since two hops from a test reach most of a tree. Only relative
+  // imports with their extension are followed; a source that cannot be
+  // read is empty, and imports nothing.
+  if (readSource) {
+    for (const path of relative) {
+      if (!/\.[A-Za-z0-9]+$/.test(path)) continue;
+      if (importsModule(readSource(path), file, path)) return true;
     }
   }
   return false;

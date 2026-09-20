@@ -9,8 +9,9 @@ import { mkdtempSync, writeFileSync, rmSync, mkdirSync, realpathSync } from "nod
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { Configurable } from "../src/config.ts";
+import type { AskClient } from "../src/jev.ts";
 import { normalizeRule } from "../src/rules.ts";
-import type { AstGrepMatch, FileSymbols, Rule, StateArm, Subject, Labels } from "../src/types.ts";
+import type { AstGrepMatch, FileSymbols, Question, Rule, StateArm, Subject, Labels } from "../src/types.ts";
 
 /** Typed label fixtures, so the `$`-prefixed metadata keys check out. */
 export const labelsOf = (o: Record<string, unknown>): Labels => o as Labels;
@@ -166,3 +167,40 @@ export const configurable = (over: Partial<Configurable> = {}): Configurable => 
   at: {},
   ...over,
 });
+
+/**
+ * A model that answers without a network: `judge` sees each question's
+ * instructions and returns the probability (noul) or level (score) it
+ * wants; `spent` counts as the real client's does. What was asked is kept
+ * on `asked`, question by question, for a test to look at.
+ */
+export function fakeClient(judge: (instructions: Record<string, unknown>, question: Record<string, unknown>) => number): AskClient & {
+  asked: Array<Record<string, unknown>>;
+} {
+  const asked: Array<Record<string, unknown>> = [];
+  const spent = { calls: 0, inputTokens: 0, usd: 0, ms: 0 };
+  return {
+    model: "fake",
+    servedModel: "fake-1",
+    spent,
+    asked,
+    async askSplitting(_state: unknown, questions: Record<string, Question>) {
+      spent.calls += 1;
+      const answers: Record<string, unknown> = {};
+      for (const [id, q] of Object.entries(questions)) {
+        const question = q as unknown as Record<string, unknown>;
+        asked.push(question);
+        const instructions = (question.instructions ?? {}) as Record<string, unknown>;
+        const value = judge(instructions, question);
+        answers[id] =
+          question.type === "noul"
+            ? { type: "noul", noul: value }
+            : question.type === "choice"
+              ? { type: "choice", choice: Object.keys((question.criteria ?? {}) as object)[0], confidence: 0.9 }
+              : { type: "score", score: value, confidence: 0.9 };
+      }
+      spent.inputTokens += 100;
+      return { model: "fake-1", answers, usage: { input_tokens: 100 } };
+    },
+  };
+}

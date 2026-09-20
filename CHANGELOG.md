@@ -8,8 +8,23 @@ change are in [docs/findings.md](docs/findings.md).
 
 ## Unreleased
 
+### Fixed
+
+- `replay --format json` printed the gap table and its trailer after the
+  JSON document; a consumer parsing stdout got two documents. The gap rows
+  are in the document (`gaps`) and the rest goes to stderr.
+
 ### Changed
 
+- `main(argv, deps)`: the model client and the two output streams are
+  injectable, so every command that asks the model -- `check`, `review`,
+  `commits`, `gaps`, `calibrate`, `eval` -- runs under test exactly as
+  the terminal runs it, against a client that answers without a network:
+  exit codes, reports, records, baselines. The paired arm follows one hop
+  of imports, so a module driven through an entry point counts as tested.
+- The test files run one at a time: static imports of modules with
+  top-level `await` are evaluated in parallel, and a test that changed
+  the working directory changed it under another file's test.
 - The CLI's commands have tests of their own: `main`'s exits before any
   command, `init` and its hooks, `replay`'s refusals, `rules`; and
   `readEvalRecord`'s nulls. A line of ast-grep's output that is not a
