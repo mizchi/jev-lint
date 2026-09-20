@@ -49,8 +49,8 @@ export const TEST_EXCERPT_BUDGET = 8000;
 const EXCERPT_CONTEXT_LINES = 2;
 
 /**
- * A test file, by the usual spellings: `a.test.ts`, `a.spec.js`, `a_test.go`
- * anywhere; or, under a `test`, `tests`, `__tests__` or `spec` directory, a
+ * A test file, by the usual spellings: `a.test.ts`, `a.spec.js`, `a_test.go`,
+ * `test_a.py` anywhere; or, under a `test`, `tests`, `__tests__` or `spec` directory, a
  * file that actually opens a test. The second clause needs the content:
  * `test/fixtures/cart.ts` sits under `test/` and is a fixture, and pairing
  * it as `cart.ts`'s test was measured to happen before the content was
@@ -61,7 +61,7 @@ const EXCERPT_CONTEXT_LINES = 2;
  * `src/contest/` are not tests, and `spec-parser.ts` is a parser.
  */
 const TEST_DIRECTORY = /(?:^|\/)(?:tests?|__tests__|spec)(?:\/|$)/;
-const TEST_NAME = /(?:[._-](?:spec|test)|_(?:spec|test))\.[A-Za-z0-9]+$/;
+const TEST_NAME = /(?:[._-](?:spec|test)|_(?:spec|test))\.[A-Za-z0-9]+$|^test_[^/]+\.py$/;
 
 export function isTestFile(path: string, content?: string): boolean {
   const p = path.split(sep).join("/");
@@ -240,9 +240,9 @@ function modulePaths(file: string): Set<string> {
 const IMPORT_SPECIFIER = /(?:\bfrom\s*|\bimport\s*\(\s*|\brequire\s*\(\s*)(?:"([^"]+)"|'([^']+)')/g;
 
 /** Lines that open a test or a suite, in the common runners. */
-const TEST_OPENER = /\b(?:describe|test|it|suite|context)\s*(?:\.\w+)?\s*\(|^\s*#\[test\]|^\s*fn test_|^\s*def test_/;
+const TEST_OPENER = /\b(?:describe|test|it|suite|context)\s*(?:\.\w+)?\s*\(|^\s*#\[test\]|^\s*fn test_|^\s*def test_|^\s*func Test\w*\s*\(/;
 /** The same, anywhere in a file: does this file open a test at all? */
-const TEST_OPENER_ANYWHERE = /\b(?:describe|test|it|suite|context)\s*(?:\.\w+)?\s*\(|#\[test\]|\bfn test_|\bdef test_/;
+const TEST_OPENER_ANYWHERE = /\b(?:describe|test|it|suite|context)\s*(?:\.\w+)?\s*\(|#\[test\]|\bfn test_|\bdef test_|\bfunc Test\w*\s*\(/;
 
 /** A test block this long or shorter is kept whole once any line in it matched. */
 const WHOLE_BLOCK_LINES = 40;

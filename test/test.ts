@@ -1072,9 +1072,13 @@ const manySubjects = (n: number, over: Partial<Subject> = {}): Subject[] =>
 // ---------------------------------------------------------------- paired
 
 test("paired: a test file is recognised by its name or its directory, in the usual spellings", () => {
-  for (const p of ["src/a.test.ts", "src/a.spec.tsx", "src/a_test.js", "test/a.ts", "tests/unit/a.mjs", "src/__tests__/a.ts", "spec/a_spec.rb"]) {
+  for (const p of ["src/a.test.ts", "src/a.spec.tsx", "src/a_test.js", "test/a.ts", "tests/unit/a.mjs", "src/__tests__/a.ts", "spec/a_spec.rb", "pkg/cart_test.go", "pkg/test_cart.py"]) {
     assert.ok(isTestFile(p), `${p} is a test file`);
   }
+  // Python's prefix and Go's suffix pair like the others.
+  assert.deepEqual(relatedTestFiles("pkg/cart.py", ["pkg/test_cart.py", "pkg/test_other.py"]), ["pkg/test_cart.py"]);
+  assert.deepEqual(relatedTestFiles("pkg/cart.go", ["pkg/cart_test.go", "pkg/other_test.go"]), ["pkg/cart_test.go"]);
+  assert.ok(isTestFile("test/helpers.go", "func TestCart(t *testing.T) {}"), "a Go test opener");
   for (const p of ["src/a.ts", "src/testing.ts", "src/contest/a.ts", "src/latest.ts", "src/spec-parser.ts"]) {
     assert.ok(!isTestFile(p), `${p} is not`);
   }
