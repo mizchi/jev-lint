@@ -1,25 +1,56 @@
 # jev-lint
 
+[日本語](README-ja.md)
+
 A linter for the things a linter could never check: whether a function does
 what its name says, whether a comment is still true, whether a test verifies
 what it claims.
 
+[`examples/cart.ts`](examples/cart.ts) is thirty-eight lines with three
+lies in it: a doc comment that promises `null` above a body that throws, an
+`isEmpty` that returns a string, an `applyDiscount` that also saves the
+cart. [`examples/cart.test.ts`](examples/cart.test.ts) has a test that
+would pass with its claim broken. Nothing a type checker minds.
+
+```bash
+$ export TYPESAFE_API_KEY=...
+$ npx -y jev-lint check examples
 ```
-corpus/ts/cart.ts
-     21  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.93  cutoff 0.83  arm located
 
-corpus/ts/cart.test.ts
-     27  flag       This test would still pass if the behaviour its name claims were broken.
-         test-name-verifies-claim  0.95  cutoff 0.53  arm bare
-
-corpus/ts/session_store.ts
-     20  flag       The comment above this code claims something that is not true of the code.
-         comment-describes-declaration  0.97  cutoff 0.75  arm located
-
-45 finding(s), 276 subject(s), 0 cached
-37 request(s), 155,249 input tokens, $0.00652, 6848 ms
 ```
+examples/cart.test.ts
+     17  flag       This test would still pass if the behaviour its name claims were broken.
+         test-name-verifies-claim  0.91  cutoff 0.62  arm bare
+
+examples/cart.ts
+     16  flag       The failure contract stated in the documentation on this function -- what it says the function throws, raises, rejects with, panics on, or returns in place of a result when something goes wrong, and under what condition -- is contradicted by the body.
+         doc-errors-match-body  0.94  cutoff 0.56  arm located
+     16  flag       The comment above this code claims something that is not true of the code.
+         comment-describes-declaration  0.91  cutoff 0.56  arm located
+     16  flag       This function ($NAME) has a failure path of its own that none of the related tests reaches.
+         tests-cover-failure-paths  0.92  cutoff 0.68  arm paired
+     16  flag       The body of this function does something materially different from what its name promises.
+         fn-name-promises  0.56  cutoff 0.55  arm located
+     22  flag       The body of this function does something materially different from what its name promises.
+         fn-name-promises  0.73  cutoff 0.55  arm located
+     30  flag       The body of this function does something materially different from what its name promises.
+         fn-name-promises  0.78  cutoff 0.55  arm located
+
+no files for go (9 rules), javascript (1 rule), json (1 rule), markdown (11 rules), python (12 rules), rust (8 rules), text (1 rule)
+7 rule(s) matched nothing: typescript/catch-hides-failure, typescript/comment-describes-block, typescript/idempotent-name, typescript/log-level-matches-event, typescript/log-message-matches-event, typescript/pure-name-is-pure, typescript/safe-name-is-safe
+  A matcher that misses is invisible everywhere else -- check these before trusting a clean run.
+
+7 finding(s), 37 subject(s), 0 cached
+7 request(s), 28,613 input tokens, $0.00120, 745 ms (4549 ms of requests)
+```
+
+Each finding is one rule's sentence, held against one piece of code, with
+the model's agreement (0.91) over the cutoff the rule ships with (0.62) and
+what it was shown (`bare`: the test alone; `located`: with its file;
+`paired`: with the tests that exercise it). Line 16 is the comment lie,
+seen by four rules from four sides — the comment, its failure contract,
+the name, and the tests that never reach the throw. Nothing clean was
+flagged. The run cost a tenth of a cent.
 
 ## What it reviews
 
@@ -159,19 +190,11 @@ npx -y jev-lint review --base main           # only the lines the branch touched
 npx -y jev-lint rules                        # every loaded rule: its question, cutoff, file
 ```
 
-A finding reads like this:
-
-```
-src/cart.ts
-     21  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.93  cutoff 0.83  arm located
-```
-
-Line 21, the rule's sentence, then how strongly the model agreed (0.93)
-against the cutoff the rule ships with (0.83), and what it was shown
-(`located`: the match with its file). A score under the cutoff is not a
-finding and is not printed; `--loose` prints the band just under it, for a
-reader.
+A finding is read as the ones [at the top of this page](#jev-lint): the
+line, the rule's sentence, the model's agreement against the cutoff the
+rule ships with, and the arm — what it was shown. A score under the cutoff
+is not a finding and is not printed; `--loose` prints the band just under
+it, for a reader.
 
 ### One rule, or your own
 
@@ -282,10 +305,12 @@ export function summarize(rows: Row[]): Total { … }
 A suppressed subject is never sent, so a suppression also saves its tokens.
 
 Two lines of output are never noise. **`N rules matched nothing`** is the only
-place a matcher that matches nothing is visible: on a TypeScript-only
-repository expect the seven Rust variants there and one JavaScript-only rule,
-and nothing else. **`N without a verdict`** means requests failed, and a run with failures never reads as a
-clean repository.
+place a matcher that matches nothing is visible: in the run at the top of
+this page, seven TypeScript rules found no `catch`, no log call, no `safe*`
+name in the two files, and that is what the list says (a language with no
+files at all is the `no files for` line before it, not a miss). **`N
+without a verdict`** means requests failed, and a run with failures never
+reads as a clean repository.
 
 Every flag, and the config file's precedence, is in
 [docs/reference.md](docs/reference.md#commands-and-flags).
