@@ -12,7 +12,9 @@
  *     sha256(schema, rule draft, arm, grouping, subject text)
  *
  * so editing a rule's sentence or its matcher invalidates that rule's verdicts
- * and nothing else, moving a function between files keeps its verdict, and --
+ * and nothing else, moving a function between files keeps its verdict on the
+ * `bare` arm -- on the arms that show more, the context shown is in the key,
+ * see `contextKey` -- and --
  * deliberately -- changing a THRESHOLD invalidates nothing at all.
  * Recalibration must be free, or it will not be done.
  *
@@ -40,9 +42,29 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, renameSync } from "node:fs";
 import { dirname } from "node:path";
 import { SCHEMA, ruleTextHash } from "./rules.ts";
-import type { Answer, CacheEntry, Grouping, Rule, RuleKind, StateArm } from "./types.ts";
+import type { Answer, CacheEntry, Grouping, Rule, RuleKind, StateArm, Subject } from "./types.ts";
 
 export const DEFAULT_CACHE_PATH = ".jev-lint-cache.json";
+
+/**
+ * What a subject's question shows beyond its text, at this arm: the part of
+ * the key that keeps two identical nodes in different surroundings apart.
+ * Null on `bare`, where the text is all there is.
+ */
+export function contextKey(
+  subject: Pick<Subject, "file" | "context" | "enclosing" | "promoted" | "line" | "subjectLine">,
+  arm: StateArm,
+): string | null {
+  // A promoted subject's question says "the code in `matched` at line N", so
+  // where in the container the match sits is part of the question: two
+  // identical throws in one function, one per branch, were one question.
+  // The offset from the container's first line, not the line itself, so an
+  // edit elsewhere in the file does not retire the verdict.
+  const where = subject.promoted ? `@${subject.line - (subject.subjectLine ?? subject.line)}` : "";
+  if (arm === "bare") return where || null;
+  const around = arm === "local" ? subject.context ?? `${subject.file}\u0000${subject.enclosing?.name ?? ""}` : `${subject.file}\u0000${subject.enclosing?.name ?? ""}`;
+  return around + where;
+}
 
 export function verdictKey(
   rule: Rule,
@@ -50,6 +72,7 @@ export function verdictKey(
   subjectText: string,
   group: Grouping = "file",
   matchText: string | null = null,
+  context: string | null = null,
 ): string {
   // `group` is in the key because it changes what the model saw. The same
   // subject at the same arm sits next to its own file's other matches under
@@ -60,10 +83,17 @@ export function verdictKey(
   // text is the enclosing function and whose question also names the match
   // inside it. Two matches in one function share the text and are two
   // questions; keyed on the text alone, the second was never asked and took
-  // the first one's verdict as a twin. Null for an unpromoted subject, so
-  // duplicated code across files still costs one question.
+  // the first one's verdict as a twin. Null for an unpromoted subject.
+  //
+  // `context` is what the arm shows beyond the text: nothing on `bare`, so
+  // duplicated code across files costs one question there; on `local` the
+  // enclosing function, on the file-bearing arms the file and the container.
+  // Two textually identical nodes in different functions were one question
+  // at every arm, and a `logger.info("cache hit")` pasted into the miss
+  // branch answered exactly what its twin in the hit branch did. `contextKey`
+  // decides it per arm; it only ever matters where the model can see it.
   return createHash("sha256")
-    .update([SCHEMA, rule.id, ruleTextHash(rule), arm, group, subjectText, matchText ?? ""].join("\n"))
+    .update([SCHEMA, rule.id, ruleTextHash(rule), arm, group, subjectText, matchText ?? "", context ?? ""].join("\n"))
     .digest("hex")
     .slice(0, 24);
 }

@@ -47,7 +47,7 @@ import {
 } from "../src/batch.ts";
 import { schedule, planMixed, explain } from "../src/schedule.ts";
 import { decide, gate, describe as describeFinding, blocks, looseFloor } from "../src/gate.ts";
-import { Cache, verdictKey } from "../src/cache.ts";
+import { Cache, verdictKey, contextKey } from "../src/cache.ts";
 import { parseUnifiedDiff, touchesChange, changedRanges, changedFilesUnder } from "../src/diff.ts";
 import { widestGap, gapReport, fitCutoffs, labelFor, stabilityReport } from "../src/calibrate.ts";
 import {
@@ -1941,6 +1941,37 @@ test("gate: findings rank by distance past their own cutoff, not by raw value", 
 });
 
 // ----------------------------------------------------------------- cache
+
+test("cache: on an arm that shows context, identical text in different contexts is two questions", () => {
+  // Found by two candidate rules at once: a `logger.info("cache hit")` in
+  // the miss branch answered exactly what its twin in the hit branch did,
+  // 0.05, because keyed on the text alone the second was never asked. On
+  // `bare` the text is all the model sees and one question is right; on
+  // `local` the enclosing function is the evidence, and on the file-bearing
+  // arms the file is, so those go into the key.
+  const r = scoreRule();
+  for (const arm of ["local", "located", "graph", "full", "paired"] as StateArm[]) {
+    assert.notEqual(verdictKey(r, arm, "T", "file", null, "ctx-a"), verdictKey(r, arm, "T", "file", null, "ctx-b"), `${arm}: two contexts, two questions`);
+    assert.equal(verdictKey(r, arm, "T", "file", null, "ctx-a"), verdictKey(r, arm, "T", "file", null, "ctx-a"), `${arm}: same context, one question`);
+  }
+  // What the runner uses as the context: the enclosing code on local, the
+  // file and the container on the file-bearing arms, nothing on bare.
+  const inA = subjectOf({ context: "function a() { x() }", contextName: "a", file: "src/a.ts", enclosing: { name: "a", role: "function" } });
+  const inB = subjectOf({ context: "function b() { x() }", contextName: "b", file: "src/a.ts", enclosing: { name: "b", role: "function" } });
+  assert.notEqual(contextKey(inA, "local"), contextKey(inB, "local"));
+  assert.notEqual(contextKey(inA, "located"), contextKey(inB, "located"), "same file, different container");
+  assert.notEqual(contextKey(inA, "located"), contextKey({ ...inA, file: "src/b.ts" }, "located"), "different file");
+  assert.equal(contextKey(inA, "bare"), contextKey(inB, "bare"));
+  assert.equal(contextKey(inA, "bare"), null);
+  // A promoted subject's question names the match's line inside the
+  // container, so two identical throws in one function -- one per `if` --
+  // are two questions on every arm, keyed by where in the function the
+  // match sits (an offset, so edits elsewhere in the file keep the verdict).
+  const first = subjectOf({ promoted: true, matchText: 'throw new Error("x")', text: "function f() {...}", line: 12, subjectLine: 10 });
+  const second = { ...first, line: 20 };
+  assert.notEqual(contextKey(first, "bare"), contextKey(second, "bare"));
+  assert.equal(contextKey(first, "bare"), contextKey({ ...first, line: 112, subjectLine: 110 }, "bare"), "the same offset after the file grew above it");
+});
 
 test("cache: a key covers the draft, the arm and the axis, but not the threshold", () => {
   const r = scoreRule();

@@ -22,7 +22,7 @@ import { resolveSubject, widenCommentCapture } from "./state.ts";
 import { buildExplainQuestion, questionId, readAnswer, readChoice } from "./questions.ts";
 import { planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { schedule, planMixed, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
-import { Cache, verdictKey } from "./cache.ts";
+import { Cache, verdictKey, contextKey } from "./cache.ts";
 import { gate } from "./gate.ts";
 import { touchesChange } from "./diff.ts";
 import { ruleTextHash, cutoffFor } from "./rules.ts";
@@ -356,6 +356,7 @@ export async function run({
       s.commit ? `${s.text}\u0000${s.commit.diff}` : s.text,
       effectiveAxis(s),
       s.promoted ? (s.matchText ?? null) : null,
+      contextKey(s, s.arm),
     ),
   }));
 
@@ -466,7 +467,7 @@ export async function run({
           const storeKey =
             batch.arm === s.arm
               ? s.key!
-              : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null);
+              : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null, contextKey(s, batch.arm));
           cache.set(storeKey, answer, {
             rule: s.rule.id,
             draft: ruleTextHash(s.rule),
