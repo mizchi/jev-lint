@@ -120,19 +120,68 @@ Read a finding as a candidate for a human to judge, not a verdict to act on.
 ## Quick start
 
 ```bash
-export TYPESAFE_API_KEY=...
-npx -y jev-lint check src --dry-run   # what it would ask, and the price. No request.
-npx -y jev-lint check src             # ask it
+export TYPESAFE_API_KEY=...            # https://typesafe.ai
+npx -y jev-lint check src --dry-run    # what it would ask, and the price. No request.
+npx -y jev-lint check src              # ask it
+```
+
+Nothing to install for that. Node 20+. `check` loads every shipped rule —
+65 of them, under `rules/<language>/<id>/` — and the files you point it
+at decide which run: a `.ts` file meets the TypeScript rules, a `.md` file
+the Markdown ones, and a language no file belongs to is listed as idle at
+the end of the run. Nothing to select.
+
+### What ships, and what it runs on
+
+| point it at | what runs | asks, for example |
+| --- | --- | --- |
+| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 21 rules, first tier | does this function do what its name promises; is the comment above it still true; would this test still pass if its claim were broken; does `catch` hide a failure |
+| `.rs` | `rust/` — 8, first tier | the same for functions, comments, tests, bindings; `# Errors` / `# Panics` against the body |
+| `.py` | `python/` — 12 | ports of the TypeScript rules; `Raises:` against the body |
+| `.go` | `go/` — 9 | ports, plus `must-name-panics`: does `MustX` panic on the failure its name promises |
+| `package.json` | `json/` — 1 | does a script's name describe the command it runs |
+| `.sql` (an sqlc catalog) | `text/` — 1 | does `-- name: GetUserByEmail` describe the SQL under it |
+| `.md` `.mdx` | `markdown/` — 11 | is this document slop, filler, vague, padded (JevSlop's eight signals, scored 0–4); does a section end by previewing the next, open with an agenda, abandon a question it raised |
+| commits — `jev-lint commits` | `git/` — 1 | does this commit's message describe its diff |
+
+Every rule is one question about a claim the code makes about itself, and
+[RULES.md](RULES.md) lists all 65 with the question, the cutoff, and how
+each scores on its own fixtures. The two first-tier languages carry the
+release bar: every rule under `typescript/` and `rust/` has fixtures,
+expectations and an accepted baseline. The rest are calibrated to the same
+bar and not yet promised.
+
+```bash
+npx -y jev-lint check src                    # the code rules, whichever languages are there
+npx -y jev-lint check docs README.md         # the markdown rules, on prose
+npx -y jev-lint commits --base main          # each commit's message against its diff
+npx -y jev-lint review --base main           # only the lines the branch touched
+npx -y jev-lint rules                        # every loaded rule: its question, cutoff, file
+```
+
+A finding reads like this:
+
+```
+src/cart.ts
+     21  flag       The body of this function does something materially different from what its name promises.
+         fn-name-promises  0.93  cutoff 0.83  arm located
+```
+
+Line 21, the rule's sentence, then how strongly the model agreed (0.93)
+against the cutoff the rule ships with (0.83), and what it was shown
+(`located`: the match with its file). A score under the cutoff is not a
+finding and is not printed; `--loose` prints the band just under it, for a
+reader.
+
+### One rule, or your own
+
+```bash
 npx -y jev-lint run fn-name-promises src        # one shipped rule, every language that has it
 npx -y jev-lint run rust/fn-name-promises src   # ...or one language
 npx -y jev-lint run --file myrule.yml src       # a rule file of your own, nothing else loaded
 ```
 
-Nothing to install for that. Node 20+. The matcher is the real ast-grep
-binary, so every language it supports is available; the shipped rules cover
-TypeScript, TSX, JavaScript and Rust.
-
-For a project:
+### For a project
 
 ```bash
 npm install --save-dev jev-lint
@@ -141,6 +190,8 @@ npx jev-lint init                     # writes .jev-lint.yaml, everything commen
 
 Uncomment `paths:` so `jev-lint check` needs no argument. The API key is read
 from the environment only, never from that file; `apiKey:` in it is an error.
+A `rules/` directory of the project's own is loaded *instead of* the shipped
+set; `-R <dir>` names any other, and repeats.
 
 ### Commits
 
