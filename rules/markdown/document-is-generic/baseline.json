@@ -1,0 +1,352 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T13:11:24.509Z",
+  "model": "jev-1.13.0",
+  "suite": "markdown/document-is-generic",
+  "rules": [
+    {
+      "id": "document-is-generic",
+      "draft": "d1d4158ab02f",
+      "at": 2.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.97,
+        "confidence": 0.98
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.92,
+        "confidence": 0.93
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 1.15,
+        "confidence": 0.04
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.29,
+        "confidence": 0.76
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.35,
+        "confidence": 0.71
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 1.56,
+        "confidence": 0.12
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 1.02,
+        "confidence": 0.15
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.58,
+        "confidence": 0.65
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 4,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.99,
+        "confidence": 0.43
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/what-is-kubernetes.md",
+        "line": 1,
+        "endLine": 55,
+        "kind": "score",
+        "value": 3.95,
+        "confidence": 0.96
+      }
+    ],
+    [
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 1.17,
+        "confidence": 0.26
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.36,
+        "confidence": 0.7
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 4,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 0.96,
+        "confidence": 0.2
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/what-is-kubernetes.md",
+        "line": 1,
+        "endLine": 55,
+        "kind": "score",
+        "value": 3.94,
+        "confidence": 0.95
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.32,
+        "confidence": 0.74
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.98,
+        "confidence": 0.98
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 1.05,
+        "confidence": 0.41
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 1.55,
+        "confidence": 0.09
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.88,
+        "confidence": 0.9
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.58,
+        "confidence": 0.65
+      }
+    ],
+    [
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.32,
+        "confidence": 0.73
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.64,
+        "confidence": 0.7
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.87,
+        "confidence": 0.89
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.97,
+        "confidence": 0.98
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 4,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.35,
+        "confidence": 0.71
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.92,
+        "confidence": 0.43
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/what-is-kubernetes.md",
+        "line": 1,
+        "endLine": 55,
+        "kind": "score",
+        "value": 3.92,
+        "confidence": 0.94
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 1.95,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 1.21,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-generic",
+        "file": "rules/markdown/document-is-generic/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 1.14,
+        "confidence": 0.05
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 36,
+    "inputTokens": 59325,
+    "usd": 0.00249165,
+    "ms": 533
+  }
+}

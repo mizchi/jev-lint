@@ -71,7 +71,7 @@ export function formatPretty(
       const what = f.message ?? f.ask;
       const num =
         f.kind === "score"
-          ? `${f.value!.toFixed(2)}/3${typeof f.confidence === "number" ? ` conf ${f.confidence.toFixed(2)}` : ""}`
+          ? `${f.value!.toFixed(2)}/${f.scale ?? 3}${typeof f.confidence === "number" ? ` conf ${f.confidence.toFixed(2)}` : ""}`
           : f.value!.toFixed(2);
       out.push(`  ${loc}  ${tag}  ${what}`);
       const repro = f.passes ? `  ${f.passes.over}/${f.passes.of} passes` : "";
@@ -80,6 +80,12 @@ export function formatPretty(
       );
       if (f.explanation) {
         out.push(`         ${c.dim(`why: ${f.explanation.choice} (${f.explanation.confidence.toFixed(2)})`)}`);
+      }
+      // A verdict on a cut block is a verdict on the part that was sent, and
+      // a claim about "the document" -- a question never returned to -- may
+      // be answered past the cut.
+      if (f.cut) {
+        out.push(`         ${c.yellow(`judged on the first ${f.cut.judged.toLocaleString()} of ${f.cut.of.toLocaleString()} characters; what lies past the cut was not seen`)}`);
       }
       if (f.messageId === "unsure") {
         out.push(`         ${c.yellow("worth a human look rather than a fix")}`);
@@ -103,7 +109,7 @@ export function formatPretty(
       c.bold(`${review.length} subject(s) under a cutoff but over its loose floor -- for a reader, not findings:`),
     );
     for (const f of review) {
-      const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
+      const num = f.kind === "score" ? `${f.value!.toFixed(2)}/${f.scale ?? 3}` : f.value!.toFixed(2);
       const where = f.commit ? `${shortRef(f.file)}  "${f.commit.subject}"` : `${f.file}:${f.line}`;
       out.push(c.dim(`  ${where}  ${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  ${f.message ?? f.ask}`));
     }
@@ -300,6 +306,7 @@ export function formatJson(result: ReportInput): string {
     passes: f.passes ?? null,
     message: f.message ?? f.ask,
     commit: f.commit ?? null,
+    cut: f.cut ?? null,
   });
   return JSON.stringify(
     {
@@ -346,10 +353,11 @@ export function formatGithub(result: ReportInput): string {
   for (const f of result.findings) {
     const level = f.severity === "error" ? "error" : f.messageId === "unsure" ? "notice" : "warning";
     const title = `${f.rule}${f.messageId === "unsure" ? " (unsure)" : ""}`;
-    const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
+    const num = f.kind === "score" ? `${f.value!.toFixed(2)}/${f.scale ?? 3}` : f.value!.toFixed(2);
     const why = f.explanation ? `; why: ${f.explanation.choice}` : "";
     const where = f.commit ? `commit ${shortRef(f.file)} "${f.commit.subject}": ` : "";
-    const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}]`;
+    const cut = f.cut ? `; judged on the first ${f.cut.judged} of ${f.cut.of} characters` : "";
+    const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}${cut}]`;
     out.push(
       `::${level} file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(title)}::${escape(body)}`,
     );
@@ -357,7 +365,7 @@ export function formatGithub(result: ReportInput): string {
   // The `--loose` band as notices: visible in the checks tab, never a
   // warning, never a failure.
   for (const f of result.review ?? []) {
-    const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
+    const num = f.kind === "score" ? `${f.value!.toFixed(2)}/${f.scale ?? 3}` : f.value!.toFixed(2);
     out.push(
       `::notice file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(`${f.rule} (loose)`)}::${escape(`${f.message ?? f.ask} [${num}, under cutoff ${f.at.toFixed(2)}; for a reader]`)}`,
     );

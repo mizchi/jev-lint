@@ -160,7 +160,10 @@ export function buildState({
 
   const state: StatePayload = {
     language,
-    reviewing: "source code, against project-specific rules stated in the questions",
+    reviewing:
+      subjects[0]?.nodeKind === "block"
+        ? "a text file, in blocks, against the rules stated in the questions"
+        : "source code, against project-specific rules stated in the questions",
     subjects: subjects.map((s) => {
       const from = s.subjectLine ?? s.line;
       const to = s.subjectEndLine ?? s.endLine;

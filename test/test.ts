@@ -27,11 +27,12 @@ import {
   selectRules,
   SCORE_LEVELS,
   DEFAULT_SCORE_AT,
+  scaleOf,
 } from "../src/rules.ts";
 import { buildQuestion, buildExplainQuestion, questionId, readAnswer, readChoice } from "../src/questions.ts";
 import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture, OUTLINE_TEXT_LIMIT } from "../src/state.ts";
 import { execFileSync } from "node:child_process";
-import { splitBlocks, textSubjects, findTextFiles } from "../src/text.ts";
+import { splitBlocks, textSubjects, findTextFiles, MAX_BLOCK_CHARS } from "../src/text.ts";
 import { listCommits, commitDiff, commitSubjects, commitFixtureSubjects, patchRepo, squashSubjects, MAX_DIFF_CHARS } from "../src/commits.ts";
 import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET } from "../src/paired.ts";
 import {
@@ -476,6 +477,32 @@ test("rules: `loose` is a floor under the cutoff, and not part of the draft", ()
   assert.match(bad({ loose: 0.7 }), /below/);
   assert.match(bad({ loose: -0.1 }), /between/);
   assert.match(bad({ loose: "half" }), /number/);
+});
+
+test("rules: a score rule may carry its own ordered rubric as `levels`, and its cutoff scales with it", () => {
+  // The shared four-level scale is the default. A rule about prose --
+  // JevSlop's eight axes are five-level rubrics -- says its own, ordered
+  // from clean to worst, and `at` then runs 0..levels-1.
+  const five = ["Almost none.", "Occasional.", "Moderate.", "Frequent.", "Dominates the writing."];
+  const r = scoreRule({ levels: five, at: 3.5 });
+  assert.deepEqual(r.levels, five);
+  assert.equal(scaleOf(r), 4);
+  assert.equal(scaleOf(scoreRule()), 3, "the shared scale is 0..3");
+  assert.equal(scaleOf(noulRule()), 1);
+  const q = buildQuestion(r, subjectOf({ rule: r }), "q0000");
+  assert.deepEqual(q.criteria, five, "the rubric reaches the wire as the criteria");
+  assert.notEqual(ruleTextHash(r), ruleTextHash(scoreRule({ levels: five.slice(0, 4), at: 2 })), "the rubric is part of the draft");
+  const bad = (over: Record<string, unknown>): string =>
+    normalizeRule({ id: "s", language: "TypeScript", rule: { kind: "x" }, ask: "a", ...over }).error ?? "";
+  assert.match(bad({ levels: ["one"] }), /two/, "one level is not a scale");
+  assert.match(bad({ levels: five, at: 4.5 }), /between 0 and 4/);
+  assert.match(bad({ kind: "noul", criteria: { true: "y", false: "n" }, levels: five }), /score/, "levels are a score rule's");
+  assert.match(bad({ levels: ["a", ""] }), /levels/);
+  // A finding on a custom rubric names its level by number and its scale.
+  const f = decide(subjectOf({ rule: r }), { value: 3.6, confidence: 0.8, kind: "score" });
+  assert.equal(f.level, "level-4");
+  assert.equal(f.scale, 4);
+  assert.match(describeFinding(f), /3\.60\/4/);
 });
 
 test("rules: criteria on a score rule is rejected (it uses the shared scale)", () => {
@@ -2768,8 +2795,37 @@ test("rules: a block rule splits text files by a header regex, and is Text only"
   assert.deepEqual(r.extensions, ["sql"]);
   const bad = (over: Record<string, unknown>): string =>
     normalizeRule({ id: "b", language: "Text", subject: "block", split: "^x", extensions: ["sql"], kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, ...over }).error ?? "";
-  assert.match(bad({ split: undefined }), /split/, "the header regex is required");
-  assert.match(bad({ split: "(" }), /regex/, "and must compile");
+  assert.match(bad({ split: "(" }), /regex/, "a header regex must compile");
+  // Without `split`, the whole file is one block: a document judged as a
+  // whole, the way a markdown rule reads an article.
+  const whole = normalizeRule({ id: "w", language: "Text", subject: "block", extensions: ["md"], kind: "noul", ask: "a", criteria: { true: "y", false: "n" } });
+  assert.equal(whole.error, undefined, whole.error ?? "");
+  assert.equal(whole.rule!.split, null);
+  const blocks = splitBlocks("# Title\n\nbody\n", null);
+  assert.equal(blocks.length, 1);
+  assert.equal(blocks[0]!.line, 1);
+  assert.equal(blocks[0]!.endLine, 3);
+  assert.deepEqual(blocks[0]!.captured, {});
+  assert.equal(splitBlocks("", null).length, 0, "an empty file is no block");
+  assert.deepEqual(LANGUAGE_DIRS.markdown, ["Text"]);
+  // A block over the cap is cut at a line boundary and the question says so.
+  const long = Array.from({ length: 3000 }, (_, i) => `line ${i} of a long document that goes on`).join("\n");
+  const tdir = mkdtempSync(join(tmpdir(), "jev-block-"));
+  writeFileSync(join(tdir, "long.md"), long);
+  const [big] = textSubjects([whole.rule!], ["."], tdir);
+  rmSync(tdir, { recursive: true, force: true });
+  assert.ok(big!.text.length <= MAX_BLOCK_CHARS && big!.text.endsWith("goes on"), "cut on a line");
+  assert.equal(big!.textCut?.of, long.length);
+  const q = buildQuestion(whole.rule!, big!, "q0000");
+  assert.match(String(q.instructions.note_on_text), /cut at a line boundary/);
+  assert.equal(q.instructions.text, big!.text);
+  // And the finding says so, in every format: a verdict on the part sent.
+  const cutFinding = decide(big!, { value: 0.9, confidence: null, kind: "noul" });
+  assert.deepEqual(cutFinding.cut, { judged: big!.text.length, of: long.length });
+  const cutReport = { findings: [cutFinding], all: [cutFinding], review: [], stats: { subjects: 1, reported: 1, missing: 0, unsure: 0, review: 0, byRule: {} } };
+  assert.match(formatPretty(cutReport, { color: false }), /judged on the first [\d,]+ of [\d,]+ characters/);
+  assert.match(formatGithub(cutReport), /judged on the first/);
+  assert.equal(JSON.parse(formatJson(cutReport)).findings[0].cut.of, long.length);
   assert.match(bad({ extensions: [] }), /extensions/, "so is at least one extension");
   assert.match(bad({ language: "TypeScript" }), /Text/, "a block rule is Text only");
   assert.match(bad({ subject: "node" }), /block/, "and Text is for block rules only");

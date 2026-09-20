@@ -11,9 +11,18 @@
  * file, `bare` does not. No matcher, so no loose-matcher caveat.
  */
 import { readFileSync } from "node:fs";
-import { extname, join } from "node:path";
+import { extname, isAbsolute, join, sep } from "node:path";
 import { FileIndex, isUnder } from "./files.ts";
 import type { Rule, Subject } from "./types.ts";
+
+/**
+ * Characters of a block that travel in the question. About 14k tokens at
+ * the measured ratio for prose, which leaves the request budget room for
+ * the questions beside it. Over it, the block is cut at a line boundary
+ * and the question says so; JevSlop refuses to truncate an article, and
+ * this tool refuses to send one it cannot name as cut.
+ */
+export const MAX_BLOCK_CHARS = 48_000;
 
 export interface TextBlock {
   /** 1-based line of the header. */
@@ -24,9 +33,19 @@ export interface TextBlock {
   captured: Record<string, string>;
 }
 
-/** Split a file at every line matching `header`, oldest first; the text before the first header is not a block. */
-export function splitBlocks(source: string, header: RegExp): TextBlock[] {
+/**
+ * Split a file at every line matching `header`, first to last; the text
+ * before the first header is not a block. With no header the whole file is
+ * one block, and an empty file is none.
+ */
+export function splitBlocks(source: string, header: RegExp | null): TextBlock[] {
   const lines = source.split("\n");
+  if (header === null) {
+    let end = lines.length - 1;
+    while (end >= 0 && lines[end]!.trim() === "") end -= 1;
+    if (end < 0) return [];
+    return [{ line: 1, endLine: end + 1, text: lines.slice(0, end + 1).join("\n"), captured: {} }];
+  }
   const flags = header.flags.replace("g", "").replace("y", "");
   const at = new RegExp(header.source, flags);
   const starts: Array<{ index: number; captured: Record<string, string> }> = [];
@@ -63,7 +82,7 @@ export function findTextFiles(
   const wanted = new Set(extensions.map((e) => (e.startsWith(".") ? e : `.${e}`).toLowerCase()));
   return index
     .list(paths)
-    .filter((rel) => wanted.has(extname(rel).toLowerCase()) && paths.some((p) => isUnder(rel, p)));
+    .filter((rel) => wanted.has(extname(rel).toLowerCase()) && paths.some((p) => isUnder(rel, p) || rel === p.split(sep).join("/")));
 }
 
 /**
@@ -75,13 +94,13 @@ export function textSubjects(
   rules: Rule[],
   paths: string[],
   cwd: string = process.cwd(),
-  read: (file: string) => string = (file) => readFileSync(join(cwd, file), "utf8"),
+  read: (file: string) => string = (file) => readFileSync(isAbsolute(file) ? file : join(cwd, file), "utf8"),
   index: FileIndex = new FileIndex(cwd),
 ): Subject[] {
   const out: Subject[] = [];
   for (const rule of rules) {
-    if (rule.subject !== "block" || !rule.split) continue;
-    const header = new RegExp(rule.split);
+    if (rule.subject !== "block") continue;
+    const header = rule.split ? new RegExp(rule.split) : null;
     for (const file of findTextFiles(paths, rule.extensions ?? [], cwd, index)) {
       let source: string;
       try {
@@ -90,12 +109,15 @@ export function textSubjects(
         continue;
       }
       for (const b of splitBlocks(source, header)) {
+        const cut = b.text.length > MAX_BLOCK_CHARS;
+        const text = cut ? b.text.slice(0, b.text.lastIndexOf("\n", MAX_BLOCK_CHARS)) : b.text;
         out.push({
           rule,
           file,
           language: "Text",
           arm: rule.state,
-          text: b.text,
+          text,
+          ...(cut ? { textCut: { of: b.text.length } } : {}),
           line: b.line,
           endLine: b.endLine,
           nodeKind: "block",

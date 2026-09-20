@@ -21,7 +21,7 @@
  * tokens.
  */
 import { readFileSync } from "node:fs";
-import { basename, dirname, join, posix, relative, sep } from "node:path";
+import { basename, dirname, isAbsolute, join, posix, relative, sep } from "node:path";
 import { moduleIdentity } from "./scan.ts";
 import { FileIndex } from "./files.ts";
 
@@ -333,7 +333,7 @@ export function pairTests(
     readSource ??
     ((p: string) => {
       try {
-        return readFileSync(join(cwd, p), "utf8");
+        return readFileSync(isAbsolute(p) ? p : join(cwd, p), "utf8");
       } catch {
         return "";
       }

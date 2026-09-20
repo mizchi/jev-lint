@@ -175,12 +175,13 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
 | `subject` | `node` (default), `enclosing`, `file`, `commit`, `block` | what code is judged. `commit` and `block` have no matcher: `commit` is `language: Git`, its subjects the commits `jev-lint commits` lists, the message judged and the diff the state; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |
-| `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\w+)`) are the captures. A block runs from its header to the line before the next |
+| `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\w+)`) are the captures. A block runs from its header to the line before the next. Left out, the whole file is one block — a document judged as a whole — cut at 48,000 characters with the cut declared |
 | `extensions` | `block` only | the files the rule reads, by extension (`[sql]`); no grammar claims them, so the rule has to say |
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context for the model only |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
 | `severity` | `hint`, `info`, `warning` (default), `error` | `error` fails a build; earn it first |
+| `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `at` then runs 0..levels-1 and a finding's level is numbered. The `rules/markdown/` rules are five-level rubrics from JevSlop |
 | `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |
 
 ### `score` or `noul`
@@ -442,7 +443,7 @@ baselines — is [RULES.md](../RULES.md), written by `tools/rules-md.ts`
 (`npm run rules:md`; `npm run rules:md:check` fails when it is stale, and
 so does `npm test`). What follows is the prose.
 
-54 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
+65 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
 grouped here by what they ask. Which languages each exists in:
 
 | rule | typescript | rust | python | go | other |
@@ -623,6 +624,45 @@ separate at 0.61 with no flips. One corpus correction is in the rule file:
 a soft-delete `DeleteUser` read as misnamed while an identical
 `SoftDeleteUser` sat beside it, which was the corpus contradicting itself.
 
+**Writing** — `markdown/`, eight `score` rules ported from
+[JevSlop](https://github.com/TKY-27/JevSlop), each a five-level rubric over
+a Markdown file as a whole (`subject: block` with no `split`): does the
+document read as filler, vague, generic, formulaic, padded, lacking
+firsthand evidence, incoherent, or as slop overall (the ninth,
+`document-repeats-itself`, separates but on four defects and is a
+candidate). JevSlop's "higher is better" axes are reversed so that every
+rule here means the same thing by a high score; two of them — firsthand
+evidence and coherence — had rubrics that named amounts ("Central …
+None", "Coherent.") and the model read the amount, not the defect, until
+each level was reworded as a statement about the document. On unseen
+technical documents nothing fires; a reference with no narrator sits at
+"some" firsthand evidence, which is a description, not a defect. Not the class the rest of this tool is built
+for — a document makes no contract with itself the way a name does — and
+shipped at `severity: info` for that reason; a writing characteristic, not
+an authorship probability.
+
+Beside them, three `noul` rules from k16shikano's
+[cognitive-rhythm writing norm](https://gist.github.com/k16shikano/eb2929f13ed19c97188393d297be8432)
+for Japanese explanatory prose, which *are* this tool's class: does a
+sentence update the subject, or only the document?
+`section-ends-with-a-preview` and `section-opens-with-an-agenda`, one
+subject per Markdown section with the document in view, and
+`document-abandons-a-question` (a question, an invited assumption or a
+promise never returned to), one subject per document. The norm's four
+exceptions — an objection quoting the misreading it rejects, the sentence
+that poses a question and the one that returns it, a request at a
+boundary, the opening and closing of an invented example — are the hard
+cleans. The general form, `section-narrates-itself`, is a candidate: at
+0.60 it reaches precision and recall 0.95, and the two that cross are the
+norm's own short punchy form of narration against its exception for an
+invented example's frame, 0.02 apart after three sentences.
+`address-outside-boundaries` separates with 0.06 of headroom and is a
+candidate too. On this repository's own documents every finding was a
+correct reading of the norm applied to a genre it is not for — a findings
+log's navigational preface, a reference's "read the twelve as…" — so use
+them on articles and chapters. `/jev-lint:prose` runs both families and
+the norm's leakage test, which is a grep and not a model question.
+
 **Go only** — `must-name-panics`: a `Must*` function promises to panic on
 the failure its name names; does it return it, log it, or swallow it in a
 deferred recover instead? The inverse of `safe-name-is-safe`, which is why
@@ -640,7 +680,7 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 On a one-language repository every other language's rules are idle, and
 the report says so in one line rather than listing them as silent.
 
-Of the 54, **47 reach precision 1.00 and recall 1.00 at their shipped cutoffs
+Of the 65, **56 reach precision 1.00 and recall 1.00 at their shipped cutoffs
 on their own fixtures** (`rules/*/*/baseline.json`, three passes each,
 decisions on the mean; `jev-lint eval --replay` re-derives every number below
 with no request). Read that with the positive counts beside them: per rule,
@@ -902,8 +942,8 @@ the batching axis invalidates the verdicts that depended on them.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **The cutoffs are fitted to small evals.** 185 labelled fixtures, 401
-  labelled defects across 54 rules, one to thirty-one per rule. Expect to refit; see
+- **The cutoffs are fitted to small evals.** 320 labelled fixtures, 467
+  labelled defects across 65 rules, one to thirty-one per rule. Expect to refit; see
   [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.

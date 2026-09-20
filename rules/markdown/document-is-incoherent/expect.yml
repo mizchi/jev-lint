@@ -1,0 +1,27 @@
+default: clean
+fixtures/scattered-thoughts.md:
+  - { line: 1, label: bad, window: 0, reason: "nine paragraphs on nine unrelated trends joined by 'Additionally', 'On another note', 'Meanwhile', 'In the same vein'; the closing admits they contradict and draws nothing from them" }
+fixtures/fast-paced-world.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean, relabelled: sections are stitched by 'Moreover', 'Furthermore', 'Additionally' and no claim depends on a previous one -- but nothing contradicts or fails to follow either; a template is a structure that holds its parts together (level 2, 'adequate'), and its emptiness is the generic and formulaic rules' finding, which both flag it" }
+fixtures/ja-slop.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean, relabelled: 「また」「さらに」「最後に」で並べただけで理由同士に関係はないが、矛盾も飛躍もない。型は型として筋が通っており、その空疎さは generic / formulaic の側の finding" }
+fixtures/productivity-listicle.md:
+  - { line: 1, label: bad, window: 0, reason: "ten tips with no relation to each other, glued by 'In addition', 'Furthermore', 'Moreover', 'Last but not least'" }
+fixtures/opinion-monorepos.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: each paragraph depends on the previous (what a boundary is, therefore what splitting costs, therefore what the monorepo buys, therefore what it costs, therefore the asymmetry)" }
+fixtures/confident-generalities.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: generic content, but logically ordered: running out of money is argued to be a symptom of the first reason, competition is ranked against the others" }
+fixtures/one-idea-five-paragraphs.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: repetitive, but not incoherent; every paragraph develops the same claim from a different side (design, cost, psychology)" }
+fixtures/postmortem.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: timeline, then why the canary could not catch it, then the two separate faults, then a fix per fault" }
+fixtures/reference-config.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: organised by table, with cross-references (prefetch caps concurrency) that hold" }
+fixtures/tutorial-git-rebase.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: each round builds on the previous branch state and the summary table is derived from the rounds" }
+fixtures/ja-dense.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 前提 → 移した理由 → 戻す理由（単価計算と p99） → 手順 → 結果 → 反省、と各節が前節に依存している" }
+fixtures/readme-cli.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: reference structure; sections do not need transitions and do not pretend to" }
+fixtures/microservices-nonsequitur.md:
+  - { line: 1, label: bad, window: 0, reason: "every conclusion contradicts its own paragraph: a stable service is split first to speed deploys and then takes longer to deploy; independence is claimed to improve reliability and the next sentence says checkout now goes down with notifications; the real cause of the slow deploy (a test suite) is admitted near the end and the summary still credits the architecture" }

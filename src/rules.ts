@@ -253,15 +253,19 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     if (raw.rule !== undefined) {
       return { error: `${id}: a \`subject: block\` rule takes no matcher; \`split\` is how it finds its blocks` };
     }
-    if (typeof raw.split !== "string" || raw.split.trim() === "") {
-      return { error: `${id}: a \`subject: block\` rule needs \`split\`, a regex matched at the start of each line, with named groups for the captures` };
+    // `split` is optional: without it the whole file is one block, which
+    // is how a document is judged as a whole.
+    if (raw.split !== undefined) {
+      if (typeof raw.split !== "string" || raw.split.trim() === "") {
+        return { error: `${id}: \`split\` must be a regex matched at the start of each line, with named groups for the captures; leave it out to take the whole file as one block` };
+      }
+      try {
+        new RegExp(raw.split);
+      } catch (err: unknown) {
+        return { error: `${id}: \`split\` is not a valid regex: ${String((err as Error).message)}` };
+      }
+      split = raw.split;
     }
-    try {
-      new RegExp(raw.split);
-    } catch (err: unknown) {
-      return { error: `${id}: \`split\` is not a valid regex: ${String((err as Error).message)}` };
-    }
-    split = raw.split;
     if (!Array.isArray(raw.extensions) || raw.extensions.length === 0 || raw.extensions.some((e: unknown) => typeof e !== "string" || e.trim() === "")) {
       return { error: `${id}: a \`subject: block\` rule needs \`extensions\`, a non-empty list such as [sql]` };
     }
@@ -311,11 +315,21 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     return { error: `${id}: \`criteria\` only applies to \`kind: noul\`; a score rule uses the shared scale` };
   }
 
+  // A score rule's own rubric, in place of the shared scale.
+  let levels: string[] | null = null;
+  if (raw.levels !== undefined) {
+    if (kind !== "score") return { error: `${id}: \`levels\` only applies to \`kind: score\`` };
+    if (!Array.isArray(raw.levels) || raw.levels.length < 2 || raw.levels.some((l: unknown) => typeof l !== "string" || l.trim() === "")) {
+      return { error: `${id}: \`levels\` must be a list of two or more non-empty strings, clean to worst` };
+    }
+    levels = raw.levels.map((l: string) => l.trim());
+  }
+
   const at = raw.at === undefined ? null : raw.at;
   if (at !== null && typeof at !== "number") {
     return { error: `${id}: \`at\` must be a number` };
   }
-  const max = kind === "score" ? 3 : 1;
+  const max = kind === "score" ? (levels ? levels.length - 1 : 3) : 1;
   if (at !== null && (at < 0 || at > max + 0.01)) {
     return { error: `${id}: \`at\` must be between 0 and ${max} for \`kind: ${kind}\`` };
   }
@@ -389,7 +403,7 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
   const known = new Set([
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
     "note", "kind", "criteria", "at", "subject", "state", "axis", "severity",
-    "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions",
+    "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions", "levels",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
   if (unknown.length > 0) {
@@ -408,6 +422,7 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
       note,
       kind,
       criteria,
+      levels,
       at,
       loose,
       subject,
@@ -596,6 +611,12 @@ export function selectRules({
   };
 }
 
+/** The top of a rule's scale: 3 on the shared score scale, levels-1 on a rule's own, 1 for a noul. */
+export function scaleOf(rule: Rule): number {
+  if (rule.kind !== "score") return 1;
+  return rule.levels ? rule.levels.length - 1 : 3;
+}
+
 export function cutoffFor(rule: Rule, overrides: Record<string, number> = {}): number {
   // `rust/id` names one language's rule; `id` names every language's.
   const qualified = rule.languageDir ? overrides[`${rule.languageDir}/${rule.id}`] : undefined;
@@ -630,6 +651,7 @@ export function ruleTextHash(rule: Rule): string {
         rule.ask,
         rule.note ?? "",
         rule.criteria ? `${criterionText(rule.criteria.true)}\n${criterionText(rule.criteria.false)}` : "",
+        ...(rule.levels ? [canonical(rule.levels)] : []),
         rule.subject,
         rule.state,
         canonical(rule.matcher),

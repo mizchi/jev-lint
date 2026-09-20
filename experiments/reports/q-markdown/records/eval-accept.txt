@@ -1,0 +1,70 @@
+markdown/document-is-filler: 3 pass(es), 13 subject(s), 39 request(s), $0.00263, 1075 ms
+markdown/document-is-filler  (rules/markdown/document-is-filler; run of 2026-09-20, 3 pass(es))
+  rule                                 at     tp  fp  fn  P     R     flips cleanTop fitted
+  document-is-filler                   1.9     6   0   0  1.00  1.00  0     1.33     1.82  midpoint of the clean/violation gap
+  no baseline yet: `jev-lint eval rules/markdown/document-is-filler --accept` makes this one
+markdown/document-is-filler: baseline accepted (3 pass(es), 2026-09-20T13:11:23.217Z)
+markdown/document-is-formulaic: 3 pass(es), 12 subject(s), 36 request(s), $0.00247, 733 ms
+markdown/document-is-formulaic  (rules/markdown/document-is-formulaic; run of 2026-09-20, 3 pass(es))
+  rule                                 at     tp  fp  fn  P     R     flips cleanTop fitted
+  document-is-formulaic                3       5   0   1  1.00  0.83  0     2.75     2.38  no separating cutoff; best trade-off
+  x scattered-thoughts.md:1  document-is-formulaic  bad but pass at 2.38 [2.37 2.36 2.41]
+  no baseline yet: `jev-lint eval rules/markdown/document-is-formulaic --accept` makes this one
+markdown/document-is-formulaic: baseline accepted (3 pass(es), 2026-09-20T13:11:23.963Z)
+markdown/document-is-generic: 3 pass(es), 12 subject(s), 36 request(s), $0.00249, 533 ms
+markdown/document-is-generic  (rules/markdown/document-is-generic; run of 2026-09-20, 3 pass(es))
+  rule                                 at     tp  fp  fn  P     R     flips cleanTop fitted
+  document-is-generic                  2.7     6   0   0  1.00  1.00  0     1.69     2.64  midpoint of the clean/violation gap
+  no baseline yet: `jev-lint eval rules/markdown/document-is-generic --accept` makes this one
+markdown/document-is-generic: baseline accepted (3 pass(es), 2026-09-20T13:11:24.509Z)
+markdown/document-is-incoherent: 3 pass(es), 13 subject(s), 39 request(s), $0.00258, 457 ms
+markdown/document-is-incoherent  (rules/markdown/document-is-incoherent; run of 2026-09-20, 3 pass(es))
+  rule                                 at     tp  fp  fn  P     R     flips cleanTop fitted
+  document-is-incoherent               3       0   0   5  -     0.00  0     0.61     0.66  midpoint of the clean/violation gap
+  x fast-paced-world.md:1  document-is-incoherent  bad but pass at 0.71 [0.73 0.68 0.72]
+  x ja-slop.md:1  document-is-incoherent  bad but pass at 0.72 [0.72 0.68 0.76]
+  x microservices-nonsequitur.md:1  document-is-incoherent  bad but pass at 1.49 [1.54 1.48 1.44]
+  x productivity-listicle.md:1  document-is-incoherent  bad but pass at 1.23 [1.22 1.25 1.22]
+  x scattered-thoughts.md:1  document-is-incoherent  bad but pass at 1.02 [0.97 1.01 1.07]
+  no baseline yet: `jev-lint eval rules/markdown/document-is-incoherent --accept` makes this one
+markdown/document-is-incoherent: baseline accepted (3 pass(es), 2026-09-20T13:11:24.971Z)
+markdown/document-is-padded: 3 pass(es), 14 subject(s), 42 request(s), $0.00281, 587 ms
+markdown/document-is-padded  (rules/markdown/document-is-padded; run of 2026-09-20, 3 pass(es))
+  rule                                 at     tp  fp  fn  P     R     flips cleanTop fitted
+  document-is-padded                   1.5     8   0   0  1.00  1.00  0     1.01     1.48  midpoint of the clean/violation gap
+  no baseline yet: `jev-lint eval rules/markdown/document-is-padded --accept` makes this one
+markdown/document-is-padded: baseline accepted (3 pass(es), 2026-09-20T13:11:25.566Z)
+markdown/document-is-slop: 3 pass(es), 13 subject(s), 39 request(s), $0.00296, 548 ms
+markdown/document-is-slop  (rules/markdown/document-is-slop; run of 2026-09-20, 3 pass(es))
+  rule                                 at     tp  fp  fn  P     R     flips cleanTop fitted
+  document-is-slop                     2       7   0   0  1.00  1.00  0     0.34     1.68  midpoint of the clean/violation gap
+  no baseline yet: `jev-lint eval rules/markdown/document-is-slop --accept` makes this one
+markdown/document-is-slop: baseline accepted (3 pass(es), 2026-09-20T13:11:26.124Z)
+markdown/document-is-vague: 3 pass(es), 11 subject(s), 33 request(s), $0.00232, 463 ms
+markdown/document-is-vague  (rules/markdown/document-is-vague; run of 2026-09-20, 3 pass(es))
+  rule                                 at     tp  fp  fn  P     R     flips cleanTop fitted
+  document-is-vague                    2.2     5   0   0  1.00  1.00  0     1.09     2.16  midpoint of the clean/violation gap
+  no baseline yet: `jev-lint eval rules/markdown/document-is-vague --accept` makes this one
+markdown/document-is-vague: baseline accepted (3 pass(es), 2026-09-20T13:11:26.596Z)
+markdown/document-lacks-firsthand-evidence: 3 pass(es), 12 subject(s), 36 request(s), $0.00236, 487 ms
+markdown/document-lacks-firsthand-evidence  (rules/markdown/document-lacks-firsthand-evidence; run of 2026-09-20, 3 pass(es))
+  rule                                 at     tp  fp  fn  P     R     flips cleanTop fitted
+  document-lacks-firsthand-evidence    3       0   1   8  0.00  0.00  0     3.59     0.17  no separating cutoff; best trade-off
+  x confident-generalities.md:1  document-lacks-firsthand-evidence  bad but pass at 0.17 [0.18 0.16 0.16]
+  x fast-paced-world.md:1  document-lacks-firsthand-evidence  bad but pass at 0.39 [0.41 0.36 0.40]
+  x ja-slop.md:1  document-lacks-firsthand-evidence  bad but pass at 0.45 [0.42 0.46 0.46]
+  x one-idea-five-paragraphs.md:1  document-lacks-firsthand-evidence  bad but pass at 0.37 [0.37 0.37 0.37]
+  x opinion-monorepos.md:1  document-lacks-firsthand-evidence  bad but pass at 0.68 [0.66 0.69 0.69]
+  x postmortem.md:1  document-lacks-firsthand-evidence  clean but flag at 3.59 [3.65 3.53 3.59]
+  x product-launch-post.md:1  document-lacks-firsthand-evidence  bad but pass at 0.57 [0.57 0.58 0.57]
+  x productivity-listicle.md:1  document-lacks-firsthand-evidence  bad but pass at 0.25 [0.22 0.24 0.28]
+  x what-is-kubernetes.md:1  document-lacks-firsthand-evidence  bad but pass at 0.50 [0.51 0.47 0.53]
+  no baseline yet: `jev-lint eval rules/markdown/document-lacks-firsthand-evidence --accept` makes this one
+markdown/document-lacks-firsthand-evidence: baseline accepted (3 pass(es), 2026-09-20T13:11:27.093Z)
+markdown/document-repeats-itself: 3 pass(es), 14 subject(s), 42 request(s), $0.00279, 608 ms
+markdown/document-repeats-itself  (rules/markdown/document-repeats-itself; run of 2026-09-20, 3 pass(es))
+  rule                                 at     tp  fp  fn  P     R     flips cleanTop fitted
+  document-repeats-itself              1.8     4   0   0  1.00  1.00  0     1.58     1.81  midpoint of the clean/violation gap
+  no baseline yet: `jev-lint eval rules/markdown/document-repeats-itself --accept` makes this one
+markdown/document-repeats-itself: baseline accepted (3 pass(es), 2026-09-20T13:11:27.709Z)
+3 of 9 suite(s) failed

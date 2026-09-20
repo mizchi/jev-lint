@@ -25,7 +25,7 @@
  *    produces no finding AND is counted, because a run where half the requests
  *    failed must not look like a clean repository.
  */
-import { cutoffFor, DEFAULT_UNSURE_BELOW, SCORE_LEVEL_NAMES } from "./rules.ts";
+import { cutoffFor, DEFAULT_UNSURE_BELOW, SCORE_LEVEL_NAMES, scaleOf } from "./rules.ts";
 import { SEVERITIES } from "./types.ts";
 import type { Answer, Finding, GateResult, Rule, Severity, Subject } from "./types.ts";
 export { MESSAGE_IDS } from "./types.ts";
@@ -112,6 +112,7 @@ export function decide(
     captured: subject.captured ?? null,
     arm: subject.arm,
     ...(subject.commit ? { commit: { subject: subject.text.split("\n")[0] ?? "" } } : {}),
+    ...(subject.textCut ? { cut: { judged: subject.text.length, of: subject.textCut.of } } : {}),
   };
 
   if (answer.value < at) {
@@ -123,9 +124,11 @@ export function decide(
   }
 
   if (answer.kind === "score") {
-    base.level = SCORE_LEVEL_NAMES[
-      Math.max(0, Math.min(SCORE_LEVEL_NAMES.length - 1, Math.round(answer.value)))
-    ];
+    const top = scaleOf(rule);
+    const nearest = Math.max(0, Math.min(top, Math.round(answer.value)));
+    // The shared scale's levels have names; a rule's own are numbered.
+    base.level = rule.levels ? `level-${nearest}` : SCORE_LEVEL_NAMES[nearest];
+    base.scale = top;
     const threshold = typeof rule.unsureBelow === "number"
       ? rule.unsureBelow
       : (unsureBelow ?? DEFAULT_UNSURE_BELOW);
@@ -192,7 +195,7 @@ export function describe(finding: Finding): string {
     return `${where}  ${finding.rule}: no verdict (the request failed or returned an unusable answer)`;
   }
 
-  const scale = finding.kind === "score" ? "/3" : "";
+  const scale = finding.kind === "score" ? `/${finding.scale ?? 3}` : "";
   const num = `${finding.value.toFixed(2)}${scale}`;
   const conf =
     typeof finding.confidence === "number" ? `, confidence ${finding.confidence.toFixed(2)}` : "";

@@ -1,0 +1,1378 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T13:36:44.111Z",
+  "model": "jev-1.13.0",
+  "suite": "markdown/section-narrates-itself",
+  "rules": [
+    {
+      "id": "section-narrates-itself",
+      "draft": "1cf62fe00805",
+      "at": 0.6
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 13,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 19,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 5,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 15,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 23,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 29,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.43,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 21,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 7,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 17,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 25,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 5,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 15,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 23,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 29,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 13,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 19,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 21,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.43,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 7,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 17,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 25,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 5,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 15,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 23,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/cache-ttl.md",
+        "line": 29,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/config-order.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/flaky-tests.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/log-levels.md",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/index-order.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 13,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/gc-pauses.md",
+        "line": 19,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/build-cache.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 7,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 17,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/exceptions.md",
+        "line": 25,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/retry-backoff.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/narrowing.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/monorepo.md",
+        "line": 21,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-narrates-itself",
+        "file": "rules/markdown/section-narrates-itself/fixtures/review-comments.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 36,
+    "inputTokens": 194367,
+    "usd": 0.008163414,
+    "ms": 1379
+  }
+}

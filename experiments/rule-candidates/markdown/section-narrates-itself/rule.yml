@@ -1,0 +1,81 @@
+# Prose that talks about itself, after the "cognitive rhythm" writing norm.
+#
+# Ported from k16shikano's writing norm for Japanese explanatory prose
+# (https://gist.github.com/k16shikano/eb2929f13ed19c97188393d297be8432),
+# whose post-writing checks are rules of exactly this tool's kind: does a
+# sentence update the SITUATION -- the subject, its data, the narrator's
+# state of judgment -- or the DOCUMENT, what the text is about to do, what
+# it will not cover, how it should be read, which device it is using? The
+# second is filler by the norm's test, whatever its length or rhythm, and
+# "short and punchy" is named there as the commonest way it survives an
+# edit. That is text contradicting its own job, which is the class this
+# tool judges. The subject is a section (`split` on a Markdown heading),
+# with the whole document in the state so a boundary reads as one.
+#
+# The rubric here is English; the documents it was calibrated on are
+# Japanese, as the norm is. The model reads both.
+# One subject per Markdown section, split at each heading; the whole
+# document is in the state so a boundary reads as one.
+
+id: section-narrates-itself
+language: Text
+subject: block
+split: "^#{1,6}\\s+(?<TITLE>.+?)\\s*#*\\s*$"
+extensions: [md, mdx, markdown]
+kind: noul
+state: located
+# 0.60, fitted 2026-09-20 on the fixtures (12 documents, 50 sections: 19
+# defects, 31 cleans of which 17 hard, 3 passes; wording attempt 3, above;
+# accepted baseline). Defects answer 0.58-0.96: the agendas, tail previews,
+# "this is not a best-practices collection" and "first, the definition"
+# 0.80-0.96; the device narration "let me put half the answer first" 0.80;
+# then the soft floor -- the disclaimer naming no misreading 0.70, "sorry
+# this has grown long" 0.69, "in short, this chapter is about the shape of
+# values" 0.65, and the norm's own short punchy form "this is not about
+# wording; the only question is who fixes it" 0.58. Cleans top at 0.60 and
+# 0.55: the two invented-example frames (「〜としよう」 ... 「冒頭の売り場に
+# オチを付けておこう」), the norm's exception 4, which the model only half
+# exempts; then a mid-argument reading instruction 0.42 (the address
+# rule's), "the other half is the override order" 0.40, "that answers half
+# the question" 0.34, the opening request 0.32. The classes cross by 0.02:
+# at 0.60 the accepted run is P 0.95 R 0.95 (the frame flagged at 0.60, the
+# short declaration missed at 0.58), and the run before it had them the
+# other way round. There is no headroom on either side. On three unseen
+# English documents (docs/findings.md, docs/deepdive.md,
+# experiments/BRIEF.md) cleans reached 0.57 (a question with a stance at a
+# section head) and the navigational prefaces of the findings log and the
+# deep dive answered 0.78-0.80 -- true by the norm, expected of the genre.
+# A cookbook cutoff, not a shipped one: a finding between 0.55 and 0.70 is
+# for a reader.
+at: 0.6
+# Wording attempts (the corpus: 12 documents, 50 sections, 20 bad, 3 passes):
+#   1. as ported -- ask: "contains a sentence whose topic is the document
+#      itself ... rather than its subject"; the four allowed forms only in
+#      `criteria.false`. P 0.94 R 0.85 at 0.7, no separating cutoff: the
+#      allowed forms answered 0.48-0.71 (the example frame 0.71, "this
+#      answers half the question" 0.68, the closing request 0.49) while the
+#      short punchy defects answered 0.47-0.48 ("first, the definition";
+#      "this is not about wording; the only question is who fixes it"; a
+#      mid-section "read what follows from the operator's side"). The ask
+#      said every document-topic sentence is true and the criteria exempted
+#      four, so the exemptions landed mid-scale.
+#   2. the exemption folded into the ask ("... and that is not one of the
+#      four allowed forms: ..."), the short forms named in `criteria.true`,
+#      author-topic sentences named as situation in `criteria.false`. The
+#      allowed forms fell to 0.49 and under, but the negated compound ask
+#      compressed the defect band with them: 0.43-0.88, three defects under
+#      0.50, no headroom anywhere (P 1.0 R 0.85 at 0.55, head 0.02).
+#   3. the ask positive again, on the norm's one axis ("updates only the
+#      document ... and says nothing new about its subject or the
+#      narrator's judgment"); attempt 2's criteria kept, minus a clause that
+#      claimed the mid-argument reading instruction, which the note hands to
+#      the address rule. See the calibration comment at `at:`.
+ask: >-
+  This section contains a sentence that updates only the document -- what
+  the text will do next, what it does not cover, how it looks so far, or
+  the device it is using -- and says nothing new about its subject or the
+  narrator's judgment.
+criteria:
+  "true": "A sentence in the section updates only the document, not the subject or the narrator's judgment: a progress announcement (\"next we look at\", \"we return to the example shortly\", \"so far this looks like theory\"), an agenda with no stance (\"this section covers A, B and C\", \"first, the definition\"), a declaration of what the text is not, will not do, or is only about (\"this is not a list of techniques\", \"this is not about wording; the only question here is who fixes it\"), a restatement of what the chapter is about with no new information about the subject, a disclaimer that names no specific misreading (\"do not misunderstand, I am not rejecting X\"), or a narration of the writing's own device (\"let me put half the answer first\", \"one more line before we close\"). The short, declarative, well-paced form of any of these is the commonest and is still one."
+  "false": "Every sentence updates the situation: the subject's facts, data, events or trade-offs, a person's words, or the narrator's state of judgment -- an assumption later overturned, a suspended decision, a concession, a confession, a hedge about the author's own competence. A sentence whose topic is the author (\"I may be wrong\", \"I have no method for this\") is about the narrator, not the text. Four document-facing forms are allowed and are false: an objection handled by quoting the specific misreading it rejects (\"if this reads as 'delete every WARN', that is wrong\"); the sentence that poses a question or the one that returns its answer, at a section's opening or close (\"that answers half the question\", \"the other half is the override order\"); a request to the reader at the section's opening or close (\"read this as X for now\", \"fill in the rest from your own build\"); and a sentence that opens or closes an invented example (\"suppose that\", \"to give the opening scene its ending\"). A heading is not a sentence."
+note: "Judge topic, not tone. A sentence about the subject that happens to be short, or a question about the subject, is not narration. A sentence that names the misreading it rejects in quotation is objection handling, not disclaimer. A section that is itself a preface or a closing may address the reader; the middle of an argument may not, and that is a separate rule -- here only whether the sentence's topic is the text."

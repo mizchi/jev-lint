@@ -1,0 +1,47 @@
+# Prose that talks about itself, after the "cognitive rhythm" writing norm.
+#
+# Ported from k16shikano's writing norm for Japanese explanatory prose
+# (https://gist.github.com/k16shikano/eb2929f13ed19c97188393d297be8432),
+# whose post-writing checks are rules of exactly this tool's kind: does a
+# sentence update the SITUATION -- the subject, its data, the narrator's
+# state of judgment -- or the DOCUMENT, what the text is about to do, what
+# it will not cover, how it should be read, which device it is using? The
+# second is filler by the norm's test, whatever its length or rhythm, and
+# "short and punchy" is named there as the commonest way it survives an
+# edit. That is text contradicting its own job, which is the class this
+# tool judges. The subject is a section (`split` on a Markdown heading),
+# with the whole document in the state so a boundary reads as one.
+#
+# The rubric here is English; the documents it was calibrated on are
+# Japanese, as the norm is. The model reads both.
+# One subject per Markdown section, split at each heading; the whole
+# document is in the state so a boundary reads as one.
+
+id: section-opens-with-an-agenda
+language: Text
+subject: block
+split: "^#{1,6}\\s+(?<TITLE>.+?)\\s*#*\\s*$"
+extensions: [md, mdx, markdown]
+kind: noul
+state: located
+# 0.72, fitted 2026-09-20 on the fixtures (12 documents, 50 sections: 6
+# defects, 44 cleans of which 16 hard, 3 passes) AND on three unseen
+# English documents. Five defects answer 0.91-0.96 (「本節では〜の三つを扱
+# う」, 「以下では〜について説明する」, "This section covers CI time, disk
+# usage, and onboarding"); the sixth, the one-line form 「まず、境界の定義か
+# ら。」, answers 0.48 and is the known miss. Corpus cleans top at 0.20 (the
+# counter-questions, the confession, the stance previews all under), which
+# made the tool's midpoint 0.35 -- and on the unseen documents two sections
+# that are not agendas at all (a paragraph on what each candidate went
+# through, a "Spec and plan:" pointer) answered 0.57 and 0.60, and a
+# spec's list of report headings 0.63. The corpus clean top was a hole;
+# the cutoff is set above the real clean band: 0.12 over 0.60, 0.19 under
+# 0.91. The one-line agenda sits inside the real clean band and is not
+# recoverable by a cutoff.
+at: 0.72
+ask: >-
+  This section opens with an agenda that carries no stance -- a table of what will be covered -- instead of a question, a discomfort, or a confession.
+criteria:
+  "true": "The first sentence or two after the heading only list what the section will do (\"this section covers A, B and C\", \"below, we describe X\", \"here we explain the three properties\") with no attitude toward the subject and no tension for the reader."
+  "false": "The section opens on the subject: a restated discomfort the previous section left, a counter-question the reader would ask (\"should we have done X first, then?\"), a confession (\"to be honest, I had also counted on\"), a claim the section will test, a reader's likely resistance stated in the reader's words, or a preview that carries a stance (\"there is no better angle on X than this\", \"put another way, this is a story about Y\"). A single sentence of scope with attitude is allowed; a bare table of contents is not."
+note: "Only the opening is judged. The test is stance: the same preview with an attitude (\"no better angle than this\") passes and without one (\"this section discusses angles\") fails. A heading is not a sentence, and a section that is only a heading and a list is judged on the list's first item."

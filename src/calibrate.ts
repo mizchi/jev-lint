@@ -24,7 +24,7 @@
  *
  * So: `jev-lint gaps` first. `jev-lint calibrate` only once the gaps are wide.
  */
-import { cutoffFor, DEFAULT_SCORE_AT, DEFAULT_NOUL_AT } from "./rules.ts";
+import { cutoffFor, DEFAULT_SCORE_AT, DEFAULT_NOUL_AT, scaleOf } from "./rules.ts";
 import type { Finding, Labels, Rule } from "./types.ts";
 
 /** One row of the separation report: the table `jev-lint gaps` prints. */
@@ -166,7 +166,7 @@ export function gapReport(
     const answers = byRule.get(rule.id) ?? [];
     const values = answers.map((a) => a.value!) as number[];
     const at = cutoffFor(rule, cutoffs);
-    const scale = rule.kind === "score" ? 3 : 1;
+    const scale = scaleOf(rule);
     const { gap, low, high } = widestGap(values);
     const reported = answers.filter((a) => a.value! >= at).length;
     const below = values.filter((v) => v < at);
@@ -332,7 +332,7 @@ export function fitCutoffs(all: ScoredSubject[], labels: Labels, rules: Rule[]):
   const fits: CutoffFit[] = [];
   for (const rule of rules) {
     const answers = byRule.get(rule.id) ?? [];
-    const scale = rule.kind === "score" ? 3 : 1;
+    const scale = scaleOf(rule);
     const bad = answers.filter((a) => a.label === "bad").map((a) => a.value!) as number[];
     const clean = answers.filter((a) => a.label === "clean").map((a) => a.value!) as number[];
 

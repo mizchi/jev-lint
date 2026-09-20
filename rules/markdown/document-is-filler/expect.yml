@@ -1,0 +1,27 @@
+default: clean
+fixtures/productivity-listicle.md:
+  - { line: 1, label: bad, window: 0, reason: "600 words whose information content is the ten headings; every paragraph under a heading restates it" }
+fixtures/fast-paced-world.md:
+  - { line: 1, label: bad, window: 0, reason: "nothing in the document could not be guessed from the title; benefits, challenges and best practices are all named without being described" }
+fixtures/ja-slop.md:
+  - { line: 1, label: bad, window: 0, reason: "見出し以上の情報がない。各段落は見出しの言い換えで、数字も手順も例もない" }
+fixtures/confident-generalities.md:
+  - { line: 1, label: bad, window: 0, reason: "six reasons, each a heading's worth of information stretched to a paragraph with no supporting detail" }
+fixtures/one-idea-five-paragraphs.md:
+  - { line: 1, label: bad, window: 0, reason: "one sentence of content ('write the test first so the caller designs the interface') carried by six paragraphs" }
+fixtures/product-launch-post.md:
+  - { line: 1, label: bad, window: 0, reason: "four features, none described beyond its name and a promise; the rest is announcement boilerplate" }
+fixtures/what-is-kubernetes.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: generic, but not empty; each section states a fact (pods share networking, kubelet talks to the control plane, etcd stores state). Generic is a different axis from filler" }
+fixtures/readme-cli.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: dense reference prose with a measurement and an exit-code table" }
+fixtures/reference-config.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: long, but every paragraph is a setting with type, default and consequence" }
+fixtures/postmortem.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a timeline with timestamps and numbers, a causal analysis, and concrete changes" }
+fixtures/tutorial-git-rebase.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: repetitive by design, but each round introduces a new operation and its observable effect on the tree hash" }
+fixtures/ja-dense.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 前提・単価計算・移行手順・結果表・反省のすべてに数字がある" }
+fixtures/opinion-monorepos.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: an argument rather than data, but each paragraph adds a step to it; nothing restates" }

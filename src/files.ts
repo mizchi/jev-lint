@@ -8,7 +8,7 @@
  * lazily and once per run, that both filter.
  */
 import { readdirSync, statSync } from "node:fs";
-import { join, relative, sep } from "node:path";
+import { isAbsolute, join, relative, sep } from "node:path";
 
 /** Directories no source lives in, whatever they are called. */
 export const SKIPPED_DIRECTORIES = new Set([
@@ -39,12 +39,19 @@ export function listFiles(roots: Iterable<string>, cwd: string = process.cwd()):
       if (e.isDirectory()) {
         if (!SKIPPED_DIRECTORIES.has(e.name)) walk(full);
       } else if (e.isFile()) {
-        found.add(relative(cwd, full).split(sep).join("/"));
+        found.add(name(full));
       }
     }
   };
+  // A path is reported relative to `cwd` when it is under it, the way
+  // ast-grep reports its matches, and as given when it is not: a file
+  // outside the tree keeps its absolute path rather than a `../../` one.
+  const name = (full: string): string => {
+    const rel = relative(cwd, full);
+    return rel.startsWith("..") || isAbsolute(rel) ? full.split(sep).join("/") : rel.split(sep).join("/");
+  };
   for (const root of roots) {
-    const full = join(cwd, root);
+    const full = isAbsolute(root) ? root : join(cwd, root);
     let st;
     try {
       st = statSync(full);
@@ -52,7 +59,7 @@ export function listFiles(roots: Iterable<string>, cwd: string = process.cwd()):
       continue;
     }
     if (st.isDirectory()) walk(full);
-    else if (st.isFile()) found.add(relative(cwd, full).split(sep).join("/"));
+    else if (st.isFile()) found.add(name(full));
   }
   return [...found].sort();
 }

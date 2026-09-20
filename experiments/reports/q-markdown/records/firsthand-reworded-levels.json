@@ -1,0 +1,352 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T13:10:15.039Z",
+  "model": "jev-1.13.0",
+  "suite": "firsthand",
+  "rules": [
+    {
+      "id": "document-lacks-firsthand-evidence",
+      "draft": "6bdb3bc07c01",
+      "at": 3
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.02,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 2.29,
+        "confidence": 0
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.76,
+        "confidence": 0.8
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 2.1,
+        "confidence": 0.24
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.98,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/what-is-kubernetes.md",
+        "line": 1,
+        "endLine": 55,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 3.98,
+        "confidence": 0.98
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 1
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.15,
+        "confidence": 0.65
+      }
+    ],
+    [
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 3.98,
+        "confidence": 0.98
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.75,
+        "confidence": 0.79
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/what-is-kubernetes.md",
+        "line": 1,
+        "endLine": 55,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.18,
+        "confidence": 0.65
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 1
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.02,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 2.1,
+        "confidence": 0
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.98,
+        "confidence": 0.98
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 2.2,
+        "confidence": 0.22
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 0.99
+      }
+    ],
+    [
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.02,
+        "confidence": 0.98
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.26,
+        "confidence": 0.61
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 3.97,
+        "confidence": 0.98
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.77,
+        "confidence": 0.8
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.98,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 2.33,
+        "confidence": 0
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/what-is-kubernetes.md",
+        "line": 1,
+        "endLine": 55,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 2.25,
+        "confidence": 0.24
+      },
+      {
+        "rule": "document-lacks-firsthand-evidence",
+        "file": "firsthand/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 3.99,
+        "confidence": 1
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 36,
+    "inputTokens": 57699,
+    "usd": 0.002423358,
+    "ms": 992
+  }
+}

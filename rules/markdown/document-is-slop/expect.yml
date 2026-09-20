@@ -1,0 +1,27 @@
+default: clean
+fixtures/productivity-listicle.md:
+  - { line: 1, label: bad, window: 0, reason: "ten interchangeable tips, each a platitude with no example, stock transitions between them, an intro and a conclusion that say nothing: low reader value across the whole document" }
+fixtures/product-launch-post.md:
+  - { line: 1, label: bad, window: 0, reason: "the intro restates the title three times, every feature is described as 'focus on what matters' with no screenshot, number or mechanism, and the customer section quotes nobody: polish over nothing" }
+fixtures/what-is-kubernetes.md:
+  - { line: 1, label: bad, window: 0, reason: "accurate but interchangeable with every other beginner explainer of the subject: no observation, no judgment, no example the author saw; the reader's takeaway is the table of contents" }
+fixtures/one-idea-five-paragraphs.md:
+  - { line: 1, label: bad, window: 0, reason: "one idea ('design the interface from the caller's side') restated in five paragraphs and a closing; nothing is added after the first" }
+fixtures/fast-paced-world.md:
+  - { line: 1, label: bad, window: 0, reason: "template prose from 'In today's fast-paced world' to 'In conclusion': every claim is a generality, every transition is stock, no number or case" }
+fixtures/confident-generalities.md:
+  - { line: 1, label: bad, window: 0, reason: "six confident reasons with no example, number, or observation behind any of them; the closing admits every founder has heard them before" }
+fixtures/ja-slop.md:
+  - { line: 1, label: bad, window: 0, reason: "「現代社会において」から「いかがでしたでしょうか」までテンプレート通り。理由もポイントも一般論で、数字も具体例も筆者の観察もない" }
+fixtures/readme-cli.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: terse and dense; flags, exit codes, a measured throughput, and the limitations section each carry information a user needs" }
+fixtures/postmortem.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: uses a few stock phrases ('at the end of the day') but every paragraph is timestamped, numbered, firsthand and consequential" }
+fixtures/reference-config.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: long, but every setting's paragraph states a type, a default and a consequence; length is content, not padding" }
+fixtures/opinion-monorepos.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: no data and no anecdote, yet a distinctive argument (repository boundary = atomic change; tool costs trend down, coordination costs trend up) that the reader could not get from a generic post" }
+fixtures/tutorial-git-rebase.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the five-round repetition is deliberate scaffolding and each round adds an operation and a different tree-hash outcome" }
+fixtures/ja-dense.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 費用・p50/p99・req/s の実測値と筆者が実際にやった手順で構成され、一般論の段落がない" }

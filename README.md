@@ -173,7 +173,7 @@ working rule from the skill alone on their first try; the gaps they reported
 are folded into it.
 
 As a Claude Code plugin, which also installs `/jev-lint:review`,
-`/jev-lint:commits` and `/jev-lint:new-rule`:
+`/jev-lint:commits`, `/jev-lint:prose` and `/jev-lint:new-rule`:
 
 ```
 /plugin marketplace add mizchi/jev-lint
@@ -289,7 +289,7 @@ The full list, with every rule's cutoff, state, fixtures and its precision
 and recall at the shipped cutoff, is [RULES.md](RULES.md), generated from
 `rules/` by `npm run rules:md` and checked by the test suite.
 
-54 rules ship in `rules/`, one directory per language and one per rule
+65 rules ship in `rules/`, one directory per language and one per rule
 under it, each with the cases that prove it, used when the project has no
 `rules/` directory of its own. Two languages are first tier — `typescript`
 (21 rules, admitting TypeScript, Tsx, JavaScript and Jsx) and `rust` (8) —
@@ -297,7 +297,10 @@ and every rule under them carries fixtures, expectations and an accepted
 baseline. `python` (12) and `go` (9) are second tier: ported from the
 TypeScript rules with the same sentence, calibrated to the same bar, not
 yet promised. `javascript` (1) and `json` (1) hold what only fits there,
-`git` (1) holds the commit-message rule, and `text` (1) the sqlc query rule. The same id under several
+`git` (1) holds the commit-message rule, `text` (1) the sqlc query rule, and
+`markdown` (11) the writing rules: eight quality signals ported from
+JevSlop and three checks from the cognitive-rhythm writing norm (see Prior
+art). The same id under several
 languages is one rule in several languages, and the loader warns if the
 copies of its sentence drift. Grouped here by what they ask, naming the
 TypeScript rule; the table in `docs/reference.md` says which languages
@@ -365,16 +368,16 @@ general question does not.
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On their own evals, 47 of the 54 rules reach precision and recall 1.00 at
-their shipped cutoffs; the seven that do not each miss one labelled defect
+On their own evals, 56 of the 65 rules reach precision and recall 1.00 at
+their shipped cutoffs; the nine that do not each miss one labelled defect
 the rule cannot see, and the rule file says which. The evals are small —
-401 labelled defects across the 54, one to thirty-one per rule — and they
+467 labelled defects across the 65, one to thirty-one per rule — and they
 are marker-free: an earlier version carried `// DEFECT: named seconds, holds
 milliseconds` above each defect, inside the file the model was shown, and
 the fits it produced were better than the rules. `jev-lint eval --replay`
 re-derives every number with no request. The full table, with what the
 packs found on this repository's own code and on an unseen one, is in
-[docs/reference.md](docs/reference.md#the-shipped-packs). Eighteen more
+[docs/reference.md](docs/reference.md#the-shipped-packs). Twenty-one more
 rules were built and measured the same way and are not shipped; they live
 in `experiments/rule-candidates/<lang>/` under the same layout, each with
 the report that says why.
@@ -483,5 +486,34 @@ instead of single-node ESLint selectors, a custom runner instead of ESLint's
 synchronous per-file callback, diff-scoped review mode, the state arm as a
 measured axis rather than a fixed choice, and record/replay so a threshold is
 auditable.
+
+Two sibling projects on the same model shaped parts of this one, and are
+worth reading beside it:
+
+- [devagrawal09/jev-review](https://github.com/devagrawal09/jev-review) — a
+  review workflow that screens whole patches and follows the strongest
+  signals through `choice` and `score` questions. Its structured criteria,
+  its screen-then-classify shape (`--explain`, `--loose`), its test-gap
+  screen (the `paired` arm and `tests-cover-failure-paths`) and its diff
+  subjects (`jev-lint commits`) were taken from it and measured here;
+  `docs/findings.md` §14 says what each measured as.
+- [TKY-27/JevSlop](https://github.com/TKY-27/JevSlop) (MIT) — an AI Slop
+  Score for note.com articles: eight writing-quality signals and one
+  whole-article judgment, each a five-level rubric. The nine rules under
+  `rules/markdown/` are those rubrics, verbatim or reversed so that a high
+  score always means the defect the rule names, applied to a Markdown file
+  as a whole; two rubrics that named amounts rather than defects had to be
+  reworded before they separated, and the rule files say how. As JevSlop
+  says of itself: a writing characteristic, not an authorship probability.
+- [k16shikano's cognitive-rhythm writing norm](https://gist.github.com/k16shikano/eb2929f13ed19c97188393d297be8432)
+  — a Japanese norm for explanatory prose whose post-writing checks ask
+  the question this tool asks of code: does a sentence update the subject,
+  or only the document? Three rules under `rules/markdown/` are those
+  checks (`section-ends-with-a-preview`, `section-opens-with-an-agenda`,
+  `document-abandons-a-question`), two more are candidates with the reason
+  they are not shipped, and `/jev-lint:prose` runs them beside the norm's
+  mechanical leakage test. They read the norm's genre — articles and
+  chapters — and will flag a reference or a findings log for doing what a
+  reference does.
 
 MIT.

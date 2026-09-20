@@ -1,0 +1,25 @@
+default: clean
+fixtures/productivity-listicle.md:
+  - { line: 1, label: bad, window: 0, reason: "'First and foremost', 'In addition', 'Furthermore', 'Moreover', 'Last but not least', 'In conclusion', 'a journey, not a destination': the transitions are the article" }
+fixtures/fast-paced-world.md:
+  - { line: 1, label: bad, window: 0, reason: "'In today's fast-paced world', 'Moreover', 'Furthermore', 'Additionally', 'However', 'Looking ahead', 'In conclusion', 'here to stay', 'win-win': stock phrasing dominates" }
+fixtures/ja-slop.md:
+  - { line: 1, label: bad, window: 0, reason: "「現代社会において」「ますます注目を集めています」「何と言っても」「さらに」「最後に」「いかがでしたでしょうか」「ぜひチャレンジしてみてください」。定型句で骨組みができている" }
+fixtures/product-launch-post.md:
+  - { line: 1, label: bad, window: 0, reason: "'thrilled to announce', 'hard at work', 'went back to the drawing board', 'packed with', 'from the ground up', 'just the beginning', 'could not have done this without you': the launch-post template" }
+fixtures/scattered-thoughts.md:
+  - { line: 1, label: bad, window: 0, reason: "'Additionally', 'On another note', 'Furthermore', 'Meanwhile', 'It is also worth noting', 'In the same vein', 'At the same time', 'Taken together': every paragraph joint is a stock transition" }
+fixtures/confident-generalities.md:
+  - { line: 1, label: bad, window: 0, reason: "predictable aphoristic register throughout: 'this is not a controversial statement; it is simply the reality', 'the lesson is obvious', 'none of this is secret', 'the gap between knowing and doing is where most startups die'. Labelled clean before the first run on the grounds that it has no stock transitions; the ask also says 'predictable', and on rereading the phrasing is the startup-essay template (answered 3.40 in the first run)" }
+fixtures/postmortem.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 'at the end of the day' and 'in other words' appear, but the document is timestamps and reasoning, not transitions" }
+fixtures/readme-cli.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: reference prose with no transitions at all" }
+fixtures/reference-config.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: repeated paragraph shape, but no stock phrases" }
+fixtures/tutorial-git-rebase.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: instructions and observations; 'check the log, check the tree' is a procedure, not a phrase" }
+fixtures/ja-dense.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 定型句がなく、接続は数字と因果で行われている" }
+fixtures/opinion-monorepos.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: rhetorical but not stock; the transitions are argumentative ('Now look at', 'So what does', 'Here is the asymmetry')" }

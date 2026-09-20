@@ -1,0 +1,47 @@
+# Prose that talks about itself, after the "cognitive rhythm" writing norm.
+#
+# Ported from k16shikano's writing norm for Japanese explanatory prose
+# (https://gist.github.com/k16shikano/eb2929f13ed19c97188393d297be8432),
+# whose post-writing checks are rules of exactly this tool's kind: does a
+# sentence update the SITUATION -- the subject, its data, the narrator's
+# state of judgment -- or the DOCUMENT, what the text is about to do, what
+# it will not cover, how it should be read, which device it is using? The
+# second is filler by the norm's test, whatever its length or rhythm, and
+# "short and punchy" is named there as the commonest way it survives an
+# edit. That is text contradicting its own job, which is the class this
+# tool judges. The subject is a section (`split` on a Markdown heading),
+# with the whole document in the state so a boundary reads as one.
+#
+# The rubric here is English; the documents it was calibrated on are
+# Japanese, as the norm is. The model reads both.
+# The whole document is one subject: a ledger of questions is a property
+# of the document, not of a section.
+
+id: document-abandons-a-question
+language: Text
+subject: block
+extensions: [md, mdx, markdown]
+kind: noul
+state: bare
+# 0.50, fitted 2026-09-20 on the fixtures (11 documents, one subject each:
+# 4 defects, 7 cleans of which 5 hard, 3 passes). Defects answer 0.63-0.80:
+# the counter-question 「では、選択率を測る前に列順を決めてしまってよかったの
+# だろうか。」 posed and walked past 0.80, "We will come back to onboarding"
+# as the last line 0.69, 「では、先に〜落としておけばよかったのだろうか」
+# never answered 0.64, a preface's 「それは後で返す」 never returned 0.63.
+# Cleans top at 0.37: the document whose one open question is its last
+# sentence, on purpose; then 0.31 (a question at a section's tail answered
+# at the next head) and 0.29 (an assumption overturned). Midpoint of the
+# gap, 0.13 either side. The defects are soft because "one deliberately open
+# question at the very end" is in the criteria and three of the four
+# abandonments sit near an end. A whole-file subject is cut at 48,000
+# characters: on the 78 KB docs/findings.md the rule answered 0.60 for
+# promises whose delivery lies beyond the cut, which is the cut speaking,
+# not the document.
+at: 0.5
+ask: >-
+  This document raises a question, an assumption or a promise that it never returns to.
+criteria:
+  "true": "Somewhere the text poses a question to the reader or itself, states an assumption in a way that invites its overturning (\"it must be working\"), or promises an answer (\"the other half of the answer comes later\"), and no later passage answers, overturns or delivers it; the reader is left holding it. One deliberately open question at the very end is not abandonment."
+  "false": "Every question, invited assumption and promise is returned to: answered, overturned by a later fact, or delivered, even in part -- or the one left open is the last thing the document does, on purpose. A rhetorical question answered in the next sentence counts as returned. A question that is the document's title or heading, answered by the body, counts as returned."
+note: "Keep a ledger: list each question, invited assumption and promise, and for each point to the passage that returns it. The judgment is about that ledger, not about whether the answers are good. A document with no question in it has nothing to abandon."

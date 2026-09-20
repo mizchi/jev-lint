@@ -1,0 +1,25 @@
+default: clean
+fixtures/opinion-monorepos.md:
+  - { line: 1, label: bad, window: 0, reason: "a well-argued piece with no firsthand evidence at all: no repository the author worked in, no measurement, no incident; the argument is entirely from mechanism" }
+fixtures/what-is-kubernetes.md:
+  - { line: 1, label: bad, window: 0, reason: "nothing the author saw or did; every statement is textbook" }
+fixtures/productivity-listicle.md:
+  - { line: 1, label: bad, window: 0, reason: "no tip is backed by anything the author tried or observed" }
+fixtures/fast-paced-world.md:
+  - { line: 1, label: bad, window: 0, reason: "no company, no team, no number; claims about benefits and challenges with no source" }
+fixtures/confident-generalities.md:
+  - { line: 1, label: bad, window: 0, reason: "'most startups fail because' with no startup named, no experience described" }
+fixtures/ja-slop.md:
+  - { line: 1, label: bad, window: 0, reason: "筆者が副業をしたのか、誰の体験なのかが一切書かれていない" }
+fixtures/product-launch-post.md:
+  - { line: 1, label: bad, window: 0, reason: "'the feedback has been overwhelmingly positive' with no quote, no number, no observed usage; the 'we' is institutional, not a witness" }
+fixtures/one-idea-five-paragraphs.md:
+  - { line: 1, label: bad, window: 0, reason: "an argument about a habit with no instance of the author practising it or observing its effect" }
+fixtures/postmortem.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: firsthand is the whole document; the author was on call and reports what they saw at each timestamp, including the nine minutes they wasted" }
+fixtures/ja-dense.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 筆者が自分で計測した費用・レイテンシと自分で行った移行手順" }
+fixtures/tutorial-git-rebase.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: no narrative, but every round reports the observed outcome (tree hash equal or not) of a command the author ran; the observations are the content" }
+fixtures/readme-cli.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: author-specific detail about the author's own tool, including a measured throughput on named hardware and a stated approximation error" }

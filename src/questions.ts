@@ -39,6 +39,14 @@ const TASK_SCORE =
 const TASK_NOUL =
   "Judge only the code identified below, and only for the statement given -- other problems with it are not your concern here.";
 
+// A block of a text file is not code, and calling it code invites the model
+// to judge it as if it were.
+const TASK_SCORE_TEXT =
+  "A project has this rule. Judge only the text identified below, against only this rule -- other problems with it are not your concern here.";
+
+const TASK_NOUL_TEXT =
+  "Judge only the text identified below, and only for the statement given -- other problems with it are not your concern here.";
+
 const TASK_EXPLAIN =
   "The statement below was judged to hold for the code identified. Pick the option that best names WHY it holds for this code; do not re-judge whether it holds.";
 
@@ -52,11 +60,12 @@ const TASK_EXPLAIN =
 export function buildQuestion(rule: Rule, subject: Subject, id: string): Question {
   const shared = subjectFields(rule, subject, id);
 
+  const isText = subject.nodeKind === "block";
   if (rule.kind === "noul") {
     return {
       type: "noul",
       instructions: {
-        task: TASK_NOUL,
+        task: isText ? TASK_NOUL_TEXT : TASK_NOUL,
         statement: rule.ask,
         ...(rule.note ? { also: rule.note } : {}),
         ...shared,
@@ -72,12 +81,12 @@ export function buildQuestion(rule: Rule, subject: Subject, id: string): Questio
   return {
     type: "score",
     instructions: {
-      task: TASK_SCORE,
+      task: isText ? TASK_SCORE_TEXT : TASK_SCORE,
       rule: rule.ask,
       ...(rule.note ? { also: rule.note } : {}),
       ...shared,
     },
-    criteria: SCORE_LEVELS,
+    criteria: rule.levels ?? SCORE_LEVELS,
   };
 }
 
@@ -145,6 +154,15 @@ function subjectFields(rule: Rule, subject: Subject, id: string): Record<string,
     // model to judge it as if this were the file's text.
     shared.module_outline = subject.text;
     delete shared.matched_because;
+  } else if (subject.nodeKind === "block") {
+    // A block travels whole: the file may be in the state on `located`,
+    // but the block is the subject and a line range into a document is a
+    // weak subject for a claim about the document. Over the cap it is cut
+    // at a line boundary, and the question says so.
+    shared.text = subject.text;
+    if (subject.textCut) {
+      shared.note_on_text = `\`text\` is the first ${subject.text.length.toLocaleString()} of ${subject.textCut.of.toLocaleString()} characters, cut at a line boundary to fit. Judge what is here; do not treat the cut as an ending.`;
+    }
   } else if (subject.text.length <= INLINE_LIMIT) {
     shared.code = subject.text;
   } else if (!subject.arm || !SOURCE_BEARING_ARMS.has(subject.arm)) {

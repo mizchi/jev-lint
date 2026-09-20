@@ -1,0 +1,23 @@
+default: clean
+fixtures/confident-generalities.md:
+  - { line: 1, label: bad, window: 0, reason: "'most startups fail because they build things nobody wants': no startup, no product, no number, no observation anywhere in the document" }
+fixtures/fast-paced-world.md:
+  - { line: 1, label: bad, window: 0, reason: "'numerous benefits', 'the right tools', 'clear communication is key': nothing is named, counted or shown" }
+fixtures/productivity-listicle.md:
+  - { line: 1, label: bad, window: 0, reason: "'countless apps', 'a world of difference', 'the biggest impact': no tool, no number, no case" }
+fixtures/ja-slop.md:
+  - { line: 1, label: bad, window: 0, reason: "「様々な種類」「経済的な余裕」「最新の情報」。副業の種類も金額も一つも挙がらない" }
+fixtures/product-launch-post.md:
+  - { line: 1, label: bad, window: 0, reason: "'faster than ever', 'significant performance improvements', 'overwhelmingly positive': no number, no screenshot, no quoted customer" }
+fixtures/readme-cli.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: flag semantics, exit codes, 9.4 million lines in 6.8 s, 0.5% at p99" }
+fixtures/postmortem.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: timestamps to the minute, 1,400 lost orders, a line number in a stack trace, a 5-minute CDN TTL" }
+fixtures/reference-config.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: every setting has a type, a default, and a named failure mode" }
+fixtures/ja-dense.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: req/s、MB、ドル、ms がすべての段落にある" }
+fixtures/tutorial-git-rebase.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: exact commands, exact expected log lines, a table of which operations change the tree hash" }
+fixtures/opinion-monorepos.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: no anecdote and no number, but concrete mechanisms (stale pins, two ordered changes with an inconsistent window, subtree checkout) rather than generalities" }

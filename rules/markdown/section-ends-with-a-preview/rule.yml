@@ -1,0 +1,45 @@
+# Prose that talks about itself, after the "cognitive rhythm" writing norm.
+#
+# Ported from k16shikano's writing norm for Japanese explanatory prose
+# (https://gist.github.com/k16shikano/eb2929f13ed19c97188393d297be8432),
+# whose post-writing checks are rules of exactly this tool's kind: does a
+# sentence update the SITUATION -- the subject, its data, the narrator's
+# state of judgment -- or the DOCUMENT, what the text is about to do, what
+# it will not cover, how it should be read, which device it is using? The
+# second is filler by the norm's test, whatever its length or rhythm, and
+# "short and punchy" is named there as the commonest way it survives an
+# edit. That is text contradicting its own job, which is the class this
+# tool judges. The subject is a section (`split` on a Markdown heading),
+# with the whole document in the state so a boundary reads as one.
+#
+# The rubric here is English; the documents it was calibrated on are
+# Japanese, as the norm is. The model reads both.
+# One subject per Markdown section, split at each heading; the whole
+# document is in the state so a boundary reads as one.
+
+id: section-ends-with-a-preview
+language: Text
+subject: block
+split: "^#{1,6}\\s+(?<TITLE>.+?)\\s*#*\\s*$"
+extensions: [md, mdx, markdown]
+kind: noul
+state: located
+# 0.65, fitted 2026-09-20 on the fixtures (12 documents, 50 sections: 7
+# defects, 43 cleans of which 11 hard, 3 passes). Defects answer 0.79-0.96:
+# the six 「次は〜を見る」/「次の節で見る」/"We will come back to
+# onboarding" tails 0.93-0.96, and a preface whose last sentence promises
+# "that I return to later" 0.79 (first labelled clean as a boundary; the
+# criteria list the form verbatim and the answer was right). Cleans top at
+# 0.50: a section whose last sentence is a question about the subject
+# (「では、既定値はどこに書くのか。」, 0.48-0.51 across passes), then 0.19.
+# The gap is 0.29; 0.65 leaves 0.14 under and 0.15 over rather than the
+# midpoint 0.645. On three unseen English documents cleans topped at 0.32
+# and the one finding (a section ending "Section 5 is what happened on code
+# nobody planted") answered 0.76.
+at: 0.65
+ask: >-
+  This section ends by announcing what comes next instead of ending on its subject.
+criteria:
+  "true": "The section's last sentence or two are about the document's progress -- \"next we look at X\", \"the following section takes up Y\", \"so far we have seen A; the next question is B\", \"we return to this later\" -- a bridge placed at the end of the section rather than at the head of the next."
+  "false": "The section ends on its subject: a fact, a judgment, an unresolved assumption, a concession, an example's ending, or a question about the subject left open. A final sentence that poses a question about the subject is not a preview; a closing request to the reader at the end of a chapter is a boundary, not a preview; a heading is not a sentence."
+note: "Only the section's ending is judged. A preview earlier in the section belongs to the narration rule. The norm's reason: a bridge belongs at the head of the next section, as a counter-question or a confession, and a preview at the tail is progress commentary."

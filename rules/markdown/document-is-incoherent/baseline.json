@@ -1,0 +1,379 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T13:18:58.205Z",
+  "model": "jev-1.13.0",
+  "suite": "markdown/document-is-incoherent",
+  "rules": [
+    {
+      "id": "document-is-incoherent",
+      "draft": "146d721b98f8",
+      "at": 1.9
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.12,
+        "confidence": 0.9
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 0.92,
+        "confidence": 0.69
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 1.6,
+        "confidence": 0.54
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 2.61,
+        "confidence": 0.67
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 0.14,
+        "confidence": 0.88
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.17,
+        "confidence": 0.86
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/scattered-thoughts.md",
+        "line": 1,
+        "endLine": 21,
+        "kind": "score",
+        "value": 2.2,
+        "confidence": 0.64
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.09,
+        "confidence": 0.93
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 1.09,
+        "confidence": 0.75
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/microservices-nonsequitur.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 2.85,
+        "confidence": 0.04
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 1.09,
+        "confidence": 0.74
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 1.45,
+        "confidence": 0.53
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 1.43,
+        "confidence": 0.55
+      }
+    ],
+    [
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 1.47,
+        "confidence": 0.52
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.19,
+        "confidence": 0.85
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 1.08,
+        "confidence": 0.76
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 1.41,
+        "confidence": 0.56
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 1.03,
+        "confidence": 0.74
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.12,
+        "confidence": 0.9
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 1.6,
+        "confidence": 0.52
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 0.91,
+        "confidence": 0.66
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.07,
+        "confidence": 0.94
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/microservices-nonsequitur.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 2.91,
+        "confidence": 0.1
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 0.13,
+        "confidence": 0.89
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/scattered-thoughts.md",
+        "line": 1,
+        "endLine": 21,
+        "kind": "score",
+        "value": 2.15,
+        "confidence": 0.66
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 2.61,
+        "confidence": 0.67
+      }
+    ],
+    [
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 1.47,
+        "confidence": 0.52
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 1.52,
+        "confidence": 0.49
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 0.9,
+        "confidence": 0.68
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.16,
+        "confidence": 0.87
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 1.38,
+        "confidence": 0.58
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/microservices-nonsequitur.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 2.8,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/scattered-thoughts.md",
+        "line": 1,
+        "endLine": 21,
+        "kind": "score",
+        "value": 2.16,
+        "confidence": 0.64
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 0.13,
+        "confidence": 0.89
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.08,
+        "confidence": 0.94
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 1.08,
+        "confidence": 0.74
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 2.57,
+        "confidence": 0.64
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.12,
+        "confidence": 0.9
+      },
+      {
+        "rule": "document-is-incoherent",
+        "file": "rules/markdown/document-is-incoherent/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 1.06,
+        "confidence": 0.77
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 39,
+    "inputTokens": 64788,
+    "usd": 0.002721096,
+    "ms": 1124
+  }
+}

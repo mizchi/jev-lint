@@ -51,6 +51,7 @@ export const LANGUAGE_DIRS: Record<string, readonly Language[]> = {
   rust: ["Rust"],
   git: ["Git"],
   text: ["Text"],
+  markdown: ["Text"],
 };
 
 /**
@@ -173,6 +174,12 @@ export interface Rule {
   kind: RuleKind;
   /** Present exactly when `kind` is `noul`. */
   criteria: NoulCriteria | null;
+  /**
+   * A score rule's own ordered rubric, clean to worst, in place of the
+   * shared four-level scale; null takes the shared one. `at` then runs
+   * 0..levels-1.
+   */
+  levels: string[] | null;
   /** The rule's own cutoff, or null to take the default for its kind. */
   at: number | null;
   /**
@@ -340,6 +347,8 @@ export interface Subject extends ResolvedSubject {
   file: string;
   language: string;
   arm: StateArm;
+  /** Present on a block cut to fit: how long the block was. */
+  textCut?: { of: number };
   /**
    * Present on a commit subject: the change the message is judged against.
    * `file` is then the sha, `text` the message, `line` 1.
@@ -471,6 +480,8 @@ export interface Finding {
   value: number | null;
   confidence: number | null;
   kind?: RuleKind;
+  /** A score's top level: 3 on the shared scale, levels-1 on a rule's own. */
+  scale?: number;
   /** How far past its own cutoff, which is the only cross-rule ranking. */
   margin?: number;
   ask?: string;
@@ -494,6 +505,8 @@ export interface Finding {
   explanation?: { choice: string; confidence: number };
   /** Present on a commit finding: the commit's subject line, for the report. */
   commit?: { subject: string };
+  /** Present when the block was cut to fit: the verdict is about its first `judged` of `of` characters. */
+  cut?: { judged: number; of: number };
 }
 
 export interface GateStats {

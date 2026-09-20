@@ -1,0 +1,25 @@
+default: clean
+fixtures/productivity-listicle.md:
+  - { line: 1, label: bad, window: 0, reason: "every one of the ten tips appears in every productivity listicle; nothing identifies this author or a situation" }
+fixtures/what-is-kubernetes.md:
+  - { line: 1, label: bad, window: 0, reason: "a beginner explainer that could be swapped with any other on the same subject without the reader noticing: same concepts, same benefits list, same 'steep learning curve' caveat" }
+fixtures/fast-paced-world.md:
+  - { line: 1, label: bad, window: 0, reason: "the remote-work essay every content farm publishes: rise, benefits, challenges, best practices, future" }
+fixtures/ja-slop.md:
+  - { line: 1, label: bad, window: 0, reason: "副業記事の定番構成そのもの。5 つの理由も 4 つのポイントも、どの同種記事にも載っている" }
+fixtures/confident-generalities.md:
+  - { line: 1, label: bad, window: 0, reason: "the canonical list of startup failure reasons in the canonical order, with nothing that a particular author would have added from a particular experience" }
+fixtures/product-launch-post.md:
+  - { line: 1, label: bad, window: 0, reason: "swap the product name and the four feature names and this is any launch post; no detail is particular to this product" }
+fixtures/opinion-monorepos.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: no data, but a distinctive line of argument (a repository boundary is only atomic change; tool costs trend down while coordination costs trend up) that is this author's, not the standard pro-monorepo list" }
+fixtures/postmortem.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a specific incident with specific timestamps, a specific library version and a specific pipeline flaw" }
+fixtures/ja-dense.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: この API のこの数字でしか成り立たない判断が書かれている" }
+fixtures/readme-cli.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a README's shape is conventional, but the content (flag semantics, exit codes, t-digest approximation, limitations) is this tool's" }
+fixtures/reference-config.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: conventional shape, particular content; every consequence is specific to this worker" }
+fixtures/tutorial-git-rebase.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: rebase tutorials are common, but the 'compare the tree hash after every round' frame and the five-round structure are this author's approach" }

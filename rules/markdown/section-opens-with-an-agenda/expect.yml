@@ -1,0 +1,63 @@
+default: clean
+fixtures/cache-ttl.md:
+  - { line: 1, label: clean, window: 0, reason: "preface opens on a scene" }
+  - { line: 5, label: clean, window: 0, reason: "opens on a discomfort about the subject: 'old' compared to what" }
+  - { line: 15, label: clean, window: 0, reason: "hard clean: opens 「〜に変えたとしよう」 -- a scope-setting sentence, but it opens an invented example (exception 4) and carries an expectation 「なくなるはずである」 that the section tests" }
+  - { line: 23, label: bad, window: 0, reason: "first sentence 「本節では、TTL の上限、下限、既定値の三つを扱う。」 -- a table of contents with no stance, the norm's one forbidden opening" }
+  - { line: 29, label: clean, window: 0, reason: "opens with a question about the subject" }
+fixtures/retry-backoff.md:
+  - { line: 1, label: clean, window: 0, reason: "preface opens on the subject" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: opens with the reader's counter-question 「すぐやり直せばよいのではないか」 and a concession 「そうしたかった、とは思う」 -- the norm's model of a section head" }
+  - { line: 13, label: clean, window: 0, reason: "opens with a claim 「指数だけでは足りない。」" }
+  - { line: 21, label: clean, window: 0, reason: "opens with the answer to the previous section's closing question" }
+fixtures/index-order.md:
+  - { line: 1, label: clean, window: 0, reason: "preface opens on a concrete wrong index" }
+  - { line: 5, label: bad, window: 0, reason: "first sentence 「本節では、複合インデックスの列順、選択率、カバリングの三つを扱う。」 -- a bare agenda" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: opens by restating the previous section's discomfort as the narrator's own 「さっきから引っかかっている」 -- scope with an attitude" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: opens 「テクニックの列挙はしない。」 -- a declaration about the text (the narration rule's defect), but it is a refusal with attitude, not a list of what will be covered; then a definition" }
+fixtures/log-levels.md:
+  - { line: 1, label: clean, window: 0, reason: "preface opens on a proverb it contradicts" }
+  - { line: 5, label: clean, window: 0, reason: "opens with a claim about WARN" }
+  - { line: 13, label: clean, window: 0, reason: "opens 「ところが」 -- overturning the previous section's assumption" }
+  - { line: 21, label: bad, window: 0, reason: "first sentence 「以下では、INFO の出力量について説明する。」 -- an agenda with no stance" }
+  - { line: 29, label: clean, window: 0, reason: "opens on the subject: issue one at the entry" }
+fixtures/flaky-tests.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 「先に答えを半分だけ置く。」 narrates a device (the narration rule's defect) but the opening carries a claim with a stance in the next sentence; not a bare table of contents" }
+  - { line: 5, label: clean, window: 0, reason: "opens on a concrete failing test" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: opens with a confession 「白状すれば、〜と思っていた。」 -- the norm's third permitted opening" }
+  - { line: 21, label: clean, window: 0, reason: "opens with a claim about the subject" }
+fixtures/narrowing.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a preview WITH a stance, 「判別共用体ほど適切な切り口もないはずだ」 -- the norm's own example of an allowed preview" }
+  - { line: 5, label: clean, window: 0, reason: "opens on the subject: a concrete type and narrowing" }
+  - { line: 13, label: bad, window: 0, reason: "first sentence 「ここでは、絞り込みが効かない三つの場面を順に述べる。」 -- a numbered agenda with no attitude" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: opens with a counter-question 「では、型ガードを書けばよいのか。」 -- the norm's second permitted opening" }
+fixtures/review-comments.md:
+  - { line: 1, label: clean, window: 0, reason: "preface opens on a quoted comment" }
+  - { line: 5, label: clean, window: 0, reason: "opens with a claim about pointing out vs asking" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: opens with objection handling 「ここまでの話を「指摘は柔らかく書け」という主張と読まれると、それは違う。」 -- a reader's likely resistance in the reader's words, taken up" }
+  - { line: 21, label: clean, window: 0, reason: "opens with a claim about teams" }
+fixtures/config-order.md:
+  - { line: 1, label: clean, window: 0, reason: "preface opens by listing four places -- of the subject, not of the text" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: opens with the norm's exact counter-question 「では、先に〜しておけばよかったのだろうか。」 and the concession" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: opens with an answer 「既定値はコードに書く。」 and 「これで問いの半分には答えたことになる。」 -- returning a question, with a stance" }
+  - { line: 21, label: clean, window: 0, reason: "hard clean: opens 「残りの半分は、上書きの順序である。」 -- announces the section's topic, but as the second half of an answer, not a list" }
+fixtures/build-cache.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the preface opens with a request to the reader 「どうか〜と割り切って読んでほしい」 -- a boundary request, not an agenda" }
+  - { line: 5, label: clean, window: 0, reason: "opens with a claim about keys" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: opens an invented scene 「〜としよう」 with a quoted colleague -- exception 4" }
+  - { line: 23, label: clean, window: 0, reason: "opens with a claim about keys growing" }
+fixtures/exceptions.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 「この文章は、例外処理のベストプラクティス集ではない。」 is the narration rule's defect, but it is a refusal with attitude, followed by a scene; not a table of what will be covered" }
+  - { line: 7, label: clean, window: 0, reason: "hard clean: opens with the norm's counter-question form 「では、先に〜おけばよかったのだろうか。」" }
+  - { line: 17, label: clean, window: 0, reason: "opens with a claim: there is a third option" }
+  - { line: 25, label: bad, window: 0, reason: "first sentence 「まず、境界の定義から。」 -- the shortest bare agenda; no stance" }
+fixtures/monorepo.md:
+  - { line: 1, label: clean, window: 0, reason: "preface opens on two arguments" }
+  - { line: 5, label: clean, window: 0, reason: "opens on a concrete scene: two lockfiles" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: 「There is no better place to see what a monorepo buys you than the build graph.」 -- a preview with a stance, in English" }
+  - { line: 21, label: bad, window: 0, reason: "first sentence 「This section covers CI time, disk usage, and onboarding.」 -- a bare agenda, in English" }
+fixtures/gc-pauses.md:
+  - { line: 1, label: clean, window: 0, reason: "preface opens on a report and a disbelief" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: opens with a question about the subject 「なぜ〜効かないのか。」 answered at once" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: opens with the reader's resistance in the reader's words 「うちのサービスでは倍になっている」" }
+  - { line: 19, label: clean, window: 0, reason: "hard clean: opens 「要するに」 -- a summary of the subject, not a list of what the section covers" }

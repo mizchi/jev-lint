@@ -1,0 +1,48 @@
+# Prose that talks about itself, after the "cognitive rhythm" writing norm.
+#
+# Ported from k16shikano's writing norm for Japanese explanatory prose
+# (https://gist.github.com/k16shikano/eb2929f13ed19c97188393d297be8432),
+# whose post-writing checks are rules of exactly this tool's kind: does a
+# sentence update the SITUATION -- the subject, its data, the narrator's
+# state of judgment -- or the DOCUMENT, what the text is about to do, what
+# it will not cover, how it should be read, which device it is using? The
+# second is filler by the norm's test, whatever its length or rhythm, and
+# "short and punchy" is named there as the commonest way it survives an
+# edit. That is text contradicting its own job, which is the class this
+# tool judges. The subject is a section (`split` on a Markdown heading),
+# with the whole document in the state so a boundary reads as one.
+#
+# The rubric here is English; the documents it was calibrated on are
+# Japanese, as the norm is. The model reads both.
+# One subject per Markdown section, split at each heading; the whole
+# document is in the state so a boundary reads as one.
+
+id: address-outside-boundaries
+language: Text
+subject: block
+split: "^#{1,6}\\s+(?<TITLE>.+?)\\s*#*\\s*$"
+extensions: [md, mdx, markdown]
+kind: noul
+state: located
+# 0.73, fitted 2026-09-20 on the fixtures (12 documents, 50 sections: 6
+# defects, 44 cleans of which 19 hard, 3 passes). Defects answer 0.79-0.92:
+# "I may be wrong about this, but" mid-paragraph 0.92, 「どうか〜の目線で読
+# んでほしい」 mid-section 0.91, 「誤解しないでほしいのだが」 0.85, a
+# standalone modesty formula 「偉そうに書ける立場でもないのだが。」 0.83 (as
+# a clause fused to a confession about the subject it answered 0.66; the
+# confession is situation, the formula is not), 「私の理解が浅いだけかもしれ
+# ないが」 0.82, 「話が長くなって恐縮だ。」 0.79. Cleans top at 0.66: 「〜を
+# 事前に証明する方法を、私は持っていない。」 mid-section, a first-person
+# claim that no method exists, which the model reads as half a hedge; then
+# 0.35. The gap is 0.13 and 0.73 is its midpoint, 0.07 either side --
+# narrow. On three unseen English documents cleans topped at 0.41 and the
+# two findings were real: "Read the 12 as ... and note the baseline" inside
+# an argument (0.75) and a "Do not quote" inside a list item (0.51, under
+# the cutoff, so a miss).
+at: 0.73
+ask: >-
+  This section addresses the reader directly -- a request, an apology, a hedge about the author -- in the middle of an argument rather than at its opening or close.
+criteria:
+  "true": "In the body of the section's argument, not at its first or last sentences, the text turns to the reader: a request (\"please read this as\"), an apology or self-deprecation (\"forgive the digression\", \"I may be wrong about this\"), a second-person appeal (\"you may feel that\"), or a modesty formula, placed where the reasoning is under way."
+  "false": "Direct address, requests and the author's hedges sit at the section's opening or close, where they act as slack between arguments; or the section has none; or what looks like address is the subject's material (a quoted person speaking, a counter-question the reader would ask that the text then answers, an invented scene addressing its character). A concession about the subject (\"that is half right\") is not a hedge about the author."
+note: "The norm allows address only at boundaries: the head and tail of a chapter or section. The middle is the argument. A counter-question put in the reader's mouth and immediately taken up is the subject's material and allowed anywhere; a hedge about the author's confidence in the middle is not."

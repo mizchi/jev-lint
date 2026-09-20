@@ -1,0 +1,23 @@
+default: clean
+fixtures/index-order.md:
+  - { line: 1, label: bad, window: 0, reason: "poses 「では、選択率を測る前に列順を決めてしまってよかったのだろうか。」 in 選択率 and moves straight to a preview and then to covering indexes; nothing returns to it -- the norm's 緊張台帳 has an entry with no 回収位置" }
+fixtures/flaky-tests.md:
+  - { line: 1, label: bad, window: 0, reason: "the preface promises 「直したはずのテストが半年後にまた落ちる理由は残りの半分にあって、それは後で返す。」; the body mentions 半年後にまた落ちる once as a fact and never explains why -- a promised answer never delivered" }
+fixtures/exceptions.md:
+  - { line: 1, label: bad, window: 0, reason: "opens 握りつぶす with 「では、先に例外を握りつぶさずに落としておけばよかったのだろうか。」 and never answers it; the later sections discuss conversion at boundaries, which is a third option, not a return to whether crashing early was right" }
+fixtures/monorepo.md:
+  - { line: 1, label: bad, window: 0, reason: "the last section lists onboarding as a cost, says 「We will come back to onboarding.」, and the document ends -- a promise with nothing after it" }
+fixtures/retry-backoff.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the counter-question 「すぐやり直せばよいのではないか」 is answered by the same section; 「では、上限は誰が決めるのか。」 at the end of ジッター is answered by the first sentence of 上限" }
+fixtures/log-levels.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the title question is answered by the body; 「問題はないに違いない。」 is overturned by 「ところが」; the preview 「次の節で見る」 is delivered by 識別子 -- a document that looks like it has open threads and has none" }
+fixtures/narrowing.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 「では、型ガードを書けばよいのか。」 is answered at once; the one open question 「誰が検査するのか。」 is the document's LAST sentence, left open on purpose -- the norm's one allowed open tension" }
+fixtures/review-comments.md:
+  - { line: 1, label: clean, window: 0, reason: "「では、質問の形で書けば角が立たないのだろうか。」 is answered in the next sentence 「角は立つ。」; the title question is answered by the body" }
+fixtures/config-order.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the document promises an answer in halves (「これで問いの半分には答えたことになる」) and delivers the second half in the next section; 「先に環境変数を読んでおけばよかったのだろうか」 is answered by the same section; 「では、既定値はどこに書くのか。」 by the next" }
+fixtures/build-cache.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 「うまくいっているに違いない。」 is overturned by 「ところが」; the scene's puzzle (nobody changed anything) is answered by 「含めていなかったのに全滅した理由は、別にあった」; the closing 読者への委任 is the norm's allowed open ending" }
+fixtures/gc-pauses.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 「なぜ〜効かないのか。」 is answered in the next sentence; 「報告が間違っているに違いない。」 is overturned by 報告のほう; 「倍になるはずがない」 is landed in 落としどころ" }

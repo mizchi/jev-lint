@@ -1,0 +1,63 @@
+default: clean
+fixtures/cache-ttl.md:
+  - { line: 1, label: clean, window: 0, reason: "no address" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: 「ここまでだと、概念の説明に見えるだろう。」 mid-section predicts how the reader sees the text -- narration (the other rule's defect), but no request, apology or hedge about the author" }
+  - { line: 15, label: clean, window: 0, reason: "hard clean: 「〜としよう」 and 「オチを付けておこう」 are the example frame's own voice, at the section's head and tail" }
+  - { line: 23, label: clean, window: 0, reason: "no address" }
+  - { line: 29, label: clean, window: 0, reason: "hard clean: 「一度は試しておきたい」 is the narrator's wish about the subject, not an appeal to the reader" }
+fixtures/retry-backoff.md:
+  - { line: 1, label: clean, window: 0, reason: "no address" }
+  - { line: 5, label: bad, window: 0, reason: "hedge about the author's competence in the middle of the argument: 「私の理解が浅いだけかもしれないが、」 -- the norm's 書き手の謙抑 mixed into 中盤の論証; the counter-question at the head is allowed, this is not" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: 「その間ユーザーは何も見ていない」 and the closing question -- the subject, no address" }
+  - { line: 21, label: bad, window: 0, reason: "request to the reader between two paragraphs of argument: 「誤解しないでほしいのだが、」 -- a plea, mid-section" }
+fixtures/index-order.md:
+  - { line: 1, label: clean, window: 0, reason: "no address" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: 「本節では〜を扱う」 speaks about the text, not to the reader; an agenda, not an address" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: 「〜と言われて」「引っかかっている」 at the head is the narrator's state; the mid-section counter-question is the reader's material; no hedge" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: 「テクニックの列挙はしない。」 at the head is a declaration about the text, not a request; and it sits at the boundary" }
+fixtures/log-levels.md:
+  - { line: 1, label: clean, window: 0, reason: "no address" }
+  - { line: 5, label: bad, window: 0, reason: "a request to the reader in the middle of the argument: 「どうか、ここから先は監視する側の目線で読んでほしい。」 -- the norm's 読者への依頼 belongs at a boundary" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: 「〜という主張と読まれると、それは違う」 mid-section looks like address, but it quotes a specific misreading and answers it -- the subject's material, exception 1" }
+  - { line: 21, label: clean, window: 0, reason: "no address" }
+  - { line: 29, label: clean, window: 0, reason: "no address" }
+fixtures/flaky-tests.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a preface that narrates its device -- about the text, not to the reader" }
+  - { line: 5, label: clean, window: 0, reason: "no address" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: a confession 「白状すれば」 at the section's HEAD -- author-facing, but at the boundary where the norm allows it" }
+  - { line: 21, label: clean, window: 0, reason: "hard clean: 「最後にもう一度だけ線を引く。」 narrates a device; it is not a request, apology or hedge" }
+fixtures/narrowing.md:
+  - { line: 1, label: clean, window: 0, reason: "no address" }
+  - { line: 5, label: clean, window: 0, reason: "no address" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: 「そうであってほしくなかった、とは思う。」 at the close is a concession about the subject, not a hedge about the author" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: 「では、型ガードを書けばよいのか。」 at the head is the reader's counter-question, taken up at once; 「半年前の自分」 is the subject's scene" }
+fixtures/review-comments.md:
+  - { line: 1, label: clean, window: 0, reason: "no address" }
+  - { line: 5, label: bad, window: 0, reason: "modesty formula in the middle of the argument: 「偉そうに書ける立場でもないのだが。」 -- a standalone sentence about the author's standing, placed after the analysis of question-shaped comments and before the conclusion; the confession before it is situation, this sentence is not" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: objection handling with the quoted misreading at the HEAD, a boundary; no hedge" }
+  - { line: 21, label: clean, window: 0, reason: "hard clean: a quoted rule 「レビューする側が五分で直せる指摘は〜」 is the subject's material, not address" }
+fixtures/config-order.md:
+  - { line: 1, label: clean, window: 0, reason: "no address" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: the counter-question and 「そうしたかった、とは思う」 at the head -- concession about the subject at the boundary" }
+  - { line: 13, label: clean, window: 0, reason: "no address" }
+  - { line: 21, label: clean, window: 0, reason: "hard clean: 「悔やんだ回数は」 at the close is the narrator's regret about the subject, at the boundary" }
+fixtures/build-cache.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 「どうか〜と割り切って読んでほしい」 -- a request, but in the preface, the boundary the norm reserves for it" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: 「うまくいっているに違いない。」 mid-section is the narrator's assumption about the subject, not a hedge about the author" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: 「何も変えてないんですけど」 is a colleague speaking inside the invented scene -- a quoted person, not address" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: 「私は持っていない」 mid-section states a fact about the subject (no method exists), not a modesty formula; the request 「読者の手元のビルドで埋めてほしい」 is the last sentence, a boundary" }
+fixtures/exceptions.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 「〜ではない」 is about the text, not to the reader" }
+  - { line: 7, label: bad, window: 0, reason: "apology in the middle of the argument: 「話が長くなって恐縮だ。」 -- between the API change and its discovery, where the reasoning is under way" }
+  - { line: 17, label: clean, window: 0, reason: "no address" }
+  - { line: 25, label: clean, window: 0, reason: "no address" }
+fixtures/monorepo.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 「I have heard」 is the author's experience as evidence, not a hedge" }
+  - { line: 5, label: clean, window: 0, reason: "no address" }
+  - { line: 13, label: bad, window: 0, reason: "hedge about the author mid-argument: 「I may be wrong about this, but」 -- inside the paragraph that carries the section's number" }
+  - { line: 21, label: clean, window: 0, reason: "hard clean: 「We will come back to onboarding.」 is narration at the tail, not a request or hedge" }
+fixtures/gc-pauses.md:
+  - { line: 1, label: clean, window: 0, reason: "no address" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: 「報告が間違っているに違いない。」 is the narrator's assumption, not a hedge; it sits at the close anyway" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: 「うちのサービスでは倍になっている」と言われれば -- the reader's resistance in the reader's words at the head, taken up" }
+  - { line: 19, label: clean, window: 0, reason: "no address" }

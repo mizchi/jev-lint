@@ -1,0 +1,63 @@
+default: clean
+fixtures/cache-ttl.md:
+  - { line: 1, label: clean, window: 0, reason: "preface opens on the subject: a scene (the shop, the orders on stock 0)" }
+  - { line: 5, label: bad, window: 0, reason: "progress announcement mid-section: 「ここまでだと、概念の説明に見えるだろう。なので、すぐに例へ戻す。」 -- the norm's first listed filler, how the explanation looks plus what the writer does next; zero information about caches" }
+  - { line: 15, label: clean, window: 0, reason: "hard clean: opens 「〜としよう」 and closes 「冒頭の売り場にオチを付けておこう」 -- the norm's allowed form 4, the frame of an invented example; every other sentence is about event ordering" }
+  - { line: 23, label: bad, window: 0, reason: "opens with a stanceless agenda 「本節では、TTL の上限、下限、既定値の三つを扱う。」 -- a table of contents, topic is the section" }
+  - { line: 29, label: bad, window: 0, reason: "ends with a progress preview 「次は、TTL を項目ごとに変える方法を見る。」 -- the norm's 節末の進行予告; the bridge belongs at the head of the next section" }
+fixtures/retry-backoff.md:
+  - { line: 1, label: clean, window: 0, reason: "preface: a claim about retries, four hidden decisions" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: a counter-question in the reader's mouth, a concession 「そうしたかった、とは思う」, and a hedge mid-argument 「私の理解が浅いだけかもしれないが」 -- the hedge is about the author's confidence, not about the text; a boundary violation for the address rule, not narration" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: dense subject matter in short sentences (「上限は要る。」「指数は十回で千倍になる。」) -- rhythm without a single sentence about the text; ends on a question about the subject" }
+  - { line: 21, label: bad, window: 0, reason: "disclaimer naming no misreading: 「誤解しないでほしいのだが、リトライそのものを否定したいわけではない。」 -- the norm's 弁明 without the quoted misreading that exception 1 requires" }
+fixtures/index-order.md:
+  - { line: 1, label: clean, window: 0, reason: "preface: a concrete wrong index and a slow plan" }
+  - { line: 5, label: bad, window: 0, reason: "opens with a stanceless agenda 「本節では、複合インデックスの列順、選択率、カバリングの三つを扱う。」" }
+  - { line: 13, label: bad, window: 0, reason: "ends with the norm's exact progress form 「ここまでで列順の話は見えた。次の問いはカバリングである。」 -- what has been shown and what comes next; nothing about indexes" }
+  - { line: 23, label: bad, window: 0, reason: "short punchy declaration of what the text is not: 「テクニックの列挙はしない。」 -- the norm names this form (否定形でも短文でも、話題が本文自身なら駄文)" }
+fixtures/log-levels.md:
+  - { line: 1, label: clean, window: 0, reason: "preface: a general proposition the body tests" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean for THIS rule: 「どうか、ここから先は監視する側の目線で読んでほしい。」 mid-section is a request to the reader, which the note hands to the address rule (where it is labelled bad); by the topic test the sentence is an address, not a progress or scope statement. First labelled bad; the two rules' defects are nested here, not disjoint, and the note decides which rule owns it" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: objection handled by quoting the misreading it rejects, 「ここまでの話を「WARN を全部消せ」という主張と読まれると、それは違う。」 -- exception 1, the quoted misreading is what separates it from a disclaimer" }
+  - { line: 21, label: bad, window: 0, reason: "opens 「以下では、INFO の出力量について説明する。」 and ends 「識別子をどう付けるかは、次の節で見る。」 -- agenda and progress preview, both about the text" }
+  - { line: 29, label: clean, window: 0, reason: "only the subject: where the identifier is issued and carried" }
+fixtures/flaky-tests.md:
+  - { line: 1, label: bad, window: 0, reason: "narrates the device: 「先に答えを半分だけ置く。」 and 「それは後で返す。」 -- the norm's 装置の実況, the operation is declared instead of performed" }
+  - { line: 5, label: bad, window: 0, reason: "ends with 「次は、順序に依存するテストを見る。」 -- progress preview at the tail" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: opens with a confession 「白状すれば」, states an assumption 「直るに違いない。」 and overturns it with 「ところが」 -- the narrator's state of judgment, which the norm counts as situation, not document" }
+  - { line: 21, label: bad, window: 0, reason: "short punchy device narration mid-section: 「最後にもう一度だけ線を引く。」 -- the norm's own example of a sentence that survives an edit because it has rhythm" }
+fixtures/narrowing.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a preview WITH a stance, 「判別共用体ほど適切な切り口もないはずだ」 -- the norm allows this (態度を帯びた一〜二文) because the attitude itself creates tension" }
+  - { line: 5, label: bad, window: 0, reason: "restatement of the chapter's theme with no new information about the subject: 「要するに、この章の主題は型ではなく、値の形である。」 -- the norm's second listed filler" }
+  - { line: 13, label: bad, window: 0, reason: "opens 「ここでは、絞り込みが効かない三つの場面を順に述べる。」 -- an agenda about the section" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: a counter-question 「では、型ガードを書けばよいのか。」 taken up at once, and a closing question about the subject -- both subject-facing" }
+fixtures/review-comments.md:
+  - { line: 1, label: clean, window: 0, reason: "preface: a quoted comment and the two jobs it creates" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: a question answered in the next sentence, and a confession about the author's past conduct with reviews and a modesty formula 「偉そうに書ける立場でもないのだが。」 -- both have the AUTHOR as topic, not the text; the address rule's business" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: opens with objection handling that quotes the misreading 「指摘は柔らかく書け」 -- exception 1" }
+  - { line: 21, label: bad, window: 0, reason: "short punchy declaration of what the text is not and what its only question is: 「言い方の話ではない。問いは、誰が直すかだけである。」 -- the norm lists exactly this form" }
+fixtures/config-order.md:
+  - { line: 1, label: clean, window: 0, reason: "preface poses the document's question in terms of the subject (which source wins)" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: counter-question, concession 「そうしたかった、とは思う」, and a closing question about the subject 「では、既定値はどこに書くのか。」 -- exception 2, the question sentence at a boundary" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: 「これで問いの半分には答えたことになる。」 at the section's head is the sentence that returns an answer at a boundary -- exception 2; a lazy rule flags 問いの半分" }
+  - { line: 21, label: clean, window: 0, reason: "hard clean: 「残りの半分は、上書きの順序である。」 returns the other half at the boundary -- exception 2; then a regret about the subject" }
+fixtures/build-cache.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a request to the reader 「どうか〜と割り切って読んでほしい」 in the preface -- exception 3, at a boundary" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: 「うまくいっているに違いない。」 then 「ところが」 -- an assumption overturned, the norm's model of good slack" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: an invented scene opened 「〜としよう」, a colleague quoted, and closed 「冒頭の月曜にオチを付けておこう」 -- exception 4" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: a closing request 「足りない部分は、読者の手元のビルドで埋めてほしい。」 at the document's end -- exception 3; the norm names 読者への委任 as a valid ending" }
+fixtures/exceptions.md:
+  - { line: 1, label: bad, window: 0, reason: "declaration of what the text is not: 「この文章は、例外処理のベストプラクティス集ではない。」 -- the norm: 本文の性格・範囲の宣言 is filler even in a preface" }
+  - { line: 7, label: bad, window: 0, reason: "apology for the text's length mid-argument: 「話が長くなって恐縮だ。」 -- its topic is the document; the counter-question at the head is allowed, this is not" }
+  - { line: 17, label: bad, window: 0, reason: "ends 「これについては、次の節で詳しく見る。」 -- progress preview at the tail" }
+  - { line: 25, label: bad, window: 0, reason: "short agenda 「まず、境界の定義から。」 -- the shortest form of a table of contents; topic is what the text does next" }
+fixtures/monorepo.md:
+  - { line: 1, label: clean, window: 0, reason: "preface: two claims about the subject" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: short sentences (「Both build. Both pass.」「It won.」「That is the point:」) all about lockfiles -- rhythm without narration, in English" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: a preview with a stance (「There is no better place to see...」) and a hedge about the author (「I may be wrong about this」) -- neither has the text as its topic" }
+  - { line: 21, label: bad, window: 0, reason: "opens 「This section covers CI time, disk usage, and onboarding.」 and ends 「We will come back to onboarding.」 -- agenda and progress preview" }
+fixtures/gc-pauses.md:
+  - { line: 1, label: clean, window: 0, reason: "preface: a report and a disbelief about it" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: a rhetorical question answered at once, an assumption 「報告が間違っているに違いない。」 as the last line -- subject and narrator's judgment only" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: the reader's resistance quoted and taken up, the assumption overturned" }
+  - { line: 19, label: clean, window: 0, reason: "hard clean: 「要するに、停止時間は生き残るオブジェクトの量に比例し」 is a summary OF THE SUBJECT, not a restatement of what the chapter is about -- the 要するに that the norm allows after a landing" }

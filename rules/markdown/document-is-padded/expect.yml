@@ -1,0 +1,29 @@
+default: clean
+fixtures/product-launch-post.md:
+  - { line: 1, label: bad, window: 0, reason: "the intro says 'Relay 3.0 is here' three ways; 'focus on what matters' appears in three sections; the customer and looking-ahead sections carry nothing. Half the document could go" }
+fixtures/one-idea-five-paragraphs.md:
+  - { line: 1, label: bad, window: 0, reason: "the idea is stated in paragraph one; paragraphs two to six restate it with no new reasoning or evidence" }
+fixtures/fast-paced-world.md:
+  - { line: 1, label: bad, window: 0, reason: "every section names its subject and then repeats the naming; the conclusion is the introduction again" }
+fixtures/productivity-listicle.md:
+  - { line: 1, label: bad, window: 0, reason: "each tip's paragraph restates its heading; the intro and conclusion are pure framing" }
+fixtures/ja-slop.md:
+  - { line: 1, label: bad, window: 0, reason: "各見出しの本文は見出しの言い換え。「まとめ」は冒頭の繰り返しで、全体を三分の一に圧縮しても情報は減らない" }
+fixtures/confident-generalities.md:
+  - { line: 1, label: bad, window: 0, reason: "the six reasons would survive as a six-item list; the paragraphs around them add assertion, not reasoning or evidence" }
+fixtures/readme-cli.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: no sentence is decorative; removing any loses a flag, a default, an exit code or a limitation" }
+fixtures/reference-config.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: long because it lists every setting; every paragraph is a distinct setting with a distinct consequence. Long is not padded" }
+fixtures/postmortem.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a couple of stock phrases, but the timeline, the canary analysis and the change list are all load-bearing" }
+fixtures/tutorial-git-rebase.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the repeated 'check the log, check the tree' structure is the lesson; each repetition yields a different observation" }
+fixtures/ja-dense.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 段落ごとに別の数字か別の判断があり、削ると根拠が消える" }
+fixtures/opinion-monorepos.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: eight paragraphs, each a distinct step in the argument (definition, cost of splitting, what the monorepo buys, what it costs, the asymmetry, the honest exception)" }
+fixtures/billing-migration-notice.md:
+  - { line: 1, label: bad, window: 0, reason: "the summary block carries the whole notice; the five sections and the recap that follow restate it and could be deleted without losing a fact" }
+fixtures/ja-repeats.md:
+  - { line: 1, label: bad, window: 0, reason: "「集中できる環境を作る」を言い換え続けており、冒頭の二文に圧縮できる" }

@@ -1,0 +1,406 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T13:11:25.566Z",
+  "model": "jev-1.13.0",
+  "suite": "markdown/document-is-padded",
+  "rules": [
+    {
+      "id": "document-is-padded",
+      "draft": "d10eb0356858",
+      "at": 1.5
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 2.19,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.81,
+        "confidence": 0.6
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.81,
+        "confidence": 0.32
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.98,
+        "confidence": 0.15
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 1.89,
+        "confidence": 0.03
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.02,
+        "confidence": 0.4
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/billing-migration-notice.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 3.58,
+        "confidence": 0.65
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/ja-repeats.md",
+        "line": 1,
+        "endLine": 23,
+        "kind": "score",
+        "value": 3.33,
+        "confidence": 0.44
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.55,
+        "confidence": 0.54
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 0.46,
+        "confidence": 0.62
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 1.09,
+        "confidence": 0.43
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 2.42,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 2.11,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 0.43,
+        "confidence": 0.64
+      }
+    ],
+    [
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.88,
+        "confidence": 0.58
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.74,
+        "confidence": 0.39
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 0.41,
+        "confidence": 0.66
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.55,
+        "confidence": 0.54
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 3.06,
+        "confidence": 0.21
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 2.25,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/ja-repeats.md",
+        "line": 1,
+        "endLine": 23,
+        "kind": "score",
+        "value": 3.37,
+        "confidence": 0.47
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 2.36,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 1,
+        "confidence": 0.42
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 0.45,
+        "confidence": 0.63
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 2.03,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.03,
+        "confidence": 0.19
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/billing-migration-notice.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 3.58,
+        "confidence": 0.65
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 2.17,
+        "confidence": 0
+      }
+    ],
+    [
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 2.36,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/billing-migration-notice.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 3.56,
+        "confidence": 0.63
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 2.23,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.57,
+        "confidence": 0.52
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 2.94,
+        "confidence": 0.4
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/ja-repeats.md",
+        "line": 1,
+        "endLine": 23,
+        "kind": "score",
+        "value": 3.32,
+        "confidence": 0.43
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 3,
+        "confidence": 0.16
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 0.93,
+        "confidence": 0.46
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 1.95,
+        "confidence": 0.03
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.8,
+        "confidence": 0.58
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.73,
+        "confidence": 0.39
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 0.45,
+        "confidence": 0.63
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 2.26,
+        "confidence": 0
+      },
+      {
+        "rule": "document-is-padded",
+        "file": "rules/markdown/document-is-padded/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 0.43,
+        "confidence": 0.64
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 42,
+    "inputTokens": 66993,
+    "usd": 0.002813706,
+    "ms": 587
+  }
+}

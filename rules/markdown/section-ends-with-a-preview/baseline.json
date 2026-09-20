@@ -1,0 +1,1378 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T13:36:45.274Z",
+  "model": "jev-1.13.0",
+  "suite": "markdown/section-ends-with-a-preview",
+  "rules": [
+    {
+      "id": "section-ends-with-a-preview",
+      "draft": "87d66cdd175a",
+      "at": 0.65
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 13,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 19,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 7,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 17,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 25,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 5,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 15,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 23,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 29,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 21,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 13,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 19,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 7,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 17,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 25,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.48,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 21,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 5,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 15,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 23,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 29,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.47,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/config-order.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/log-levels.md",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/index-order.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/flaky-tests.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 7,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 17,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/exceptions.md",
+        "line": 25,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 13,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/gc-pauses.md",
+        "line": 19,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/build-cache.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 5,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 15,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 23,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/cache-ttl.md",
+        "line": 29,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/retry-backoff.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/narrowing.md",
+        "line": 23,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/monorepo.md",
+        "line": 21,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 13,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "section-ends-with-a-preview",
+        "file": "rules/markdown/section-ends-with-a-preview/fixtures/review-comments.md",
+        "line": 21,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 36,
+    "inputTokens": 143517,
+    "usd": 0.006027714000000001,
+    "ms": 1037
+  }
+}

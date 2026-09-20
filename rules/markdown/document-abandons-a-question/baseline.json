@@ -1,0 +1,325 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T13:36:48.669Z",
+  "model": "jev-1.13.0",
+  "suite": "markdown/document-abandons-a-question",
+  "rules": [
+    {
+      "id": "document-abandons-a-question",
+      "draft": "697b6b09d217",
+      "at": 0.5
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/narrowing.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/config-order.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/log-levels.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/monorepo.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/flaky-tests.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/build-cache.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/index-order.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/retry-backoff.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/review-comments.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/gc-pauses.md",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/exceptions.md",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.64,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/monorepo.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/build-cache.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/retry-backoff.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/config-order.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/gc-pauses.md",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/exceptions.md",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/log-levels.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/index-order.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/review-comments.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/narrowing.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/flaky-tests.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/gc-pauses.md",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/flaky-tests.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/monorepo.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/retry-backoff.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/index-order.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/config-order.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/build-cache.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/exceptions.md",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/narrowing.md",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/log-levels.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "document-abandons-a-question",
+        "file": "rules/markdown/document-abandons-a-question/fixtures/review-comments.md",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 33,
+    "inputTokens": 54060,
+    "usd": 0.00227052,
+    "ms": 981
+  }
+}

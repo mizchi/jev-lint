@@ -1,0 +1,63 @@
+default: clean
+fixtures/cache-ttl.md:
+  - { line: 1, label: clean, window: 0, reason: "preface ends on the subject: orders on stock 0" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: a progress announcement sits in the MIDDLE (「すぐに例へ戻す」); the ending is a judgment about TTL as a lie budget -- only the tail is this rule's" }
+  - { line: 15, label: clean, window: 0, reason: "hard clean: ends by closing the invented example (「冒頭の売り場にオチを付けておこう。」 then the ending itself) -- an example's ending, not a preview" }
+  - { line: 23, label: clean, window: 0, reason: "ends on the subject (a short TTL is found by load, load comes later than complaints)" }
+  - { line: 29, label: bad, window: 0, reason: "last sentence 「次は、TTL を項目ごとに変える方法を見る。」 -- the norm's 節末の進行予告, verbatim form" }
+fixtures/retry-backoff.md:
+  - { line: 1, label: clean, window: 0, reason: "preface ends on a claim about services in production" }
+  - { line: 5, label: clean, window: 0, reason: "ends on the subject: the fifth retry reaches seconds" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: last sentence is a question about the subject, 「では、上限は誰が決めるのか。」 -- a question left open at the tail is the norm's bridge, not a preview of the text" }
+  - { line: 21, label: clean, window: 0, reason: "ends on the subject: the outer retry has the same four defaults" }
+fixtures/index-order.md:
+  - { line: 1, label: clean, window: 0, reason: "preface ends on what the plan does not say" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: opens with an agenda (the other rule's defect) but ends on the subject, 「列順の原則はこれだけである。」" }
+  - { line: 13, label: bad, window: 0, reason: "ends 「ここまでで列順の話は見えた。次の問いはカバリングである。」 -- progress summary plus preview, the norm's listed form" }
+  - { line: 23, label: clean, window: 0, reason: "ends on the subject: the read/write ratio changes daily" }
+fixtures/log-levels.md:
+  - { line: 1, label: clean, window: 0, reason: "preface ends on a claim" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: ends on an unresolved assumption 「アラートは鳴らないのだから、問題はないに違いない。」 -- the norm's 思い込み left for the next section to overturn; not a preview" }
+  - { line: 13, label: clean, window: 0, reason: "ends on the subject: too many ERRORs is an outage problem" }
+  - { line: 21, label: bad, window: 0, reason: "last sentence 「識別子をどう付けるかは、次の節で見る。」 -- a bridge at the tail" }
+  - { line: 29, label: clean, window: 0, reason: "ends on the subject: by the third outage few omissions remain" }
+fixtures/flaky-tests.md:
+  - { line: 1, label: bad, window: 0, reason: "the preface's last sentence 「それは後で返す。」 is 'we return to this later', which the criteria list verbatim -- the section ends by announcing the text's progress, not on its subject (first labelled clean as a preface boundary; the answer of 0.80 was right and the label was wrong)" }
+  - { line: 5, label: bad, window: 0, reason: "last sentence 「次は、順序に依存するテストを見る。」 -- verbatim 節末の進行予告" }
+  - { line: 13, label: clean, window: 0, reason: "ends on the subject: the fix for shared state" }
+  - { line: 21, label: clean, window: 0, reason: "ends on the subject: irreducible instability is monitoring's job" }
+fixtures/narrowing.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the preface IS a preview, but with a stance and about the subject (where narrowing breaks, the tag) -- no announcement of the text's progress" }
+  - { line: 5, label: clean, window: 0, reason: "ends on the subject: the compiler does not look inside the function" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: ends on a concession about the subject 「そうであってほしくなかった、とは思う。」" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: ends on a question about the subject, 「誰が検査するのか。」, left open on purpose at the document's end" }
+fixtures/review-comments.md:
+  - { line: 1, label: clean, window: 0, reason: "preface ends on the subject" }
+  - { line: 5, label: clean, window: 0, reason: "ends on the subject: write the reason for delegating" }
+  - { line: 13, label: clean, window: 0, reason: "ends on the subject: fewer notifications get read" }
+  - { line: 21, label: clean, window: 0, reason: "ends on the subject: having a line matters more than where it is" }
+fixtures/config-order.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: preface ends 「それがこの問いの中身である。」 -- names the question's content, which is the subject; not what the text does next" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: ends with a question about the subject 「では、既定値はどこに書くのか。」 -- the norm's bridge form, taken up at the head of the next section" }
+  - { line: 13, label: clean, window: 0, reason: "ends on the subject: secrets should fail empty" }
+  - { line: 21, label: clean, window: 0, reason: "ends on a regret about the subject" }
+fixtures/build-cache.md:
+  - { line: 1, label: clean, window: 0, reason: "preface ends on a claim about caches" }
+  - { line: 5, label: clean, window: 0, reason: "ends on the subject: the check costs one run per input" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: ends with the invented scene's ending (「冒頭の月曜にオチを付けておこう。」 and the answer) -- exception 4" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: ends with a request to the reader at the document's close, 「足りない部分は、読者の手元のビルドで埋めてほしい。」 -- a boundary, not a preview" }
+fixtures/exceptions.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 「その間に起きたことを追う。」 states what the document does -- but a one-sentence preface with a scene (three months, one catch) is a stance-bearing opening, not a tail preview of a next section" }
+  - { line: 7, label: clean, window: 0, reason: "ends on the subject: whether anyone would have read the WARNs" }
+  - { line: 17, label: bad, window: 0, reason: "last sentence 「これについては、次の節で詳しく見る。」 -- a bridge at the tail" }
+  - { line: 25, label: clean, window: 0, reason: "ends on the subject, landing on the opening scene" }
+fixtures/monorepo.md:
+  - { line: 1, label: clean, window: 0, reason: "preface ends on the counter-argument" }
+  - { line: 5, label: clean, window: 0, reason: "ends on the subject: the conflict is resolved in the open" }
+  - { line: 13, label: clean, window: 0, reason: "ends on the subject: the monorepo made the split obvious" }
+  - { line: 21, label: bad, window: 0, reason: "last sentence 「We will come back to onboarding.」 -- a preview at the tail, in English" }
+fixtures/gc-pauses.md:
+  - { line: 1, label: clean, window: 0, reason: "preface ends on a claim" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: ends on an assumption 「報告が間違っているに違いない。」 that the next section overturns -- slack, not a preview" }
+  - { line: 13, label: clean, window: 0, reason: "ends on the subject: the premise was what broke" }
+  - { line: 19, label: clean, window: 0, reason: "ends on the subject, landing on the opening report" }

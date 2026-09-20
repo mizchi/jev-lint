@@ -29,7 +29,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
 | `subject` | `node` (default), `enclosing`, `file`, `commit`, `block` | what code is judged. `commit` and `block` have no matcher: `commit` is `language: Git`, its subjects the commits `jev-lint commits` lists; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |
-| `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\w+)`) are the captures. A block runs from its header to the line before the next |
+| `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\w+)`) are the captures. A block runs from its header to the line before the next. Left out, the whole file is one block, cut at 48,000 characters with the cut declared |
 | `extensions` | `block` only | the files the rule reads, by extension (`[sql]`) |
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context the model reads before answering, never shown in a finding. `criteria` *define* the two answers; `note` scopes them — which cases are out of bounds, which conventions count as honoured |
@@ -39,6 +39,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `unsureBelow` | 0–1 | `score` only: a confidence under it words the finding as a question |
 | `constraints` / `utils` | | ast-grep's, passed through unchanged; part of the rule's identity for the cache |
 | `docs` / `tags` | | free text, for your own reports |
+| `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `at` then runs 0..levels-1 |
 | `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |
 
 An unknown field is a validation error, so a typo cannot quietly do nothing.

@@ -1,0 +1,29 @@
+default: clean
+fixtures/one-idea-five-paragraphs.md:
+  - { line: 1, label: bad, window: 0, reason: "the same claim, 'decide what before how, let the caller design the interface', appears in every paragraph in slightly different words and nothing is added after the first" }
+fixtures/product-launch-post.md:
+  - { line: 1, label: bad, window: 0, reason: "the intro restates the title three times; 'focus on what matters' recurs in three sections; 'we could not be more excited' and its variants bracket the post" }
+fixtures/fast-paced-world.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean by the rubric's own levels: the conclusion restates the intro and 'flexibility' recurs, which is minor-to-some repetition, not frequent; the document's defects are formulaic and vague, not repetition (relabelled after the first run, where it answered 1.54)" }
+fixtures/ja-slop.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean by the rubric's own levels: まとめが見出しを言い換える程度の軽い繰り返しで、頻繁ではない。欠陥は定型と一般論であって反復ではない（初回の答え 0.98 を見て再ラベル）" }
+fixtures/tutorial-git-rebase.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: five rounds with the same shape, but each round is a different operation with a different effect on the tree hash; the repetition is scaffolding that adds information every time" }
+fixtures/confident-generalities.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: generic, but not repetitive; each paragraph is a different reason and none restates another" }
+fixtures/readme-cli.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: flags appear in usage and again in examples, with the example adding a use" }
+fixtures/reference-config.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the same paragraph shape for every setting, with different content each time" }
+fixtures/postmortem.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the root cause is stated once in the timeline and once in the analysis, from a different angle each time" }
+fixtures/ja-dense.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: 前提の数字が結果表で再登場するが、比較のためで言い換えではない" }
+fixtures/opinion-monorepos.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: the thesis is stated at the start and the end, with the argument in between; no paragraph restates a previous one" }
+fixtures/what-is-kubernetes.md:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: generic, but each section is a different concept and none repeats another" }
+fixtures/billing-migration-notice.md:
+  - { line: 1, label: bad, window: 0, reason: "the date, the action and the issuing system are stated in the intro, the summary, three body sections, the FAQ and the recap; nothing after the summary adds a fact" }
+fixtures/ja-repeats.md:
+  - { line: 1, label: bad, window: 0, reason: "「集中できる環境を作る」がすべての節の主語であり結論。原因と結果が循環し（集中できる環境があるから集中できる）、節が進んでも情報が増えない" }
