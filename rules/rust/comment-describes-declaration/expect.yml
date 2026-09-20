@@ -1,0 +1,18 @@
+default: clean
+fixtures/budget.rs:
+  - line: 16
+    label: bad
+    window: 0
+    reason: says cents, returns whole units. / Returns the amount still available, in cents.
+  - line: 21
+    label: bad
+    window: 0
+    reason: the comment claims it leaves the budget untouched and it increments `checks` -- which makes it a false comment AND a predicate name on a mutating function. Both rules are right about it; flagged by fn-name-promises at 0.82 while this marker named only the comment rule. / Reports whether the budget is exhausted, without changing it.
+  - line: 27
+    label: bad
+    window: 0
+    reason: says it saturates at the limit, and it does not clamp at all. / Adds to the amount spent, stopping at the limit.
+  - line: 32
+    label: bad
+    window: 0
+    reason: documents a `reason` parameter the function no longer takes. / Resets the budget, recording `reason` for the audit log.

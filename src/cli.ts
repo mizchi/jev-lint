@@ -15,7 +15,7 @@
  *   replay    re-score a recorded run under different cutoffs, for free
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join, relative } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
 import { loadRules, cutoffFor, defaultRulePaths } from "./rules.ts";
 import { run, collectSubjects, toRecord } from "./run.ts";
@@ -50,7 +50,7 @@ import { DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { Cache, DEFAULT_CACHE_PATH } from "./cache.ts";
 import { USD_PER_MTOK, API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_MODEL, DEFAULT_CONCURRENCY, fromEnv } from "./jev.ts";
 import { CONFIG_NAMES, applyConfig, findConfig, initialConfig, initialHook, loadConfig } from "./config.ts";
-import { GROUP_MODES, SEVERITIES, STATE_ARMS } from "./types.ts";
+import { GROUP_MODES, SEVERITIES, STATE_ARMS, TIER_ONE } from "./types.ts";
 import type { Finding, GroupMode, Labels, Rule, RunResult, Severity, StateArm, Subject } from "./types.ts";
 import { explain, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
 import type { ChangedRanges } from "./diff.ts";
@@ -110,7 +110,7 @@ usage:
   jev-lint calibrate [paths...]    repeat runs, and fit cutoffs if labels exist
   jev-lint rules                   list loaded rules and validation errors
   jev-lint replay <record.json>    re-score a recorded run, no requests
-  jev-lint eval [dirs...]          run every rule's evals/ suite against its baseline
+  jev-lint eval [dirs...]          run every rule's fixtures against its baseline
   jev-lint eval --compare a.json b.json   two records of one suite, case by case, no requests
   jev-lint init                   write a .jev-lint.yaml to start from
   jev-lint init --pre-commit      write a pre-commit hook that reviews the staged diff
@@ -152,7 +152,7 @@ options:
       --model <id>         Jev model
       --force              ignore cached verdicts
       --accept             eval: run, then make that run the baseline
-      --accept-last        eval: make the previous run (evals/last.json) the baseline, no requests
+      --accept-last        eval: make the previous run (last.json) the baseline, no requests
       --replay             eval: re-score each baseline at the current cutoffs, no requests
       --compare            eval: the two positional records, scored at their own cutoffs
       --dry-run            plan and price the run without asking anything
@@ -717,10 +717,10 @@ async function main(argv: string[]): Promise<number> {
 }
 
 /**
- * `eval`: every rule directory's evals/ suite, scored at the shipped cutoff
+ * `eval`: every rule directory's fixtures, scored at the shipped cutoff
  * and compared with its baseline.
  *
- * Three modes. Plain: ask, write evals/last.json, compare. `--replay`: no
+ * Three modes. Plain: ask, write last.json, compare. `--replay`: no
  * requests -- re-score the baseline at the cutoffs as they are now, which
  * is the free regression gate for CI, and refuse if a rule's question has
  * changed since the baseline was taken. `--accept`: copy last.json over
@@ -732,7 +732,7 @@ async function cmdEval(opts: Options, out: Log, log: Log): Promise<number> {
   const roots = opts.paths.length > 0 ? opts.paths : opts.rules;
   const suites = discoverEvals(roots);
   if (suites.length === 0) {
-    log(`no evals under ${roots.join(", ")}: a suite is a rule directory holding evals/labels.json and evals/cases/`);
+    log(`no evals under ${roots.join(", ")}: a suite is a rule directory holding expect.yml and fixtures/`);
     return 2;
   }
   let failed = 0;
@@ -849,7 +849,7 @@ function cmdEvalCompare(opts: Options, out: Log, log: Log): number {
   const drafts = new Map(left.rules.map((r) => [r.id, r.draft]));
   const changed = right.rules.filter((r) => drafts.has(r.id) && drafts.get(r.id) !== r.draft).map((r) => r.id);
   const diff = compareEvals(scoreL, scoreR, { draftChanged: false });
-  const rel = (f: string) => relative(suite.cases, f);
+  const rel = (f: string) => relative(suite.fixtures, f);
   const side = (name: string, rec: EvalRecord, sc: EvalScore) => {
     out(`${name}: ${rec.recorded.slice(0, 19)}  model ${rec.model ?? "?"}  ${rec.passes.length} pass(es)`);
     for (const r of sc.rules) {
@@ -897,7 +897,7 @@ function formatEvalSuite(
       `  ${r.rule.padEnd(36)} ${String(r.at).padEnd(5)} ${String(r.tp).padStart(3)} ${String(r.fp).padStart(3)} ${String(r.fn).padStart(3)}  ${fmt(r.precision).padEnd(5)} ${fmt(r.recall).padEnd(5)} ${String(r.flips).padEnd(5)} ${String(r.cleanTop ?? "-").padEnd(8)} ${r.fitted ?? "-"}  ${r.fitReason}`,
     );
   }
-  const rel = (f: string) => relative(suite.cases, f);
+  const rel = (f: string) => relative(suite.fixtures, f);
   const vals = (c: CaseScore) => `[${c.values.map((v) => v.toFixed(2)).join(" ")}]`;
   for (const c of wrong) {
     lines.push(`  x ${rel(c.file)}:${c.line}  ${c.rule}  ${c.label} but ${c.decision} at ${c.mean.toFixed(2)} ${vals(c)}`);
@@ -937,12 +937,17 @@ function cmdRules(opts: Options, out: Log, log: Log): number {
   for (const w of warnings) log(`rule warning: ${w}`);
   for (const r of rules) {
     out(
-      `${r.id}\n  ${r.languages.join(", ")}  kind=${r.kind}  subject=${r.subject}  arm=${r.state}  cutoff=${cutoffFor(r, opts.at).toFixed(2)}  severity=${r.severity}`,
+      `${r.languageDir ? `${r.languageDir}/` : ""}${r.id}\n  ${r.languages.join(", ")}  kind=${r.kind}  subject=${r.subject}  arm=${r.state}  cutoff=${cutoffFor(r, opts.at).toFixed(2)}  severity=${r.severity}`,
     );
     out(`  ask: ${r.ask}`);
     if (r.note) out(`  note (model only): ${r.note}`);
     if (r.explain) out(`  explain (--explain): ${Object.keys(r.explain).join(" | ")}`);
     if (r.loose !== null) out(`  loose floor (--loose): ${r.loose}`);
+    // A shipped rule outside the first tier may ship without a baseline;
+    // say so where the cutoff is printed, since that cutoff was never fitted.
+    if (r.languageDir && r.source && !existsSync(join(dirname(r.source), "baseline.json"))) {
+      out(`  uncalibrated: no baseline.json beside it${(TIER_ONE as readonly string[]).includes(r.languageDir) ? " -- a tier-one rule must have one" : ""}`);
+    }
     out(`  from: ${r.source}`);
   }
   out("");

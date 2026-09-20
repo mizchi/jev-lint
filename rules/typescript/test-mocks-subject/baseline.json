@@ -1,0 +1,595 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-19T17:13:18.875Z",
+ "model": "jev-1.13.0",
+ "suite": "typescript/test-mocks-subject",
+ "rules": [
+  {
+   "id": "test-mocks-subject",
+   "draft": "7a49ecf96a0f",
+   "at": 0.3
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 36,
+    "endLine": 41,
+    "kind": "noul",
+    "value": 0.63,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 43,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.71,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 50,
+    "endLine": 54,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 56,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 64,
+    "endLine": 72,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 74,
+    "endLine": 78,
+    "kind": "noul",
+    "value": 0.49,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 90,
+    "endLine": 94,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 96,
+    "endLine": 100,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 108,
+    "endLine": 118,
+    "kind": "noul",
+    "value": 0.38,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 120,
+    "endLine": 129,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 131,
+    "endLine": 142,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 39,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 44,
+    "endLine": 47,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 49,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 55,
+    "endLine": 60,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 62,
+    "endLine": 65,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 67,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 72,
+    "endLine": 78,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 87,
+    "endLine": 90,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 98,
+    "endLine": 105,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 109,
+    "endLine": 119,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 36,
+    "endLine": 41,
+    "kind": "noul",
+    "value": 0.57,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 43,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.73,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 50,
+    "endLine": 54,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 56,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 64,
+    "endLine": 72,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 74,
+    "endLine": 78,
+    "kind": "noul",
+    "value": 0.58,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 90,
+    "endLine": 94,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 96,
+    "endLine": 100,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 108,
+    "endLine": 118,
+    "kind": "noul",
+    "value": 0.36,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 120,
+    "endLine": 129,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 131,
+    "endLine": 142,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 39,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 44,
+    "endLine": 47,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 49,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 55,
+    "endLine": 60,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 62,
+    "endLine": 65,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 67,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 72,
+    "endLine": 78,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 87,
+    "endLine": 90,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 98,
+    "endLine": 105,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 109,
+    "endLine": 119,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 36,
+    "endLine": 41,
+    "kind": "noul",
+    "value": 0.6,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 43,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.74,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 50,
+    "endLine": 54,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 56,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 64,
+    "endLine": 72,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 74,
+    "endLine": 78,
+    "kind": "noul",
+    "value": 0.51,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 90,
+    "endLine": 94,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 96,
+    "endLine": 100,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 108,
+    "endLine": 118,
+    "kind": "noul",
+    "value": 0.37,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 120,
+    "endLine": 129,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/checkout.test.ts",
+    "line": 131,
+    "endLine": 142,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 39,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 44,
+    "endLine": 47,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 49,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 55,
+    "endLine": 60,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 62,
+    "endLine": 65,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 67,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 72,
+    "endLine": 78,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 87,
+    "endLine": 90,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 98,
+    "endLine": 105,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-mocks-subject",
+    "file": "rules/typescript/test-mocks-subject/fixtures/signup.test.ts",
+    "line": 109,
+    "endLine": 119,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 6,
+  "inputTokens": 60282,
+  "usd": 0.002531844,
+  "ms": 1744
+ }
+}

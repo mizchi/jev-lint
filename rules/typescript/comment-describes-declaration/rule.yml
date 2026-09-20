@@ -1,0 +1,100 @@
+# Comment drift: does the comment still describe the code?
+#
+# A comment is a claim the code makes about itself, in the one notation nothing
+# checks. Types are checked, names are at least read, tests run -- a comment
+# decays in total silence, and the only reader who can notice is one who
+# understands both the sentence and the code under it. That is exactly the
+# defect family this kind of model is measured to be good at, and exactly the
+# one with no existing tool.
+#
+# ## Why these rules are as sharp as the test rules
+#
+# Because the matcher hands the question BOTH halves by name. `follows:` with a
+# pattern captures the preceding comment into `$DOC`, and the matched node is
+# the code, so a question can say "does $DOC describe this?" rather than hoping
+# the model pairs them up itself. A question whose two subjects are named is
+# answerable; "are the comments here good" is not.
+#
+# ## What is deliberately NOT asked
+#
+# Not style, not whether a comment should exist, not whether it is redundant,
+# not whether it is well written. One axis only: is the claim TRUE of the code.
+# A comment restating the obvious is not a defect here, and a rubric that mixed
+# "untrue" with "unnecessary" would answer neither monotonically.
+#
+# Nor is a comment about something the subject cannot show. A comment claiming
+# "callers must hold the lock" is not checkable from the function it sits on, so
+# the criteria below confine themselves to claims the code in front of the model
+# can confirm or contradict -- a condition invisible in the subject makes every
+# answer land mid-scale, which looks like a threshold problem and is not one.
+
+# --------------------------------------------------------------------------
+# 1. Does a declaration's own comment describe the declaration?
+# --------------------------------------------------------------------------
+id: comment-describes-declaration
+# TypeScript only: the matcher below names `interface_declaration` and
+# `type_alias_declaration`, which do not exist in the JavaScript grammar, and
+# ast-grep rejects the entire rule set over one unknown kind. The JavaScript
+# variant follows.
+languages: [ TypeScript, Tsx ]
+kind: noul
+subject: node
+# `located`: pending measurement, and the reason to expect it to matter here
+# is different from the test rules. A test's title and body are a closed pair,
+# but a doc comment routinely makes a claim about what a function RETURNS to
+# its callers or about a type declared elsewhere in the file, so the file is
+# where the confirmation lives. `tools/arms.ts` settles it.
+state: located
+at: 0.56
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: warning
+rule:
+  any:
+    # A comment directly above the declaration.
+    - all:
+        - any:
+            - kind: function_declaration
+            - kind: class_declaration
+            - kind: method_definition
+            - kind: interface_declaration
+            - kind: type_alias_declaration
+        - follows:
+            any:
+              - kind: comment
+            pattern: $DOC
+    # An exported declaration: the comment precedes the `export`, not the
+    # declaration, so the relation has to be tested one level up.
+    - all:
+        - any:
+            - kind: function_declaration
+            - kind: class_declaration
+            - kind: interface_declaration
+            - kind: type_alias_declaration
+        - inside:
+            kind: export_statement
+            follows:
+              kind: comment
+              pattern: $DOC
+ask: >-
+  The comment above this code claims something that is not true of the code.
+criteria:
+  "true": >-
+    A specific claim the comment makes is contradicted by the code: it names a
+    different operation, direction, rounding, ordering or unit than the code
+    uses, it states a return value or guarantee the code does not provide, it
+    describes a side effect the code does not perform or omits one it does, it
+    gives a count, limit or default that differs from the code's, or it refers
+    to a parameter, field or function that the code no longer has.
+  "false": >-
+    Every specific claim the comment makes holds for the code below it. A
+    comment that is vague, redundant, restates the obvious, or says less than it
+    could is not a false comment -- only a claim that is actually wrong counts
+    here. A section heading or divider ("--- Orchestrator: Budget Planning ---",
+    "// Helpers") names the part of the file that starts here, not the
+    declaration under it, and makes no claim about it.
+note: >-
+  Judge only claims the code in front of you can confirm or contradict. A
+  comment about a caller's obligations, about performance, or about history is
+  not checkable here and is not a violation. A heading that labels a section of
+  the file is not a claim about the first declaration in that section.

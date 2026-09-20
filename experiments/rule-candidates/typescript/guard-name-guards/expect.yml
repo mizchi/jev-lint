@@ -1,0 +1,124 @@
+default: clean
+fixtures/gates.ts:
+  - line: 4
+    label: bad
+    window: 0
+    reason: "assertInvariant returns without looking at the condition whenever NODE_ENV is production: the name promises the invariant is asserted, and in production it never is"
+  - line: 11
+    label: bad
+    window: 0
+    reason: validateUpload accepts any file over the scan limit without reading a byte; the large file is the one that was never validated
+  - line: 21
+    label: bad
+    window: 0
+    reason: "verifyChecksum returns true when the hash algorithm is unsupported: the digest was never computed, and the caller reads 'verified'"
+  - line: 35
+    label: bad
+    window: 0
+    reason: ensureSubscribed discards the rejection of subscribe(), so on a refused or failed subscription it resolves normally with nothing ensured
+  - line: 44
+    label: bad
+    window: 0
+    reason: "validateLicenseKey returns valid/enterprise for any key starting with 'dev-' without checking the signature: a shortcut branch that skips the check for a class of inputs"
+  - line: 56
+    label: bad
+    window: 0
+    reason: "assertPositive returns silently for anything that is not a number, so a string or undefined is accepted without the check the name promises. (First written as an early return on NaN, which scored 0.64-0.66: `value <= 0` is already false for NaN, so that early return skipped nothing the check would have caught, and the model was right to be lukewarm; the fixture was rewritten so the shortcut path accepts inputs the check would reject.)"
+  - line: 81
+    label: clean
+    window: 0
+    reason: "hard clean: on the catch path the check is not skipped, it is handed to fallbackRateLimit, a helper whose name says it performs the same check, and its answer is returned. Rewritten from agent-cluster apps/bit-relay/worker.ts:396, which the rule flagged at 0.80 on the unseen run; a false positive there"
+  - line: 115
+    label: clean
+    window: 0
+    reason: "hard clean: every path compares the proposal against the objective and reports a result; it is the pure fallback for validateAlignment"
+  - line: 127
+    label: clean
+    window: 0
+    reason: "hard clean: the catch swallows the module failure but the function then returns the fallback validator's verdict, so the check is performed on every path. Rewritten from agent-cluster apps/agent-worker/worker.ts:6991, flagged at 0.72 on the unseen run; a false positive there"
+  - line: 144
+    label: clean
+    window: 0
+    reason: "hard clean: a GET or HEAD has no body, so returning ok with no body is not an unexamined input, there is nothing to examine; every request that has a body is parsed and checked"
+  - line: 160
+    label: clean
+    window: 0
+    reason: "hard clean: the early return hands back the result of an earlier evaluation of the same check, not an unexamined acceptance"
+  - line: 169
+    label: clean
+    window: 0
+    reason: "hard clean: terse arrow-function assert, one condition, throws on failure"
+  - line: 174
+    label: clean
+    window: 0
+    reason: "hard clean: delegates the whole check to argon2.verify, nothing to see in the body"
+  - line: 178
+    label: clean
+    window: 0
+    reason: "hard clean: early returns reject, they do not accept; failing closed honours the name"
+  - line: 190
+    label: clean
+    window: 0
+    reason: "hard clean: every dependency is pinged and the failures reported; the catch records a failure rather than hiding it"
+fixtures/guards.ts:
+  - line: 7
+    label: bad
+    reason: "validateEmail returns true for the empty string without examining it: the empty path is accepted as valid, and '' is not an email"
+    window: 0
+  - line: 12
+    label: clean
+    reason: "hard clean for THIS rule, out of scope: sanitizeHtml strips only <script> and is an incomplete sanitiser, but that is a completeness defect needing knowledge of what HTML sanitisation must cover, not a path that skips the check. Asked as a path question it scores 0.39-0.40 (attempt 1); asked 'in full' (attempt 2) it rose to 0.57 but dragged ensureIndex/ensureBucket to 0.55 and the rule stopped separating. Known miss."
+    window: 0
+  - line: 16
+    label: bad
+    reason: ensureDir swallows every mkdir error, so on EACCES/ENOTDIR it returns normally with the directory not ensured
+    window: 0
+  - line: 24
+    label: bad
+    reason: "verifyWebhookSignature returns true when no signature header is present: an attacker omits the header and the payload is accepted as verified"
+    window: 0
+  - line: 46
+    label: clean
+    reason: "hard clean: the body shows no check of its own, it delegates entirely to a zod schema"
+    window: 0
+  - line: 55
+    label: clean
+    reason: "hard clean: a check* that returns a boolean rather than throwing, and reads a module-level map"
+    window: 0
+  - line: 66
+    label: clean
+    reason: "hard clean: terse assertOk, one condition, throws on failure"
+    window: 0
+  - line: 70
+    label: clean
+    reason: "hard clean: ensure* that is a pure conversion, nothing to check"
+    window: 0
+  - line: 79
+    label: clean
+    reason: "hard clean: verify* reports failure as null rather than throwing; every path that returns claims has checked shape, signature and expiry"
+    window: 0
+  - line: 91
+    label: clean
+    reason: sanitizeFilename uses an allowlist so nothing outside it survives
+    window: 0
+  - line: 96
+    label: clean
+    reason: checkAgeGate computes and returns the answer on its only path
+    window: 0
+  - line: 106
+    label: bad
+    reason: "checkRateLimit returns true (allowed) when the counter store throws: the caller reads that as 'checked and under the limit', but on that path the limit was never checked -- it fails open"
+    window: 0
+fixtures/idempotent.ts:
+  - line: 5
+    label: clean
+    reason: "hard clean for guard-name-guards: the index is created on the only path; what is wrong is the repeat, not a skipped check"
+    window: 0
+  - line: 50
+    label: clean
+    reason: "hard clean: rethrows any error other than NotFound, so the bucket is ensured on every normal path"
+    window: 0
+  - line: 99
+    label: clean
+    reason: "hard clean: ensure* that is a pure conversion, nothing to check"
+    window: 0

@@ -1,0 +1,136 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-19T17:13:04.415Z",
+ "model": "jev-1.13.0",
+ "suite": "javascript/comment-describes-declaration",
+ "rules": [
+  {
+   "id": "comment-describes-declaration",
+   "draft": "22953c1cf03c",
+   "at": 0.57
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 4,
+    "endLine": 6,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 9,
+    "endLine": 11,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 14,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 19,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 4,
+    "endLine": 6,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 9,
+    "endLine": 11,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 14,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 19,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 4,
+    "endLine": 6,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 9,
+    "endLine": 11,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 14,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-declaration",
+    "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+    "line": 19,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.21,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 9,
+  "inputTokens": 47460,
+  "usd": 0.0019933200000000002,
+  "ms": 2318
+ }
+}

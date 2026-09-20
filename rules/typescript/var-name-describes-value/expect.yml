@@ -1,0 +1,170 @@
+default: clean
+fixtures/batch.test.ts:
+  - line: 6
+    label: clean
+    window: 0
+    reason: "`passed` is a counter that is incremented and printed as `${passed} passed`; the conventional counter name, which calibration.md lists as a hard clean. The self-lint of jev-lint flagged this shape in its own runner and it was renamed to passCount; here it is labelled clean because the code shows the count and a boolean reading has no use in the file to support it. Recorded either way as a shape the rule sits on the fence about."
+  - line: 7
+    label: clean
+    window: 0
+    reason: "`failCount` is the counter it says it is; the honest twin of line 6."
+  - line: 8
+    label: clean
+    window: 0
+    reason: "`only` holds the optional test-name filter from argv; a conventional runner name for an optional selector."
+  - line: 22
+    label: clean
+    window: 0
+    reason: "`flat` holds the normalized rule that the test then reads `.rule.all[0]` from; the name describes the shape produced. The hard clean twin of line 33."
+  - line: 33
+    label: bad
+    window: 0
+    reason: "`flat` holds a rejection (`.rule` is undefined and `.error` is asserted), not a flattened rule; the self-lint found this shape in jev-lint's own tests and it was renamed. The claim is about which branch of the result came back, which the assertions show and the initializer does not."
+  - line: 39
+    label: clean
+    window: 0
+    reason: "`ok` is a fixture list paired with `bad`; the two names classify the fixtures and a reader of the loop is not wrong about what each holds. The borderline test-binding shape from the agent-cluster run, labelled clean."
+  - line: 40
+    label: clean
+    window: 0
+    reason: "`bad` is the list of fixtures that must fail to load; paired classification name, see line 39."
+  - line: 46
+    label: bad
+    window: 0
+    reason: "`ok` holds a rejection whose `.error` is asserted; the name says the opposite of what the value is."
+  - line: 51
+    label: clean
+    window: 0
+    reason: "`fromHugeSource` names the provenance of the batches it holds; from jev-lint's own tests, where the self-lint scored it under the cutoff."
+  - line: 62
+    label: clean
+    window: 0
+    reason: "`subjects` is the spread of two subject lists."
+  - line: 63
+    label: clean
+    window: 0
+    reason: "`batches` is what planRuleBatches returns."
+  - line: 64
+    label: clean
+    window: 0
+    reason: "`spanning` is the one batch that spans files, found with .find; an adjective for a single item is terse but accurate. From jev-lint's own tests."
+  - line: 66
+    label: bad
+    window: 0
+    reason: "`files` holds the rule ids of the batch's subjects (`.map((s) => s.rule.id)`), and the assertion counts distinct rules; nothing about files."
+  - line: 72
+    label: clean
+    window: 0
+    reason: "`placed` is the flattened list of placed subjects."
+  - line: 73
+    label: clean
+    window: 0
+    reason: "`seen` is the conventional name for a Set used to detect duplicates."
+fixtures/cart.ts:
+  - line: 52
+    label: bad
+    window: 0
+    reason: "named seconds, holds milliseconds: the code compares it with `elapsedMs`, subtracts `elapsedMs` from it for a setTimeout delay, so the unit mismatch is visible in the file without knowing setTimeout's contract."
+  - line: 53
+    label: clean
+    window: 0
+    reason: "`elapsedMs` is a difference of two millisecond timestamps; the suffix is right."
+  - line: 57
+    label: bad
+    window: 0
+    reason: reads as a boolean, holds a string.
+  - line: 59
+    label: bad
+    window: 0
+    reason: plural name, single value.
+  - line: 61
+    label: clean
+    window: 0
+    reason: "`totalCents` multiplies a price sum by 100 in the initializer: the unit the name claims is produced in the code."
+  - line: 63
+    label: clean
+    window: 0
+    reason: "`paidItems` is a filter on price > 0; the adjective is a loose fit but the value is the items it says, and a clearer name being imaginable is not a mismatch."
+  - line: 29
+    label: clean
+    window: 0
+    reason: "`sum` starts at 0 and accumulates; a terse accumulator name is the convention."
+fixtures/checkout.test.ts:
+  - line: 38
+    label: clean
+    window: 0
+    reason: "`total` is the object checkout returns, whose .discounted is read; a totals object under a singular name is accurate."
+  - line: 58
+    label: bad
+    window: 0
+    reason: "`total` is bound to a spy on cart.total, not to a total"
+  - line: 59
+    label: clean
+    window: 0
+    reason: "`result` is generic and accurate."
+  - line: 147
+    label: clean
+    window: 0
+    reason: "`unauthorized` is the response to the request sent without a token; a test binding named for its scenario. The unseen check answered 0.45-0.47 on this shape."
+  - line: 151
+    label: clean
+    window: 0
+    reason: "`authorized` is the response to the request sent with a token, paired with `unauthorized` above; reads as an adjective, holds a Response. The unseen check on agent-cluster flagged this exact shape four times at 0.51-0.69 before the note named it, and a reader of the test is not misled."
+  - line: 159
+    label: clean
+    window: 0
+    reason: "`missingOrder` is the response to the request missing its order id; scenario name on a Response. Flagged at 0.77-0.83 on agent-cluster (`missingObjective`, `missingTask`) before the note named the convention."
+fixtures/jobs.ts:
+  - line: 5
+    label: clean
+    window: 0
+    reason: "`result` is the raw query result and .rowCount is read from it; generic and accurate. The clean twin of line 14."
+  - line: 10
+    label: clean
+    window: 0
+    reason: "`documents` is bound to `.rows` of the query result, which is the documents. The clean twin of line 14: same call, the name matches what is unwrapped."
+  - line: 15
+    label: bad
+    window: 0
+    reason: "`users` is bound to a query result whose .rows are the users, not to users"
+  - line: 20
+    label: clean
+    window: 0
+    reason: "`shards` is a count read from a setting and compared with 1; the plural-for-a-count convention where the initializer is a call, not a literal. The unseen check on agent-cluster answered 0.49 on this shape (`const shards = readRuntimeAdapterSandboxShards(env)`), 0.01 under the cutoff."
+fixtures/notify.ts:
+  - line: 4
+    label: clean
+    window: 0
+    reason: "`retries` is a plural name on a count; the plural-for-a-count convention is not a plural on a single item."
+  - line: 8
+    label: bad
+    window: 0
+    reason: "`templatePath` holds the file's contents (readFileSync ... 'utf8'), which the next line splits into lines; the name says path."
+  - line: 10
+    label: clean
+    window: 0
+    reason: "`subject` is lines[0]: a singular name on a single item taken from an array. The clean twin of cart.ts:58."
+  - line: 11
+    label: clean
+    window: 0
+    reason: "`body` is the remaining lines."
+  - line: 16
+    label: bad
+    window: 0
+    reason: "`domain` holds the part of the email before the '@', which is the local part; the domain is [1]."
+  - line: 27
+    label: bad
+    window: 0
+    reason: "`userIds` holds the users' display names, and the function returns them as such."
+  - line: 28
+    label: clean
+    window: 0
+    reason: "`pending` is the array of promises still in flight; an adjective on a collection, accurate."
+  - line: 31
+    label: bad
+    window: 0
+    reason: "`delivered` holds the promise mailer.send returns, which is pushed into `pending`, not a delivery outcome."
+  - line: 39
+    label: clean
+    window: 0
+    reason: "`timeoutSeconds` is 30 and is multiplied by 1000 before reaching setTimeout: the unit the name claims is the unit the code converts from. The clean twin of cart.ts:52."

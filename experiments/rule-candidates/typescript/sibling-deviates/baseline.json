@@ -1,0 +1,811 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-20T05:56:21.189Z",
+ "model": "jev-1.13.0",
+ "suite": "typescript/sibling-deviates",
+ "rules": [
+  {
+   "id": "sibling-deviates",
+   "draft": "bba3232d6441",
+   "at": 0.55
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/codec.ts",
+    "line": 1,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/auth_routes.ts",
+    "line": 1,
+    "endLine": 41,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/accounts.ts",
+    "line": 1,
+    "endLine": 29,
+    "kind": "noul",
+    "value": 0.28,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/commands.ts",
+    "line": 1,
+    "endLine": 28,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/fetchers.ts",
+    "line": 1,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.88,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/factories.ts",
+    "line": 1,
+    "endLine": 19,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/formatters.ts",
+    "line": 1,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.67,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/handlers.ts",
+    "line": 1,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.74,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/exporters.ts",
+    "line": 1,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/lookups.ts",
+    "line": 1,
+    "endLine": 28,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/jobs.ts",
+    "line": 1,
+    "endLine": 29,
+    "kind": "noul",
+    "value": 0.17,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/notifications.ts",
+    "line": 1,
+    "endLine": 26,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/order_service.ts",
+    "line": 1,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/middleware.ts",
+    "line": 1,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/parsers.ts",
+    "line": 1,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.72,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/permissions.ts",
+    "line": 1,
+    "endLine": 24,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/preferences.ts",
+    "line": 1,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.23,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/phases.ts",
+    "line": 1,
+    "endLine": 38,
+    "kind": "noul",
+    "value": 0.78,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/product_source.ts",
+    "line": 1,
+    "endLine": 29,
+    "kind": "noul",
+    "value": 0.32,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/project_files.ts",
+    "line": 1,
+    "endLine": 25,
+    "kind": "noul",
+    "value": 0.8,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/serializers.ts",
+    "line": 1,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.81,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/session_events.ts",
+    "line": 1,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.73,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/rate_limiter.ts",
+    "line": 1,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/sync.ts",
+    "line": 1,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.39,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/uploads.ts",
+    "line": 1,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/worker_routes.ts",
+    "line": 1,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/settings.ts",
+    "line": 1,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/validators.ts",
+    "line": 1,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.22,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/user_repository.ts",
+    "line": 1,
+    "endLine": 23,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/commands.ts",
+    "line": 1,
+    "endLine": 28,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/auth_routes.ts",
+    "line": 1,
+    "endLine": 41,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/accounts.ts",
+    "line": 1,
+    "endLine": 29,
+    "kind": "noul",
+    "value": 0.27,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/codec.ts",
+    "line": 1,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/factories.ts",
+    "line": 1,
+    "endLine": 19,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/fetchers.ts",
+    "line": 1,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/formatters.ts",
+    "line": 1,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.67,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/exporters.ts",
+    "line": 1,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/handlers.ts",
+    "line": 1,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.71,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/jobs.ts",
+    "line": 1,
+    "endLine": 29,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/lookups.ts",
+    "line": 1,
+    "endLine": 28,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/middleware.ts",
+    "line": 1,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/notifications.ts",
+    "line": 1,
+    "endLine": 26,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/parsers.ts",
+    "line": 1,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.69,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/order_service.ts",
+    "line": 1,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/permissions.ts",
+    "line": 1,
+    "endLine": 24,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/phases.ts",
+    "line": 1,
+    "endLine": 38,
+    "kind": "noul",
+    "value": 0.8,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/preferences.ts",
+    "line": 1,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.26,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/product_source.ts",
+    "line": 1,
+    "endLine": 29,
+    "kind": "noul",
+    "value": 0.29,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/project_files.ts",
+    "line": 1,
+    "endLine": 25,
+    "kind": "noul",
+    "value": 0.78,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/rate_limiter.ts",
+    "line": 1,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/serializers.ts",
+    "line": 1,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/session_events.ts",
+    "line": 1,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.74,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/settings.ts",
+    "line": 1,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/sync.ts",
+    "line": 1,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.43,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/uploads.ts",
+    "line": 1,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/user_repository.ts",
+    "line": 1,
+    "endLine": 23,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/validators.ts",
+    "line": 1,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/worker_routes.ts",
+    "line": 1,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/codec.ts",
+    "line": 1,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/commands.ts",
+    "line": 1,
+    "endLine": 28,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/accounts.ts",
+    "line": 1,
+    "endLine": 29,
+    "kind": "noul",
+    "value": 0.29,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/auth_routes.ts",
+    "line": 1,
+    "endLine": 41,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/exporters.ts",
+    "line": 1,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/factories.ts",
+    "line": 1,
+    "endLine": 19,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/fetchers.ts",
+    "line": 1,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.85,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/formatters.ts",
+    "line": 1,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.64,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/jobs.ts",
+    "line": 1,
+    "endLine": 29,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/lookups.ts",
+    "line": 1,
+    "endLine": 28,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/middleware.ts",
+    "line": 1,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/handlers.ts",
+    "line": 1,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.71,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/order_service.ts",
+    "line": 1,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/notifications.ts",
+    "line": 1,
+    "endLine": 26,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/parsers.ts",
+    "line": 1,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.74,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/permissions.ts",
+    "line": 1,
+    "endLine": 24,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/preferences.ts",
+    "line": 1,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.24,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/phases.ts",
+    "line": 1,
+    "endLine": 38,
+    "kind": "noul",
+    "value": 0.78,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/product_source.ts",
+    "line": 1,
+    "endLine": 29,
+    "kind": "noul",
+    "value": 0.33,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/project_files.ts",
+    "line": 1,
+    "endLine": 25,
+    "kind": "noul",
+    "value": 0.78,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/serializers.ts",
+    "line": 1,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.84,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/rate_limiter.ts",
+    "line": 1,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.21,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/session_events.ts",
+    "line": 1,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.73,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/settings.ts",
+    "line": 1,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/sync.ts",
+    "line": 1,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.42,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/user_repository.ts",
+    "line": 1,
+    "endLine": 23,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/uploads.ts",
+    "line": 1,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/validators.ts",
+    "line": 1,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.2,
+    "confidence": null
+   },
+   {
+    "rule": "sibling-deviates",
+    "file": "experiments/rule-candidates/typescript/sibling-deviates/fixtures/worker_routes.ts",
+    "line": 1,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.85,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 87,
+  "inputTokens": 133272,
+  "usd": 0.005597424,
+  "ms": 23010
+ }
+}

@@ -1,0 +1,74 @@
+id: openapi-summary-matches-schema
+language: Yaml
+kind: noul
+subject: node
+state: bare
+# 0.58 is kept above the fitted midpoint (0.48 over 30 subjects, 16 bad,
+# 14 clean, 3 passes) for headroom on real specs: bad band 0.80-0.96,
+# clean band 0.04-0.16. The promised-but-undeclared status class sat at
+# 0.42-0.52 until the criteria said the responses map is the complete
+# declaration; it now answers 0.89-0.93.
+at: 0.58
+rule:
+  # An operation: the mapping that is the value of an HTTP-method key and
+  # holds `responses:`. Its `summary`/`description` are the claim; its
+  # parameters, requestBody and responses are the evidence.
+  kind: block_mapping
+  inside:
+    kind: block_node
+    inside:
+      kind: block_mapping_pair
+      has: { field: key, regex: "^(get|post|put|patch|delete|head|options|trace)$" }
+  all:
+    - has:
+        kind: block_mapping_pair
+        has: { field: key, regex: "^responses$" }
+    - any:
+        - all:
+            - has:
+                kind: block_mapping_pair
+                all:
+                  - has: { field: key, regex: "^summary$" }
+                  - has: { field: value, pattern: $SUMMARY }
+            - has:
+                kind: block_mapping_pair
+                all:
+                  - has: { field: key, regex: "^description$" }
+                  - has: { field: value, pattern: $DESCRIPTION }
+        - has:
+            kind: block_mapping_pair
+            all:
+              - has: { field: key, regex: "^summary$" }
+              - has: { field: value, pattern: $SUMMARY }
+        - has:
+            kind: block_mapping_pair
+            all:
+              - has: { field: key, regex: "^description$" }
+              - has: { field: value, pattern: $DESCRIPTION }
+ask: >-
+  This operation's summary or description claims something that its parameters,
+  request body or responses contradict.
+criteria:
+  "true": >-
+    A specific claim in the summary or description is false of the schema beside
+    it: it says the response is a list when the success response schema is a
+    single object or the reverse, it names a parameter, field or header the
+    operation does not declare, it states a body shape the responses do not
+    declare, it promises a status code that is not a key of `responses` -- the
+    responses map is the operation's complete declaration of what it can return,
+    so a "404 if not found" or "409 if it already exists" whose code is absent
+    from the map is contradicted by the map, not merely left out of it -- it
+    lists accepted values that differ from an enum, or it calls the operation
+    safe, read-only or free of side effects when the method and responses show
+    it creates, replaces or deletes something.
+  "false": >-
+    Every checkable claim holds. A summary that is vague, says less than the
+    schema, or does not mention pagination, envelopes or error codes the schema
+    declares is not a contradiction; the omission that counts is the other way
+    round, a code the text promises and the responses map lacks.
+note: >-
+  Judge only claims the operation's own parameters, requestBody and responses
+  can confirm or contradict. A claim about authentication, rate limits, other
+  endpoints, or behaviour the schema cannot show is not checkable here and is
+  not a violation. A POST used for a search or query that only reads is not a
+  contradiction.

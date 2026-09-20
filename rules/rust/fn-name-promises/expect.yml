@@ -1,0 +1,89 @@
+default: clean
+fixtures/backoff.rs:
+  - line: 39
+    label: bad
+    window: 0
+    reason: "`summarize` promises a summary; it returns an arbitrary sum of three unrelated numbers. Same accidental defect as `summarize` in corpus/ts/session.ts and `configure` in corpus/ts/cart.ts, and flagged the same way. See docs/findings.md."
+fixtures/budget.rs:
+  - line: 21
+    label: bad
+    window: 0
+    reason: the comment claims it leaves the budget untouched and it increments `checks` -- which makes it a false comment AND a predicate name on a mutating function. Both rules are right about it; flagged by fn-name-promises at 0.82 while this marker named only the comment rule. / Reports whether the budget is exhausted, without changing it.
+  - line: 59
+    label: clean
+    window: 0
+    reason: "hard clean: `settle` zeroes the outstanding amount and returns what was owed, in the cents the rest of the API uses; the comment above it talks about rounding the body never does, and a stale comment inside a fairly named function is not a name that lies. Before this improvement the body also divided by 100, an unannounced unit change on top of the stale comment, and scored 0.66-0.71, above the labelled defect backoff.rs:39; the fixture was ambiguous on the unit and was rewritten so the label stands on the comment alone."
+fixtures/cache.rs:
+  - line: 18
+    label: bad
+    window: 0
+    reason: "`is_empty` reads as a predicate but returns a count."
+  - line: 22
+    label: bad
+    window: 0
+    reason: "`get` promises a read; this mutates `hits` and removes the entry."
+  - line: 27
+    label: bad
+    window: 0
+    reason: named for all keys, returns one.
+  - line: 43
+    label: bad
+    window: 0
+    reason: nothing here configures anything -- it returns the sum of five unrelated numbers. Labelled after the first run flagged it at 0.87 against a clean label; see the note in corpus/ts/cart.ts and docs/findings.md.
+fixtures/queue.rs:
+  - line: 28
+    label: clean
+    window: 0
+    reason: "clean: constructor."
+  - line: 32
+    label: bad
+    window: 0
+    reason: "`get_job` promises a lookup; it inserts and enqueues the job when missing."
+  - line: 41
+    label: bad
+    window: 0
+    reason: "`count_failed` promises a count; it returns the failed jobs."
+  - line: 45
+    label: clean
+    window: 0
+    reason: "hard clean: terse `take`, pops the next id, marks it running, returns it."
+  - line: 52
+    label: bad
+    window: 0
+    reason: "`drain` promises to empty the queue; it clones the jobs and removes nothing."
+  - line: 56
+    label: clean
+    window: 0
+    reason: "hard clean: `len` is the conventional name, computes from `order`."
+  - line: 60
+    label: clean
+    window: 0
+    reason: "hard clean: `is_empty` is a real predicate here (contrast cache.rs)."
+  - line: 64
+    label: clean
+    window: 0
+    reason: "hard clean: terse `record(id, outcome)`, records an outcome and requeues or fails the job, which is what recording an outcome means for a queue."
+  - line: 84
+    label: clean
+    window: 0
+    reason: "hard clean: trait method `default`."
+  - line: 90
+    label: clean
+    window: 0
+    reason: "hard clean: trait method `fmt`, the conventional Display name."
+  - line: 95
+    label: bad
+    window: 0
+    reason: "`retry` promises `attempts` tries; the loop returns on the first error, so it tries once."
+  - line: 105
+    label: clean
+    window: 0
+    reason: "hard clean: conventional `run`, drains the queue through the handler and returns how many were handled."
+  - line: 114
+    label: clean
+    window: 0
+    reason: "hard clean: conventional `handle`, one job through the handler, outcome recorded."
+  - line: 119
+    label: clean
+    window: 0
+    reason: "clean: parses, returns None when it cannot."

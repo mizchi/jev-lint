@@ -1,0 +1,55 @@
+default: clean
+fixtures/checkout.test.ts:
+  - line: 36
+    label: bad
+    reason: title claims the discount is applied; ./discount.ts is under vi.mock with a fake that returns subtotal*0.9, and 90 is that fake's arithmetic
+    window: 0
+  - line: 43
+    label: bad
+    reason: title claims 8% CA tax is computed; computeTax is a vi.mock returning the constant 8 that the assertion checks
+    window: 0
+  - line: 50
+    label: bad
+    reason: title claims the total is computed from line items; cart.total is spied with mockReturnValue(100) and the assertion reads that 100 back
+    window: 0
+  - line: 56
+    label: clean
+    reason: "hard clean: vi.spyOn on the subject's own method but no replacement value, so the real total runs and the value assertion sees it"
+    window: 0
+  - line: 64
+    label: clean
+    reason: "hard clean: the repository is mocked (a dependency) while cancelOrder, the subject, runs for real and its rejection is asserted"
+    window: 0
+  - line: 74
+    label: bad
+    reason: title claims stock is reserved; inventory.reserveStock is stubbed with mockResolvedValue and the assertion is that stub's value echoed per item
+    window: 0
+  - line: 90
+    label: clean
+    reason: "hard clean: fake timers replace the clock (a dependency); isCouponActive runs for real"
+    window: 0
+  - line: 96
+    label: clean
+    reason: "hard clean: fake timers replace the clock; the subject runs for real"
+    window: 0
+  - line: 108
+    label: bad
+    reason: title claims an ETA is computed from transit days; the fetch stub hands back eta '2024-07-04' verbatim and that is what the assertion checks, so no computation runs
+    window: 0
+  - line: 120
+    label: clean
+    reason: "hard clean: fetch (the network) is stubbed to fail once; the retry the title claims lives in getOrderStatus, which runs for real"
+    window: 0
+  - line: 131
+    label: clean
+    reason: "hard clean: the title is about the boundary (posting to the API), and fetch is the boundary"
+    window: 0
+fixtures/signup.test.ts:
+  - line: 109
+    label: clean
+    reason: "hard clean: the SendGrid client is the adapter's dependency; the adapter runs for real"
+    window: 0
+  - line: 55
+    label: clean
+    reason: "hard clean: the mailer is a mocked dependency; signup runs for real"
+    window: 0

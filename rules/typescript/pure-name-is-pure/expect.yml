@@ -1,0 +1,120 @@
+default: clean
+fixtures/cart.ts:
+  - line: 28
+    label: bad
+    window: 0
+    reason: "`calculate` promises a pure computation; this writes to module state as a side effect."
+fixtures/pure.ts:
+  - line: 5
+    label: bad
+    reason: formatDate calls setHours on its argument, mutating the caller's Date
+    window: 0
+  - line: 18
+    label: bad
+    reason: computeTotal writes cart.lastTotal on its argument and increments a metric
+    window: 0
+  - line: 31
+    label: bad
+    reason: parseConfig takes a path and reads the file; parse* promises a conversion of its input, not I/O
+    window: 0
+  - line: 42
+    label: bad
+    reason: deriveSessionKey increments account.keyVersion on its argument; each call derives a different key
+    window: 0
+  - line: 49
+    label: bad
+    reason: toSlug records into a module-level Set so the same title yields a different slug on the next call
+    window: 0
+  - line: 63
+    label: clean
+    reason: "hard clean: toJSON reads this and returns a new object"
+    window: 0
+  - line: 67
+    label: clean
+    reason: "hard clean: toString reads this"
+    window: 0
+  - line: 72
+    label: clean
+    reason: "hard clean: a mutable local accumulator, nothing outside"
+    window: 0
+  - line: 83
+    label: bad
+    reason: "formatMoney writes into a module-level Map (memoised Intl.NumberFormat). Decided in attempt 3: memoisation into a cache that outlives the call counts as an effect, because asking the model to exempt it (attempt 2) halved the margin -- formatMoney fell only to 0.51-0.62 while toSlug fell to 0.79. The finding is accurate: the name does not say the function fills a cache."
+    window: 0
+  - line: 93
+    label: clean
+    reason: builds and returns local objects
+    window: 0
+  - line: 108
+    label: clean
+    reason: "hard clean: calls .sort() but on a copy the body made"
+    window: 0
+  - line: 120
+    label: clean
+    reason: "hard clean: assigns into an object, but one it created by spreading defaults"
+    window: 0
+  - line: 129
+    label: bad
+    reason: calculateShippingCost fetches a quote over the network
+    window: 0
+  - line: 142
+    label: clean
+    reason: "hard clean: 'log' in the name and a Date construction, but it only formats its argument and returns a string"
+    window: 0
+  - line: 154
+    label: clean
+    reason: "hard clean: 'env' in the name, but the environment is a parameter; the body reads it and returns a new object, and the throw is not an effect"
+    window: 0
+  - line: 186
+    label: clean
+    reason: "hard clean (revision 2, the agent-cluster shape): parseIcuMessage awaits a memoised module loader (getIcuCoreModule) and calls a pure parse function on it; the load is acquiring a dependency, not this body's effect, and nothing is written"
+    window: 0
+  - line: 196
+    label: clean
+    reason: "hard clean (revision 2): formatPluralLabel awaits the same memoised loader after an early return and calls a pure category function; reads its arguments and returns a string"
+    window: 0
+  - line: 216
+    label: clean
+    reason: "hard clean (revision 2): computeContentHash obtains a native binding through a synchronous require-once cache (loadNativeHasher) and hashes its argument; require is acquiring a dependency, the hash is a pure function of bytes and seed"
+    window: 0
+  - line: 236
+    label: clean
+    reason: "hard clean (revision 2): toCountryName reads a constant table that a helper builds lazily on first use; the table is a dependency, not the body's output, and the body only looks up its argument"
+    window: 0
+  - line: 252
+    label: clean
+    reason: "hard clean (revision 2): derivePublicKey resolves a backend from a module-level registry (resolveSignerBackend) and derives the key from the seed; the registry is read, not written, and the throw on an unknown algorithm is not an effect"
+    window: 0
+  - line: 274
+    label: clean
+    reason: "hard clean (revision 2, the worker.ts shape): parseWorkerLimits calls readEnvInt/readEnvString, whose names say env, but each receives its value from the raw argument; nothing is read from the environment"
+    window: 0
+  - line: 301
+    label: bad
+    reason: "parseRemoteManifest acquires a lazily initialised client (fine) and then uses it to GET a URL: the I/O is the fetch, not the acquisition; parse* promises a conversion of its input, and its input is a URL"
+    window: 0
+  - line: 324
+    label: bad
+    reason: "computeRoute acquires the router module (fine) and then writes the route it computed into a module-level routeCache Map: caching its own result is the effect the revision-2 note still counts, the same decision as formatMoney and toSlug"
+    window: 0
+  - line: 347
+    label: bad
+    reason: "parseCheckpoint reads the clock (new Date()) as the default for a missing started_at/updated_at: the common path is pure, the fallback path is not, and the same input parses to a different record at a different time (the worker.ts:7586 / :16594 / :5308 shape)"
+    window: 0
+  - line: 361
+    label: clean
+    reason: "hard clean: toCheckpoint is parseCheckpoint with the timestamp injected as the `now` parameter; the fallback reads an argument, not the clock"
+    window: 0
+  - line: 380
+    label: bad
+    reason: "parseCliOptions reads process.env.CLUSTER_API_TOKEN as the default token: parse* of argv that also reads the environment (the self-improve-loop.ts:1875 shape)"
+    window: 0
+  - line: 401
+    label: bad
+    reason: "toReviewRecord mints rev_${crypto.randomUUID()} when there is no current record: a random source on the fallback path, so the same inputs convert to different records (the worker.ts:5133 shape)"
+    window: 0
+fixtures/safe.ts:
+  - line: 40
+    label: clean
+    reason: "hard clean for pure-name-is-pure: throws, but touches nothing outside itself"
+    window: 0

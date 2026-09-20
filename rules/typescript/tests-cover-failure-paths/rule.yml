@@ -1,0 +1,118 @@
+# Family H: what the tests reach. The one rule whose evidence is in another
+# file -- the tests -- and therefore the rule the `paired` arm exists for.
+#
+# The sibling of jev-review's `testGap` screening, narrowed to what a model
+# can decide from two pieces of text: this function declares a way to fail
+# (a throw, a rejection, an error result, a guard that rejects an input), and
+# the related tests, as excerpted into the state, never drive it there. Not
+# "is this function tested enough" -- that has no referee -- but "is there a
+# failure path here that no test reaches", which a reader with both files
+# open can answer.
+#
+# The matcher is exported functions only. A private helper's failure path
+# is exercised through whatever exports call it, and asking about it
+# directly makes every such helper a finding.
+#
+# A file with no related test is never asked about: the runner drops those
+# subjects and counts them (`unpaired` in the report). With no tests in the
+# state, "no test reaches this path" is true of everything and says nothing.
+#
+# Three sentence attempts, all on the criteria and note; the ask never moved.
+# The draft separated at once (defects 0.91-0.95, cleans under 0.28) on a
+# corpus of the plain shapes, and three hard cleans added afterwards landed
+# at 0.49-0.51: a path reached only through a same-file caller, a path
+# reached under a test title that claims a different failure, and a
+# four-operand guard tripped through one operand. The second attempt said
+# "reached through a caller counts" and "judge the body, not the title" and
+# moved the first two to 0.27 and 0.34; the third said "one throw behind
+# several operands is one path" and named the assertion vocabularies, which
+# moved the compound guard to 0.28 and let the mislabelled-title case drift
+# back to 0.45. That pair trading places is the residue.
+
+id: tests-cover-failure-paths
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+subject: node
+state: paired
+# 0.68, refitted 2026-09-20 on this rule's evals (27 subjects: 7 defects, 20
+# cleans of which 11 hard, 3 passes, evals/baseline.json) after the paired
+# arm learned to keep a short test whole and to pair by resolved import.
+# Defects answer 0.88-0.95 (quietest: truncateSlug's sibling in slug.ts,
+# whose guard no test trips). Cleans top out at 0.36 (readConfig, whose
+# only throws are a callee's), then 0.28 (retry, reached through a
+# try/catch) and 0.27 (truncateSlug, whose guard is reached under a test
+# title that claims something else -- 0.45 before the whole test travelled
+# with the excerpt). Midpoint 0.62; 0.68 leans toward precision because a
+# corpus clean answer is an upper bound on its real-code answer only for
+# the case the corpus contains, and the first run on unseen code (jev-lint's
+# own src/, 113 subjects) was a continuum with 7 over 0.70, 4 of them right
+# and one a fallback `return captured` that the note now names as
+# not-a-failure. See experiments/reports/h-tests-reach.
+at: 0.68
+rule:
+  any:
+    - all:
+        - kind: function_declaration
+        - inside:
+            kind: export_statement
+        - has:
+            field: name
+            pattern: $NAME
+    - all:
+        - kind: variable_declarator
+        # Direct nesting only: `export const f = ...` is
+        # export_statement > lexical_declaration > variable_declarator.
+        # With `stopBy: end` here, a closure declared INSIDE an exported
+        # function matched too, and the first run on real code reported
+        # a private `const askBatch = async ...` as if it were an export.
+        - inside:
+            kind: lexical_declaration
+            inside:
+              kind: export_statement
+        - has:
+            field: name
+            pattern: $NAME
+        - has:
+            field: value
+            any:
+              - kind: arrow_function
+              - kind: function_expression
+ask: >-
+  This function ($NAME) has a failure path of its own that none of the related
+  tests reaches.
+criteria:
+  "true": >-
+    The body itself throws, rejects, returns an error value, or refuses an input
+    through a guard on some path, and no related test in the state drives $NAME
+    down that path: no test passes an input that trips the guard, asserts a
+    throw or a rejection from it, or asserts the error result -- neither by
+    calling $NAME nor through another function in this file that calls it. A
+    related test that never calls $NAME, directly or through a caller, while the
+    body has such a path, is that case.
+  "false": >-
+    Every failure path the body declares is reached by some related test -- a
+    test passes the bad input, asserts that the call throws or rejects, or
+    asserts the error result it returns, whether it calls $NAME itself or calls
+    a function in this file that calls $NAME, and in whatever vocabulary the
+    runner uses (`toThrow`, `rejects`, `assert.throws`, a `try`/`catch` around
+    the call, an `.ok` read as false) -- or the body has no failure path of its
+    own: it cannot fail, or the only failures on its paths come from callees it
+    does not guard, which are those callees' paths and not this function's. A
+    throw behind one condition with several operands is one path, and a test
+    that trips any one operand has reached it.
+note: >-
+  A failure path is one throw, one reject, or one return of an error value (`{
+  ok: false }`, `null`, `undefined` on a checked condition): a single throw
+  behind a condition with several `||` operands is one path, reached when any
+  operand is tripped. Only the paths this body DECLARES count; a callee that may
+  throw is not this function's path unless the body catches and re-reports it.
+  Judge what a test's body does, not what its title says: a test whose title
+  claims a failure but whose body never trips $NAME's guard reaches nothing, and
+  a test whose title is about something else but whose body passes the bad input
+  and asserts the throw reaches it. The related tests are excerpts, so a call to
+  $NAME counts even when the assertion around it was cut; but a call with
+  ordinary input does not reach a guard that ordinary input never trips, and a
+  mention of $NAME only in an import reaches nothing. Returning the input
+  unchanged, or a default, when a condition is not met is a fallback and not a
+  failure path: nothing is refused and nothing reports an error.
+axis: file

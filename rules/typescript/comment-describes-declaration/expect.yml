@@ -1,0 +1,30 @@
+default: clean
+fixtures/session_store.ts:
+  - line: 12
+    label: bad
+    window: 0
+    reason: says milliseconds, returns seconds.
+  - line: 17
+    label: bad
+    window: 0
+    reason: says it does not mutate, and it increments `hits`.
+  - line: 24
+    label: bad
+    window: 0
+    reason: says newest first, sorts oldest first.
+  - line: 29
+    label: bad
+    window: 0
+    reason: the comment documents a `ttlSeconds` parameter that no longer exists.
+  - line: 34
+    label: bad
+    window: 0
+    reason: says it throws on an unknown id, and it returns false.
+  - line: 88
+    label: clean
+    window: 0
+    reason: "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"
+  - line: 94
+    label: clean
+    window: 0
+    reason: "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"

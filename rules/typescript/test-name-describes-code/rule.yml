@@ -1,0 +1,119 @@
+# --------------------------------------------------------------------------
+# 3. Tests: two rules, because there are two ways a test can lie
+# --------------------------------------------------------------------------
+#
+# These are the sharpest rules in the pack, because the matcher hands the
+# question both halves of the comparison by name: the title string and the
+# body. A question whose two subjects are named explicitly is answerable;
+# "is this test good" is not.
+#
+# There are two rules and not one because a test can fail its name in two
+# unrelated ways, and a rubric answers the axis it was written on and nothing
+# else -- mixing axes into one question stops it being monotone:
+#
+#   test-name-describes-code   the code does something OTHER than the name says.
+#                              A title about the empty case exercising the
+#                              non-empty one. A title promising a throw whose
+#                              body expects a value.
+#   test-name-verifies-claim   the code is ABOUT the right thing but does not
+#                              actually establish it. An assertion so weak the
+#                              named behaviour could be broken and still pass.
+#                              No assertion at all.
+#
+# The first version of this pack asked both in one question, whose criteria
+# listed "a different case ... or asserts nothing at all" together. That caught
+# the corpus's defects, but it could not say WHICH kind a finding was, and a
+# finding that cannot name its kind is one a reader has to re-derive. Whether
+# splitting also changes recall is measured in docs/findings.md.
+#
+# They overlap, and that is expected rather than a problem: an atomic rule is an
+# addition to a broader one, not a replacement, and each carries its own cutoff.
+
+# 3a. Does the code do what the name says?
+id: test-name-describes-code
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+subject: node
+# `bare` -- the cheapest arm, because this subject already contains both
+# things being compared: the matcher captures the title and the body, so the
+# file adds no evidence.
+#
+# INHERITED, not measured for this rule. The arm sweep in docs/data/arms.json
+# covers the PRE-SPLIT pack, where `test-name-matches-body` scored precision
+# 1.0 and recall 1.0 on every arm and the file widened its class separation
+# from 0.82 to 0.90 without changing a decision. That rule no longer exists;
+# it became this one and `test-name-verifies-claim`, and neither successor has
+# been re-measured across arms. Re-run `tools/arms.ts` before relying on it.
+#
+# Staying on `bare` buys something the wider margin does not: a verdict that
+# depends on nothing outside the test itself. Editing an unrelated test in the
+# same file cannot change this one's answer, and cannot invalidate its cached
+# verdict either.
+state: bare
+# Fitted 0.72 on evals/ (10 defects, 19 cleans of which 14 are labelled hard,
+# 3 passes, 0 flips): clean top 0.54, lowest defect 0.89, midpoint 0.71.
+# Set just above the midpoint for headroom on real code.
+#
+# The cutoff used to be 0.95, fitted to two defects and one clean answering
+# 0.96 -- cart.test.ts:32, "returns items sorted by price" over a body that
+# counts the fixture. That case was labelled clean for this rule on the
+# theory that "the code is about items", and the rule's comments called its
+# 0.96 an inversion. It is not: the body calls no sort, so the name refers
+# to something the code never touches, which is this rule's own true branch.
+# It is now labelled a defect, and the case that actually tests the split --
+# sortByPrice IS called and only the length is checked, inventory.test.ts:26
+# -- answers 0.53 as a clean. The two rules are nested (a wrong-thing test
+# also fails to establish its claim), so every defect here is also a defect
+# for `test-name-verifies-claim`, and this rule's weak-but-right cleans are
+# that rule's defects.
+#
+# What moved the weak-but-right cleans down from 0.74-0.81: the ask now
+# names what is exercised (operation, input, outcome) rather than "does
+# something other", and the note says a weak or missing assertion is not a
+# different outcome. The quietest defect is the adjacent-name one (a title
+# saying reserves over a body that restocks), at 0.89.
+at: 0.72
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: warning
+rule:
+  any:
+    - pattern: it($TITLE, $BODY)
+    - pattern: test($TITLE, $BODY)
+    - pattern: it($TITLE, $BODY, $TIMEOUT)
+    - pattern: test($TITLE, $BODY, $TIMEOUT)
+    - pattern: it.each($CASES)($TITLE, $BODY)
+ask: >-
+  The operation, input or outcome this test's code exercises is not the one its
+  name names.
+note: >-
+  A weak or missing assertion is not a different outcome. The outcome differs
+  only when the code expects something the name contradicts: an ordinary value
+  where the name says throws or rejects, active where it says rejects, the
+  below-threshold price where it says above. A body that calls the named
+  operation on the named input and then checks a length, checks that something
+  exists, or checks nothing, is about the named thing.
+criteria:
+  # Deliberately silent about assertion STRENGTH. A weak assertion about the
+  # right thing is the other rule's business, and a criterion that mentioned
+  # both would be answering two axes at once.
+  "true": >-
+    Reading the name and then the code, they are about different things. The
+    operation the code calls is not the one the name says (a lookup where the
+    name says remove, a post where it says reverse); the input or case the code
+    sets up is not the one the name states (three units where the name says
+    above ten, a non-empty list where it says empty); the outcome the code
+    expects is the opposite of the one the name implies (expecting active where
+    the name says rejects); the name promises a throw, a panic, an error or a
+    rejection where the code expects an ordinary value; or the name refers to
+    something -- a sort, a warning, a log line -- that the code never calls and
+    never checks.
+  "false": >-
+    The code calls the operation the name says, on the input the name says, and
+    expects the kind of outcome the name says. That holds however weak the
+    assertion is: a length check, an is_some, a toBeDefined, a bare call with no
+    assertion at all, are still about the named thing, and whether they
+    establish it is a separate question this rule does not ask. A one-word
+    title, a synonym for the operation's name, a compound title whose body
+    covers both parts, and setup that calls other operations before the named
+    one, are all fine.

@@ -676,10 +676,11 @@ function* walkYaml(dir: string): Generator<string> {
     a.name.localeCompare(b.name),
   )) {
     const full = join(dir, entry.name);
-    // `evals/` holds a rule's cases and records, not rules; a `.yml` in there
-    // is a fixture. Hidden directories are nobody's rules either.
+    // `fixtures/` holds a rule's cases, not rules; a `.yml` in there is a
+    // fixture. `expect.yml` is the expectations. Hidden directories are
+    // nobody's rules either.
     if (entry.isDirectory()) {
-      if (entry.name !== "evals" && !entry.name.startsWith(".")) yield* walkYaml(full);
-    } else if (/\.ya?ml$/.test(entry.name)) yield full;
+      if (entry.name !== "fixtures" && entry.name !== "evals" && !entry.name.startsWith(".")) yield* walkYaml(full);
+    } else if (/\.ya?ml$/.test(entry.name) && entry.name !== "expect.yml") yield full;
   }
 }

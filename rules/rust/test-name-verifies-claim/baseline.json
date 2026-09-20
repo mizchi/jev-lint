@@ -1,0 +1,973 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-19T17:54:56.392Z",
+ "model": "jev-1.13.0",
+ "suite": "rust/test-name-verifies-claim",
+ "rules": [
+  {
+   "id": "test-name-verifies-claim",
+   "draft": "2ba765c39ea4",
+   "at": 0.55
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 19,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 25,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.44,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 33,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 39,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.57,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 45,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 51,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 56,
+    "endLine": 58,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 61,
+    "endLine": 63,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 66,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.61,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 72,
+    "endLine": 77,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 80,
+    "endLine": 84,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 87,
+    "endLine": 89,
+    "kind": "noul",
+    "value": 0.84,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 92,
+    "endLine": 97,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 100,
+    "endLine": 106,
+    "kind": "noul",
+    "value": 0.22,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 109,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 115,
+    "endLine": 117,
+    "kind": "noul",
+    "value": 0.29,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 120,
+    "endLine": 122,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 14,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 19,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 24,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.97,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 30,
+    "endLine": 33,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 36,
+    "endLine": 39,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 42,
+    "endLine": 44,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 47,
+    "endLine": 50,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 27,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 34,
+    "endLine": 40,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 43,
+    "endLine": 47,
+    "kind": "noul",
+    "value": 0.28,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 50,
+    "endLine": 55,
+    "kind": "noul",
+    "value": 0.27,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 58,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 65,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.49,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 73,
+    "endLine": 75,
+    "kind": "noul",
+    "value": 0.48,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 78,
+    "endLine": 80,
+    "kind": "noul",
+    "value": 0.41,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 83,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.61,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 88,
+    "endLine": 97,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 100,
+    "endLine": 108,
+    "kind": "noul",
+    "value": 0.21,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 19,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 25,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.47,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 33,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 39,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.55,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 45,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.2,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 51,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 56,
+    "endLine": 58,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 61,
+    "endLine": 63,
+    "kind": "noul",
+    "value": 0.2,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 66,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.62,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 72,
+    "endLine": 77,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 80,
+    "endLine": 84,
+    "kind": "noul",
+    "value": 0.21,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 87,
+    "endLine": 89,
+    "kind": "noul",
+    "value": 0.83,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 92,
+    "endLine": 97,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 100,
+    "endLine": 106,
+    "kind": "noul",
+    "value": 0.23,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 109,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 115,
+    "endLine": 117,
+    "kind": "noul",
+    "value": 0.33,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 120,
+    "endLine": 122,
+    "kind": "noul",
+    "value": 0.17,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 27,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 34,
+    "endLine": 40,
+    "kind": "noul",
+    "value": 0.17,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 43,
+    "endLine": 47,
+    "kind": "noul",
+    "value": 0.27,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 50,
+    "endLine": 55,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 58,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 65,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.5,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 73,
+    "endLine": 75,
+    "kind": "noul",
+    "value": 0.5,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 78,
+    "endLine": 80,
+    "kind": "noul",
+    "value": 0.37,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 83,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.74,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 88,
+    "endLine": 97,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 100,
+    "endLine": 108,
+    "kind": "noul",
+    "value": 0.2,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 14,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 19,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 24,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.97,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 30,
+    "endLine": 33,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 36,
+    "endLine": 39,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 42,
+    "endLine": 44,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 47,
+    "endLine": 50,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 19,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.97,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 25,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.45,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 33,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 39,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.59,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 45,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 51,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 56,
+    "endLine": 58,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 61,
+    "endLine": 63,
+    "kind": "noul",
+    "value": 0.21,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 66,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.6,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 72,
+    "endLine": 77,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 80,
+    "endLine": 84,
+    "kind": "noul",
+    "value": 0.21,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 87,
+    "endLine": 89,
+    "kind": "noul",
+    "value": 0.83,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 92,
+    "endLine": 97,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 100,
+    "endLine": 106,
+    "kind": "noul",
+    "value": 0.22,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 109,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 115,
+    "endLine": 117,
+    "kind": "noul",
+    "value": 0.28,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/ledger_test.rs",
+    "line": 120,
+    "endLine": 122,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 27,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 34,
+    "endLine": 40,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 43,
+    "endLine": 47,
+    "kind": "noul",
+    "value": 0.25,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 50,
+    "endLine": 55,
+    "kind": "noul",
+    "value": 0.23,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 58,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 65,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.38,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 73,
+    "endLine": 75,
+    "kind": "noul",
+    "value": 0.47,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 78,
+    "endLine": 80,
+    "kind": "noul",
+    "value": 0.4,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 83,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.69,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 88,
+    "endLine": 97,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/notify_test.rs",
+    "line": 100,
+    "endLine": 108,
+    "kind": "noul",
+    "value": 0.2,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 14,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 19,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 24,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.97,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 30,
+    "endLine": 33,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 36,
+    "endLine": 39,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 42,
+    "endLine": 44,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-verifies-claim",
+    "file": "rules/rust/test-name-verifies-claim/fixtures/store_test.rs",
+    "line": 47,
+    "endLine": 50,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 27,
+  "inputTokens": 247983,
+  "usd": 0.010415286000000001,
+  "ms": 10028
+ }
+}

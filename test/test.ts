@@ -564,6 +564,23 @@ test("rules: a duplicate id is reported and a missing path is reported", () => {
   }
 });
 
+test("rules: every tier-one shipped rule has fixtures, an expect file and an accepted baseline", () => {
+  // The bar a first-tier language is held to. A rule under any other
+  // language directory may ship without a baseline and is listed as
+  // uncalibrated; a rule under typescript/ or rust/ may not.
+  const { rules, errors } = loadRules(["rules"]);
+  assert.deepEqual(errors, []);
+  for (const r of rules) {
+    if (!r.languageDir || !(TIER_ONE as readonly string[]).includes(r.languageDir)) continue;
+    const dir = join("rules", r.languageDir, r.id);
+    assert.equal(r.source, join(dir, "rule.yml"), `${r.languageDir}/${r.id} lives where its identity says`);
+    for (const need of ["fixtures", "expect.yml", "baseline.json"]) {
+      assert.ok(existsSync(join(dir, need)), `${dir}/${need} is missing`);
+    }
+  }
+  assert.ok(rules.some((r) => r.languageDir === "typescript") && rules.some((r) => r.languageDir === "rust"));
+});
+
 test("rules: the shipped pack loads with no errors", () => {
   const { rules, errors } = loadRules(["rules"]);
   assert.deepEqual(errors, [], `shipped rules must be valid: ${errors.join("; ")}`);
@@ -2465,7 +2482,7 @@ await testAsync("run: --explain asks a second question of the findings only, and
       return { answers, usage: { input_tokens: 1 } };
     },
   };
-  const result = await run({ rules: [rule], paths: ["rules/fn-name-promises/evals/cases"], cachePath: null, client, explain: true });
+  const result = await run({ rules: [rule], paths: ["rules/typescript/fn-name-promises/fixtures"], cachePath: null, client, explain: true });
   const verdictRounds = seen.filter((qs) => Object.values(qs).every((q) => q.type === "score"));
   const explainRounds = seen.filter((qs) => Object.values(qs).every((q) => q.type === "choice"));
   assert.ok(verdictRounds.length > 0 && explainRounds.length > 0, "two kinds of request, never mixed");
@@ -2483,7 +2500,7 @@ await testAsync("run: --explain asks a second question of the findings only, and
   assert.equal(JSON.parse(formatJson(result)).findings[0].explanation.choice, "narrows");
   // Without the flag nothing is asked twice, whatever the rule declares.
   seen.length = 0;
-  const plain = await run({ rules: [rule], paths: ["rules/fn-name-promises/evals/cases"], cachePath: null, client });
+  const plain = await run({ rules: [rule], paths: ["rules/typescript/fn-name-promises/fixtures"], cachePath: null, client });
   assert.equal(seen.filter((qs) => Object.values(qs).some((q) => q.type === "choice")).length, 0);
   assert.ok(plain.findings.every((f) => f.explanation === undefined));
 });
@@ -2505,7 +2522,7 @@ await testAsync("run: --loose reaches every format as a section of its own, and 
       return { answers, usage: { input_tokens: 1 } };
     },
   };
-  const opts = { rules: [rule], paths: ["rules/fn-name-promises/evals/cases"], cachePath: null, client };
+  const opts = { rules: [rule], paths: ["rules/typescript/fn-name-promises/fixtures"], cachePath: null, client };
   const loose = await run({ ...opts, loose: Infinity });
   const before = calls;
   const tight = await run(opts);
@@ -2542,7 +2559,7 @@ await testAsync("run: an auth error stops the run instead of failing every batch
   };
   const result = await run({
     rules: [rule],
-    paths: ["rules/fn-name-promises/evals/cases"],
+    paths: ["rules/typescript/fn-name-promises/fixtures"],
     cachePath: null,
     retry: 3,
     concurrency: 1,
@@ -2673,39 +2690,49 @@ await testAsync("jev: usage is priced at the published input rate", async () => 
 
 // ------------------------------------------------------------------ evals
 
-test("evals: a rule directory with evals/labels.json is an eval suite, and its yml is not a rule", () => {
-  // The layout: rules/<rule>/rule.yml beside rules/<rule>/evals/{cases,
-  // labels.json, baseline.json}. The loader walks rules/ recursively, so
-  // anything under evals/ that ends in .yml would be read as a rule file and
-  // fail validation -- the loader has to skip evals/, and discovery has to
-  // find exactly the directories that carry labels.
+test("evals: a rule directory with expect.yml is an eval suite, and neither it nor its fixtures are rules", () => {
+  // The layout: rules/<lang>/<id>/rule.yml beside expect.yml, fixtures/ and
+  // baseline.json. The loader walks rules/ recursively, so expect.yml and
+  // any .yml fixture would be read as rule files and fail validation -- the
+  // loader skips both, and discovery finds exactly the directories that
+  // carry an expect file.
   const dir = mkdtempSync(join(tmpdir(), "jev-lint-evals-"));
   try {
-    mkdirSync(join(dir, "a", "evals", "cases"), { recursive: true });
-    writeFileSync(join(dir, "a", "rule.yml"), "- id: a\n  language: TypeScript\n  rule: { kind: function_declaration }\n  ask: q\n");
-    writeFileSync(join(dir, "a", "evals", "labels.json"), JSON.stringify({ $default: "clean", "x.ts": [] }));
-    writeFileSync(join(dir, "a", "evals", "notes.yml"), "not: a rule\n");
-    mkdirSync(join(dir, "b"), { recursive: true });
-    writeFileSync(join(dir, "b", "rule.yml"), "- id: b\n  language: TypeScript\n  rule: { kind: function_declaration }\n  ask: q\n");
+    mkdirSync(join(dir, "typescript", "a", "fixtures"), { recursive: true });
+    writeFileSync(join(dir, "typescript", "a", "rule.yml"), "id: a\nlanguage: TypeScript\nrule: { kind: function_declaration }\nask: q\n");
+    writeFileSync(join(dir, "typescript", "a", "expect.yml"), "default: clean\nfixtures/x.ts:\n  - { line: 3, label: bad, reason: r }\n");
+    writeFileSync(join(dir, "typescript", "a", "fixtures", "workflow.yml"), "not: a rule\n");
+    mkdirSync(join(dir, "rust", "b"), { recursive: true });
+    writeFileSync(join(dir, "rust", "b", "rule.yml"), "id: b\nlanguage: Rust\nrule: { kind: function_item }\nask: q\n");
     const { rules, errors } = loadRules([dir]);
-    assert.deepEqual(errors, [], "evals/ must be invisible to the rule loader");
-    assert.deepEqual(rules.map((r) => r.id), ["a", "b"]);
+    assert.deepEqual(errors, [], "expect.yml and fixtures/ must be invisible to the rule loader");
+    assert.deepEqual(rules.map((r) => `${r.languageDir}/${r.id}`), ["rust/b", "typescript/a"]);
     const suites = discoverEvals([dir]);
-    assert.equal(suites.length, 1, "only the directory with evals/labels.json is a suite");
-    assert.equal(suites[0]!.name, "a");
-    assert.equal(suites[0]!.ruleFile, join(dir, "a", "rule.yml"));
-    assert.equal(suites[0]!.cases, join(dir, "a", "evals", "cases"));
-    assert.equal(suites[0]!.baseline, join(dir, "a", "evals", "baseline.json"));
+    assert.equal(suites.length, 1, "only the directory with expect.yml is a suite");
+    assert.equal(suites[0]!.name, "typescript/a", "named by language and id");
+    assert.equal(suites[0]!.ruleFile, join(dir, "typescript", "a", "rule.yml"));
+    assert.equal(suites[0]!.fixtures, join(dir, "typescript", "a", "fixtures"));
+    assert.equal(suites[0]!.baseline, join(dir, "typescript", "a", "baseline.json"));
+    // Loading the suite re-keys the expectations to the paths a run reports
+    // and stamps the suite's rule on each, so `labelFor` needs no `rule:`.
+    const loaded = loadSuite(suites[0]!);
+    assert.deepEqual(loaded.errors, []);
+    assert.equal(loaded.labels.$default, "clean");
+    assert.deepEqual(loaded.labels[join(dir, "typescript", "a", "fixtures", "x.ts")], [{ line: 3, label: "bad", reason: "r", rule: "a" }]);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
 });
 
-test("evals: labels are written relative to cases/ and resolved to the paths a run reports", () => {
-  const labels = relocateLabels({ $default: "clean", "cart.ts": [{ line: 3, label: "bad", rule: "a" }] }, "rules/a/evals/cases");
+test("evals: expectations are written relative to the rule directory and resolved to the paths a run reports", () => {
+  const labels = relocateLabels({ default: "clean", note: "n", "fixtures/cart.ts": [{ line: 3, label: "bad" }] }, "rules/typescript/a", "a");
   assert.equal(labels.$default, "clean");
-  assert.deepEqual(labels["rules/a/evals/cases/cart.ts"], [{ line: 3, label: "bad", rule: "a" }]);
-  assert.equal(labels["cart.ts"], undefined);
+  assert.equal(labels.$note, "n");
+  assert.deepEqual(labels["rules/typescript/a/fixtures/cart.ts"], [{ line: 3, label: "bad", rule: "a" }]);
+  assert.equal(labels["fixtures/cart.ts"], undefined);
+  // The old spellings still read, so a hand-written file is not rejected
+  // for a dollar sign.
+  assert.equal(relocateLabels({ $default: "bad" }, "d", "a").$default, "bad");
 });
 
 const evalRule = (id: string, at: number) => noulRule({ id, at });
@@ -2773,21 +2800,22 @@ test("evals: comparing with a baseline names the cases that got worse, and a cha
 
 await testAsync("evals: a suite runs its rule over its cases, records every pass, and knows when its question changed", async () => {
   const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-lint-evals-")));
-  const ruleDir = join(dir, "fn-name-promises");
+  const ruleDir = join(dir, "typescript", "fn-name-promises");
   try {
-    mkdirSync(join(ruleDir, "evals", "cases"), { recursive: true });
+    mkdirSync(join(ruleDir, "fixtures"), { recursive: true });
     writeFileSync(
       join(ruleDir, "rule.yml"),
-      ["- id: fn-name-promises", "  language: TypeScript", "  kind: noul", "  at: 0.5",
-       "  rule: { kind: function_declaration, has: { field: name, pattern: $NAME } }",
-       "  ask: The body of this function does something other than what its name promises.",
-       "  criteria: { 'true': it does, 'false': it does not }"].join("\n"),
+      ["id: fn-name-promises", "language: TypeScript", "kind: noul", "at: 0.5",
+       "rule: { kind: function_declaration, has: { field: name, pattern: $NAME } }",
+       "ask: The body of this function does something other than what its name promises.",
+       "criteria: { 'true': it does, 'false': it does not }"].join("\n"),
     );
-    writeFileSync(join(ruleDir, "evals", "cases", "a.ts"), "export function isValid(x: string): string { return x; }\nexport function count(xs: string[]): number { return xs.length; }\n");
-    writeFileSync(join(ruleDir, "evals", "labels.json"), JSON.stringify({
-      $default: "clean",
-      "a.ts": [{ line: 1, label: "bad", rule: "fn-name-promises", window: 0, reason: "reads as a predicate, returns a string" }],
-    }));
+    writeFileSync(join(ruleDir, "fixtures", "a.ts"), "export function isValid(x: string): string { return x; }\nexport function count(xs: string[]): number { return xs.length; }\n");
+    writeFileSync(join(ruleDir, "expect.yml"), [
+      "default: clean",
+      "fixtures/a.ts:",
+      "  - { line: 1, label: bad, window: 0, reason: reads as a predicate, returns a string }",
+    ].join("\n"));
     const [suite] = discoverEvals([dir]);
     assert.ok(suite);
     // A fake model: 0.9 for the first question, 0.1 for the second, on every pass.

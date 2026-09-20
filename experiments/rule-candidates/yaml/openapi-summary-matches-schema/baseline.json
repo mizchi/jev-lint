@@ -1,0 +1,838 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-19T17:48:26.362Z",
+ "model": "jev-1.13.0",
+ "suite": "yaml/openapi-summary-matches-schema",
+ "rules": [
+  {
+   "id": "openapi-summary-matches-schema",
+   "draft": "7b3b7b1c9af4",
+   "at": 0.58
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 9,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 29,
+    "endLine": 51,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 55,
+    "endLine": 71,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 73,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 89,
+    "endLine": 106,
+    "kind": "noul",
+    "value": 0.78,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 9,
+    "endLine": 39,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 41,
+    "endLine": 64,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 68,
+    "endLine": 92,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 96,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 114,
+    "endLine": 145,
+    "kind": "noul",
+    "value": 0.79,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 147,
+    "endLine": 161,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 165,
+    "endLine": 187,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 191,
+    "endLine": 211,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 213,
+    "endLine": 233,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 237,
+    "endLine": 257,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 259,
+    "endLine": 271,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 275,
+    "endLine": 293,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 13,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 34,
+    "endLine": 60,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 64,
+    "endLine": 80,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 82,
+    "endLine": 104,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 106,
+    "endLine": 121,
+    "kind": "noul",
+    "value": 0.89,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 125,
+    "endLine": 142,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 9,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 39,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 66,
+    "endLine": 87,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 91,
+    "endLine": 115,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 119,
+    "endLine": 145,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 149,
+    "endLine": 171,
+    "kind": "noul",
+    "value": 0.85,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 175,
+    "endLine": 190,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 13,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 34,
+    "endLine": 60,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 64,
+    "endLine": 80,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 82,
+    "endLine": 104,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 106,
+    "endLine": 121,
+    "kind": "noul",
+    "value": 0.85,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 125,
+    "endLine": 142,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 9,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 39,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 66,
+    "endLine": 87,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 91,
+    "endLine": 115,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 119,
+    "endLine": 145,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 149,
+    "endLine": 171,
+    "kind": "noul",
+    "value": 0.87,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 175,
+    "endLine": 190,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 9,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 29,
+    "endLine": 51,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 55,
+    "endLine": 71,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 73,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 89,
+    "endLine": 106,
+    "kind": "noul",
+    "value": 0.81,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 9,
+    "endLine": 39,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 41,
+    "endLine": 64,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 68,
+    "endLine": 92,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 96,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 114,
+    "endLine": 145,
+    "kind": "noul",
+    "value": 0.73,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 147,
+    "endLine": 161,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 165,
+    "endLine": 187,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 191,
+    "endLine": 211,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 213,
+    "endLine": 233,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 237,
+    "endLine": 257,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 259,
+    "endLine": 271,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 275,
+    "endLine": 293,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 9,
+    "endLine": 35,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 39,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 66,
+    "endLine": 87,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 91,
+    "endLine": 115,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 119,
+    "endLine": 145,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 149,
+    "endLine": 171,
+    "kind": "noul",
+    "value": 0.85,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/billing.yaml",
+    "line": 175,
+    "endLine": 190,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 13,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 34,
+    "endLine": 60,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 64,
+    "endLine": 80,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 82,
+    "endLine": 104,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 106,
+    "endLine": 121,
+    "kind": "noul",
+    "value": 0.87,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/users.yaml",
+    "line": 125,
+    "endLine": 142,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 9,
+    "endLine": 39,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 41,
+    "endLine": 64,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 68,
+    "endLine": 92,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 96,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 114,
+    "endLine": 145,
+    "kind": "noul",
+    "value": 0.78,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 147,
+    "endLine": 161,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 165,
+    "endLine": 187,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 191,
+    "endLine": 211,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 213,
+    "endLine": 233,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 237,
+    "endLine": 257,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 259,
+    "endLine": 271,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/webhooks.yaml",
+    "line": 275,
+    "endLine": 293,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 9,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 29,
+    "endLine": 51,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 55,
+    "endLine": 71,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 73,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "openapi-summary-matches-schema",
+    "file": "experiments/rule-candidates/yaml/openapi-summary-matches-schema/fixtures/openapi/catalog.yaml",
+    "line": 89,
+    "endLine": 106,
+    "kind": "noul",
+    "value": 0.79,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 12,
+  "inputTokens": 70755,
+  "usd": 0.0029717100000000002,
+  "ms": 4770
+ }
+}

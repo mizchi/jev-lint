@@ -1,0 +1,142 @@
+# --------------------------------------------------------------------------
+# 2. Does a comment inside a body describe the code it sits above?
+# --------------------------------------------------------------------------
+#
+# Where drift actually accumulates. A doc comment gets reread when the
+# signature changes; a comment in the middle of a function survives every
+# rewrite of the lines beneath it.
+#
+# `subject: enclosing` on purpose: the subject becomes the whole function, so
+# the model can see what the commented lines do in context, while `$DOC` names
+# the claim being tested. The matched statement alone is usually too small to
+# confirm or contradict anything.
+#
+# This matcher is the broadest in either pack -- every statement that follows
+# any comment -- so check its cost with `--dry-run` before running it over a
+# large repository, and see docs/findings.md for what it costs on tokio.
+id: comment-describes-block
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+subject: enclosing
+# `located`, not `bare`, and the reason is the finding of the 2026-09-20
+# pass. A statement inside a `test("...", () => { ... })` callback has no
+# named container: the arrow function is not a symbol, so `subject:
+# enclosing` cannot promote it and the model is handed the ONE statement
+# under the comment and nothing else. On `bare` that is the whole question,
+# and every preamble -- the comment that opens a test and says what the
+# test is for, above whatever its first statement happens to be -- reads
+# as "the code does not do what the comment says": 0.77-0.90 on the evals'
+# eight real preamble shapes, 0.81-0.93 on this repository's own tests.
+# Rust tests are named `fn`s, are promoted, and the same shapes answer
+# 0.20-0.42 on `bare`. `located` gives the TypeScript variant the file, and
+# with it the body: the same eight preambles answer 0.24-0.79, and with the
+# criteria below 0.05-0.20.
+#
+# Also found while looking: `$DOC` is the LAST line of a multi-line `//`
+# comment (each line is its own `comment` node), so the note tells the
+# model where the comment starts.
+state: located
+# Calibrated late, and the reason is worth keeping.
+#
+# This rule shipped for two versions saying "NOT CALIBRATED": its median was
+# a healthy 0.20, but the clean case at corpus/ts/session_store.ts:97
+# answered 0.94 -- an exact tie with the labelled defect above it in the same
+# function, and a tie admits no cutoff. Two rewordings and one state fix did
+# nothing to it. It was not the rule. A `subject: enclosing` rule keys its
+# verdicts on the enclosing function's text, and two matches in one function
+# shared a key: the second was never asked, and was handed the first one's
+# verdict as a twin. Byte-identical scores over three passes were the tell,
+# once a candidate rule made them visible. With the match in the key the
+# clean case answers on its own and the classes separate: precision 1,
+# recall 1, midpoint 0.80, on both variants.
+#
+# Then the corpus lost its `// DEFECT` markers, which had sat directly above
+# each defect saying what was wrong with it, inside the very state this rule
+# sends. Without them one of the two defects answered 0.96 and the other
+# 0.49, and on real code the preamble band (0.81-0.91, see above) sat over
+# the second, so the cutoff was parked at 0.94.
+#
+# 2026-09-20: twelve labelled defects and thirteen hard cleans (eight
+# preambles and section headings, a trailing comment, three why/vague/label
+# comments), `located`, and criteria that say what the code beneath a
+# comment is (the run of statements to the next comment), what a preamble
+# is, and that a trailing comment belongs to the line before it. On the
+# evals the cleans top out at 0.39 and the defects start at 0.53 (fitted
+# midpoint 0.46). The tool-side cause is fixed since: a callback passed to
+# `test()` / `it()` is a container now, named by its title, so a statement
+# inside one promotes to the test on every arm, and a captured `//` comment
+# is the whole run of lines, not its last. On this repository's test/test.ts
+# (104 subjects, big enough to step `located` down to `local`) the preambles
+# went from a median of 0.57 with 60 over 0.50, to a median of 0.11 with one
+# over 0.50 -- a "why" paragraph at 0.70. The cutoff stays parked at 0.75:
+# over that one with 0.05 to spare, under eleven of the twelve defects with
+# 0.08 to spare (the lowest caught, a unit mismatch, answers 0.83). The one
+# it misses is stated in the evals: `session_store.ts:69` (0.51), where the
+# comment is true of the sort it sits above and false only together with
+# the loop after it. Set `at: 0.5` on a codebase whose inline comments are
+# claims rather than rationale.
+at: 0.75
+severity: info
+rule:
+  all:
+    - any:
+        - kind: if_statement
+        - kind: for_statement
+        - kind: for_in_statement
+        - kind: while_statement
+        - kind: try_statement
+        - kind: switch_statement
+        - kind: return_statement
+        - kind: expression_statement
+        - kind: lexical_declaration
+    - follows:
+        kind: comment
+        pattern: $DOC
+    # Inside a body, not at the top level: a top-level comment above a
+    # statement is documentation and rule 1 covers the declarations.
+    - inside:
+        kind: statement_block
+        stopBy: end
+# Reworded twice after measurement. The first version asked whether the
+# commented lines "do something other than what the comment says", and
+# answered 0.90 to 0.96 for everything -- a gap of 0.03, which no cutoff
+# repairs. The second was the declaration rule's: demand a SPECIFIC
+# contradiction and name what does not count. The third, below, also says
+# what "the code beneath" a comment is -- the run of statements to the next
+# comment, not the first statement -- which is what a section heading
+# ("Append two events" above two appends) needs, and names the preamble and
+# the trailing comment as making no claim. Each clause was measured; see
+# experiments/reports/improve-comment-describes-block/REPORT.md.
+ask: >-
+  The comment captured as DOC makes a claim about the code beneath it that the
+  code contradicts.
+criteria:
+  "true": >-
+    The comment says what the code beneath it does, and the code does something
+    else: a count, limit, number of attempts or delay that differs from the
+    code's, or that the comment fixes to a number while the code takes it from a
+    parameter; a direction, order, sign, rounding or unit that is not the one
+    the code uses; a condition the code tests the other way round; or a step the
+    comment says happens here that the code beneath it does not perform.
+  "false": >-
+    Every specific claim in the comment holds for the code beneath it. The code
+    beneath a comment is the run of statements from the comment down to the next
+    comment or the end of the block, not the first statement alone: "two events"
+    above two appends is true. A comment that gives a reason outside the code --
+    a policy, a caller, a server, a past bug -- that says what the whole test or
+    function is for, that describes what other code does, that is vague, or that
+    summarises the code loosely but not wrongly, makes no claim the code can
+    contradict. A comment that states the effect the code beneath it achieves
+    ("so the newest are kept") is a claim about that code, and is judged by what
+    the code does. A comment that sits at the end of a line of code, after that
+    code, belongs to that line, not to the code beneath it. The contradiction
+    has to be visible in the code shown: a comment about setup, a later step, or
+    code that is not shown is not contradicted by a statement that simply does
+    not mention it.
+note: >-
+  The comment under test is the one whose last line is captured as DOC; it may
+  begin several lines above that line, and all of it is the comment. Find that
+  line in the source before judging: if code precedes the comment on its own
+  line, the comment is a trailing remark on that code and makes no claim about
+  the line beneath it. Judge the comment only against the code that follows it.
+  Other comments in the same function are not your concern.

@@ -1,0 +1,48 @@
+id: test-name-verifies-claim
+language: Rust
+kind: noul
+subject: node
+state: bare
+# Fitted 0.53-0.56 across two runs on evals/ (17 defects, 18 cleans of which 9 are labelled hard,
+# 3 passes, 0 flips): clean top 0.50 (a label-only snapshot name,
+# `digest_snapshot_three_items`), lowest defects 0.61 (a title claiming a
+# reversal over a body that posts; the above-ten case never set up; a
+# snapshot under a claim that a footer is omitted). The gap is 0.11 and the
+# cutoff sits in its middle; the snapshot axis is what keeps it narrow, in
+# both directions, and is the same limit the TypeScript variant has.
+at: 0.54
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: warning
+rule:
+  all:
+    - kind: function_item
+    - has: { field: name, pattern: $NAME }
+    - follows:
+        kind: attribute_item
+        regex: "test"
+ask: >-
+  This test would still pass if the behaviour its name claims were broken.
+note: >-
+  Two things to read for. A snapshot records whatever the output was: under a
+  name that claims a specific property of the output (a row hidden, a footer
+  omitted, a hint shown, a format) it establishes nothing about that property,
+  while under a name that only says renders, or snapshot, or labels the variant
+  rendered, it is the whole claim. And a body whose named operation is never
+  called, or whose named case is never set up, establishes nothing however exact
+  its assertion is.
+criteria:
+  "true": >-
+    The body does not establish what the name claims: it asserts nothing at all,
+    it asserts something that would hold whether or not the named behaviour
+    worked, it checks an incidental property such as a length or a type instead
+    of the named behaviour itself, or it never sets up the case the name is
+    about so the assertion never exercises it.
+  "false": >-
+    The body contains at least one assertion that would fail if the named
+    behaviour were broken. Read the name for what it actually claims: a name
+    that claims only that something renders, or that the output matches a
+    snapshot, or that only labels the input the snapshot was taken of, is
+    established by the snapshot; a name that claims an interaction with a
+    collaborator -- that something was called, once, with these arguments -- is
+    established by an assertion on that call.

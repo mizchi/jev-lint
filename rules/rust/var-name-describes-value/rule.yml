@@ -1,0 +1,65 @@
+id: var-name-describes-value
+language: Rust
+kind: noul
+subject: node
+# Same measurement as the TypeScript variant above: not separable on `bare`,
+# separable on `located`, and on `bare` it was also the one rule whose
+# decision FLIPPED between two runs of the same corpus.
+state: located
+# Refitted 2026-09-20 with the TypeScript variant (10 defects, 13 explicit
+# hard cleans, 23 subjects): cleans top at 0.25-0.39 across runs (`lines`
+# bound to a count is the highest), the stable defects start at 0.61. The
+# unit case, `timeout_seconds` passed to Duration::from_millis, answers
+# 0.75-0.81 now that the code names the unit; beside a same-valued
+# `timeout_millis` with nothing naming either unit it was the clean one
+# that got flagged (0.83). Three defects wobble across any cutoff between
+# 0.4 and 0.6 on identical input: `domain` bound to the piece before '@'
+# (0.47-0.71), `bytes` bound to a String (0.32-0.72) and `ids` bound to
+# names (0.13-0.60). 0.5 flags the first two on the mean and misses `ids`;
+# no cutoff holds all three steady, so this is the residue, not a fit.
+at: 0.5
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: warning
+rule:
+  all:
+    - kind: let_declaration
+    - has: { field: pattern, pattern: $NAME }
+    - has: { field: value, pattern: $VALUE }
+ask: >-
+  This binding's name misdescribes the value it is bound to.
+criteria:
+  "true": >-
+    The name states a type, unit, shape, quantity or meaning that the
+    initializer does not produce: a plural name bound to a single item or a
+    singular name bound to a collection, a name that reads as a boolean bound to
+    something that is not one, a name naming one unit while the value is in
+    another, a name saying it holds a value while it holds a function or a
+    promise, or a name describing a different thing entirely from what the
+    initializer computes.
+  "false": >-
+    The name is an accurate description of what the initializer produces, even
+    if it is terse or a clearer name could be imagined. Being short or generic
+    is not a mismatch.
+note: >-
+  Compare the name with the initializer and with every use of the binding in
+  this file; a mismatch is one the code shows. It counts when the binding is
+  used as a different kind of thing from what the name says (a boolean name on a
+  value compared with a string, a number or a variant; a path name on contents
+  that are split into lines; a result name on a promise that is pushed or
+  awaited; a unit suffix on a value the code converts from or compares with
+  another unit); when the initializer selects a different element, part or field
+  from the one the name names (the first element under a name meaning the last,
+  the piece before a separator under a name meaning the piece after it, one
+  field of a record under the name of another of its fields); or when the name
+  asserts success or presence and the code then reads the value as a failure or
+  an absence. It does not count when the name is a convention rather than a
+  claim: a plural name on a number, which names the count of those things
+  whether the number is a literal or comes from a call; a short accumulator,
+  index or buffer name; a collection named for its role such as a set of seen
+  items or a list of pending work; a list of test inputs named for the class
+  they belong to and paired with the opposite class; a test binding named for
+  the scenario it exercises, such as the response to the unauthorized request or
+  to the request missing a field, which reads as an adjective and holds the
+  result of that scenario; or a name that gives the value's role or provenance
+  rather than its type.

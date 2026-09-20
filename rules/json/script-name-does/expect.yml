@@ -1,0 +1,153 @@
+default: clean
+fixtures/app/package.json:
+  - line: 7
+    label: clean
+    reason: "hard clean: terse dev -> vite dev server"
+    window: 0
+  - line: 8
+    label: bad
+    reason: build only deletes dist, produces nothing
+    window: 0
+  - line: 9
+    label: clean
+    reason: vite preview is a preview
+    window: 0
+  - line: 10
+    label: clean
+    reason: "hard clean: test -> vitest run, tool name differs from script name"
+    window: 0
+  - line: 11
+    label: clean
+    reason: "hard clean: vitest with no args is watch mode"
+    window: 0
+  - line: 12
+    label: bad
+    reason: "lint runs prettier --write: formats and rewrites, does not lint"
+    window: 0
+  - line: 13
+    label: clean
+    reason: "hard clean: fmt is the abbreviation for format; prettier --write formats"
+    window: 0
+  - line: 14
+    label: bad
+    reason: typecheck runs eslint, which does not type check
+    window: 0
+  - line: 15
+    label: clean
+    reason: "hard clean: ci is the sum of delegated scripts"
+    window: 0
+  - line: 16
+    label: clean
+    reason: "hard clean: prepare -> husky is the conventional lifecycle hook install"
+    window: 0
+fixtures/cli/package.json:
+  - line: 9
+    label: clean
+    reason: start runs the built entry
+    window: 0
+  - line: 10
+    label: clean
+    reason: esbuild bundle is a build
+    window: 0
+  - line: 11
+    label: clean
+    reason: "hard clean: node --test with strip-types is a test runner"
+    window: 0
+  - line: 12
+    label: clean
+    reason: "hard clean: e2e -> playwright test"
+    window: 0
+  - line: 13
+    label: clean
+    reason: c8 wrapping npm test is a coverage run
+    window: 0
+  - line: 14
+    label: clean
+    reason: cli up is a migration
+    window: 0
+  - line: 15
+    label: clean
+    reason: "hard clean: db:reset is down --all then up"
+    window: 0
+  - line: 16
+    label: bad
+    reason: typecheck also stages and commits every change
+    window: 0
+  - line: 17
+    label: clean
+    reason: "hard clean: watch -> node --watch"
+    window: 0
+  - line: 18
+    label: clean
+    reason: fly deploy deploys
+    window: 0
+fixtures/lib/package.json:
+  - line: 15
+    label: clean
+    reason: "hard clean: prebuild lifecycle hook that clears dist; a lazy rule reads 'build' and sees rm -rf"
+    window: 0
+  - line: 16
+    label: clean
+    reason: tsc -p builds
+    window: 0
+  - line: 17
+    label: bad
+    reason: test prints ok and runs no tests
+    window: 0
+  - line: 18
+    label: clean
+    reason: "hard clean: terse check -> biome check"
+    window: 0
+  - line: 19
+    label: clean
+    reason: "hard clean: lint:fix says fix, eslint --fix rewrites on purpose"
+    window: 0
+  - line: 20
+    label: clean
+    reason: typedoc generates docs
+    window: 0
+  - line: 21
+    label: bad
+    reason: clean also compiles the project after deleting dist
+    window: 0
+  - line: 22
+    label: clean
+    reason: "hard clean: release -> changeset publish, different tool name, same act"
+    window: 0
+  - line: 23
+    label: clean
+    reason: "hard clean: postinstall -> patch-package is the conventional hook"
+    window: 0
+fixtures/monorepo/package.json:
+  - line: 6
+    label: bad
+    reason: test:e2e runs the unit test directory, not e2e
+    window: 0
+  - line: 7
+    label: bad
+    reason: "format runs eslint without --fix: reports, does not format"
+    window: 0
+  - line: 8
+    label: bad
+    reason: start builds and starts nothing
+    window: 0
+  - line: 9
+    label: clean
+    reason: "hard clean: pretest lifecycle hook building before tests"
+    window: 0
+  - line: 10
+    label: clean
+    reason: "hard clean: lint as an umbrella for static checks; tsc --noEmit reports only"
+    window: 0
+  - line: 11
+    label: clean
+    reason: "hard clean: npm `version` lifecycle hook, conventional changeset + git add"
+    window: 0
+  - line: 12
+    label: clean
+    reason: "hard clean: terse gen -> openapi-typescript codegen"
+    window: 0
+  - line: 13
+    label: clean
+    reason: bench runs a benchmark script
+    window: 0

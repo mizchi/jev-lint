@@ -1,0 +1,96 @@
+default: clean
+fixtures/auth_routes.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: every export uses the same word handle/handler; the disagreement is in position (suffix vs prefix), not in the verb chosen for the operation."
+fixtures/codec.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: encodeFrame/decodeFrame (bytes) and parseHeader/stringifyHeader (text) are two conventional inverse pairs for two different representations."
+fixtures/commands.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: all five are run* with different nouns; verbs agree."
+fixtures/factories.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: createOrder / makeInvoice / newCustomer / buildShipment are four identical plain-object constructors; four verbs for one operation.
+fixtures/handlers.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: all six exports are handle* with different nouns; verbs agree."
+fixtures/jobs.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: purge / rebuild / send / rotate / compact are distinct jobs, not one operation under several verbs; noopJob is a placeholder."
+fixtures/lookups.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: five identical by-id lookups; four are get*, loadInvoice uses a synonym for the same operation.
+fixtures/middleware.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: middleware names are nouns/adjectives for what they do (requestId, noCache, timing) plus compose; there is no repeated operation under different verbs."
+fixtures/notifications.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: sendEmail / sendSms / sendWebhook / dispatchPush are four identical deliveries with the same signature; dispatch is a synonym of send here.
+fixtures/order_service.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: getOrder (by id, throws) vs findOrdersByCustomer (by criteria, list) is the conventional get/find split; createOrder/cancelOrder/listOrders are distinct operations."
+fixtures/permissions.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: checkAdmin is a boolean predicate like isValid / hasPermission / canEdit / isOwner but named as a command.
+fixtures/preferences.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: load/save are the file-level pair (async, path), get/set the in-memory pair (sync, prefs object); two conventional pairs at two layers, plus reset. A lazy rule flags get vs load as synonyms."
+fixtures/product_source.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: fetchProduct (async, network via ./http), getProduct (sync, cache via ./cache), loadProduct (cache then network) are three different operations; the verbs carry that difference."
+fixtures/project_files.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: all five are read* with different nouns; verbs agree."
+fixtures/rate_limiter.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: one public item (createRateLimiter); private helpers refill/takeOne are not siblings to compare."
+fixtures/settings.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: updateTheme / setLocale / changeTimezone / modifyDensity / setFontScale are five identical immutable setters; four verbs for one operation.
+fixtures/sync.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: diff* (sync, returns Change[]) and push* (async, returns PushReport) are two operations; verbs match operations."
+fixtures/user_repository.ts:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: getUser / fetchOrder / loadCart / retrieveInvoice are four identical by-id SQL lookups with the same signature; four verbs for one operation.
+fixtures/validators.ts:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "hard clean: validate* for five checks and fail() for constructing the error they return; different operations, different verbs."

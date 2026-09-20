@@ -1,0 +1,225 @@
+default: clean
+fixtures/admin_handlers.ts:
+  - line: 8
+    window: 0
+    label: bad
+    reason: "'This invitation has already been accepted' on a branch reached by a missing token, an accepted invite or an expired one: one specific cause named for three visible causes, and not in a catch"
+  - line: 19
+    window: 0
+    label: clean
+    reason: "hard clean: the same three-cause branch described as 'no longer valid', which covers all three"
+  - line: 29
+    window: 0
+    label: clean
+    reason: "hard clean: 'Reindex queued' with 202 after enqueuing is what happened"
+  - line: 35
+    window: 0
+    label: clean
+    reason: "clean: 'Membership not found' on the !membership branch"
+  - line: 39
+    window: 0
+    label: clean
+    reason: "hard clean: 'Member removed' after an awaited update setting removedAt; the soft action named by its usual word"
+  - line: 45
+    window: 0
+    label: clean
+    reason: "clean: 'User not found' on the !user branch"
+  - line: 49
+    window: 0
+    label: bad
+    reason: "'All personal data has been erased' after only enqueuing a gdpr.anonymize job; nothing was erased yet"
+  - line: 55
+    window: 0
+    label: clean
+    reason: "clean: 'API key not found' when rotate returned nothing"
+  - line: 58
+    window: 0
+    label: clean
+    reason: "clean: 'API key rotated' after the awaited rotate returned the new key"
+  - line: 66
+    window: 0
+    label: clean
+    reason: "hard clean: 'Catalog file could not be parsed' in a catch whose try holds only parseCatalog; the one cause is the only cause"
+  - line: 70
+    window: 0
+    label: clean
+    reason: "hard clean: 'Import started' with 202 after enqueuing the import job"
+fixtures/handlers.ts:
+  - line: 14
+    window: 0
+    label: bad
+    reason: "'Account permanently deleted' when the handler only sets deletedAt and status: a soft delete described as permanent"
+  - line: 25
+    window: 0
+    label: clean
+    reason: "hard clean: the same soft delete described honestly as closed with retention; the retention claim is about a later process the handler cannot show"
+  - line: 35
+    window: 0
+    label: bad
+    reason: "'Password updated' when the handler only creates a reset token and sends an email; nothing was updated"
+  - line: 45
+    window: 0
+    label: clean
+    reason: "hard clean: the deliberately vague 'if an account exists, a link has been sent' is true of the code, which sends only when a user exists"
+  - line: 50
+    window: 0
+    label: clean
+    reason: "hard clean: 'Cache purge started' with 202 after enqueuing is what happened"
+  - line: 55
+    window: 0
+    label: bad
+    reason: "'Index rebuilt' after only enqueuing a search.rebuild job"
+  - line: 63
+    window: 0
+    label: clean
+    reason: "clean: the 400 message names the URL parse failure that reached the catch"
+  - line: 72
+    window: 0
+    label: clean
+    reason: "clean: 'Webhook updated' after the awaited update"
+  - line: 82
+    window: 0
+    label: clean
+    reason: "hard clean: matcher over-match, res.send(toCsv(orders)) is a body, not a message"
+  - line: 92
+    window: 0
+    label: clean
+    reason: "hard clean: 'Subscription cancelled' after an awaited cancel(..., { atPeriodEnd: true }); the message restates the call it follows and adds no claim about timing"
+  - line: 106
+    window: 0
+    label: clean
+    reason: "clean: 'Refund issued' only after the refund's status was checked"
+  - line: 112
+    window: 0
+    label: bad
+    reason: "'This verification link has expired' for a token that is missing, already used or expired: three visible causes, one named, and expiry is not even the first"
+  - line: 123
+    window: 0
+    label: clean
+    reason: "hard clean: matcher over-match, a plain-text health response is not a claim about an action"
+fixtures/share.tsx:
+  - line: 13
+    window: 0
+    label: clean
+    reason: "hard clean: 'Saving…' is a progress message before the await; the second message in the same function is judged separately"
+  - line: 15
+    window: 0
+    label: clean
+    reason: "hard clean: 'Saved' after the awaited PATCH completed; the honest sibling of the enqueue-only 'Saved' cases, in a function that also shows 'Saving…'"
+  - line: 30
+    window: 0
+    label: bad
+    reason: "'Shared with your team' is shown before the share request resolves; the code only reports a failure afterwards in .catch"
+  - line: 31
+    window: 0
+    label: clean
+    reason: "clean: 'Sharing failed' in the .catch of the same request; the bad success message sits in the same function and must not drag this one"
+  - line: 39
+    window: 0
+    label: clean
+    reason: "clean: 'Invoice sent' after the awaited POST to /send completed inside the try"
+  - line: 41
+    window: 0
+    label: clean
+    reason: "hard clean: 'Could not send the invoice' in the catch of the send; generic failure for the one operation tried"
+  - line: 47
+    window: 0
+    label: bad
+    reason: "'Comment deleted' when the code only PATCHes hidden: true; the message names a stronger action than the code performed"
+  - line: 52
+    window: 0
+    label: clean
+    reason: "hard clean: the same PATCH hidden: true described as 'Comment hidden', which is what the code did"
+  - line: 59
+    window: 0
+    label: clean
+    reason: "hard clean: 'Exporting…' as a progress message before the enqueue"
+  - line: 61
+    window: 0
+    label: bad
+    reason: "'Export finished' after only queue.add('export-doc'); the export was enqueued, not finished, and the progress message in the same function must not shield it"
+  - line: 77
+    window: 0
+    label: bad
+    reason: "'Saved' via a state setter after queue.add that is not even awaited; nothing was persisted"
+  - line: 90
+    window: 0
+    label: clean
+    reason: "hard clean: 'Review requested. The reviewer will be notified.' after an awaited POST to /reviews restates the call; the notification claim is about another system"
+  - line: 97
+    window: 0
+    label: clean
+    reason: "hard clean: a generic 'Something went wrong while restoring' in the catch of the restore call"
+  - line: 100
+    window: 0
+    label: clean
+    reason: "clean: 'Version restored' after the awaited POST to /restore did not throw"
+  - line: 110
+    window: 0
+    label: bad
+    reason: "'Renamed' is shown while the PATCH is explicitly not awaited (void) and never checked; the dialog closes before the outcome is known"
+fixtures/ui-messages.tsx:
+  - line: 13
+    window: 0
+    label: bad
+    reason: "'Saved' after only enqueuing a persist-draft job; nothing was saved yet and the result of the job is never seen"
+  - line: 18
+    window: 0
+    label: clean
+    reason: "hard clean: 'Request received' after enqueuing is exactly what happened"
+  - line: 23
+    window: 0
+    label: bad
+    reason: "'Email sent' with mailer.send fire-and-forget: not awaited, no result checked, the send may still fail"
+  - line: 29
+    window: 0
+    label: clean
+    reason: "clean: 'Receipt emailed' only after the awaited send reports the address as accepted"
+  - line: 39
+    window: 0
+    label: bad
+    reason: "'Payment successful' is set before the charge promise resolves; the code only reports a failure afterwards"
+  - line: 58
+    window: 0
+    label: clean
+    reason: "hard clean: 'Saving…' as a progress message before the await"
+  - line: 76
+    window: 0
+    label: clean
+    reason: "hard clean: 'Published' after the awaited publish call; the honest sibling of the bad case at line 13"
+  - line: 96
+    window: 0
+    label: bad
+    reason: "'Network error' in a catch that also catches the validation Error thrown for a row with no email; a specific cause claimed by a catch-all"
+  - line: 104
+    window: 0
+    label: clean
+    reason: "hard clean: a generic 'Something went wrong' in a catch-all claims nothing specific"
+  - line: 116
+    window: 0
+    label: clean
+    reason: "clean: 'Copied to clipboard' after the awaited write, on the path where it did not throw"
+  - line: 122
+    window: 0
+    label: bad
+    reason: "'Export complete. Download ready' right after POST /exports returned a job; the export was started, not completed"
+  - line: 127
+    window: 0
+    label: clean
+    reason: "hard clean: 'Invitation sent' after an awaited successful POST to /invites; the code never sends mail itself, but the message restates what the call it awaited is for"
+  - line: 132
+    window: 0
+    label: clean
+    reason: "clean: 'Report scheduled' after posting a schedule"
+  - line: 142
+    window: 0
+    label: clean
+    reason: "clean: the message is chosen from the awaited response's ok flag"
+  - line: 157
+    window: 0
+    label: bad
+    reason: "'You have been unsubscribed' shown immediately, with the unsubscribe request neither awaited nor checked"
+  - line: 164
+    window: 0
+    label: clean
+    reason: "hard clean: 'Project archived' after awaiting a PATCH that sets archived; the soft action is named as what it is"

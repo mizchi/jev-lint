@@ -1,0 +1,99 @@
+default: clean
+fixtures/cart.test.ts:
+  - line: 24
+    label: bad
+    window: 0
+    reason: the title names the empty case; the body exercises the non-empty one. Wrong THING, not a weak assertion.
+  - line: 28
+    label: bad
+    window: 0
+    reason: the title says it throws; the body expects an ordinary value. Wrong THING.
+  - line: 32
+    label: bad
+    window: 0
+    reason: "RELABELLED from clean. The title names a sort the body never calls: nothing under test runs, the body counts the fixture. \"About items\" is not \"about sorting items\"; the criteria's true branch names this shape (\"the name refers to something the code never touches at all\"). The genuine right-thing-weakly case, which stays clean, is inventory.test.ts:26, where sortByPrice IS called and only the length is checked."
+  - line: 36
+    label: clean
+    window: 0
+    reason: "hard clean: calls the named operation with the named input and asserts nothing; the missing assertion is the other rule's finding"
+  - line: 76
+    label: clean
+    window: 0
+    reason: 'hard clean: opens with a preamble comment telling a confusing story about a past bug; the body doubles an item and expects the doubled sum, which is what the title says. RENAMED from "does not double-count an item listed twice": that title read as the opposite of the 450 the body expects (a listed-twice item counted twice), and the rule was right to hedge at 0.69; the preamble shape is what the case is for and it is kept.'
+fixtures/inventory.test.ts:
+  - line: 26
+    label: clean
+    window: 0
+    reason: "hard clean: the named operation is called on the named input; only the length is asserted. Right thing, established weakly -- the other rule's finding, not this one's"
+  - line: 30
+    label: clean
+    window: 0
+    reason: "hard clean: compound claim (sorted, ties stay in insertion order); the body sets up a tie and asserts the full order, covering both parts"
+  - line: 36
+    label: clean
+    window: 0
+    reason: "hard clean: sortByPrice is called and the first element is inspected, with a toBeDefined that pins nothing. Right thing, weakly"
+  - line: 43
+    label: bad
+    window: 0
+    reason: "wrong input: the title says above ten units; the body sets up three and expects full price, the below-threshold case"
+  - line: 48
+    label: clean
+    window: 0
+    reason: "hard clean: right input (twelve units), right operation; toBeLessThan pins no amount. Right thing, weakly"
+  - line: 53
+    label: clean
+    window: 0
+    reason: "hard clean: it.each with a printf title; each row is a full-price line and the body checks that price"
+  - line: 63
+    label: bad
+    window: 0
+    reason: "wrong operation: the title says removes; the body calls lookupSku and never removes anything"
+  - line: 67
+    label: bad
+    window: 0
+    reason: the title promises a throw; the body expects an ordinary undefined
+  - line: 71
+    label: clean
+    window: 0
+    reason: "hard clean: a one-word title; the body finds an item by sku and checks it"
+  - line: 77
+    label: bad
+    window: 0
+    reason: "wrong operation: the title says reserves; the body calls restock and checks the quantity went up"
+  - line: 82
+    label: bad
+    window: 0
+    reason: the title refers to a warning being logged; the body touches no logger, it checks a quantity
+  - line: 88
+    label: clean
+    window: 0
+    reason: "hard clean: compound claim; both the reserved and the remaining quantity are asserted"
+  - line: 94
+    label: clean
+    window: 0
+    reason: "hard clean: calls restock with zero, the named input, and asserts nothing"
+  - line: 98
+    label: clean
+    window: 0
+    reason: the title promises a throw and the body asserts one
+  - line: 102
+    label: clean
+    window: 0
+    reason: "hard clean: setup calls removeItem, which the title does not mention; the assertion is about the undo the title names"
+  - line: 112
+    label: bad
+    window: 0
+    reason: "opposite outcome: the title says rejects; the body expects the expired coupon to be active"
+  - line: 117
+    label: bad
+    window: 0
+    reason: the title promises a rejection on timeout; the gateway resolves and the body expects a captured payment
+  - line: 122
+    label: clean
+    window: 0
+    reason: 'hard clean: "prices the cart" is a synonym for totalCents; the body totals every line'
+  - line: 126
+    label: clean
+    window: 0
+    reason: "hard clean: a negative claim (does not read X as Y) established by an exact equality on the parse result"

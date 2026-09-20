@@ -1,0 +1,379 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-19T17:13:06.989Z",
+ "model": "jev-1.13.0",
+ "suite": "typescript/idempotent-name",
+ "rules": [
+  {
+   "id": "idempotent-name",
+   "draft": "ba8028d1d053",
+   "at": 0.4
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 6,
+    "endLine": 8,
+    "kind": "noul",
+    "value": 0.84,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 13,
+    "endLine": 15,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 17,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.68,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 23,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.84,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 40,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 47,
+    "endLine": 49,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 51,
+    "endLine": 59,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 68,
+    "endLine": 76,
+    "kind": "noul",
+    "value": 0.23,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 83,
+    "endLine": 90,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 92,
+    "endLine": 98,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 100,
+    "endLine": 103,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 107,
+    "endLine": 111,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 118,
+    "endLine": 121,
+    "kind": "noul",
+    "value": 0.62,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 6,
+    "endLine": 8,
+    "kind": "noul",
+    "value": 0.82,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 13,
+    "endLine": 15,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 17,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.69,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 23,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.85,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 40,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 47,
+    "endLine": 49,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 51,
+    "endLine": 59,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 68,
+    "endLine": 76,
+    "kind": "noul",
+    "value": 0.22,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 83,
+    "endLine": 90,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 92,
+    "endLine": 98,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 100,
+    "endLine": 103,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 107,
+    "endLine": 111,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 118,
+    "endLine": 121,
+    "kind": "noul",
+    "value": 0.69,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 6,
+    "endLine": 8,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 13,
+    "endLine": 15,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 17,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.75,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 23,
+    "endLine": 32,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 40,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 47,
+    "endLine": 49,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 51,
+    "endLine": 59,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 68,
+    "endLine": 76,
+    "kind": "noul",
+    "value": 0.26,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 83,
+    "endLine": 90,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 92,
+    "endLine": 98,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 100,
+    "endLine": 103,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 107,
+    "endLine": 111,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "idempotent-name",
+    "file": "rules/typescript/idempotent-name/fixtures/idempotent.ts",
+    "line": 118,
+    "endLine": 121,
+    "kind": "noul",
+    "value": 0.72,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 3,
+  "inputTokens": 28005,
+  "usd": 0.00117621,
+  "ms": 715
+ }
+}

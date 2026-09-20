@@ -1,0 +1,129 @@
+default: clean
+fixtures/__tests__/ledger.test.ts: []
+fixtures/basket.test.ts: []
+fixtures/basket.ts:
+  - line: 19
+    label: clean
+    window: 0
+    reason: cartTotal is a reduce over the lines; it has no failure path to reach, and the tests cover both a populated and an empty basket anyway.
+  - line: 23
+    label: bad
+    window: 0
+    reason: applyCoupon throws on an empty basket and on an expired coupon. Both tests pass twoLines (two lines) and a coupon with expiresAt 2000 at now 1000; neither guard is ever tripped and no test asserts a throw from applyCoupon. withEmptyCart exists in the file but is only passed to cartTotal and checkoutCart.
+  - line: 38
+    label: clean
+    window: 0
+    reason: "hard clean: removeItem throws on an unknown sku and the test 'throws when the sku is not in the cart' passes \"hat\" and asserts toThrow(/not in cart/). The guard is the kind of thing this rule flags; here it is reached."
+  - line: 46
+    label: clean
+    window: 0
+    reason: "hard clean: checkoutCart's only guard is the empty basket, and 'refuses an empty cart' reaches it through the fixture withEmptyCart() and asserts toThrow(). The bad input is not visible at the call site; the fixture's name says what it is."
+fixtures/env.test.ts: []
+fixtures/env.ts:
+  - line: 3
+    label: bad
+    window: 0
+    reason: "requireEnv throws when the variable is unset or empty. env.test.ts imports requireEnv on its import line and never calls it: every describe block is about optionalEnv or envFlag. An import is not a test."
+  - line: 11
+    label: clean
+    window: 0
+    reason: optionalEnv returns the fallback instead of failing; the unset and empty cases are answers, and both are tested.
+  - line: 16
+    label: clean
+    window: 0
+    reason: envFlag maps every input to a boolean; there is no refused input.
+fixtures/ledger.ts:
+  - line: 14
+    label: bad
+    window: 0
+    reason: "postEntry has two failure paths: a TypeError on a non-integer amount and { ok: false } when the entry date falls in the closed period. The it.each reaches the TypeError with three bad amounts; nothing posts an entry dated on or before closedThrough (2024-03-31), so the closed-period result is never produced or asserted. Half-covered is the harder shape of this defect."
+  - line: 24
+    label: clean
+    window: 0
+    reason: "hard clean: no test calls parseAmount by name -- the test file does not even import it -- but parseEntryLine calls it, and the test 'throws when the amount is not in 0.00 form' passes \"twelve\" through parseEntryLine and asserts parseAmount's own message. The path is reached through a same-file caller, which is reaching it."
+  - line: 33
+    label: clean
+    window: 0
+    reason: parseEntryLine's own guard (no amount on the line) is reached by 'throws when the line has no amount'; the other throw on its path belongs to parseAmount and is reached too.
+fixtures/parse-config.test.ts: []
+fixtures/parse-config.ts:
+  - line: 9
+    label: clean
+    window: 0
+    reason: "hard clean: readConfig can blow up -- readFileSync on a missing path, JSON.parse on malformed text -- but it guards neither and catches neither; those are its callees' failures, not a path this body declares. The tests only cover happy paths, which is exactly what a lazy rule would flag."
+  - line: 21
+    label: clean
+    window: 0
+    reason: "hard clean: parsePort returns { ok: false } on two conditions and both are reached, in node:assert style rather than expect: 'refuses a non-integer' passes \"eighty\" and asserts .ok is false, 'refuses a port above 65535' passes \"70000\" and asserts .ok is false."
+  - line: 32
+    label: clean
+    window: 0
+    reason: describeConfig is a template string; nothing here can fail.
+fixtures/payments.test.ts: []
+fixtures/payments.ts:
+  - line: 10
+    label: bad
+    window: 0
+    reason: capturePayment throws on a non-positive or non-integer amount and throws when the gateway's status is not 'succeeded'. Both tests build the gateway with gatewayReturning, which always resolves status 'succeeded', and pass 1999 cents; neither guard is reached and no rejection is asserted.
+  - line: 21
+    label: clean
+    window: 0
+    reason: formatAmount formats any integer; it declares no failure.
+fixtures/retry.test.ts: []
+fixtures/retry.ts:
+  - line: 15
+    label: clean
+    window: 0
+    reason: "hard clean: fetchWithRetry declares its own failure, RetryExhausted after the attempt budget, and 'gives up after the attempt budget' drives it there with a doFetch that always resolves 503 and asserts rejects.toBeInstanceOf(RetryExhausted). The inner catch of doFetch errors is swallowed and retried, which is not a failure path of its own."
+  - line: 33
+    label: clean
+    window: 0
+    reason: "hard clean: withTimeout rejects with TimeoutError when its timer fires, and the test reaches it with a never-settling promise and a 5ms budget; the assertion is a try/catch around the await and a check on the caught error's name rather than an expect(...).rejects, but it is the same reach."
+fixtures/session.test.ts: []
+fixtures/session.ts:
+  - line: 20
+    label: bad
+    window: 0
+    reason: loadSession throws SessionNotFound when store.get resolves null. The only test builds the store with storeWith(alice), whose get always resolves a session, and asserts the resolved value; nothing makes get return null and nothing asserts a rejection.
+  - line: 28
+    label: clean
+    window: 0
+    reason: touchSession spreads a record with two new timestamps; there is no path on which it fails.
+  - line: 32
+    label: clean
+    window: 0
+    reason: isExpired is a comparison; a false result is an answer, not a failure path.
+fixtures/slug.test.ts: []
+fixtures/slug.ts:
+  - line: 1
+    label: bad
+    window: 0
+    reason: "slugify throws on an empty or whitespace title. The test titled 'throws on an empty title' never passes an empty title: it calls slugify(\"hello\") and the throw it asserts is truncateSlug's max < 1 guard. The title claims the path; the body does not reach it."
+  - line: 12
+    label: clean
+    window: 0
+    reason: "hard clean: truncateSlug's RangeError on max < 1 IS reached -- by the test under the wrong title, 'throws on an empty title', which passes 0 and asserts toThrow(). The title is another rule's problem; the path is exercised."
+  - line: 25
+    label: clean
+    window: 0
+    reason: "hard clean: parseDuration's single throw is reached by an it.each table of four unparseable inputs asserting toThrow(/unrecognised duration/). The bad inputs sit in a table, not at the call site."
+fixtures/tally.test.ts: []
+fixtures/tally.ts:
+  - line: 13
+    label: clean
+    window: 0
+    reason: "hard clean: renderReport catches fetchRows' rejection and re-reports it as { ok: false }, which by the note is its own failure path; 'reports a row-loading failure instead of throwing' passes a fetchRows that throws and asserts the result through the expectFailure helper (assert.equal(result.ok, false)) and assert.match on the message."
+  - line: 25
+    label: clean
+    window: 0
+    reason: "hard clean: assertReportShape's one throw is reached by 'rejects a value without rows' in node:assert vocabulary, assert.throws(() => ..., /rows array/), with no expect anywhere in the file."
+fixtures/validate-signup.test.ts: []
+fixtures/validate-signup.ts:
+  - line: 11
+    label: clean
+    window: 0
+    reason: normalizeEmail trims and lowercases; it cannot refuse an input.
+  - line: 15
+    label: bad
+    window: 0
+    reason: "validateSignup has three rejection branches: email shape, password under 12 characters, reserved username. The tests reach the email branch once ('rejects an email without an @'); the password branch and the reserved-username branch are never triggered -- every other call uses the good fixture, whose password is 21 characters and whose username is 'pat'."

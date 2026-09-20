@@ -1,0 +1,99 @@
+default: clean
+fixtures/cache.rs:
+  - line: 45
+    label: bad
+    window: 0
+    reason: "named seconds, holds milliseconds: the next line passes it to Duration::from_millis, so the unit is named in the code."
+  - line: 46
+    label: clean
+    window: 0
+    reason: "`ttl` is a Duration; terse and accurate."
+  - line: 48
+    label: bad
+    window: 0
+    reason: reads as a boolean, holds a count.
+  - line: 50
+    label: bad
+    window: 0
+    reason: plural name, single value.
+  - line: 52
+    label: clean
+    window: 0
+    reason: "`entry_count` is `.len()`; the honest twin of line 48."
+  - line: 54
+    label: clean
+    window: 0
+    reason: "`retries` is a plural name on a count, the convention."
+  - line: 63
+    label: clean
+    window: 0
+    reason: "`timeout_millis` is passed to Duration::from_millis; the unit named is the unit used. Was flagged at 0.83 when it sat beside a same-valued `timeout_seconds` in one function with nothing in the code naming either unit."
+  - line: 64
+    label: clean
+    window: 0
+    reason: "`n` is a length; a single letter for a count is terse, not wrong."
+fixtures/worker.rs:
+  - line: 22
+    label: bad
+    window: 0
+    reason: "`config_path` holds the file's contents (read_to_string), which the next lines iterate by line; the name says path."
+  - line: 23
+    label: clean
+    window: 0
+    reason: "`lines` is a plural name bound to `.count()` and compared with 0: the plural-for-a-count convention, same as `retries`. First labelled bad; the model answered 0.30 and the convention argument is the better one."
+  - line: 27
+    label: clean
+    window: 0
+    reason: "`rows` is the collected lines; a loose but accurate plural on a Vec."
+  - line: 28
+    label: clean
+    window: 0
+    reason: "`head` is `.first()` of a Vec; terse and accurate."
+  - line: 29
+    label: bad
+    window: 0
+    reason: "`last` is `.get(1)`, the second element, not the last."
+  - line: 34
+    label: clean
+    window: 0
+    reason: "`parts` is the split pieces; generic and accurate."
+  - line: 35
+    label: bad
+    window: 0
+    reason: "`domain` is `parts[0]`, the piece before the '@', which is the local part."
+  - line: 40
+    label: bad
+    window: 0
+    reason: "`bytes` holds a String produced by from_utf8; the bytes went in, a string came out."
+  - line: 45
+    label: clean
+    window: 0
+    reason: "`pending` is the jobs not yet done; an adjective on a collection, accurate."
+  - line: 46
+    label: bad
+    window: 0
+    reason: "`ids` holds `owner_name` cloned from each job, while Job has an `id` field that is not used."
+  - line: 47
+    label: clean
+    window: 0
+    reason: "`seen` is the conventional name for a HashSet of what has been visited."
+  - line: 55
+    label: clean
+    window: 0
+    reason: "`spanning` is the one batch found with more than one file; an adjective on an Option of one item, terse and accurate."
+  - line: 60
+    label: bad
+    window: 0
+    reason: "`is_ready` reads as a boolean and holds a status line (a string), which is then tested with starts_with."
+  - line: 61
+    label: bad
+    window: 0
+    reason: "`has_errors` reads as a boolean and holds a count, compared with 0 later."
+  - line: 62
+    label: clean
+    window: 0
+    reason: "`timeout_seconds` is passed to Duration::from_secs; the clean twin of cache.rs:45."
+  - line: 63
+    label: clean
+    window: 0
+    reason: "`buf` is a byte buffer; terse and accurate."

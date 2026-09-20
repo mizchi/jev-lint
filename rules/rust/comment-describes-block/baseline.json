@@ -1,0 +1,514 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-19T17:57:16.030Z",
+ "model": "jev-1.13.0",
+ "suite": "rust/comment-describes-block",
+ "rules": [
+  {
+   "id": "comment-describes-block",
+   "draft": "70ecb7495d9c",
+   "at": 0.45
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/budget.rs",
+    "line": 53,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.62,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/budget.rs",
+    "line": 61,
+    "endLine": 61,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 37,
+    "endLine": 37,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 43,
+    "endLine": 43,
+    "kind": "noul",
+    "value": 0.8,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 49,
+    "endLine": 49,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 56,
+    "endLine": 61,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 70,
+    "endLine": 72,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 81,
+    "endLine": 81,
+    "kind": "noul",
+    "value": 0.83,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 86,
+    "endLine": 86,
+    "kind": "noul",
+    "value": 0.56,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 94,
+    "endLine": 94,
+    "kind": "noul",
+    "value": 0.68,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 102,
+    "endLine": 102,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 105,
+    "endLine": 105,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 110,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 126,
+    "endLine": 126,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 138,
+    "endLine": 138,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 143,
+    "endLine": 143,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 153,
+    "endLine": 153,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 164,
+    "endLine": 164,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/budget.rs",
+    "line": 53,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.61,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/budget.rs",
+    "line": 61,
+    "endLine": 61,
+    "kind": "noul",
+    "value": 0.84,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 37,
+    "endLine": 37,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 43,
+    "endLine": 43,
+    "kind": "noul",
+    "value": 0.8,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 49,
+    "endLine": 49,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 56,
+    "endLine": 61,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 70,
+    "endLine": 72,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 81,
+    "endLine": 81,
+    "kind": "noul",
+    "value": 0.84,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 86,
+    "endLine": 86,
+    "kind": "noul",
+    "value": 0.59,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 94,
+    "endLine": 94,
+    "kind": "noul",
+    "value": 0.69,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 102,
+    "endLine": 102,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 105,
+    "endLine": 105,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 110,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 126,
+    "endLine": 126,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 138,
+    "endLine": 138,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 143,
+    "endLine": 143,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 153,
+    "endLine": 153,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 164,
+    "endLine": 164,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/budget.rs",
+    "line": 53,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.68,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/budget.rs",
+    "line": 61,
+    "endLine": 61,
+    "kind": "noul",
+    "value": 0.87,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 37,
+    "endLine": 37,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 43,
+    "endLine": 43,
+    "kind": "noul",
+    "value": 0.82,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 49,
+    "endLine": 49,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 56,
+    "endLine": 61,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 70,
+    "endLine": 72,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 81,
+    "endLine": 81,
+    "kind": "noul",
+    "value": 0.76,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 86,
+    "endLine": 86,
+    "kind": "noul",
+    "value": 0.65,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 94,
+    "endLine": 94,
+    "kind": "noul",
+    "value": 0.69,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 102,
+    "endLine": 102,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 105,
+    "endLine": 105,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 110,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 126,
+    "endLine": 126,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 138,
+    "endLine": 138,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 143,
+    "endLine": 143,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 153,
+    "endLine": 153,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/rust/comment-describes-block/fixtures/scheduler.rs",
+    "line": 164,
+    "endLine": 164,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 15,
+  "inputTokens": 115497,
+  "usd": 0.004850874,
+  "ms": 6151
+ }
+}

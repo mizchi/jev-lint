@@ -1,0 +1,90 @@
+# 3b. Granted it is about the right thing -- does it actually establish it?
+id: test-name-verifies-claim
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+subject: node
+# `bare` -- the cheapest arm, because this subject already contains both
+# things being compared: the matcher captures the title and the body, so the
+# file adds no evidence.
+#
+# INHERITED, not measured for this rule -- see the same note on
+# `test-name-describes-code` above. docs/data/arms.json covers the pre-split
+# `test-name-matches-body`, not this rule, and this is the rule holding most
+# of the residue on real code, so the inheritance is worth closing.
+#
+# Staying on `bare` buys something the wider margin does not: a verdict that
+# depends on nothing outside the test itself. Editing an unrelated test in the
+# same file cannot change this one's answer, and cannot invalidate its cached
+# verdict either.
+state: bare
+# The false branch names what a title does NOT claim, and it has to. On the
+# original four defects this rule separated at 0.53; the tests pack's corpus
+# added eleven defects and three hard cleans whose titles claim nothing
+# ("matches the snapshot", "renders", "renders the receipt for a single-item
+# order") over a snapshot assertion, and the rule read those at 0.69-0.77,
+# inside its defect band -- precision 0.93 at any cutoff. Telling the
+# criteria that a snapshot establishes a snapshot claim, and a call
+# assertion an interaction claim, put the three at 0.4 and under and the
+# fourteen defects at 0.53 and over: precision 1, recall 1, midpoint 0.51.
+# 0.52 rather than the midpoint: the quietest defect ("hides the discount
+# row when no discount applies", snapshot only) answers 0.53-0.56 across
+# passes, and the cutoff has to sit under its band.
+#
+# Re-measured on evals/ after the suite grew to 31 defects and 52 cleans
+# (16 labelled hard) and a note was added -- see the note below. With it,
+# every defect but one answers 0.76 and up and every clean but one 0.44 and
+# under. The two exceptions both sit at 0.54: profile.test.ts:164, a
+# label-only snapshot title ("matches the snapshot with a pending email
+# change") that the model half-reads as a claim about the pending email,
+# and inventory.test.ts:77, a title saying "reserves" over a body that
+# restocks, which `test-name-describes-code` catches at 0.89 and this rule
+# half-catches. No cutoff separates a clean and a defect at the same value.
+# 0.62 chooses precision: the clean is passed with 0.08 to spare, the
+# adjacent-name defect is left to the other rule, and the next real file's
+# clean band, which sits higher than a corpus's, has 0.18 of room.
+at: 0.62
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: warning
+rule:
+  any:
+    - pattern: it($TITLE, $BODY)
+    - pattern: test($TITLE, $BODY)
+    - pattern: it($TITLE, $BODY, $TIMEOUT)
+    - pattern: test($TITLE, $BODY, $TIMEOUT)
+    - pattern: it.each($CASES)($TITLE, $BODY)
+ask: >-
+  This test would still pass if the behaviour its name claims were broken.
+# The note is what moved the label-only snapshot cleans ("renders", "matches
+# the snapshot for a three-item order") from 0.50-0.55 to 0.32-0.41 while
+# keeping the snapshot-under-a-claim defects at 0.55-0.76. Two things were
+# tried and measured worse: a criteria rewrite that spelled the snapshot
+# reasoning out in the true branch lifted EVERY snapshot test to 0.59-0.76,
+# label-only ones included; and rephrasing the ask as "the assertions do
+# not establish what the name claims" made "renders the error state when
+# the request fails" read as a label (0.48, a miss) and two exact-order
+# cleans wobble to 0.48-0.49. A longer note naming "with/for/of some state"
+# as input-labelling lifted the Rust label-only cleans to 0.50-0.54.
+note: >-
+  Two things to read for. A snapshot records whatever the output was: under a
+  name that claims a specific property of the output (a row hidden, a footer
+  omitted, a hint shown, a format) it establishes nothing about that property,
+  while under a name that only says renders, or snapshot, or labels the variant
+  rendered, it is the whole claim. And a body whose named operation is never
+  called, or whose named case is never set up, establishes nothing however exact
+  its assertion is.
+criteria:
+  "true": >-
+    The body does not establish what the name claims: it asserts nothing at all,
+    it asserts something that would hold whether or not the named behaviour
+    worked, it checks an incidental property such as a length or a type instead
+    of the named behaviour itself, or it never sets up the case the name is
+    about so the assertion never exercises it.
+  "false": >-
+    The body contains at least one assertion that would fail if the named
+    behaviour were broken. Read the name for what it actually claims: a name
+    that claims only that something renders, or that the output matches a
+    snapshot, or that only labels the input the snapshot was taken of, is
+    established by the snapshot; a name that claims an interaction with a
+    collaborator -- that something was called, once, with these arguments -- is
+    established by an assertion on that call.

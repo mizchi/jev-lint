@@ -1,0 +1,10 @@
+default: clean
+fixtures/legacy_cart.js:
+  - line: 4
+    label: bad
+    window: 0
+    reason: says it returns cents, returns whole units.
+  - line: 9
+    label: bad
+    window: 0
+    reason: claims it leaves the input alone, and it sorts in place.

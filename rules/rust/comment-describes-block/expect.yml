@@ -1,0 +1,75 @@
+default: clean
+fixtures/budget.rs:
+  - line: 53
+    label: bad
+    window: 0
+    reason: says it halves the limit, and it divides by the factor it was given.
+  - line: 61
+    label: bad
+    window: 0
+    reason: says it rounds up, and integer division truncates.
+fixtures/scheduler.rs:
+  - line: 37
+    label: bad
+    window: 0
+    reason: says ten; truncate keeps 20, and the first 20, not the most recent.
+  - line: 43
+    label: bad
+    window: 0
+    reason: says newest first; sort_by_key on `at` is ascending, oldest first.
+  - line: 49
+    label: bad
+    window: 0
+    reason: says seconds to milliseconds; multiplies by a million.
+  - line: 56
+    label: bad
+    window: 0
+    reason: says three retries; the range is 0..5.
+  - line: 70
+    label: bad
+    window: 0
+    reason: says it skips done entries; `!e.done` skips the pending ones.
+  - line: 81
+    label: bad
+    window: 0
+    reason: says round down; (secs + 59) / 60 rounds up.
+  - line: 86
+    label: bad
+    window: 0
+    reason: says double; it adds a constant.
+  - line: 94
+    label: bad
+    window: 0
+    reason: says the head is removed; first().cloned() leaves it.
+  - line: 102
+    label: clean
+    window: 0
+    reason: a why-comment about the unit, and the code does use seconds (as_secs); DOC is its last line only.
+  - line: 105
+    label: clean
+    window: 0
+    reason: vague but true, above a tail expression.
+  - line: 110
+    label: clean
+    window: 0
+    reason: conventional label for an early return.
+  - line: 126
+    label: clean
+    window: 0
+    reason: preamble naming the bug the test guards against; DOC is its last line only.
+  - line: 138
+    label: clean
+    window: 0
+    reason: "section heading: 'two entries' spans the two appends beneath it."
+  - line: 143
+    label: clean
+    window: 0
+    reason: "section heading: the let beneath it plus the asserts after it are the verification."
+  - line: 153
+    label: clean
+    window: 0
+    reason: a trailing comment on the previous line (the continue), not a claim about the append beneath it.
+  - line: 164
+    label: clean
+    window: 0
+    reason: preamble saying the retry count is not what is tested, above an ordinary first statement.

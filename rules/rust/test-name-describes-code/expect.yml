@@ -1,0 +1,87 @@
+default: clean
+fixtures/ledger_test.rs:
+  - line: 19
+    label: clean
+    window: 0
+    reason: "hard clean: sort_by_amount is called on the entries; only the length is asserted. Right thing, weakly"
+  - line: 25
+    label: clean
+    window: 0
+    reason: "hard clean: compound claim; a tie is set up and the full order asserted"
+  - line: 33
+    label: clean
+    window: 0
+    reason: "hard clean: the sort runs and the first element is inspected with is_some, which pins nothing. Right thing, weakly"
+  - line: 39
+    label: bad
+    window: 0
+    reason: "wrong input: the title says above ten units; the body uses three and expects full price"
+  - line: 45
+    label: clean
+    window: 0
+    reason: "hard clean: right input, right operation; the assertion pins no amount. Right thing, weakly"
+  - line: 51
+    label: bad
+    window: 0
+    reason: "wrong operation: the title says removes; the body calls lookup and removes nothing"
+  - line: 56
+    label: bad
+    window: 0
+    reason: the title promises a panic; the body expects None
+  - line: 61
+    label: clean
+    window: 0
+    reason: "hard clean: a one-word name; the body looks an entry up and checks its amount"
+  - line: 66
+    label: bad
+    window: 0
+    reason: "wrong operation: the title says reverses; the body posts and checks the amount went up"
+  - line: 72
+    label: bad
+    window: 0
+    reason: the title refers to a warning being logged; the body touches no logger
+  - line: 80
+    label: clean
+    window: 0
+    reason: "hard clean: compound claim; both the removal and the new balance are asserted"
+  - line: 87
+    label: clean
+    window: 0
+    reason: "hard clean: posts zero, the named input, and asserts nothing"
+  - line: 92
+    label: clean
+    window: 0
+    reason: the title promises an error and the body asserts the error variant
+  - line: 100
+    label: clean
+    window: 0
+    reason: "hard clean: setup reverses an entry, which the title does not mention; the assertion is about the undo"
+  - line: 109
+    label: bad
+    window: 0
+    reason: "opposite outcome: the title says rejects; the body asserts the expired coupon is active"
+  - line: 115
+    label: clean
+    window: 0
+    reason: 'hard clean: "totals" is a synonym for balance; the body sums every entry'
+  - line: 120
+    label: clean
+    window: 0
+    reason: "hard clean: a negative claim established by an exact equality on the parse result"
+fixtures/store_test.rs:
+  - line: 14
+    label: bad
+    window: 0
+    reason: the title names the empty case; the body exercises the non-empty one. Wrong THING. [test]
+  - line: 19
+    label: bad
+    window: 0
+    reason: the title claims it panics; the body expects an ordinary value. Wrong THING. [test]
+  - line: 24
+    label: bad
+    window: 0
+    reason: "RELABELLED from clean. The title names a sort the body never calls: no function under test runs, the body measures the fixture. The criteria's own true branch (\"the name refers to something the code never touches at all\") covers it. The genuine right-thing-weakly case, which stays clean, is ledger_test.rs:19, where sort_by_amount IS called and only the length is checked. [test]"
+  - line: 30
+    label: clean
+    window: 0
+    reason: "hard clean: calls the named operation with the named input and asserts nothing; the missing assertion is the other rule's finding"

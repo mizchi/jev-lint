@@ -1,0 +1,703 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-19T17:57:16.030Z",
+ "model": "jev-1.13.0",
+ "suite": "typescript/comment-describes-block",
+ "rules": [
+  {
+   "id": "comment-describes-block",
+   "draft": "6cb3b8f94861",
+   "at": 0.75
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 15,
+    "endLine": 15,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 20,
+    "endLine": 20,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 26,
+    "endLine": 26,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 31,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.82,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 44,
+    "endLine": 44,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 49,
+    "endLine": 49,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 54,
+    "endLine": 54,
+    "kind": "noul",
+    "value": 0.87,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 62,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.89,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 70,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.87,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 78,
+    "endLine": 78,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 85,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 88,
+    "endLine": 88,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 94,
+    "endLine": 94,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 15,
+    "endLine": 15,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 22,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.17,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 34,
+    "endLine": 34,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 41,
+    "endLine": 41,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 57,
+    "endLine": 57,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 69,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 84,
+    "endLine": 84,
+    "kind": "noul",
+    "value": 0.2,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 101,
+    "endLine": 104,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 103,
+    "endLine": 103,
+    "kind": "noul",
+    "value": 0.37,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 113,
+    "endLine": 113,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/session_store.ts",
+    "line": 69,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.58,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/session_store.ts",
+    "line": 79,
+    "endLine": 82,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 15,
+    "endLine": 15,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 22,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 34,
+    "endLine": 34,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 41,
+    "endLine": 41,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 57,
+    "endLine": 57,
+    "kind": "noul",
+    "value": 0.17,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 69,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 84,
+    "endLine": 84,
+    "kind": "noul",
+    "value": 0.23,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 101,
+    "endLine": 104,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 103,
+    "endLine": 103,
+    "kind": "noul",
+    "value": 0.32,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 113,
+    "endLine": 113,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 15,
+    "endLine": 15,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 20,
+    "endLine": 20,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 26,
+    "endLine": 26,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 31,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.83,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 44,
+    "endLine": 44,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 49,
+    "endLine": 49,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 54,
+    "endLine": 54,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 62,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.89,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 70,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 78,
+    "endLine": 78,
+    "kind": "noul",
+    "value": 0.88,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 85,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 88,
+    "endLine": 88,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 94,
+    "endLine": 94,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/session_store.ts",
+    "line": 69,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.5,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/session_store.ts",
+    "line": 79,
+    "endLine": 82,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 15,
+    "endLine": 15,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 22,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 34,
+    "endLine": 34,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 41,
+    "endLine": 41,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 57,
+    "endLine": 57,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 69,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 84,
+    "endLine": 84,
+    "kind": "noul",
+    "value": 0.22,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 101,
+    "endLine": 104,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 103,
+    "endLine": 103,
+    "kind": "noul",
+    "value": 0.33,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/log_sink.test.ts",
+    "line": 113,
+    "endLine": 113,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 15,
+    "endLine": 15,
+    "kind": "noul",
+    "value": 0.88,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 20,
+    "endLine": 20,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 26,
+    "endLine": 26,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 31,
+    "endLine": 31,
+    "kind": "noul",
+    "value": 0.83,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 44,
+    "endLine": 44,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 49,
+    "endLine": 49,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 54,
+    "endLine": 54,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 62,
+    "endLine": 62,
+    "kind": "noul",
+    "value": 0.89,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 70,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 78,
+    "endLine": 78,
+    "kind": "noul",
+    "value": 0.88,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 85,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 88,
+    "endLine": 88,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/retry_queue.ts",
+    "line": 94,
+    "endLine": 94,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/session_store.ts",
+    "line": 69,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.47,
+    "confidence": null
+   },
+   {
+    "rule": "comment-describes-block",
+    "file": "rules/typescript/comment-describes-block/fixtures/session_store.ts",
+    "line": 79,
+    "endLine": 82,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 15,
+  "inputTokens": 115497,
+  "usd": 0.004850874,
+  "ms": 6151
+ }
+}

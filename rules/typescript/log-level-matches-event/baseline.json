@@ -1,0 +1,487 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-19T17:13:08.051Z",
+ "model": "jev-1.13.0",
+ "suite": "typescript/log-level-matches-event",
+ "rules": [
+  {
+   "id": "log-level-matches-event",
+   "draft": "387c90cc602b",
+   "at": 0.6
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 16,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 25,
+    "endLine": 25,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 34,
+    "endLine": 34,
+    "kind": "noul",
+    "value": 0.36,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 42,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 52,
+    "endLine": 56,
+    "kind": "noul",
+    "value": 0.76,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 70,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.82,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 79,
+    "endLine": 79,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 85,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.88,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 95,
+    "endLine": 95,
+    "kind": "noul",
+    "value": 0.25,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 107,
+    "endLine": 107,
+    "kind": "noul",
+    "value": 0.34,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 120,
+    "endLine": 120,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 132,
+    "endLine": 132,
+    "kind": "noul",
+    "value": 0.2,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 142,
+    "endLine": 142,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 150,
+    "endLine": 150,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 159,
+    "endLine": 159,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 170,
+    "endLine": 170,
+    "kind": "noul",
+    "value": 0.8,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 179,
+    "endLine": 179,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 16,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.91,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 25,
+    "endLine": 25,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 34,
+    "endLine": 34,
+    "kind": "noul",
+    "value": 0.38,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 42,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 52,
+    "endLine": 56,
+    "kind": "noul",
+    "value": 0.75,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 70,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.85,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 79,
+    "endLine": 79,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 85,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.88,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 95,
+    "endLine": 95,
+    "kind": "noul",
+    "value": 0.35,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 107,
+    "endLine": 107,
+    "kind": "noul",
+    "value": 0.37,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 120,
+    "endLine": 120,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 132,
+    "endLine": 132,
+    "kind": "noul",
+    "value": 0.2,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 142,
+    "endLine": 142,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 150,
+    "endLine": 150,
+    "kind": "noul",
+    "value": 0.12,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 159,
+    "endLine": 159,
+    "kind": "noul",
+    "value": 0.18,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 170,
+    "endLine": 170,
+    "kind": "noul",
+    "value": 0.8,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 179,
+    "endLine": 179,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 16,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 25,
+    "endLine": 25,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 34,
+    "endLine": 34,
+    "kind": "noul",
+    "value": 0.42,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 42,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 52,
+    "endLine": 56,
+    "kind": "noul",
+    "value": 0.75,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 70,
+    "endLine": 70,
+    "kind": "noul",
+    "value": 0.8,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 79,
+    "endLine": 79,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 85,
+    "endLine": 85,
+    "kind": "noul",
+    "value": 0.89,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 95,
+    "endLine": 95,
+    "kind": "noul",
+    "value": 0.29,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 107,
+    "endLine": 107,
+    "kind": "noul",
+    "value": 0.4,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 120,
+    "endLine": 120,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 132,
+    "endLine": 132,
+    "kind": "noul",
+    "value": 0.2,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 142,
+    "endLine": 142,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 150,
+    "endLine": 150,
+    "kind": "noul",
+    "value": 0.11,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 159,
+    "endLine": 159,
+    "kind": "noul",
+    "value": 0.16,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 170,
+    "endLine": 170,
+    "kind": "noul",
+    "value": 0.8,
+    "confidence": null
+   },
+   {
+    "rule": "log-level-matches-event",
+    "file": "rules/typescript/log-level-matches-event/fixtures/logging.ts",
+    "line": 179,
+    "endLine": 179,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 3,
+  "inputTokens": 39291,
+  "usd": 0.001650222,
+  "ms": 971
+ }
+}

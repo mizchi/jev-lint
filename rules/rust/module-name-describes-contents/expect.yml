@@ -1,0 +1,21 @@
+default: clean
+fixtures/backoff.rs:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "named `backoff` and every public item is about backoff. The Rust half of the hard-clean class described at the top of corpus/ts/session.ts. Names here are defensible rather than obvious: a predicate that needs an inference, a mutation that announces itself, a parse that can fail, a `get` that computes. The corpus had none of these and a cutoff fitted without them sat too close to the boundary."
+fixtures/budget.rs:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "named for the budget it tracks. The Rust half of the comment-drift corpus. See corpus/ts/session_store.ts for what the CLEAN cases are doing there: a vague, redundant or why-not-what comment is accurate and must not be flagged, because the axis is whether the claim is false, not whether the comment is worth having."
+fixtures/helpers.rs:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: every public item here is about formatting and parsing currency, and the module is called `helpers`.
+fixtures/retry.rs:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: the module is called `retry` and every public item is about retrying.

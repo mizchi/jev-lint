@@ -1,0 +1,132 @@
+default: clean
+fixtures/ledger_test.rs:
+  - line: 19
+    label: bad
+    window: 0
+    reason: ordering claimed, length checked
+  - line: 25
+    label: clean
+    window: 0
+    reason: compound claim; exact order asserted
+  - line: 33
+    label: bad
+    window: 0
+    reason: smallest-first claimed; is_some holds for any first element
+  - line: 39
+    label: bad
+    window: 0
+    reason: above-ten case claimed, never set up
+  - line: 45
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims only that a discount happens; strict less-than fails if none does"
+  - line: 51
+    label: bad
+    window: 0
+    reason: removal claimed; nothing removed
+  - line: 56
+    label: bad
+    window: 0
+    reason: panic claimed; None expected
+  - line: 61
+    label: clean
+    window: 0
+    reason: "hard clean: one-word name; exact amount asserted"
+  - line: 66
+    label: bad
+    window: 0
+    reason: reversal claimed; a posting is made and the amount goes up
+  - line: 72
+    label: bad
+    window: 0
+    reason: warning claimed; no logger observed
+  - line: 80
+    label: clean
+    window: 0
+    reason: compound claim; both parts asserted
+  - line: 87
+    label: bad
+    window: 0
+    reason: asserts nothing
+  - line: 92
+    label: clean
+    window: 0
+    reason: the error variant the title claims is matched
+  - line: 100
+    label: clean
+    window: 0
+    reason: "hard clean: setup reverses first; the exact restored amount is asserted"
+  - line: 109
+    label: bad
+    window: 0
+    reason: rejection claimed; active asserted
+  - line: 115
+    label: clean
+    window: 0
+    reason: "hard clean: synonym name; exact balance asserted"
+  - line: 120
+    label: clean
+    window: 0
+    reason: "hard clean: negative claim established by exact equality on the parse result"
+fixtures/notify_test.rs:
+  - line: 27
+    label: bad
+    window: 0
+    reason: "quiet: the display name is claimed; only the sent count is checked"
+  - line: 34
+    label: clean
+    window: 0
+    reason: recipient and body content are asserted
+  - line: 43
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims the count itself; the count is asserted"
+  - line: 50
+    label: clean
+    window: 0
+    reason: "hard clean: a claimed non-interaction established by is_empty on the log"
+  - line: 58
+    label: bad
+    window: 0
+    reason: "quiet: every item listed is claimed; only the sent count is checked"
+  - line: 65
+    label: clean
+    window: 0
+    reason: the per-line count the title claims is asserted
+  - line: 73
+    label: clean
+    window: 0
+    reason: "hard clean: a label-only name over a snapshot"
+  - line: 78
+    label: clean
+    window: 0
+    reason: 'hard clean: "renders the empty digest" claims nothing a snapshot does not establish'
+  - line: 83
+    label: bad
+    window: 0
+    reason: snapshot only under a specific claim (the footer is omitted); a digest with the footer would be recorded and pass
+  - line: 88
+    label: bad
+    window: 0
+    reason: "quiet: a retry is claimed; is_err holds after one attempt or two"
+  - line: 100
+    label: clean
+    window: 0
+    reason: the exact error is asserted
+fixtures/store_test.rs:
+  - line: 14
+    label: bad
+    window: 0
+    reason: the title names the empty case; the body exercises the non-empty one. Wrong THING. [test]
+  - line: 19
+    label: bad
+    window: 0
+    reason: the title claims it panics; the body expects an ordinary value. Wrong THING. [test]
+  - line: 24
+    label: bad
+    window: 0
+    reason: the title claims an ordering guarantee and the body checks the length, so the named behaviour could be broken and this would still pass. Right thing, assertion too WEAK. [test]
+  - line: 30
+    label: bad
+    window: 0
+    reason: asserts nothing, so nothing it claims is established. [test]

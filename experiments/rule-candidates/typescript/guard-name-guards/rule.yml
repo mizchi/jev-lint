@@ -1,0 +1,87 @@
+# Family B: function names that promise a guarantee.
+#
+# Sharper cousins of the shipped `fn-name-promises`. Each matcher narrows the
+# captured $NAME with a regex to a family of names that makes one specific
+# promise -- a check is performed, failure is absorbed, a repeat is harmless,
+# nothing outside is touched -- and the sentence asks only about that promise.
+
+# ----------------------------------------------------------------------------
+# 1. validate* / sanitize* / assert* / ensure* / check* / verify*
+# ----------------------------------------------------------------------------
+id: guard-name-guards
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+subject: node
+state: local
+# 0.59, refitted 2026-09-20 on evals/ (10 defects, 20 cleans, 3 passes):
+# clean tops at 0.51 (`validateAlignmentFallback`, a pure comparison whose
+# name says it is the lesser path), defects start at 0.66 (`assertPositive`
+# that lets a non-number through). Midpoint of that gap, 0.08 / 0.07 of
+# headroom. On agent-cluster the clean band reaches 0.55
+# (`checkScopedApiAuth`, which returns pass after a helper says not to
+# enforce). The earlier 0.63 was fitted to 4 defects and 11 cleans; the two
+# unseen false positives it produced -- a catch branch returning a fallback
+# helper's verdict -- are now hard cleans here (gates.ts:81, :127) and the
+# criteria name that shape.
+at: 0.59
+rule:
+  any:
+    - all:
+        - kind: function_declaration
+        - has:
+            field: name
+            pattern: $NAME
+            regex: "^(validate|sanitize|assert|ensure|check|verify)([A-Z0-9_]|$)"
+    - all:
+        - kind: method_definition
+        - has:
+            field: name
+            pattern: $NAME
+            regex: "^(validate|sanitize|assert|ensure|check|verify)([A-Z0-9_]|$)"
+    - all:
+        - kind: variable_declarator
+        - has:
+            field: name
+            pattern: $NAME
+            regex: "^(validate|sanitize|assert|ensure|check|verify)([A-Z0-9_]|$)"
+        - has:
+            field: value
+            any:
+              - kind: arrow_function
+              - kind: function_expression
+ask: >-
+  This function's name ($NAME) promises a check, but there is a path through its
+  body on which that check is not performed and the function still completes as
+  if it had passed.
+criteria:
+  "true": >-
+    Some path returns, resolves or falls through normally without the check the
+    name promises having been performed: an input is accepted early without
+    being examined, a failure of the operation that would have established the
+    condition is caught and discarded, or a shortcut branch skips the check for
+    some callers or inputs.
+  "false": >-
+    On every path that completes normally the check the name promises has been
+    performed, by this body or by a schema, library or helper it delegates to --
+    including a fallback helper whose verdict is returned when the primary check
+    fails to run. Reporting the outcome by returning false, null or a result
+    object rather than throwing is still performing the check, returning early
+    when there is nothing to accept (a GET has no body, so a body validator
+    returns ok with no body) is not accepting an unexamined input, and a terse
+    name is not a missing check.
+note: >-
+  Only this function's paths are judged, not how thorough its check is: a body
+  that performs the check the name names on every path but could have examined
+  more is not skipping it. A schema, validator or helper the body calls is
+  assumed to check what its own name says, and that includes a fallback helper
+  named for the same check whose result a catch branch returns. Failing closed
+  -- rejecting when the check cannot be run -- honours the name; failing open --
+  accepting when the check cannot be run or was skipped -- does not. The
+  distinction for an early acceptance is what is absent: when the thing to be
+  examined is absent there is nothing to check; when the evidence the check
+  needs is absent (no signature, no expected value, an unsupported algorithm)
+  and the input is accepted anyway, the check was skipped. What matters is
+  whether something goes on as if it had passed: a value of the wrong type, an
+  empty string, NaN or a key with a magic prefix that the function lets through
+  unexamined is a skipped check even when the early return looks like a type
+  guard, because the caller continues with that value as checked.

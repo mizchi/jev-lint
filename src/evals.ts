@@ -1,13 +1,14 @@
 /**
  * Per-rule evals: the regression suite a rule ships with.
  *
- * A rule lives in its own directory beside the cases that prove it:
+ * A rule lives in its own directory, under its language, beside the
+ * fixtures that prove it:
  *
- *     rules/<rule>/rule.yml               the rule, every language variant
- *     rules/<rule>/evals/cases/           fixture code, marker-free
- *     rules/<rule>/evals/labels.json      what each case is, and why
- *     rules/<rule>/evals/baseline.json    the last accepted run, replayable
- *     rules/<rule>/evals/last.json        the last run, accepted or not
+ *     rules/<lang>/<id>/rule.yml          the rule, one language
+ *     rules/<lang>/<id>/fixtures/         fixture code, marker-free
+ *     rules/<lang>/<id>/expect.yml        what each fixture holds, and why
+ *     rules/<lang>/<id>/baseline.json     the last accepted run, replayable
+ *     rules/<lang>/<id>/last.json         the last run, accepted or not
  *
  * `jev-lint eval` runs each suite's rule over its cases, scores the answers at
  * the SHIPPED cutoff on the mean of N passes, and compares with the baseline.
@@ -21,24 +22,27 @@
  * cannot say anything about the rule as it is now, and the comparison says so
  * rather than comparing two different questions.
  *
- * Labels are keyed relative to `cases/`, so an eval directory is portable;
+ * Expectations are keyed relative to the rule directory, so it is portable;
  * they are resolved to the paths a run reports before scoring.
  */
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import { join, relative } from "node:path";
+import { basename, dirname, join } from "node:path";
+import YAML from "yaml";
 import { fitCutoffs, labelFor } from "./calibrate.ts";
-import { cutoffFor, loadRules, ruleTextHash } from "./rules.ts";
+import { cutoffFor, languageDirGrammars, loadRules, ruleTextHash } from "./rules.ts";
 import { run } from "./run.ts";
 import { DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
 import type { Label, Labels, Rule } from "./types.ts";
 
 export interface EvalSuite {
-  /** The directory's name: the rule (family) it holds. */
+  /** `lang/id` under the shipped layout, else the directory's name. */
   name: string;
   dir: string;
   ruleFile: string;
-  cases: string;
-  labels: string;
+  /** The fixtures directory: the code the rule is run over. */
+  fixtures: string;
+  /** `expect.yml`: the expectations, keyed relative to `dir`. */
+  expect: string;
   baseline: string;
   last: string;
 }
@@ -107,21 +111,25 @@ export function discoverEvals(roots: string[]): EvalSuite[] {
     } catch {
       return;
     }
-    const labelsFile = join(dir, "evals", "labels.json");
-    if (existsSync(labelsFile)) {
+    const expect = join(dir, "expect.yml");
+    if (existsSync(expect)) {
       const ruleFile = ["rule.yml", "rule.yaml"].map((n) => join(dir, n)).find((p) => existsSync(p)) ?? join(dir, "rule.yml");
+      // `lang/id` when the parent is a language directory, so two languages'
+      // suites for one rule are told apart in every report.
+      const parent = basename(dirname(dir));
+      const name = languageDirGrammars(parent) ? `${parent}/${basename(dir)}` : basename(dir);
       out.push({
-        name: relative(join(dir, ".."), dir) || dir,
+        name,
         dir,
         ruleFile,
-        cases: join(dir, "evals", "cases"),
-        labels: labelsFile,
-        baseline: join(dir, "evals", "baseline.json"),
-        last: join(dir, "evals", "last.json"),
+        fixtures: join(dir, "fixtures"),
+        expect,
+        baseline: join(dir, "baseline.json"),
+        last: join(dir, "last.json"),
       });
     }
     for (const e of entries) {
-      if (e.isDirectory() && e.name !== "evals" && !e.name.startsWith(".")) visit(join(dir, e.name));
+      if (e.isDirectory() && e.name !== "fixtures" && !e.name.startsWith(".")) visit(join(dir, e.name));
     }
   };
   for (const r of roots) {
@@ -134,14 +142,29 @@ export function discoverEvals(roots: string[]): EvalSuite[] {
   return out;
 }
 
-/** Labels keyed relative to `cases/`, re-keyed to the paths a run reports. */
-export function relocateLabels(labels: Labels, cases: string): Labels {
+/**
+ * Expectations keyed relative to the rule directory, re-keyed to the paths
+ * a run reports, with the suite's rule stamped on each entry so that
+ * `labelFor` -- which matches a label to a rule -- needs no `rule:` key in
+ * the file. `default`/`note` are the spellings; `$default`/`$note` still
+ * read.
+ */
+export function relocateLabels(labels: Labels, dir: string, rule?: string): Labels {
   const out: Labels = {};
   for (const [k, v] of Object.entries(labels)) {
-    if (k.startsWith("$")) out[k] = v;
-    else out[join(cases, k)] = v as Label[];
+    if (k === "default" || k === "$default") out.$default = v as Labels["$default"];
+    else if (k === "note" || k === "$note") out.$note = v as string;
+    else if (k.startsWith("$")) out[k] = v;
+    else out[join(dir, k)] = (v as Label[]).map((l) => (rule && !l.rule ? { ...l, rule } : l));
   }
   return out;
+}
+
+/** The expectations of a suite, as written. */
+function readExpect(suite: EvalSuite): Labels {
+  const raw = YAML.parse(readFileSync(suite.expect, "utf8")) as Labels | null;
+  const rule = loadRules([suite.ruleFile]).rules[0]?.id;
+  return relocateLabels(raw ?? {}, suite.dir, rule);
 }
 
 /**
@@ -302,9 +325,9 @@ export function loadSuite(suite: EvalSuite): { rules: Rule[]; labels: Labels; er
   const { rules, errors } = loadRules([suite.ruleFile]);
   let labels: Labels = { $default: "clean" };
   try {
-    labels = relocateLabels(JSON.parse(readFileSync(suite.labels, "utf8")) as Labels, suite.cases);
+    labels = readExpect(suite);
   } catch (err: unknown) {
-    errors.push(`${suite.labels}: ${String(err).slice(0, 160)}`);
+    errors.push(`${suite.expect}: ${String(err).slice(0, 160)}`);
   }
   return { rules, labels, errors };
 }
@@ -319,7 +342,7 @@ export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Prom
   // and the cases are scanned once rather than once per pass.
   const r = await run({
     rules,
-    paths: [suite.cases],
+    paths: [suite.fixtures],
     cutoffs: opts.cutoffs ?? {},
     cachePath: null,
     force: true,
@@ -362,11 +385,11 @@ export function evalCorpus(roots: string[]): { paths: string[]; labels: Labels }
   const labels: Labels = { $default: "clean" };
   const paths: string[] = [];
   for (const suite of discoverEvals(roots)) {
-    if (!existsSync(suite.cases)) continue;
-    paths.push(suite.cases);
+    if (!existsSync(suite.fixtures)) continue;
+    paths.push(suite.fixtures);
     let own: Labels;
     try {
-      own = relocateLabels(JSON.parse(readFileSync(suite.labels, "utf8")) as Labels, suite.cases);
+      own = readExpect(suite);
     } catch {
       continue;
     }

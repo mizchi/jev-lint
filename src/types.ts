@@ -612,5 +612,8 @@ export interface Label {
 export interface Labels {
   $default?: "bad" | "clean" | "unlabeled";
   $note?: string;
+  /** The spellings `expect.yml` uses; `relocateLabels` folds them into the `$` forms. */
+  default?: "bad" | "clean" | "unlabeled";
+  note?: string;
   [path: string]: Label[] | string | undefined;
 }

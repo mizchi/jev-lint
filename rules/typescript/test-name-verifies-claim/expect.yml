@@ -1,0 +1,239 @@
+default: clean
+fixtures/cart.test.ts:
+  - line: 24
+    label: bad
+    window: 0
+    reason: the title names the empty case; the body exercises the non-empty one. Wrong THING, not a weak assertion.
+  - line: 28
+    label: bad
+    window: 0
+    reason: the title says it throws; the body expects an ordinary value. Wrong THING.
+  - line: 32
+    label: bad
+    window: 0
+    reason: the title claims an ordering guarantee and the body counts the results, so the named behaviour could be broken and this would still pass. Right thing, assertion too WEAK.
+  - line: 36
+    label: bad
+    window: 0
+    reason: asserts nothing at all, so nothing it claims is established.
+  - line: 76
+    label: clean
+    window: 0
+    reason: 'hard clean: opens with a preamble comment about a past bug; the assertion is the exact doubled sum, which fails if either occurrence is dropped. RENAMED from "does not double-count an item listed twice", a title that read as the opposite of the 450 the body expects; the preamble shape is kept'
+fixtures/checkout.test.ts:
+  - line: 50
+    label: bad
+    window: 0
+    reason: the total is mocked to 100 and the assertion reads 100 back; a broken total() still passes
+  - line: 74
+    label: bad
+    window: 0
+    reason: reserveStock is mocked; the result asserted is the mock's value, so a reserveLineItems that reserved nothing still passes
+  - line: 108
+    label: bad
+    window: 0
+    reason: fetch is stubbed with the ETA; the assertion reads the stub back
+fixtures/inventory.test.ts:
+  - line: 26
+    label: bad
+    window: 0
+    reason: the title claims an ordering; the body checks only the length, which holds whether or not the sort works
+  - line: 30
+    label: clean
+    window: 0
+    reason: compound claim; a tie is set up and the exact order asserted
+  - line: 36
+    label: bad
+    window: 0
+    reason: the title claims the cheapest is first; toBeDefined holds for any first element
+  - line: 43
+    label: bad
+    window: 0
+    reason: the title claims the above-ten case; the body never sets it up (three units), so the discount is never exercised
+  - line: 48
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims only that a discount happens; toBeLessThan(full price) fails if none does"
+  - line: 53
+    label: clean
+    window: 0
+    reason: "it.each: each row asserts the exact price"
+  - line: 63
+    label: bad
+    window: 0
+    reason: the title claims removal; nothing is removed, so a broken removeItem passes
+  - line: 67
+    label: bad
+    window: 0
+    reason: the title claims a throw; the body expects undefined, so a lookup that never throws passes
+  - line: 71
+    label: clean
+    window: 0
+    reason: "hard clean: one-word title; the exact name is asserted"
+  - line: 77
+    label: bad
+    window: 0
+    reason: the title claims a reservation; reserve is never called
+  - line: 82
+    label: bad
+    window: 0
+    reason: the title claims a warning is logged; no logger is observed
+  - line: 88
+    label: clean
+    window: 0
+    reason: compound claim; both quantities asserted exactly
+  - line: 94
+    label: bad
+    window: 0
+    reason: asserts nothing
+  - line: 98
+    label: clean
+    window: 0
+    reason: the throw the title claims is asserted
+  - line: 102
+    label: clean
+    window: 0
+    reason: "hard clean: setup calls other operations; the exact restored quantity is asserted"
+  - line: 112
+    label: bad
+    window: 0
+    reason: the title claims rejection; the body expects the coupon active, so a broken rejection passes
+  - line: 117
+    label: bad
+    window: 0
+    reason: the title claims a rejection on timeout; the gateway resolves and the body expects a capture
+  - line: 122
+    label: clean
+    window: 0
+    reason: "hard clean: a synonym title; the exact total is asserted"
+  - line: 126
+    label: clean
+    window: 0
+    reason: "hard clean: a negative claim (not read as an empty sku) established by exact equality on the parse result -- the self-lint shape"
+fixtures/order-summary.test.ts:
+  - line: 18
+    label: bad
+    window: 0
+    reason: the only assertion is a whole-render snapshot, which holds whatever was recorded, error state or not
+  - line: 43
+    label: bad
+    window: 0
+    reason: snapshot only; a discount row that is not hidden would be recorded and pass
+  - line: 85
+    label: bad
+    window: 0
+    reason: snapshot only; a wrong currency format would be recorded and pass
+  - line: 48
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims only that the snapshot matches, which the assertion verifies exactly"
+  - line: 53
+    label: clean
+    window: 0
+    reason: 'hard clean: "renders" claims nothing a snapshot does not establish'
+  - line: 90
+    label: clean
+    window: 0
+    reason: 'hard clean: "renders the receipt for a single-item order" labels the input of the snapshot and asserts no property'
+fixtures/profile.test.ts:
+  - line: 35
+    label: bad
+    window: 0
+    reason: "quiet: the title claims the stored email is lowercased; the assertion is a call count, so an update storing it as given passes"
+  - line: 40
+    label: clean
+    window: 0
+    reason: "hard clean: the same claim established by toHaveBeenCalledWith carrying the lowercased email"
+  - line: 45
+    label: bad
+    window: 0
+    reason: "quiet: the title claims an event name and its payload; toHaveBeenCalled checks neither"
+  - line: 50
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims a non-interaction (no publish) and not.toHaveBeenCalled is exactly that"
+  - line: 55
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims call order; the assertion is on invocation order"
+  - line: 61
+    label: bad
+    window: 0
+    reason: the title claims the updated profile is returned; toBeDefined holds for any non-undefined value
+  - line: 74
+    label: bad
+    window: 0
+    reason: "quiet: the title claims a retry; the rejection is swallowed and toHaveBeenCalled holds after one attempt"
+  - line: 80
+    label: clean
+    window: 0
+    reason: "hard clean: opens with a preamble comment; compound claim, and both the call count and the stored url are asserted"
+  - line: 91
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims the interaction itself (once per upload); toHaveBeenCalledTimes(1) is that claim"
+  - line: 96
+    label: clean
+    window: 0
+    reason: "hard clean: compound claim (the previous object, and not the new one); the call count and the argument together cover both halves. Before the count was added the rule answered 0.54 and was right: CalledWith(old) alone allows a second removal"
+  - line: 109
+    label: bad
+    window: 0
+    reason: "quiet: the title claims the url is cleared; toHaveBeenCalledWith(id, anything) checks no patch content"
+  - line: 114
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims storage is not touched; not.toHaveBeenCalled is exactly that"
+  - line: 128
+    label: clean
+    window: 0
+    reason: the rejection the title claims is asserted, and the write is asserted absent
+  - line: 134
+    label: bad
+    window: 0
+    reason: "quiet: the title claims trimming; a call count establishes nothing about the stored name"
+  - line: 139
+    label: clean
+    window: 0
+    reason: "hard clean: negative claim established by exact equality -- the self-lint shape"
+  - line: 143
+    label: clean
+    window: 0
+    reason: the exact tags are asserted
+  - line: 150
+    label: clean
+    window: 0
+    reason: 'hard clean: "renders the profile card" claims nothing a snapshot does not establish'
+  - line: 154
+    label: clean
+    window: 0
+    reason: "hard clean: a label-only title over an inline snapshot"
+  - line: 164
+    label: clean
+    window: 0
+    reason: 'hard clean: "matches the snapshot" claims exactly what the assertion checks'
+  - line: 168
+    label: bad
+    window: 0
+    reason: snapshot only under a specific claim (a verification hint is shown); a card without the hint would be recorded and pass
+  - line: 172
+    label: clean
+    window: 0
+    reason: the placeholder and the absence of an img are asserted
+fixtures/signup.test.ts:
+  - line: 39
+    label: bad
+    window: 0
+    reason: title claims the display name is in the email; the assertion is toHaveBeenCalled with no arguments checked
+  - line: 44
+    label: bad
+    window: 0
+    reason: title claims the hash is stored and the plaintext is not; the assertion is a call count
+  - line: 49
+    label: bad
+    window: 0
+    reason: title claims rejection; the rejection is swallowed with .catch and only the lookup call is asserted
+  - line: 87
+    label: bad
+    window: 0
+    reason: title claims the invitation is marked accepted; the assertion is that update was called, with anything

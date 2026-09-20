@@ -9,4 +9,5 @@ node_modules/
 dist/
 *.tgz
 # The last eval run, accepted or not; the accepted one is baseline.json.
-rules/*/evals/last.json
+rules/*/*/last.json
+experiments/rule-candidates/*/*/last.json

@@ -1,0 +1,104 @@
+default: clean
+fixtures/log_sink.test.ts:
+  - line: 15
+    label: clean
+    window: 0
+    reason: "section heading: 'two events' spans the two appends beneath it; the first append alone is not the count."
+  - line: 22
+    label: clean
+    window: 0
+    reason: "section heading: the query beneath it plus the asserts after it are the verification."
+  - line: 34
+    label: clean
+    window: 0
+    reason: "'newest first' names the order the two asserts beneath it check; index 0 is the later event."
+  - line: 41
+    label: clean
+    window: 0
+    reason: preamble explaining why realpathSync is there; DOC is its last line only.
+  - line: 57
+    label: clean
+    window: 0
+    reason: preamble naming the bug the test guards against, above an ordinary first statement.
+  - line: 69
+    label: clean
+    window: 0
+    reason: "'first two polls' is the enclosing if's condition (polls <= 2); the single return beneath it is what each of those polls gets."
+  - line: 84
+    label: clean
+    window: 0
+    reason: preamble about the pre-commit hook and the old behaviour, above a dynamic import that has nothing to do with it.
+  - line: 101
+    label: clean
+    window: 0
+    reason: preamble explaining why the loop checks the budget rather than the ceiling; the loop does check the budget.
+  - line: 103
+    label: clean
+    window: 0
+    reason: a trailing comment on the previous line (the continue), not a claim about the assert beneath it.
+  - line: 113
+    label: clean
+    window: 0
+    reason: says the claim is about the batch count and the assert checks the count.
+fixtures/retry_queue.ts:
+  - line: 15
+    label: bad
+    window: 0
+    reason: says descending, largest first; the comparator sorts ascending.
+  - line: 20
+    label: bad
+    window: 0
+    reason: says at most ten; the cap is 25.
+  - line: 26
+    label: bad
+    window: 0
+    reason: says the delay doubles; it grows linearly.
+  - line: 31
+    label: bad
+    window: 0
+    reason: says the cutoff is in milliseconds; seconds are subtracted from a millisecond clock.
+  - line: 44
+    label: bad
+    window: 0
+    reason: says three tries; the code allows five.
+  - line: 49
+    label: bad
+    window: 0
+    reason: says round down; Math.ceil rounds up.
+  - line: 54
+    label: bad
+    window: 0
+    reason: says the head is removed; queue[0] leaves it in place.
+  - line: 62
+    label: bad
+    window: 0
+    reason: says it skips jobs that have a worker; the condition skips the ones that do not.
+  - line: 70
+    label: bad
+    window: 0
+    reason: says oldest first; the comparator puts the newest first.
+  - line: 78
+    label: bad
+    window: 0
+    reason: says half a second; the timeout is five seconds.
+  - line: 85
+    label: clean
+    window: 0
+    reason: "a why-comment: explains the early return by the server's policy, claims nothing the code contradicts."
+  - line: 88
+    label: clean
+    window: 0
+    reason: vague but true.
+  - line: 94
+    label: clean
+    window: 0
+    reason: conventional label for an early return.
+fixtures/session_store.ts:
+  - line: 69
+    label: bad
+    window: 0
+    reason: says the latest-expiring are kept; the ascending sort puts them last and slice(limit) deletes exactly those.
+  - line: 79
+    label: bad
+    window: 0
+    reason: says three attempts; the loop runs five.

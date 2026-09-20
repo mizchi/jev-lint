@@ -1,0 +1,676 @@
+{
+ "schema": "jev-lint-eval-1",
+ "recorded": "2026-09-19T17:48:30.144Z",
+ "model": "jev-1.13.0",
+ "suite": "rust/test-name-describes-code",
+ "rules": [
+  {
+   "id": "test-name-describes-code",
+   "draft": "b17cb0965d32",
+   "at": 0.7
+  }
+ ],
+ "cutoffs": {},
+ "passes": [
+  [
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 19,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.42,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 25,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 33,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.5,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 39,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.9,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 45,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 51,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 56,
+    "endLine": 58,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 61,
+    "endLine": 63,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 66,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 72,
+    "endLine": 77,
+    "kind": "noul",
+    "value": 0.86,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 80,
+    "endLine": 84,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 87,
+    "endLine": 89,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 92,
+    "endLine": 97,
+    "kind": "noul",
+    "value": 0.14,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 100,
+    "endLine": 106,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 109,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 115,
+    "endLine": 117,
+    "kind": "noul",
+    "value": 0.26,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 120,
+    "endLine": 122,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 14,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.97,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 19,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 24,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 30,
+    "endLine": 33,
+    "kind": "noul",
+    "value": 0.44,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 36,
+    "endLine": 39,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 42,
+    "endLine": 44,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 47,
+    "endLine": 50,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 14,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 19,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 24,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 30,
+    "endLine": 33,
+    "kind": "noul",
+    "value": 0.39,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 36,
+    "endLine": 39,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 42,
+    "endLine": 44,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 47,
+    "endLine": 50,
+    "kind": "noul",
+    "value": 0.04,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 19,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.41,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 25,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.19,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 33,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.52,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 39,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.89,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 45,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 51,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 56,
+    "endLine": 58,
+    "kind": "noul",
+    "value": 0.93,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 61,
+    "endLine": 63,
+    "kind": "noul",
+    "value": 0.09,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 66,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.83,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 72,
+    "endLine": 77,
+    "kind": "noul",
+    "value": 0.88,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 80,
+    "endLine": 84,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 87,
+    "endLine": 89,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 92,
+    "endLine": 97,
+    "kind": "noul",
+    "value": 0.1,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 100,
+    "endLine": 106,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 109,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 115,
+    "endLine": 117,
+    "kind": "noul",
+    "value": 0.3,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 120,
+    "endLine": 122,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   }
+  ],
+  [
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 19,
+    "endLine": 22,
+    "kind": "noul",
+    "value": 0.42,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 25,
+    "endLine": 30,
+    "kind": "noul",
+    "value": 0.15,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 33,
+    "endLine": 36,
+    "kind": "noul",
+    "value": 0.52,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 39,
+    "endLine": 42,
+    "kind": "noul",
+    "value": 0.89,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 45,
+    "endLine": 48,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 51,
+    "endLine": 53,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 56,
+    "endLine": 58,
+    "kind": "noul",
+    "value": 0.92,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 61,
+    "endLine": 63,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 66,
+    "endLine": 69,
+    "kind": "noul",
+    "value": 0.88,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 72,
+    "endLine": 77,
+    "kind": "noul",
+    "value": 0.88,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 80,
+    "endLine": 84,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 87,
+    "endLine": 89,
+    "kind": "noul",
+    "value": 0.08,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 92,
+    "endLine": 97,
+    "kind": "noul",
+    "value": 0.13,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 100,
+    "endLine": 106,
+    "kind": "noul",
+    "value": 0.07,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 109,
+    "endLine": 112,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 115,
+    "endLine": 117,
+    "kind": "noul",
+    "value": 0.32,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/ledger_test.rs",
+    "line": 120,
+    "endLine": 122,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 14,
+    "endLine": 16,
+    "kind": "noul",
+    "value": 0.96,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 19,
+    "endLine": 21,
+    "kind": "noul",
+    "value": 0.94,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 24,
+    "endLine": 27,
+    "kind": "noul",
+    "value": 0.95,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 30,
+    "endLine": 33,
+    "kind": "noul",
+    "value": 0.44,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 36,
+    "endLine": 39,
+    "kind": "noul",
+    "value": 0.03,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 42,
+    "endLine": 44,
+    "kind": "noul",
+    "value": 0.06,
+    "confidence": null
+   },
+   {
+    "rule": "test-name-describes-code",
+    "file": "rules/rust/test-name-describes-code/fixtures/store_test.rs",
+    "line": 47,
+    "endLine": 50,
+    "kind": "noul",
+    "value": 0.05,
+    "confidence": null
+   }
+  ]
+ ],
+ "spent": {
+  "calls": 12,
+  "inputTokens": 119778,
+  "usd": 0.005030676,
+  "ms": 5238
+ }
+}

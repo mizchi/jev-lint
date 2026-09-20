@@ -1,0 +1,28 @@
+id: module-name-describes-contents
+language: Rust
+kind: noul
+subject: file
+state: graph
+at: 0.55
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: info
+rule:
+  kind: source_file
+ask: >-
+  This module's name does not describe what the module contains.
+criteria:
+  "true": >-
+    The filename and path name a subject that the module's public items do not
+    match: the items belong to a different concern than the name states, the
+    name names one thing while the module holds an unrelated assortment, the
+    name is narrower or broader than the items it holds, or the name is a
+    placeholder such as utils, helpers, misc, common or manager for items that
+    share a concern that could be named.
+  "false": >-
+    The filename and path describe what the module's public items are about,
+    closely enough that someone looking for those items would look here.
+note: >-
+  A module holding one cohesive group of items is not a mismatch merely for
+  holding several of them, and a conventional entry-point name (index, mod, lib,
+  main) is named by its directory rather than by itself.
