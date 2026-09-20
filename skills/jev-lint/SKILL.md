@@ -57,6 +57,8 @@ Knowing which half you are working on is most of the job.
 export TYPESAFE_API_KEY=...            # or TYPESAFEAI_API_KEY
 npx -y jev-lint check src --dry-run    # plan and price. Makes NO request.
 npx -y jev-lint check src              # judge whole files
+npx -y jev-lint run fn-name-promises src        # one shipped rule; rust/<id> for one language
+npx -y jev-lint run --file myrule.yml src       # a rule file of your own, and nothing else
 npx -y jev-lint review --base main     # judge only what the diff touched
 npx -y jev-lint commits --base main    # judge each commit's message against its diff
 npx -y jev-lint init                   # write .jev-lint.yaml, all commented out

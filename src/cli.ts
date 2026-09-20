@@ -17,7 +17,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
-import { loadRules, cutoffFor, defaultRulePaths } from "./rules.ts";
+import { loadRules, cutoffFor, defaultRulePaths, shippedRulesPath, selectRules } from "./rules.ts";
 import { run, collectSubjects, toRecord } from "./run.ts";
 import { defaultRange } from "./commits.ts";
 import { changedRanges, changedFiles, changedFilesUnder } from "./diff.ts";
@@ -80,6 +80,7 @@ interface Options {
   failOn: Severity | null;
   preCommit: boolean;
   prePush: boolean;
+  file: string | null;
   accept: boolean;
   acceptLast: boolean;
   replay: boolean;
@@ -109,6 +110,10 @@ const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
   jev-lint check [paths...]        judge whole files
+  jev-lint run <rule> [paths...]   judge with one shipped rule: an id (every
+                                   language that has it) or rust/<id> (one);
+                                   --file <rules.yml> judges with that file's
+                                   rules instead, or the one <rule> names in it
   jev-lint review [paths...]       judge only what the diff touched
   jev-lint commits [range]         judge commit messages against their diffs
                                    (default @{upstream}..HEAD; or --base <ref>)
@@ -123,6 +128,7 @@ usage:
   jev-lint init --pre-push        write a pre-push hook that judges the commits about to leave
 
 options:
+      --file <path>        run: a rule file to use instead of the shipped rules
       --config <path>      config file (default: nearest .jev-lint.yaml,
                            searching upwards); --no-config ignores it
       --base-url <url>     the API endpoint (default ${DEFAULT_BASE_URL})
@@ -233,6 +239,7 @@ function parseArgs(argv: string[]): Options {
     failOn: null,
     preCommit: false,
     prePush: false,
+    file: null,
     accept: false,
     acceptLast: false,
     replay: false,
@@ -342,6 +349,10 @@ function parseArgs(argv: string[]): Options {
       }
       case "--pre-push":
         opts.prePush = true;
+        break;
+      case "--file":
+        opts.file = need(i, a);
+        i += 1;
         break;
       case "--pre-commit":
         opts.preCommit = true;
@@ -555,7 +566,7 @@ function loadOrDie(opts: Options, log: Log): { rules: Rule[]; errors: string[] }
 }
 
 async function main(argv: string[]): Promise<number> {
-  const command = argv[0] && !argv[0].startsWith("-") ? argv[0] : "check";
+  let command = argv[0] && !argv[0].startsWith("-") ? argv[0] : "check";
   const rest = argv[0] && !argv[0].startsWith("-") ? argv.slice(1) : argv;
   let opts: Options;
   try {
@@ -604,9 +615,33 @@ async function main(argv: string[]): Promise<number> {
   if (command === "replay") return cmdReplay(opts, out, log);
   if (command === "eval") return cmdEval({ ...opts, paths: argPaths }, out, log);
 
-  const loaded = loadOrDie(opts, log);
-  if (!loaded) return 2;
-  const { rules } = loaded;
+  // `run`: one rule, chosen by id or by file, then judged exactly as `check`
+  // would. The first positional is the rule when it names one; with --file
+  // and no such id in the file, it is a path like the rest.
+  let rules: Rule[];
+  if (command === "run") {
+    const [head, ...tail] = opts.paths;
+    const shipped = shippedRulesPath();
+    const project = opts.rulesAreShipped ? [] : opts.rules;
+    let picked = selectRules({ id: head ?? null, file: opts.file, shipped, projectRules: project });
+    let paths = tail;
+    if (picked.rules.length === 0 && opts.file && head !== undefined) {
+      // Not an id in the file: every positional is a path.
+      picked = selectRules({ file: opts.file, shipped, projectRules: project });
+      paths = opts.paths;
+    }
+    for (const e of picked.errors) log(`rule error: ${e}`);
+    for (const w of picked.warnings) log(`rule warning: ${w}`);
+    if (picked.rules.length === 0) return 2;
+    rules = picked.rules;
+    opts.paths = paths;
+    if (!opts.quiet) log(`run: ${rules.map((r) => (r.languageDir ? `${r.languageDir}/${r.id}` : r.id)).join(", ")} from ${picked.from}`);
+    command = "check";
+  } else {
+    const loaded = loadOrDie(opts, log);
+    if (!loaded) return 2;
+    rules = loaded.rules;
+  }
 
   // Which files to look at.
   let paths = opts.paths;

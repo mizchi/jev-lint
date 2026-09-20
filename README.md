@@ -123,6 +123,9 @@ Read a finding as a candidate for a human to judge, not a verdict to act on.
 export TYPESAFE_API_KEY=...
 npx -y jev-lint check src --dry-run   # what it would ask, and the price. No request.
 npx -y jev-lint check src             # ask it
+npx -y jev-lint run fn-name-promises src        # one shipped rule, every language that has it
+npx -y jev-lint run rust/fn-name-promises src   # ...or one language
+npx -y jev-lint run --file myrule.yml src       # a rule file of your own, nothing else loaded
 ```
 
 Nothing to install for that. Node 20+. The matcher is the real ast-grep

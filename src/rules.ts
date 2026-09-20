@@ -491,9 +491,72 @@ function criterionText(c: Criterion): string {
  */
 export function defaultRulePaths(): [string[], boolean] {
   if (existsSync(resolve("rules"))) return [["rules"], false];
+  const shipped = shippedRulesPath();
+  return shipped ? [[shipped], true] : [["rules"], false];
+}
+
+/** The packaged rules, wherever this copy of the tool is installed; null if not found. */
+export function shippedRulesPath(): string | null {
   // dist/cli.js and src/cli.ts are both one directory below the package root.
   const shipped = join(dirname(fileURLToPath(import.meta.url)), "..", "rules");
-  return existsSync(shipped) ? [[shipped], true] : [["rules"], false];
+  return existsSync(shipped) ? shipped : null;
+}
+
+/**
+ * The rules `jev-lint run` runs: one shipped rule by id -- in every language
+ * that has it, or one with a `lang/` prefix -- or, failing that, a rule of
+ * the project's own; or, with `file`, that file's rules, all of them or the
+ * one the id names. Never an empty set without an error saying why, and an
+ * unknown id offers the nearest ones.
+ */
+export function selectRules({
+  id,
+  file,
+  shipped,
+  projectRules,
+}: {
+  id?: string | null;
+  file?: string | null;
+  shipped: string | null;
+  projectRules: string[];
+}): { rules: Rule[]; errors: string[]; warnings: string[]; from: string } {
+  const matches = (r: Rule, want: string) =>
+    r.id === want || (r.languageDir !== null && `${r.languageDir}/${r.id}` === want);
+  if (file) {
+    const loaded = loadRules([file]);
+    if (loaded.errors.length > 0) return { ...loaded, from: file };
+    const rules = id ? loaded.rules.filter((r) => matches(r, id)) : loaded.rules;
+    if (rules.length === 0) {
+      return {
+        rules: [],
+        warnings: loaded.warnings,
+        errors: [`no rule \`${id}\` in ${file}; it holds ${loaded.rules.map((r) => r.id).join(", ") || "no rules"}`],
+        from: file,
+      };
+    }
+    return { rules, errors: [], warnings: loaded.warnings, from: file };
+  }
+  if (!id) return { rules: [], errors: ["run needs a rule id, or --file <rules.yml>"], warnings: [], from: "" };
+  const sources = [...(shipped ? [shipped] : []), ...projectRules.filter((p) => p !== shipped)];
+  const seen: string[] = [];
+  for (const source of sources) {
+    const loaded = loadRules([source]);
+    const rules = loaded.rules.filter((r) => matches(r, id));
+    if (rules.length > 0) return { rules, errors: loaded.errors, warnings: loaded.warnings, from: source };
+    for (const r of loaded.rules) {
+      const key = r.languageDir ? `${r.languageDir}/${r.id}` : r.id;
+      if (!seen.includes(key)) seen.push(key);
+    }
+  }
+  const token = id.split("/").pop()!.toLowerCase();
+  const near = seen.filter((k) => k.toLowerCase().includes(token) || token.includes(k.split("/").pop()!.toLowerCase()));
+  const hint = near.length > 0 ? ` -- did you mean ${near.slice(0, 6).join(", ")}?` : "";
+  return {
+    rules: [],
+    errors: [`no shipped rule or project rule is called \`${id}\`${hint}`],
+    warnings: [],
+    from: "",
+  };
 }
 
 export function cutoffFor(rule: Rule, overrides: Record<string, number> = {}): number {

@@ -23,6 +23,8 @@ import {
   ruleTextHash,
   normalizeLanguage,
   defaultRulePaths,
+  shippedRulesPath,
+  selectRules,
   SCORE_LEVELS,
   DEFAULT_SCORE_AT,
 } from "../src/rules.ts";
@@ -297,6 +299,41 @@ test("rules: a commit rule has no matcher, only the Git grammar, and never reach
   assert.ok(!emitted.includes("Git"), "Git must not be emitted as a language");
   assert.ok(!emitted.includes("commit-message-describes-diff"));
   assert.deepEqual(ruleLanguages([rule!, ordinary]), ["TypeScript"]);
+});
+
+test("rules: `run` selects one shipped rule by id, in every language or one, or the rules of a file", () => {
+  // `jev-lint run fn-name-promises src`: the shipped rule, whatever the
+  // project's own rules/ holds, in every language that has it; with a
+  // language prefix, in that one. `--file` names a file instead, and the
+  // id then picks one rule out of it.
+  const shipped = shippedRulesPath()!;
+  assert.ok(existsSync(shipped));
+  const every = selectRules({ id: "fn-name-promises", shipped, projectRules: [] });
+  assert.deepEqual(every.errors, []);
+  assert.deepEqual(every.rules.map((r) => r.languageDir).sort(), ["go", "python", "rust", "typescript"]);
+  const one = selectRules({ id: "rust/fn-name-promises", shipped, projectRules: [] });
+  assert.deepEqual(one.rules.map((r) => `${r.languageDir}/${r.id}`), ["rust/fn-name-promises"]);
+  // Unknown: an error that names the nearest ids, never an empty run.
+  const missing = selectRules({ id: "fn-name", shipped, projectRules: [] });
+  assert.equal(missing.rules.length, 0);
+  assert.match(missing.errors[0]!, /no shipped rule.*fn-name/);
+  assert.match(missing.errors[0]!, /fn-name-promises/, "the nearest ids are offered");
+  // A project's own rule is found when the shipped set has no such id.
+  const dir = mkdtempSync(join(tmpdir(), "jev-run-"));
+  try {
+    writeFileSync(join(dir, "mine.yml"), "- id: mine\n  language: TypeScript\n  rule: { kind: x }\n  ask: q\n- id: other\n  language: TypeScript\n  rule: { kind: y }\n  ask: q\n");
+    const own = selectRules({ id: "mine", shipped, projectRules: [dir] });
+    assert.deepEqual(own.rules.map((r) => r.id), ["mine"]);
+    // --file: the file's rules, all of them or the named one.
+    const file = selectRules({ file: join(dir, "mine.yml"), shipped, projectRules: [] });
+    assert.deepEqual(file.rules.map((r) => r.id), ["mine", "other"]);
+    const picked = selectRules({ file: join(dir, "mine.yml"), id: "other", shipped, projectRules: [] });
+    assert.deepEqual(picked.rules.map((r) => r.id), ["other"]);
+    assert.match(selectRules({ file: join(dir, "mine.yml"), id: "nope", shipped, projectRules: [] }).errors[0]!, /nope.*mine\.yml/);
+    assert.match(selectRules({ file: join(dir, "missing.yml"), shipped, projectRules: [] }).errors[0]!, /no such file/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("rules: a minimal score rule is valid and defaults are the documented ones", () => {
