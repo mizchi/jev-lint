@@ -17,7 +17,7 @@ export interface Context {
   cachePath: string | null;
 }
 
-/** Null when the configuration is unusable, after saying why; the exit code is then 2. */
+/** Null when the configuration is unusable, after saying why; `main` then exits 2. */
 export function resolveContext(opts: Options, rest: string[], log: Log): Context | null {
   // A flag beats the file and the file beats the built-in default, which is the
   // only order that lets a project commit a configuration and still let someone
