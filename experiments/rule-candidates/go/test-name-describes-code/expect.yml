@@ -1,0 +1,24 @@
+default: clean
+fixtures/cart_test.go:
+  - { line: 20, label: clean, window: 0, reason: "hard clean: one-word title, the body checks Total." }
+  - { line: 27, label: clean, window: 0, reason: "clean: adds an item, checks the total rose by its price." }
+  - { line: 38, label: bad, window: 0, reason: "the name says RemoveItem drops the line; the body calls Line and checks the quantity, and never calls RemoveItem." }
+  - { line: 49, label: clean, window: 0, reason: "hard clean: 'Delete' is a synonym for the RemoveItem the body calls." }
+  - { line: 62, label: clean, window: 0, reason: "hard clean: compound title; the body does both parts and checks emptiness." }
+  - { line: 75, label: clean, window: 0, reason: "hard clean: calls AddItem with the negative quantity the name says; the assertion is vacuous, which is the other rule's question." }
+  - { line: 83, label: clean, window: 0, reason: "hard clean: a generic outer name over three subtests that all apply a discount." }
+  - { line: 84, label: clean, window: 0, reason: "hard clean: applies the 10% the name says; the positivity check is weak, not about a different thing." }
+  - { line: 94, label: clean, window: 0, reason: "clean: 50% off, total halves." }
+  - { line: 105, label: clean, window: 0, reason: "clean: 150% is refused with ErrBadDiscount." }
+  - { line: 114, label: bad, window: 0, reason: "the name says the discount caps at 100%; the body applies 10% and checks an ordinary total, never the capping case." }
+  - { line: 124, label: bad, window: 0, reason: "the name says lines are sorted by price; the body never sorts and checks only the count." }
+fixtures/token_test.go:
+  - { line: 22, label: clean, window: 0, reason: "hard clean: signs then parses, which is the round trip the name says; no assertion is the other rule's question." }
+  - { line: 32, label: clean, window: 0, reason: "hard clean: parses and checks the claims exist; weak, but about the named thing." }
+  - { line: 48, label: clean, window: 0, reason: "clean: outer TestParse over three Parse subtests." }
+  - { line: 52, label: bad, window: 0, reason: "the name says the expired token is rejected; the body fails on any error and expects the subject back, the opposite outcome." }
+  - { line: 66, label: clean, window: 0, reason: "clean: tampers with the signature, expects ErrSignature." }
+  - { line: 79, label: clean, window: 0, reason: "clean: signs alice, expects alice back." }
+  - { line: 94, label: clean, window: 0, reason: "clean: counts clock reads during Parse." }
+  - { line: 110, label: clean, window: 0, reason: "hard clean: table-driven; every case expects an error from Parse." }
+  - { line: 131, label: bad, window: 0, reason: "the name says Sign fails on an empty subject; the body signs subject u2 and expects success." }

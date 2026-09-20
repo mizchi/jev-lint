@@ -1,0 +1,66 @@
+id: pure-name-is-pure
+language: Go
+kind: noul
+subject: node
+state: local
+# 0.60, fitted 2026-09-20 (6 defects, 12 cleans of which 8 hard, 3 passes):
+# clean tops at 0.31-0.37 (`ComputeRate`, which takes a mutex to read two
+# fields); the next clean is 0.13 (`FormatLocalTime`, a LoadLocation the
+# note calls acquiring a dependency). Defects sit at 0.90-0.97: the slog
+# line in computeTotal, time.Now in CalculateShipping, the key cache, the
+# os.WriteFile in FormatReceipt, os.Getenv in ParseConfig's fallback, and
+# toRow assigning through its pointer. Set just under the midpoint: 0.23
+# over the top clean, 0.30 under the lowest defect. Before the lock, the
+# loader and the parameter-named-env cleans were added the top clean was
+# 0.06; they are what the cutoff is measured against. Report:
+# experiments/reports/j-go/REPORT.md.
+at: 0.60
+rule:
+  all:
+    - any:
+        - kind: function_declaration
+        - kind: method_declaration
+    # Go's spelling of the family: exported and unexported both count.
+    # `To` needs a capital after it, so `Total` and `Token` are not `To*`.
+    - has:
+        field: name
+        pattern: $NAME
+        regex: "^([Cc]ompute|[Cc]alculate|[Dd]erive|[Ff]ormat|[Tt]o|[Pp]arse)([A-Z0-9_]|$)"
+# The same sentence as typescript/pure-name-is-pure, by copy: the loader
+# warns if the two drift.
+ask: This function's name ($NAME) presents it as a computation of a result from
+  its inputs, but its body changes state outside itself or performs I/O.
+criteria:
+  "true": "The body mutates an argument or something reachable through one,
+    assigns to a module-level binding, a field of `this` or an object it did not
+    create, stores something it computed into a cache, Map, Set or other store
+    that outlives the call, logs, emits or increments a metric, or reads or
+    writes a file, network, database, environment, clock or random source --
+    directly, or through a call whose name or arguments show it does so (fetch,
+    a path, a URL, a query, send, save). One such read or write on any path is
+    enough: a default taken from the clock, the environment or a random source
+    when a field is missing, or an effect in a fallback branch, makes the body
+    impure even though its common path is not."
+  "false": The body derives its result from its parameters, from `this`, from
+    module-level values it only reads, and from dependencies it obtains -- a
+    module, binding, table, formatter, parser or backend handed back by a
+    loader, resolver or registry lookup -- and returns it. A mutable local
+    accumulator, a copy of an argument that is then modified, and a local object
+    built up and returned are not effects outside the function.
+note: "Obtaining a dependency is not an effect. Calling or awaiting a helper
+  that hands back a module, native binding, compiled table, backend or client
+  (get*Module, load*, require, resolve*, a dynamic import) acquires something
+  the body needs; that the helper memoises what it loaded is the helper's
+  business, not this body's. What is judged is what the body then does with its
+  inputs: calling a pure function of an acquired module is a computation, using
+  an acquired client to fetch, read, write or send is I/O. The line is what gets
+  written: a body that puts its own result -- a value it computed, a key it
+  generated, a formatter it built -- into a cache, Map or Set that outlives the
+  call changes what later calls observe and is an effect even when it is only
+  memoisation; a body that only takes a dependency out of such a store is not. A
+  helper that receives its input from a parameter (readEnvInt(raw.count, ...))
+  reads that argument, not the environment, whatever its name says. Reading
+  `this` in a toJSON, toString or similar method is reading, not writing.
+  Sorting or mutating a copy the body made itself is not mutating the argument."
+axis: file
+severity: info

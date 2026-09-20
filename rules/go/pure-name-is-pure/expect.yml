@@ -1,0 +1,20 @@
+default: clean
+fixtures/pricing.go:
+  - { line: 33, label: bad, window: 0, reason: "logs through slog on every call; a computation that emits a log line." }
+  - { line: 42, label: clean, window: 0, reason: "hard clean: reads a package-level table it never writes." }
+  - { line: 50, label: bad, window: 0, reason: "reads the clock (time.Now) to add a Sunday surcharge; the result is not a function of its inputs." }
+  - { line: 66, label: bad, window: 0, reason: "stores the derived key into a package-level cache that outlives the call; memoisation is still a write." }
+  - { line: 77, label: clean, window: 0, reason: "hard clean: obtains a hasher from sha256.New and writes into it; the hasher is local and nothing outside the call changes." }
+  - { line: 86, label: clean, window: 0, reason: "clean: string formatting of its arguments." }
+  - { line: 95, label: bad, window: 0, reason: "writes the receipt to a file with os.WriteFile on the way to returning it." }
+  - { line: 108, label: clean, window: 0, reason: "clean: arithmetic on the argument." }
+  - { line: 119, label: clean, window: 0, reason: "hard clean: returns an error on bad input; an error return is a result, not an effect." }
+  - { line: 141, label: bad, window: 0, reason: "reads the environment (os.Getenv) for a default when the currency is missing; an effect in the fallback branch." }
+  - { line: 150, label: clean, window: 0, reason: "hard clean: net.SplitHostPort and net.ParseIP are pure parsers despite the package name." }
+  - { line: 163, label: clean, window: 0, reason: "hard clean: a ToJSON that reads its receiver and marshals it." }
+  - { line: 171, label: bad, window: 0, reason: "assigns o.Total through the pointer argument before building the row; mutates its input." }
+  - { line: 176, label: clean, window: 0, reason: "hard clean: sorts a copy it made itself, not the argument." }
+  - { line: 183, label: clean, window: 0, reason: "clean: builds and returns a local map." }
+  - { line: 195, label: clean, window: 0, reason: "hard clean: named for the environment but takes the raw value as a parameter; it reads its argument, not the environment." }
+  - { line: 206, label: clean, window: 0, reason: "hard clean: obtains a location through a loader (time.LoadLocation) and formats with it; acquiring a dependency is not an effect." }
+  - { line: 220, label: clean, window: 0, reason: "hard clean: takes the counter's lock to read two fields; nothing outside the call is changed." }

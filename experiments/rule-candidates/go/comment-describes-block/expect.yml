@@ -1,0 +1,21 @@
+default: clean
+fixtures/client.go:
+  - { line: 34, label: clean, window: 0, reason: "clean: the header is set as a bearer; the remark about query parameters is about the API, not this code." }
+  - { line: 42, label: clean, window: 0, reason: "hard clean: 'retry only on 5xx and transport errors' is what `err == nil && StatusCode < 500` returns on; a 4xx is returned, not retried." }
+  - { line: 52, label: clean, window: 0, reason: "clean: 1<<attempt seconds is 1s, 2s, 4s, capped at 30s beneath it." }
+  - { line: 76, label: clean, window: 0, reason: "hard clean: the 404 branch returns nil, nil as the comment says; what the caller does with nil is outside this code." }
+  - { line: 83, label: bad, window: 0, reason: "the comment says the body is capped at 8 MiB; LimitReader is given 4<<20, which is 4 MiB." }
+  - { line: 94, label: clean, window: 0, reason: "clean: the switch lists 200, 201 and 204 as the comment says." }
+  - { line: 109, label: bad, window: 0, reason: "the comment says the header is seconds since the epoch; the code passes it to time.UnixMilli, which reads milliseconds." }
+fixtures/worker.go:
+  - { line: 43, label: bad, window: 0, reason: "the comment says newest first; the less function is Updated.Before, which sorts oldest first." }
+  - { line: 48, label: bad, window: 0, reason: "the comment says skip disabled items; the loop appends exactly the disabled ones and drops the rest." }
+  - { line: 60, label: clean, window: 0, reason: "clean: s.workers goroutines, each ranging over ids until close." }
+  - { line: 73, label: clean, window: 0, reason: "hard clean: 'feed, then close' spans the loop and the close(ids) beneath it; the loop alone is not the whole claim." }
+  - { line: 86, label: bad, window: 0, reason: "the comment says wait for every worker before reading the errors; the code closes and drains errs first and calls wg.Wait after." }
+  - { line: 98, label: bad, window: 0, reason: "the comment says three attempts; the loop runs five." }
+  - { line: 109, label: clean, window: 0, reason: "hard clean: a reason outside the code (the source's rate limit); the sleep beneath it is short, as said." }
+  - { line: 112, label: clean, window: 0, reason: "clean: logs and returns the last error." }
+  - { line: 121, label: bad, window: 0, reason: "the comment says round up; total / pageSize is integer division, which rounds down, and nothing adds the partial page." }
+  - { line: 128, label: clean, window: 0, reason: "hard clean: 'at or above 1 MiB' is `>= 1<<20`; a number that matches." }
+  - { line: 137, label: clean, window: 0, reason: "hard clean: the comment describes the scheduler in another file, not the return beneath it; the return order is not a claim about which pool runs first." }

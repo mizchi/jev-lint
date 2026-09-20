@@ -1,0 +1,21 @@
+default: clean
+fixtures/auth/password.go:
+  - { line: 1, label: bad, window: 1000000, reason: "named for passwords; holds a salt generator, a constant-time compare, an email normaliser and a slugifier -- an assortment of which only the first two are about passwords." }
+fixtures/auth/token.go:
+  - { line: 1, label: clean, window: 1000000, reason: "clean: Sign and Parse of a signed token, under auth/." }
+fixtures/cache.go:
+  - { line: 1, label: bad, window: 1000000, reason: "named cache; holds a token-bucket rate limiter (NewLimiter, Allow, Wait) and nothing that caches." }
+fixtures/errors.go:
+  - { line: 1, label: clean, window: 1000000, reason: "clean: sentinel errors, an error type and the mapping to HTTP status." }
+fixtures/handlers.go:
+  - { line: 1, label: clean, window: 1000000, reason: "hard clean: several HTTP handlers plus their registration; one cohesive group under a plural name." }
+fixtures/cmd/server/main.go:
+  - { line: 1, label: clean, window: 1000000, reason: "hard clean: the conventional entry point under cmd/server; it wires the server and a health route, and is named by its directory." }
+fixtures/metrics.go:
+  - { line: 1, label: bad, window: 1000000, reason: "named metrics; holds session lookup, an auth middleware and a role check, and nothing that measures." }
+fixtures/store.go:
+  - { line: 1, label: clean, window: 1000000, reason: "hard clean: a generic name over one database store of orders; someone looking for the queries would look here." }
+fixtures/user.go:
+  - { line: 1, label: bad, window: 1000000, reason: "named for users; holds Order, Line and Invoice with their methods alongside User." }
+fixtures/utils.go:
+  - { line: 1, label: bad, window: 1000000, reason: "a placeholder name over one cohesive concern -- retry with backoff -- that could be named." }

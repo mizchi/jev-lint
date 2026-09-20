@@ -1,0 +1,78 @@
+id: test-name-verifies-claim
+language: Go
+kind: noul
+subject: node
+state: bare
+# 0.70, fitted 2026-09-20 (9 defects, 12 cleans of which 6 hard, 3 passes):
+# eight defects sit at 0.86-0.97 (the discarded AddItem(-1) error, the
+# `Total() > 0` under "applies 10% discount", the round trip that ignores
+# Parse's result, the expired token expected to parse). The top cleans are
+# the Go shape the TypeScript corpus has no twin for: an outer Test function
+# whose subtests carry the assertions, `TestParse` at 0.46-0.51 and
+# `TestApplyDiscount` at 0.33-0.41. One labelled defect is a recorded miss
+# at 0.60-0.67: `TestParseReturnsClaims`, which checks only that the claims
+# are non-nil -- the fitted midpoint 0.56 would take it with 0.07 of
+# headroom a side. 0.70 keeps 0.19 over the top clean and 0.16 under the
+# lowest found defect. Report: experiments/reports/j-go/REPORT.md.
+at: 0.70
+axis: file
+severity: warning
+rule:
+  any:
+    # `func TestFooBar(t *testing.T)`: the name is the title.
+    - all:
+        - kind: function_declaration
+        - has:
+            field: name
+            pattern: $TITLE
+            regex: "^Test([A-Z_]|$)"
+        - has:
+            field: parameters
+            regex: "testing\\.(T|TB)\\b"
+    # `t.Run("title", func(t *testing.T) {...})`: a subtest with a literal
+    # title. A table-driven `t.Run(tc.name, ...)` has no literal and is
+    # judged as part of its enclosing Test function.
+    - all:
+        - kind: call_expression
+        - has:
+            field: function
+            regex: "\\.Run$"
+        - has:
+            field: arguments
+            all:
+              - has:
+                  nthChild: 1
+                  any:
+                    - kind: interpreted_string_literal
+                    - kind: raw_string_literal
+                  pattern: $TITLE
+              - has:
+                  kind: func_literal
+                  pattern: $BODY
+# The same sentence as typescript/test-name-verifies-claim, by copy: the loader
+# warns if the two drift.
+ask: >-
+  This test would still pass if the behaviour its name claims were broken.
+note: >-
+  Two things to read for. A snapshot records whatever the output was: under a
+  name that claims a specific property of the output (a row hidden, a footer
+  omitted, a hint shown, a format) it establishes nothing about that property,
+  while under a name that only says renders, or snapshot, or labels the variant
+  rendered, it is the whole claim. And a body whose named operation is never
+  called, or whose named case is never set up, establishes nothing however exact
+  its assertion is.
+criteria:
+  "true": >-
+    The body does not establish what the name claims: it asserts nothing at all,
+    it asserts something that would hold whether or not the named behaviour
+    worked, it checks an incidental property such as a length or a type instead
+    of the named behaviour itself, or it never sets up the case the name is
+    about so the assertion never exercises it.
+  "false": >-
+    The body contains at least one assertion that would fail if the named
+    behaviour were broken. Read the name for what it actually claims: a name
+    that claims only that something renders, or that the output matches a
+    snapshot, or that only labels the input the snapshot was taken of, is
+    established by the snapshot; a name that claims an interaction with a
+    collaborator -- that something was called, once, with these arguments -- is
+    established by an assertion on that call.

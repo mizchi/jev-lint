@@ -1,0 +1,460 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:56:00.893Z",
+  "model": "jev-1.13.0",
+  "suite": "go/must-name-panics",
+  "rules": [
+    {
+      "id": "must-name-panics",
+      "draft": "f29df34d98cf",
+      "at": 0.75
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 17,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 25,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 34,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 42,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 46,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 54,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 62,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 78,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 91,
+        "endLine": 101,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 108,
+        "endLine": 116,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 118,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 126,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 132,
+        "endLine": 138,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 140,
+        "endLine": 151,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 153,
+        "endLine": 158,
+        "kind": "noul",
+        "value": 0.45,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 160,
+        "endLine": 162,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 17,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 25,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 34,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 42,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 46,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 54,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 62,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 78,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 91,
+        "endLine": 101,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 108,
+        "endLine": 116,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 118,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 126,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 132,
+        "endLine": 138,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 140,
+        "endLine": 151,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 153,
+        "endLine": 158,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 160,
+        "endLine": 162,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 17,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 25,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 34,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 42,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 46,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 54,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 62,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 78,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 91,
+        "endLine": 101,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 108,
+        "endLine": 116,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 118,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 126,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 132,
+        "endLine": 138,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 140,
+        "endLine": 151,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 153,
+        "endLine": 158,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "must-name-panics",
+        "file": "experiments/rule-candidates/go/must-name-panics/fixtures/must.go",
+        "line": 160,
+        "endLine": 162,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 27906,
+    "usd": 0.001172052,
+    "ms": 813
+  }
+}

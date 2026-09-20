@@ -1,0 +1,38 @@
+id: module-name-describes-contents
+language: Go
+kind: noul
+subject: file
+state: graph
+# 0.60, fitted 2026-09-20 (5 defects, 5 cleans of which 3 hard, 3 passes):
+# clean tops at 0.39 (errors.go, sentinel errors plus a status mapping),
+# defects start at 0.79 (auth/password.go holding an email normaliser and a
+# slugifier) and run to 0.90 (utils.go over one nameable concern). Midpoint
+# of the 0.40 gap, 0.20 of headroom a side. `main.go` scored 0.66 at the
+# fixtures root and 0.13 under cmd/server/, where the outline names it by
+# its directory. The outline lists Go functions and methods but not type
+# declarations (the probe has no name field for them), so a file of types
+# shows only its methods. Report: experiments/reports/j-go/REPORT.md.
+at: 0.60
+axis: file
+severity: info
+rule:
+  kind: source_file
+# The same sentence as typescript/module-name-describes-contents, by copy:
+# the loader warns if the two drift.
+ask: >-
+  This module's name does not describe what the module contains.
+criteria:
+  "true": >-
+    The filename and path name a subject that the module's public items do not
+    match: the items belong to a different concern than the name states, the
+    name names one thing while the module holds an unrelated assortment, the
+    name is narrower or broader than the items it holds, or the name is a
+    placeholder such as utils, helpers, misc, common or manager for items that
+    share a concern that could be named.
+  "false": >-
+    The filename and path describe what the module's public items are about,
+    closely enough that someone looking for those items would look here.
+note: >-
+  A module holding one cohesive group of items is not a mismatch merely for
+  holding several of them, and a conventional entry-point name (index, mod, lib,
+  main) is named by its directory rather than by itself.

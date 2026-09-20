@@ -1,12 +1,12 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-20T09:51:20.601Z",
+  "recorded": "2026-09-20T10:09:28.985Z",
   "model": "jev-1.13.0",
   "suite": "python/safe-name-is-safe",
   "rules": [
     {
       "id": "safe-name-is-safe",
-      "draft": "270651e95498",
+      "draft": "27a6834f2033",
       "at": 0.59
     }
   ],
@@ -15,162 +15,25 @@
     [
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 16,
         "endLine": 21,
         "kind": "noul",
-        "value": 0.75,
+        "value": 0.74,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 24,
         "endLine": 29,
         "kind": "noul",
-        "value": 0.09,
+        "value": 0.07,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 32,
-        "endLine": 36,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 39,
-        "endLine": 43,
-        "kind": "noul",
-        "value": 0.89,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 46,
-        "endLine": 50,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 53,
-        "endLine": 57,
-        "kind": "noul",
-        "value": 0.92,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 60,
-        "endLine": 63,
-        "kind": "noul",
-        "value": 0.93,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 66,
-        "endLine": 67,
-        "kind": "noul",
-        "value": 0.82,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 70,
-        "endLine": 74,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 77,
-        "endLine": 81,
-        "kind": "noul",
-        "value": 0.96,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 84,
-        "endLine": 90,
-        "kind": "noul",
-        "value": 0.5,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 93,
-        "endLine": 99,
-        "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 102,
-        "endLine": 107,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 110,
-        "endLine": 113,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 116,
-        "endLine": 117,
-        "kind": "noul",
-        "value": 0.33,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 16,
-        "endLine": 21,
-        "kind": "noul",
-        "value": 0.69,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 24,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 32,
         "endLine": 36,
         "kind": "noul",
@@ -179,162 +42,25 @@
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 39,
         "endLine": 43,
         "kind": "noul",
-        "value": 0.93,
+        "value": 0.95,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 46,
         "endLine": 50,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 53,
-        "endLine": 57,
-        "kind": "noul",
-        "value": 0.91,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 60,
-        "endLine": 63,
-        "kind": "noul",
-        "value": 0.93,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 66,
-        "endLine": 67,
-        "kind": "noul",
-        "value": 0.84,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 70,
-        "endLine": 74,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 77,
-        "endLine": 81,
-        "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 84,
-        "endLine": 90,
-        "kind": "noul",
-        "value": 0.41,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 93,
-        "endLine": 99,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 102,
-        "endLine": 107,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 110,
-        "endLine": 113,
-        "kind": "noul",
-        "value": 0.15,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 116,
-        "endLine": 117,
-        "kind": "noul",
-        "value": 0.29,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 16,
-        "endLine": 21,
-        "kind": "noul",
-        "value": 0.7,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 24,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 32,
-        "endLine": 36,
         "kind": "noul",
         "value": 0.06,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 39,
-        "endLine": 43,
-        "kind": "noul",
-        "value": 0.92,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 46,
-        "endLine": 50,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 53,
         "endLine": 57,
         "kind": "noul",
@@ -343,7 +69,7 @@
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 60,
         "endLine": 63,
         "kind": "noul",
@@ -352,34 +78,34 @@
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 66,
         "endLine": 67,
         "kind": "noul",
-        "value": 0.84,
+        "value": 0.8,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 70,
         "endLine": 74,
         "kind": "noul",
-        "value": 0.15,
+        "value": 0.1,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 77,
         "endLine": 81,
         "kind": "noul",
-        "value": 0.94,
+        "value": 0.95,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 84,
         "endLine": 90,
         "kind": "noul",
@@ -388,46 +114,320 @@
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 93,
         "endLine": 99,
         "kind": "noul",
-        "value": 0.11,
+        "value": 0.08,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 102,
         "endLine": 107,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 110,
+        "endLine": 113,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 116,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 16,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 24,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 32,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 39,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 46,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 53,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 60,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 66,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 70,
+        "endLine": 74,
         "kind": "noul",
         "value": 0.1,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
-        "line": 110,
-        "endLine": 113,
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 77,
+        "endLine": 81,
         "kind": "noul",
-        "value": 0.15,
+        "value": 0.95,
         "confidence": null
       },
       {
         "rule": "safe-name-is-safe",
-        "file": "experiments/rule-candidates/python/safe-name-is-safe/fixtures/safe.py",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 84,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.51,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 93,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 102,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 110,
+        "endLine": 113,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
         "line": 116,
         "endLine": 117,
         "kind": "noul",
-        "value": 0.28,
+        "value": 0.22,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 16,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 24,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 32,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 39,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 46,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 53,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 60,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 66,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 70,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 77,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 84,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.44,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 93,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 102,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 110,
+        "endLine": 113,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/python/safe-name-is-safe/fixtures/safe.py",
+        "line": 116,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.25,
         "confidence": null
       }
     ]
   ],
   "spent": {
     "calls": 3,
-    "inputTokens": 24192,
-    "usd": 0.0010160640000000001,
-    "ms": 741
+    "inputTokens": 25653,
+    "usd": 0.001077426,
+    "ms": 824
   }
 }

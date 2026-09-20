@@ -1,0 +1,18 @@
+default: clean
+fixtures/must.go:
+  - { line: 17, label: clean, window: 0, reason: "clean: the canonical shape, panics on the parse error." }
+  - { line: 25, label: bad, window: 0, reason: "logs the open error and returns nil; the caller gets a nil *os.File instead of a stopped program." }
+  - { line: 34, label: bad, window: 0, reason: "an unset variable returns the empty string; nothing panics." }
+  - { line: 42, label: clean, window: 0, reason: "hard clean: delegates to regexp.MustCompile, which panics for it." }
+  - { line: 46, label: bad, window: 0, reason: "returns (int, error): a Must that hands the failure back as an error value contradicts its own name." }
+  - { line: 54, label: clean, window: 0, reason: "clean: a missing key panics." }
+  - { line: 62, label: clean, window: 0, reason: "hard clean: log.Fatalf ends the process, which is what the name promises even though nothing here spells panic." }
+  - { line: 78, label: bad, window: 0, reason: "a missing file is replaced by default config with a warning; only the parse error panics." }
+  - { line: 91, label: bad, window: 0, reason: "the deferred recover swallows the panic it raised and returns the zero value." }
+  - { line: 108, label: clean, window: 0, reason: "hard clean: argument validation by panic; no fallible call, but the failures it has all panic." }
+  - { line: 118, label: clean, window: 0, reason: "clean: panics on the marshal error." }
+  - { line: 126, label: clean, window: 0, reason: "hard clean: an assertion helper; the only failure is the condition, and it panics." }
+  - { line: 132, label: clean, window: 0, reason: "hard clean: wraps the error with fmt.Errorf before panicking with it." }
+  - { line: 140, label: clean, window: 0, reason: "hard clean: retries three times, then panics with the last error." }
+  - { line: 153, label: clean, window: 0, reason: "hard clean: cannot fail; an empty address gets the ephemeral port, which is a normalisation, not a failure." }
+  - { line: 160, label: bad, window: 0, reason: "discards the error from os.WriteFile with a blank assignment; a failed write is silently ignored." }

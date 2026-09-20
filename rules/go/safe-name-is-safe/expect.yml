@@ -1,0 +1,22 @@
+default: clean
+fixtures/conv.go:
+  - { line: 16, label: bad, window: 0, reason: "a / b with no check panics on b == 0, the one failure a SafeDiv is named to absorb." }
+  - { line: 20, label: clean, window: 0, reason: "clean: zero divisor returns 0." }
+  - { line: 27, label: clean, window: 0, reason: "clean: (int, bool), false on any parse error." }
+  - { line: 35, label: bad, window: 0, reason: "the day-suffix branch panics on a bad count instead of returning (0, false)." }
+  - { line: 50, label: clean, window: 0, reason: "clean: empty or unparsable returns the default." }
+  - { line: 61, label: clean, window: 0, reason: "clean: any read error yields the empty string." }
+  - { line: 69, label: bad, window: 0, reason: "xs[0] on an empty slice panics with index out of range; the name promises zero." }
+  - { line: 73, label: clean, window: 0, reason: "clean: length checked." }
+  - { line: 80, label: clean, window: 0, reason: "clean: bounds checked both ways." }
+  - { line: 87, label: clean, window: 0, reason: "hard clean: recovers a panic from Close and logs the error; logging before absorbing is fine." }
+  - { line: 101, label: clean, window: 0, reason: "hard clean: the goroutine recovers its own panic; the failure the name is about is absorbed inside it." }
+  - { line: 114, label: clean, window: 0, reason: "clean: false on Unmarshal error." }
+  - { line: 121, label: bad, window: 0, reason: "*p with no nil check panics on nil; the name says the dereference is safe." }
+  - { line: 125, label: clean, window: 0, reason: "clean: nil returns 0." }
+  - { line: 132, label: clean, window: 0, reason: "clean: SplitHostPort error and empty host both fall back." }
+  - { line: 143, label: clean, window: 0, reason: "hard clean: a TryLock that cannot fail; nothing to catch." }
+  - { line: 147, label: clean, window: 0, reason: "hard clean: returns (conn, error); the error is a value the caller inspects, which is what a try name promises in Go." }
+  - { line: 151, label: bad, window: 0, reason: "on a parse error it logs and calls os.Exit(2), which ends the process instead of returning a value." }
+  - { line: 160, label: clean, window: 0, reason: "clean: LookupEnv miss returns the default." }
+  - { line: 169, label: clean, window: 0, reason: "hard clean: empty input is reported as ErrEmpty, an error value the caller inspects; nothing escapes." }

@@ -1,0 +1,433 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:51:45.976Z",
+  "model": "jev-1.13.0",
+  "suite": "go/idempotent-name",
+  "rules": [
+    {
+      "id": "idempotent-name",
+      "draft": "8ae7599f9a2e",
+      "at": 0.42
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 15,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 24,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 29,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 36,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 45,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 58,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 78,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 84,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 97,
+        "endLine": 104,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 106,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 121,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.56,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 134,
+        "endLine": 137,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 143,
+        "endLine": 145,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 147,
+        "endLine": 153,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 15,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 24,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 29,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 36,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 45,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 58,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 78,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 84,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 97,
+        "endLine": 104,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 106,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 121,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.56,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 134,
+        "endLine": 137,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 143,
+        "endLine": 145,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 147,
+        "endLine": 153,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 15,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 24,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 29,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 36,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 45,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 58,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 78,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 84,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 97,
+        "endLine": 104,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 106,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 121,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 134,
+        "endLine": 137,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 143,
+        "endLine": 145,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "experiments/rule-candidates/go/idempotent-name/fixtures/schema.go",
+        "line": 147,
+        "endLine": 153,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 31560,
+    "usd": 0.00132552,
+    "ms": 746
+  }
+}

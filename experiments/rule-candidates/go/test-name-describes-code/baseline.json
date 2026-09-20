@@ -1,0 +1,595 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:47:16.604Z",
+  "model": "jev-1.13.0",
+  "suite": "go/test-name-describes-code",
+  "rules": [
+    {
+      "id": "test-name-describes-code",
+      "draft": "546673371674",
+      "at": 0.78
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 20,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 27,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 38,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 49,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.64,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 62,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 75,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.52,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 83,
+        "endLine": 112,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 84,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 94,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 105,
+        "endLine": 111,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 114,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 124,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 22,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 32,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 48,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 52,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 66,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 79,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 94,
+        "endLine": 108,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 110,
+        "endLine": 129,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 131,
+        "endLine": 141,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 20,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 27,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 38,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 49,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 62,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 75,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 83,
+        "endLine": 112,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 84,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 94,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 105,
+        "endLine": 111,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 114,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 124,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 22,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 32,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 48,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 52,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 66,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 79,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 94,
+        "endLine": 108,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 110,
+        "endLine": 129,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 131,
+        "endLine": 141,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 20,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 27,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 38,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 49,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 62,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 75,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 83,
+        "endLine": 112,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 84,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 94,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 105,
+        "endLine": 111,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 114,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/cart_test.go",
+        "line": 124,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 22,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 32,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 48,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 52,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 66,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 79,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 94,
+        "endLine": 108,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 110,
+        "endLine": 129,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/go/test-name-describes-code/fixtures/token_test.go",
+        "line": 131,
+        "endLine": 141,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 52272,
+    "usd": 0.002195424,
+    "ms": 786
+  }
+}

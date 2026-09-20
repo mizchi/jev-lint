@@ -1,0 +1,29 @@
+default: clean
+fixtures/service.go:
+  - { line: 32, label: bad, window: 0, reason: "debug for a refusal the handler reports to the caller as 401; an outcome, not progress." }
+  - { line: 41, label: bad, window: 0, reason: "error on a cache miss, the routine branch that every uncached request takes." }
+  - { line: 44, label: bad, window: 0, reason: "info on the path where the load has failed and the handler gives up with a 500." }
+  - { line: 50, label: clean, window: 0, reason: "hard clean: a failed write to a client that has gone away; warn, and nothing to recover." }
+  - { line: 52, label: clean, window: 0, reason: "clean: debug for the served detail." }
+  - { line: 57, label: clean, window: 0, reason: "hard clean: a refused login is an expected business rejection at info." }
+  - { line: 61, label: clean, window: 0, reason: "clean: info on success." }
+  - { line: 71, label: clean, window: 0, reason: "clean: info when the database comes up." }
+  - { line: 74, label: clean, window: 0, reason: "clean: warn for a transient condition the loop goes on to retry." }
+  - { line: 82, label: bad, window: 0, reason: "warn immediately followed by os.Exit(1); the process is giving up." }
+  - { line: 90, label: clean, window: 0, reason: "clean: per-item progress at debug." }
+  - { line: 93, label: clean, window: 0, reason: "hard clean: error for a load that failed and is skipped; the function recovers by skipping, and an operator should still see it." }
+  - { line: 99, label: bad, window: 0, reason: "error on the ordinary success path, reporting the batch count." }
+  - { line: 106, label: clean, window: 0, reason: "hard clean: warn for a degraded start with defaults." }
+  - { line: 111, label: clean, window: 0, reason: "clean: error before exiting on an unparsable config." }
+  - { line: 119, label: clean, window: 0, reason: "hard clean: a usage error on stderr in the command-line entry point." }
+  - { line: 123, label: clean, window: 0, reason: "clean: info on startup." }
+fixtures/worker.go:
+  - { line: 32, label: clean, window: 0, reason: "clean: info for an orderly stop." }
+  - { line: 36, label: clean, window: 0, reason: "clean: error when the queue read fails and the loop returns it." }
+  - { line: 40, label: clean, window: 0, reason: "clean: debug for an empty poll." }
+  - { line: 46, label: bad, window: 0, reason: "debug on the path that drops a job for good after three failures; data is discarded." }
+  - { line: 50, label: clean, window: 0, reason: "clean: warn for a failure the loop requeues." }
+  - { line: 55, label: bad, window: 0, reason: "info on the path where the ack failed and the loop returns the error to its caller." }
+  - { line: 58, label: clean, window: 0, reason: "clean: debug for a done job." }
+  - { line: 67, label: clean, window: 0, reason: "clean: info for the drain summary." }
+  - { line: 71, label: clean, window: 0, reason: "hard clean: fatal on an ack failure during a drain is severe, but the branch is a real failure, not a routine one." }

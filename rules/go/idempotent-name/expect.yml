@@ -1,0 +1,17 @@
+default: clean
+fixtures/schema.go:
+  - { line: 15, label: bad, window: 0, reason: "CREATE TABLE without IF NOT EXISTS: the second call fails because the table exists." }
+  - { line: 24, label: clean, window: 0, reason: "clean: CREATE INDEX IF NOT EXISTS." }
+  - { line: 29, label: clean, window: 0, reason: "clean: INSERT ... ON CONFLICT DO UPDATE, keyed by id." }
+  - { line: 36, label: bad, window: 0, reason: "a plain INSERT under an Upsert name: the second call inserts a duplicate row or fails on the key." }
+  - { line: 41, label: clean, window: 0, reason: "hard clean: MkdirAll is inherently repeatable." }
+  - { line: 45, label: bad, window: 0, reason: "opens with O_APPEND and writes a header line on every call, so the file grows with each Ensure." }
+  - { line: 58, label: clean, window: 0, reason: "hard clean: a pure conversion of its argument; nothing to repeat." }
+  - { line: 78, label: bad, window: 0, reason: "appends the handler to a slice with no existence check; the second call registers it twice." }
+  - { line: 84, label: clean, window: 0, reason: "clean: checks the map for the name before writing." }
+  - { line: 97, label: clean, window: 0, reason: "hard clean: writes by key; a repeat overwrites the same entry with zero. Resetting a counter to zero on a repeat is the same state the first call left." }
+  - { line: 106, label: clean, window: 0, reason: "clean: returns early on the running flag it sets." }
+  - { line: 121, label: bad, window: 0, reason: "ServeMux.HandleFunc panics when a pattern is registered twice, so the second SetupRoutes call panics; nothing guards it." }
+  - { line: 134, label: clean, window: 0, reason: "hard clean: assigns a fresh registry to the global on every call; the state after two calls is the state after one." }
+  - { line: 143, label: bad, window: 0, reason: "appends the hook to a package-level slice; the second call runs the hook twice at shutdown." }
+  - { line: 147, label: clean, window: 0, reason: "hard clean: sync.Once makes the second call a no-op." }

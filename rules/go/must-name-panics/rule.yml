@@ -1,0 +1,57 @@
+id: must-name-panics
+language: Go
+kind: noul
+subject: node
+state: local
+# 0.75, fitted 2026-09-20 (6 defects, 10 cleans of which 7 hard, 3 passes):
+# clean tops at 0.51-0.57 (`MustListen`, which turns an empty address into
+# ":0" -- a normalisation to its author and a substituted default to the
+# model, and the ambiguity is real); the next clean is 0.17 (the delegation
+# to regexp.MustCompile). Five defects sit at 0.93-0.97 (nil returned after
+# a logged open error, the empty string for an unset variable, the (int,
+# error) signature, defaults for a missing config file, the discarded
+# WriteFile error). One labelled defect is a recorded miss at 0.08-0.19:
+# `mustDecode`, whose deferred recover swallows the panic it raised and
+# returns the zero value; spelling the recover out in the note moved it
+# from 0.18 to 0.09, so the sentence went back to its first form. 0.75 keeps
+# 0.18 over the top clean and 0.18 under the lowest found defect. Report:
+# experiments/reports/j-go/REPORT.md.
+at: 0.75
+axis: file
+rule:
+  all:
+    - any:
+        - kind: function_declaration
+        - kind: method_declaration
+    # The inverse of safe-name-is-safe: `Must*` promises that failure is
+    # NOT reported as a value. Its own candidate because the sentence is
+    # the opposite of the safe rule's, not a variant of it.
+    - has:
+        field: name
+        pattern: $NAME
+        regex: "^([Mm]ust)([A-Z0-9_]|$)"
+ask: >-
+  This function's name ($NAME) says that a failure stops the program instead
+  of being handed back, but its body has a path on which a failure is
+  returned, swallowed, or replaced by a default.
+criteria:
+  "true": >-
+    A failure of the kind the name is about is handed back rather than
+    raised: the body returns an error value beside its result, returns nil,
+    a zero value or a default when the operation fails, logs the failure and
+    carries on, discards the error a call returns, or recovers a panic and
+    turns it into a value.
+  "false": >-
+    Every failure of the kind the name is about ends in a panic, a log.Fatal
+    or an os.Exit -- directly, or through a helper whose own name says it
+    does the same, such as a Must* it delegates to -- or the body cannot fail
+    at all. Retrying before panicking, wrapping the error before panicking
+    with it, and validating arguments with a panic are all the promised
+    shape.
+note: >-
+  A Must* that takes what a fallible call returns and panics when the error
+  is non-nil is the canonical shape. Only this body is judged; a callee that
+  is not itself a Must* is assumed to report its failures as an error, and
+  what matters is what this body does with that error. Substituting a
+  default for a missing input is a failure handed back, whatever the log
+  line beside it says.

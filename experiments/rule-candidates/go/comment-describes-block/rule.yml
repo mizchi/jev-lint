@@ -2,8 +2,24 @@ id: comment-describes-block
 language: Go
 kind: noul
 subject: enclosing
-state: located
-at: 0.7  # uncalibrated
+# `bare` (as rust/comment-describes-block), measured 2026-09-20 against
+# `located` on the same evals: the enclosing function holds the comment and
+# the statements beneath it, and the file only lowered the weak defects (the
+# 8 MiB cap fell from 0.66-0.84 to 0.40-0.58, the seconds-vs-UnixMilli
+# header from 0.67 to 0.55) without moving the one hard clean that sits in
+# the defect band either way.
+state: bare
+# 0.50, fitted 2026-09-20 (7 defects, 11 cleans of which 6 hard, 3 passes,
+# two runs): ordinary cleans top at 0.34 on means (0.45 on one pass of the
+# "retry only on 5xx" preamble in the first run), defects start at 0.62 on
+# means (wg.Wait after the error drain; 0.56 on its lowest pass) and run to
+# 0.93. One hard clean is a recorded false positive at 0.78-0.83: "the large
+# pool goes first ... see the scheduler in pool.go" above `return small,
+# large`, a comment about other code that the model reads against the tuple
+# order. 0.50 keeps 0.05-0.16 over the ordinary cleans and 0.06 under the
+# lowest defect pass; a cookbook cutoff, not a shipped one.
+# Report: experiments/reports/j-go/REPORT.md.
+at: 0.50
 severity: info
 utils:
   statement:

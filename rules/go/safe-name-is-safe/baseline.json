@@ -1,0 +1,568 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:54:27.562Z",
+  "model": "jev-1.13.0",
+  "suite": "go/safe-name-is-safe",
+  "rules": [
+    {
+      "id": "safe-name-is-safe",
+      "draft": "f99db107d378",
+      "at": 0.43
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 16,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 20,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 27,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 35,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 50,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 61,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 69,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 73,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 80,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 87,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 101,
+        "endLine": 112,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 114,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 121,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 125,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 132,
+        "endLine": 141,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 143,
+        "endLine": 145,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 147,
+        "endLine": 149,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 151,
+        "endLine": 158,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 160,
+        "endLine": 165,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 169,
+        "endLine": 174,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 16,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.64,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 20,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 27,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 35,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 50,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 61,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 69,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 73,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 80,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 87,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 101,
+        "endLine": 112,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 114,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 121,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 125,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 132,
+        "endLine": 141,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 143,
+        "endLine": 145,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 147,
+        "endLine": 149,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 151,
+        "endLine": 158,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 160,
+        "endLine": 165,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 169,
+        "endLine": 174,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 16,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.56,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 20,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 27,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 35,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 50,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 61,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 69,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 73,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 80,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 87,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 101,
+        "endLine": 112,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 114,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 121,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 125,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 132,
+        "endLine": 141,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 143,
+        "endLine": 145,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 147,
+        "endLine": 149,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 151,
+        "endLine": 158,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 160,
+        "endLine": 165,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "experiments/rule-candidates/go/safe-name-is-safe/fixtures/conv.go",
+        "line": 169,
+        "endLine": 174,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 34092,
+    "usd": 0.001431864,
+    "ms": 746
+  }
+}

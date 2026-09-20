@@ -1,0 +1,514 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:53:07.836Z",
+  "model": "jev-1.13.0",
+  "suite": "go/pure-name-is-pure",
+  "rules": [
+    {
+      "id": "pure-name-is-pure",
+      "draft": "99eafefabfd2",
+      "at": 0.6
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 33,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 42,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 50,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 66,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 77,
+        "endLine": 84,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 86,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 95,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 108,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 119,
+        "endLine": 133,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 141,
+        "endLine": 148,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 150,
+        "endLine": 161,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 163,
+        "endLine": 169,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 171,
+        "endLine": 174,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 176,
+        "endLine": 181,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 183,
+        "endLine": 193,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 195,
+        "endLine": 204,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 206,
+        "endLine": 212,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 220,
+        "endLine": 228,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 33,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 42,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 50,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 66,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 77,
+        "endLine": 84,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 86,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 95,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 108,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 119,
+        "endLine": 133,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 141,
+        "endLine": 148,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 150,
+        "endLine": 161,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 163,
+        "endLine": 169,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 171,
+        "endLine": 174,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 176,
+        "endLine": 181,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 183,
+        "endLine": 193,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 195,
+        "endLine": 204,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 206,
+        "endLine": 212,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 220,
+        "endLine": 228,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 33,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 42,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 50,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 66,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 77,
+        "endLine": 84,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 86,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 95,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 108,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 119,
+        "endLine": 133,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 141,
+        "endLine": 148,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 150,
+        "endLine": 161,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 163,
+        "endLine": 169,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 171,
+        "endLine": 174,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 176,
+        "endLine": 181,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 183,
+        "endLine": 193,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 195,
+        "endLine": 204,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 206,
+        "endLine": 212,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "experiments/rule-candidates/go/pure-name-is-pure/fixtures/pricing.go",
+        "line": 220,
+        "endLine": 228,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 46560,
+    "usd": 0.00195552,
+    "ms": 979
+  }
+}

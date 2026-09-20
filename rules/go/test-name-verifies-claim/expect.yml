@@ -1,0 +1,24 @@
+default: clean
+fixtures/cart_test.go:
+  - { line: 20, label: clean, window: 0, reason: "clean: Total() == 350 fails if Total is wrong." }
+  - { line: 27, label: clean, window: 0, reason: "clean: the total must rise by exactly the price." }
+  - { line: 38, label: bad, window: 0, reason: "RemoveItem is never called, so nothing here fails if removal is broken." }
+  - { line: 49, label: clean, window: 0, reason: "hard clean: checks the line is gone and the total dropped." }
+  - { line: 62, label: clean, window: 0, reason: "clean: len(Lines()) == 0 after add and remove." }
+  - { line: 75, label: bad, window: 0, reason: "the error from AddItem(-1) is discarded and `len < 0` can never fail; the test passes whether or not negative quantities are rejected." }
+  - { line: 83, label: clean, window: 0, reason: "hard clean: the outer name claims only that ApplyDiscount is tested; the subtests assert halving and refusal." }
+  - { line: 84, label: bad, window: 0, reason: "Total() > 0 holds whether or not the 10% was applied." }
+  - { line: 94, label: clean, window: 0, reason: "clean: the total must equal half of before." }
+  - { line: 105, label: clean, window: 0, reason: "clean: errors.Is(err, ErrBadDiscount) fails if 150% is accepted." }
+  - { line: 114, label: bad, window: 0, reason: "the capping case (over 100%) is never set up; 10% off 350 is 315 whether or not a cap exists." }
+  - { line: 124, label: bad, window: 0, reason: "a length check cannot fail when the order is wrong." }
+fixtures/token_test.go:
+  - { line: 22, label: bad, window: 0, reason: "the Parse result and error are discarded; the round trip could return garbage and the test passes." }
+  - { line: 32, label: bad, window: 0, reason: "only non-nil is checked; Parse could return claims with the wrong subject or expiry and the test passes." }
+  - { line: 48, label: clean, window: 0, reason: "hard clean: the outer name claims only that Parse is tested; the subtests assert rejection and the subject." }
+  - { line: 52, label: bad, window: 0, reason: "the test expects the expired token to parse; if rejection were broken it passes, and if rejection works it fails." }
+  - { line: 66, label: clean, window: 0, reason: "clean: errors.Is(err, ErrSignature) fails if tampering goes unnoticed." }
+  - { line: 79, label: clean, window: 0, reason: "clean: Subject must be alice." }
+  - { line: 94, label: clean, window: 0, reason: "hard clean: an interaction claim (the clock is read once) established by counting calls on the fake." }
+  - { line: 110, label: clean, window: 0, reason: "hard clean: table-driven; each case fails if Parse accepts the malformed token." }
+  - { line: 131, label: bad, window: 0, reason: "the empty-subject case is never set up; a non-empty subject signs fine whether or not the check exists." }

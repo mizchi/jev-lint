@@ -1,0 +1,83 @@
+id: test-name-describes-code
+language: Go
+kind: noul
+subject: node
+state: bare
+# 0.78, fitted 2026-09-20 (5 defects, 16 cleans of which 8 hard, 3 passes):
+# defects sit at 0.88-0.97 (the "rejects expired token" subtest that expects
+# the subject back, Sign "fails on empty subject" over subject u2, the
+# RemoveItem test that never removes). The top clean is the synonym,
+# `TestDeleteItem` calling RemoveItem, at 0.58-0.76 across two runs (means
+# 0.66 and 0.68); next is the vacuous negative-quantity test at 0.53, about
+# the named thing and the other rule's business. Midpoint of the 0.68-0.89
+# gap: 0.10 over the top clean and 0.11 under the lowest defect on means,
+# but 0.02 over the synonym's highest single pass -- a cookbook cutoff until
+# a corpus with more synonym titles says where that class really sits. Report: experiments/reports/j-go/REPORT.md.
+at: 0.78
+axis: file
+severity: warning
+rule:
+  any:
+    # `func TestFooBar(t *testing.T)`: the name is the title.
+    - all:
+        - kind: function_declaration
+        - has:
+            field: name
+            pattern: $TITLE
+            regex: "^Test([A-Z_]|$)"
+        - has:
+            field: parameters
+            regex: "testing\\.(T|TB)\\b"
+    # `t.Run("title", func(t *testing.T) {...})`: a subtest with a literal
+    # title. A table-driven `t.Run(tc.name, ...)` has no literal and is
+    # judged as part of its enclosing Test function.
+    - all:
+        - kind: call_expression
+        - has:
+            field: function
+            regex: "\\.Run$"
+        - has:
+            field: arguments
+            all:
+              - has:
+                  nthChild: 1
+                  any:
+                    - kind: interpreted_string_literal
+                    - kind: raw_string_literal
+                  pattern: $TITLE
+              - has:
+                  kind: func_literal
+                  pattern: $BODY
+# The same sentence as typescript/test-name-describes-code, by copy: the loader
+# warns if the two drift.
+ask: >-
+  The operation, input or outcome this test's code exercises is not the one its
+  name names.
+note: >-
+  A weak or missing assertion is not a different outcome. The outcome differs
+  only when the code expects something the name contradicts: an ordinary value
+  where the name says throws or rejects, active where it says rejects, the
+  below-threshold price where it says above. A body that calls the named
+  operation on the named input and then checks a length, checks that something
+  exists, or checks nothing, is about the named thing.
+criteria:
+  "true": >-
+    Reading the name and then the code, they are about different things. The
+    operation the code calls is not the one the name says (a lookup where the
+    name says remove, a post where it says reverse); the input or case the code
+    sets up is not the one the name states (three units where the name says
+    above ten, a non-empty list where it says empty); the outcome the code
+    expects is the opposite of the one the name implies (expecting active where
+    the name says rejects); the name promises a throw, a panic, an error or a
+    rejection where the code expects an ordinary value; or the name refers to
+    something -- a sort, a warning, a log line -- that the code never calls and
+    never checks.
+  "false": >-
+    The code calls the operation the name says, on the input the name says, and
+    expects the kind of outcome the name says. That holds however weak the
+    assertion is: a length check, an is_some, a toBeDefined, a bare call with no
+    assertion at all, are still about the named thing, and whether they
+    establish it is a separate question this rule does not ask. A one-word
+    title, a synonym for the operation's name, a compound title whose body
+    covers both parts, and setup that calls other operations before the named
+    one, are all fine.

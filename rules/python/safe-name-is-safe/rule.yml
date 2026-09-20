@@ -38,4 +38,6 @@ note: "A throw on a programmer error -- an argument of the wrong type, a misuse
   of the function's own API -- is not the failure such a name promises to absorb
   and does not count. Logging before returning the fallback is fine. The failure
   that counts is the one the name and the parameters are about: parsing, lookup,
-  I/O, connection, conversion."
+  I/O, connection, conversion. A returned error value or a (value, ok) pair is
+  failure reported as a value; a panic, an os.Exit or a log.Fatal is failure
+  escaping."

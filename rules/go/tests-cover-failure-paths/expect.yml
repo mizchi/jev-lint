@@ -1,0 +1,14 @@
+default: clean
+fixtures/basket.go:
+  - { line: 29, label: clean, window: 0, reason: "clean: a constructor with no failure path." }
+  - { line: 33, label: clean, window: 0, reason: "hard clean: three guards (empty sku, non-positive quantity, checked out) and a subtest trips each one." }
+  - { line: 51, label: bad, window: 0, reason: "ErrNotFound on an unknown sku; the only test removes a sku that exists." }
+  - { line: 59, label: clean, window: 0, reason: "clean: the (Line{}, false) path is reached by Line(\"nope\")." }
+  - { line: 67, label: clean, window: 0, reason: "clean: cannot fail." }
+  - { line: 76, label: clean, window: 0, reason: "clean: cannot fail." }
+  - { line: 84, label: bad, window: 0, reason: "ErrBadDiscount for a percentage outside 0-100; the only test applies 50." }
+  - { line: 92, label: bad, window: 0, reason: "two failure paths, the empty cart and the second checkout; the tests reach only the second." }
+  - { line: 108, label: clean, window: 0, reason: "clean: cannot fail." }
+  - { line: 112, label: bad, window: 0, reason: "two paths, the non-number (reached with \"abc\") and the non-positive number (ErrBadQuantity), which no test passes." }
+  - { line: 123, label: clean, window: 0, reason: "hard clean: discards AddItem's errors and has no failure path of its own; the callee's paths are the callee's." }
+  - { line: 134, label: bad, window: 0, reason: "panics on a bad quantity; the only test passes \"4\" and no test asserts the panic." }

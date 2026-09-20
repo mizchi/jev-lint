@@ -1,352 +1,352 @@
 {
- "schema": "jev-lint-eval-1",
- "recorded": "2026-09-19T17:13:16.235Z",
- "model": "jev-1.13.0",
- "suite": "typescript/safe-name-is-safe",
- "rules": [
-  {
-   "id": "safe-name-is-safe",
-   "draft": "eb2f14711326",
-   "at": 0.53
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T10:09:28.061Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/safe-name-is-safe",
+  "rules": [
+    {
+      "id": "safe-name-is-safe",
+      "draft": "f781a7cb8a5b",
+      "at": 0.53
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 34,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 40,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 49,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 59,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 73,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 85,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 92,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 99,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 107,
+        "endLine": 109,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 111,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 34,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 40,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 49,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 59,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 73,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 85,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 92,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 99,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 107,
+        "endLine": 109,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 111,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 5,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 13,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 34,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 40,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 49,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 59,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 73,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 85,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 92,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 99,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 107,
+        "endLine": 109,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
+        "line": 111,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 21705,
+    "usd": 0.00091161,
+    "ms": 727
   }
- ],
- "cutoffs": {},
- "passes": [
-  [
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 5,
-    "endLine": 11,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 13,
-    "endLine": 21,
-    "kind": "noul",
-    "value": 0.78,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 34,
-    "endLine": 38,
-    "kind": "noul",
-    "value": 0.87,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 40,
-    "endLine": 47,
-    "kind": "noul",
-    "value": 0.92,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 49,
-    "endLine": 57,
-    "kind": "noul",
-    "value": 0.15,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 59,
-    "endLine": 66,
-    "kind": "noul",
-    "value": 0.19,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 73,
-    "endLine": 81,
-    "kind": "noul",
-    "value": 0.14,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 85,
-    "endLine": 90,
-    "kind": "noul",
-    "value": 0.23,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 92,
-    "endLine": 95,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 99,
-    "endLine": 105,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 107,
-    "endLine": 109,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 111,
-    "endLine": 122,
-    "kind": "noul",
-    "value": 0.92,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 5,
-    "endLine": 11,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 13,
-    "endLine": 21,
-    "kind": "noul",
-    "value": 0.77,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 34,
-    "endLine": 38,
-    "kind": "noul",
-    "value": 0.88,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 40,
-    "endLine": 47,
-    "kind": "noul",
-    "value": 0.92,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 49,
-    "endLine": 57,
-    "kind": "noul",
-    "value": 0.14,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 59,
-    "endLine": 66,
-    "kind": "noul",
-    "value": 0.13,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 73,
-    "endLine": 81,
-    "kind": "noul",
-    "value": 0.15,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 85,
-    "endLine": 90,
-    "kind": "noul",
-    "value": 0.23,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 92,
-    "endLine": 95,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 99,
-    "endLine": 105,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 107,
-    "endLine": 109,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 111,
-    "endLine": 122,
-    "kind": "noul",
-    "value": 0.9,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 5,
-    "endLine": 11,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 13,
-    "endLine": 21,
-    "kind": "noul",
-    "value": 0.72,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 34,
-    "endLine": 38,
-    "kind": "noul",
-    "value": 0.89,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 40,
-    "endLine": 47,
-    "kind": "noul",
-    "value": 0.92,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 49,
-    "endLine": 57,
-    "kind": "noul",
-    "value": 0.13,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 59,
-    "endLine": 66,
-    "kind": "noul",
-    "value": 0.16,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 73,
-    "endLine": 81,
-    "kind": "noul",
-    "value": 0.14,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 85,
-    "endLine": 90,
-    "kind": "noul",
-    "value": 0.24,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 92,
-    "endLine": 95,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 99,
-    "endLine": 105,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 107,
-    "endLine": 109,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "safe-name-is-safe",
-    "file": "rules/typescript/safe-name-is-safe/fixtures/safe.ts",
-    "line": 111,
-    "endLine": 122,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   }
-  ]
- ],
- "spent": {
-  "calls": 3,
-  "inputTokens": 20505,
-  "usd": 0.0008612100000000001,
-  "ms": 708
- }
 }

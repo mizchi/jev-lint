@@ -1,0 +1,298 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:50:13.748Z",
+  "model": "jev-1.13.0",
+  "suite": "go/module-name-describes-contents",
+  "rules": [
+    {
+      "id": "module-name-describes-contents",
+      "draft": "6f59fdaefc20",
+      "at": 0.6
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/auth/token.go",
+        "line": 1,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/metrics.go",
+        "line": 1,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/user.go",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/store.go",
+        "line": 1,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/auth/password.go",
+        "line": 1,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/errors.go",
+        "line": 1,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/cache.go",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/handlers.go",
+        "line": 1,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/utils.go",
+        "line": 1,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/cmd/server/main.go",
+        "line": 1,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/store.go",
+        "line": 1,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/auth/password.go",
+        "line": 1,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/auth/token.go",
+        "line": 1,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/cache.go",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/cmd/server/main.go",
+        "line": 1,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/utils.go",
+        "line": 1,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/metrics.go",
+        "line": 1,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/errors.go",
+        "line": 1,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/user.go",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/handlers.go",
+        "line": 1,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/handlers.go",
+        "line": 1,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/store.go",
+        "line": 1,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/auth/password.go",
+        "line": 1,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/cache.go",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/cmd/server/main.go",
+        "line": 1,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/utils.go",
+        "line": 1,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/errors.go",
+        "line": 1,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.42,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/user.go",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/auth/token.go",
+        "line": 1,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/go/module-name-describes-contents/fixtures/metrics.go",
+        "line": 1,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 30,
+    "inputTokens": 30210,
+    "usd": 0.0012688200000000001,
+    "ms": 667
+  }
+}

@@ -1,0 +1,62 @@
+id: safe-name-is-safe
+language: Go
+kind: noul
+subject: node
+state: local
+# 0.43, fitted 2026-09-20 (5 defects, 15 cleans of which 5 hard, 3 passes,
+# with the Go sentence in the note): clean tops at 0.26-0.31 (`tryConnect`
+# returning (net.Conn, error); `SafeGo`, whose goroutine recovers its own
+# panic, at 0.28), defects start at 0.54-0.59 (`SafeDiv`, whose panic on a
+# zero divisor is implicit in `a / b`) then 0.69 (`FirstOrZero` indexing an
+# empty slice), 0.67-0.76 (`SafeDeref`), 0.79-0.85 (the panicking day
+# branch) and 0.95 (os.Exit). Midpoint of the gap: 0.12 over the top clean
+# and 0.11 under the lowest defect on single passes. Without the note's
+# last sentence the two error-returning cleans sat at 0.63 and 0.49, inside
+# the defect band. Report: experiments/reports/j-go/REPORT.md.
+at: 0.43
+rule:
+  all:
+    - any:
+        - kind: function_declaration
+        - kind: method_declaration
+    # Go's spelling of the family. `Must*` promises the opposite (it panics)
+    # and has its own candidate, must-name-panics. Go's throw is a panic,
+    # and os.Exit / log.Fatal escape the caller the same way.
+    - has:
+        field: name
+        pattern: $NAME
+        regex: "^([Ss]afe|[Tt]ry)([A-Z0-9_]|$)|(OrZero|OrDefault|OrNil|OrEmpty|OrNone)$"
+# The same sentence as typescript/safe-name-is-safe, by copy: the loader
+# warns if the two drift. "throw" and "rejected promise" there read as
+# panic here; the criteria's "result object the caller can inspect" is
+# Go's (value, error) or (value, ok) pair.
+ask: This function's name ($NAME) says that failure is absorbed and reported as
+  a value, but its body has a path on which a failure escapes as a throw or a
+  rejection.
+criteria:
+  "true": "A failure of the kind the name promises to absorb can reach the caller
+    as an exception or a rejected promise: the operation that can fail is
+    outside any try, the catch rethrows or throws a new error, a failing case is
+    detected and answered with a throw instead of the null, undefined, default,
+    false or result value the name promises, or the fallback itself is computed
+    by something that can fail."
+  "false": "Every failure of the kind the name refers to is turned into the value
+    the name promises: null, undefined, a default, a boolean, or a result object
+    the caller can inspect. A body that cannot fail at all, and so has nothing
+    to catch, honours the name."
+# Deliberate drift from typescript/safe-name-is-safe, in `note` only: one
+# sentence added at the end. Go reports failure as a returned `error` or a
+# `(value, ok)` pair, and its throw is a panic (os.Exit and log.Fatal end
+# the process the same way). Without the sentence the model read
+# `tryConnect(...) (net.Conn, error)` and `TryFirst(...) ("", ErrEmpty)` as
+# failures escaping (0.63 and 0.49 on the first attempt) -- an `error` is
+# not among the values the TypeScript criteria list, because TypeScript has
+# no such convention.
+note: "A throw on a programmer error -- an argument of the wrong type, a misuse
+  of the function's own API -- is not the failure such a name promises to absorb
+  and does not count. Logging before returning the fallback is fine. The failure
+  that counts is the one the name and the parameters are about: parsing, lookup,
+  I/O, connection, conversion. A returned error value or a (value, ok) pair is
+  failure reported as a value; a panic, an os.Exit or a log.Fatal is failure
+  escaping."
+axis: file
