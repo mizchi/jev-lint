@@ -11,7 +11,9 @@ conflict.** Sections 1-8 record the tool at 8 rules over a 10-file corpus, with
 batching axes. Section 12 lists what is still unmeasured, and section 13 is the
 tool applied to its own source, which is where its four worst bugs were found.
 Section 14 is what was taken from a sibling project built on the same model,
-`jev-review`, and what each piece measured as.
+`jev-review`, and what each piece measured as. Section 15 is the split of
+`rules/` by language, the Python and Go ports, and the commit-message rule,
+with what the ports found wrong in the tool.
 Where a number changed, the later one is the live one and the earlier one is
 left standing because how it changed is part of the evidence. Four claims are
 explicitly **retracted**, and every one of them is section 9 retracting its own
@@ -1167,3 +1169,83 @@ a verdict in this tool.
 - Per-finding severity `score` and owner routing. Unmeasured, and a lint
   finding has a rule-level severity already.
 - 80- and 160-line regions. A node is a better unit than a window.
+
+---
+
+## 15. Rules by language, two ports, and commits
+
+Spec and plan: `docs/superpowers/specs/2026-09-20-rules-by-language-design.md`,
+`docs/superpowers/plans/2026-09-20-rules-by-language.md`.
+
+### The layout
+
+`rules/<id>/rule.yml` held every grammar's variant as one YAML document
+with anchors, and its `evals/cases/` mixed `.ts` and `.rs`. It is now
+`rules/<lang>/<id>/` — one rule, one language, `fixtures/`, `expect.yml`
+and `baseline.json` beside it — and the loader enforces it: a language
+directory admits only its grammars, the id must be the directory's name,
+and one id under two languages with different `ask`/`criteria`/`note`/
+`explain` is a warning. The move was a script that resolved the anchors,
+split the cases by extension and the baselines by rule id, sent nothing,
+and was checked by `eval --replay`: 24 suites, all as shipped, before and
+after. The sentence is now a copy per language; the drift warning is what
+holds the copies together, and the one deliberate drift so far
+(`safe-name-is-safe`'s Go sentence about error values) was folded back
+into the TypeScript and Python notes instead, both re-accepted.
+
+### Two ports, one agent each, one afternoon
+
+Python and Go each got the families whose claim transfers, with the
+sentence copied verbatim and the matcher, state, cutoff and fixtures their
+own, to the bar in `experiments/BRIEF.md`.
+
+| | ported | shipped | P 1.00 / R 1.00 | stayed a candidate | cost |
+| --- | --- | --- | --- | --- | --- |
+| Python | 12 | 11 | 10 | `test-name-verifies-claim`: pytest inputs built by a helper are invisible on `bare` (a clean at 0.68); `located` fixes that clean and drops a defect to 0.53 | $0.056 |
+| Go | 13 | 9 | 6 | the two comment rules (Go's grammar puts a block-opening comment beside the `statement_list`; recall 0.67), `test-name-describes-code` (0.02 of headroom on one pass), `log-level-matches-event` (pinned by a `Fatalw` on a real failure) | $0.067 |
+
+Go gained a rule with no TypeScript twin: `must-name-panics`, because
+`Must*` promises the opposite of `safe*` and a copied sentence cannot say
+so. Both reports name a "the model was right" correction to the corpus
+itself — a docstring claiming a flag the CLI never read, a "free item"
+test whose assertion could not fail, a `try_lock` that let a missing
+directory escape — which is the pattern of section 2 again.
+
+**What the ports found wrong in the tool**, all fixed the same day:
+
+- `paired` paired a Go `cart.go` with `test/fixtures/cookbook/cart.test.ts`
+  and `cart.rs`: the walk adds the conventional `test/` root and matched
+  on the stem alone. Tests now pair only within the source's language
+  family, and a file under a test directory that is not named as a test
+  must contain a test opener (a fixture is not a test).
+- The Go symbol probe had `type_declaration` with no name field, so types
+  never reached the `graph` outline; and its export check read a
+  capitalised parameter type as the name, listing `displayName(u User)` as
+  public API. The name is on the `type_spec`; the regex now anchors on the
+  declaration.
+- `eval --dry-run` took the flag and sent the requests anyway — the one
+  command the calibration procedure says to price first.
+- `gaps` said `rewrite` for two Python rules (gaps 0.20 and 0.24) that then
+  separated on eval with ≥ 0.10 of headroom: its verdict threshold is
+  stricter than the fit. Not changed; noted.
+
+### Commits
+
+`jev-lint commits [range]` is the first source of subjects that is not
+ast-grep: one subject per non-merge commit, the message the subject, the
+diff the state. The state budget forced three caps — the patch at a hunk
+boundary, the stat at 120 lines with its summary kept, the file list at
+200 — after a 352-file commit produced a 33,737-token state against a
+32,768 ceiling. Fixtures were going to be `git format-patch` files and
+became `fixtures/<case>/{message, before/, after/}` when the second patch
+would not apply on the first's tree.
+
+`git/commit-message-describes-diff` separates at 0.65 with 0.30 of
+headroom above the clean top, no flips, on sixteen cases ($0.015). Its
+first unseen run, over this repository's own last twelve commits, found
+one true finding: a docs commit (`3c0ff08`) whose `git add -A` had swept
+in 1,700 lines of two running agents' half-built candidates, and a second
+(`cc1c372`) with the same mistake at 0.47 — which is the rule doing the
+thing it exists for, on the day it was written, to the person writing it.
+Neither history was rewritten; the candidates landed properly in their
+own commits, and every commit since is under 0.40.
