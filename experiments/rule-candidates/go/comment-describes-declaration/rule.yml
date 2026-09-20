@@ -1,0 +1,44 @@
+id: comment-describes-declaration
+language: Go
+kind: noul
+subject: node
+state: located
+at: 0.7  # uncalibrated
+axis: file
+severity: warning
+rule:
+  all:
+    - any:
+        - kind: function_declaration
+        - kind: method_declaration
+        - kind: type_declaration
+    # A Go doc comment is a run of `//` lines; tree-sitter makes each its
+    # own node, so this captures the last line and jev-lint widens the
+    # capture to the run it ends.
+    - follows:
+        kind: comment
+        pattern: $DOC
+# The same sentence as typescript/comment-describes-declaration, by copy:
+# the loader warns if the two drift.
+ask: >-
+  The comment above this code claims something that is not true of the code.
+criteria:
+  "true": >-
+    A specific claim the comment makes is contradicted by the code: it names a
+    different operation, direction, rounding, ordering or unit than the code
+    uses, it states a return value or guarantee the code does not provide, it
+    describes a side effect the code does not perform or omits one it does, it
+    gives a count, limit or default that differs from the code's, or it refers
+    to a parameter, field or function that the code no longer has.
+  "false": >-
+    Every specific claim the comment makes holds for the code below it. A
+    comment that is vague, redundant, restates the obvious, or says less than it
+    could is not a false comment -- only a claim that is actually wrong counts
+    here. A section heading or divider ("--- Orchestrator: Budget Planning ---",
+    "// Helpers") names the part of the file that starts here, not the
+    declaration under it, and makes no claim about it.
+note: >-
+  Judge only claims the code in front of you can confirm or contradict. A
+  comment about a caller's obligations, about performance, or about history is
+  not checkable here and is not a violation. A heading that labels a section of
+  the file is not a claim about the first declaration in that section.

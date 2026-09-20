@@ -1,0 +1,46 @@
+# Commits: the message is a claim, the diff is the body.
+#
+# The class this tool exists for, in the one place a repository writes a
+# claim about every change it makes. "Fix the retry loop" over a diff that
+# adds a feature; "Refactor, no behaviour change" over a diff that changes a
+# default; "Remove X" over a diff that leaves X in place. A reviewer with the
+# message and the diff side by side can answer this; nothing else checks it.
+#
+# `subject: commit` has no matcher: `jev-lint commits <range>` builds one
+# subject per non-merge commit from git, the message is the subject and the
+# diff (capped, with the stat kept whole) is the state. Fixtures are
+# `git format-patch` output, one commit per file, applied to a throwaway
+# repository by `jev-lint eval`.
+
+id: commit-message-describes-diff
+language: Git
+subject: commit
+kind: noul
+at: 0.7 # uncalibrated
+ask: >-
+  This commit's message ($SUBJECT) claims something the diff does not do, or
+  the diff does something material that the message does not mention.
+criteria:
+  "true": >-
+    Someone who read only the message would be wrong about what this commit
+    changed: the message names a fix, a removal, a rename or a "no behaviour
+    change" that the diff does not carry out, or attributes the change to the
+    wrong thing; or the diff makes a change a reader would need to know about
+    -- a changed default, a new dependency, a deleted test, a widened
+    permission, a second unrelated change -- that neither the subject line nor
+    the body mentions.
+  "false": >-
+    The message describes what the diff does. A subject line is a summary and
+    may leave out the mechanical parts of the change it names; a body that
+    says "also" or "while here" accounts for a second change; a version bump,
+    a lockfile, generated code, a formatting-only hunk, a trailer such as
+    Co-Authored-By or Signed-off-by, and a test added for the change described
+    are not changes the message had to mention.
+note: >-
+  Judge the message against the diff, not the diff on its own merits. Whether
+  the change is a good one is not the question; whether the message tells
+  the truth about it is. A terse but accurate subject line honours the
+  claim. A message that describes the intent ("make retries safe") rather
+  than the mechanism (a new mutex) is accurate when the mechanism serves the
+  intent. `diff` may be cut to fit; `stat` and `files` are always complete,
+  so a change visible in `stat` but absent from `diff` did happen.

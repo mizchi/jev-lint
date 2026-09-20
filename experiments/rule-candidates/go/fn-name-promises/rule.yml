@@ -1,0 +1,50 @@
+id: fn-name-promises
+language: Go
+kind: noul
+subject: node
+state: located
+# 0.40, fitted 2026-09-20 (9 defects, 15 cleans of which 10 hard, 3 passes):
+# clean tops at 0.26 (`Take`, the terse pop-and-mark), defects start at 0.59
+# (`Drain`, which copies and removes nothing; 0.50-0.68 across passes, the
+# widest spread in the corpus) then 0.60 (`Summarize`); the other seven sit at
+# 0.76-0.95. Set under the midpoint so Drain's lowest pass keeps 0.10 and the
+# top clean keeps 0.14. Report: experiments/reports/j-go/REPORT.md.
+at: 0.40
+axis: file
+severity: warning
+rule:
+  all:
+    - any:
+        - kind: function_declaration
+        - kind: method_declaration
+    - has: { field: name, pattern: $NAME }
+    # Test, benchmark, fuzz and example functions get the test rules, which
+    # ask a sharper question (as rust/fn-name-promises excludes #[test]).
+    - not:
+        has:
+          field: name
+          regex: "^(Test|Benchmark|Fuzz|Example)([A-Z_]|$)"
+# The same sentence as typescript/fn-name-promises, by copy: the loader warns
+# if the two drift.
+ask: >-
+  The body of this function does something materially different from what its
+  name promises.
+criteria:
+  "true": >-
+    Someone who read only the name and the parameter list would be wrong about
+    what this function does: it returns a different kind of thing than the name
+    suggests (a count that is a list, a predicate that is a number), it changes
+    state when the name says it only reads, checks, looks up or serialises, it
+    can fail or return nothing when the name promises a value, it handles only a
+    narrower case than the name claims, it never performs an effect or
+    repetition the name names (a drain or remove that leaves the container as it
+    was, a retry that tries once), it computes something no reading of the name
+    accounts for, or it does substantial work the name does not mention at all,
+    such as writing what it was asked to read.
+  "false": >-
+    The name and parameter list describe what the body actually does. Someone
+    who read only them would not be surprised by the body, even if a longer or
+    more specific name could be imagined. A terse or conventional name (run,
+    handle, take, len, fmt, toString, a getter) that the body fits is not a
+    violation, and a comment inside the body that is wrong about the body is a
+    wrong comment, not a wrong name.

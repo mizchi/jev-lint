@@ -101,6 +101,13 @@ export function buildExplainQuestion(rule: Rule, subject: Subject, id: string): 
 
 /** What every question about a subject carries: where it is and what it is. */
 function subjectFields(rule: Rule, subject: Subject, id: string): Record<string, unknown> {
+  // A commit: the message is the thing judged, named as such. No lines, no
+  // node kind, no loose-matcher caveat -- nothing matched it.
+  if (subject.commit) {
+    const shared: Record<string, unknown> = { subject: id, message: subject.text };
+    if (subject.captured && Object.keys(subject.captured).length > 0) shared.matcher_captured = subject.captured;
+    return shared;
+  }
   // The lines of the code actually supplied, which is the subject's range and
   // not the match's when `subject: enclosing` promoted it.
   const from = subject.subjectLine ?? subject.line;

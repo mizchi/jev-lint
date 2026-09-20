@@ -1,0 +1,77 @@
+id: comment-describes-block
+language: Python
+kind: noul
+subject: enclosing
+state: located
+at: 0.7   # uncalibrated
+severity: info
+rule:
+  any:
+    # A statement that follows a `#` comment inside a body.
+    - all:
+        - any:
+            - kind: if_statement
+            - kind: for_statement
+            - kind: while_statement
+            - kind: try_statement
+            - kind: with_statement
+            - kind: return_statement
+            - kind: raise_statement
+            - kind: expression_statement
+            - kind: assert_statement
+            - kind: delete_statement
+            - kind: match_statement
+            - kind: break_statement
+            - kind: continue_statement
+            - kind: pass_statement
+        - follows:
+            kind: comment
+            pattern: $DOC
+        # Inside a body, not at the top level: a top-level comment above a
+        # statement is documentation and the declaration rule covers it.
+        - inside:
+            kind: block
+            stopBy: end
+    # A comment that opens a body: tree-sitter hoists it out of the block, so
+    # it precedes the block rather than the block's first statement.
+    - all:
+        - kind: block
+        - follows:
+            kind: comment
+            pattern: $DOC
+        - inside:
+            kind: function_definition
+            stopBy: end
+ask: >-
+  The comment captured as DOC makes a claim about the code beneath it that the
+  code contradicts.
+criteria:
+  "true": >-
+    The comment says what the code beneath it does, and the code does something
+    else: a count, limit, number of attempts or delay that differs from the
+    code's, or that the comment fixes to a number while the code takes it from a
+    parameter; a direction, order, sign, rounding or unit that is not the one
+    the code uses; a condition the code tests the other way round; or a step the
+    comment says happens here that the code beneath it does not perform.
+  "false": >-
+    Every specific claim in the comment holds for the code beneath it. The code
+    beneath a comment is the run of statements from the comment down to the next
+    comment or the end of the block, not the first statement alone: "two events"
+    above two appends is true. A comment that gives a reason outside the code --
+    a policy, a caller, a server, a past bug -- that says what the whole test or
+    function is for, that describes what other code does, that is vague, or that
+    summarises the code loosely but not wrongly, makes no claim the code can
+    contradict. A comment that states the effect the code beneath it achieves
+    ("so the newest are kept") is a claim about that code, and is judged by what
+    the code does. A comment that sits at the end of a line of code, after that
+    code, belongs to that line, not to the code beneath it. The contradiction
+    has to be visible in the code shown: a comment about setup, a later step, or
+    code that is not shown is not contradicted by a statement that simply does
+    not mention it.
+note: >-
+  The comment under test is the one whose last line is captured as DOC; it may
+  begin several lines above that line, and all of it is the comment. Find that
+  line in the source before judging: if code precedes the comment on its own
+  line, the comment is a trailing remark on that code and makes no claim about
+  the line beneath it. Judge the comment only against the code that follows it.
+  Other comments in the same function are not your concern.

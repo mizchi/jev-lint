@@ -1,0 +1,22 @@
+default: clean
+fixtures/cart.py:
+  - { line: 25, label: clean, window: 0, reason: "hard clean: a dunder; `__len__` returns the number of items, which is what len() promises." }
+  - { line: 29, label: bad, window: 0, reason: "reads as a predicate, returns the strings 'expired' / 'active'." }
+  - { line: 35, label: bad, window: 0, reason: "`get` promises a read; `pop` removes the order from the dict." }
+  - { line: 39, label: bad, window: 0, reason: "`calculate` promises a computation; this writes cart.total_cents and appends to a module-level audit list." }
+  - { line: 47, label: bad, window: 0, reason: "named for all expired items (plural), deletes only the first match and returns." }
+  - { line: 54, label: clean, window: 0, reason: "hard clean: terse `sum_prices`, sums prices." }
+  - { line: 58, label: clean, window: 0, reason: "hard clean: terse conventional `fmt_money`, formats cents as dollars." }
+  - { line: 62, label: clean, window: 0, reason: "hard clean: `take` removes what it returns, which is what take means." }
+  - { line: 68, label: clean, window: 0, reason: "hard clean: `consume` is the conventional boolean-returning mutator of a token stream." }
+  - { line: 75, label: clean, window: 0, reason: "hard clean: the comment inside says 'halve' while the body applies `percent`; a wrong comment, not a wrong name." }
+fixtures/jobs.py:
+  - { line: 13, label: bad, window: 0, reason: "`load_config` writes the defaults to disk when the file is missing: writing what it was asked to read." }
+  - { line: 20, label: bad, window: 0, reason: "`retry` with an `attempts` parameter tries exactly once and returns None on failure." }
+  - { line: 33, label: bad, window: 0, reason: "`get_job` inserts a row when the job is missing: a getter that creates." }
+  - { line: 41, label: bad, window: 0, reason: "`count_pending` returns the list of ids, not a count." }
+  - { line: 49, label: clean, window: 0, reason: "hard clean: `to_dict` reads the table and returns a dict; reading in a serialiser is reading." }
+  - { line: 57, label: bad, window: 0, reason: "`drain` copies the queue and leaves it as it was; nothing is drained." }
+  - { line: 64, label: clean, window: 0, reason: "hard clean: terse `handle`, dispatches on the event type." }
+  - { line: 73, label: clean, window: 0, reason: "hard clean: a getter-like name that consults the environment before the config; still returns the poll interval." }
+  - { line: 80, label: clean, window: 0, reason: "hard clean: terse `run`, the CLI entry point." }

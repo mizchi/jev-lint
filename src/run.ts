@@ -27,6 +27,7 @@ import { touchesChange } from "./diff.ts";
 import { ruleTextHash, cutoffFor } from "./rules.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
 import { pairTests, type RelatedTest } from "./paired.ts";
+import { commitSubjects } from "./commits.ts";
 import type {
   Answer,
   Batch,
@@ -266,6 +267,12 @@ export interface RunOptions {
    * answers cut at a second line, so it costs no request.
    */
   loose?: number | null;
+  /**
+   * Judge commits instead of files: the range's non-merge commits, one
+   * subject each per `subject: commit` rule. `paths` is then ignored and
+   * ast-grep never runs.
+   */
+  commits?: { range: string; label?: (sha: string) => string } | null;
 }
 
 export async function run({
@@ -290,6 +297,7 @@ export async function run({
   client = null,
   explain = false,
   loose = null,
+  commits = null,
 }: RunOptions): Promise<RunResult> {
   const started = Date.now();
   const passes = Number.isInteger(retry) && retry > 0 ? retry : 1;
@@ -299,13 +307,11 @@ export async function run({
   // a verdict the report never used.
   const useCache = passes === 1 ? cachePath : null;
 
-  const { subjects, symbols, sources, tests, stderr, skippedByDiff, duplicateGrammars, ignored, unpaired } = await collectSubjects({
-    rules,
-    paths,
-    arm,
-    diffRanges,
-    cwd,
-  });
+  const collected = commits
+    ? collectCommits(rules, commits.range, cwd, commits.label)
+    : await collectSubjects({ rules, paths, arm, diffRanges, cwd });
+  const { subjects, symbols, sources, tests, stderr, skippedByDiff, duplicateGrammars, ignored, unpaired } = collected;
+  const commitStats = commits && "commits" in collected ? (collected as { commits: RunResult["commits"] }).commits : undefined;
 
   const cache = useCache ? Cache.load(useCache) : new Cache(null);
   // Under `auto` the axis is decided per rule, and the axis is part of what
@@ -320,9 +326,18 @@ export async function run({
   const effectiveAxis = (s: Subject): Grouping =>
     group === "auto" ? (axisOf!.get(s.rule.id) ?? "rule") : group;
 
+  // A commit's verdict is about the message AND the diff: the same message
+  // over a different change is a different question, so the diff is in the
+  // key beside the message.
   const keyed = subjects.map((s) => ({
     ...s,
-    key: verdictKey(s.rule, s.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null),
+    key: verdictKey(
+      s.rule,
+      s.arm,
+      s.commit ? `${s.text}\u0000${s.commit.diff}` : s.text,
+      effectiveAxis(s),
+      s.promoted ? (s.matchText ?? null) : null,
+    ),
   }));
 
   // Identical subject text under the same rule draft is one question however
@@ -368,6 +383,7 @@ export async function run({
       duplicateGrammars,
       ignored,
       unpaired,
+      commits: commitStats,
       retry: passes,
       schedule: plan,
       cachedCount: results.length,
@@ -519,9 +535,38 @@ export async function run({
     servedModel: jev.servedModel,
     ignored,
     unpaired,
+    commits: commitStats,
     retry: passes,
     ...gated,
     elapsedMs: Date.now() - started,
+  };
+}
+
+/**
+ * Commits mode's collector: the same shape `collectSubjects` returns, from
+ * git instead of ast-grep, so the rest of the run does not know the
+ * difference. No sources, no symbols, no tests: a commit batch's state is
+ * built from the subject itself.
+ */
+function collectCommits(
+  rules: Rule[],
+  range: string,
+  cwd: string,
+  label?: (sha: string) => string,
+): CollectResult & { commits: { range: string; total: number; skippedMerges: number } } {
+  const { subjects, commits, skippedMerges } = commitSubjects(rules, range, cwd, label);
+  return {
+    subjects,
+    symbols: new Map(),
+    sources: new Map(),
+    tests: null,
+    matches: [],
+    stderr: "",
+    skippedByDiff: 0,
+    duplicateGrammars: 0,
+    ignored: { subjects: 0, files: [], unknownRules: [] },
+    unpaired: { subjects: 0, files: [] },
+    commits: { range, total: commits, skippedMerges },
   };
 }
 

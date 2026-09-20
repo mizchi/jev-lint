@@ -1,0 +1,20 @@
+default: clean
+fixtures/client.py:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: `retries` is a plural on a number, the conventional count of retries, read as a loop bound." }
+  - { line: 19, label: bad, window: 0, reason: "`users` is bound to one user record (`fetch_user(uid)`) and read with `.get(\"role\")`; a plural on a single item." }
+  - { line: 20, label: bad, window: 0, reason: "`is_admin` reads as a boolean; it holds the role string and is compared with \"admin\" on the next line." }
+  - { line: 25, label: bad, window: 0, reason: "`username` holds `split(\"@\")[1]`, the domain after the separator, and the function is `domain_of`; the name means the part before it." }
+  - { line: 30, label: bad, window: 0, reason: "`config_path` holds the file's contents split into lines, which the loop then iterates; a path name on contents." }
+  - { line: 31, label: clean, window: 0, reason: "hard clean: `seen` is a set named for its role." }
+  - { line: 32, label: clean, window: 0, reason: "hard clean: `pending` is a list of pending work, named for its role." }
+  - { line: 42, label: bad, window: 0, reason: "`count` is bound to a list comprehension and the function returns `len(count)`; a count name on a collection." }
+  - { line: 48, label: bad, window: 0, reason: "`first` holds `lines[-1]`, the last line, in a function named `latest_line`; the name means the first." }
+  - { line: 54, label: clean, window: 0, reason: "hard clean: `i` is the conventional loop index." }
+  - { line: 66, label: clean, window: 0, reason: "hard clean: `raw` names the value's provenance (the unparsed environment string) rather than its type." }
+  - { line: 72, label: clean, window: 0, reason: "hard clean: `buf` is the conventional accumulator name for a bytearray." }
+fixtures/test_client.py:
+  - { line: 35, label: clean, window: 0, reason: "hard clean: `admin` is a test binding named for the scenario it holds -- the response for the admin user." }
+  - { line: 41, label: clean, window: 0, reason: "hard clean: `unauthorized` holds the 403 response, the scenario the name reads as an adjective for." }
+  - { line: 48, label: clean, window: 0, reason: "hard clean: `ok` is a fixture list paired with `bad`; the two names classify the inputs." }
+  - { line: 49, label: clean, window: 0, reason: "hard clean: `bad` is the list of inputs that must fail; paired classification name." }
+  - { line: 60, label: clean, window: 0, reason: "hard clean: `healthy` holds the healthy count in a test and is asserted `== 2`; a terse test binding named for what it counts." }

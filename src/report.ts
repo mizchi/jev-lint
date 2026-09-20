@@ -61,7 +61,9 @@ export function formatPretty(
   }
 
   for (const [file, list] of [...byFile.entries()].sort()) {
-    out.push(c.bold(file));
+    // A commit is named by its short sha and subject line, not by a path.
+    const commit = list[0]?.commit;
+    out.push(c.bold(commit ? `${file.slice(0, 8)}  "${commit.subject}"` : file));
     for (const f of list.sort((a, b) => a.line - b.line)) {
       const loc = `${f.line}`.padStart(5);
       const tag = (f.messageId ? TAG[f.messageId]?.(c) : null) ?? String(f.messageId);
@@ -170,6 +172,10 @@ export function formatPretty(
   if (stats.review) bits.push(c.dim(`${stats.review} for a reader (--loose)`));
   if (stats.missing) bits.push(c.yellow(`${stats.missing} without a verdict`));
   if (result.skippedByDiff) bits.push(c.dim(`${result.skippedByDiff} outside the diff`));
+  if (result.commits) {
+    bits.push(`${result.commits.total} commit(s) in ${result.commits.range}`);
+    if (result.commits.skippedMerges) bits.push(c.dim(`${result.commits.skippedMerges} merge(s) skipped`));
+  }
   out.push(bits.join(", "));
 
   if (spent?.calls) {
@@ -222,7 +228,10 @@ export function formatPretty(
 /** Rules that produced no subject at all. */
 export function silentRules(result: Partial<ReportInput>): string[] {
   const fired = new Set((result.subjects ?? []).map((s) => s.rule.id));
-  return (result.rules ?? []).map((r) => r.id).filter((id) => !fired.has(id));
+  // In commits mode only commit rules can fire, and in file mode only the
+  // others can; a rule of the other kind is not silent, it is off duty.
+  const onDuty = (result.rules ?? []).filter((r) => (r.subject === "commit") === Boolean(result.commits));
+  return onDuty.map((r) => r.id).filter((id) => !fired.has(id));
 }
 
 export function formatJson(result: ReportInput): string {
@@ -243,6 +252,7 @@ export function formatJson(result: ReportInput): string {
     arm: f.arm,
     passes: f.passes ?? null,
     message: f.message ?? f.ask,
+    commit: f.commit ?? null,
   });
   return JSON.stringify(
     {
@@ -290,7 +300,8 @@ export function formatGithub(result: ReportInput): string {
     const title = `${f.rule}${f.messageId === "unsure" ? " (unsure)" : ""}`;
     const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
     const why = f.explanation ? `; why: ${f.explanation.choice}` : "";
-    const body = `${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}]`;
+    const where = f.commit ? `commit ${f.file.slice(0, 8)} "${f.commit.subject}": ` : "";
+    const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}]`;
     out.push(
       `::${level} file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(title)}::${escape(body)}`,
     );

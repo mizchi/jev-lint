@@ -1,0 +1,42 @@
+id: fn-name-promises
+language: Python
+kind: noul
+subject: node
+state: located
+# 0.51, fitted 2026-09-20 on this rule's own evals (23 subjects: 9 defects,
+# 14 cleans of which 9 hard, 3 passes). Cleans top out at 0.40 (`take`, which
+# removes what it returns) then 0.30 (`consume`, the boolean-returning
+# mutator); defects start at 0.61 (`calculate_total` writing the cart and an
+# audit list) and 0.66 (`load_config` writing defaults to disk). Midpoint of
+# the gap, 0.10 of headroom on each side, no decision flips, max spread 0.05.
+# Methods are `function_definition` inside `class_definition`, so one arm
+# covers functions, methods and decorated definitions.
+at: 0.51
+axis: file
+severity: warning
+rule:
+  all:
+    - kind: function_definition
+    - has: { field: name, pattern: $NAME }
+ask: >-
+  The body of this function does something materially different from what its
+  name promises.
+criteria:
+  "true": >-
+    Someone who read only the name and the parameter list would be wrong about
+    what this function does: it returns a different kind of thing than the name
+    suggests (a count that is a list, a predicate that is a number), it changes
+    state when the name says it only reads, checks, looks up or serialises, it
+    can fail or return nothing when the name promises a value, it handles only a
+    narrower case than the name claims, it never performs an effect or
+    repetition the name names (a drain or remove that leaves the container as it
+    was, a retry that tries once), it computes something no reading of the name
+    accounts for, or it does substantial work the name does not mention at all,
+    such as writing what it was asked to read.
+  "false": >-
+    The name and parameter list describe what the body actually does. Someone
+    who read only them would not be surprised by the body, even if a longer or
+    more specific name could be imagined. A terse or conventional name (run,
+    handle, take, len, fmt, toString, a getter) that the body fits is not a
+    violation, and a comment inside the body that is wrong about the body is a
+    wrong comment, not a wrong name.

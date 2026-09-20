@@ -1,0 +1,649 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:34:48.281Z",
+  "model": "jev-1.13.0",
+  "suite": "python/fn-name-promises",
+  "rules": [
+    {
+      "id": "fn-name-promises",
+      "draft": "e362df75554f",
+      "at": 0.51
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 13,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 20,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 33,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 45,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 53,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 57,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 64,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 73,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 80,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 22,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 25,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 29,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 35,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 39,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.61,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 47,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 54,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 58,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 62,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 68,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 75,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 22,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 25,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 29,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 35,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 39,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 47,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 54,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 58,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 62,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 68,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 75,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 13,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 20,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 33,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 45,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 53,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 57,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 64,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 73,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 80,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 13,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 20,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 33,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 45,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 53,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 57,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 64,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 73,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/jobs.py",
+        "line": 80,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 22,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 25,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 29,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 35,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 39,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 47,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 54,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 58,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 62,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 68,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/python/fn-name-promises/fixtures/cart.py",
+        "line": 75,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 41682,
+    "usd": 0.001750644,
+    "ms": 735
+  }
+}

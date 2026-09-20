@@ -1,0 +1,5 @@
+default: clean
+fixtures/fix-that-adds-a-feature:
+  - { line: 1, label: bad, window: 0, reason: "the message says a fix to `total`; the diff leaves `total` untouched and adds `applyCoupon`" }
+fixtures/add-coupon:
+  - { line: 1, label: clean, window: 0, reason: "the message names the feature and the body its rule; the diff is exactly that" }

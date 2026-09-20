@@ -13,7 +13,7 @@
 import { strict as assert } from "node:assert";
 import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync, existsSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, isAbsolute } from "node:path";
+import { join, isAbsolute, sep } from "node:path";
 
 import { PROBE_PREFIX, LANGUAGE_DIRS, TIER_ONE } from "../src/types.ts";
 import {
@@ -28,6 +28,8 @@ import {
 } from "../src/rules.ts";
 import { buildQuestion, buildExplainQuestion, questionId, readAnswer, readChoice } from "../src/questions.ts";
 import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture, OUTLINE_TEXT_LIMIT } from "../src/state.ts";
+import { execFileSync } from "node:child_process";
+import { listCommits, commitDiff, commitSubjects, commitFixtureSubjects, patchRepo, MAX_DIFF_CHARS } from "../src/commits.ts";
 import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET } from "../src/paired.ts";
 import {
   planBatches,
@@ -2575,6 +2577,163 @@ await testAsync("run: --loose reaches every format as a section of its own, and 
   assert.equal(json.findings.length, loose.findings.length, "and never mixed into the findings");
 });
 
+// ---------------------------------------------------------------- commits
+
+/** A throwaway repository with commits made by `steps`, for the commit tests. */
+function tempRepo(steps: Array<{ message: string; files: Record<string, string> }>): string {
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-commits-")));
+  const git = (...args: string[]) =>
+    execFileSync("git", args, { cwd: dir, stdio: ["ignore", "pipe", "pipe"], env: { ...process.env, GIT_AUTHOR_NAME: "t", GIT_AUTHOR_EMAIL: "t@x", GIT_COMMITTER_NAME: "t", GIT_COMMITTER_EMAIL: "t@x" } }).toString();
+  git("init", "-q", "-b", "main");
+  for (const step of steps) {
+    for (const [f, text] of Object.entries(step.files)) {
+      mkdirSync(join(dir, f, ".."), { recursive: true });
+      writeFileSync(join(dir, f), text);
+    }
+    git("add", "-A");
+    git("commit", "-q", "--allow-empty", "-m", step.message);
+  }
+  return dir;
+}
+
+const commitRule = (over: Record<string, unknown> = {}): Rule =>
+  normalizeRule({
+    id: "commit-message-describes-diff",
+    language: "Git",
+    subject: "commit",
+    kind: "noul",
+    ask: "The message claims something the diff does not do.",
+    criteria: { true: "y", false: "n" },
+    at: 0.5,
+    ...over,
+  }).rule!;
+
+test("commits: a range lists its commits oldest first, with subject, body and parents", () => {
+  const dir = tempRepo([
+    { message: "Add cart", files: { "cart.ts": "export const cart = 1;\n" } },
+    { message: "Fix the total\n\nIt was off by one.", files: { "cart.ts": "export const cart = 2;\n" } },
+  ]);
+  try {
+    const commits = listCommits("HEAD", dir);
+    assert.equal(commits.length, 2);
+    assert.equal(commits[0]!.subject, "Add cart", "oldest first, so a review reads in order");
+    assert.equal(commits[1]!.subject, "Fix the total");
+    assert.equal(commits[1]!.message, "Fix the total\n\nIt was off by one.");
+    assert.equal(commits[0]!.parents.length, 0);
+    assert.equal(commits[1]!.parents.length, 1);
+    assert.match(commits[1]!.sha, /^[0-9a-f]{40}$/);
+    assert.deepEqual(listCommits(`${commits[0]!.sha}..HEAD`, dir).map((c) => c.subject), ["Fix the total"]);
+    // The diff: files touched, a stat, the patch, and whether it was cut.
+    const d = commitDiff(commits[1]!.sha, dir);
+    assert.deepEqual(d.files, ["cart.ts"]);
+    assert.match(d.stat, /cart\.ts/);
+    assert.match(d.diff, /-export const cart = 1;\n\+export const cart = 2;/);
+    assert.equal(d.truncated, false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: a diff over the budget keeps the stat and the first hunks and says so", () => {
+  const big = Array.from({ length: 4000 }, (_, i) => `line ${i} of a very long file that will not fit in one state`).join("\n");
+  const dir = tempRepo([{ message: "Add a big file", files: { "big.txt": big, "small.txt": "x\n" } }]);
+  try {
+    const [c] = listCommits("HEAD", dir);
+    const d = commitDiff(c!.sha, dir);
+    assert.equal(d.truncated, true);
+    assert.ok(d.diff.length <= MAX_DIFF_CHARS + 200, `${d.diff.length} chars`);
+    assert.match(d.stat, /big\.txt/);
+    assert.match(d.stat, /small\.txt/, "the stat still names every file");
+    assert.ok(d.diff.startsWith("diff --git"), "and the diff still starts at the top");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: subjects are one per commit per commit rule; merges are skipped and counted", () => {
+  const dir = tempRepo([
+    { message: "Add cart", files: { "cart.ts": "a\n" } },
+    { message: "Fix cart", files: { "cart.ts": "b\n" } },
+  ]);
+  try {
+    const git = (...args: string[]) => execFileSync("git", args, { cwd: dir, env: { ...process.env, GIT_AUTHOR_NAME: "t", GIT_AUTHOR_EMAIL: "t@x", GIT_COMMITTER_NAME: "t", GIT_COMMITTER_EMAIL: "t@x" }, stdio: ["ignore", "pipe", "pipe"] }).toString();
+    git("checkout", "-q", "-b", "side", "HEAD~1");
+    writeFileSync(join(dir, "side.ts"), "s\n");
+    git("add", "-A");
+    git("commit", "-q", "-m", "Add side");
+    git("checkout", "-q", "main");
+    git("merge", "-q", "--no-ff", "-m", "Merge side", "side");
+    const rule = commitRule();
+    const ordinary = scoreRule();
+    const { subjects, skippedMerges, commits } = commitSubjects([rule, ordinary], "HEAD", dir);
+    assert.equal(commits, 4, "four commits reachable");
+    assert.equal(skippedMerges, 1, "the merge is not judged: its diff is its parents'");
+    assert.equal(subjects.length, 3, "one per non-merge commit for the one commit rule; the ordinary rule makes none");
+    const fix = subjects.find((s) => s.text.startsWith("Fix cart"))!;
+    assert.equal(fix.rule.id, "commit-message-describes-diff");
+    assert.match(fix.file, /^[0-9a-f]{40}$/, "the finding's file is the sha");
+    assert.equal(fix.line, 1);
+    assert.equal(fix.arm, "bare");
+    assert.equal(fix.language, "Git");
+    assert.equal(fix.nodeKind, "commit");
+    assert.deepEqual(fix.captured, { SUBJECT: "Fix cart" });
+    assert.ok(fix.commit && fix.commit.diff.includes("-a\n+b"), "the diff travels with the subject");
+    // The state carries the message as the subject and the diff as the evidence.
+    const [batch] = planBatches([fix]);
+    assert.equal(batch!.state.message, "Fix cart");
+    assert.equal(batch!.state.diff, fix.commit!.diff);
+    assert.deepEqual(batch!.state.files, ["cart.ts"]);
+    assert.match(String(batch!.state.reviewing), /commit/);
+    const q = batch!.questions[batch!.subjects[0]!.id!]!;
+    assert.equal(q.instructions.message, "Fix cart", "the question names the message, not `code`");
+    assert.equal(q.instructions.code, undefined);
+    assert.equal(q.instructions.matched_because, undefined, "no matcher, so no loose-matcher caveat");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("run: commits mode judges a range with the commit rules only, and every format names the commit", async () => {
+  const { run } = await import("../src/run.ts");
+  const dir = tempRepo([
+    { message: "Add cart", files: { "cart.ts": "a\n" } },
+    { message: "Remove the cart entirely", files: { "cart.ts": "b\n" } },
+  ]);
+  try {
+    const rule = commitRule();
+    const ordinary = scoreRule({ rule: { kind: "function_declaration" } });
+    const seen: unknown[] = [];
+    const client = {
+      model: "fake",
+      servedModel: null,
+      spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
+      askSplitting: async (state: { message?: string }, questions: Record<string, unknown>) => {
+        seen.push(state);
+        const answers: Record<string, unknown> = {};
+        for (const id of Object.keys(questions)) answers[id] = { type: "noul", noul: state.message?.startsWith("Remove") ? 0.9 : 0.1 };
+        return { answers, usage: { input_tokens: 1 } };
+      },
+    };
+    const result = await run({ rules: [rule, ordinary], paths: [], commits: { range: "HEAD" }, cwd: dir, cachePath: null, client });
+    assert.equal(result.subjects.length, 2, "two commits, one commit rule; the ordinary rule made no subject");
+    assert.equal(seen.length, 2, "one request per commit");
+    assert.equal(result.findings.length, 1);
+    const [f] = result.findings;
+    assert.match(f!.file, /^[0-9a-f]{40}$/);
+    assert.equal(f!.line, 1);
+    const pretty = formatPretty(result, { color: false });
+    assert.match(pretty, new RegExp(`${f!.file.slice(0, 8)}  "Remove the cart entirely"`), "the commit is named by short sha and subject line");
+    assert.match(formatGithub(result), /title=commit-message-describes-diff/);
+    assert.equal(JSON.parse(formatJson(result)).findings[0].commit.subject, "Remove the cart entirely");
+    // Dry run lists the commits and asks nothing.
+    const dry = await run({ rules: [rule], paths: [], commits: { range: "HEAD" }, cwd: dir, cachePath: null, client, dryRun: true });
+    assert.equal(dry.subjects.length, 2);
+    assert.equal(seen.length, 2, "nothing more was asked");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 await testAsync("run: an auth error stops the run instead of failing every batch and every pass", async () => {
   // A key that does not work on the first batch does not work on the other
   // twenty-two, or on the next two passes. Sending them anyway is 69 failed
@@ -2912,7 +3071,11 @@ await testAsync("end to end: every shipped rule finds subjects in its own evals,
   const { rules } = loadRules(["rules"]);
   const { paths, labels } = evalCorpus(["rules"]);
   assert.ok(paths.length >= 15, `expected a cases directory per rule, got ${paths.length}`);
-  const { subjects } = await collectSubjects({ rules, paths });
+  const { subjects: fromFiles } = await collectSubjects({ rules, paths });
+  // A commit suite's fixtures are patches, judged as commits of a throwaway
+  // repository and named by their patch files.
+  const fromPatches = paths.filter((p) => p.includes(`${sep}git${sep}`) || p.includes("/git/")).flatMap((p) => commitFixtureSubjects(rules, p));
+  const subjects = [...fromFiles, ...fromPatches];
   assert.ok(subjects.length > 50, `expected the evals to produce subjects, got ${subjects.length}`);
 
   const byRule = new Map();

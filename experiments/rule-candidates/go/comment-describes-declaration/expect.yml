@@ -1,0 +1,26 @@
+default: clean
+fixtures/cache.go:
+  - { line: 22, label: clean, window: 0, reason: "clean: an LRU with expiry, and the zero value has nil maps; both claims hold." }
+  - { line: 33, label: bad, window: 0, reason: "the comment says a max of zero or less never evicts by count; the body replaces it with 1024, so Set evicts at 1024." }
+  - { line: 42, label: clean, window: 0, reason: "clean: every claim (value+true, nil+false, expired removed on the way out) holds." }
+  - { line: 59, label: bad, window: 0, reason: "the comment says a zero ttl uses DefaultTTL (5m) and that Set never evicts; the body uses 10 minutes and evicts from the back past max." }
+  - { line: 84, label: clean, window: 0, reason: "hard clean: 'the caller holds c.mu' is a caller obligation, not a claim about this body." }
+  - { line: 90, label: clean, window: 0, reason: "clean: removes and reports presence." }
+  - { line: 102, label: bad, window: 0, reason: "the comment says most recently used first; the loop walks from Back (least recently used) to the front." }
+  - { line: 118, label: clean, window: 0, reason: "hard clean: 'including any that have expired' is a true claim about len(c.items), which Get and Purge alone remove expired entries from." }
+  - { line: 125, label: clean, window: 0, reason: "clean: drops expired entries, counts them." }
+  - { line: 140, label: clean, window: 0, reason: "clean: a struct comment that is vague but true." }
+  - { line: 146, label: clean, window: 0, reason: "hard clean: 'cheap; takes the lock briefly' is a performance remark the body cannot contradict." }
+  - { line: 154, label: clean, window: 0, reason: "hard clean: a history note above a getter; it makes no claim about the body." }
+fixtures/ratelimit.go:
+  - { line: 16, label: clean, window: 0, reason: "clean: a mutex-guarded token bucket." }
+  - { line: 28, label: clean, window: 0, reason: "clean: starts with burst tokens, refills at rate." }
+  - { line: 39, label: clean, window: 0, reason: "hard clean: 'callers must hold mu' is a caller obligation, not a claim about the body." }
+  - { line: 51, label: bad, window: 0, reason: "the comment says Allow does not consume a token; the body decrements tokens exactly as Take does." }
+  - { line: 64, label: clean, window: 0, reason: "clean: consumes one and reports availability." }
+  - { line: 78, label: bad, window: 0, reason: "the comment says it polls at most once every 10ms; the select waits 100ms." }
+  - { line: 93, label: clean, window: 0, reason: "clean: returns the rejected counter." }
+  - { line: 100, label: bad, window: 0, reason: "the comment says Reset empties the bucket so the next call must wait; the body fills it to burst, so the next call proceeds." }
+  - { line: 108, label: clean, window: 0, reason: "clean: refused requests get 429." }
+  - { line: 121, label: clean, window: 0, reason: "hard clean: a section heading, not a claim about the declaration under it." }
+  - { line: 128, label: clean, window: 0, reason: "hard clean: 'keep it allocation-free' is a performance instruction; the body allocates nothing and the claim is not checkable either way." }

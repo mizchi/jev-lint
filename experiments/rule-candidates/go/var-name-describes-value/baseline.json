@@ -1,0 +1,973 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:38:34.960Z",
+  "model": "jev-1.13.0",
+  "suite": "go/var-name-describes-value",
+  "rules": [
+    {
+      "id": "var-name-describes-value",
+      "draft": "3ad95156b3aa",
+      "at": 0.5
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 57,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 42,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 43,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 48,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 60,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 65,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 70,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 74,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 87,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 88,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 97,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 98,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 101,
+        "endLine": 101,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 106,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 116,
+        "endLine": 116,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 119,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 27,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 30,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 43,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 55,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 71,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 80,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 86,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 93,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 98,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 104,
+        "endLine": 104,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 116,
+        "endLine": 116,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 120,
+        "endLine": 120,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 27,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 30,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 43,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 55,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 71,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 80,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 86,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 93,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 98,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 104,
+        "endLine": 104,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 116,
+        "endLine": 116,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 120,
+        "endLine": 120,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 57,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 42,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 43,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 48,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 60,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 65,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 70,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 74,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 87,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 88,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 97,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 98,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 101,
+        "endLine": 101,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 106,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 116,
+        "endLine": 116,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 119,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 57,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 42,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 43,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 48,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 60,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 65,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 70,
+        "endLine": 70,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 74,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 87,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 88,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 97,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 98,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 101,
+        "endLine": 101,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 106,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 116,
+        "endLine": 116,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/handler.go",
+        "line": 119,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 27,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 30,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 43,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 55,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 71,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 80,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 86,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 93,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 98,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 104,
+        "endLine": 104,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 116,
+        "endLine": 116,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/go/var-name-describes-value/fixtures/config.go",
+        "line": 120,
+        "endLine": 120,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 84078,
+    "usd": 0.0035312760000000003,
+    "ms": 908
+  }
+}

@@ -138,6 +138,26 @@ export function buildState({
   language,
   tests = null,
 }: BuildStateArgs): StatePayload {
+  // A commit batch: one commit, its message and its diff. Nothing else in
+  // the state applies -- there is no file, no symbol table, no tests.
+  const commit = subjects[0]?.commit;
+  if (commit) {
+    const state: StatePayload = {
+      language: "Git",
+      reviewing: "one commit: its message is what the questions judge, and its diff is what the message is judged against",
+      subjects: subjects.map((s) => ({ id: s.id, rule: s.rule?.id, node: "commit" })),
+      message: subjects[0]!.text,
+      files: commit.files,
+      stat: commit.stat,
+      diff: commit.diff,
+    };
+    if (commit.truncated) {
+      state.note_on_diff =
+        "`diff` was cut at a hunk boundary to fit; `stat` and `files` are complete. A file or hunk absent from `diff` may still have changed.";
+    }
+    return state;
+  }
+
   const state: StatePayload = {
     language,
     reviewing: "source code, against project-specific rules stated in the questions",

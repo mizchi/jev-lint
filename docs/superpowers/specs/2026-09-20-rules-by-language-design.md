@@ -168,11 +168,16 @@ default. Added on request, in the new layout, as `rules/git/`.
   material the message does not mention. Criteria in terms of what the
   diff shows; the note says a subject line is a summary and a body may
   say "also"; a `Co-Authored-By` trailer or a version bump is not a claim.
-- **Fixtures.** `fixtures/*.patch`, `git format-patch` output: message
-  and diff in one file, reproducible with `git am`. `expect.yml` keys the
-  patch file at line 1. The corpus is built and calibrated to the same
-  bar as any rule; hard cleans are the terse-but-true subject line, the
-  "also" body, the mechanical rename.
+- **Fixtures.** `fixtures/<case>/` holding `message`, `before/` and
+  `after/`: the eval makes each case one commit -- `after` over `before`,
+  with that message -- on its own orphan branch of a throwaway repository,
+  so cases are independent and need no git knowledge to write. (The first
+  design said `git format-patch` files; patches apply in sequence, so the
+  second fixture failed to apply on the first's tree, and the directory
+  form replaced it.) `expect.yml` keys `fixtures/<case>` at line 1. The
+  corpus is built and calibrated to the same bar as any rule; hard cleans
+  are the terse-but-true subject line, the "also" body, the mechanical
+  rename.
 - **Hook.** `jev-lint init` offers a `pre-push` line running `commits`
   on `@{upstream}..HEAD` with `--fail-on error` off, so it prints and
   never blocks until a project earns it.

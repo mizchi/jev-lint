@@ -1,0 +1,676 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:36:25.054Z",
+  "model": "jev-1.13.0",
+  "suite": "go/fn-name-promises",
+  "rules": [
+    {
+      "id": "fn-name-promises",
+      "draft": "9414b2a0e45a",
+      "at": 0.4
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 38,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 50,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 62,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 76,
+        "endLine": 84,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 86,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 92,
+        "endLine": 96,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 98,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 104,
+        "endLine": 121,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 123,
+        "endLine": 135,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 139,
+        "endLine": 149,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 151,
+        "endLine": 164,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 166,
+        "endLine": 174,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 30,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 44,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 62,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 71,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 82,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 97,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 107,
+        "endLine": 120,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 122,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 126,
+        "endLine": 135,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 137,
+        "endLine": 146,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 38,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 50,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 62,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 76,
+        "endLine": 84,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 86,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 92,
+        "endLine": 96,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 98,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 104,
+        "endLine": 121,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 123,
+        "endLine": 135,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 139,
+        "endLine": 149,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 151,
+        "endLine": 164,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 166,
+        "endLine": 174,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 30,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 44,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 62,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 71,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 82,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 97,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 107,
+        "endLine": 120,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 122,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 126,
+        "endLine": 135,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 137,
+        "endLine": 146,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 38,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 50,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 62,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 76,
+        "endLine": 84,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 86,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 92,
+        "endLine": 96,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 98,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 104,
+        "endLine": 121,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 123,
+        "endLine": 135,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 139,
+        "endLine": 149,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 151,
+        "endLine": 164,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/queue.go",
+        "line": 166,
+        "endLine": 174,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 30,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 44,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 62,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 71,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 82,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 97,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 107,
+        "endLine": 120,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 122,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 126,
+        "endLine": 135,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "experiments/rule-candidates/go/fn-name-promises/fixtures/store.go",
+        "line": 137,
+        "endLine": 146,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 47364,
+    "usd": 0.001989288,
+    "ms": 750
+  }
+}

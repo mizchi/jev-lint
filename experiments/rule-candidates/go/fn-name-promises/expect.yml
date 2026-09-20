@@ -1,0 +1,27 @@
+default: clean
+fixtures/queue.go:
+  - { line: 34, label: clean, window: 0, reason: "clean: constructor." }
+  - { line: 38, label: bad, window: 0, reason: "`GetJob` promises a lookup; it inserts and enqueues the job when missing, and takes a payload a lookup has no use for." }
+  - { line: 50, label: bad, window: 0, reason: "`CountFailed` promises a count; it returns the failed jobs." }
+  - { line: 62, label: clean, window: 0, reason: "hard clean: terse `Take`, pops the next id, marks it running, bumps attempts, returns it." }
+  - { line: 76, label: bad, window: 0, reason: "`Drain` promises to empty the queue; it copies the jobs out and removes nothing." }
+  - { line: 86, label: clean, window: 0, reason: "hard clean: `Len` is the conventional name, computes from `order`." }
+  - { line: 92, label: clean, window: 0, reason: "hard clean: `IsFull` is a real predicate here (contrast `HasCapacity`)." }
+  - { line: 98, label: bad, window: 0, reason: "`HasCapacity` reads as a predicate but returns the number of free slots." }
+  - { line: 104, label: clean, window: 0, reason: "hard clean: terse `Record(id, err)`, records an outcome and requeues or fails the job, which is what recording an outcome means for a queue." }
+  - { line: 123, label: clean, window: 0, reason: "hard clean: `String` is the Stringer method." }
+  - { line: 139, label: bad, window: 0, reason: "`Retry` takes `attempts` and a delay; the loop returns on the first error and never sleeps, so it tries once." }
+  - { line: 151, label: clean, window: 0, reason: "hard clean: conventional `Run`, drains the queue through the handler until the context ends and returns how many were handled." }
+  - { line: 166, label: clean, window: 0, reason: "hard clean: conventional `Handle`, one job through the handler, outcome recorded." }
+fixtures/store.go:
+  - { line: 26, label: clean, window: 0, reason: "clean: constructor." }
+  - { line: 30, label: clean, window: 0, reason: "hard clean: `FindByEmail` returns (*User, error) and ErrNotFound on no rows; a lookup that can fail is what the Go signature says." }
+  - { line: 44, label: clean, window: 0, reason: "clean: lists the non-disabled users." }
+  - { line: 62, label: clean, window: 0, reason: "clean: counts the disabled users, returns an int." }
+  - { line: 71, label: clean, window: 0, reason: "hard clean: `Disable` mutates, as its name announces, and reports not-found as an error." }
+  - { line: 82, label: bad, window: 0, reason: "`IsDisabled` reads as a predicate; it also writes `last_seen` when the user is active." }
+  - { line: 97, label: bad, window: 0, reason: "`ValidateEmail` promises a check; it inserts a user row after checking." }
+  - { line: 107, label: bad, window: 0, reason: "`DeleteStale` promises a delete; it selects and counts the stale rows and deletes nothing." }
+  - { line: 122, label: clean, window: 0, reason: "hard clean: conventional `Close`, closes the connection." }
+  - { line: 126, label: bad, window: 0, reason: "`Summarize` promises a summary; it returns an arbitrary sum of email lengths, day numbers and name lengths (the `summarize` case of the TypeScript and Rust corpora)." }
+  - { line: 137, label: clean, window: 0, reason: "hard clean: unexported `displayName`, name or the local part of the email; a fallback is what a display name is." }

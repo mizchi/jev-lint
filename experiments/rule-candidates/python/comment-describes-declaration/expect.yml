@@ -1,0 +1,19 @@
+default: clean
+fixtures/session_store.py:
+  - { line: 18, label: bad, window: 0, reason: "says every public method takes the store's lock; the class has no lock and no method acquires one." }
+  - { line: 26, label: bad, window: 0, reason: "says milliseconds, returns seconds (created_at + ttl_seconds - time.time())." }
+  - { line: 29, label: bad, window: 0, reason: "docstring says it does not mutate the session, and it increments `hits`." }
+  - { line: 36, label: bad, window: 0, reason: "says newest first; sorts ascending by created_at, oldest first." }
+  - { line: 40, label: bad, window: 0, reason: "the docstring documents a `ttl_seconds` argument that `create` does not take." }
+  - { line: 51, label: bad, window: 0, reason: "says it raises KeyError for an unknown id; it returns False." }
+  - { line: 59, label: clean, window: 0, reason: "hard clean: a caller's obligation, not checkable from the method." }
+  - { line: 67, label: clean, window: 0, reason: "hard clean: history (used to be a coroutine), nothing the code can contradict." }
+  - { line: 77, label: clean, window: 0, reason: "hard clean: a section divider above the declaration, which names the part of the file and claims nothing about `tag`." }
+  - { line: 84, label: clean, window: 0, reason: "hard clean: a performance claim, and a true one -- the body is one dict lookup." }
+  - { line: 89, label: bad, window: 0, reason: "says up to three attempts; the loop runs five." }
+fixtures/cli.py:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: 'exits with status 2 on a bad option' is what argparse does; the code delegates to parse_args and contradicts nothing." }
+  - { line: 19, label: clean, window: 0, reason: "hard clean: the comment sits above the decorator, and lru_cache(maxsize=1) is the memoisation it claims." }
+  - { line: 27, label: bad, window: 0, reason: "says DEBUG by default and INFO with --verbose; the code configures WARNING by default and INFO with --verbose." }
+  - { line: 33, label: clean, window: 0, reason: "hard clean: the comment opening the class body (hoisted out of the block by the grammar); the base run returns 2, the usage error code, as it says." }
+  - { line: 54, label: clean, window: 0, reason: "hard clean: 'Entry point.' is vague and true." }

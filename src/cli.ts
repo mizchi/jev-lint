@@ -19,6 +19,7 @@ import { dirname, join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
 import { loadRules, cutoffFor, defaultRulePaths } from "./rules.ts";
 import { run, collectSubjects, toRecord } from "./run.ts";
+import { defaultRange } from "./commits.ts";
 import { changedRanges, changedFiles, changedFilesUnder } from "./diff.ts";
 import {
   compareEvals,
@@ -106,6 +107,8 @@ const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 usage:
   jev-lint check [paths...]        judge whole files
   jev-lint review [paths...]       judge only what the diff touched
+  jev-lint commits [range]         judge commit messages against their diffs
+                                   (default @{upstream}..HEAD; or --base <ref>)
   jev-lint gaps [paths...]         per-rule separation report (read this first)
   jev-lint calibrate [paths...]    repeat runs, and fit cutoffs if labels exist
   jev-lint rules                   list loaded rules and validation errors
@@ -588,6 +591,7 @@ async function main(argv: string[]): Promise<number> {
   // Which files to look at.
   let paths = opts.paths;
   let diffRanges: ChangedRanges | null = null;
+  let commitsRange: string | null = null;
   if (command === "review") {
     diffRanges = await changedRanges({ base: opts.base, staged: opts.staged });
     // Scan only the changed files: matching the whole tree and discarding
@@ -600,6 +604,21 @@ async function main(argv: string[]): Promise<number> {
       return 0;
     }
     paths = files;
+  } else if (command === "commits") {
+    // The range is a positional (`main..HEAD`), else `--base <ref>`, else
+    // what is not yet pushed. A repository with no upstream and no `--base`
+    // has no default worth guessing at.
+    const range = opts.paths[0] ?? (opts.base ? `${opts.base}..HEAD` : defaultRange());
+    if (!range) {
+      log("commits: no range. Give one (`main..HEAD`), or --base <ref>, or set an upstream");
+      return 2;
+    }
+    if (!rules.some((r) => r.subject === "commit")) {
+      log("commits: no `subject: commit` rule is loaded; the shipped one is rules/git/commit-message-describes-diff");
+      return 2;
+    }
+    commitsRange = range;
+    paths = [];
   } else if (paths.length === 0) {
     paths = ["."];
   }
@@ -608,7 +627,7 @@ async function main(argv: string[]): Promise<number> {
   if (command === "calibrate") {
     return cmdCalibrate({ rules, paths, diffRanges, opts, cachePath, out, log });
   }
-  if (command !== "check" && command !== "review") {
+  if (command !== "check" && command !== "review" && command !== "commits") {
     log(`unknown command \`${command}\``);
     process.stderr.write(USAGE);
     return 2;
@@ -632,6 +651,7 @@ async function main(argv: string[]): Promise<number> {
     explain: opts.explain,
     loose: opts.loose,
     model: opts.model,
+    commits: commitsRange ? { range: commitsRange } : null,
   });
 
   const runCache = result.cache as Cache | undefined;
@@ -659,7 +679,13 @@ async function main(argv: string[]): Promise<number> {
     // subjects is how a rule author checks that a matcher found the four
     // predicates and not the loader, and that `$NAME` captured a name -- the
     // two things a wrong matcher gets wrong while producing a plausible count.
-    if (opts.showSubjects) {
+    if (result.commits) {
+      out(`${result.commits.total} commit(s) in ${result.commits.range}` + (result.commits.skippedMerges ? `, ${result.commits.skippedMerges} merge(s) skipped` : ""));
+      for (const s of result.subjects) {
+        out(`  ${s.file.slice(0, 8)}  "${s.captured?.SUBJECT ?? ""}"  ${s.commit?.files.length ?? 0} file(s)${s.commit?.truncated ? "  diff cut to fit" : ""}`);
+      }
+    }
+    if (opts.showSubjects && !result.commits) {
       out("");
       out(`${result.subjects.length} subject(s):`);
       for (const s of result.subjects) {

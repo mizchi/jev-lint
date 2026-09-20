@@ -1,0 +1,82 @@
+id: comment-describes-declaration
+language: Python
+kind: noul
+subject: node
+state: located
+# 0.67, fitted 2026-09-20 on this rule's own evals (19 subjects: 8 defects,
+# 11 cleans of which 8 hard, 3 passes). Cleans top out at 0.43 (`parse_args`,
+# whose docstring claims the exit argparse performs) then 0.30 (the comment
+# hoisted above a class body's first method); defects start at 0.90 (`recent`,
+# "newest first" over an ascending sort). Midpoint of the gap, 0.23 of
+# headroom on each side, no decision flips, max spread 0.08. One node is one
+# subject: a declaration with both a `#` comment above and a docstring is
+# asked once, about the comment.
+at: 0.67
+axis: file
+severity: warning
+rule:
+  any:
+    # A `#` comment directly above the declaration.
+    - all:
+        - any:
+            - kind: function_definition
+            - kind: class_definition
+        - follows:
+            kind: comment
+            pattern: $DOC
+    # A decorated declaration: the comment precedes the decorator, so the
+    # relation has to be tested one level up.
+    - all:
+        - any:
+            - kind: function_definition
+            - kind: class_definition
+        - inside:
+            kind: decorated_definition
+            follows:
+              kind: comment
+              pattern: $DOC
+    # The first declaration in a class body: tree-sitter hoists a comment
+    # that opens a block out of the block, so it precedes the block, not
+    # the declaration.
+    - all:
+        - kind: function_definition
+        - nthChild: 1
+        - inside:
+            kind: block
+            follows:
+              kind: comment
+              pattern: $DOC
+    # A docstring: the claim sits inside the declaration, as the first
+    # statement of its body.
+    - all:
+        - any:
+            - kind: function_definition
+            - kind: class_definition
+        - has:
+            field: body
+            has:
+              kind: expression_statement
+              nthChild: 1
+              has: { kind: string, pattern: $DOC }
+ask: >-
+  The comment above this code claims something that is not true of the code.
+criteria:
+  "true": >-
+    A specific claim the comment makes is contradicted by the code: it names a
+    different operation, direction, rounding, ordering or unit than the code
+    uses, it states a return value or guarantee the code does not provide, it
+    describes a side effect the code does not perform or omits one it does, it
+    gives a count, limit or default that differs from the code's, or it refers
+    to a parameter, field or function that the code no longer has.
+  "false": >-
+    Every specific claim the comment makes holds for the code below it. A
+    comment that is vague, redundant, restates the obvious, or says less than it
+    could is not a false comment -- only a claim that is actually wrong counts
+    here. A section heading or divider ("--- Orchestrator: Budget Planning ---",
+    "// Helpers") names the part of the file that starts here, not the
+    declaration under it, and makes no claim about it.
+note: >-
+  Judge only claims the code in front of you can confirm or contradict. A
+  comment about a caller's obligations, about performance, or about history is
+  not checkable here and is not a violation. A heading that labels a section of
+  the file is not a claim about the first declaration in that section.

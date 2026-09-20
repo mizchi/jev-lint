@@ -1,0 +1,730 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:36:51.195Z",
+  "model": "jev-1.13.0",
+  "suite": "python/var-name-describes-value",
+  "rules": [
+    {
+      "id": "var-name-describes-value",
+      "draft": "034d1213288f",
+      "at": 0.57
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 35,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 41,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 48,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 49,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 58,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 60,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 30,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 32,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 42,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 48,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 54,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 56,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 66,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 67,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 72,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 35,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 41,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 48,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 49,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 58,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 60,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 30,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 32,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 42,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 48,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 54,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 56,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 66,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 67,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 72,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 35,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 41,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 48,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 49,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 58,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/test_client.py",
+        "line": 60,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 30,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 32,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 42,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 48,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 54,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 56,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 66,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 67,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "experiments/rule-candidates/python/var-name-describes-value/fixtures/client.py",
+        "line": 72,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 63339,
+    "usd": 0.0026602380000000005,
+    "ms": 938
+  }
+}

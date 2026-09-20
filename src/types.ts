@@ -330,6 +330,11 @@ export interface Subject extends ResolvedSubject {
   file: string;
   language: string;
   arm: StateArm;
+  /**
+   * Present on a commit subject: the change the message is judged against.
+   * `file` is then the sha, `text` the message, `line` 1.
+   */
+  commit?: { files: string[]; stat: string; diff: string; truncated: boolean };
   /** Assigned when the subject is placed in a batch; meaningful only there. */
   id?: string;
   /** The content-addressed cache key. Assigned by the runner. */
@@ -406,6 +411,12 @@ export interface StatePayload {
   enclosing_code?: Array<Record<string, unknown>>;
   /** The `paired` arm: excerpts of the tests related to the file. */
   related_tests?: Array<{ path: string; paired_by: string; code: string }>;
+  /** A commit subject's state: the message, and the change it describes. */
+  message?: string;
+  files?: string[];
+  stat?: string;
+  diff?: string;
+  note_on_diff?: string;
   note_on_independence?: string;
   note_on_enclosing_code?: string;
   note_on_related_tests?: string;
@@ -471,6 +482,8 @@ export interface Finding {
   passes?: { over: number; of: number; spread: number };
   /** Present on a reported finding when `--explain` asked its rule's follow-up. */
   explanation?: { choice: string; confidence: number };
+  /** Present on a commit finding: the commit's subject line, for the report. */
+  commit?: { subject: string };
 }
 
 export interface GateStats {
@@ -577,6 +590,8 @@ export interface RunResult extends GateResult {
   duplicateGrammars?: number;
   ignored?: IgnoreStats;
   unpaired?: UnpairedStats;
+  /** Present in commits mode: how many commits the range held, and how many merges were skipped. */
+  commits?: { total: number; skippedMerges: number; range: string };
   /** How many times everything was asked; above 1 with `--retry`. */
   retry?: number;
   /**

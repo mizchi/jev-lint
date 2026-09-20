@@ -1,0 +1,20 @@
+default: clean
+fixtures/retry_queue.py:
+  - { line: 28, label: clean, window: 0, reason: "hard clean: a why-comment (the server rejects bursts) opening the body; the sleep beneath it is the pacing it names." }
+  - { line: 31, label: bad, window: 0, reason: "says keep the newest; the sort is ascending by ts and the slice keeps the first MAX_ENTRIES, the oldest." }
+  - { line: 38, label: bad, window: 0, reason: "says skip entries older than a day; the condition `ts > now - DAY` skips the entries newer than a day." }
+  - { line: 41, label: bad, window: 0, reason: "says up to three attempts; range(5)." }
+  - { line: 50, label: bad, window: 0, reason: "says one second between attempts; sleep(0.1)." }
+  - { line: 57, label: bad, window: 0, reason: "says mark done and notify the sender; the statement beneath sets attempts to -1 and nothing notifies anyone." }
+  - { line: 59, label: clean, window: 0, reason: "hard clean: 'housekeeping' is vague and claims nothing the remove contradicts." }
+  - { line: 66, label: bad, window: 0, reason: "says convert to milliseconds; multiplies seconds by 100." }
+  - { line: 72, label: bad, window: 0, reason: "says round down; round() rounds to nearest." }
+  - { line: 77, label: clean, window: 0, reason: "hard clean: opens the body above a dict and a loop that do build one bucket per job." }
+  - { line: 81, label: clean, window: 0, reason: "hard clean: states the effect (oldest first) of a sort that is ascending by ts; true." }
+fixtures/test_log_sink.py:
+  - { line: 15, label: clean, window: 0, reason: "hard clean: 'two events' spans the two appends beneath it; the first append alone is not the count." }
+  - { line: 18, label: clean, window: 0, reason: "hard clean: 'verify' is a section heading over the query and the asserts." }
+  - { line: 30, label: clean, window: 0, reason: "hard clean: 'newest first' names the order the two asserts beneath it check." }
+  - { line: 37, label: clean, window: 0, reason: "hard clean: a preamble about the bug the test guards against, hoisted above the body's first statement." }
+  - { line: 49, label: clean, window: 0, reason: "hard clean: a trailing comment on the query line, which the next statement (an assert) follows; it belongs to the line before it." }
+  - { line: 56, label: clean, window: 0, reason: "hard clean: 'must not raise' is the property the second close is there to exercise; the call beneath does not contradict it." }

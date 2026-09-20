@@ -1,0 +1,80 @@
+id: var-name-describes-value
+language: Go
+kind: noul
+subject: node
+state: located
+# 0.50, fitted 2026-09-20 (10 defects, 25 cleans of which 12 hard, 3 passes):
+# clean tops at 0.09-0.14 (`dot`, an index); nine defects sit at 0.71-0.94
+# in the accepted run. One labelled defect of the part-selection class sits
+# under the cutoff and is a recorded miss: `host := SplitN(addr, ":", 2)[1]`
+# at 0.27-0.30. Its sibling `basename := path[dot+1:]` answered 0.40 in one
+# run and 0.86 in the next (same rule, same corpus): a run-to-run move that
+# the pass-to-pass spread (<= 0.09) does not show. The fitted midpoint 0.19
+# would take `host` with 0.07 of headroom a side; 0.50 sits in the wide gap
+# instead, 0.36 over the top clean and 0.21 under the lowest found defect.
+# Report: experiments/reports/j-go/REPORT.md.
+at: 0.50
+axis: file
+severity: warning
+rule:
+  any:
+    # `x := v` and `x, err := v`: the name is the whole left list, so a
+    # capture reads `orders, err` when the binding is a pair, which is what
+    # the reader sees too.
+    - all:
+        - kind: short_var_declaration
+        - has: { field: left, pattern: $NAME }
+        - has: { field: right, pattern: $VALUE }
+        - not:
+            has:
+              field: right
+              has: { kind: func_literal }
+    # `var x = v` and `var x T = v`; a `var x T` with no value has nothing to
+    # compare and is not matched.
+    - all:
+        - kind: var_spec
+        - has: { field: name, pattern: $NAME }
+        - has: { field: value, pattern: $VALUE }
+        - not:
+            has:
+              field: value
+              has: { kind: func_literal }
+# The same sentence as typescript/var-name-describes-value, by copy: the
+# loader warns if the two drift.
+ask: >-
+  This binding's name misdescribes the value it is bound to.
+criteria:
+  "true": >-
+    The name states a type, unit, shape, quantity or meaning that the
+    initializer does not produce: a plural name bound to a single item or a
+    singular name bound to a collection, a name that reads as a boolean bound to
+    something that is not one, a name naming one unit while the value is in
+    another, a name saying it holds a value while it holds a function or a
+    promise, or a name describing a different thing entirely from what the
+    initializer computes.
+  "false": >-
+    The name is an accurate description of what the initializer produces, even
+    if it is terse or a clearer name could be imagined. Being short or generic
+    is not a mismatch.
+note: >-
+  Compare the name with the initializer and with every use of the binding in
+  this file; a mismatch is one the code shows. It counts when the binding is
+  used as a different kind of thing from what the name says (a boolean name on a
+  value compared with a string, a number or a variant; a path name on contents
+  that are split into lines; a result name on a promise that is pushed or
+  awaited; a unit suffix on a value the code converts from or compares with
+  another unit); when the initializer selects a different element, part or field
+  from the one the name names (the first element under a name meaning the last,
+  the piece before a separator under a name meaning the piece after it, one
+  field of a record under the name of another of its fields); or when the name
+  asserts success or presence and the code then reads the value as a failure or
+  an absence. It does not count when the name is a convention rather than a
+  claim: a plural name on a number, which names the count of those things
+  whether the number is a literal or comes from a call; a short accumulator,
+  index or buffer name; a collection named for its role such as a set of seen
+  items or a list of pending work; a list of test inputs named for the class
+  they belong to and paired with the opposite class; a test binding named for
+  the scenario it exercises, such as the response to the unauthorized request or
+  to the request missing a field, which reads as an adjective and holds the
+  result of that scenario; or a name that gives the value's role or provenance
+  rather than its type.

@@ -111,6 +111,7 @@ export function decide(
     text: subject.text,
     captured: subject.captured ?? null,
     arm: subject.arm,
+    ...(subject.commit ? { commit: { subject: subject.text.split("\n")[0] ?? "" } } : {}),
   };
 
   if (answer.value < at) {

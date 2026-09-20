@@ -1,0 +1,28 @@
+default: clean
+fixtures/config.go:
+  - { line: 22, label: bad, window: 0, reason: "`configPath` is bound to the file's contents (os.ReadFile), which the code then splits into lines; the path is the parameter." }
+  - { line: 27, label: clean, window: 0, reason: "hard clean: `seen` is a set named for its role." }
+  - { line: 28, label: clean, window: 0, reason: "clean: plural `lines` on a split." }
+  - { line: 43, label: clean, window: 0, reason: "hard clean: bare `err` on an error, the Go convention." }
+  - { line: 55, label: bad, window: 0, reason: "`ttlSeconds` holds a time.Duration from ParseDuration, assigned to a Duration field; the value is not in seconds." }
+  - { line: 61, label: clean, window: 0, reason: "hard clean: short `n` on a parsed integer, assigned to Retries." }
+  - { line: 71, label: bad, window: 0, reason: "`verbose` reads as a boolean; it is bound to the raw string and compared with \"1\" and \"true\" on the next line." }
+  - { line: 86, label: clean, window: 0, reason: "hard clean: terse `sc` for a scanner." }
+  - { line: 93, label: bad, window: 0, reason: "`lastLine` is bound to `lines[0]`, the first line, and the function returns it as the last." }
+  - { line: 98, label: clean, window: 0, reason: "clean: `deadline` is now plus TTL." }
+  - { line: 104, label: clean, window: 0, reason: "hard clean: `n` is a counter accumulator." }
+  - { line: 116, label: clean, window: 0, reason: "hard clean: `dot` is the index of the dot, terse but accurate." }
+  - { line: 120, label: bad, window: 0, reason: "`basename` is bound to the text after the last dot, which is the extension, and the function is named Extension." }
+fixtures/handler.go:
+  - { line: 39, label: clean, window: 0, reason: "hard clean: `ctx, cancel` is the conventional pair from WithTimeout." }
+  - { line: 43, label: bad, window: 0, reason: "plural `orders` bound to one *Order from FindByID; the code reads `orders.Archived`." }
+  - { line: 48, label: bad, window: 0, reason: "`isAdmin` reads as a boolean; it holds the X-Role header string and is compared with \"admin\"." }
+  - { line: 61, label: clean, window: 0, reason: "hard clean: `limit` from Atoi, replaced by a default when unparsable; a limit is what it is." }
+  - { line: 65, label: bad, window: 0, reason: "singular `order` bound to the []Order from ListByUser; the code ranges over it." }
+  - { line: 70, label: clean, window: 0, reason: "hard clean: `total` starts at zero and accumulates." }
+  - { line: 74, label: clean, window: 0, reason: "hard clean: `resp` is the response struct, a role name." }
+  - { line: 88, label: bad, window: 0, reason: "`ok` asserts success; it holds the error from Archive and the next line reads it as a failure (`ok != nil`)." }
+  - { line: 97, label: clean, window: 0, reason: "clean: `addr` holds the remote address and may be replaced by the forwarded one." }
+  - { line: 101, label: bad, window: 0, reason: "`host` is bound to element [1] of the host:port split, which is the port; the function is named clientHost." }
+  - { line: 116, label: clean, window: 0, reason: "hard clean: sentinel error named by convention." }
+  - { line: 119, label: clean, window: 0, reason: "hard clean: `status` starts as 500 and is narrowed to 404; a status code either way." }

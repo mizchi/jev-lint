@@ -30,6 +30,7 @@ import { basename, dirname, join } from "node:path";
 import YAML from "yaml";
 import { fitCutoffs, labelFor } from "./calibrate.ts";
 import { cutoffFor, languageDirGrammars, loadRules, ruleTextHash } from "./rules.ts";
+import { patchRepo } from "./commits.ts";
 import { run } from "./run.ts";
 import { DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
 import type { Label, Labels, Rule } from "./types.ts";
@@ -340,9 +341,14 @@ export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Prom
   // One run, `repeat` passes: the runner interleaves the passes' requests,
   // so three passes over a suite cost the wall time of one and a bit,
   // and the cases are scanned once rather than once per pass.
+  // A commit suite's fixtures are patches: applied to a throwaway
+  // repository, judged as commits, and named by their patch files so the
+  // expectations key on `fixtures/<n>.patch` at line 1.
+  const commitSuite = rules.some((rule) => rule.subject === "commit") ? patchRepo(suite.fixtures) : null;
   const r = await run({
     rules,
     paths: [suite.fixtures],
+    ...(commitSuite ? { commits: { range: commitSuite.range, label: commitSuite.label }, cwd: commitSuite.cwd } : {}),
     cutoffs: opts.cutoffs ?? {},
     cachePath: null,
     force: true,
