@@ -138,7 +138,7 @@ from the environment only, never from that file; `apiKey:` in it is an error.
 ### For a coding agent
 
 The repository ships a skill — how to run jev-lint, which shipped packs to
-use, a cookbook of fourteen validated rules, and the calibration procedure —
+use, a cookbook of sixteen validated rules, and the calibration procedure —
 so an agent can add jev-lint to a project or write a rule for it without
 reading this README. Two agents that had never seen the tool each wrote a
 working rule from the skill alone on their first try; the gaps they reported
@@ -257,7 +257,7 @@ docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules
 
-23 rules ship in `rules/`, one directory each with the cases that prove it,
+24 rules ship in `rules/`, one directory each with the cases that prove it,
 used when the project has no `rules/` directory of its own. The naming and
 comment rules exist in an ECMAScript and a Rust variant sharing one sentence;
 the rest are ECMAScript or JSON. Grouped here by what they ask:
@@ -291,6 +291,7 @@ general question does not.
 | --- | --- |
 | `test-mocks-subject` | is the behaviour the title claims performed by a stub, with the assertion reading the stub back? |
 | `snapshot-only-behaviour-claim` | does the title claim a property that a whole-render snapshot does not isolate? |
+| `tests-cover-failure-paths` | does this exported function have a failure path — a throw, a rejection, an error result, a guard — that none of the file's related tests reaches? The one rule on the `paired` arm, which carries excerpts of those tests |
 
 **Comments** — is the comment still true?
 
@@ -314,10 +315,10 @@ general question does not.
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On their own evals, 20 of the 23 rules reach precision and recall 1.00 at
+On their own evals, 21 of the 24 rules reach precision and recall 1.00 at
 their shipped cutoffs; the three that do not each miss one labelled defect
 the rule cannot see, and the rule file says which. The evals are small —
-200 labelled defects across the 23, one to thirty-one per rule — and they
+207 labelled defects across the 24, one to thirty-one per rule — and they
 are marker-free: an earlier version carried `// DEFECT: named seconds, holds
 milliseconds` above each defect, inside the file the model was shown, and
 the fits it produced were better than the rules. `jev-lint eval --replay`
@@ -351,7 +352,7 @@ Three decisions shape whether a rule works, and each is a field:
 | --- | --- | --- |
 | `rule` | any ast-grep matcher | which code is looked at. **Over-match on purpose**: a node the matcher misses is never asked about, and the model saying "irrelevant" is cheaper than a tight matcher |
 | `subject` | `node` (default), `enclosing`, `file` | what code is judged. The most common failure is asking about code that cannot contain the answer; a `catch` clause alone cannot show whether the failure mattered |
-| `state` | `bare`, `local`, `located` (default), `graph`, `full` | what else the model sees. Not a quality knob: the least context that still contains the answer |
+| `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what else the model sees. Not a quality knob: the least context that still contains the answer. `paired` adds excerpts of the file's related tests, for a question whose evidence is in them |
 
 Capture names when the rule is about a name. `has: { field: name, pattern:
 $NAME }` hands `$NAME` to the model by name, and "does this body do what

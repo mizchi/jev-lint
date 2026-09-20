@@ -70,6 +70,7 @@ interface Options {
   group: GroupMode;
   ruleBatchCap: number;
   explainSchedule: boolean;
+  explain: boolean;
   at: Record<string, number>;
   unsureBelow: number | null;
   failOn: Severity | null;
@@ -126,6 +127,10 @@ options:
       --arm <name>         override every rule's state arm: ${ARMS.join(" | ")}
       --group <how>        file (default) | rule | auto -- see below
       --rule-batch-cap <n> subjects per rule-axis request (default ${DEFAULT_RULE_BATCH_CAP})
+      --explain            after the verdicts, ask each finding which of its
+                           rule's explain: labels names why (one extra
+                           request per batch with findings; nothing under a
+                           cutoff is asked)
       --explain-schedule   print the axis chosen per rule, and why
       --at <rule=n>        override one cutoff (repeatable)
       --unsure-below <n>   confidence under which a finding is worded as a question
@@ -209,6 +214,7 @@ function parseArgs(argv: string[]): Options {
     group: "file",
     ruleBatchCap: DEFAULT_RULE_BATCH_CAP,
     explainSchedule: false,
+    explain: false,
     at: {},
     unsureBelow: null,
     failOn: null,
@@ -278,6 +284,9 @@ function parseArgs(argv: string[]): Options {
       case "--rule-batch-cap":
         opts.ruleBatchCap = Number(need(i, a));
         i += 1;
+        break;
+      case "--explain":
+        opts.explain = true;
         break;
       case "--explain-schedule":
         opts.explainSchedule = true;
@@ -601,6 +610,7 @@ async function main(argv: string[]): Promise<number> {
     concurrency: opts.concurrency,
     batchSize: opts.batchSize,
     retry: opts.retry,
+    explain: opts.explain,
     model: opts.model,
   });
 
@@ -652,6 +662,12 @@ async function main(argv: string[]): Promise<number> {
     if (result.ignored?.unknownRules.length) {
       log(
         `jev-lint-ignore comment(s) name a rule that does not exist: ${result.ignored.unknownRules.join(", ")}`,
+      );
+    }
+    if (result.unpaired && result.unpaired.subjects > 0) {
+      out(
+        `${result.unpaired.subjects} subject(s) on the paired arm would not be asked: no related test file for ` +
+          `${result.unpaired.files.length} file(s)`,
       );
     }
     if (result.retry && result.retry > 1) {
@@ -904,6 +920,7 @@ function cmdRules(opts: Options, out: Log, log: Log): number {
     );
     out(`  ask: ${r.ask}`);
     if (r.note) out(`  note (model only): ${r.note}`);
+    if (r.explain) out(`  explain (--explain): ${Object.keys(r.explain).join(" | ")}`);
     out(`  from: ${r.source}`);
   }
   out("");

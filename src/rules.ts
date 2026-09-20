@@ -35,6 +35,8 @@ import {
   PROBE_PREFIX,
   STATE_ARMS,
   SUBJECTS,
+  type Criterion,
+  type CriterionDetail,
   type Grouping,
   type Language,
   type NoulCriteria,
@@ -51,6 +53,8 @@ import {
 // these re-exports keep every existing import site pointing at one definition.
 export { GROUPINGS, KINDS, LANGUAGES, STATE_ARMS, SUBJECTS };
 export type {
+  Criterion,
+  CriterionDetail,
   Grouping,
   Language,
   NoulCriteria,
@@ -242,15 +246,11 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     if (typeof c !== "object" || Array.isArray(c)) {
       return { error: `${id}: \`criteria\` must be a mapping with \`true\` and \`false\`` };
     }
-    const yes = c.true ?? c["true"];
-    const no = c.false ?? c["false"];
-    if (typeof yes !== "string" || yes.trim() === "") {
-      return { error: `${id}: \`criteria.true\` must be a non-empty string` };
-    }
-    if (typeof no !== "string" || no.trim() === "") {
-      return { error: `${id}: \`criteria.false\` must be a non-empty string` };
-    }
-    criteria = { true: yes.trim(), false: no.trim() };
+    const yes = normalizeCriterion(c.true ?? c["true"], `${id}: \`criteria.true\``);
+    if (yes.error) return { error: yes.error };
+    const no = normalizeCriterion(c.false ?? c["false"], `${id}: \`criteria.false\``);
+    if (no.error) return { error: no.error };
+    criteria = { true: yes.criterion!, false: no.criterion! };
   } else if (raw.criteria !== undefined) {
     return { error: `${id}: \`criteria\` only applies to \`kind: noul\`; a score rule uses the shared scale` };
   }
@@ -295,10 +295,32 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
 
   const note = typeof raw.note === "string" && raw.note.trim() !== "" ? raw.note.trim() : null;
 
+  // Labels for the `--explain` follow-up: a closed mapping, two or more, each
+  // described. One label is not a choice, and a label without a description
+  // is one the model picks by its spelling.
+  let explain: Record<string, string> | null = null;
+  if (raw.explain !== undefined && raw.explain !== null) {
+    const e = raw.explain;
+    if (typeof e !== "object" || Array.isArray(e)) {
+      return { error: `${id}: \`explain\` must be a mapping of label to description` };
+    }
+    const entries = Object.entries(e as Record<string, unknown>);
+    if (entries.length < 2) {
+      return { error: `${id}: \`explain\` needs at least two labels to choose between` };
+    }
+    explain = {};
+    for (const [label, desc] of entries) {
+      if (typeof desc !== "string" || desc.trim() === "") {
+        return { error: `${id}: \`explain.${label}\` must be a non-empty string` };
+      }
+      explain[label] = desc.trim();
+    }
+  }
+
   const known = new Set([
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
     "note", "kind", "criteria", "at", "subject", "state", "axis", "severity",
-    "message", "unsureBelow", "docs", "tags",
+    "message", "unsureBelow", "docs", "tags", "explain",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
   if (unknown.length > 0) {
@@ -326,11 +348,70 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
       message: typeof raw.message === "string" ? raw.message : null,
       docs: typeof raw.docs === "string" ? raw.docs : null,
       tags: Array.isArray(raw.tags) ? raw.tags.filter((t: unknown) => typeof t === "string") : [],
+      explain,
     },
   };
 }
 
-/** The cutoff actually in force for a rule, after config overrides. */
+/**
+ * One criterion: a sentence, or a mapping of `what` / `examples` / `not_for`.
+ *
+ * The mapping is closed. The server reads any JSON here, so an unknown key
+ * would reach the model as a label it has no instructions for -- the same
+ * silent failure the flat `{true, false}` check above exists to prevent.
+ */
+function normalizeCriterion(
+  raw: unknown,
+  where: string,
+): { criterion?: Criterion; error?: string } {
+  if (typeof raw === "string") {
+    if (raw.trim() === "") return { error: `${where} must be a non-empty string` };
+    return { criterion: raw.trim() };
+  }
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return { error: `${where} must be a non-empty string or a mapping of what / examples / not_for` };
+  }
+  const c = raw as Record<string, unknown>;
+  const unknown = Object.keys(c).filter((k) => !CRITERION_KEYS.has(k));
+  if (unknown.length > 0) {
+    return { error: `${where}: unknown key(s) ${unknown.join(", ")}; a mapping takes what, examples and not_for` };
+  }
+  if (typeof c.what !== "string" || c.what.trim() === "") {
+    return { error: `${where}.what must be a non-empty string` };
+  }
+  const out: CriterionDetail = { what: c.what.trim() };
+  if (c.examples !== undefined) {
+    if (
+      !Array.isArray(c.examples) ||
+      c.examples.length === 0 ||
+      c.examples.some((e) => typeof e !== "string" || e.trim() === "")
+    ) {
+      return { error: `${where}.examples must be a non-empty list of strings` };
+    }
+    out.examples = c.examples.map((e: string) => e.trim());
+  }
+  if (c.not_for !== undefined) {
+    if (typeof c.not_for !== "string" || c.not_for.trim() === "") {
+      return { error: `${where}.not_for must be a non-empty string` };
+    }
+    out.not_for = c.not_for.trim();
+  }
+  return { criterion: out };
+}
+
+const CRITERION_KEYS = new Set(["what", "examples", "not_for"]);
+
+/**
+ * A criterion as the draft hash sees it.
+ *
+ * A sentence is hashed as itself, so every cache written before the mapping
+ * shape existed still answers for the same sentence. A mapping is hashed
+ * canonically: the model reads it as JSON, so YAML key order is spelling.
+ */
+function criterionText(c: Criterion): string {
+  return typeof c === "string" ? c : canonical(c);
+}
+
 /**
  * Where rules come from when `-r` was not given.
  *
@@ -381,7 +462,7 @@ export function ruleTextHash(rule: Rule): string {
         rule.kind,
         rule.ask,
         rule.note ?? "",
-        rule.criteria ? `${rule.criteria.true}\n${rule.criteria.false}` : "",
+        rule.criteria ? `${criterionText(rule.criteria.true)}\n${criterionText(rule.criteria.false)}` : "",
         rule.subject,
         rule.state,
         canonical(rule.matcher),

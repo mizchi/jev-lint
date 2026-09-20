@@ -75,6 +75,9 @@ export function formatPretty(
       out.push(
         `         ${c.dim(`${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  arm ${f.arm}${repro}`)}`,
       );
+      if (f.explanation) {
+        out.push(`         ${c.dim(`why: ${f.explanation.choice} (${f.explanation.confidence.toFixed(2)})`)}`);
+      }
       if (f.messageId === "unsure") {
         out.push(`         ${c.yellow("worth a human look rather than a fix")}`);
       }
@@ -128,6 +131,18 @@ export function formatPretty(
       ),
     );
     out.push(c.yellow("  Those suppress nothing, and the rule they meant keeps firing."));
+    out.push("");
+  }
+  const unpaired = result.unpaired;
+  if (unpaired && unpaired.subjects > 0) {
+    // Same reason: a subject the paired arm could not pair was never asked
+    // about, and this line is the only place that shows.
+    out.push(
+      c.dim(
+        `${unpaired.subjects} subject(s) on the paired arm not asked: no related test file for ${unpaired.files.length} file(s)` +
+          ` (${unpaired.files.slice(0, 3).join(", ")}${unpaired.files.length > 3 ? ", …" : ""})`,
+      ),
+    );
     out.push("");
   }
 
@@ -207,6 +222,7 @@ export function formatJson(result: ReportInput): string {
         endLine: f.endLine,
         value: f.value,
         confidence: f.confidence,
+        explanation: f.explanation ?? null,
         cutoff: f.at,
         margin: round(f.margin),
         kind: f.kind,
@@ -228,6 +244,7 @@ export function formatJson(result: ReportInput): string {
         })),
       silentRules: silentRules(result),
       ignored: result.ignored ?? null,
+      unpaired: result.unpaired ?? null,
       retry: result.retry ?? 1,
       spent: result.spent,
       errors: result.errors ?? [],
@@ -253,7 +270,8 @@ export function formatGithub(result: ReportInput): string {
     const level = f.severity === "error" ? "error" : f.messageId === "unsure" ? "notice" : "warning";
     const title = `${f.rule}${f.messageId === "unsure" ? " (unsure)" : ""}`;
     const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
-    const body = `${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}]`;
+    const why = f.explanation ? `; why: ${f.explanation.choice}` : "";
+    const body = `${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}]`;
     out.push(
       `::${level} file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(title)}::${escape(body)}`,
     );

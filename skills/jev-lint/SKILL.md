@@ -153,12 +153,15 @@ Work in this order, and do not skip a step because the rule "looks right":
 2. **Pick `subject` so it can contain the answer**: `node` (the match),
    `enclosing` (its function), `file` (the module as an outline). Then pick
    `state`, the least context that still contains the answer — `bare`,
-   `local`, `located` (default, the whole file), `graph`, `full`. Neither is a
-   quality knob; see [rule-fields.md](references/rule-fields.md). Rule of
-   thumb: if the matched node already holds both sides of the comparison (a
-   test's title and body, a docstring and its function), start at `bare` or
-   `local`; if the answer depends on how the thing is *used* (a binding's
-   unit, a function's callers), `located`.
+   `local`, `paired`, `located` (default, the whole file), `graph`, `full`.
+   Neither is a quality knob; see [rule-fields.md](references/rule-fields.md).
+   Rule of thumb: if the matched node already holds both sides of the
+   comparison (a test's title and body, a docstring and its function), start
+   at `bare` or `local`; if the answer depends on how the thing is *used* (a
+   binding's unit, a function's callers), `located`; if the answer is in the
+   file's **tests** (does any test reach this path), `paired` — the one arm
+   that reaches into another file, and a file with no related test then
+   yields no subject rather than a guess.
 3. **Choose `kind`.** `noul` for a yes/no predicate with `criteria` describing
    what true and false look like *in the code itself* — this is what every
    shipped rule uses. `score` for an ordered "how badly", 0–3, with a

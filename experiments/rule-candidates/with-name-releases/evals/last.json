@@ -1,0 +1,919 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T08:27:52.870Z",
+  "model": "jev-1.13.0",
+  "suite": "with-name-releases",
+  "rules": [
+    {
+      "id": "with-name-releases",
+      "draft": "a0a6da077b9e",
+      "at": 0.56
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 6,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 13,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 30,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 40,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 62,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 66,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 73,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 86,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 94,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 5,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 21,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 27,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 36,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 45,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 68,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 81,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 7,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 14,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 28,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 45,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 56,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 73,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 81,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 90,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 95,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 5,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 17,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 27,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 34,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 43,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 59,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.51,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 85,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.43,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 101,
+        "endLine": 113,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 7,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 14,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 28,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 45,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 56,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.56,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 73,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 81,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 90,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 95,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 5,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 21,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 27,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 36,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 45,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 68,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 81,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 5,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 17,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 27,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 34,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 43,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.52,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 59,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.52,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 85,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 101,
+        "endLine": 113,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 6,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 13,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 30,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 40,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 62,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 66,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 73,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 86,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 94,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 5,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 17,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 27,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 34,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 43,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 59,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.51,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 85,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.42,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/edge.ts",
+        "line": 101,
+        "endLine": 113,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 5,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 21,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 27,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 36,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 45,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 68,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/wrappers.tsx",
+        "line": 81,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 7,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 14,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 28,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 45,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 56,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 73,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 81,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 90,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/resources.ts",
+        "line": 95,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 6,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 13,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 30,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 40,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 62,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 66,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 73,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 86,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "with-name-releases",
+        "file": "experiments/rule-candidates/with-name-releases/evals/cases/cli.ts",
+        "line": 94,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 12,
+    "inputTokens": 86919,
+    "usd": 0.003650598,
+    "ms": 767
+  }
+}

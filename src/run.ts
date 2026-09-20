@@ -18,7 +18,7 @@ import { readFileSync } from "node:fs";
 import { Jev, JevError, mapLimit, DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
 import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.ts";
 import { resolveSubject, widenCommentCapture } from "./state.ts";
-import { questionId, readAnswer } from "./questions.ts";
+import { buildExplainQuestion, questionId, readAnswer, readChoice } from "./questions.ts";
 import { planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { schedule, planMixed, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
 import { Cache, verdictKey } from "./cache.ts";
@@ -26,12 +26,16 @@ import { gate } from "./gate.ts";
 import { touchesChange } from "./diff.ts";
 import { ruleTextHash, cutoffFor } from "./rules.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
+import { pairTests, type RelatedTest } from "./paired.ts";
 import type {
   Answer,
   Batch,
+  Finding,
   Grouping,
   GroupMode,
   IgnoreStats,
+  UnpairedStats,
+  Question,
   Rule,
   RunError,
   RunResult,
@@ -59,11 +63,14 @@ export interface CollectResult {
   subjects: Subject[];
   symbols: SymbolIndex;
   sources: Map<string, string>;
+  /** Present when any subject sits on the `paired` arm. */
+  tests: Map<string, RelatedTest[]> | null;
   matches: unknown[];
   stderr: string;
   skippedByDiff: number;
   duplicateGrammars: number;
   ignored: IgnoreStats;
+  unpaired: UnpairedStats;
 }
 
 export async function collectSubjects({
@@ -153,6 +160,35 @@ export async function collectSubjects({
     });
   }
 
+  // The `paired` arm's evidence lives in other files, found once per run.
+  //
+  // A subject on that arm whose file has no related test is DROPPED, and the
+  // drop is counted. Asking anyway would put "no test file was found" in the
+  // state and get back the model's opinion of untested code in general,
+  // which is not the question; and dropping quietly would be the matcher
+  // failing silently by another route. The count is on the result and in
+  // the report so a reader can see what was not asked.
+  let tests: Map<string, RelatedTest[]> | null = null;
+  const unpaired: UnpairedStats = { subjects: 0, files: [] };
+  const pairedFiles = new Set(subjects.filter((s) => s.arm === "paired").map((s) => s.file));
+  if (pairedFiles.size > 0) {
+    tests = pairTests(pairedFiles, {
+      roots: paths,
+      cwd,
+      keywords: (file) =>
+        (symbols.get(file)?.symbols ?? []).filter((sym) => sym.exported && sym.name).map((sym) => sym.name!),
+    });
+    const dropped = new Set<string>();
+    for (let i = subjects.length - 1; i >= 0; i -= 1) {
+      const s = subjects[i]!;
+      if (s.arm !== "paired" || tests.has(s.file)) continue;
+      subjects.splice(i, 1);
+      unpaired.subjects += 1;
+      dropped.add(s.file);
+    }
+    unpaired.files = [...dropped].sort();
+  }
+
   // Stable order, so two runs batch identically and a recorded run replays.
   subjects.sort(
     (a, b) => a.file.localeCompare(b.file) || a.line - b.line || a.rule.id.localeCompare(b.rule.id),
@@ -168,11 +204,13 @@ export async function collectSubjects({
     subjects,
     symbols,
     sources,
+    tests,
     matches,
     stderr,
     skippedByDiff,
     duplicateGrammars,
     ignored,
+    unpaired,
   };
 }
 
@@ -214,6 +252,14 @@ export interface RunOptions {
   onProgress?: ((p: { done: number; total: number; file: string }) => void) | null;
   /** A client to ask through instead of a fresh `Jev`; for tests that fake the API. */
   client?: AskClient | null;
+  /**
+   * After the verdicts, ask each rule's `explain` follow-up of its findings.
+   *
+   * One request per batch that produced findings, with that batch's state,
+   * so a subject under its cutoff costs nothing more. The answer is a label
+   * on the finding, for the reader; it decides nothing.
+   */
+  explain?: boolean;
 }
 
 export async function run({
@@ -236,6 +282,7 @@ export async function run({
   retry = 1,
   onProgress = null,
   client = null,
+  explain = false,
 }: RunOptions): Promise<RunResult> {
   const started = Date.now();
   const passes = Number.isInteger(retry) && retry > 0 ? retry : 1;
@@ -245,7 +292,7 @@ export async function run({
   // a verdict the report never used.
   const useCache = passes === 1 ? cachePath : null;
 
-  const { subjects, symbols, sources, stderr, skippedByDiff, duplicateGrammars, ignored } = await collectSubjects({
+  const { subjects, symbols, sources, tests, stderr, skippedByDiff, duplicateGrammars, ignored, unpaired } = await collectSubjects({
     rules,
     paths,
     arm,
@@ -260,7 +307,7 @@ export async function run({
   let plan: Schedule | null = null;
   let axisOf: Map<string, Grouping> | null = null;
   if (group === "auto") {
-    plan = schedule(subjects, rules, { sources, symbols, batchSize, ruleBatchCap });
+    plan = schedule(subjects, rules, { sources, symbols, tests, batchSize, ruleBatchCap });
     axisOf = new Map(plan.decisions.map((d) => [d.rule, d.axis]));
   }
   const effectiveAxis = (s: Subject): Grouping =>
@@ -298,8 +345,8 @@ export async function run({
   // was not asked on.
   const batches =
     group === "auto"
-      ? planMixed(toAsk, plan!.fileAxisRules, { sources, symbols, batchSize, ruleBatchCap })
-      : planBatches(toAsk, { batchSize, sources, symbols, group });
+      ? planMixed(toAsk, plan!.fileAxisRules, { sources, symbols, tests, batchSize, ruleBatchCap })
+      : planBatches(toAsk, { batchSize, sources, symbols, tests, group });
 
   if (dryRun) {
     return {
@@ -313,6 +360,7 @@ export async function run({
       skippedByDiff,
       duplicateGrammars,
       ignored,
+      unpaired,
       retry: passes,
       schedule: plan,
       cachedCount: results.length,
@@ -423,6 +471,7 @@ export async function run({
   if (useCache) cache.save({ model: jev.servedModel ?? jev.model });
 
   const gated = gate(results, { cutoffs, unsureBelow });
+  if (explain && !refused) await explainFindings(gated.findings, batches, jev, errors);
   // Attached by identity rather than by position: `gate` happens to map 1:1
   // over its input, and relying on that is the same coupling that once
   // attributed every answer to the wrong subject.
@@ -462,10 +511,61 @@ export async function run({
     ),
     servedModel: jev.servedModel,
     ignored,
+    unpaired,
     retry: passes,
     ...gated,
     elapsedMs: Date.now() - started,
   };
+}
+
+/**
+ * The `--explain` pass: for every reported finding whose rule declares
+ * `explain` labels, one choice question, grouped by the batch its verdict
+ * came from and sent against that batch's state.
+ *
+ * The findings are matched back to their subjects by identity, the same way
+ * a retry pass is: a batch's subjects carry the ids the state was built
+ * with, so a follow-up asked under the same id is a question about the same
+ * numbered subject in the same state. Nothing here is cached -- the label is
+ * a reading aid on a finding, and a finding is what the cache already keys.
+ * A failed follow-up leaves the finding unlabelled and is reported; it never
+ * removes a finding.
+ */
+async function explainFindings(
+  findings: Finding[],
+  batches: Batch[],
+  jev: AskClient,
+  errors: RunError[],
+): Promise<void> {
+  const byIdentity = new Map<string, Finding>();
+  for (const f of findings) byIdentity.set(`${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`, f);
+  const jobs: Array<{ batch: Batch; asked: Array<{ subject: Subject; finding: Finding }> }> = [];
+  for (const batch of batches) {
+    const asked: Array<{ subject: Subject; finding: Finding }> = [];
+    for (const s of batch.subjects) {
+      if (!s.rule.explain) continue;
+      const f = byIdentity.get(identify(s));
+      if (f) asked.push({ subject: s, finding: f });
+    }
+    if (asked.length > 0) jobs.push({ batch, asked });
+  }
+  await mapLimit(jobs, DEFAULT_CONCURRENCY, async ({ batch, asked }) => {
+    const questions: Record<string, Question> = {};
+    for (const { subject } of asked) questions[subject.id!] = buildExplainQuestion(subject.rule, subject, subject.id!);
+    try {
+      const res = await jev.askSplitting(batch.state, questions);
+      for (const { subject, finding } of asked) {
+        const c = readChoice(res.answers, subject.id!);
+        if (c) finding.explanation = { choice: c.choice, confidence: c.confidence };
+      }
+    } catch (err: unknown) {
+      errors.push({
+        file: batch.file,
+        subjects: asked.length,
+        error: `explain: ${String((err as Error)?.message ?? err)}`,
+      });
+    }
+  });
 }
 
 /** One subject's verdict, plus how it behaved across `--retry` passes. */

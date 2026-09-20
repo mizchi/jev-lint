@@ -1,6 +1,6 @@
 # Using the shipped rules
 
-jev-lint ships 23 rules in the npm package's `rules/` directory, one
+jev-lint ships 24 rules in the npm package's `rules/` directory, one
 directory per rule (family) with `rule.yml` and the `evals/` that prove it.
 They are the rules to start from: each one has a cutoff fitted to a labelled
 corpus, a `state` arm chosen by measurement, and a `criteria` block that took
@@ -45,6 +45,7 @@ match the name" does not.
 | --- | --- | --- |
 | `test-mocks-subject` | is the claimed behaviour performed by a stub, with the assertion reading the stub back? | `located` (the `vi.mock` at the top of the file is the evidence) |
 | `snapshot-only-behaviour-claim` | does the title claim a property a whole-render snapshot does not isolate? | `located` |
+| `tests-cover-failure-paths` | does this exported function have a failure path (throw, rejection, error result, guard) that none of the file's related tests reaches? | `paired` (excerpts of the related tests; a file with no related test yields no subject and is counted as `unpaired`) |
 
 **Messages** — `log-level-matches-event`: does the level of a
 `logger.<level>(...)` call match the severity of the path it sits on?
@@ -59,7 +60,7 @@ One axis only — is the claim false.
 The naming and comment rules each have an ECMAScript variant (`TypeScript, Tsx, JavaScript, Jsx`) and a
 Rust variant (`-rust`) sharing one sentence; `comment-describes-declaration`
 also has a `-js` variant, because JavaScript has no type declarations to
-match. **On a TypeScript-only repository 8 of the 23 rules report "matched
+match. **On a TypeScript-only repository 8 of the 24 rules report "matched
 nothing"** — the seven Rust variants and the `-js` one. That line is expected
 there, and nowhere else.
 
@@ -164,8 +165,8 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted on each rule's own evals (`rules/<id>/evals/`, 200 labelled defects
-across the 23 rules, three passes each). 20 of the 23 reach precision and
+Fitted on each rule's own evals (`rules/<id>/evals/`, 207 labelled defects
+across the 24 rules, three passes each). 21 of the 24 reach precision and
 recall 1.00 at their shipped cutoffs; the three that do not each miss one
 labelled defect the rule file names — a binding holding one branch of a
 union result, a Rust field taken under another field's name, an inline

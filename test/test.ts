@@ -26,8 +26,9 @@ import {
   SCORE_LEVELS,
   DEFAULT_SCORE_AT,
 } from "../src/rules.ts";
-import { buildQuestion, questionId, readAnswer } from "../src/questions.ts";
+import { buildQuestion, buildExplainQuestion, questionId, readAnswer, readChoice } from "../src/questions.ts";
 import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture, OUTLINE_TEXT_LIMIT } from "../src/state.ts";
+import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET } from "../src/paired.ts";
 import {
   planBatches,
   planRuleBatches,
@@ -260,6 +261,77 @@ test("rules: a noul without nested criteria is rejected before it can reach the 
   assert.ok(missingFalse.error);
 });
 
+test("rules: a criterion may be a mapping of what / examples / not_for, and nothing else", () => {
+  // The wire accepts any JSON as a criterion description, and a structured
+  // one -- the defining sentence, a few examples, what the branch is NOT for
+  // -- is what the SDK's own review workflow sends. Allowed here as a mapping
+  // with exactly those keys, so a typo cannot silently reach the model as a
+  // key it does not know.
+  const structured = normalizeRule({
+    id: "n",
+    language: "Rust",
+    kind: "noul",
+    rule: { kind: "function_item" },
+    ask: "a",
+    criteria: {
+      true: { what: "it does", examples: ["one", "two"], not_for: "code that merely mentions it" },
+      false: "it does not",
+    },
+  });
+  assert.equal(structured.error, undefined, structured.error ?? "");
+  assert.deepEqual(structured.rule!.criteria, {
+    true: { what: "it does", examples: ["one", "two"], not_for: "code that merely mentions it" },
+    false: "it does not",
+  });
+
+  const bare = (criteria: unknown): string =>
+    normalizeRule({ id: "n", language: "Rust", kind: "noul", rule: { kind: "function_item" }, ask: "a", criteria }).error ?? "";
+  assert.match(bare({ true: { examples: ["x"] }, false: "n" }), /what/, "`what` is required");
+  assert.match(bare({ true: { what: "" }, false: "n" }), /what/, "and non-empty");
+  assert.match(bare({ true: { what: "y", examples: "x" }, false: "n" }), /examples/, "examples is a list");
+  assert.match(bare({ true: { what: "y", examples: [] }, false: "n" }), /examples/, "and not an empty one");
+  assert.match(bare({ true: { what: "y", counter: "x" }, false: "n" }), /counter/, "unknown keys are named");
+  assert.match(bare({ true: ["a", "b"], false: "n" }), /criteria\.true/, "a list is neither shape");
+});
+
+test("rules: a structured criterion is part of the draft, and a string one hashes as before", () => {
+  const plain = noulRule();
+  // A string criterion must hash exactly as it always has, or every committed
+  // cache of every noul rule misses on the day this lands.
+  assert.equal(
+    ruleTextHash(plain),
+    ruleTextHash(noulRule({ criteria: { true: "it does", false: "it does not" } })),
+  );
+  const structured = noulRule({ criteria: { true: { what: "it does" }, false: "it does not" } });
+  assert.notEqual(ruleTextHash(plain), ruleTextHash(structured), "the shape reaches the model");
+  assert.notEqual(
+    ruleTextHash(structured),
+    ruleTextHash(noulRule({ criteria: { true: { what: "it does", examples: ["x"] }, false: "it does not" } })),
+    "and so does an example",
+  );
+  // But not the spelling: key order in YAML is not a new draft.
+  assert.equal(
+    ruleTextHash(noulRule({ criteria: { true: { what: "y", not_for: "z" }, false: "n" } })),
+    ruleTextHash(noulRule({ criteria: { true: { not_for: "z", what: "y" }, false: "n" } })),
+  );
+});
+
+test("rules: `explain` is a closed mapping of at least two labels, and not part of the draft", () => {
+  const r = scoreRule({ explain: { mutates: "It changes state the name does not mention", narrows: "It handles a narrower case" } });
+  assert.deepEqual(r.explain, { mutates: "It changes state the name does not mention", narrows: "It handles a narrower case" });
+  assert.equal(scoreRule().explain, null);
+  // The explanation is asked AFTER the verdict, of findings only, so it never
+  // touches what the verdict question looked like: adding one must not retire
+  // a single cached verdict.
+  assert.equal(ruleTextHash(scoreRule()), ruleTextHash(r));
+  const bad = (explain: unknown): string =>
+    normalizeRule({ id: "r", language: "TypeScript", rule: { kind: "x" }, ask: "a", explain }).error ?? "";
+  assert.match(bad({ only: "one" }), /two/, "one option is not a choice");
+  assert.match(bad({ a: "", b: "y" }), /explain\.a/, "a label needs a description");
+  assert.match(bad(["a", "b"]), /mapping/, "a list has no labels");
+  assert.match(bad({ a: 1, b: "y" }), /explain\.a/);
+});
+
 test("rules: criteria on a score rule is rejected (it uses the shared scale)", () => {
   const { error } = normalizeRule({
     id: "s",
@@ -445,6 +517,18 @@ test("questions: a noul question nests its criteria and carries no threshold", (
   assert.ok(!/\bat\b.*0\.\d/.test(wire), "a cutoff must never appear in a question");
 });
 
+test("questions: a structured criterion reaches the wire as the mapping it was written as", () => {
+  const rule = noulRule({
+    criteria: { true: { what: "it does", examples: ["one"], not_for: "mentions" }, false: "it does not" },
+  });
+  const q = buildQuestion(rule, subjectOf({ rule }), "q0000");
+  assert.equal(q.type, "noul");
+  assert.deepEqual(q.criteria, {
+    true: { what: "it does", examples: ["one"], not_for: "mentions" },
+    false: "it does not",
+  });
+});
+
 test("questions: a score question carries the shared four-level scale", () => {
   const q = buildQuestion(scoreRule(), subjectOf(), "q0000");
   assert.equal(q.type, "score");
@@ -489,6 +573,24 @@ test("questions: a file subject is labelled an outline, not code", () => {
   assert.equal(q.instructions.code, undefined);
   assert.equal(q.instructions.module_outline, "path: a.ts");
   assert.equal(q.instructions.matched_because, undefined);
+});
+
+test("questions: an explain question is a choice over the rule's labels, about the same subject", () => {
+  const rule = scoreRule({ explain: { mutates: "It changes state", narrows: "It handles a narrower case" } });
+  const q = buildExplainQuestion(rule, subjectOf({ rule, captured: { NAME: "load" } }), "q0003");
+  assert.equal(q.type, "choice");
+  assert.deepEqual(q.criteria, { mutates: "It changes state", narrows: "It handles a narrower case" });
+  assert.equal(q.instructions.subject, "q0003");
+  assert.equal(q.instructions.statement, rule.ask, "it names the statement that was judged to hold");
+  assert.deepEqual(q.instructions.matcher_captured, { NAME: "load" });
+  assert.match(String(q.instructions.task), /judged to hold/, "and says the verdict is already in");
+  // A choice answer reads back as its label and confidence; anything else is null.
+  assert.deepEqual(
+    readChoice({ q0003: { type: "choice", choice: "mutates", confidence: 0.8, probabilities: { mutates: 0.8, narrows: 0.2 } } }, "q0003"),
+    { choice: "mutates", confidence: 0.8, probabilities: { mutates: 0.8, narrows: 0.2 } },
+  );
+  assert.equal(readChoice({ q0003: { type: "noul", noul: 0.9 } }, "q0003"), null);
+  assert.equal(readChoice({}, "q0003"), null);
 });
 
 test("questions: ids are stable and zero-padded", () => {
@@ -575,6 +677,33 @@ test("state: each arm carries exactly the sections it promises", () => {
   const full = buildState({ ...args, arm: "full" });
   assert.equal(full.source, "SOURCE");
   assert.equal(full.symbols!.length, 2);
+});
+
+test("state: the paired arm carries the enclosing code and the related tests, never the file", () => {
+  const args = {
+    file: "src/a.ts",
+    source: "SOURCE",
+    entry: sampleEntry(),
+    subjects: [subjectOf({ id: "q0000", nodeKind: "call", line: 3, endLine: 3, context: "function outer() { fetch(url) }", contextName: "outer" })],
+    language: "TypeScript",
+    tests: [{ path: "test/a.test.ts", via: "name" as const, code: 'it("outer throws on empty", () => { ... })' }],
+  };
+  const paired = buildState({ ...args, arm: "paired" });
+  assert.equal(paired.source, undefined, "paired is not located: the file is not the evidence");
+  assert.equal(paired.symbols, undefined);
+  assert.equal(paired.file, "src/a.ts");
+  assert.equal(paired.enclosing_code!.length, 1, "it carries what local carries");
+  assert.deepEqual(paired.related_tests, [{ path: "test/a.test.ts", paired_by: "its name", code: 'it("outer throws on empty", () => { ... })' }]);
+  assert.match(String(paired.note_on_related_tests), /excerpt/i, "and says the tests are excerpts, not whole files");
+
+  // The other arms never carry tests, even when they are offered.
+  for (const arm of ["bare", "local", "located", "graph", "full"] as StateArm[]) {
+    assert.equal(buildState({ ...args, arm }).related_tests, undefined, `${arm} must not carry tests`);
+  }
+  // And a paired state with nothing to pair says so, rather than sending an empty list.
+  const none = buildState({ ...args, tests: [], arm: "paired" });
+  assert.equal(none.related_tests, undefined);
+  assert.match(String(none.note_on_related_tests), /no test file/i);
 });
 
 test("state: every question appears in the subject index on every arm", () => {
@@ -852,6 +981,175 @@ const manySubjects = (n: number, over: Partial<Subject> = {}): Subject[] =>
     subjectOf({ line: i + 1, endLine: i + 1, text: `call${i}()`, ...over }),
   );
 
+// ---------------------------------------------------------------- paired
+
+test("paired: a test file is recognised by its name or its directory, in the usual spellings", () => {
+  for (const p of ["src/a.test.ts", "src/a.spec.tsx", "src/a_test.js", "test/a.ts", "tests/unit/a.mjs", "src/__tests__/a.ts", "spec/a_spec.rb"]) {
+    assert.ok(isTestFile(p), `${p} is a test file`);
+  }
+  for (const p of ["src/a.ts", "src/testing.ts", "src/contest/a.ts", "src/latest.ts", "src/spec-parser.ts"]) {
+    assert.ok(!isTestFile(p), `${p} is not`);
+  }
+  // Under a test directory, a file named like a test needs nothing more; any
+  // other file is a test only if it contains one. `test/fixtures/cart.ts` is
+  // a fixture, and pairing it as `cart.ts`'s test was measured to happen.
+  assert.ok(isTestFile("test/fixtures/cart.ts", "export const cart = { items: [] };") === false, "a fixture under test/");
+  assert.ok(isTestFile("test/cart.ts", 'test("adds", () => {});'), "a test under test/, named for its module");
+  assert.ok(isTestFile("test/fixtures/cart.test.ts", "export const x = 1;"), "named as a test: always a test");
+});
+
+test("paired: related tests are ranked by stem, then directory, capped, and never the file itself", () => {
+  const tests = [
+    "test/other.test.ts",
+    "src/cart/cart.test.ts",
+    "src/cart/__tests__/cart.spec.ts",
+    "test/cart.test.ts",
+    "src/cart/checkout.test.ts",
+    "test/cart/index.test.ts",
+    "test/cart/pricing.test.ts",
+  ];
+  const ranked = relatedTestFiles("src/cart/cart.ts", tests);
+  assert.deepEqual(ranked, ["src/cart/__tests__/cart.spec.ts", "src/cart/cart.test.ts", "test/cart.test.ts"],
+    "name AND directory outrank name alone; ties break on path; a name match is required");
+  assert.ok(!ranked.includes("src/cart/checkout.test.ts"), "same directory, other name: not this file's test");
+  assert.ok(ranked.length <= MAX_RELATED_TESTS);
+  const many = Array.from({ length: 9 }, (_, i) => `test/d${i}/cart.test.ts`);
+  assert.equal(relatedTestFiles("src/cart.ts", many).length, MAX_RELATED_TESTS, "and the cap holds");
+  // A test file that IMPORTS the module is related whatever it is called:
+  // a repository with one test file for everything pairs on that.
+  const sources = new Map([
+    ["test/test.ts", 'import { total } from "../src/cart/cart.ts";\nit("x", () => total());'],
+    ["test/other.test.ts", 'import { x } from "../src/other";'],
+  ]);
+  const byImport = relatedTestFiles("src/cart/cart.ts", ["test/test.ts", "test/other.test.ts"], (p) => sources.get(p) ?? "");
+  assert.deepEqual(byImport, ["test/test.ts"]);
+  // The name must be a whole dot- or underscore-separated segment of the
+  // test's name: `cart.test.ts` and `cart_test.js` are about `cart`,
+  // `cartography.test.ts` and `shopping-cart.test.ts` are not.
+  assert.deepEqual(relatedTestFiles("src/cart.ts", ["test/cartography.test.ts", "test/cart_test.js", "test/shopping-cart.test.ts"]), ["test/cart_test.js"]);
+  // A relative specifier is resolved from the test file and compared as a
+  // path: `../src/report.ts` from `test/test.ts` is `src/report.ts` and not
+  // any other `report.ts` in the tree.
+  assert.ok(importsModule('import x from "./cart"', "src/cart/cart.ts", "src/cart/cart.test.ts"), "extension-free");
+  assert.ok(importsModule("const { a } = require('../cart/cart.js')", "src/cart/cart.ts", "src/lib/x.test.ts"), "require, with extension");
+  assert.ok(importsModule('import * as c from "../src/cart"', "src/cart/index.ts", "test/cart.test.ts"), "a directory import names index");
+  assert.ok(importsModule('import { t } from "../../src/cart/cart.ts"', "src/cart/cart.ts", "test/unit/a.test.ts"), "two levels up");
+  assert.ok(!importsModule('import { r } from "../src/report.ts"', "cases/report.ts", "test/test.ts"), "same name elsewhere is not this file");
+  assert.ok(!importsModule('import { a } from "./cartography"', "src/cart/cart.ts", "src/cart/a.test.ts"), "a prefix is not the module");
+  assert.ok(!importsModule('import { a } from "cart"', "src/cart/cart.ts", "src/cart/a.test.ts"), "a bare package is not a relative module");
+  // A path-like alias (`src/cart`, `@/cart`) is matched as a suffix of the file's path.
+  assert.ok(importsModule('import { a } from "src/cart/cart"', "src/cart/cart.ts", "test/a.test.ts"), "root-relative alias");
+  assert.ok(importsModule('import { a } from "@/cart/cart"', "src/cart/cart.ts", "test/a.test.ts"), "@ alias");
+  assert.ok(!importsModule('import { a } from "lib/cart/cart"', "src/cart/cart.ts", "test/a.test.ts"), "a different tree");
+  // A module named by its directory pairs on the directory's name, and on
+  // the mirrored `cart/index.test.ts`.
+  const byDir = relatedTestFiles("src/cart/index.ts", tests);
+  assert.deepEqual(byDir.slice(0, 3).sort(), ["src/cart/__tests__/cart.spec.ts", "src/cart/cart.test.ts", "test/cart/index.test.ts"]);
+  // A test file is not paired with itself.
+  assert.ok(!relatedTestFiles("src/cart/cart.test.ts", tests).includes("src/cart/cart.test.ts"));
+});
+
+test("paired: an excerpt keeps the lines that name the subject or open a test, with a little around each", () => {
+  const content = [
+    'import { parseCart } from "../src/cart";',   // 1 keyword: keeps 1-3
+    "",                                            // 2
+    "const fixture = {};",                         // 3
+    "",                                            // 4
+    'describe("cart", () => {',                    // 5 opener, no keyword near: not kept
+    "  const c1 = 1;",                             // 6
+    "  const c2 = 2;",                             // 7
+    "  const c3 = 3;",                             // 8
+    '  it("totals an empty cart", () => {',        // 9 opener of a test that never names the module
+    "    expect(1).toBe(1);",                      // 10
+    "  });",                                       // 11
+    "  const c4 = 4;",                             // 12
+    '  it("rejects an empty cart", () => {',       // 13 opener: the title above the keyword line
+    "    const input = {};",                       // 14
+    "    const again = input;",                    // 15
+    "    expect(() => parseCart({})).toThrow();",  // 16 keyword: keeps 14-18 and 13
+    "  });",                                       // 17
+    "});",                                         // 18
+  ].join("\n");
+  const out = compactTest("test/cart.test.ts", content, ["parseCart"]);
+  assert.equal(out.path, "test/cart.test.ts");
+  assert.ok(out.code.includes("parseCart({})"), "the call that drives the failure path is kept");
+  assert.ok(out.code.includes('it("rejects'), "and the title that claims it");
+  assert.ok(out.code.includes("const input"), "with a little context around each");
+  assert.ok(!out.code.includes('it("totals'), "a test that never names the module is not kept for its title");
+  assert.ok(!out.code.includes("const c4"), "nor the filler between");
+  assert.ok(out.code.includes("…"), "and the cut is marked");
+  // Keywords are identifiers: `gate` is not `aggregate`.
+  assert.equal(compactTest("t.ts", "aggregate();\nx;\nx;\nx;\nx;\ngate();", ["gate"]).code, "x;\nx;\ngate();");
+  // A short test that names the module is kept WHOLE, from its opener to its
+  // closing line: the assertion four lines below the call is the evidence.
+  const whole = [
+    'it("rejects an empty cart", async () => {',
+    "  const result = await capturePayment(gatewayReturning({ status: 'succeeded' }));",
+    "  const a = 1;",
+    "  const b = 2;",
+    "  const c = 3;",
+    "  const d = 4;",
+    "  assert.equal(result.ok, false);",
+    "});",
+    "",
+    'it("unrelated", () => {',
+    "  expect(1).toBe(1);",
+    "});",
+  ].join("\n");
+  const kept = compactTest("t.ts", whole, ["capturePayment"]).code;
+  assert.ok(kept.includes("assert.equal(result.ok, false);"), "the closing assertion survives");
+  assert.ok(kept.includes("});"), "and the block's end");
+  assert.ok(!kept.includes('it("unrelated"'), "but not the next test");
+  // Nothing matches: the file is sent as it is rather than as nothing.
+  assert.equal(compactTest("t.ts", "const a = 1;\nconst b = 2;", ["zzz"]).code, "const a = 1;\nconst b = 2;");
+  // Long excerpts are cut from the middle, within the limit given.
+  const long = Array.from({ length: 400 }, (_, i) => `it("case ${i}", () => parseCart(${i}));`).join("\n");
+  const cut = compactTest("t.ts", long, ["parseCart"], 2000).code;
+  assert.ok(cut.length <= 2000 + 8, `${cut.length} chars`);
+  assert.ok(cut.startsWith('it("case 0"') && cut.trimEnd().endsWith("399));"), "both ends survive");
+  // The default is the whole budget: one related file gets all of it.
+  assert.ok(compactTest("t.ts", long, ["parseCart"]).code.length <= TEST_EXCERPT_BUDGET + 8);
+});
+
+test("paired: the walk finds test files under the paths and the conventional roots, and skips the usual junk", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-paired-"));
+  try {
+    for (const f of [
+      "src/cart.ts", "src/cart.test.ts", "test/cart.test.ts", "tests/x.spec.js",
+      "node_modules/dep/dep.test.ts", "dist/cart.test.js", ".git/a.test.ts", "coverage/a.test.ts",
+    ]) {
+      mkdirSync(join(dir, f, ".."), { recursive: true });
+      writeFileSync(join(dir, f), "");
+    }
+    mkdirSync(join(dir, "test/fixtures"), { recursive: true });
+    writeFileSync(join(dir, "test/fixtures/cart.ts"), "export const cart = {};");
+    writeFileSync(join(dir, "test/helpers.ts"), 'export function run() { it("x", () => {}); }');
+    const found = findTestFiles(["src"], dir).sort();
+    assert.deepEqual(found, ["src/cart.test.ts", "test/cart.test.ts", "test/helpers.ts", "tests/x.spec.js"], "the fixture is not a test; the helper that opens tests is");
+    // pairTests reads and compacts, keyed by the source file.
+    writeFileSync(join(dir, "test/cart.test.ts"), 'it("totals", () => total([]));');
+    writeFileSync(join(dir, "src/cart.test.ts"), "const setup = 1;");
+    const paired = pairTests(["src/cart.ts", "src/nothing.ts", "src/empty.ts"], { roots: ["src"], cwd: dir, keywords: () => ["total"] });
+    assert.deepEqual(paired.get("src/cart.ts")!.map((t) => t.path), ["src/cart.test.ts", "test/cart.test.ts"]);
+    assert.deepEqual(paired.get("src/cart.ts")!.map((t) => t.via), ["name", "name"], "and says how each was paired");
+    assert.equal(paired.get("src/cart.ts")![1]!.code, 'it("totals", () => total([]));');
+    assert.equal(paired.get("src/cart.ts")![0]!.code, "const setup = 1;", "nothing matched: sent whole");
+    assert.equal(paired.get("src/nothing.ts"), undefined, "no related tests: absent, so the runner can count it");
+    // An empty test file is no evidence either.
+    writeFileSync(join(dir, "src/empty.test.ts"), "");
+    assert.equal(pairTests(["src/empty.ts"], { roots: ["src"], cwd: dir }).get("src/empty.ts"), undefined);
+    // The budget is shared: two related files get half each.
+    const big = Array.from({ length: 300 }, (_, i) => `it("t${i}", () => total(${i}));`).join("\n");
+    writeFileSync(join(dir, "src/cart.test.ts"), big);
+    writeFileSync(join(dir, "test/cart.test.ts"), big);
+    const halves = pairTests(["src/cart.ts"], { roots: ["src"], cwd: dir, keywords: () => ["total"] }).get("src/cart.ts")!;
+    assert.equal(halves.length, 2);
+    for (const h of halves) assert.ok(h.code.length <= TEST_EXCERPT_BUDGET / 2 + 8, `${h.code.length} chars`);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("batch: every subject lands in exactly one batch and none is empty", () => {
   const subjects = manySubjects(700);
   const batches = planBatches(subjects, {
@@ -979,6 +1277,42 @@ test("batch: a file too large for the state budget steps the arm down and says s
   assert.equal(batches[0]!.degraded!.from, "located");
   // A step-down is a real loss of context, so it must be visible.
   assert.match(batches[0]!.degraded!.reason, /state budget/);
+});
+
+test("batch: the paired arm carries the file's tests, steps down to local, and never survives the rule axis", () => {
+  const tests = new Map([["a.ts", [{ path: "a.test.ts", via: "import" as const, code: "it('x', () => {})" }]]]);
+  const [batch] = planBatches(manySubjects(2, { arm: "paired", file: "a.ts" }), {
+    sources: new Map([["a.ts", "src"]]),
+    symbols: new Map([["a.ts", sampleEntry()]]),
+    tests,
+  });
+  assert.equal(batch!.arm, "paired");
+  assert.deepEqual(batch!.state.related_tests, [{ path: "a.test.ts", paired_by: "it imports this file", code: "it('x', () => {})" }]);
+
+  // Tests too large for the state: the arm steps down to local and says so.
+  const huge = new Map([["a.ts", [{ path: "a.test.ts", via: "name" as const, code: "x".repeat(200_000) }]]]);
+  const [down] = planBatches(manySubjects(2, { arm: "paired", file: "a.ts" }), {
+    sources: new Map([["a.ts", "src"]]),
+    symbols: new Map([["a.ts", sampleEntry()]]),
+    tests: huge,
+  });
+  assert.equal(down!.arm, "local");
+  assert.equal(down!.degraded!.from, "paired");
+  assert.equal(down!.state.related_tests, undefined);
+
+  // Under rule grouping the state spans files, so it cannot carry one file's tests.
+  for (const b of planRuleBatches(manySubjects(4, { arm: "paired" }), { symbols: new Map() })) {
+    assert.equal(b.arm, "local");
+    assert.equal(b.degraded!.from, "paired");
+  }
+  // Which is why the scheduler pins it to the file axis, like located.
+  const needsTests = scoreRule({ id: "needs-tests", state: "paired" });
+  const s = schedule(manySubjects(4, { rule: needsTests, arm: "paired", file: "a.ts" }), [needsTests], {
+    sources: new Map(),
+    symbols: new Map(),
+  });
+  assert.equal(s.decisions[0]!.axis, "file");
+  assert.equal(s.decisions[0]!.pinned, true);
 });
 
 test("batch: the token estimate is pessimistic rather than optimistic", () => {
@@ -1967,6 +2301,84 @@ test("jev: a billing refusal is an auth error, since retrying will not help", ()
   assert.equal(Jev.classify(400, "max_tokens_exceeded"), "too_big");
   assert.equal(Jev.classify(400, "bad json"), "other");
   assert.equal(Jev.classify(500, ""), "other");
+});
+
+await testAsync("run: a paired subject with no related test is dropped and counted, never asked", async () => {
+  // A question about tests with no tests in the state is one the state cannot
+  // answer; asking it anyway returns whatever the model thinks of untested
+  // code in general. Dropping it silently would be the matcher failing
+  // silently by another route, so the count is on the result.
+  const { collectSubjects } = await import("../src/run.ts");
+  const dir = mkdtempSync(join(tmpdir(), "jev-unpaired-"));
+  try {
+    mkdirSync(join(dir, "src"));
+    writeFileSync(join(dir, "src/tested.ts"), "export function a() { throw new Error('x'); }\n");
+    writeFileSync(join(dir, "src/tested.test.ts"), "import { a } from './tested';\nit('a throws', () => { a(); });\n");
+    writeFileSync(join(dir, "src/lonely.ts"), "export function b() { throw new Error('y'); }\n");
+    const rule = noulRule({ id: "p", language: "TypeScript", state: "paired", rule: { kind: "function_declaration" } });
+    const { subjects, tests, unpaired } = await collectSubjects({ rules: [rule], paths: ["src"], cwd: dir });
+    assert.deepEqual(subjects.map((s) => s.file), ["src/tested.ts"]);
+    assert.equal(tests!.get("src/tested.ts")!.length, 1);
+    assert.deepEqual(unpaired, { subjects: 1, files: ["src/lonely.ts"] });
+    // Under another arm the same rule asks about both, and pairs nothing.
+    const located = await collectSubjects({ rules: [rule], paths: ["src"], cwd: dir, arm: "located" });
+    assert.equal(located.subjects.length, 2, "the test file itself matches too? no: it is not a function_declaration file");
+    assert.deepEqual(located.unpaired, { subjects: 0, files: [] });
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("run: --explain asks a second question of the findings only, and attaches the label", async () => {
+  // jev-review's shape: a cheap screen, then a follow-up classification of
+  // what came over the threshold. Here the matcher is the screen and the
+  // verdict is the threshold; the follow-up is one choice per finding, sent
+  // per batch with the same state, so nothing under the cutoff costs a token.
+  const { run } = await import("../src/run.ts");
+  const rule = scoreRule({
+    id: "r",
+    rule: { kind: "function_declaration" },
+    explain: { mutates: "It changes state", narrows: "It handles a narrower case" },
+  });
+  const seen: Array<Record<string, { type: string }>> = [];
+  const client = {
+    model: "fake",
+    servedModel: null,
+    spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
+    askSplitting: async (_state: unknown, questions: Record<string, { type: string }>) => {
+      seen.push(questions);
+      const answers: Record<string, unknown> = {};
+      let i = 0;
+      for (const [id, q] of Object.entries(questions)) {
+        answers[id] =
+          q.type === "choice"
+            ? { type: "choice", choice: "narrows", confidence: 0.7, probabilities: { mutates: 0.3, narrows: 0.7 } }
+            : { type: "score", score: i++ % 2 === 0 ? 3 : 1, confidence: 0.9 };
+      }
+      return { answers, usage: { input_tokens: 1 } };
+    },
+  };
+  const result = await run({ rules: [rule], paths: ["rules/fn-name-promises/evals/cases"], cachePath: null, client, explain: true });
+  const verdictRounds = seen.filter((qs) => Object.values(qs).every((q) => q.type === "score"));
+  const explainRounds = seen.filter((qs) => Object.values(qs).every((q) => q.type === "choice"));
+  assert.ok(verdictRounds.length > 0 && explainRounds.length > 0, "two kinds of request, never mixed");
+  assert.equal(
+    explainRounds.reduce((n, qs) => n + Object.keys(qs).length, 0),
+    result.findings.length,
+    "exactly one explain question per reported finding",
+  );
+  assert.ok(result.findings.length > 0 && result.findings.length < result.all.length, "the fake put only some over the cutoff");
+  for (const f of result.findings) assert.deepEqual(f.explanation, { choice: "narrows", confidence: 0.7 });
+  for (const f of result.all.filter((f) => !f.reported)) assert.equal(f.explanation, undefined, "nothing under the cutoff is explained");
+  // And the explanation reaches every format.
+  assert.match(formatPretty(result, { color: false }), /why: narrows \(0\.70\)/);
+  assert.match(formatGithub(result), /why: narrows/);
+  assert.equal(JSON.parse(formatJson(result)).findings[0].explanation.choice, "narrows");
+  // Without the flag nothing is asked twice, whatever the rule declares.
+  seen.length = 0;
+  const plain = await run({ rules: [rule], paths: ["rules/fn-name-promises/evals/cases"], cachePath: null, client });
+  assert.equal(seen.filter((qs) => Object.values(qs).some((q) => q.type === "choice")).length, 0);
+  assert.ok(plain.findings.every((f) => f.explanation === undefined));
 });
 
 await testAsync("run: an auth error stops the run instead of failing every batch and every pass", async () => {

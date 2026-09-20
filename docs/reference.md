@@ -46,6 +46,7 @@ failed and nothing was reported.
 | `--arm <name>` | override every rule's state arm: `bare`, `local`, `located`, `graph`, `full` |
 | `--group <how>` | `file` (default), `rule`, `auto` — see [Batching](#batching) |
 | `--rule-batch-cap <n>` | subjects per rule-axis request (default 32) |
+| `--explain` | after the verdicts, ask each finding which of its rule's `explain:` labels names why; one extra request per batch with findings — see [Rule fields](#rule-fields) |
 | `--explain-schedule` | print the axis chosen per rule, and why |
 | `--base <ref>` / `--staged` | what `review` diffs against: the merge base with `ref`, or the index (what a commit will contain: no untracked files, no unstaged edits) |
 | `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any finding |
@@ -161,13 +162,14 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `ask` | required | the predicate, one sentence |
 | `language` / `languages` | required | one grammar, or several |
 | `kind` | `score` (default) or `noul` | see below |
-| `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria` |
+| `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `subject` | `node` (default), `enclosing`, `file` | what code is judged |
-| `state` | `bare`, `local`, `located` (default), `graph`, `full` | what the model also sees |
+| `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context for the model only |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
 | `severity` | `hint`, `info`, `warning` (default), `error` | `error` fails a build; earn it first |
+| `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |
 
 ### `score` or `noul`
 
@@ -189,6 +191,29 @@ reach the wire.
 Asking an ordered conclusion as a `choice` is the mistake this avoids: the
 ordering is thrown away, adjacent levels split the probability mass, and the
 result arrives as a low confidence indistinguishable from real uncertainty.
+
+A branch of `criteria` is usually one sentence. It may instead be a mapping
+of `what` (the defining sentence), `examples` (a list) and `not_for` (what
+the branch is not about), which is the shape the vendor's own review
+workflow sends and the API reads as JSON. Measured on `fn-name-promises`
+(74 subjects, both grammars, three passes each way): the two shapes give the
+same decisions at the shipped cutoffs, class gaps within 0.02 of each other,
+and no subject moved more than 0.06 — the pass-to-pass spread. So the
+mapping is a way of writing the same criterion, not a better criterion; use
+it when a list of examples reads more clearly than a sentence with seven
+clauses, and expect about 6% more input tokens for it.
+
+
+`explain` is the one place a `choice` is used, and it is used **after** the
+verdict, not for it. With `--explain`, every reported finding of a rule that
+declares labels is asked one more question against the same state: which
+label best names why the statement holds. Nothing under a cutoff is asked,
+so the cost is one request per batch that produced findings. Read the label
+as a reading aid with its confidence beside it: on the `fn-name-promises`
+corpus, 10 of 13 labels matched the label's own reason, and the three that
+did not came back at 0.20, 0.26 and 0.53 — overlapping options splitting the
+mass, which is exactly why a choice never decides a verdict here.
+
 
 ### `subject`: what the question is about
 
@@ -218,9 +243,25 @@ text.
 | --- | --- | --- |
 | `bare` | the matched code and the file's name | cheapest, and the only arm immune to unrelated edits in the same file |
 | `local` | + each match's enclosing function, deduplicated | — |
+| `paired` | + the enclosing function, and **excerpts of the tests related to the file** (`related_tests`); no whole file. The one arm whose evidence is in another file | up to ~2,500 tokens of excerpt per file; a subject whose file has no related test is dropped and counted as `unpaired` |
 | `located` | + the whole file source | — |
 | `graph` | + path identity, imports, symbol table with each symbol's signature and call edges; **no source** | small at any file size |
 | `full` | source and graph | hits the 32Ki state budget soonest |
+
+`paired` is different in kind from the others: its evidence is in **another
+file**. A test file is related when its name contains the module's stem
+(`cart.ts` ↔ `cart.test.ts`, `test/cart.test.ts`, `__tests__/cart.spec.ts`)
+or when it imports the module — the second is what pairs a repository whose
+tests all live in one file. What travels is an excerpt: the lines of each
+related test that name the module's exported symbols, a little context
+around each, and the title of the test they sit in; `…` marks a cut. The
+state says they are excerpts. A file with no related test yields no subject
+on this arm — the runner drops those and prints how many, because "no test
+reaches this path" with no tests in the state is true of everything and
+says nothing. The cache does not key on the tests any more than `located`
+keys on the file: adding a test later does not retire a verdict, and
+`--force` is the escape hatch.
+
 
 **This is not a quality knob.** More context is not better; it is a choice of
 which error you would rather have. The rule that works:
@@ -373,7 +414,7 @@ refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
 
 ## The shipped packs
 
-23 rules, one directory each under `rules/` with its evals beside it,
+24 rules, one directory each under `rules/` with its evals beside it,
 grouped here by what they ask. The naming and comment rules carry an
 ECMAScript and a Rust variant sharing one sentence; the rest are ECMAScript
 or JSON only. The notes the former packs shipped with are in
@@ -444,6 +485,7 @@ separates on four defects and is not shipped on that count. Reports in
 | --- | --- |
 | `test-mocks-subject` | is the behaviour the title claims performed by a stub, with the assertion reading the stub's canned value back? |
 | `snapshot-only-behaviour-claim` | does the title claim a property (an ordering, a hidden row, a branch) that a whole-render snapshot does not isolate? |
+| `tests-cover-failure-paths` | does this exported function declare a failure path — a throw, a rejection, an error result, a guard that refuses an input — that none of the related tests reaches? |
 
 Both need `state: located`: a `vi.mock` at the top of the file is what makes
 the first answerable, and on `bare` its two top-of-file cases fall from 0.6 to
@@ -451,6 +493,17 @@ the first answerable, and on `bare` its two top-of-file cases fall from 0.6 to
 quiet (0.42–0.64): a mocked subject reads as a mild claim. A third candidate,
 `test-asserts-on-mock`, separated as well and was dropped because
 `test-name-verifies-claim` already reports every one of its cases.
+
+`tests-cover-failure-paths` is the one rule on the `paired` arm and the
+reason that arm exists: its evidence is the tests, which are in another
+file. Exported functions only — a private helper's failure path is
+exercised through whatever export calls it. On its evals (27 subjects, 7
+defects, 11 hard cleans, 3 passes) it separates at 0.88–0.95 against a
+clean band topping at 0.36, cutoff 0.68, no flips. On this repository's
+own `src/` the first run was a continuum with seven subjects over 0.70,
+four of them right; the one wrong one — a fallback `return captured` read
+as a failure path — is named in the note now. A file with no related test
+yields no subject; the report says how many. See findings §14.
 
 **Messages** — messages for a human reader
 
@@ -718,8 +771,8 @@ the batching axis invalidates the verdicts that depended on them.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **The cutoffs are fitted to small evals.** 78 case files, 200 labelled
-  defects across 23 rules, one to thirty-one per rule. Expect to refit; see
+- **The cutoffs are fitted to small evals.** 98 case files, 207 labelled
+  defects across 24 rules, one to thirty-one per rule. Expect to refit; see
   [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.

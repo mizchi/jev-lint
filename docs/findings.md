@@ -10,6 +10,8 @@ conflict.** Sections 1-8 record the tool at 8 rules over a 10-file corpus, with
 15 rules across two packs, a 13-file corpus, TypeScript sources, and two
 batching axes. Section 12 lists what is still unmeasured, and section 13 is the
 tool applied to its own source, which is where its four worst bugs were found.
+Section 14 is what was taken from a sibling project built on the same model,
+`jev-review`, and what each piece measured as.
 Where a number changed, the later one is the live one and the earlier one is
 left standing because how it changed is part of the evidence. Four claims are
 explicitly **retracted**, and every one of them is section 9 retracting its own
@@ -41,6 +43,7 @@ outputs and the cache have their own shapes and do not:
 | `arms.json` | four state arms (section 3) |
 | `self-lint-before.json` / `self-lint-after.json` | **replay.** this repository judged before and after section 13's fixes |
 | `self-lint-cache.json` | the 737 verdicts behind section 5, kept as a cache |
+| `criteria-shape-string.json` / `criteria-shape-structured.json` | `fn-name-promises` evals, three passes each, with its criteria as sentences and as `{what, examples, not_for}` mappings (section 14) |
 
 ---
 
@@ -989,3 +992,178 @@ other tool checks and six of them tests that were quietly not testing what they
 said. It is not a substitute for reading the output: a fifth of the findings
 were wrong, and the most valuable four defects of the whole exercise came from
 distrusting its own summary lines rather than from any rule it ran.
+
+---
+
+## 14. Taking what `jev-review` has
+
+[`jev-review`](https://github.com/devagrawal09/jev-review) is a code-review
+workflow on the same model, built the other way round: no matcher, a whole
+patch or an 80-line region per state, five `noul` screens (correctness,
+security, reliability, compatibility, test gap), then a `choice` to locate
+the hunk, a `choice` to name the mechanism, a `score` for severity. This
+section is what was worth carrying across, translated into this tool's
+shape, and what each piece measured as. The screening questions themselves
+were not: "does this patch contain incorrect runtime behaviour" is the open
+bug hunt that section 1 of the deep dive records the model as poor at, and
+the hunk-locating `choice` is what ast-grep does here for free.
+
+### Three rules, translated into contracts the code declares
+
+Each candidate went through `experiments/BRIEF.md` unchanged: a corpus with
+hard cleans, `gaps`, at most three sentences, `eval --repeat 3`, a report.
+Reports and corpora are under `experiments/reports/{f,g,h}-*` and
+`experiments/rule-candidates/`.
+
+| candidate | from | corpus | at | P / R | flips | headroom | verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `with-name-releases` | reliability → cleanup | 12 bad / 21 clean (17 hard) | 0.56 | 1.00 / 1.00 | 1 | 0.05 / 0.02 | COOKBOOK |
+| `serializer-parser-agree` | compatibility → dataFormat | 7 bad / 9 clean (6 hard) | 0.40 | 1.00 / 1.00 | 0 | 0.09 / 0.11 | COOKBOOK |
+| `tests-cover-failure-paths` | testGap | 7 bad / 20 clean (11 hard) | 0.68 | 1.00 / 1.00 | 0 | 0.32 / 0.20 | **SHIP** |
+
+`with-name-releases` is the fourth guarantee name (after `safe*`,
+`ensure*`, `compute*`): `with*` / `using*` / `scoped*` promises the resource
+comes back on every path. It separates perfectly on its corpus and found
+one real leak on 25 unseen `with*` functions (a `clearTimeout` after
+`await Promise.race`, skipped when the race rejects) against one false
+positive (a retry loop that attempts `ROLLBACK` and swallows the rollback's
+own error). The headroom is what keeps it a recipe: the timer / flag /
+spinner shapes answer 0.68–0.93 with nothing clean above 0.42, and would
+ship alone; the transaction-with-retry and lock-with-early-return shapes
+sit at 0.51–0.63 on both sides of the line. $0.025.
+
+`serializer-parser-agree` matches the writer half of a round trip and
+gives the question the file, so the reader is in the state without the
+matcher having to find the pair. Literal-versus-literal defects — a version
+tag written as `2` and checked against `1`, hex written and base64 read, a
+field required on read that the writer never emits — are found at
+0.84–0.97 by every phrasing tried. The two that are not literal (a key
+spelled `display_name` and read as `displayName`; a field emitted under a
+condition and dereferenced unconditionally) moved 0.25 → 0.87 → 0.51 and
+0.54 → 0.78 → 0.60 across the three sentences, which is the cutoff belonging
+to the phrasing rather than to the rule. $0.012.
+
+`tests-cover-failure-paths` is `jev-review`'s `testGap` narrowed to a
+claim two pieces of text can settle: this exported function declares a way
+to fail — a throw, a rejection, an error result, a guard — and the related
+tests never drive it there. Not "is this tested enough", which has no
+referee. It needed the arm described next, and it is shipped: on its evals
+the defects answer 0.88–0.95 against a clean band topping at 0.36, with no
+flips across three passes. The first run on this repository's own `src/`
+(113 subjects, one pass, $0.0067) was a continuum with seven over 0.70:
+four right (`runAstGrep`, `runEval`, `readEvalRecord`, `loadSuite`), one
+borderline (`discoverEvals`, a swallowed `readdir`), one wrong
+(`widenCommentCapture`, whose fallback `return captured` was read as a
+failure path — the note now says a fallback is not one), and one matcher
+bug (a closure inside `run` matched as an export; the matcher takes direct
+`export const` only now, and `src/` drops from 113 to 89 subjects). $0.029
+for the corpus and calibration, plus $0.004 to refit after the arm changed.
+
+**The calibration found two bugs in the arm**, which is the result worth
+recording. Both were pairings that should not have happened, both were
+found because the agent building the corpus read what `--show-subjects`
+paired and not only what the model answered, and neither was a crash:
+
+- `cart.ts` in the corpus paired with `test/fixtures/cookbook/cart.ts` —
+  a fixture, under the conventional `test/` root, taken as a test because
+  anything under `test/` was, and matched by `cart` as a substring of its
+  name. Now a file under a test directory but not named as a test must
+  contain a test opener, and a name matches as a whole `.`/`_`-separated
+  segment: `cart.test.ts` names `cart`, `cartography.test.ts` does not.
+- `report.ts` in the corpus paired with `test/test.ts`, which imports
+  `../src/report.ts`: the import check compared only the specifier's last
+  segment to the stem. A relative specifier is now resolved from the
+  importing file and compared as a path.
+
+The agent also read the excerpts and found that two lines of context lost
+the assertion that proved a path was reached — `assert.equal(result.ok,
+false)` four lines below the call. A short test that names the module now
+travels whole, from its opener to its closing brace. Refitting after those
+three changes moved the top clean from 0.44 (`truncateSlug`, whose guard is
+reached under a test title that claims something else) to 0.27, and the
+fitted midpoint from 0.65 to 0.62; the shipped 0.68 is kept for the reason
+the rule file gives.
+
+### The `paired` arm: evidence in another file
+
+The test-gap rule needed something no arm had: the tests. Every other arm
+is built from the file the match is in; section 8 lists cross-file edges as
+out of scope. `paired` is the one exception, and it is deliberately the
+smallest one: the matched code, its enclosing function, and **excerpts** of
+the tests related to the file.
+
+Two decisions in it were forced by this repository. The first is what
+"related" means. `jev-review` pairs by filename stem and directory, which
+pairs nothing here — every test lives in `test/test.ts` — so a test file
+that *imports* the module counts too. The second is what an excerpt keeps.
+The first version kept every line that opened a test, and on a 2,900-line
+test file that filled the 8,000-character budget with the titles of tests
+about other modules and pushed the lines that call this module past the
+cut. What ships keeps the lines that name the module's exported symbols
+(word-bounded, so `gate` is not `aggregate`), two lines around each, the
+nearest test title above each, and — when that test is forty lines or
+shorter — the whole test from its title to its closing brace, for the
+reason the calibration found above. Nothing else.
+
+A file with no related test yields no subject on this arm. The runner drops
+those and prints how many (`unpaired` in every format), because "no test
+reaches this path" with no tests in the state is true of everything and
+says nothing; asking it anyway would return the model's opinion of untested
+code in general. The scheduler pins `paired` to the file axis like
+`located` — one file's tests cannot travel in a state that spans files —
+and it steps down to `local` when the excerpts alone would not fit. The
+cache does not key on the tests, for the same reason `located` does not key
+on the file.
+
+### Structured criteria: measured neutral
+
+`jev-review` writes each `noul` branch as `{what, examples, not_for}` rather
+than a sentence, and the API reads any JSON there. The shape is now allowed
+(a closed mapping; an unknown key is an error, not a field the model never
+sees) and was measured on `fn-name-promises`, both grammars, 74 subjects,
+three passes each way (`docs/data/criteria-shape-*.json`, $0.012):
+
+| | TS gap | TS fit | Rust gap | Rust fit | decisions at shipped cutoffs | largest subject move | input tokens |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| sentences | 0.29 | 0.49 | 0.16 | 0.56 | 21/21 tp, 0 fp | — | 140,691 |
+| mappings | 0.27 | 0.52 | 0.18 | 0.53 | 21/21 tp, 0 fp | 0.06 (`queue.rs:95`, 0.78 → 0.72) | 149,865 |
+
+No subject moved more than the pass-to-pass spread (0.06–0.10). The
+mapping is a way of writing the same criterion, at about 6% more tokens,
+not a better one. It is documented as an option for a criterion that reads
+better as a list than as a seven-clause sentence, and not recommended
+beyond that. A string criterion hashes exactly as before, so no committed
+cache misses on the change.
+
+### `--explain`: the follow-up, kept after the verdict
+
+`jev-review`'s stage after screening asks a `choice` — which mechanism —
+of what came over the threshold. The same shape fits here as an option on
+the run rather than a change to it: a rule may declare `explain:` labels,
+and `--explain` asks one `choice` per **reported finding**, per batch,
+against the batch's own state. Nothing under a cutoff is asked, the label
+decides nothing, and adding labels to a rule is not part of its draft, so
+it retires no cached verdict.
+
+Smoke-tested on the `fn-name-promises` corpus with six labels drawn from
+the rule's own criteria (`returns_other_kind`, `mutates`, `can_fail`,
+`narrower`, `no_effect`, `extra_work`): 21 findings, 7 explain requests on
+top of 8 verdict requests, $0.0028 for the run against $0.0022 without.
+Ten of the thirteen labels on labelled defects matched the corpus label's
+own reason. The three that did not — a predicate returning a string called
+`no_effect`, a count returning a list called `extra_work`, a nonsense sum
+called `no_effect` — came back at 0.20, 0.26 and 0.53, and every match came
+back at 0.70 or above but one. That is the documented property of a
+`choice`: overlapping options split the mass. Read a label under 0.5 as
+"the options overlapped here", which is also why a `choice` never decides
+a verdict in this tool.
+
+### Not taken
+
+- The five screening `noul`s as rules. Open-ended bug hunting over a region
+  is the class the model is measured poor at, and the whole design here is
+  the complement of that.
+- The hunk-locating `choice`. The matcher decides where, exactly and free.
+- Per-finding severity `score` and owner routing. Unmeasured, and a lint
+  finding has a rule-level severity already.
+- 80- and 160-line regions. A node is a better unit than a window.

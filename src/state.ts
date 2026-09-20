@@ -19,6 +19,10 @@
  * rather have:
  *
  *   bare      subject code only. Harshest, noisiest. Highest recall.
+ *   paired    + the enclosing function, and excerpts of the tests related
+ *             to the file. The one arm whose evidence is in ANOTHER file:
+ *             "does a test reach this failure path" cannot be answered from
+ *             the source at any cutoff.
  *   located   + the whole file. Fewer false positives, more misses.
  *   graph     + path identity, imports, and the symbol table with call edges,
  *             but NOT the file text. The cheap arm, and the only one that can
@@ -36,6 +40,7 @@
  * answered and one that cannot.
  */
 import { moduleIdentity } from "./scan.ts";
+import type { RelatedTest } from "./paired.ts";
 import { STATE_ARMS } from "./types.ts";
 import type {
   FileSymbols,
@@ -55,6 +60,7 @@ export const ARMS = STATE_ARMS;
 export const ARM_BLURB: Record<StateArm, string> = {
   bare: "the matched code only -- no file, no graph",
   local: "the matched code plus its enclosing function; no whole file",
+  paired: "the matched code, its enclosing function, and excerpts of the tests related to the file; no whole file",
   located: "the matched code plus the whole file source",
   graph: "path identity, imports and the symbol table with call edges; no file source",
   full: "the file source and the graph",
@@ -119,6 +125,8 @@ export interface BuildStateArgs {
   subjects: Subject[];
   arm: StateArm;
   language: string;
+  /** The `paired` arm's evidence; ignored by every other arm. */
+  tests?: RelatedTest[] | null;
 }
 
 export function buildState({
@@ -128,6 +136,7 @@ export function buildState({
   subjects,
   arm,
   language,
+  tests = null,
 }: BuildStateArgs): StatePayload {
   const state: StatePayload = {
     language,
@@ -162,7 +171,7 @@ export function buildState({
     state.source = source;
   }
 
-  if (arm === "local") {
+  if (arm === "local" || arm === "paired") {
     // Per-subject context instead of the whole file: each subject's enclosing
     // function, deduplicated, since several matches usually share one.
     const seen = new Map<string, string | null>();
@@ -175,6 +184,22 @@ export function buildState({
         ...(name ? { name } : {}),
         code,
       }));
+    }
+  }
+
+  if (arm === "paired") {
+    // The tests are excerpts, and the state says so: a model told it is
+    // looking at "the tests" would read a cut as an absence.
+    if (tests && tests.length > 0) {
+      state.related_tests = tests.map((t) => ({
+        path: t.path,
+        paired_by: t.via === "import" ? "it imports this file" : "its name",
+        code: t.code,
+      }));
+      state.note_on_related_tests =
+        "`related_tests` are excerpts of the test files most likely to be about this file, each with what paired it (`paired_by`): the lines that name its symbols, the test they sit in, and a little context; `…` marks a cut. A test not shown here may exist, but these are the best matches found.";
+    } else {
+      state.note_on_related_tests = "No test file related to this file was found.";
     }
   }
 

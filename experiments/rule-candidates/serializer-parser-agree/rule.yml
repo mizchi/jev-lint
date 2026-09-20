@@ -1,0 +1,111 @@
+# Paired contracts: do the two halves of a round trip agree?
+#
+# A module that defines both halves of a round trip -- serialize*/parse*,
+# encode*/decode*, toJSON/fromJSON, pack*/unpack*, toRow/fromRow, write*/read*
+# -- has made a claim about itself that no tool checks: the reader reads back
+# what the writer wrote. The type checker does not see it because both halves
+# pass through `unknown`, `JSON.parse`, `Record<string, unknown>` or a string.
+# A test only catches it when someone thought to round-trip. What is left is a
+# reader who holds both bodies in mind at once, and that is the one thing this
+# kind of model is measured to be good at: two pieces of code that contradict a
+# contract they declare about each other.
+#
+# The matcher finds ONE half, the writer, by name; `state: located` puts the
+# whole file -- and so the other half -- in front of the model, and the
+# criteria say what to do when there is no other half. Matching the pair in
+# ast-grep would silently miss every pair whose halves are not siblings.
+
+- id: serializer-parser-agree
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  # `located`: the counterpart is elsewhere in the file, never inside the
+  # matched node, so `bare` and `local` cannot contain the answer.
+  state: located
+  # 0.40, fitted 2026-09-20 on this rule's evals (7 defects, 9 cleans of which
+  # 6 hard, 3 passes, evals/baseline.json): clean tops at 0.31 (readPrefsFile,
+  # an alias-tolerant reader), defects start at 0.51 (toUserRow, display_name
+  # written and displayName read) then 0.60 (writeConfigFile, proxy emitted
+  # conditionally and required on read); the other five sit at 0.84-0.97.
+  # Midpoint 0.41; set just under it so the weakest defect keeps its side.
+  # Gap 0.20 on means, 0.15 on single passes -- narrow, and the two weakest
+  # defects moved by 0.3-0.6 between phrasings of the question, which is why
+  # this is a cookbook recipe and not a shipped cutoff. See
+  # experiments/reports/g-paired-contracts/REPORT.md.
+  at: 0.40
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &writer_name
+              field: name
+              pattern: $NAME
+              # The writer side of every conventional pair. `to[A-Z]` also
+              # catches toString and toCacheKey; those have no reader and the
+              # "false" branch says so, which is cheaper than a tighter regex
+              # that misses a toRow.
+              regex: "^(serialize|serialise|encode|stringify|marshal|pack|write|dump|to[A-Z])([A-Za-z0-9_]|$)"
+      - all:
+          - kind: method_definition
+          - has: *writer_name
+      - all:
+          - kind: variable_declarator
+          - has: *writer_name
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+      # `const codec = { encode: (p) => ..., decode: (s) => ... }`
+      - all:
+          - kind: pair
+          - has:
+              field: key
+              pattern: $NAME
+              regex: "^(serialize|serialise|encode|stringify|marshal|pack|write|dump|to[A-Z])([A-Za-z0-9_]|$)"
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: >-
+    Passing what $NAME produces to the function in this file that reads it
+    back would not give back the value $NAME was given: a field comes back
+    under a different key, in a different unit or encoding, or the reader
+    rejects a value the writer legitimately produces.
+  criteria:
+    "true": >-
+      Trace one value through $NAME and then through its counterpart in this
+      file -- the parse, decode, from, unpack, read or unmarshal function for
+      the same format, even when a file, a database row, a queue or a cookie
+      sits between the two -- and the round trip fails: the reader looks a
+      field up in the record under a key the writer never put there, so it
+      comes back undefined; the reader applies a scale, format or decoding
+      that is not the inverse of what the writer applied, so a number or date
+      comes back a different quantity (getTime() milliseconds read with a
+      `* 1000` that assumes seconds, an ISO string read as a number, hex
+      decoded as base64); the reader throws, asserts or dereferences without a
+      fallback a field the writer never emits or emits only inside a
+      condition; or the reader compares a version or type tag against a
+      literal other than the one the writer wrote.
+    "false": >-
+      The file has no function that reads back what $NAME produces, so no
+      round trip exists here to fail; or the round trip gives back what the
+      writer was given for everything the writer can produce. Renaming across
+      the trip is fine when the key the reader looks up is the key the writer
+      wrote, whatever property it is then assigned to; seconds written with
+      `/ 1000` and read with `* 1000` is a correct inverse; a reader that also
+      tolerates a missing field with a default, accepts an older spelling as
+      an alias, handles an older version in its own branch, or ignores or
+      recomputes a field the writer emits is agreeing with the writer, not
+      contradicting it; and a reader that nests what the writer flattened
+      is fine when every field maps across.
+  note: >-
+    The counterpart is the function in this file that consumes the format
+    $NAME produces; a store or a wire between them does not put it out of
+    scope, and its name need not mirror $NAME's. A writer with no such
+    counterpart in this file is not a violation, and a writer whose only
+    reader is a library codec agrees with it by construction. Judge the two
+    bodies, not the declared types: the disagreement to find is one the type
+    checker cannot see because both halves pass through a string or an
+    untyped record.

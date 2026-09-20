@@ -83,6 +83,7 @@
  */
 import { estimateTokens, planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { USD_PER_MTOK } from "./jev.ts";
+import type { RelatedTest } from "./paired.ts";
 import type { Batch, Grouping, Rule, StateArm, Subject, SymbolIndex } from "./types.ts";
 
 /**
@@ -127,7 +128,7 @@ export const DEFAULT_RULE_BATCH_CAP = 32;
  * So a file-bearing arm pins the rule to the file axis. Cost optimisation
  * happens among the rules where it is free.
  */
-const FILE_BEARING_ARMS = new Set<StateArm>(["located", "full"]);
+const FILE_BEARING_ARMS = new Set<StateArm>(["located", "full", "paired"]);
 
 /** Which axis each rule was assigned, and what it cost either way. */
 export interface RuleDecision {
@@ -171,6 +172,7 @@ export interface Schedule {
 interface PlanContext {
   sources?: Map<string, string> | null;
   symbols?: SymbolIndex | null;
+  tests?: Map<string, RelatedTest[]> | null;
   batchSize?: number;
   ruleBatchCap?: number;
 }
@@ -192,12 +194,12 @@ const totals = (batches: Batch[]) => ({
 export function planMixed(
   subjects: Subject[],
   fileAxisRules: Set<string>,
-  { sources, symbols, batchSize = DEFAULT_BATCH_SIZE, ruleBatchCap = DEFAULT_RULE_BATCH_CAP }: PlanContext = {},
+  { sources, symbols, tests, batchSize = DEFAULT_BATCH_SIZE, ruleBatchCap = DEFAULT_RULE_BATCH_CAP }: PlanContext = {},
 ): Batch[] {
   const onFile = subjects.filter((s) => fileAxisRules.has(s.rule.id));
   const onRule = subjects.filter((s) => !fileAxisRules.has(s.rule.id));
   return [
-    ...planBatches(onFile, { group: "file", sources, symbols, batchSize }),
+    ...planBatches(onFile, { group: "file", sources, symbols, tests, batchSize }),
     // The rule axis gets the tighter cap: its saving is in round trips, and a
     // crowded state is where anchoring was measured.
     ...planBatches(onRule, { group: "rule", sources, symbols, batchSize: ruleBatchCap }),
@@ -216,16 +218,17 @@ export function schedule(
   {
     sources,
     symbols,
+    tests,
     batchSize = DEFAULT_BATCH_SIZE,
     ruleBatchCap = DEFAULT_RULE_BATCH_CAP,
   }: PlanContext = {},
 ): Schedule {
-  const ctx = { sources, symbols, batchSize, ruleBatchCap };
+  const ctx = { sources, symbols, tests, batchSize, ruleBatchCap };
   const present = [...new Set(subjects.map((s) => s.rule.id))];
   const byId = new Map(rules.map((r) => [r.id, r]));
 
   // Reference plans, for the report and for the pins.
-  const allFileBatches = planBatches(subjects, { group: "file", sources, symbols, batchSize });
+  const allFileBatches = planBatches(subjects, { group: "file", sources, symbols, tests, batchSize });
   const allRuleBatches = planBatches(subjects, { group: "rule", sources, symbols, batchSize: ruleBatchCap });
 
   // Two sources of a pin, and the rule's own always wins -- an author who
@@ -287,7 +290,7 @@ export function schedule(
   const decisions: RuleDecision[] = present.map((id) => {
     const mine = subjects.filter((s) => s.rule.id === id);
     const files = new Set(mine.map((s) => s.file)).size;
-    const soloFile = totals(planBatches(mine, { group: "file", sources, symbols, batchSize }));
+    const soloFile = totals(planBatches(mine, { group: "file", sources, symbols, tests, batchSize }));
     const soloRule = totals(
       planBatches(mine, { group: "rule", sources, symbols, batchSize: ruleBatchCap }),
     );
@@ -353,7 +356,7 @@ export function explain(s: Schedule): string {
   }
   out.push("");
   out.push("* held rather than chosen by cost: either pinned by the rule, or on a");
-  out.push("  file-bearing arm (located/full) that the rule axis would have to strip.");
+  out.push("  file-bearing arm (located/full/paired) that the rule axis would have to strip.");
   out.push("");
   const row = (label: string, t: { requests: number; tokens: number }) =>
     `  ${label.padEnd(16)} ${String(t.requests).padStart(5)} request(s)  ${t.tokens.toLocaleString().padStart(11)} tokens  $${((t.tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`;

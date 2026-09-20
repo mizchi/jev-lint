@@ -25,10 +25,10 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `ask` | required | the predicate, one sentence |
 | `language` / `languages` | required | one grammar, or several, by ast-grep's names: `Bash`, `C`, `Cpp`, `CSharp`, `Css`, `Dart`, `Elixir`, `Go`, `Haskell`, `Html`, `Java`, `JavaScript`, `Json`, `Jsx`, `Kotlin`, `Lua`, `Php`, `Python`, `Ruby`, `Rust`, `Scala`, `Solidity`, `Swift`, `Tsx`, `TypeScript`, `Yaml` |
 | `kind` | `score` (default) or `noul` | see below |
-| `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria` |
+| `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `subject` | `node` (default), `enclosing`, `file` | what code is judged |
-| `state` | `bare`, `local`, `located` (default), `graph`, `full` | what the model also sees |
+| `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context the model reads before answering, never shown in a finding. `criteria` *define* the two answers; `note` scopes them — which cases are out of bounds, which conventions count as honoured |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
 | `severity` | `hint`, `info`, `warning` (default), `error` | what `--format github` annotates; only `error` is rendered as an error. Earn it first |
@@ -36,6 +36,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `unsureBelow` | 0–1 | `score` only: a confidence under it words the finding as a question |
 | `constraints` / `utils` | | ast-grep's, passed through unchanged; part of the rule's identity for the cache |
 | `docs` / `tags` | | free text, for your own reports |
+| `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |
 
 An unknown field is a validation error, so a typo cannot quietly do nothing.
 
@@ -59,6 +60,29 @@ reach the wire.
 Asking an ordered conclusion as a `choice` is the mistake this avoids: the
 ordering is thrown away, adjacent levels split the probability mass, and the
 result arrives as a low confidence indistinguishable from real uncertainty.
+
+A branch of `criteria` is usually one sentence. It may instead be a mapping
+of `what` (the defining sentence), `examples` (a list) and `not_for` (what
+the branch is not about), which is the shape the vendor's own review
+workflow sends and the API reads as JSON. Measured on `fn-name-promises`
+(74 subjects, both grammars, three passes each way): the two shapes give the
+same decisions at the shipped cutoffs, class gaps within 0.02 of each other,
+and no subject moved more than 0.06 — the pass-to-pass spread. So the
+mapping is a way of writing the same criterion, not a better criterion; use
+it when a list of examples reads more clearly than a sentence with seven
+clauses, and expect about 6% more input tokens for it.
+
+
+`explain` is the one place a `choice` is used, and it is used **after** the
+verdict, not for it. With `--explain`, every reported finding of a rule that
+declares labels is asked one more question against the same state: which
+label best names why the statement holds. Nothing under a cutoff is asked,
+so the cost is one request per batch that produced findings. Read the label
+as a reading aid with its confidence beside it: on the `fn-name-promises`
+corpus, 10 of 13 labels matched the label's own reason, and the three that
+did not came back at 0.20, 0.26 and 0.53 — overlapping options splitting the
+mass, which is exactly why a choice never decides a verdict here.
+
 
 ## `subject`: what the question is about
 
@@ -90,9 +114,25 @@ text.
 | --- | --- | --- |
 | `bare` | the matched code and the file's name | cheapest, and the only arm immune to unrelated edits in the same file |
 | `local` | + each match's enclosing function, deduplicated | — |
+| `paired` | + the enclosing function, and **excerpts of the tests related to the file** (`related_tests`); no whole file. The one arm whose evidence is in another file | up to ~2,500 tokens of excerpt per file; a subject whose file has no related test is dropped and counted as `unpaired` |
 | `located` | + the whole file source | — |
 | `graph` | + path identity, imports, symbol table with each symbol's signature and call edges; **no source** | small at any file size |
 | `full` | source and graph | hits the 32Ki state budget soonest |
+
+`paired` is different in kind from the others: its evidence is in **another
+file**. A test file is related when its name contains the module's stem
+(`cart.ts` ↔ `cart.test.ts`, `test/cart.test.ts`, `__tests__/cart.spec.ts`)
+or when it imports the module — the second is what pairs a repository whose
+tests all live in one file. What travels is an excerpt: the lines of each
+related test that name the module's exported symbols, a little context
+around each, and the title of the test they sit in; `…` marks a cut. The
+state says they are excerpts. A file with no related test yields no subject
+on this arm — the runner drops those and prints how many, because "no test
+reaches this path" with no tests in the state is true of everything and
+says nothing. The cache does not key on the tests any more than `located`
+keys on the file: adding a test later does not retire a verdict, and
+`--force` is the escape hatch.
+
 
 **This is not a quality knob.** More context is not better; it is a choice of
 which error you would rather have. The rule that works:

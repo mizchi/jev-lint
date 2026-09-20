@@ -665,6 +665,203 @@ clear violations.
 
 ---
 
+## 12. A name that promises to give a resource back
+
+The fourth of the guarantee names (recipe 2 has the predicates; the shipped
+`safe-name-is-safe`, `idempotent-name` and `pure-name-is-pure` are the
+others). `with*` / `using*` / `scoped*` / `*Scope` say the body holds
+something only for the duration of the callback, so the question is whether
+every path — the throw, the rejection, the early return — gives it back.
+Measured on 33 subjects (12 defects, 21 cleans, 17 of them hard) at three
+passes: precision 1.00, recall 1.00 at 0.56, but 0.05 of headroom and one
+flip, so it is a recipe and not a shipped cutoff. On 25 unseen `with*`
+functions from eight repositories it found one real leak (a `clearTimeout`
+after `await Promise.race`, skipped when the operation rejects) and one
+false positive (a retry loop that attempts `ROLLBACK` and swallows the
+rollback's own error). The timer / flag / spinner subclass separates on its
+own today (0.68–0.93 against nothing clean above 0.42); the transaction
+-with-retry and lock-with-early-return shapes are what pin the bands
+together. Report: `experiments/reports/f-resource-names/`.
+
+```yaml
+- id: with-name-releases
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: local
+  at: 0.56
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &scope_name
+              field: name
+              pattern: $NAME
+              regex: "^(with|using|scoped|runWith|inTransaction)([A-Z0-9_]|$)|Scope$"
+      - all:
+          - kind: method_definition
+          - has: *scope_name
+      - all:
+          - kind: variable_declarator
+          - has: *scope_name
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: >-
+    This function's name ($NAME) says it holds a resource only for the
+    duration of the work it runs, but its body has a path on which something
+    it acquired is not released, rolled back, cleared or restored.
+  criteria:
+    "true": >-
+      The body acquires something -- a connection, client, lock, file handle,
+      cursor, transaction, temporary file or directory, timer, listener,
+      span, spinner, or a flag it sets on the way in -- and there is a path
+      through the body on which the matching release does not happen: the
+      release is written only after the awaited callback with no try/finally
+      around it, so a throw or rejection skips it; it sits only in the
+      success branch of a try/catch and the catch rethrows without it; an
+      early return leaves after the acquisition and before it -- including a
+      return that sits between the acquisition and the try/finally that
+      would have released it; or one of two things acquired is released and
+      the other is not.
+    "false": >-
+      Either the body acquires nothing that needs giving back -- it wraps a
+      component, merges defaults, retries, or passes a value through -- or
+      everything it acquires is released on every path: in a finally, by a
+      helper whose own name or shape does the scoping (transaction(fn),
+      runExclusive(fn), run(ctx, fn), acquire-and-callback APIs), by a
+      `using` or `await using` declaration, or by a for-await loop, which
+      closes its iterator when the loop exits by return or throw. Rollback in
+      the catch and release in the finally is the honoured shape.
+  note: >-
+    Only this body's own acquisitions are judged. A helper the body calls
+    whose name says it scopes, runs or disposes (transaction, runExclusive,
+    withLock, using, dispose, close on a for-await) is assumed to release what
+    it acquires, and a callback passed to such a helper is inside that
+    helper's scope. Whether the callback's own work is correct is not the
+    question; what matters is what this body took and whether the path that
+    throws, rejects or returns early gives it back. A finally protects only
+    the statements inside its try: something acquired before the try and
+    returned from before the try is never reached by that finally. What is
+    judged is whether the path reaches the release, not whether the release
+    itself can fail: a rollback or close that is attempted on the failure
+    path and has its own error swallowed is a release that was reached.
+    Logging in the catch is fine. A timer set and never cleared, and a
+    boolean flag set on entry and reset only on success, count as acquired
+    and not released.
+  axis: file
+```
+
+Why `local`: the acquisition and the release are both in the body, and the
+file adds only the chance that an unrelated edit moves the verdict. Why the
+long `note`: every clause in it is a hard clean that fired before it was
+written — the `for await` that closes its own iterator, the rollback whose
+own error is swallowed, the acquisition made before the `try`.
+
+## 13. A writer and a reader in one file that disagree
+
+A pair that contradicts itself: `serialize*` and the `parse*` beside it,
+`encode`/`decode`, `toJSON`/`fromJSON`, `toRow`/`fromRow`. The type checker
+cannot see it because both halves pass through a string or an untyped
+record. Match the **writer** only and give the question the file
+(`located`), so the reader is in the state without the matcher having to
+find the pair. Measured on 16 subjects (7 defects, 9 cleans, 6 hard):
+precision 1.00, recall 1.00 at 0.40 with no flips — but 0.09 of headroom,
+and the two weakest defects (a key spelled `display_name` on one side and
+`displayName` on the other; a field emitted inside a condition and required
+on read) moved 0.25–0.87 with the wording across three attempts, so the
+cutoff belongs to this phrasing. Literal-versus-literal defects — a version
+tag written as `2` and checked against `1`, hex written and base64 read, a
+required field the writer never emits — are found at 0.84–0.97 by every
+phrasing. Report: `experiments/reports/g-paired-contracts/`.
+
+```yaml
+- id: serializer-parser-agree
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: located
+  at: 0.40
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &writer_name
+              field: name
+              pattern: $NAME
+              regex: "^(serialize|serialise|encode|stringify|marshal|pack|write|dump|to[A-Z])([A-Za-z0-9_]|$)"
+      - all:
+          - kind: method_definition
+          - has: *writer_name
+      - all:
+          - kind: variable_declarator
+          - has: *writer_name
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+      - all:
+          - kind: pair
+          - has:
+              field: key
+              pattern: $NAME
+              regex: "^(serialize|serialise|encode|stringify|marshal|pack|write|dump|to[A-Z])([A-Za-z0-9_]|$)"
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: >-
+    Passing what $NAME produces to the function in this file that reads it
+    back would not give back the value $NAME was given: a field comes back
+    under a different key, in a different unit or encoding, or the reader
+    rejects a value the writer legitimately produces.
+  criteria:
+    "true": >-
+      Trace one value through $NAME and then through its counterpart in this
+      file -- the parse, decode, from, unpack, read or unmarshal function for
+      the same format, even when a file, a database row, a queue or a cookie
+      sits between the two -- and the round trip fails: the reader looks a
+      field up in the record under a key the writer never put there, so it
+      comes back undefined; the reader applies a scale, format or decoding
+      that is not the inverse of what the writer applied, so a number or date
+      comes back a different quantity (getTime() milliseconds read with a
+      `* 1000` that assumes seconds, an ISO string read as a number, hex
+      decoded as base64); the reader throws, asserts or dereferences without a
+      fallback a field the writer never emits or emits only inside a
+      condition; or the reader compares a version or type tag against a
+      literal other than the one the writer wrote.
+    "false": >-
+      The file has no function that reads back what $NAME produces, so no
+      round trip exists here to fail; or the round trip gives back what the
+      writer was given for everything the writer can produce. Renaming across
+      the trip is fine when the key the reader looks up is the key the writer
+      wrote, whatever property it is then assigned to; seconds written with
+      `/ 1000` and read with `* 1000` is a correct inverse; a reader that also
+      tolerates a missing field with a default, accepts an older spelling as
+      an alias, handles an older version in its own branch, or ignores or
+      recomputes a field the writer emits is agreeing with the writer, not
+      contradicting it; and a reader that nests what the writer flattened
+      is fine when every field maps across.
+  note: >-
+    The counterpart is the function in this file that consumes the format
+    $NAME produces; a store or a wire between them does not put it out of
+    scope, and its name need not mirror $NAME's. A writer with no such
+    counterpart in this file is not a violation, and a writer whose only
+    reader is a library codec agrees with it by construction. Judge the two
+    bodies, not the declared types: the disagreement to find is one the type
+    checker cannot see because both halves pass through a string or an
+    untyped record.
+```
+
+Why "would not give back the value it was given" rather than "disagrees":
+the round-trip framing is what let the flatten-and-rename clean (writer
+emits `street_line1`, reader assembles `street.line1`) through, which the
+field-by-field framing flagged at 0.48.
+
 ## Patterns that do not work, and why
 
 - **"Is this well named?"** No claim to check against. Capture the name and

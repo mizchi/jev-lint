@@ -22,6 +22,7 @@
  */
 import { buildQuestion, questionId } from "./questions.ts";
 import { buildState, buildRuleState } from "./state.ts";
+import type { RelatedTest } from "./paired.ts";
 import type {
   ArmFallback,
   Batch,
@@ -196,12 +197,14 @@ export interface PlanOptions {
   batchSize?: number;
   sources?: Map<string, string> | null;
   symbols?: SymbolIndex | null;
+  /** The `paired` arm's evidence, per file. */
+  tests?: Map<string, RelatedTest[]> | null;
   group?: Grouping;
 }
 
 export function planBatches(
   subjects: Subject[],
-  { batchSize = DEFAULT_BATCH_SIZE, sources, symbols, group = "file" }: PlanOptions = {},
+  { batchSize = DEFAULT_BATCH_SIZE, sources, symbols, tests, group = "file" }: PlanOptions = {},
 ): Batch[] {
   if (group === "rule") return planRuleBatches(subjects, { batchSize, symbols });
   const cap = Number.isInteger(batchSize) && batchSize > 0 ? batchSize : DEFAULT_BATCH_SIZE;
@@ -223,7 +226,7 @@ export function planBatches(
     const language = items[0]!.language;
 
     const stateAt = (candidate: StateArm, batchItems: Subject[]) =>
-      buildState({ file, source, entry, subjects: batchItems, arm: candidate, language });
+      buildState({ file, source, entry, subjects: batchItems, arm: candidate, language, tests: tests?.get(file) ?? null });
 
     // Which arm can this file afford? Only the part of a state that a SPLIT
     // cannot shrink decides that, and the floor is what one subject alone
@@ -326,6 +329,8 @@ function stepDown(arm: StateArm): StateArm[] {
       return ["located", "local", "bare"];
     case "graph":
       return ["graph", "bare"];
+    case "paired":
+      return ["paired", "local", "bare"];
     case "local":
       return ["local", "bare"];
     default:
@@ -411,9 +416,12 @@ export function planRuleBatches(
   return batches;
 }
 
-/** `located` cannot mean "every file" -- under rule grouping it becomes `local`. */
+/**
+ * `located` cannot mean "every file" -- under rule grouping it becomes
+ * `local`. `paired` is one file's tests, so the same applies.
+ */
 function ruleGroupArm(arm: StateArm): StateArm {
-  if (arm === "located" || arm === "full") return "local";
+  if (arm === "located" || arm === "full" || arm === "paired") return "local";
   return arm;
 }
 

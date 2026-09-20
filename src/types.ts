@@ -37,7 +37,7 @@ export const SUBJECTS = ["node", "enclosing", "file"] as const;
 export type SubjectMode = (typeof SUBJECTS)[number];
 
 /** Which sections of state accompany the questions. */
-export const STATE_ARMS = ["bare", "local", "located", "graph", "full"] as const;
+export const STATE_ARMS = ["bare", "local", "paired", "located", "graph", "full"] as const;
 export type StateArm = (typeof STATE_ARMS)[number];
 
 /** What a state is built around: one file, or one rule's matches. */
@@ -93,10 +93,27 @@ export type MessageId = (typeof MESSAGE_IDS)[number];
  */
 export type Matcher = Record<string, unknown>;
 
+/**
+ * One branch of a noul's criteria, in either of two shapes.
+ *
+ * A sentence is the usual form. The structured form is what the vendor's own
+ * review workflow sends: the defining sentence, a few examples of the branch,
+ * and what the branch is NOT for. The wire accepts any JSON as a description,
+ * so this is a validation choice rather than a protocol one -- a mapping is
+ * limited to these three keys so a misspelt one is an error and not a field
+ * the model silently never sees.
+ */
+export interface CriterionDetail {
+  what: string;
+  examples?: string[];
+  not_for?: string;
+}
+export type Criterion = string | CriterionDetail;
+
 /** A noul's two branches. Must be nested under `criteria` on the wire. */
 export interface NoulCriteria {
-  true: string;
-  false: string;
+  true: Criterion;
+  false: Criterion;
 }
 
 /** A validated, normalized rule. */
@@ -132,6 +149,12 @@ export interface Rule {
   message: string | null;
   docs: string | null;
   tags: string[];
+  /**
+   * Labels for a follow-up `choice`, asked of this rule's findings only when
+   * the run is given `--explain`: which of these best names why the verdict
+   * holds. Never part of the verdict question, so never part of the draft.
+   */
+  explain: Record<string, string> | null;
   /** Where it was loaded from. Absent on rules built in memory. */
   source?: string;
   pack?: string;
@@ -276,7 +299,25 @@ export interface NoulQuestion {
   criteria: NoulCriteria;
 }
 
-export type Question = ScoreQuestion | NoulQuestion;
+/**
+ * The follow-up, not a verdict: which of a rule's labels best names why a
+ * finding holds. A choice discards ordering, which is why it is never used
+ * for the verdict itself; a set of unordered mechanisms is what it is for.
+ */
+export interface ChoiceQuestion {
+  type: "choice";
+  instructions: Record<string, unknown>;
+  criteria: Record<string, string>;
+}
+
+export type Question = ScoreQuestion | NoulQuestion | ChoiceQuestion;
+
+/** A choice's answer: the label, how sure, and the mass on every label. */
+export interface Choice {
+  choice: string;
+  confidence: number;
+  probabilities: Record<string, number> | null;
+}
 
 /** A usable answer. Absent rather than zero when unusable. */
 export interface Answer {
@@ -312,8 +353,11 @@ export interface StatePayload {
   symbols?: Array<Record<string, unknown>>;
   source?: string;
   enclosing_code?: Array<Record<string, unknown>>;
+  /** The `paired` arm: excerpts of the tests related to the file. */
+  related_tests?: Array<{ path: string; paired_by: string; code: string }>;
   note_on_independence?: string;
   note_on_enclosing_code?: string;
+  note_on_related_tests?: string;
   matcher?: string;
   [key: string]: unknown;
 }
@@ -374,6 +418,8 @@ export interface Finding {
    * discipline says not to automate.
    */
   passes?: { over: number; of: number; spread: number };
+  /** Present on a reported finding when `--explain` asked its rule's follow-up. */
+  explanation?: { choice: string; confidence: number };
 }
 
 export interface GateStats {
@@ -392,6 +438,15 @@ export interface IgnoreStats {
   files: string[];
   /** Rule ids named in a suppression that no loaded rule answers to. */
   unknownRules: string[];
+}
+
+/**
+ * What the `paired` arm could not pair: subjects dropped because their file
+ * has no related test to look at, and the files they were in.
+ */
+export interface UnpairedStats {
+  subjects: number;
+  files: string[];
 }
 
 export interface GateResult {
@@ -462,6 +517,7 @@ export interface RunResult extends GateResult {
   skippedByDiff?: number;
   duplicateGrammars?: number;
   ignored?: IgnoreStats;
+  unpaired?: UnpairedStats;
   /** How many times everything was asked; above 1 with `--retry`. */
   retry?: number;
   /**

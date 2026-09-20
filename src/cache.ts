@@ -17,10 +17,12 @@
  * Recalibration must be free, or it will not be done.
  *
  * What is NOT in the key is the rest of the file, even though the file is in
- * the state on the `located` and `full` arms. That is a known and accepted
- * imprecision: keying on whole-file content would invalidate every verdict in
- * a file on every keystroke, which is not a cache. `jev-lint check --force` is
- * the escape hatch.
+ * the state on the `located` and `full` arms -- nor the related tests the
+ * `paired` arm carries, so a test added later does not retire a verdict that
+ * said no test reached a path. That is a known and accepted imprecision:
+ * keying on whole-file content would invalidate every verdict in a file on
+ * every keystroke, which is not a cache. `jev-lint check --force` is the
+ * escape hatch.
  *
  * Three properties the rest of the tool relies on:
  *

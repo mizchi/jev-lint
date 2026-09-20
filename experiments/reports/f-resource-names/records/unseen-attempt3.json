@@ -1,0 +1,286 @@
+{
+  "schema": "jev-lint-run-1",
+  "recorded": "2026-09-20T08:25:37.414Z",
+  "model": "jev-1.13.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 48,
+    "inputTokens": 89109,
+    "outputTokens": 1692,
+    "ms": 24099,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.003742578,
+    "wallMs": 1923
+  },
+  "rules": [
+    {
+      "id": "with-name-releases",
+      "kind": "noul",
+      "ask": "This function's name ($NAME) says it holds a resource only for the duration of the work it runs, but its body has a path on which something it acquired is not released, rolled back, cleared or restored.",
+      "note": "Only this body's own acquisitions are judged. A helper the body calls whose name says it scopes, runs or disposes (transaction, runExclusive, withLock, using, dispose, close on a for-await) is assumed to release what it acquires, and a callback passed to such a helper is inside that helper's scope. Whether the callback's own work is correct is not the question; what matters is what this body took and whether the path that throws, rejects or returns early gives it back. A finally protects only the statements inside its try: something acquired before the try and returned from before the try is never reached by that finally. Logging in the catch is fine. A timer set and never cleared, and a boolean flag set on entry and reset only on success, count as acquired and not released.",
+      "draft": "96fd35a7b7e2",
+      "at": 0.45,
+      "state": "local",
+      "subject": "node",
+      "severity": "warning",
+      "language": "TypeScript"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/crater_scripts_flaker-entry.ts",
+      "line": 135,
+      "endLine": 143,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/lightbringer_src_trace.ts",
+      "line": 70,
+      "endLine": 88,
+      "kind": "noul",
+      "value": 0.20333333333333337,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/crater_webdriver_playwright_adapter.ts",
+      "line": 2159,
+      "endLine": 2169,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/crater_webdriver_playwright_adapter.ts",
+      "line": 7271,
+      "endLine": 7294,
+      "kind": "noul",
+      "value": 0.08666666666666667,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/agentcluster_worker.ts",
+      "line": 161,
+      "endLine": 170,
+      "kind": "noul",
+      "value": 0.06666666666666667,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/agentcluster_worker.ts",
+      "line": 182,
+      "endLine": 187,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/mnemo_mnemo-server_src_telemetry-runtime.ts",
+      "line": 637,
+      "endLine": 835,
+      "kind": "noul",
+      "value": 0.17333333333333334,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/mnemo_mnemo-server_src_telemetry-runtime.ts",
+      "line": 837,
+      "endLine": 878,
+      "kind": "noul",
+      "value": 0.11,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/oden_crates_odenctl_src_control-plane_durable-object-storage.ts",
+      "line": 585,
+      "endLine": 595,
+      "kind": "noul",
+      "value": 0.20333333333333334,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/oden_crates_odenctl_src_control-plane_snapshot-publisher.ts",
+      "line": 197,
+      "endLine": 204,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/oden_crates_odenctl_src_control-plane_snapshot-publisher.ts",
+      "line": 206,
+      "endLine": 219,
+      "kind": "noul",
+      "value": 0.056666666666666664,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/crater_scripts_wpt-runner.ts",
+      "line": 2682,
+      "endLine": 2703,
+      "kind": "noul",
+      "value": 0.68,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/pi-remote-cloudflare-sandbox_src_computer-workspace.ts",
+      "line": 33,
+      "endLine": 33,
+      "kind": "noul",
+      "value": 0.043333333333333335,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/mnemo_proto_src_session_transaction.ts",
+      "line": 13,
+      "endLine": 41,
+      "kind": "noul",
+      "value": 0.5766666666666667,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/chaosbringer_packages_chaosbringer_src_fixture.ts",
+      "line": 66,
+      "endLine": 133,
+      "kind": "noul",
+      "value": 0.43333333333333335,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/chaosbringer_packages_chaosbringer_src_fixture.ts",
+      "line": 209,
+      "endLine": 299,
+      "kind": "noul",
+      "value": 0.14333333333333334,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/rolldown_packages_rolldown_build.ts",
+      "line": 114,
+      "endLine": 170,
+      "kind": "noul",
+      "value": 0.07666666666666667,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/mnemo_proto_src_memory_lock.ts",
+      "line": 3,
+      "endLine": 10,
+      "kind": "noul",
+      "value": 0.06,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/flaker-fix76_src_cli_runners_quarantine-runtime.ts",
+      "line": 197,
+      "endLine": 248,
+      "kind": "noul",
+      "value": 0.19000000000000003,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/oden_crates_odenctl_src_runtime_node-app.ts",
+      "line": 963,
+      "endLine": 975,
+      "kind": "noul",
+      "value": 0.08666666666666667,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/oden_crates_odenctl_src_runtime_node-app.ts",
+      "line": 1062,
+      "endLine": 1064,
+      "kind": "noul",
+      "value": 0.04,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/oden_crates_odenctl_src_runtime_node-app.ts",
+      "line": 1073,
+      "endLine": 1079,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/oden_crates_odenctl_src_runtime_node-app.ts",
+      "line": 1269,
+      "endLine": 1280,
+      "kind": "noul",
+      "value": 0.07,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/oden_crates_odenctl_src_runtime_node-app.ts",
+      "line": 1282,
+      "endLine": 1301,
+      "kind": "noul",
+      "value": 0.3566666666666667,
+      "confidence": null,
+      "arm": "local"
+    },
+    {
+      "rule": "with-name-releases",
+      "file": "/private/tmp/claude-501/-Users-mz-ghq-github-com-mizchi-jevlint/90610f47-295d-4c05-8ddc-83e260f68787/scratchpad/unseen/rolldown_packages_rolldown_src_cli_commands_bundle.ts",
+      "line": 269,
+      "endLine": 274,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "local"
+    }
+  ]
+}

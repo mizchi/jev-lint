@@ -1,0 +1,98 @@
+# Guarantee names, resource scoping: with* / using* / scoped* / runWith* /
+# inTransaction* / *Scope with a body that acquires something and has a path
+# on which it is never released.
+#
+# The sibling rules in this family (safe-name-is-safe, idempotent-name,
+# pure-name-is-pure, guard-name-guards) each narrow the shipped
+# fn-name-promises to one promise a name makes; this one is the promise that
+# a resource acquired for a callback is given back when the callback ends,
+# whichever way it ends. The name is the matcher's job (a regex on $NAME) and
+# is over-matched on purpose: withRouter, withDefaults, withRetry and
+# withAuth(Component) acquire nothing, and the criteria say so -- a body
+# that holds no resource has nothing to leak. Only the release is the
+# model's question.
+#
+# `local`: the body is the evidence. A release delegated to a helper is
+# judged by that helper's name (db.transaction, mutex.runExclusive,
+# AsyncLocalStorage.run, `using`, a for-await loop), never by the file, so
+# `located` was not measured.
+
+- id: with-name-releases
+  languages: [TypeScript, Tsx, JavaScript, Jsx]
+  kind: noul
+  subject: node
+  state: local
+  # 0.56, fitted 2026-09-20 on evals/ (12 defects, 21 cleans, 3 passes).
+  # Before the two hard cleans taken from unseen code the fit was 0.45 with
+  # 0.15 of headroom each side (clean top 0.31, `withMemo`). Those two --
+  # `withImmediateWrite`, a retry loop whose rollback has its own error
+  # swallowed, and `withDeadline`, a timer cleared in both promise handlers
+  # rather than a finally -- answer 0.49 and 0.41, and the weakest defects
+  # (`withLock`, an early return between acquire() and the try; `withPidFile`,
+  # two things acquired and one released) answer 0.64-0.65. The gap is 0.15
+  # on the mean and 0.07 across passes; the midpoint is 0.56 and the headroom
+  # is under 0.10 on both sides, which is why this is a cookbook recipe and
+  # not a shipped cutoff.
+  at: 0.56
+  rule:
+    any:
+      - all:
+          - kind: function_declaration
+          - has: &scope_name
+              field: name
+              pattern: $NAME
+              regex: "^(with|using|scoped|runWith|inTransaction)([A-Z0-9_]|$)|Scope$"
+      - all:
+          - kind: method_definition
+          - has: *scope_name
+      - all:
+          - kind: variable_declarator
+          - has: *scope_name
+          - has:
+              field: value
+              any:
+                - kind: arrow_function
+                - kind: function_expression
+  ask: >-
+    This function's name ($NAME) says it holds a resource only for the
+    duration of the work it runs, but its body has a path on which something
+    it acquired is not released, rolled back, cleared or restored.
+  criteria:
+    "true": >-
+      The body acquires something -- a connection, client, lock, file handle,
+      cursor, transaction, temporary file or directory, timer, listener,
+      span, spinner, or a flag it sets on the way in -- and there is a path
+      through the body on which the matching release does not happen: the
+      release is written only after the awaited callback with no try/finally
+      around it, so a throw or rejection skips it; it sits only in the
+      success branch of a try/catch and the catch rethrows without it; an
+      early return leaves after the acquisition and before it -- including a
+      return that sits between the acquisition and the try/finally that
+      would have released it; or one of two things acquired is released and
+      the other is not.
+    "false": >-
+      Either the body acquires nothing that needs giving back -- it wraps a
+      component, merges defaults, retries, or passes a value through -- or
+      everything it acquires is released on every path: in a finally, by a
+      helper whose own name or shape does the scoping (transaction(fn),
+      runExclusive(fn), run(ctx, fn), acquire-and-callback APIs), by a
+      `using` or `await using` declaration, or by a for-await loop, which
+      closes its iterator when the loop exits by return or throw. Rollback in
+      the catch and release in the finally is the honoured shape.
+  note: >-
+    Only this body's own acquisitions are judged. A helper the body calls
+    whose name says it scopes, runs or disposes (transaction, runExclusive,
+    withLock, using, dispose, close on a for-await) is assumed to release what
+    it acquires, and a callback passed to such a helper is inside that
+    helper's scope. Whether the callback's own work is correct is not the
+    question; what matters is what this body took and whether the path that
+    throws, rejects or returns early gives it back. A finally protects only
+    the statements inside its try: something acquired before the try and
+    returned from before the try is never reached by that finally. What is
+    judged is whether the path reaches the release, not whether the release
+    itself can fail: a rollback or close that is attempted on the failure
+    path and has its own error swallowed is a release that was reached.
+    Logging in the catch is fine. A timer set and never cleared, and a
+    boolean flag set on entry and reset only on success, count as acquired
+    and not released.
+  axis: file

@@ -26,7 +26,7 @@
  */
 import { SCORE_LEVELS } from "./rules.ts";
 import { INLINE_LIMIT, SOURCE_BEARING_ARMS, truncate } from "./state.ts";
-import type { Answer, Question, Rule, RuleKind, Subject } from "./types.ts";
+import type { Answer, Choice, ChoiceQuestion, Question, Rule, RuleKind, Subject } from "./types.ts";
 
 /** Stable question name, so answers can be matched back positionally. */
 export function questionId(i: number): string {
@@ -39,6 +39,9 @@ const TASK_SCORE =
 const TASK_NOUL =
   "Judge only the code identified below, and only for the statement given -- other problems with it are not your concern here.";
 
+const TASK_EXPLAIN =
+  "The statement below was judged to hold for the code identified. Pick the option that best names WHY it holds for this code; do not re-judge whether it holds.";
+
 /**
  * Build one question for one subject.
  *
@@ -47,6 +50,57 @@ const TASK_NOUL =
  * that was asked.
  */
 export function buildQuestion(rule: Rule, subject: Subject, id: string): Question {
+  const shared = subjectFields(rule, subject, id);
+
+  if (rule.kind === "noul") {
+    return {
+      type: "noul",
+      instructions: {
+        task: TASK_NOUL,
+        statement: rule.ask,
+        ...(rule.note ? { also: rule.note } : {}),
+        ...shared,
+      },
+      // Nested under `criteria`, never at the top level. A flat `{true, false}`
+      // gets a 200 back with the criteria silently discarded; the only symptom
+      // is a smaller input-token count. `rules.ts` validates the shape so the
+      // mistake cannot reach the wire.
+      criteria: { true: rule.criteria!.true, false: rule.criteria!.false },
+    };
+  }
+
+  return {
+    type: "score",
+    instructions: {
+      task: TASK_SCORE,
+      rule: rule.ask,
+      ...(rule.note ? { also: rule.note } : {}),
+      ...shared,
+    },
+    criteria: SCORE_LEVELS,
+  };
+}
+
+/**
+ * The follow-up for one finding: which of the rule's `explain` labels best
+ * names why the statement holds. Same subject fields as the verdict question
+ * -- it is asked against the same state, in a request of its own -- so the
+ * model is pointed at exactly the code the verdict was about.
+ */
+export function buildExplainQuestion(rule: Rule, subject: Subject, id: string): ChoiceQuestion {
+  return {
+    type: "choice",
+    instructions: {
+      task: TASK_EXPLAIN,
+      statement: rule.ask,
+      ...subjectFields(rule, subject, id),
+    },
+    criteria: { ...(rule.explain ?? {}) },
+  };
+}
+
+/** What every question about a subject carries: where it is and what it is. */
+function subjectFields(rule: Rule, subject: Subject, id: string): Record<string, unknown> {
   // The lines of the code actually supplied, which is the subject's range and
   // not the match's when `subject: enclosing` promoted it.
   const from = subject.subjectLine ?? subject.line;
@@ -91,34 +145,7 @@ export function buildQuestion(rule: Rule, subject: Subject, id: string): Questio
     // mid-scale and it reads as a threshold problem.
     shared.code = truncate(subject.text);
   }
-
-  if (rule.kind === "noul") {
-    return {
-      type: "noul",
-      instructions: {
-        task: TASK_NOUL,
-        statement: rule.ask,
-        ...(rule.note ? { also: rule.note } : {}),
-        ...shared,
-      },
-      // Nested under `criteria`, never at the top level. A flat `{true, false}`
-      // gets a 200 back with the criteria silently discarded; the only symptom
-      // is a smaller input-token count. `rules.ts` validates the shape so the
-      // mistake cannot reach the wire.
-      criteria: { true: rule.criteria!.true, false: rule.criteria!.false },
-    };
-  }
-
-  return {
-    type: "score",
-    instructions: {
-      task: TASK_SCORE,
-      rule: rule.ask,
-      ...(rule.note ? { also: rule.note } : {}),
-      ...shared,
-    },
-    criteria: SCORE_LEVELS,
-  };
+  return shared;
 }
 
 /** Read one answer back. Returns null when the answer is unusable. */
@@ -141,6 +168,19 @@ export function readAnswer(
     value: a.score as number,
     confidence: typeof a.confidence === "number" ? a.confidence : null,
     kind: "score",
+    probabilities: (a.probabilities as Record<string, number> | undefined) ?? null,
+  };
+}
+
+/** Read a choice back. Null when the answer is not a usable choice. */
+export function readChoice(answers: Record<string, unknown> | undefined, id: string): Choice | null {
+  const a = answers?.[id] as
+    | { type?: string; choice?: unknown; confidence?: unknown; probabilities?: unknown }
+    | undefined;
+  if (!a || a.type !== "choice" || typeof a.choice !== "string") return null;
+  return {
+    choice: a.choice,
+    confidence: typeof a.confidence === "number" ? a.confidence : 0,
     probabilities: (a.probabilities as Record<string, number> | undefined) ?? null,
   };
 }
