@@ -188,15 +188,17 @@ Work in this order, and do not skip a step because the rule "looks right":
    fails the whole scan.
 5. **Ask, on a few files, with `--retry 3` and an `--at` you guess**, and read
    every finding against the code. Then, if the rule will be kept, give it
-   evals: `rules/<id>/evals/cases/` with a handful of defects and the hard
-   clean cases, `labels.json` beside them, and `jev-lint eval rules/<id>
-   --repeat 3 --accept` — see [references/calibration.md](references/calibration.md).
-   A rule ships with a fitted `at:` and an accepted baseline, not a guess.
+   fixtures: `rules/<lang>/<id>/fixtures/` with a handful of defects and the
+   hard clean cases, `expect.yml` beside them, and `jev-lint eval
+   rules/<lang>/<id> --repeat 3 --accept` — see
+   [references/calibration.md](references/calibration.md). A rule ships
+   with a fitted `at:` and an accepted baseline, not a guess.
 
-Two grammars, one sentence: Rust and TypeScript spell the same idea with
-different node kinds, so write two rules and share `ask`/`criteria` with a YAML
-anchor (`&fn_ask` / `*fn_ask`). Copies drift; a drifted copy is a cache that
-never hits.
+Two grammars, one rule: Rust and TypeScript spell the same idea with
+different node kinds, so the rule lives twice, `rules/typescript/<id>/` and
+`rules/rust/<id>/`, same id, each with its own matcher, state, cutoff and
+fixtures. The sentence is a copy; the loader warns when the copies drift,
+so edit both or say in a comment why they differ.
 
 ## Judging the output
 
@@ -207,8 +209,8 @@ means the tool is wrong:
 2. **The rule is right and the *name* is wrong.** A test called "no batch
    exceeds the ceiling" whose body legitimately exempts one-subject batches is
    a name that overclaims. Fix the name.
-3. **The rule is wrong.** Add the case to the rule's `evals/cases` as a
-   labelled clean example, run the eval, and refit. A false positive that
+3. **The rule is wrong.** Add the case to the rule's `fixtures/` as a
+   labelled clean example in `expect.yml`, run the eval, and refit. A false positive that
    is not in the evals comes back.
 
 Do not chase the tail: editing a file moves the `located` state for every

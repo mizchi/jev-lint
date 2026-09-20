@@ -1,9 +1,9 @@
 # Rule improvement brief
 
 You are raising the quality of ONE or TWO jev-lint rules that already have
-evals. Each rule is a directory -- `rules/<id>/` if shipped,
-`experiments/rule-candidates/<id>/` if not -- holding `rule.yml` and
-`evals/{cases,labels.json,baseline.json}`. Write only inside the
+evals. Each rule is a directory -- `rules/<lang>/<id>/` if shipped,
+`experiments/rule-candidates/<lang>/<id>/` if not -- holding `rule.yml`,
+`fixtures/`, `expect.yml` and `baseline.json`. Write only inside the
 directories you were given, plus your report under
 `experiments/reports/improve-<id>/REPORT.md`. Do not commit. Do not touch
 `src/`, other rule directories, or `docs/`.
@@ -56,7 +56,7 @@ what it cannot do is worth more than one that hides it.
   Measure `state` changes rather than guess (`--arm` is not available in
   eval; edit `state:` and run).
 - `at:`: to the fitted midpoint, or above it for headroom on real code.
-- `evals/cases/` and `evals/labels.json`: add cases. Real-looking code,
+- `fixtures/` and `expect.yml`: add cases. Real-looking code,
   10-40 lines per case, and NEVER a marker comment (`// DEFECT`, `// CLEAN`,
   `// this is wrong because`) in a case file -- the model reads the file.
   Labels carry the reason. Paths relative to `cases/`, `window: 0` for

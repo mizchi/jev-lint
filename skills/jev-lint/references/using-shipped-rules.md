@@ -1,7 +1,9 @@
 # Using the shipped rules
 
 jev-lint ships 24 rules in the npm package's `rules/` directory, one
-directory per rule (family) with `rule.yml` and the `evals/` that prove it.
+directory per rule under its language (`rules/typescript/<id>/`,
+`rules/rust/<id>/`, …) with `rule.yml`, the `fixtures/` that prove it and
+`expect.yml`.
 They are the rules to start from: each one has a cutoff fitted to a labelled
 corpus, a `state` arm chosen by measurement, and a `criteria` block that took
 several rounds to get right. Write your own only for a convention they do not
@@ -57,11 +59,12 @@ describe the command it runs? JSON, `bare`.
 Not asked, deliberately: style, redundancy, whether a comment should exist.
 One axis only — is the claim false.
 
-The naming and comment rules each have an ECMAScript variant (`TypeScript, Tsx, JavaScript, Jsx`) and a
-Rust variant (`-rust`) sharing one sentence; `comment-describes-declaration`
-also has a `-js` variant, because JavaScript has no type declarations to
-match. **On a TypeScript-only repository 8 of the 24 rules report "matched
-nothing"** — the seven Rust variants and the `-js` one. That line is expected
+The naming and comment rules each exist under `typescript/` (`TypeScript,
+Tsx, JavaScript, Jsx`) and `rust/`, same id, same sentence;
+`comment-describes-declaration` also exists under `javascript/`, because
+JavaScript has no type declarations to match. **On a TypeScript-only
+repository 8 of the 24 rules report "matched nothing"** — the seven under
+`rust/` and the one under `javascript/`. That line is expected
 there, and nowhere else.
 
 The two test rules are nested, not orthogonal: a test that exercises the wrong
@@ -123,9 +126,9 @@ domain, add `note:` with your exceptions. Two things to know before editing:
 - **Editing `ask`, `criteria`, `note`, `rule`, `subject` or `state`
   invalidates that rule's cached verdicts** — it is a new question. Editing
   `at` or `severity` invalidates nothing. Recalibration is free by design.
-- **Rules that share a sentence share it by YAML anchor** (`&fn_ask` /
-  `*fn_ask`). Edit the anchor and both variants follow. Anchors are scoped to
-  one YAML document, so keep a rule and its `-rust` twin in the same file.
+- **A rule in two languages is two files with one id** (`rules/typescript/<id>`,
+  `rules/rust/<id>`). The sentence is a copy; the loader warns when the copies
+  drift, so edit both.
 
 Dropping a language variant is a deletion, not a `languages:` edit: the Rust
 rule names Rust node kinds, and ast-grep rejects a kind absent from the target
@@ -165,7 +168,7 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted on each rule's own evals (`rules/<id>/evals/`, 207 labelled defects
+Fitted on each rule's own fixtures (`rules/<lang>/<id>/`, 207 labelled defects
 across the 24 rules, three passes each). 21 of the 24 reach precision and
 recall 1.00 at their shipped cutoffs; the three that do not each miss one
 labelled defect the rule file names — a binding holding one branch of a

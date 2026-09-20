@@ -8,27 +8,30 @@ to do when it fails.
 
 ## Where the cases live
 
-A rule is a directory, and its cases live beside it:
+A rule is a directory under its language, and its cases live beside it:
 
 ```
-rules/<id>/
-  rule.yml                 the rule, every language variant
-  evals/
-    cases/                 fixture code that reads like real code -- no markers
-    labels.json            {"$default":"clean","cart.ts":[{"line":12,"label":"bad","rule":"<id>","window":0,"reason":"..."}]}
-    baseline.json          the accepted run: answers, cutoffs, the rule's draft hash
-    last.json              the last run, accepted or not
+rules/<lang>/<id>/
+  rule.yml                 the rule, one language (typescript admits the ECMAScript four)
+  fixtures/                fixture code that reads like real code -- no markers
+  expect.yml               default: clean
+                           fixtures/cart.ts:
+                             - { line: 12, label: bad, window: 0, reason: "..." }
+  baseline.json            the accepted run: answers, cutoffs, the rule's draft hash
+  last.json                the last run, accepted or not
 ```
 
-Paths in `labels.json` are relative to `cases/`. `window` says how loosely
+Paths in `expect.yml` are relative to the rule directory. There is no
+`rule:` key on an entry; the directory decides. `window` says how loosely
 the line is matched; `0` for one-per-line subjects, larger for a
 `subject: enclosing` rule that reports at the top of the function.
 
 ## The commands
 
 ```bash
-jev-lint eval rules/<id> --repeat 3        # ask 3 times; score at the SHIPPED cutoff; compare with the baseline
-jev-lint eval rules/<id> --accept          # ...and make that run the baseline
+jev-lint eval rules/<lang>/<id> --repeat 3   # ask 3 times; score at the SHIPPED cutoff; compare with the baseline
+jev-lint eval rules/<lang>/<id> --accept     # ...and make that run the baseline
+jev-lint eval rules/rust                     # every Rust rule
 jev-lint eval --replay                     # every rule, no requests: re-score baselines at current cutoffs
 jev-lint gaps <dir>                        # a rule with no labels yet: does it separate at all?
 jev-lint calibrate <dir> --labels <json> --repeat 3 --record run.json   # a fit outside the evals layout

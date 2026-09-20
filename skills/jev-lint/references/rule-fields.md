@@ -173,9 +173,26 @@ the matched node is the code.
 `languages: [TypeScript, Tsx]` works when the matcher is valid in both. Rust and
 TypeScript spell the same structural idea with different node kinds, and
 ast-grep **rejects** a kind absent from the target grammar — and one rejected
-rule fails the whole scan — so those need two matchers. Share the sentence with
-a YAML anchor rather than copying it, since copies drift and a drifted copy is a
-cache that never hits:
+rule fails the whole scan — so those need two matchers.
+
+In the shipped layout that is two directories with one id, each with its
+own matcher, state, cutoff and fixtures:
+
+```
+rules/typescript/fn-name-promises/rule.yml    rule: { kind: function_declaration, ... }
+rules/rust/fn-name-promises/rule.yml          rule: { kind: function_item, ... }
+```
+
+The sentence is a copy, and `jev-lint rules` warns when the two copies of
+an id differ in `ask`, `criteria`, `note` or `explain`. A language
+directory admits only its own grammars (`typescript` admits the ECMAScript
+four). The identity of a rule is `(language, id)`: findings,
+`jev-lint-ignore` and `--at <id>=n` apply to every language; `--at
+rust/<id>=n` to one.
+
+In a flat rule file (`rules/mine.yml`, or one passed with `-R`) a rule file
+may be a *list* of rules or a `---` stream, and a YAML anchor shares the
+sentence within one document:
 
 ```yaml
 - id: fn-name-promises
@@ -191,7 +208,4 @@ cache that never hits:
   ask: *fn_ask
   criteria: *fn_criteria
 ```
-
-Anchors are scoped to one YAML document, which is why a rule file may be a
-*list* of rules as well as a `---` stream.
 

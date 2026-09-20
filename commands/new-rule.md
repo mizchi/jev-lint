@@ -19,7 +19,9 @@ this order and do not skip the validation.
 3. **Find the node kinds** with `npx -y @ast-grep/cli run -l <lang> -p '<a
    snippet of the code shape>' --debug-query=ast .` rather than guessing. A
    kind absent from the grammar fails the whole scan.
-4. **Write the rule** to `rules/<id>.yml` (create `rules/` if absent; note
+4. **Write the rule** to `rules/<id>.yml` — or, if it will get fixtures and
+   a baseline, to `rules/<language>/<id>/rule.yml` like the shipped rules
+   (create `rules/` if absent; note
    that doing so switches the project off the packaged packs — say so, and
    offer to copy them in). Over-match in the matcher. Write `criteria` in
    terms of what the code in front of the model shows. Put exceptions in

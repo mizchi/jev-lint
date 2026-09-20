@@ -172,7 +172,9 @@ Why: `criteria."true"` lists what a mismatch *looks like in the code* —
 wrong return kind, hidden mutation, narrower case — so the model has
 something to check rather than a mood to report. The `"false"` branch
 explicitly forgives terse names; without that line every short name reads as
-a weak violation. Two grammars, one sentence, shared by anchor.
+a weak violation. Two grammars, one sentence: in a flat file, shared by
+anchor as here; in the `rules/<lang>/<id>/` layout, two files with one id
+and the loader's drift warning holding the copies together.
 
 The third arm is looser than it looks: `has: { any: [arrow_function, ...] }`
 without `field: value` matches any declarator that *contains* an arrow, so

@@ -52,7 +52,7 @@ failed and nothing was reported.
 | `--base <ref>` / `--staged` | what `review` diffs against: the merge base with `ref`, or the index (what a commit will contain: no untracked files, no unstaged edits) |
 | `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any finding |
 | `init --pre-commit` | write a hook running `review --staged --fail-on error`; refuses to overwrite an existing hook without `--force` |
-| `eval [dirs...]` | run every `rules/<id>/evals/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression or a changed question |
+| `eval [dirs...]` | run every `rules/<lang>/<id>/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression or a changed question |
 | `--repeat <n>` / `--labels <path>` | `calibrate`: re-ask n times, fit against labels |
 | `--record <path>` | write a replayable run record — do this for anything you will quote |
 | `--force` | ignore cached verdicts |
@@ -77,9 +77,9 @@ run's summary says `paced to` a rate under it.
 
 Two lines of output are never noise. **`N rules matched nothing`** is the only
 place a dead matcher is visible — check it before trusting a clean run. On a
-TypeScript-only repository expect 8 of the 21 shipped rules there: the 7 Rust
-variants, plus `comment-describes-declaration-js`, which exists because
-JavaScript has no type declarations to match. **`N without a verdict`** means
+TypeScript-only repository expect 8 of the 24 shipped rules there: the 7
+under `rust/`, plus `javascript/comment-describes-declaration`, which exists
+because JavaScript has no type declarations to match. **`N without a verdict`** means
 requests failed, and a run with failures never reads as a clean repository.
 
 ### Silencing a finding
@@ -301,27 +301,25 @@ the matched node is the code.
 `languages: [TypeScript, Tsx]` works when the matcher is valid in both. Rust and
 TypeScript spell the same structural idea with different node kinds, and
 ast-grep **rejects** a kind absent from the target grammar — and one rejected
-rule fails the whole scan — so those need two matchers. Share the sentence with
-a YAML anchor rather than copying it, since copies drift and a drifted copy is a
-cache that never hits:
+rule fails the whole scan — so those need two matchers. In the shipped
+layout that is two directories with one id, each with its own matcher,
+state, cutoff and fixtures:
 
-```yaml
-- id: fn-name-promises
-  languages: [TypeScript, Tsx, JavaScript, Jsx]
-  rule: { kind: function_declaration, has: { field: name, pattern: $NAME } }
-  ask: &fn_ask The body of this function does something materially different from what its name promises.
-  criteria: &fn_criteria
-    "true": ...
-    "false": ...
-- id: fn-name-promises-rust
-  language: Rust
-  rule: { kind: function_item, has: { field: name, pattern: $NAME } }
-  ask: *fn_ask
-  criteria: *fn_criteria
+```
+rules/typescript/fn-name-promises/rule.yml    rule: { kind: function_declaration, ... }
+rules/rust/fn-name-promises/rule.yml          rule: { kind: function_item, ... }
 ```
 
-Anchors are scoped to one YAML document, which is why a rule file may be a
-*list* of rules as well as a `---` stream.
+The sentence is a copy, and copies drift; `jev-lint rules` warns when the
+two copies of an id differ in `ask`, `criteria`, `note` or `explain`. A
+language directory admits only its own grammars (`typescript` admits the
+ECMAScript four), so a Rust kind cannot land in the TypeScript file. The
+identity of a rule is `(language, id)`: findings, `jev-lint-ignore` and
+`--at <id>=n` name the id and apply to every language, and `--at
+rust/<id>=n` names one.
+
+Outside that layout a rule file may still be a *list* of rules or a `---`
+stream, and YAML anchors still work within one document.
 
 ## Calibrating
 
@@ -400,7 +398,7 @@ Three consequences before you switch it on:
 1. **It costs a little accuracy.** On the corpus the two axes disagree on 1.4%
    of decisions, and the residue after refitting is one fewer true positive and
    two more false positives out of 276. One rule
-   (`fn-name-promises-rust`) has **no separating cutoff at all** on the rule
+   (`rust/fn-name-promises`) has **no separating cutoff at all** on the rule
    axis, because a rule-axis state spans files and so cannot carry one.
 2. **A cutoff belongs to an axis.** Switching means re-fitting — `jev-lint replay
    <record> --labels <labels>` does that for free — and the rule-axis numbers
@@ -537,11 +535,11 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 
 ### What the cutoffs are worth
 
-On a TypeScript-only repository the seven Rust variants and
-`comment-describes-declaration-js` report "matched nothing": 8 of the 23.
+On a TypeScript-only repository the seven rules under `rust/` and the one
+under `javascript/` report "matched nothing": 8 of the 24.
 
-Of the 23, **20 reach precision 1.00 and recall 1.00 at their shipped cutoffs
-on their own evals** (`rules/*/evals/baseline.json`, three passes each,
+Of the 24, **21 reach precision 1.00 and recall 1.00 at their shipped cutoffs
+on their own fixtures** (`rules/*/*/baseline.json`, three passes each,
 decisions on the mean; `jev-lint eval --replay` re-derives every number below
 with no request). Read that with the positive counts beside them: per rule,
 31, 17, 13, 12, 12, 11, 10, 10, 10, 10, 9, 9, 6, 6, 6, 5, 5, 5, 4, 4, 2, 2, 1
@@ -550,14 +548,14 @@ labelled defects — 200 in all, against 113 before the improvement round of
 drawn from real code, and rewrote criteria until the rule separated or the
 reason it could not was named. The two `module-name-describes-contents`
 rules still have one defect each and ship at `severity: info`;
-`comment-describes-declaration-js` has two.
+`javascript/comment-describes-declaration` has two.
 
 Three do not, each by one labelled defect the rule file names:
 
 | rule | at the shipped cutoff | the one it misses |
 | --- | --- | --- |
 | `var-name-describes-value` | recall 0.92 | `flat = normalizeRule(bad)` holding a rejection: the claim is about the branch of a union result, visible only in the assertions after it |
-| `var-name-describes-value-rust` | recall 0.90 | a field taken under another field's name, answering 0.10–0.87 on identical input across runs |
+| `rust/var-name-describes-value` | recall 0.90 | a field taken under another field's name, answering 0.10–0.87 on identical input across runs |
 | `comment-describes-block` | recall 0.92 | a comment true of the sort it sits above and false only together with the loop after it (0.52); parked at 0.75 over the band that big test files still produce, since the arm steps down to `local` there and a test callback has no container to promote to |
 
 What the round moved, besides the counts: `fn-name-promises` from 0.82 to
@@ -812,7 +810,8 @@ the batching axis invalidates the verdicts that depended on them.
 
 ```
 src/            the tool: scan -> state -> questions -> gate -> report
-rules/          the shipped packs
+rules/          the shipped rules: rules/<language>/<id>/{rule.yml, fixtures/, expect.yml, baseline.json}
+                typescript/ and rust/ are first tier and always calibrated; javascript/ and json/ hold what only fits there
 corpus/         the labeled corpus the cutoffs are fitted to
 tools/          the experiments: arms.ts, grouping.ts
 docs/data/      recorded runs, each replayable with no API key
