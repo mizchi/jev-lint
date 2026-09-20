@@ -1,63 +1,59 @@
 id: comment-describes-block
-language: Python
+language: Go
 kind: noul
 subject: enclosing
 state: located
-# 0.45, fitted 2026-09-20 on this rule's own evals (17 subjects: 7 defects,
-# 10 cleans of which 9 hard, 3 passes) and checked on 18 unseen subjects
-# from three real files. Cleans top out at 0.22 (a body-opening comment
-# over the loop it describes) on the evals and 0.32 on the unseen files (a
-# section heading "agent.log (INFO+)" over a handler whose level is a
-# parameter). Five defects answer 0.81-0.95; the inverted condition ("skip
-# entries older than a day" over `ts > now - DAY`) answers 0.56 (0.53-0.60
-# across passes), and the cutoff sits 0.11 under it and 0.13 over the
-# unseen clean band. One labelled defect is not found and is left in the
-# evals as such: "keep the newest" over an ascending sort and a `[:N]`
-# slice (0.36), false only when the two statements are read together --
-# the same shape the TypeScript variant records as its miss. The fitted
-# midpoint (0.29) sits between that miss and the clean band and is not
-# used. The grammar hoists a comment that opens a block out of the block;
-# the second arm matches the block itself so those comments are asked
-# about too, and the subject is the enclosing function either way.
-at: 0.45
+at: 0.7  # uncalibrated
 severity: info
+utils:
+  statement:
+    any:
+      - kind: if_statement
+      - kind: for_statement
+      - kind: expression_switch_statement
+      - kind: type_switch_statement
+      - kind: select_statement
+      - kind: return_statement
+      - kind: expression_statement
+      - kind: short_var_declaration
+      - kind: var_declaration
+      - kind: const_declaration
+      - kind: assignment_statement
+      - kind: inc_statement
+      - kind: dec_statement
+      - kind: go_statement
+      - kind: defer_statement
+      - kind: send_statement
+      - kind: break_statement
+      - kind: continue_statement
+      - kind: labeled_statement
+      - kind: block
 rule:
   any:
-    # A statement that follows a `#` comment inside a body.
+    # A `//` run above a statement in the middle of a body. tree-sitter makes
+    # each line its own node, so this captures the last line and jev-lint
+    # widens it to the run.
     - all:
-        - any:
-            - kind: if_statement
-            - kind: for_statement
-            - kind: while_statement
-            - kind: try_statement
-            - kind: with_statement
-            - kind: return_statement
-            - kind: raise_statement
-            - kind: expression_statement
-            - kind: assert_statement
-            - kind: delete_statement
-            - kind: match_statement
-            - kind: break_statement
-            - kind: continue_statement
-            - kind: pass_statement
+        - matches: statement
         - follows:
             kind: comment
             pattern: $DOC
-        # Inside a body, not at the top level: a top-level comment above a
-        # statement is documentation and the declaration rule covers it.
         - inside:
             kind: block
             stopBy: end
-    # A comment that opens a body: tree-sitter hoists it out of the block, so
-    # it precedes the block rather than the block's first statement.
+    # A comment that opens a body sits beside the `statement_list`, not
+    # inside it, so the first statement has no comment sibling: reach out to
+    # the list and read what precedes it.
     - all:
-        - kind: block
-        - follows:
-            kind: comment
-            pattern: $DOC
+        - matches: statement
+        - nthChild: 1
         - inside:
-            kind: function_definition
-            stopBy: end
+            kind: statement_list
+            follows:
+              kind: comment
+              pattern: $DOC
+# The same sentence as typescript/comment-describes-block, by copy: the
+# loader warns if the two drift.
 ask: >-
   The comment captured as DOC makes a claim about the code beneath it that the
   code contradicts.

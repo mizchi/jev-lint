@@ -357,3 +357,28 @@ fi
 exec npx -y jev-lint review --staged --fail-on error
 `;
 }
+
+/**
+ * The pre-push hook: the commits about to leave, judged by their messages.
+ *
+ * A branch with no upstream has nothing to diff against yet, so the hook
+ * steps aside there rather than block the first push of every branch.
+ */
+export function initialPushHook(): string {
+  return `#!/bin/sh
+# jev-lint pre-push hook, written by \`jev-lint init --pre-push\`.
+#
+# Judges the commits not yet on the upstream -- does each message describe
+# its diff -- prints every finding, and blocks the push only on a rule with
+# \`severity: error\`. Skip it once with \`git push --no-verify\`.
+if [ -z "$TYPESAFE_API_KEY" ] && [ -z "$TYPESAFEAI_API_KEY" ]; then
+  echo "jev-lint: no API key in the environment, skipping the commit review" >&2
+  exit 0
+fi
+if ! git rev-parse --abbrev-ref '@{upstream}' >/dev/null 2>&1; then
+  echo "jev-lint: no upstream for this branch yet, skipping the commit review" >&2
+  exit 0
+fi
+exec npx -y jev-lint commits '@{upstream}..HEAD' --fail-on error
+`;
+}

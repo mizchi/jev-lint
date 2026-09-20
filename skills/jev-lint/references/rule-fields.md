@@ -28,7 +28,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
-| `subject` | `node` (default), `enclosing`, `file` | what code is judged |
+| `subject` | `node` (default), `enclosing`, `file`, `commit` | what code is judged. `commit` is the one subject with no matcher: `language: Git`, no `rule:`, `state: bare`; its subjects are the commits `jev-lint commits` lists, the message is judged and the diff is the state |
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context the model reads before answering, never shown in a finding. `criteria` *define* the two answers; `note` scopes them — which cases are out of bounds, which conventions count as honoured |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
@@ -104,6 +104,12 @@ problem and is not one.
   list is cut from the end and says how many it left out — so a module of
   any size gets a verdict. The only way to ask "is this module named for
   what it contains", because a file's text never mentions its own path.
+- `commit` — a commit: its message is the subject, its diff the state.
+  No matcher, `language: Git`, `state: bare`. Only `jev-lint commits` runs
+  these rules; `check` and `review` leave them off duty. The one shipped is
+  `git/commit-message-describes-diff`, whose fixtures are
+  `fixtures/<case>/{message, before/, after/}` — each case becomes one
+  commit on its own branch of a throwaway repository when the eval runs.
 
 ## `state`: what else the model sees
 

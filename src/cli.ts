@@ -50,7 +50,7 @@ import { ARMS, ARM_BLURB } from "./state.ts";
 import { DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { Cache, DEFAULT_CACHE_PATH } from "./cache.ts";
 import { USD_PER_MTOK, API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_MODEL, DEFAULT_CONCURRENCY, fromEnv } from "./jev.ts";
-import { CONFIG_NAMES, applyConfig, findConfig, initialConfig, initialHook, loadConfig } from "./config.ts";
+import { CONFIG_NAMES, applyConfig, findConfig, initialConfig, initialHook, initialPushHook, loadConfig } from "./config.ts";
 import { GROUP_MODES, SEVERITIES, STATE_ARMS, TIER_ONE } from "./types.ts";
 import type { Finding, GroupMode, Labels, Rule, RunResult, Severity, StateArm, Subject } from "./types.ts";
 import { explain, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
@@ -77,6 +77,7 @@ interface Options {
   unsureBelow: number | null;
   failOn: Severity | null;
   preCommit: boolean;
+  prePush: boolean;
   accept: boolean;
   acceptLast: boolean;
   replay: boolean;
@@ -117,6 +118,7 @@ usage:
   jev-lint eval --compare a.json b.json   two records of one suite, case by case, no requests
   jev-lint init                   write a .jev-lint.yaml to start from
   jev-lint init --pre-commit      write a pre-commit hook that reviews the staged diff
+  jev-lint init --pre-push        write a pre-push hook that judges the commits about to leave
 
 options:
       --config <path>      config file (default: nearest .jev-lint.yaml,
@@ -228,6 +230,7 @@ function parseArgs(argv: string[]): Options {
     unsureBelow: null,
     failOn: null,
     preCommit: false,
+    prePush: false,
     accept: false,
     acceptLast: false,
     replay: false,
@@ -335,6 +338,9 @@ function parseArgs(argv: string[]): Options {
         i += 1;
         break;
       }
+      case "--pre-push":
+        opts.prePush = true;
+        break;
       case "--pre-commit":
         opts.preCommit = true;
         break;
@@ -443,7 +449,8 @@ function parseArgs(argv: string[]): Options {
  * the one holding someone's calibrated cutoffs.
  */
 function cmdInit(opts: Options, out: Log, log: Log): number {
-  if (opts.preCommit) return cmdInitHook(opts, out, log);
+  if (opts.preCommit) return cmdInitHook(opts, out, log, "pre-commit");
+  if (opts.prePush) return cmdInitHook(opts, out, log, "pre-push");
   const target = opts.config && opts.config !== "none" ? opts.config : CONFIG_NAMES[0];
   if (existsSync(target) && !opts.force) {
     log(`${target} already exists; pass --force to overwrite it`);
@@ -484,33 +491,44 @@ function cmdInit(opts: Options, out: Log, log: Log): number {
  * probably husky's or a task runner's, and the right move there is one line
  * added to it, which is printed.
  */
-function cmdInitHook(opts: Options, out: Log, log: Log): number {
+function cmdInitHook(opts: Options, out: Log, log: Log, which: "pre-commit" | "pre-push"): number {
   let hooksDir: string;
   try {
     hooksDir = execFileSync("git", ["rev-parse", "--git-path", "hooks"], { encoding: "utf8" }).trim();
   } catch {
-    log("not inside a git repository, so there is nowhere to put a pre-commit hook");
+    log(`not inside a git repository, so there is nowhere to put a ${which} hook`);
     return 2;
   }
-  const target = join(hooksDir, "pre-commit");
+  const target = join(hooksDir, which);
+  const line =
+    which === "pre-commit"
+      ? "npx -y jev-lint review --staged --fail-on error"
+      : "npx -y jev-lint commits '@{upstream}..HEAD' --fail-on error";
   if (existsSync(target) && !opts.force) {
     log(`${target} already exists; pass --force to overwrite it, or add this line to it:`);
-    log("  npx -y jev-lint review --staged --fail-on error");
+    log(`  ${line}`);
     return 2;
   }
   try {
     mkdirSync(hooksDir, { recursive: true });
-    writeFileSync(target, initialHook(), { mode: 0o755 });
+    writeFileSync(target, which === "pre-commit" ? initialHook() : initialPushHook(), { mode: 0o755 });
   } catch (err: unknown) {
     log(`could not write ${target}: ${String(err).slice(0, 160)}`);
     return 2;
   }
   out(`wrote ${target}`);
   out("");
-  out("It reviews the staged diff on every commit, prints what it finds, and");
-  out("blocks only on a rule with `severity: error` -- no shipped rule has it.");
-  out("With no API key in the environment it steps aside. Skip it once with");
-  out("`git commit --no-verify`; remove it by deleting the file.");
+  if (which === "pre-commit") {
+    out("It reviews the staged diff on every commit, prints what it finds, and");
+    out("blocks only on a rule with `severity: error` -- no shipped rule has it.");
+    out("With no API key in the environment it steps aside. Skip it once with");
+    out("`git commit --no-verify`; remove it by deleting the file.");
+  } else {
+    out("It judges the commits not yet on the upstream -- does each message");
+    out("describe its diff -- prints what it finds, and blocks only on a rule");
+    out("with `severity: error`. With no API key, or no upstream yet, it steps");
+    out("aside. Skip it once with `git push --no-verify`; remove it by deleting the file.");
+  }
   return 0;
 }
 

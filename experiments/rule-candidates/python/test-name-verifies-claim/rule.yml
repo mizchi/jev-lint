@@ -1,0 +1,44 @@
+id: test-name-verifies-claim
+language: Python
+kind: noul
+subject: node
+state: bare
+at: 0.7   # uncalibrated
+axis: file
+severity: warning
+rule:
+  all:
+    - kind: function_definition
+    # pytest collects `test_*`; unittest collects `test*` methods.
+    - has:
+        field: name
+        pattern: $TITLE
+        regex: "^test($|_|[A-Z0-9])"
+    - has:
+        field: body
+        pattern: $BODY
+ask: >-
+  This test would still pass if the behaviour its name claims were broken.
+note: >-
+  Two things to read for. A snapshot records whatever the output was: under a
+  name that claims a specific property of the output (a row hidden, a footer
+  omitted, a hint shown, a format) it establishes nothing about that property,
+  while under a name that only says renders, or snapshot, or labels the variant
+  rendered, it is the whole claim. And a body whose named operation is never
+  called, or whose named case is never set up, establishes nothing however exact
+  its assertion is.
+criteria:
+  "true": >-
+    The body does not establish what the name claims: it asserts nothing at all,
+    it asserts something that would hold whether or not the named behaviour
+    worked, it checks an incidental property such as a length or a type instead
+    of the named behaviour itself, or it never sets up the case the name is
+    about so the assertion never exercises it.
+  "false": >-
+    The body contains at least one assertion that would fail if the named
+    behaviour were broken. Read the name for what it actually claims: a name
+    that claims only that something renders, or that the output matches a
+    snapshot, or that only labels the input the snapshot was taken of, is
+    established by the snapshot; a name that claims an interaction with a
+    collaborator -- that something was called, once, with these arguments -- is
+    established by an assertion on that call.

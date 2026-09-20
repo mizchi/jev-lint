@@ -3,7 +3,17 @@ language: Go
 kind: noul
 subject: node
 state: located
-at: 0.7  # uncalibrated
+# 0.40, fitted 2026-09-20 (6 defects, 17 cleans of which 8 hard, 3 passes):
+# clean tops at 0.21 (`Rejected`, a true counter comment; the "keep it
+# allocation-free" performance note). Three defects sit at 0.80-0.91 (Allow
+# consumes, Set's default and eviction, Wait's 100ms) and `New`'s "never
+# evicts" at 0.46-0.55 across two runs. Two labelled
+# defects are recorded misses: `Reset` ("empties" over a body that fills to
+# burst) at 0.30 and `Keys` ("most recently used first" over a walk from
+# list.Back) at 0.22 -- the second needs container/list knowledge, which
+# the model is measured to lack. 0.40 keeps 0.19 over the top clean and
+# 0.06 under New's lowest pass; a cookbook cutoff, not a shipped one. Report: experiments/reports/j-go/REPORT.md.
+at: 0.40
 axis: file
 severity: warning
 rule:

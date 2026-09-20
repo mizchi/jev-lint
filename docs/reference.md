@@ -52,6 +52,8 @@ failed and nothing was reported.
 | `--base <ref>` / `--staged` | what `review` diffs against: the merge base with `ref`, or the index (what a commit will contain: no untracked files, no unstaged edits) |
 | `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any finding |
 | `init --pre-commit` | write a hook running `review --staged --fail-on error`; refuses to overwrite an existing hook without `--force` |
+| `commits [range]` | judge each non-merge commit's message against its diff with the `subject: commit` rules; the range is a positional (`main..HEAD`), else `--base <ref>`, else `@{upstream}..HEAD`. Findings are `<sha>:1`, named by short sha and subject line in every format. `--retry`, `--loose`, `--explain` and the cache apply; the cache keys on message and diff together |
+| `init --pre-push` | write a hook running `commits '@{upstream}..HEAD' --fail-on error`; steps aside with no key or no upstream |
 | `eval [dirs...]` | run every `rules/<lang>/<id>/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression or a changed question |
 | `--repeat <n>` / `--labels <path>` | `calibrate`: re-ask n times, fit against labels |
 | `--record <path>` | write a replayable run record — do this for anything you will quote |
@@ -166,7 +168,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
-| `subject` | `node` (default), `enclosing`, `file` | what code is judged |
+| `subject` | `node` (default), `enclosing`, `file`, `commit` | what code is judged. `commit` is the one subject with no matcher: `language: Git`, no `rule:`, `state: bare`; its subjects are the commits `jev-lint commits` lists, the message is judged and the diff is the state |
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context for the model only |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
@@ -234,6 +236,12 @@ problem and is not one.
   list is cut from the end and says how many it left out — so a module of
   any size gets a verdict. The only way to ask "is this module named for
   what it contains", because a file's text never mentions its own path.
+- `commit` — a commit: its message is the subject, its diff the state.
+  No matcher, `language: Git`, `state: bare`. Only `jev-lint commits` runs
+  these rules; `check` and `review` leave them off duty. The one shipped is
+  `git/commit-message-describes-diff`, whose fixtures are
+  `fixtures/<case>/{message, before/, after/}` — each case becomes one
+  commit on its own branch of a throwaway repository when the eval runs.
 
 ### `state`: what else the model sees
 

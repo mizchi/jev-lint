@@ -64,6 +64,7 @@ import {
   findConfig,
   initialConfig,
   initialHook,
+  initialPushHook,
   loadConfig,
   type Configurable,
 } from "../src/config.ts";
@@ -3609,6 +3610,23 @@ await testAsync("config: the pre-commit hook init writes is a shell script that 
     rmSync(dir, { recursive: true, force: true });
   }
   assert.match(hook, /review --staged/, "it judges what the commit contains, not the working tree");
+  assert.match(hook, /--fail-on error/, "and blocks only on what a rule has earned");
+  assert.match(hook, /TYPESAFE_API_KEY/, "and stands aside on a machine without a key");
+});
+
+await testAsync("config: the pre-push hook judges the commits about to be pushed, and steps aside without an upstream", async () => {
+  const { execFileSync } = await import("node:child_process");
+  const hook = initialPushHook();
+  assert.ok(hook.startsWith("#!/bin/sh\n"));
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-hook-"));
+  try {
+    writeFileSync(join(dir, "pre-push"), hook);
+    execFileSync("sh", ["-n", join(dir, "pre-push")]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+  assert.match(hook, /jev-lint commits/, "it judges commits, not files");
+  assert.match(hook, /@\{upstream\}/, "what is not yet pushed");
   assert.match(hook, /--fail-on error/, "and blocks only on what a rule has earned");
   assert.match(hook, /TYPESAFE_API_KEY/, "and stands aside on a machine without a key");
 });

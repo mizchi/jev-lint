@@ -49,6 +49,7 @@ Knowing which half you are working on is most of the job.
 | write a rule for a convention of your own | [references/cookbook.md](references/cookbook.md), then validate as below |
 | know what every field means, `score` vs `noul`, the `state` arms | [references/rule-fields.md](references/rule-fields.md) |
 | fit a cutoff, build a rule's evals, judge whether a rule works | [references/calibration.md](references/calibration.md) |
+| judge commit messages against their diffs | `jev-lint commits`, below |
 
 ## Running it
 
@@ -57,6 +58,7 @@ export TYPESAFE_API_KEY=...            # or TYPESAFEAI_API_KEY
 npx -y jev-lint check src --dry-run    # plan and price. Makes NO request.
 npx -y jev-lint check src              # judge whole files
 npx -y jev-lint review --base main     # judge only what the diff touched
+npx -y jev-lint commits --base main    # judge each commit's message against its diff
 npx -y jev-lint init                   # write .jev-lint.yaml, all commented out
 npx -y jev-lint rules                  # what loaded, and every validation error
 ```
@@ -69,6 +71,7 @@ which is where findings concentrate and costs a fraction of a cent.
 ```bash
 jev-lint review --base "$GITHUB_BASE_REF" --format github   # in CI
 jev-lint init --pre-commit      # hook: review --staged --fail-on error, on every commit
+jev-lint init --pre-push        # hook: commits @{upstream}..HEAD --fail-on error, before every push
 jev-lint check src --retry 3                                 # decide on the mean of 3 passes
 jev-lint check src --at fn-name-promises=0.8                 # override one cutoff for one run
 jev-lint check src -R my-rules.yml -R rules                  # rule sources, repeatable

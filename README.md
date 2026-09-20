@@ -139,6 +139,25 @@ npx jev-lint init                     # writes .jev-lint.yaml, everything commen
 Uncomment `paths:` so `jev-lint check` needs no argument. The API key is read
 from the environment only, never from that file; `apiKey:` in it is an error.
 
+### Commits
+
+A commit message is a claim and its diff is the body — the same class of
+defect, in the one place a repository writes a claim about every change.
+
+```bash
+npx -y jev-lint commits --base main   # does each message describe its diff?
+npx -y jev-lint commits               # the commits not yet pushed (@{upstream}..HEAD)
+npx jev-lint init --pre-push          # a hook that runs that before every push
+```
+
+One subject per non-merge commit: the message is judged, the diff (capped,
+with the stat kept whole and the cut declared) is what it is judged
+against. The shipped rule is `git/commit-message-describes-diff`: the
+message names a fix, a removal or a "no behaviour change" the diff does not
+carry out, or the diff changes a default, drops a test or adds a dependency
+the message never mentions. A terse subject line, an "also" in the body, a
+lockfile beside the change, a revert of the exact inverse: not findings.
+
 ### For a coding agent
 
 The repository ships a skill — how to run jev-lint, which shipped packs to

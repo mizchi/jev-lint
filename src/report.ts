@@ -103,7 +103,8 @@ export function formatPretty(
     );
     for (const f of review) {
       const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
-      out.push(c.dim(`  ${f.file}:${f.line}  ${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  ${f.message ?? f.ask}`));
+      const where = f.commit ? `${f.file.slice(0, 8)}  "${f.commit.subject}"` : `${f.file}:${f.line}`;
+      out.push(c.dim(`  ${where}  ${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  ${f.message ?? f.ask}`));
     }
     out.push("");
   }

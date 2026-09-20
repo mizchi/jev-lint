@@ -1,0 +1,487 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:41:37.596Z",
+  "model": "jev-1.13.0",
+  "suite": "python/comment-describes-block",
+  "rules": [
+    {
+      "id": "comment-describes-block",
+      "draft": "f53ac2dce62a",
+      "at": 0.45
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 28,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 38,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 41,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 50,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 57,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 59,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 66,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 72,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 77,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 81,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 30,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 37,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 49,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 56,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 30,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 37,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 49,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 56,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 28,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 38,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 41,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 50,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 57,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 59,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 66,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 72,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 77,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 81,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 30,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 37,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 49,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/test_log_sink.py",
+        "line": 56,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 28,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 38,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 41,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 50,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 57,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 59,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 66,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 72,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 77,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "experiments/rule-candidates/python/comment-describes-block/fixtures/retry_queue.py",
+        "line": 81,
+        "endLine": 81,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 47643,
+    "usd": 0.002001006,
+    "ms": 952
+  }
+}
