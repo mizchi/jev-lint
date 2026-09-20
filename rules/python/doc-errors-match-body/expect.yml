@@ -1,0 +1,20 @@
+default: clean
+fixtures/repo.py:
+  - { line: 32, label: clean, window: 0, reason: "hard clean: the documented NotFound is raised by `_require_row`, a helper named for that failure and visible in the file; no raise in this body." }
+  - { line: 41, label: clean, window: 0, reason: "hard clean: None on a missing row as documented; the OperationalError is sqlite's own, passing through the execute call the clause is about." }
+  - { line: 55, label: bad, window: 0, reason: "the doc says raises NotFound when no job has the name; the body returns None. A failure the body cannot produce." }
+  - { line: 67, label: clean, window: 0, reason: "the documented Conflict is produced by converting sqlite's IntegrityError; the honoured shape." }
+  - { line: 79, label: bad, window: 0, reason: "the doc names only NotFound; the body also raises Conflict when the job is not queued. A failure path the section does not mention." }
+  - { line: 90, label: clean, window: 0, reason: "False on a missing job and Conflict on a running one, both documented." }
+  - { line: 106, label: clean, window: 0, reason: "hard clean: ValueError is raised here; NotFound arrives through self.get, whose own docstring says it raises it." }
+  - { line: 118, label: bad, window: 0, reason: "the doc says None for an unknown state; the body raises ValueError there." }
+fixtures/client.py:
+  - { line: 15, label: clean, window: 0, reason: "hard clean: HTTPError is produced by raise_for_status, the mechanism for the documented intent; Timeout passes through requests.get with the timeout the clause names." }
+  - { line: 27, label: clean, window: 0, reason: "None on 404 and ApiError on any other error status, both documented." }
+  - { line: 43, label: bad, window: 0, reason: "the doc says raises requests.Timeout; the body catches Timeout and returns -1. A failure the body cannot produce." }
+  - { line: 57, label: clean, window: 0, reason: "ApiError on an error status as documented." }
+  - { line: 68, label: clean, window: 0, reason: "hard clean: SystemExit is what argparse's parse_args does on invalid arguments; the body delegates to the named parser and raises nothing itself." }
+  - { line: 83, label: bad, window: 0, reason: "the doc says raises FileNotFoundError when the file does not exist; the body catches it and returns {}." }
+  - { line: 97, label: clean, window: 0, reason: "hard clean: says never raises; the open and read sit in a try whose except OSError returns an empty string." }
+  - { line: 111, label: bad, window: 0, reason: "the doc says ValueError when out of range; the body raises TypeError there. Wrong exception class (int() does raise ValueError for a non-integer, which covers only half the clause)." }
+  - { line: 123, label: clean, window: 0, reason: "hard clean: 1 when the API call failed is served by the except RequestException; the SystemExit from parse_args is argparse's, not a clause this body owes." }

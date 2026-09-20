@@ -1,0 +1,97 @@
+# --------------------------------------------------------------------------
+# Does a TODO describe work the code beneath it has already done?
+# --------------------------------------------------------------------------
+#
+# Cookbook recipe 7, with the comment pack's matcher. A TODO is a claim that
+# something is NOT done, and it is the comment least likely to be reread: the
+# case gets handled, the check gets added, and the note asking for it
+# survives. A linter can count TODOs and cannot read one.
+#
+# Recipe 7 matches the comment itself; here, as in comment-describes-block,
+# the subject is the statement that FOLLOWS the comment, with the comment
+# captured as `$DOC`, so the model is told which comment is under test and
+# which code it sits above. `subject: enclosing` then hands over the whole
+# function: a TODO above a guard is answered by the guard, but a TODO above
+# a call is sometimes answered three lines further down.
+id: todo-describes-work
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+subject: enclosing
+# `bare`: the enclosing function is the subject already, and a TODO that
+# is answered outside the function is one the criteria call not judgeable
+# here. The file would add cost and let an unrelated edit move the verdict.
+state: bare
+# Fitted 2026-09-20 on 16 subjects (7 defects, 9 cleans, 8 of them hard),
+# three passes. The recipe's sentence ("describes work the code already
+# does") found the handled case, the done validation and the dedupe at
+# 0.73-0.89 and missed the two that state a defect the code does not have
+# -- unbounded retries 0.10, a leaked handle 0.28 -- until the ask named
+# that class too (0.88 and 0.81 after). The one clean that fought the rule
+# is the "also reject ..." TODO above a neighbouring check of a similar
+# kind: 0.62-0.63 through two attempts, 0.28 once the note said two checks
+# are the same work only when they test the same field, with the corpus's
+# two pairs as the examples -- so that class's clearance is fitted, not
+# measured. Bad 0.65-0.89, clean 0.05-0.28, no flips. Midpoint 0.47: 0.16
+# over the highest clean pass, 0.16 under the lowest defect pass ("throws
+# on an empty file" above a blank-text guard, 0.63-0.67). See
+# experiments/reports/l-recipes/REPORT.md.
+at: 0.47
+severity: info
+rule:
+  all:
+    - any:
+        - kind: if_statement
+        - kind: for_statement
+        - kind: for_in_statement
+        - kind: while_statement
+        - kind: try_statement
+        - kind: switch_statement
+        - kind: return_statement
+        - kind: expression_statement
+        - kind: lexical_declaration
+        - kind: throw_statement
+        # A top-level TODO above an export has no enclosing function; the
+        # subject falls back to the statement, and the criteria call a
+        # TODO the statement cannot answer not judgeable here.
+        - kind: export_statement
+    - follows:
+        kind: comment
+        pattern: $DOC
+        regex: "\\b(TODO|FIXME|XXX)\\b"
+ask: >-
+  The comment captured as DOC asks for work that the code beneath it
+  already does, or describes a defect, leak or limitation that the code
+  beneath it does not have.
+criteria:
+  "true": >-
+    The comment asks for something -- handle a case, add a check, cap a
+    loop, close or release something, remove duplicates, validate an input,
+    fix a specific bug -- and the code beneath it in the same function
+    visibly does exactly that: the case is handled, the check is there, the
+    handle is closed on every path, the duplicates are removed. Or the
+    comment states that the code has a defect, leak or limitation -- retries
+    are unbounded, a handle leaks, a case crashes -- and the code beneath it
+    visibly does not have it: the loop has a bound, the handle is closed in a
+    finally, the case is guarded.
+  "false": >-
+    The work the comment asks for is not done in the code beneath it: the
+    comment names a case, input, path or concern the code does not handle, a
+    replacement or refactor the code has not had, a value that is still a
+    placeholder or a default, or a step that belongs elsewhere. A comment
+    that only cites an issue, ticket or person and states no work makes no
+    claim to judge. A comment asking for an additional check ("also reject
+    ...") is true until that check itself exists; a neighbouring check of a
+    similar kind is not it. A comment about a concern the code beneath it is not
+    about -- caching above a lookup, configuration above a constant -- is
+    work not done, not work done.
+note: >-
+  The comment under test is the one captured as DOC; it may be several lines
+  and all of it is the comment. The code beneath it is the run of statements
+  from the comment to the end of the enclosing function, not the first
+  statement alone. Other TODOs in the same function are not the question.
+  A partial step is not the whole work: a guard that handles one of the two
+  cases the comment names leaves the comment true. Two checks are the same
+  work only when they test the same field or condition: a check on an
+  expiry date is not a check on a campaign's end, a check on a negative
+  quantity is not a check on a missing one, unless the code says the two
+  are one.

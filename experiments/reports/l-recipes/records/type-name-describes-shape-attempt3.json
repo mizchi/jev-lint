@@ -1,0 +1,649 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T10:51:55.151Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/type-name-describes-shape",
+  "rules": [
+    {
+      "id": "type-name-describes-shape",
+      "draft": "8f28e97bca13",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 3,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 10,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 18,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 3,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 7,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 6,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 15,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.61,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 7,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 13,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 3,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 7,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 3,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 10,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 18,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 6,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 15,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 7,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 13,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 3,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 10,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 18,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/lint_report.ts",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 6,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 15,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/session.ts",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 3,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 7,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/core.ts",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.61,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 7,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 13,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "experiments/rule-candidates/typescript/type-name-describes-shape/fixtures/customers.ts",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 12,
+    "inputTokens": 47985,
+    "usd": 0.0020153700000000003,
+    "ms": 745
+  }
+}

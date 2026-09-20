@@ -1,0 +1,27 @@
+default: clean
+fixtures/sync.ts:
+  - { line: 15, label: clean, window: 0, reason: "hard clean: 'syncing user' names the intent at the top of the operation; it does not claim the sync is done." }
+  - { line: 18, label: bad, window: 0, reason: "'user saved' is logged before `await this.repo.save(user)` runs; if save throws, the log says a save happened that did not." }
+  - { line: 28, label: clean, window: 0, reason: "hard clean: 'saving user' before the fetch and save is intent phrasing, not a completion claim." }
+  - { line: 33, label: bad, window: 0, reason: "'user synced' sits in the catch branch, where the fetch or save threw and nothing was synced." }
+  - { line: 35, label: clean, window: 0, reason: "hard clean: 'sync finished' in a finally is true on both the success and the failure branch -- the attempt is over either way." }
+  - { line: 38, label: clean, window: 0, reason: "hard clean: 'done' is terse, and sits after the loop with ok and total beside it." }
+  - { line: 45, label: clean, window: 0, reason: "hard clean: the same 'cache hit' text as the defect in load, here inside `if (cached)`, where it is true." }
+  - { line: 55, label: bad, window: 0, reason: "'cache hit' on the fall-through after `if (cached) return`: this is the miss branch, and the code goes on to read the repo." }
+  - { line: 69, label: clean, window: 0, reason: "clean: cache miss after the early return on a hit, and the repo read follows." }
+  - { line: 84, label: clean, window: 0, reason: "hard clean: 'retrying directory fetch' in a catch inside a for loop that goes round again after the sleep; it does retry." }
+  - { line: 95, label: bad, window: 0, reason: "'directory fetch failed, retrying' followed by `throw err` with no loop and no second call: nothing retries." }
+  - { line: 103, label: bad, window: 0, reason: "'deleted ${stale.length}' interpolates the number of candidates handed to deleteMany, not result.deletedCount, which is the number deleted and what the function returns." }
+  - { line: 109, label: clean, window: 0, reason: "hard clean: a templated message whose variables are the right ones -- archivedCount from the archive call and the days it was given." }
+  - { line: 115, label: clean, window: 0, reason: "hard clean: users.length is the fetched page's size, source and page are the arguments; every interpolation is what it says." }
+fixtures/billing.ts:
+  - { line: 14, label: bad, window: 0, reason: "'order cancelled' after gateway.cancelSubscription: the entity is a subscription, not an order." }
+  - { line: 19, label: bad, window: 0, reason: "'payment captured' after gateway.authorize, in a function named holdFunds that returns the auth id: funds are held, not captured; capture is the separate settle step below." }
+  - { line: 25, label: clean, window: 0, reason: "hard clean: the same 'payment captured' text as the defect above, here after gateway.capture, where it is true." }
+  - { line: 33, label: clean, window: 0, reason: "clean: a failure message in the catch of the send." }
+  - { line: 41, label: clean, window: 0, reason: "hard clean: 'rate limited, backing off' on the 429 branch, followed by a sleep and a recursive retry -- both halves are true." }
+  - { line: 46, label: clean, window: 0, reason: "clean: on the 404 branch the returned subscription is given status cancelled; 'marking cancelled' is what happens." }
+  - { line: 56, label: clean, window: 0, reason: "clean: the stale branch returns without handling the event." }
+  - { line: 60, label: clean, window: 0, reason: "clean: 'invoice paid' on the invoice.paid branch, before markPaid; it reports the event received, not an action." }
+  - { line: 64, label: clean, window: 0, reason: "clean: the fall-through after the handled types." }
+  - { line: 69, label: clean, window: 0, reason: "clean: after disconnect." }

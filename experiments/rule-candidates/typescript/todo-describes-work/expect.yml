@@ -1,0 +1,20 @@
+default: clean
+fixtures/checkout.ts:
+  - { line: 9, label: bad, window: 0, reason: "the guard directly beneath the TODO returns an empty quote for an empty cart; the case the TODO asks to handle is handled" }
+  - { line: 24, label: bad, window: 0, reason: "the loop is bounded by opts.maxAttempts and the last attempt rethrows; the FIXME describes unbounded retries the code does not have" }
+  - { line: 37, label: bad, window: 0, reason: "the loop beneath skips any sku already seen; the items are deduplicated across both carts, which is what the TODO asks for" }
+  - { line: 49, label: clean, window: 0, reason: "hard clean: a stub returning 0 under a TODO asking for the real estimate; the work is not done" }
+  - { line: 54, label: clean, window: 0, reason: "hard clean: expiry is rejected but the TODO asks for campaign end, a different check the code does not make; a partial neighbour is not the work" }
+fixtures/uploads.ts:
+  - { line: 13, label: bad, window: 0, reason: "the handle is closed in a finally that a parse failure inside the loop cannot skip; the leak the XXX describes is not there" }
+  - { line: 27, label: bad, window: 0, reason: "the email is tested against the pattern and rejected before repo.save; the validation the TODO asks for is done" }
+  - { line: 33, label: clean, window: 0, reason: "hard clean: the TODO asks for caching; the code beneath is the uncached lookup it complains about, a different concern than what the code does" }
+  - { line: 39, label: clean, window: 0, reason: "hard clean: an issue reference with no stated work; nothing to judge" }
+  - { line: 45, label: clean, window: 0, reason: "hard clean: the delay is a fixed 500ms; the FIXME asks for exponential backoff the code does not have" }
+  - { line: 51, label: clean, window: 0, reason: "hard clean: the TODO asks to move defaults into config; the code still reads the default inline, a different concern than the statement" }
+  - { line: 56, label: clean, window: 0, reason: "hard clean: a top-level TODO asking to drop the alias; the alias is still there, and no enclosing function exists" }
+fixtures/rows.ts:
+  - { line: 5, label: bad, window: 0, reason: "the return beneath the TODO already passes the sku through encodeURIComponent; the escaping the TODO asks for is done" }
+  - { line: 10, label: bad, window: 0, reason: "the guard beneath the FIXME returns [] for blank text; the empty-file crash the FIXME describes is not there" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: the checks beneath flag an unknown sku and a negative qty; a missing qty (NaN or undefined) is neither, and the TODO's 'also' asks for that third check" }
+  - { line: 30, label: clean, window: 0, reason: "hard clean: the TODO asks to remove the compatibility branch; the branch is still there" }

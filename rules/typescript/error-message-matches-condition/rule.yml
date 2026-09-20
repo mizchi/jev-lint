@@ -1,0 +1,160 @@
+# --------------------------------------------------------------------------
+# Does an error's message describe the condition that raises it?
+# --------------------------------------------------------------------------
+#
+# Cookbook recipe 9. A wrong error message is a false claim that survives
+# every test that only checks that something threw: "user not found" thrown
+# from a role check sends the reader of the log to the wrong place. The
+# message is the claim; the guard around the throw is the evidence.
+#
+# The sibling assertion-message-matches matches only `if (COND) throw` and
+# assert shapes, so the condition is captured beside the message. This rule
+# matches every throw with a message and lets `subject: enclosing` supply
+# whatever condition the function has -- an if, a switch arm, a status
+# comparison two lines up, or none at all for a rethrow. Its report
+# (experiments/reports/improve-assertion-message-matches) found the one
+# class a message rule flags wrongly on real code: a test double that throws
+# a scripted failure, whose message names the failure being simulated and
+# whose condition only picks when to simulate it. The mock-factory callbacks
+# are excluded by structure here as they are there; a fake class's method
+# still matches and the criteria say what it is.
+id: error-message-matches-condition
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+# The function around the throw is the subject: the condition is there,
+# and so is any sibling throw whose message this one may have been copied
+# from. `local` adds nothing to that and the file would only add cost.
+subject: enclosing
+state: local
+# Fitted 2026-09-20 on 19 subjects (5 defects, 14 cleans, 9 of them hard),
+# three passes. With the throw alone as the match (attempt 1) the copied-
+# message pairs were twins -- one verdict for both throws -- and the fit
+# was P 0.57 R 0.80. With the guard in the match (attempt 2) the defects
+# answer 0.84-0.98 and every clean but the fake gateway's scripted throw
+# (0.77) sits under 0.35. Attempt 3 hands the Fake*/Mock*/Stub* classes to
+# the matcher and describes the unnamed double by its shape (a sentinel
+# compared in the condition, a real dependency's failure in the message):
+# the inline object double answers 0.29. Bad 0.85-0.97, clean 0.05-0.42
+# (the top clean is "API_KEY is not set" on the first of a copied pair,
+# 0.39-0.46), no flips. Midpoint 0.63; 0.65 leaves 0.19 over the highest
+# clean pass and 0.19 under the lowest defect pass. Not yet run on unseen
+# code: the sibling assertion-message-matches found its false positives
+# there, in test doubles, which is why the doubles are in this corpus.
+# See experiments/reports/l-recipes/REPORT.md.
+at: 0.65
+severity: warning
+rule:
+  all:
+    - any:
+        # The guarding `if` and its throw as ONE match, so that two throws
+        # with the same message in one function are two different matches.
+        # Attempt 1 matched the throw alone: a promoted subject is keyed on
+        # the enclosing text plus the match text, and `throw new
+        # ValidationError("invalid email")` twice in one function is one key
+        # -- the second copy was never asked and took the first one's
+        # verdict (byte-identical triples across three passes, see the
+        # report's Tooling note). The copied message is the defect class
+        # this rule exists for, so the condition has to be in the match.
+        - all:
+            - kind: if_statement
+            - has:
+                field: consequence
+                any:
+                  - all:
+                      - kind: throw_statement
+                      - has: &thrown
+                          kind: new_expression
+                          any:
+                            - pattern: new $TYPE($MESSAGE)
+                            - pattern: new $TYPE($MESSAGE, $$$REST)
+                  - all:
+                      - kind: statement_block
+                      - has:
+                          kind: throw_statement
+                          has: *thrown
+        # A throw in an else block, keyed on the whole if/else.
+        - all:
+            - kind: if_statement
+            - has:
+                field: alternative
+                kind: else_clause
+                has:
+                  kind: statement_block
+                  has:
+                    kind: throw_statement
+                    has: *thrown
+        # Every other throw -- a rethrow, a wrapper in a catch, a switch
+        # default, a throw after a loop -- on its own.
+        - all:
+            - kind: throw_statement
+            - has: *thrown
+            - not:
+                inside:
+                  any:
+                    - kind: if_statement
+                    - all:
+                        - kind: statement_block
+                        - inside:
+                            any:
+                              - kind: if_statement
+                              - kind: else_clause
+    # A throw inside a mock factory's callback is a scripted failure, never
+    # a claim about a condition. Excluded by structure, not by asking.
+    - not:
+        inside:
+          stopBy: end
+          any:
+            - pattern: vi.fn($$$)
+            - pattern: jest.fn($$$)
+            - pattern: mock.fn($$$)
+            - pattern: mock.method($$$)
+            - pattern: sinon.stub($$$)
+            - pattern: $X.mockImplementation($$$)
+            - pattern: $X.mockImplementationOnce($$$)
+    # A class that says it is a fake is a fake; its throws are scripted.
+    # Attempt 2 measured the FakeGateway method at 0.77 under `local`, where
+    # the class name is not in the state -- the parser can read it, so it
+    # decides. A double that is not named one stays a subject and is the
+    # criteria's to recognise.
+    - not:
+        inside:
+          stopBy: end
+          kind: class_declaration
+          has:
+            field: name
+            regex: "^(Fake|Mock|Stub|Dummy|Spy)"
+ask: >-
+  The message given to this error ($MESSAGE) misdescribes the condition
+  that leads to the throw.
+criteria:
+  "true": >-
+    The message names a different cause, value, operation or expectation
+    than the condition guarding the throw actually checks: it says a thing
+    is missing when the check is about its permission, form or range; it
+    names one field or operand when the condition tests another; it names one
+    failure (a timeout, an expiry) when the status or state tested is a
+    different one (a 404, an absence); it states a bound or direction the
+    condition does not test; or it is a copy of another throw's message in
+    the same function and describes that throw's condition rather than this
+    one.
+  "false": >-
+    The message describes the condition that leads to the throw, whether it
+    states the failed requirement, its consequence, or the intent the check
+    serves. A message that is short, generic or lacks detail is not wrong,
+    only unhelpful; a generic message on a generic guard is a match. A
+    message that quotes the offending input, that names what cannot proceed
+    rather than the value that failed, or that wraps a caught error with the
+    name of the operation that failed, is a match. In a test file, a throw
+    whose condition compares a call count, a route, an id or an amount with
+    a fixed sentinel value and whose message names a failure of the real
+    dependency is a test double simulating that failure: its message
+    describes the scenario the test sets up, not the condition, and is a
+    match.
+note: >-
+  Judge only the throw whose message is captured as MESSAGE -- matched together
+  with the if that guards it, when one does -- against the
+  condition or branch in the enclosing function that leads to it. Whether
+  the check itself is correct, and whether the other throws in the function
+  are right, is not the question. A throw with no condition -- a rethrow, a
+  wrapper in a catch, an unconditional failure at the end of a function --
+  is judged against the operation it reports.

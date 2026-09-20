@@ -1,0 +1,23 @@
+default: clean
+fixtures/accounts.ts:
+  - { line: 11, label: clean, window: 0, reason: "the target was not found and the message says so" }
+  - { line: 14, label: bad, window: 0, reason: "the guard tests the actor's role and ownership, and the line above already established the account exists; 'account not found' names a different failure than the one detected, and a copy of the previous throw's message" }
+  - { line: 21, label: clean, window: 0, reason: "the email fails the pattern and the message says invalid email" }
+  - { line: 24, label: bad, window: 0, reason: "the condition is the password's length; 'invalid email' names a different field, copied from the throw above" }
+  - { line: 27, label: clean, window: 0, reason: "a blank display name and 'display name is required' agree" }
+  - { line: 33, label: clean, window: 0, reason: "hard clean: the message names the intent of the check (verify before publishing) rather than the operand (emailVerified is false); same condition, stated as what to do" }
+  - { line: 39, label: clean, window: 0, reason: "hard clean: a generic message on a generic ownership guard; 'forbidden' is short, not wrong" }
+  - { line: 46, label: bad, window: 0, reason: "the session is absent from the store and the message says it expired; the next guard is the one that tests expiry, so the reader is sent to the wrong cause" }
+  - { line: 49, label: clean, window: 0, reason: "expiresAt in the past and 'session expired' agree" }
+fixtures/gateway.test.ts:
+  - { line: 46, label: clean, window: 0, reason: "hard clean: an inline object double in a test throws a scripted 'gateway unavailable' when the customer id is the sentinel c_down; the message names the failure being simulated, and no class name says it is a fake" }
+fixtures/http_client.ts:
+  - { line: 15, label: bad, window: 0, reason: "the condition is a 404 status; 'request timed out' names a failure the fetch's own AbortSignal would produce, not the one detected" }
+  - { line: 18, label: clean, window: 0, reason: "hard clean: the message quotes the status and the order id; a non-ok status and 'unexpected status' agree" }
+  - { line: 26, label: clean, window: 0, reason: "API_KEY missing and 'API_KEY is not set' agree" }
+  - { line: 30, label: bad, window: 0, reason: "the condition is API_BASE_URL missing; the message is a copy of the API_KEY throw above and names the wrong variable" }
+  - { line: 41, label: clean, window: 0, reason: "hard clean: a wrapper in a catch with no condition; the message names the operation that failed and carries the cause" }
+  - { line: 44, label: clean, window: 0, reason: "maxAttempts is not a number and the message says so" }
+  - { line: 52, label: clean, window: 0, reason: "hard clean: the command is absent from the map and the message quotes the name; 'unknown command' is the absence" }
+  - { line: 60, label: clean, window: 0, reason: "hard clean: a generic message on a generic guard; the step reported failure and the message says migration failed" }
+  - { line: 73, label: clean, window: 0, reason: "a switch default for any other header value; 'unsupported api version' with the value quoted" }

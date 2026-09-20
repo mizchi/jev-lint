@@ -1,0 +1,117 @@
+# doc-errors-match-body: does the doc comment's failure contract match the body?
+#
+# The narrower cousin of comment-describes-declaration. Only the failure
+# clauses are judged: what a JSDoc `@throws {Type} when ...`, `@returns null
+# when ...`, or a prose "Throws if ..." / "Rejects when ..." says the function
+# does when something goes wrong. eslint-plugin-jsdoc checks that `@throws`
+# is well-formed, not that it is true; nothing checks the truth.
+id: doc-errors-match-body
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+subject: node
+# `located`: the comment sits outside the matched node, and a helper the
+# body delegates its failure to (a `requireRow`, a schema) is in the file.
+state: located
+# 0.56, fitted 2026-09-20 on this rule's own evals (16 subjects: 6 defects,
+# 10 cleans of which 8 hard, 3 passes; accepted baseline). Cleans top out at
+# 0.36 (`peek`, plain undefined-on-miss) then 0.31 (`fetchProfileOrUndefined`,
+# whose "any other failure rejects" covers a plain throw); defects start at
+# 0.74 (`parseTtl`, an undocumented RangeError beside a documented undefined)
+# then 0.82. Midpoint of the gap, 0.18 of headroom on each side, no decision
+# flips, max spread 0.05. On 10 unseen subjects in jev-lint's own src/ the
+# clean band topped at 0.27.
+at: 0.56
+axis: file
+severity: warning
+rule:
+  any:
+    # A comment directly above a function or method that makes a failure claim.
+    - all:
+        - any:
+            - kind: function_declaration
+            - kind: method_definition
+        - follows: &failure_doc
+            kind: comment
+            regex: "(?i)@throws|@return|throws|rejects|null|undefined|panics|fails"
+            pattern: $DOC
+    # An exported function: the comment precedes the `export`.
+    - all:
+        - kind: function_declaration
+        - inside:
+            kind: export_statement
+            follows: *failure_doc
+    # A function-valued binding, exported or not: the comment precedes the
+    # `const`, or the `export` around it.
+    - all:
+        - kind: variable_declarator
+        - has:
+            field: value
+            any:
+              - kind: arrow_function
+              - kind: function_expression
+        - inside:
+            kind: lexical_declaration
+            any:
+              - follows: *failure_doc
+              - inside:
+                  kind: export_statement
+                  follows: *failure_doc
+ask: >-
+  The failure contract stated in the documentation on this function -- what it
+  says the function throws, raises, rejects with, panics on, or returns in
+  place of a result when something goes wrong, and under what condition -- is
+  contradicted by the body.
+criteria:
+  "true": >-
+    The documentation names a failure the body cannot produce: it says the
+    function throws or raises a named error and the body returns null, None,
+    a default or a success value on that condition instead; it says the
+    function panics on a condition and the body returns a value on that
+    condition; it says an error is returned when something is missing or
+    invalid and the body unwraps, expects or asserts there instead. Or the
+    documentation names the wrong failure: a different error type, exception
+    class or error variant than the body raises, or a different condition
+    than the one the body actually checks before failing. Or the body
+    explicitly fails on its own -- a throw, raise, panic!, bail, assert,
+    explicit error return, or a null, None or default returned in place of a
+    result -- under a condition the documentation says nothing about anywhere
+    in its text. Or the documentation says the function never throws, never
+    panics or never fails and the body has a throw, a panic, an unwrap, an
+    expect, an assert, or an index that can be out of range.
+  "false": >-
+    Every failure the documentation names is one the body produces under the
+    condition named, and every explicit failure the body writes is covered
+    somewhere in the documentation, whether under a heading such as Raises,
+    Errors or Panics, in a Returns clause, or in the summary sentence. A
+    failure described at the level of intent ("when the record does not
+    exist", "if the response is an error status") is honoured by whatever
+    mechanism the body uses to produce it: a lookup helper named for that
+    failure, a raise_for_status, a `?` on the call the documentation is
+    about, a catch that converts one error into the documented one. A
+    documented panic that the body reaches through expect, unwrap, an index or
+    an assert on the documented condition is honoured. Documentation that says
+    the function never throws, never panics or never fails over a body with
+    no failure path of its own is honoured. A documented error that the body
+    obtains by delegating to a named schema, parser, validator or argument
+    parser is honoured by that call. A fallback the documentation describes
+    -- a default when the file is absent, None when the row is missing -- is
+    a documented outcome, not a failure path, wherever in the text it is
+    described. An unwrap, expect or index in a body whose documentation makes
+    no claim about panicking is not a contradiction here; whether it deserves
+    a Panics section is a linter's check, not this rule's.
+note: >-
+  Only the failure clauses are judged -- what the documentation says the
+  function throws, raises, rejects with, panics on, or returns instead of a
+  result, and when. Whether the rest of the documentation is accurate is a
+  different question. The failures that count as the body's own are the ones
+  it writes explicitly: a throw, raise, panic!, bail, assert, explicit Err, or
+  a null, None or default returned where a result was expected. An unwrap,
+  expect or index counts only against a claim the documentation makes: that
+  the function never panics, or that it returns an error on the very
+  condition the unwrap fails on. An error that merely passes through
+  unchanged from a callee -- a `?`, an awaited call, an un-caught call to a
+  library function -- is the callee's failure, not a clause this body owes,
+  unless the documentation says the function cannot fail. A helper whose
+  name states what it fails with (require_row, must_exist, get_or_raise, a
+  parser or schema named in the clause) is assumed to fail that way, whether
+  or not its body is in view.

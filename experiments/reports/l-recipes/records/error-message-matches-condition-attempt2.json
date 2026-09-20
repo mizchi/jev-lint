@@ -1,0 +1,541 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T10:48:57.807Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/error-message-matches-condition",
+  "rules": [
+    {
+      "id": "error-message-matches-condition",
+      "draft": "4c9069243f4f",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/gateway.test.ts",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 24,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 27,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 33,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 15,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 41,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 60,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 73,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/gateway.test.ts",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 24,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 27,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 33,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 15,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 41,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 60,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 73,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/gateway.test.ts",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 24,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 27,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 33,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/accounts.ts",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 15,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 41,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 60,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "experiments/rule-candidates/typescript/error-message-matches-condition/fixtures/http_client.ts",
+        "line": 73,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 48003,
+    "usd": 0.002016126,
+    "ms": 699
+  }
+}

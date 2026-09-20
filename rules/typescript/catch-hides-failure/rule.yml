@@ -1,0 +1,98 @@
+# --------------------------------------------------------------------------
+# Does a catch hide a failure the caller needed?
+# --------------------------------------------------------------------------
+#
+# Cookbook recipe 8. Whether `return []` in a catch is a bug depends on what
+# the function promised: `listInvoices(): Promise<Invoice[]>` that answers
+# an outage with an empty list has told its caller the customer has no
+# invoices. A linter can find an empty catch; it cannot say whether the
+# function's name and return type admit a swallowed failure.
+#
+# The inverse of the shipped safe-name-is-safe: that rule fires when a
+# `safe*` / `try*` / `*OrNull` / `*OrDefault` body lets a failure escape;
+# this one fires when a body that made no such promise absorbs one. The
+# name exclusion is in the MATCHER, not the note: a parser can decide
+# whether the enclosing name says try*, and a subject the rule is not about
+# should never be asked about. What the parser cannot decide -- a return
+# type of `T | null`, a Result-like value, a cleanup catch, a CLI main that
+# exits non-zero -- stays with the criteria.
+id: catch-hides-failure
+languages: [ TypeScript, Tsx, JavaScript, Jsx ]
+kind: noul
+# The enclosing function is the answer: its name, its return type and what
+# the catch returns are all in it. `local` rather than `located` for the
+# reason recipe 8 gives -- the file would add cost and the chance that an
+# unrelated edit moves the verdict.
+subject: enclosing
+state: local
+# Fitted 2026-09-20 on 17 subjects (6 defects, 11 cleans, all of them the
+# hard ones recipe 8 warns about), three passes. The recipe's sentence
+# separated on the first run: defects 0.78-0.93 (only-logs 0.93, a made-up
+# rate 0.92, [] for an outage 0.89, 0 for a broken count 0.86, an empty
+# placeholder invoice 0.78), cleans 0.04-0.40 (rethrow, wrap, log-and-
+# rethrow, Result, T | null, cleanup in a finally, next-source fallback,
+# an error list the return carries, a CLI main that exits 1). The one
+# clean added later that reached 0.57 was the idempotent delete that
+# swallows ENOENT and rethrows the rest; the false branch now names that
+# class (a catch that swallows only the case in which the operation's goal
+# already holds) and it answers 0.18. The `try*` / `*OrDefault` functions
+# in the corpus are not subjects: the matcher drops them. Bad 0.78-0.93,
+# clean 0.04-0.32, no flips. Midpoint 0.55: 0.21 over the highest clean
+# pass (readSettings falling back to defaults on ENOENT, 0.34), 0.23 under
+# the lowest defect. See experiments/reports/l-recipes/REPORT.md.
+at: 0.55
+severity: warning
+rule:
+  all:
+    - kind: catch_clause
+    # A catch inside a function whose name declares that failure is absorbed
+    # is safe-name-is-safe's subject, not this rule's. `stopBy: end` walks
+    # every ancestor, so a catch in a callback inside `tryLoad` is excluded
+    # with it -- accepted, since that callback's failure is tryLoad's to
+    # absorb.
+    - not:
+        inside:
+          stopBy: end
+          any:
+            - all:
+                - kind: function_declaration
+                - has: &absorbing_name
+                    field: name
+                    regex: "^(safe|try|maybe)([A-Z0-9_]|$)|(OrNull|OrDefault|OrUndefined|OrElse)$"
+            - all:
+                - kind: method_definition
+                - has: *absorbing_name
+            - all:
+                - kind: variable_declarator
+                - has: *absorbing_name
+ask: >-
+  This catch block hides a failure the function's caller needed to know
+  about.
+criteria:
+  "true": >-
+    The catch block neither rethrows, returns an error value the signature
+    admits, nor reports through a channel the function is documented to use;
+    it returns a default, an empty value, a made-up value or nothing, or only
+    logs, and the function's name or return type promises a real result --
+    a value that was fetched, parsed or computed, or an operation such as a
+    save or a send that the caller will assume happened.
+  "false": >-
+    The failure is propagated -- rethrown, wrapped, or logged and then
+    rethrown; converted into a value the caller can distinguish from success,
+    such as a Result, an error entry the return value carries, or null or
+    undefined when the return type admits it; or absorbed where absorbing is
+    the point: a cleanup or best-effort step after the real result is
+    already in hand, a catch whose only job is to fall back to the next
+    attempt or the next source, a catch that swallows only the case in which
+    the operation's goal already holds -- removing what is already gone,
+    creating what already exists -- and rethrows everything else, or a
+    top-level entry point that reports and exits with a non-zero status.
+note: >-
+  Only the catch captured as the match is judged, against the function it
+  sits in. A function returning an optional (T | null | undefined) or a
+  Result-like type has declared that it absorbs failure; a function whose
+  return type is void and whose name is an operation (save, send, publish)
+  has not -- its caller assumes the operation happened. A secondary failure
+  -- removing a temporary file, closing a handle, flushing a metric -- that
+  is swallowed after the function's real work has succeeded is not the
+  failure the caller needed.

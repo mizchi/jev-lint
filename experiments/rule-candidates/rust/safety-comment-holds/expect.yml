@@ -1,0 +1,30 @@
+default: clean
+fixtures/ring.rs:
+  - { line: 20, label: clean, window: 0, reason: "hard clean: 'cap is at least 16' is the `cap.max(16)` two lines above; a non-zero layout is what alloc needs." }
+  - { line: 34, label: clean, window: 0, reason: "clean: realloc with the old layout the type allocated with; the new size came through Layout::array." }
+  - { line: 48, label: clean, window: 0, reason: "hard clean: 'len < cap after the grow above' is exactly what `if len == cap { grow() }` two lines up leaves; the write is at len." }
+  - { line: 61, label: clean, window: 0, reason: "hard clean: the while loop's exit condition is cap - len >= bytes.len(), which is the spare room the comment cites." }
+  - { line: 71, label: clean, window: 0, reason: "clean: from_raw_parts over the first len bytes, which push and extend wrote; the slice borrows &self." }
+  - { line: 82, label: clean, window: 0, reason: "clean: start <= len is the check two lines above, and the length passed is len - start." }
+  - { line: 94, label: bad, window: 0, reason: "the comment says 'end < len, checked above'; the check above is on index, and end = index + width is never compared with len, so the slice can run past the initialised bytes." }
+  - { line: 103, label: bad, window: 0, reason: "the comment claims cap >= len + 1 after push's grow; push grows only when len == cap and then writes, so len == cap is reachable, and from_raw_parts is given len + 1 bytes of which at most len were ever written. No `finish` writes a terminator." }
+  - { line: 110, label: bad, window: 0, reason: "the comment says the slice borrows self; the signature returns &'static [u8], so the slice outlives the buffer that dealloc frees in Drop." }
+  - { line: 123, label: clean, window: 0, reason: "clean: dealloc with the layout of the current cap, which with_capacity and grow used." }
+fixtures/arena.rs:
+  - { line: 68, label: clean, window: 0, reason: "hard clean: terse, but 'id.0 < slots.len(), checked above' is the guard two lines up, on the same index and the same vec." }
+  - { line: 81, label: clean, window: 0, reason: "clean: the guard is on generations.len() and the get_unchecked is on generations with the same index." }
+  - { line: 90, label: bad, window: 0, reason: "'both indices were checked against the vec they index': b.0 was checked against free.len(), a different vec, and is then used to index slots." }
+  - { line: 101, label: clean, window: 0, reason: "hard clean: the invariant is in the type, not on the path -- Handle.index is private, alloc and Handle::new bound it by slots.len(), release marks Empty rather than shrinking. Needs the file in view." }
+  - { line: 107, label: clean, window: 0, reason: "hard clean: 'i < len, loop bound' is all it says and `for i in 0..self.slots.len()` is all it needs." }
+  - { line: 120, label: bad, window: 0, reason: "the comment says i is bounded by len; the loop is `while i <= len`, so the last iteration indexes at len, one past the end." }
+  - { line: 133, label: bad, window: 0, reason: "unreachable_unchecked on the Empty arm, justified by 'a Handle is only returned by alloc, which stores a Full slot'; release sets that slot Empty while the Copy handle is still held, and Handle::new hands out a handle for any in-range index, Empty or not." }
+fixtures/ffi.rs:
+  - { line: 41, label: clean, window: 0, reason: "hard clean: restates frame_version's documented contract (static, NUL-terminated, program lifetime) correctly, and 'static is what the signature returns." }
+  - { line: 50, label: clean, window: 0, reason: "clean: a slice's pointer and length, for the duration of a call documented not to retain the pointer." }
+  - { line: 62, label: clean, window: 0, reason: "clean: a CString on the stack outlives the call." }
+  - { line: 65, label: bad, window: 0, reason: "'ctx is non-null here': frame_open is documented to return NULL when the file cannot be opened, and nothing between the call and frame_set_flag tests ctx." }
+  - { line: 77, label: bad, window: 0, reason: "the comment says open returns Err before constructing a Reader with a null context; open has no such check, so the cited guard is absent." }
+  - { line: 90, label: clean, window: 0, reason: "clean: closed once, in Drop, and frame_close is documented to ignore NULL; the comment claims nothing the code does not give." }
+  - { line: 112, label: clean, window: 0, reason: "hard clean: a transmute that looks alarming but is justified -- repr(u8), contiguous 0..=LAST, and `byte > LAST` returns None three lines above." }
+  - { line: 117, label: bad, window: 0, reason: "'this conversion is safe' names no reason; byte comes straight from the wire and nothing checks it against the enum's range, so any value above 2 is an invalid Tag." }
+  - { line: 124, label: clean, window: 0, reason: "hard clean: vague-sounding but true -- a null pointer is a valid value of a raw pointer type, and the transmute of 0 produces one; that ptr::null_mut would be the idiom is not a false claim." }

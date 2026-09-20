@@ -1,0 +1,28 @@
+default: clean
+fixtures/session.ts:
+  - { line: 6, label: bad, window: 0, reason: "UserId names an identifier; the members (sessionToken, issuedAt, expiresAt) are a session, and issue() builds one; a reader looking for the user's id type finds a session record" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: a branded primitive named for what it identifies; the intersection is the branding idiom, not a shape that contradicts the name" }
+  - { line: 15, label: clean, window: 0, reason: "Session's members are a session" }
+  - { line: 22, label: clean, window: 0, reason: "hard clean: Partial<Session> named SessionPatch; an alias derived from a type and named for it" }
+  - { line: 24, label: clean, window: 0, reason: "hard clean: Ctx is terse and conventional; db, clock and request id are what a request context holds" }
+fixtures/lint_report.ts:
+  - { line: 3, label: bad, window: 0, reason: "Config names settings; the members are the output of a lint run (errors, warnings, files checked, duration), and lint() returns one; LintOptions beside it is the actual config" }
+  - { line: 10, label: clean, window: 0, reason: "LintOptions are options" }
+  - { line: 16, label: clean, window: 0, reason: "a union of severity names" }
+  - { line: 18, label: bad, window: 0, reason: "ErrorHandler names a function that handles errors; the members are an error record (code, message, retryable) and classify() returns one as data, nothing is called" }
+  - { line: 24, label: clean, window: 0, reason: "hard clean: Errors is a record of error lists keyed by file; a plural on a map of the things it names" }
+  - { line: 26, label: bad, window: 0, reason: "ParseResult names the product of a parse; the type is a success flag, and parseFlags writes the product into an out parameter; a reader looking for the parsed flags in ParseResult finds a boolean" }
+fixtures/customers.ts:
+  - { line: 1, label: bad, window: 0, reason: "Users is plural; the members are one user (id, email, displayName) and findUser returns one; a Page<Users> reads as a page of user-lists" }
+  - { line: 7, label: bad, window: 0, reason: "isHealthy is a boolean name declared as a string; probe() stores a three-way status (ok/degraded/down) in it, so the member's name contradicts its type" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: Timestamps is plural for a mixin of two timestamp fields; the name says several timestamps and the members are several timestamps" }
+  - { line: 18, label: clean, window: 0, reason: "hard clean: Row is terse; an id and its cells are a row" }
+  - { line: 20, label: clean, window: 0, reason: "Handler is a request-to-response function" }
+  - { line: 22, label: clean, window: 0, reason: "hard clean: Props is the conventional name for a component's inputs; the members are the card's inputs" }
+  - { line: 28, label: clean, window: 0, reason: "Page<T> holds items and a cursor" }
+fixtures/core.ts:
+  - { line: 1, label: clean, window: 0, reason: "hard clean: a recursive union named Json; every arm is a JSON value" }
+  - { line: 3, label: clean, window: 0, reason: "hard clean: a discriminated union named Result; the members are the two outcomes" }
+  - { line: 5, label: clean, window: 0, reason: "hard clean: Maybe<T> is T or an absence; a one-word generic helper" }
+  - { line: 7, label: clean, window: 0, reason: "hard clean: an interface of methods named for the role that holds them; a repository is what finds, saves and removes" }
+  - { line: 24, label: clean, window: 0, reason: "hard clean: an alias derived from a function's return type and named for the thing parseOrder parses" }

@@ -1,0 +1,352 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T10:50:32.242Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/todo-describes-work",
+  "rules": [
+    {
+      "id": "todo-describes-work",
+      "draft": "f6f6c27b0f46",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 27,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 33,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 51,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 56,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 24,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 37,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 49,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 54,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 24,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 37,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 49,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 54,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 27,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 33,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 51,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 56,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 24,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 37,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 49,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/checkout.ts",
+        "line": 54,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 27,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 33,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 51,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "todo-describes-work",
+        "file": "experiments/rule-candidates/typescript/todo-describes-work/fixtures/uploads.ts",
+        "line": 56,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 30042,
+    "usd": 0.001261764,
+    "ms": 750
+  }
+}

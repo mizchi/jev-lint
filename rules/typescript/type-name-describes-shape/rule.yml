@@ -1,0 +1,72 @@
+# --------------------------------------------------------------------------
+# Does a type's name describe the shape it declares?
+# --------------------------------------------------------------------------
+#
+# Cookbook recipe 3, the naming pack at the type level. A type name is a
+# claim about its members the way a binding name is a claim about its value
+# (var-name-describes-value): `UserId` says an identifier, `Config` says
+# settings, `Users` says several. A type checker sees the members and never
+# the name; a linter can enforce casing and nothing else.
+#
+# The matcher is every interface and type alias, over-matched on purpose:
+# `Props`, a branded primitive, a `Partial<T>` alias and a one-word helper
+# type are all subjects, and the criteria are what say they are not
+# mismatches.
+id: type-name-describes-shape
+languages: [ TypeScript, Tsx ]
+kind: noul
+subject: node
+# `located`, as the recipe says: whether `Config` misdescribes its members is
+# sometimes only visible where the type is constructed or consumed, and the
+# type's own text is short, so the file is cheap here.
+state: located
+# Fitted 2026-09-20 on 23 subjects (6 defects, 17 cleans, 12 of them hard),
+# three passes. The recipe's sentence found three of the six: UserId-is-a-
+# session 0.81, isHealthy-as-string 0.78, ErrorHandler-is-a-record 0.73;
+# Config-that-is-a-report 0.53, ParseResult-that-is-a-flag 0.39 and
+# Users-for-one-user 0.33 sat inside the wobble. The ask now says the type
+# is judged against how the file builds and uses it, and the true branch
+# names those three as classes (a settings type a function fills with
+# results; a result type that is only a success flag; a plural on a type
+# handled one at a time) -- they answer 0.77, 0.72 and 0.65. The cleans
+# never moved: the branded primitive, the Partial alias, Props, Ctx, Row,
+# Timestamps, a recursive Json, a Result union, Maybe<T>, an interface of
+# methods and a ReturnType alias all sit at 0.06-0.20 in every attempt.
+# Midpoint 0.42: 0.22 over the highest clean, 0.19 under the lowest pass of
+# the weakest defect (Users, 0.61-0.72). The recall on defect classes the
+# criteria do not name is not measured here; the clean band is the number
+# to trust. See experiments/reports/l-recipes/REPORT.md.
+at: 0.42
+severity: warning
+rule:
+  all:
+    - any:
+        - kind: interface_declaration
+        - kind: type_alias_declaration
+    - has: { field: name, pattern: $NAME }
+ask: >-
+  This type's name ($NAME) misdescribes the shape it declares, judged
+  against its members and against how the file builds and uses values of
+  the type.
+criteria:
+  "true": >-
+    The name states a thing, unit, cardinality or role that the members do
+    not match: a singular name for a collection type, or a plural name for a
+    type whose members are one item and whose values the file handles one at
+    a time; a name naming one concept while the members and the code that
+    builds or consumes the type describe another, such as an identifier type
+    whose members are a session, or a settings or configuration type that a
+    function fills with results; a name that says the type is a result,
+    output or product when the type is only a success flag and the product
+    goes elsewhere; a name that says the type is a function, handler or
+    callback when the members are a data record; or a member whose declared
+    type contradicts the unit or kind its own name states, such as a
+    boolean-named member declared as a string or a count declared as a
+    boolean.
+  "false": >-
+    The members are what the name says they are. A name that is generic,
+    abbreviated, terse, or could be more specific is not a mismatch; nor is a
+    conventional name such as Props, Ctx, Row or Options; a branded primitive
+    that carries the name of what it identifies; an alias built from another
+    type by Partial, Pick, Omit or Readonly and named for that type; or a
+    plural name on a map or record keyed by the things it names.

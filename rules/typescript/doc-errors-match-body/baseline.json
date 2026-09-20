@@ -1,0 +1,460 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T10:50:05.359Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/doc-errors-match-body",
+  "rules": [
+    {
+      "id": "doc-errors-match-body",
+      "draft": "1ed0e8346b56",
+      "at": 0.56
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 35,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 53,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 65,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 82,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 94,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 107,
+        "endLine": 109,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 116,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 28,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 53,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 67,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 78,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 88,
+        "endLine": 94,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 102,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 112,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 35,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 53,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 65,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 82,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 94,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 107,
+        "endLine": 109,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 116,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 28,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 53,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 67,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 78,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 88,
+        "endLine": 94,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 102,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 112,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 35,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 53,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 65,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 82,
+        "endLine": 87,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 94,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 107,
+        "endLine": 109,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/users.ts",
+        "line": 116,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 28,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 53,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 67,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 78,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 88,
+        "endLine": 94,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 102,
+        "endLine": 106,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "experiments/rule-candidates/typescript/doc-errors-match-body/fixtures/cache.ts",
+        "line": 112,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 61941,
+    "usd": 0.002601522,
+    "ms": 726
+  }
+}

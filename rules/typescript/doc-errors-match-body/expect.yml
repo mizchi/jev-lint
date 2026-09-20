@@ -1,0 +1,19 @@
+default: clean
+fixtures/users.ts:
+  - { line: 35, label: bad, window: 0, reason: "the doc says @throws NotFoundError when no user has the id; the body returns null there. A failure the body cannot produce." }
+  - { line: 46, label: clean, window: 0, reason: "hard clean: @throws ZodError on a validation the body delegates to the schema named in the clause; no throw is visible in the body." }
+  - { line: 53, label: bad, window: 0, reason: "the doc says it returns null when there is no such user; the body throws NotFoundError there." }
+  - { line: 65, label: clean, window: 0, reason: "hard clean: the documented TimeoutError is produced by a catch that converts the AbortSignal timeout into it; every other failure rethrows and is not a clause this body owes." }
+  - { line: 82, label: clean, window: 0, reason: "hard clean: undefined on 404 as documented, and the throw on any other error status is the 'any other failure rejects' clause." }
+  - { line: 94, label: bad, window: 0, reason: "the doc names only NotFoundError; the body also throws when the user is already an admin. A failure path the doc's section does not mention." }
+  - { line: 107, label: clean, window: 0, reason: "says never null; `??` with a string fallback cannot yield null." }
+  - { line: 116, label: bad, window: 0, reason: "the doc says @throws RangeError on an empty id; the body throws TypeError. Wrong error type." }
+fixtures/cache.ts:
+  - { line: 28, label: bad, window: 0, reason: "the doc says expired throws and never-written yields null; the body throws on never-written and returns null on expired. The conditions are swapped." }
+  - { line: 40, label: clean, window: 0, reason: "undefined on absent or expired, as documented." }
+  - { line: 53, label: clean, window: 0, reason: "hard clean: says never throws; the write is inside a try whose catch only logs, and nothing outside the try can throw." }
+  - { line: 67, label: clean, window: 0, reason: "hard clean: the documented condition (absent or expired) is served by peek's undefined, which this body turns into CacheMissError." }
+  - { line: 78, label: clean, window: 0, reason: "hard clean: a wrapper whose only failure is the documented callee's (readFileSync); no throw is visible in the body." }
+  - { line: 88, label: bad, window: 0, reason: "the doc says undefined when the string is not a duration and nothing else; the body throws RangeError on a zero count. A failure path the doc does not mention." }
+  - { line: 102, label: clean, window: 0, reason: "hard clean: the SyntaxError is JSON.parse's, the callee the clause is about; the missing-file case returns {} as documented." }
+  - { line: 112, label: clean, window: 0, reason: "hard clean: says never throws and the body catches and continues; that it counts rather than removes is a wrong summary, not a wrong failure clause, and this rule judges only the failure clause." }

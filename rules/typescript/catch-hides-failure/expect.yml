@@ -1,0 +1,20 @@
+default: clean
+fixtures/billing.ts:
+  - { line: 12, label: bad, window: 0, reason: "listInvoices promises Invoice[]; the catch logs and returns [], so an outage reads to the caller as a customer with no invoices" }
+  - { line: 22, label: bad, window: 0, reason: "fetchExchangeRate promises a rate; the catch returns 1, a made-up rate that will price every conversion at par" }
+  - { line: 30, label: bad, window: 0, reason: "recordPayment is void and named for an operation; the catch only logs, so the caller believes the payment was recorded" }
+  - { line: 38, label: bad, window: 0, reason: "parseInvoice promises an Invoice; the catch returns an empty placeholder invoice the caller cannot tell from a real one" }
+  - { line: 46, label: clean, window: 0, reason: "hard clean: the return type is a Result and the catch returns the error branch; the failure is a value the caller can distinguish" }
+  - { line: 55, label: clean, window: 0, reason: "hard clean: the return type admits null, a 404 becomes null, everything else is rethrown" }
+  - { line: 65, label: clean, window: 0, reason: "hard clean: the catch wraps the failure in a BillingError with the cause and throws it" }
+  - { line: 73, label: clean, window: 0, reason: "hard clean: logs and rethrows; the caller learns of the failure" }
+fixtures/export_cli.ts:
+  - { line: 18, label: clean, window: 0, reason: "hard clean: a cleanup catch inside a finally; the report has already been written and renamed, only the temp dir removal is swallowed" }
+  - { line: 28, label: clean, window: 0, reason: "hard clean: a missing settings file falls back to defaults and every other error is rethrown; the catch distinguishes" }
+  - { line: 39, label: clean, window: 0, reason: "hard clean: the catch only moves to the next source and the last error is thrown when all fail" }
+  - { line: 51, label: clean, window: 0, reason: "hard clean: the failed key is pushed to the failed list the return value carries; the caller can see which keys did not prime" }
+  - { line: 63, label: bad, window: 0, reason: "countPending promises a count; the catch returns 0, so a broken database reads as nothing pending" }
+  - { line: 74, label: clean, window: 0, reason: "hard clean: a CLI main that prints the error and exits non-zero; the failure is reported through the process status" }
+  - { line: 90, label: bad, window: 0, reason: "isUpstreamHealthy promises a yes or no; the catch answers yes to a fetch that failed or timed out, the one case the question exists for" }
+  - { line: 98, label: clean, window: 0, reason: "hard clean: an idempotent delete; a file that is already gone is the requested state, and every other error is rethrown" }
+  - { line: 107, label: clean, window: 0, reason: "hard clean: the return type is Date | undefined and a missing or unreadable marker is the undefined case the signature declares" }

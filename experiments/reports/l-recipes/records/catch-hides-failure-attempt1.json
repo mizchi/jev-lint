@@ -1,0 +1,406 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T10:46:23.203Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/catch-hides-failure",
+  "rules": [
+    {
+      "id": "catch-hides-failure",
+      "draft": "70c23ba2cc2c",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 28,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 51,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 63,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 74,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 12,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 22,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 38,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 55,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 65,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 73,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 12,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 22,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 38,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 55,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 65,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 73,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 28,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.42,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 51,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 63,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 74,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 28,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 51,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 63,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/export_cli.ts",
+        "line": 74,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 12,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 22,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 30,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 38,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 55,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 65,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "catch-hides-failure",
+        "file": "experiments/rule-candidates/typescript/catch-hides-failure/fixtures/billing.ts",
+        "line": 73,
+        "endLine": 76,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 30237,
+    "usd": 0.001269954,
+    "ms": 785
+  }
+}

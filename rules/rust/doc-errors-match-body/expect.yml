@@ -1,0 +1,21 @@
+default: clean
+fixtures/buffer.rs:
+  - { line: 26, label: clean, window: 0, reason: "hard clean: `# Panics` if capacity is zero, honoured by an assert on exactly that condition." }
+  - { line: 36, label: bad, window: 0, reason: "the doc says it panics when the ring is empty; `unwrap_or(0)` returns 0 instead. A failure the body cannot produce." }
+  - { line: 45, label: clean, window: 0, reason: "hard clean: `# Panics` on an `expect` with the documented condition." }
+  - { line: 51, label: clean, window: 0, reason: "says never panics; `.get(index).copied()` has no panic path." }
+  - { line: 60, label: bad, window: 0, reason: "the doc says it returns CapacityError when the ring is full; the body evicts the oldest sample and returns Ok. A failure the body cannot produce." }
+  - { line: 73, label: clean, window: 0, reason: "returns CapacityError exactly when full." }
+  - { line: 86, label: clean, window: 0, reason: "hard clean: the panic is an assert on the documented condition, not an unwrap." }
+  - { line: 94, label: clean, window: 0, reason: "never panics; the empty case returns None before the division." }
+  - { line: 106, label: bad, window: 0, reason: "the doc says never panics; `parts[1]` indexes past the end when the line has no `=`. A failure path the doc denies." }
+  - { line: 117, label: clean, window: 0, reason: "hard clean: the documented panic comes from the callee `split_at`, whose condition is the one documented; no panic is visible in this body." }
+  - { line: 122, label: clean, window: 0, reason: "never fails; the body has no failure path." }
+fixtures/config.rs:
+  - { line: 34, label: clean, window: 0, reason: "hard clean: both documented errors arrive through `?` with context; nothing is unwrapped." }
+  - { line: 48, label: bad, window: 0, reason: "the doc says it returns ConfigError::Missing when the file does not exist; the body panics there through unwrap_or_else(panic!)." }
+  - { line: 59, label: clean, window: 0, reason: "hard clean: NotFound is absorbed into the default as documented; a read error other than NotFound and a parse error are returned, which is what the clause says." }
+  - { line: 77, label: bad, window: 0, reason: "the doc says ConfigError::Unset when the key is absent; the body builds ConfigError::Missing. Wrong error variant." }
+  - { line: 90, label: clean, window: 0, reason: "hard clean: one clause, two mechanisms; a non-integer fails through `?` and zero through `bail!`, both inside 'not a positive integer'." }
+  - { line: 103, label: bad, window: 0, reason: "the doc says the only error is a zero port; the body also bails on an empty name. A failure path the doc's section does not mention." }
+  - { line: 118, label: clean, window: 0, reason: "hard clean: the only failure clause is the write, and the write is the only explicit failure; the `expect` on the serialisation makes no claim the doc denies. Whether an expect deserves a Panics section is clippy missing_panics_doc, a parser check, and whether this one is reachable is not visible in the subject, so the rule scopes it out." }
