@@ -10,8 +10,9 @@
  * the next, and travels as the subject's text; `state: located` adds the
  * file, `bare` does not. No matcher, so no loose-matcher caveat.
  */
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { extname, join, relative, sep } from "node:path";
+import { readFileSync } from "node:fs";
+import { extname, join } from "node:path";
+import { FileIndex, isUnder } from "./files.ts";
 import type { Rule, Subject } from "./types.ts";
 
 export interface TextBlock {
@@ -46,39 +47,23 @@ export function splitBlocks(source: string, header: RegExp): TextBlock[] {
   });
 }
 
-/** Directories no source lives in. */
-const SKIPPED = new Set(["node_modules", ".git", "dist", "build", "target", "coverage", "vendor"]);
-
-/** Every file under `paths` (files or directories) with one of the extensions, relative to `cwd`, sorted. */
-export function findTextFiles(paths: string[], extensions: string[], cwd: string = process.cwd()): string[] {
+/**
+ * Every file under `paths` (files or directories) with one of the
+ * extensions, relative to `cwd`, sorted. The walk is the run's shared one
+ * when an index is given; a file the index knows from another root (the
+ * paired arm's conventional test directories) is not one of these unless
+ * it is under `paths`.
+ */
+export function findTextFiles(
+  paths: string[],
+  extensions: string[],
+  cwd: string = process.cwd(),
+  index: FileIndex = new FileIndex(cwd),
+): string[] {
   const wanted = new Set(extensions.map((e) => (e.startsWith(".") ? e : `.${e}`).toLowerCase()));
-  const found = new Set<string>();
-  const walk = (dir: string) => {
-    let entries;
-    try {
-      entries = readdirSync(dir, { withFileTypes: true });
-    } catch {
-      return;
-    }
-    for (const e of entries) {
-      if (e.name.startsWith(".") || SKIPPED.has(e.name)) continue;
-      const full = join(dir, e.name);
-      if (e.isDirectory()) walk(full);
-      else if (e.isFile() && wanted.has(extname(e.name).toLowerCase())) found.add(relative(cwd, full).split(sep).join("/"));
-    }
-  };
-  for (const p of paths) {
-    const full = join(cwd, p);
-    let st;
-    try {
-      st = statSync(full);
-    } catch {
-      continue;
-    }
-    if (st.isDirectory()) walk(full);
-    else if (st.isFile() && wanted.has(extname(full).toLowerCase())) found.add(relative(cwd, full).split(sep).join("/"));
-  }
-  return [...found].sort();
+  return index
+    .list(paths)
+    .filter((rel) => wanted.has(extname(rel).toLowerCase()) && paths.some((p) => isUnder(rel, p)));
 }
 
 /**
@@ -91,12 +76,13 @@ export function textSubjects(
   paths: string[],
   cwd: string = process.cwd(),
   read: (file: string) => string = (file) => readFileSync(join(cwd, file), "utf8"),
+  index: FileIndex = new FileIndex(cwd),
 ): Subject[] {
   const out: Subject[] = [];
   for (const rule of rules) {
     if (rule.subject !== "block" || !rule.split) continue;
     const header = new RegExp(rule.split);
-    for (const file of findTextFiles(paths, rule.extensions ?? [], cwd)) {
+    for (const file of findTextFiles(paths, rule.extensions ?? [], cwd, index)) {
       let source: string;
       try {
         source = read(file);

@@ -30,6 +30,7 @@ import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "
 import { pairTests, type RelatedTest } from "./paired.ts";
 import { commitSubjects, squashSubjects } from "./commits.ts";
 import { textSubjects } from "./text.ts";
+import { FileIndex } from "./files.ts";
 import type {
   Answer,
   Batch,
@@ -165,9 +166,13 @@ export async function collectSubjects({
     });
   }
 
+  // One walk of the tree for everything that is not ast-grep: block rules
+  // and the paired arm both filter it.
+  const index = new FileIndex(cwd);
+
   // Block rules: text files split at a header line, beside what ast-grep
   // found. Read through `readSource` so the `located` state has the file.
-  for (const s of textSubjects(rules, paths, cwd, (file) => readSource(file))) {
+  for (const s of textSubjects(rules, paths, cwd, (file) => readSource(file), index)) {
     if (diffRanges && !touchesChange(diffRanges, s.file, s.line, s.endLine)) {
       skippedByDiff += 1;
       continue;
@@ -190,6 +195,7 @@ export async function collectSubjects({
     tests = pairTests(pairedFiles, {
       roots: paths,
       cwd,
+      index,
       keywords: (file) =>
         (symbols.get(file)?.symbols ?? []).filter((sym) => sym.exported && sym.name).map((sym) => sym.name!),
     });

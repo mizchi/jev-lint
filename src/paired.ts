@@ -20,9 +20,10 @@
  * ordinary modules; the excerpt keeps four related files under a few thousand
  * tokens.
  */
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { basename, dirname, join, posix, relative, sep } from "node:path";
 import { moduleIdentity } from "./scan.ts";
+import { FileIndex } from "./files.ts";
 
 /** One related test, as the state carries it. */
 export interface RelatedTest {
@@ -70,11 +71,6 @@ export function isTestFile(path: string, content?: string): boolean {
   return content === undefined || TEST_OPENER_ANYWHERE.test(content);
 }
 
-/** Directories no test lives in, whatever they are called. */
-const SKIPPED_DIRECTORIES = new Set([
-  "node_modules", "dist", "build", "out", "target", "coverage", "vendor", "tmp",
-]);
-
 /** Directories at the project root that hold tests by convention. */
 const CONVENTIONAL_ROOTS = ["test", "tests", "__tests__", "spec"];
 
@@ -82,46 +78,12 @@ const CONVENTIONAL_ROOTS = ["test", "tests", "__tests__", "spec"];
  * Every test file under the paths a run was given, plus the conventional
  * test directories at the project root -- `jev-lint check src` should still
  * find `test/`. Paths come back relative to `cwd`, with forward slashes, the
- * way ast-grep reports its matches.
+ * way ast-grep reports its matches. The walk is the run's shared one when
+ * an index is given.
  */
-export function findTestFiles(roots: string[], cwd: string = process.cwd()): string[] {
-  const found = new Set<string>();
-  const seenDirs = new Set<string>();
-  const walk = (dir: string) => {
-    if (seenDirs.has(dir)) return;
-    seenDirs.add(dir);
-    let entries;
-    try {
-      entries = readdirSync(dir, { withFileTypes: true });
-    } catch {
-      return;
-    }
-    for (const e of entries) {
-      if (e.name.startsWith(".")) continue;
-      const full = join(dir, e.name);
-      if (e.isDirectory()) {
-        if (!SKIPPED_DIRECTORIES.has(e.name)) walk(full);
-      } else if (e.isFile()) {
-        const rel = relative(cwd, full).split(sep).join("/");
-        if (isTestFile(rel, readIfUnderTestDirectory(full, rel))) found.add(rel);
-      }
-    }
-  };
-  for (const root of [...roots, ...CONVENTIONAL_ROOTS]) {
-    const full = join(cwd, root);
-    let st;
-    try {
-      st = statSync(full);
-    } catch {
-      continue;
-    }
-    if (st.isDirectory()) walk(full);
-    else if (st.isFile()) {
-      const rel = relative(cwd, full).split(sep).join("/");
-      if (isTestFile(rel, readIfUnderTestDirectory(full, rel))) found.add(rel);
-    }
-  }
-  return [...found].sort();
+export function findTestFiles(roots: string[], cwd: string = process.cwd(), index: FileIndex = new FileIndex(cwd)): string[] {
+  const all = index.list([...roots, ...CONVENTIONAL_ROOTS]);
+  return all.filter((rel) => isTestFile(rel, readIfUnderTestDirectory(join(cwd, rel), rel)));
 }
 
 /**
@@ -345,6 +307,8 @@ export interface PairOptions {
   /** The paths the run was given; the walk starts there. */
   roots: string[];
   cwd?: string;
+  /** The run's shared walk, so this is not a second one. */
+  index?: FileIndex;
   /** What to look for in a test: a file's exported names, typically. */
   keywords?: (file: string) => string[];
   /** Test file discovery, injectable for tests of this module. */
@@ -362,9 +326,9 @@ export interface PairOptions {
  */
 export function pairTests(
   files: Iterable<string>,
-  { roots, cwd = process.cwd(), keywords = () => [], testFiles, readSource }: PairOptions,
+  { roots, cwd = process.cwd(), keywords = () => [], testFiles, readSource, index }: PairOptions,
 ): Map<string, RelatedTest[]> {
-  const candidates = testFiles ?? findTestFiles(roots, cwd);
+  const candidates = testFiles ?? findTestFiles(roots, cwd, index);
   const read =
     readSource ??
     ((p: string) => {
