@@ -330,7 +330,8 @@ export function emitRuleFile(rules: Rule[], languages: Language[]): string {
 /**
  * Locate the `ast-grep` binary.
  *
- * Four places, in order, because the layout differs between working in this
+ * An override, then the resolved package, then two layout guesses, then
+ * PATH -- in that order, because the layout differs between working in this
  * repository and being installed as a dependency -- where npm hoists
  * `node_modules` to the consumer's root and `../node_modules/.bin` beside the
  * package does not exist. Resolving through `@ast-grep/cli`'s own package
