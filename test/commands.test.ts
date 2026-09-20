@@ -205,6 +205,9 @@ await testAsync("commands: review judges only what the diff touched, and commits
       const nothing = await cli(["review", "--base", "HEAD", ...base]);
       assert.equal(nothing.code, 0);
       assert.match(nothing.out, /no changed files/);
+      const nothingJson = await cli(["review", "--base", "HEAD", ...base, "--json"]);
+      assert.equal(nothingJson.code, 0);
+      assert.deepEqual(JSON.parse(nothingJson.out).findings, [], "one document, empty, where JSON was asked for");
       // The commit rule, answered low: the range is judged and nothing reported.
       const commitRules = join(realpathSync(here), "rules", "git");
       const commits = await cli(["commits", "HEAD~1..HEAD", "--no-config", "--cache", "none", "-R", commitRules, "--no-color"], fakeClient(() => 0.2));
@@ -245,6 +248,91 @@ await testAsync("commands: eval and calibrate say what they cannot read, and exi
       assert.match(cal.out, /name-lies/);
     } finally {
       rmSync(proj, { recursive: true, force: true });
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("commands: --json gives every command one JSON document on stdout, and nothing else there", async () => {
+  // A consumer parses stdout. Whatever a command says for a reader goes to
+  // stderr under --json, and the document carries what the text carried.
+  const { dir, rules, src } = project();
+  const one = (s: string): Record<string, any> => {
+    const doc = JSON.parse(s);
+    assert.equal(typeof doc, "object");
+    return doc;
+  };
+  try {
+    const base = ["--no-config", "--cache", "none", "-R", rules, "--no-color", "--json"];
+    const check = one((await cli(["check", src, ...base])).out);
+    assert.equal(check.findings.length, 1);
+    assert.equal(check.stats.byFile[join(src, "a.ts")].subjects, 4);
+
+    const dry = one((await cli(["check", src, ...base, "--dry-run"])).out);
+    assert.equal(dry.dryRun, true);
+    assert.equal(dry.requests, 1);
+    assert.equal(dry.subjects, 4);
+    assert.ok(dry.tokens > 0 && dry.usd > 0);
+    assert.deepEqual(dry.byRule.map((r: { rule: string }) => r.rule).sort(), ["body-short", "name-lies"]);
+    assert.equal(dry.batches[0].arm, "located");
+
+    const listed = one((await cli(["rules", ...base])).out);
+    assert.deepEqual(listed.rules.map((r: { id: string }) => r.id), ["name-lies", "body-short"]);
+    assert.equal(listed.rules[0].cutoff, 0.5);
+    assert.deepEqual(listed.errors, []);
+
+    const gaps = one((await cli(["gaps", src, ...base])).out);
+    assert.ok(Array.isArray(gaps.gaps) && gaps.gaps.some((r: { rule: string }) => r.rule === "name-lies"));
+    assert.equal(gaps.stats.subjects, 4);
+
+    const labels = join(dir, "labels.json");
+    writeFileSync(labels, JSON.stringify({ $default: "clean", [join(src, "a.ts")]: [{ line: 5, label: "bad", window: 0, rule: "name-lies" }] }));
+    const cal = one((await cli(["calibrate", src, ...base, "--repeat", "2", "--labels", labels])).out);
+    assert.equal(cal.passes, 2);
+    assert.ok(cal.gaps.length === 2 && cal.stability.rows.length === 2 && cal.stability.runs === 2);
+    assert.equal(cal.fits.find((f: { rule: string }) => f.rule === "name-lies").fitted, 0.5);
+
+    const record = join(dir, "run.json");
+    await cli(["check", src, ...base.filter((a) => a !== "--json"), "--record", record]);
+    const replay = one((await cli(["replay", record, "--no-config", "--json"])).out);
+    assert.equal(replay.findings.length, 1);
+    assert.ok(Array.isArray(replay.gaps));
+
+    const init = one((await cli(["init", "--config", join(dir, "new.yaml"), "--json"])).out);
+    assert.equal(init.wrote, join(dir, "new.yaml"));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("commands: eval --json is one document too, for a run, a dry run, a replay and a compare", async () => {
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-commands-evaljson-")));
+  try {
+    const suite = join(dir, "typescript", "name-lies");
+    mkdirSync(join(suite, "fixtures"), { recursive: true });
+    writeFileSync(
+      join(suite, "rule.yml"),
+      ["id: name-lies", "language: TypeScript", "kind: noul", "at: 0.5", "rule: { kind: function_declaration, has: { field: name, pattern: $NAME } }", "ask: This function's name ($NAME) lies.", "criteria: { 'true': it lies, 'false': it does not }", ""].join("\n"),
+    );
+    writeFileSync(join(suite, "fixtures", "a.ts"), "export function honest() {}\nexport function liar() {}\n");
+    writeFileSync(join(suite, "expect.yml"), "default: clean\nfixtures/a.ts:\n  - { line: 2, label: bad, window: 0, reason: it lies }\n");
+    const here = process.cwd();
+    process.chdir(dir);
+    try {
+      const one = (s: string) => JSON.parse(s);
+      const dry = one((await cli(["eval", "typescript/name-lies", "--no-config", "--json", "--dry-run", "--repeat", "1"])).out);
+      assert.equal(dry.suites[0].plan.requests, 1);
+      const run = one((await cli(["eval", "typescript/name-lies", "--no-config", "--json", "--repeat", "1", "--accept"])).out);
+      assert.equal(run.failed, 0);
+      assert.equal(run.suites[0].score.rules[0].precision, 1);
+      const replay = one((await cli(["eval", "typescript/name-lies", "--no-config", "--json", "--replay"])).out);
+      assert.equal(replay.suites[0].ok, true);
+      const cmp = one((await cli(["eval", "--compare", join(suite, "baseline.json"), join(suite, "baseline.json"), "--no-config", "-R", dir, "--json"])).out);
+      assert.equal(cmp.diff.regressions.length, 0);
+      assert.equal(cmp.a.passes, 1);
+    } finally {
+      process.chdir(here);
     }
   } finally {
     rmSync(dir, { recursive: true, force: true });

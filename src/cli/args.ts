@@ -139,6 +139,8 @@ options:
       --fail-on <severity> exit 1 only for findings at or above hint | info |
                            warning | error (default: any finding)
       --format <fmt>       pretty | json | github
+      --json               --format json: one JSON document on stdout, for every
+                           command; what a reader would be told goes to stderr
       --concurrency <n>    most requests in flight at once (default ${DEFAULT_CONCURRENCY}; a 429 narrows it)
       --batch-size <n>     subjects per request (default ${DEFAULT_BATCH_SIZE})
       --repeat <n>         calibrate: how many times to re-ask (default 3)
@@ -377,6 +379,9 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
         break;
       case "--staged":
         opts.staged = true;
+        break;
+      case "--json":
+        opts.format = "json";
         break;
       case "--format":
         opts.format = need(i, a) as Options["format"];

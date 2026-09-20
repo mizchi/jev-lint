@@ -63,7 +63,7 @@ failed and nothing was reported.
 | `--dry-run` | plan and price without asking anything |
 | `--show-missing` | list subjects that got no verdict |
 | `--show-subjects` | with `--dry-run`: list every subject with its line, node kind and captures |
-| `--format <fmt>` | `pretty`, `json`, `github` |
+| `--format <fmt>` / `--json` | `pretty`, `json`, `github`; `--json` is `--format json`, and holds for every command |
 | `--concurrency <n>` / `--batch-size <n>` | default 32 and 256; the client also paces its input tokens against the server's rate limit, see `JEV_LINT_TOKENS_PER_SECOND` |
 | `--model <id>` | Jev model |
 | `--quiet` / `--no-color` | |
@@ -100,6 +100,28 @@ questions are its own; a batch's state, which travels once for every
 subject in it, is charged to each rule in proportion to the subjects it
 put there, so the shares sum to the plan. Which rule to drop, or to `run`
 alone, is a decision the total alone cannot inform.
+
+### Structured output: `--json`
+
+`--json` (`--format json`) makes every command print one JSON document on
+stdout and nothing else there; what a reader would be told -- a config in
+use, a rule that failed to load, a baseline accepted -- goes to stderr.
+The exit code is the same as for text.
+
+| command | document |
+| --- | --- |
+| `check`, `review`, `commits`, `run` | `findings`, `review` (the `--loose` band), `stats` (`byRule`, `byFile`), `degraded`, `silentRules`, `idleLanguages`, `ignored`, `unpaired`, `retry`, `spent`, `errors` |
+| any of those with `--dry-run` | `dryRun: true`, `subjects`, `cached`, `requests`, `tokens`, `usd`, `batches`, `byRule` (the price per rule), `commits`, `subjectList` with `--show-subjects`, `ignored`, `unpaired`, `excluded`, `idleLanguages`, `silentRules` |
+| `replay` | as `check`, plus `gaps` |
+| `gaps` | `gaps` (the rows of the table), `stats`, `cached`, `spent` |
+| `calibrate` | `passes`, `gaps`, `stability` (with `--repeat`), `fits` (with `--labels`), `spent` |
+| `eval` | `suites[]` with `ok`, `score`, `diff`, `changedDrafts`, `recorded`, `passes`; `failed`. With `--dry-run`, each suite's `plan` |
+| `eval --compare` | `suite`, `a`, `b` (each with `rules`), `changedDrafts`, `diff` |
+| `rules` | `rules[]` with `id`, `languageDir`, `languages`, `kind`, `subject`, `state`, `cutoff`, `loose`, `severity`, `ask`, `note`, `explain`, `uncalibrated`, `source`; `errors`, `warnings` |
+| `init` | `wrote`, and `keySet` or `hook` |
+
+A `review` with no changed file is an empty document of the usual shape,
+not a line of prose.
 
 ### Leaving a path out: `--exclude`
 

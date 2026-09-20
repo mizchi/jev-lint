@@ -29,6 +29,10 @@ export function cmdInit(opts: Options, out: Log, log: Log): number {
     return 2;
   }
 
+  if (opts.format === "json") {
+    out(JSON.stringify({ wrote: target, keySet: fromEnv(API_KEY_VARS) !== null }, null, 2));
+    return 0;
+  }
   out(`wrote ${target}`);
   out("");
   const key = fromEnv(API_KEY_VARS);
@@ -82,6 +86,10 @@ export function cmdInitHook(opts: Options, out: Log, log: Log, which: "pre-commi
   } catch (err: unknown) {
     log(`could not write ${target}: ${String(err).slice(0, 160)}`);
     return 2;
+  }
+  if (opts.format === "json") {
+    out(JSON.stringify({ wrote: target, hook: which }, null, 2));
+    return 0;
   }
   out(`wrote ${target}`);
   out("");

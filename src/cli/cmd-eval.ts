@@ -59,7 +59,8 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
       // Plan and price, ask nothing: the same promise `check --dry-run` makes.
       try {
         const plan = await planEval(suite, opts.repeat);
-        out(`${suite.name}: ${plan.subjects} subject(s), ${plan.requests} request(s) over ${opts.repeat} pass(es), ~${plan.tokens.toLocaleString()} input tokens, ~$${((plan.tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
+        if (opts.format === "json") results.push({ suite: suite.name, dir: suite.dir, plan: { ...plan, usd: (plan.tokens / 1e6) * USD_PER_MTOK, repeat: opts.repeat } });
+        else out(`${suite.name}: ${plan.subjects} subject(s), ${plan.requests} request(s) over ${opts.repeat} pass(es), ~${plan.tokens.toLocaleString()} input tokens, ~$${((plan.tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
       } catch (err: unknown) {
         log(`${suite.name}: ${String((err as Error)?.message ?? err).slice(0, 240)}`);
         failed += 1;
@@ -104,7 +105,7 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
     if (!ok) failed += 1;
 
     if (opts.format === "json") {
-      results.push({ suite: suite.name, dir: suite.dir, ok, score, diff, stale: changedDrafts, recorded: record.recorded, passes: record.passes.length });
+      results.push({ suite: suite.name, dir: suite.dir, ok, score, diff, changedDrafts, recorded: record.recorded, passes: record.passes.length });
     } else {
       out(formatEvalSuite(suite, score, diff, wrong, changedDrafts, record, baselineRecord, opts.replay));
     }
@@ -156,6 +157,11 @@ export function cmdEvalCompare(opts: Options, out: Log, log: Log): number {
   const changed = right.rules.filter((r) => drafts.has(r.id) && drafts.get(r.id) !== r.draft).map((r) => r.id);
   const diff = compareEvals(scoreL, scoreR, { draftChanged: false });
   const rel = (f: string) => relative(suite.fixtures, f);
+  if (opts.format === "json") {
+    const summary = (path: string, rec: EvalRecord, sc: EvalScore) => ({ path, recorded: rec.recorded, model: rec.model ?? null, passes: rec.passes.length, rules: sc.rules });
+    out(JSON.stringify({ suite: suite.name, a: summary(a, left, scoreL), b: summary(b, right, scoreR), changedDrafts: changed, diff }, null, 2));
+    return diff.regressions.length > 0 ? 1 : 0;
+  }
   const side = (name: string, rec: EvalRecord, sc: EvalScore) => {
     out(`${name}: ${rec.recorded.slice(0, 19)}  model ${rec.model ?? "?"}  ${rec.passes.length} pass(es)`);
     for (const r of sc.rules) {

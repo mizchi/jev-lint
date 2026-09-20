@@ -10,6 +10,13 @@ import type { Rule, RunResult } from "../types.ts";
 import type { Log, Options } from "./args.ts";
 
 export function printDryRun(result: RunResult, rules: Rule[], opts: Options, out: Log, log: Log): number {
+  if (opts.format === "json") {
+    out(JSON.stringify(dryRunDocument(result, rules, opts), null, 2));
+    if (result.ignored?.unknownRules.length) {
+      log(`jev-lint-ignore comment(s) name a rule that does not exist: ${result.ignored.unknownRules.join(", ")}`);
+    }
+    return 0;
+  }
   out(`${result.subjects.length} subject(s), ${result.cachedCount} already cached`);
   out(`${result.batches.length} request(s) planned`);
   const tokens = result.batches.reduce((a, b) => a + b.estimatedTokens, 0);
@@ -77,4 +84,51 @@ export function printDryRun(result: RunResult, rules: Rule[], opts: Options, out
   const silent = silentRules(result);
   if (silent.length) out(`${silent.length} rule(s) matched nothing: ${silent.join(", ")}`);
   return 0;
+}
+
+/** The plan as one document: what the text says, as fields. */
+export function dryRunDocument(result: RunResult, rules: Rule[], opts: Options): Record<string, unknown> {
+  const tokens = result.batches.reduce((a, b) => a + b.estimatedTokens, 0);
+  return {
+    dryRun: true,
+    subjects: result.subjects.length,
+    cached: result.cachedCount ?? 0,
+    requests: result.batches.length,
+    tokens,
+    usd: (tokens / 1e6) * USD_PER_MTOK,
+    retry: result.retry ?? 1,
+    batches: result.batches.map((b) => ({
+      file: b.file,
+      rule: b.rule ?? null,
+      subjects: b.subjects.length,
+      arm: b.arm,
+      tokens: b.estimatedTokens,
+      degraded: b.degraded ? { from: b.degraded.from, to: b.degraded.to, reason: b.degraded.reason } : null,
+    })),
+    byRule: costByRule(result.batches, rules),
+    commits: result.commits
+      ? {
+          ...result.commits,
+          subjects: result.subjects.map((s) => ({ sha: s.file, subject: s.captured?.SUBJECT ?? "", files: s.commit?.files.length ?? 0, truncated: s.commit?.truncated ?? false })),
+        }
+      : null,
+    ...(opts.showSubjects && !result.commits
+      ? {
+          subjectList: result.subjects.map((s) => ({
+            file: s.file,
+            line: s.line,
+            endLine: s.endLine,
+            rule: s.rule.id,
+            node: s.nodeKind,
+            judged: s.promoted ? s.rule.subject : null,
+            captured: s.captured ?? {},
+          })),
+        }
+      : {}),
+    ignored: result.ignored ?? null,
+    unpaired: result.unpaired ?? null,
+    excluded: result.excluded ?? 0,
+    idleLanguages: idleLanguages(result),
+    silentRules: silentRules(result),
+  };
 }

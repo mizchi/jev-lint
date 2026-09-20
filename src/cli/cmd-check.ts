@@ -52,8 +52,10 @@ export async function cmdCheck(
   if (result.stderr?.trim()) log(`ast-grep: ${result.stderr.trim().slice(0, 800)}`);
 
   if (result.schedule && (opts.explainSchedule || opts.dryRun)) {
-    out(explain(result.schedule as Schedule));
-    out("");
+    // Prose for a reader; under --json stdout is the document alone.
+    const say = opts.format === "json" ? log : out;
+    say(explain(result.schedule as Schedule));
+    say("");
   }
 
 

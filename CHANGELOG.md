@@ -8,6 +8,15 @@ change are in [docs/findings.md](docs/findings.md).
 
 ## Unreleased
 
+### Added
+
+- `--json` (`--format json`) for every command, one document on stdout and
+  nothing else there: `--dry-run` (the plan, the price per rule, the
+  subjects), `rules`, `gaps`, `calibrate` (gaps, stability, fits), `eval`
+  in its four modes, `init`. `gaps` and `eval` printed their text and then
+  their JSON; an empty `review` under `--json` is an empty document, not
+  a sentence.
+
 ### Fixed
 
 - `replay --format json` printed the gap table and its trailer after the

@@ -33,10 +33,12 @@ export async function resolveTargets(
     // on the command line or in the config narrow WHICH changed files, they
     // do not widen the scan back to the tree.
     const files = changedFilesUnder(changedFiles(diffRanges), paths);
-    if (files.length === 0) {
+    if (files.length === 0 && opts.format !== "json") {
       if (!opts.quiet) out("no changed files");
       return { exit: 0 };
     }
+    // Under --json an empty run is still one document of the usual shape,
+    // with nothing in it, rather than a line of prose where JSON was asked for.
     paths = files;
   } else if (command === "commits") {
     // The range is a positional (`main..HEAD`), else `--base <ref>`, else

@@ -5,7 +5,8 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { Cache } from "../cache.ts";
 import { gapReport, stabilityReport, fitCutoffs } from "../calibrate.ts";
 import type { ChangedRanges } from "../diff.ts";
-import { USD_PER_MTOK, type AskClient } from "../jev.ts";
+import type { AskClient } from "../jev.ts";
+import { printDryRun } from "./dry-run.ts";
 import { formatGaps, formatStability } from "../report.ts";
 import { run, buildRecord } from "../run.ts";
 import type { Finding, Labels, Rule, RunResult } from "../types.ts";
@@ -45,22 +46,24 @@ export async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, clien
   if (opts.dryRun) {
     // The same promise every command makes of the flag: plan, price, ask
     // nothing. It was accepted here and ignored.
-    const tokens = result.batches.reduce((a, b) => a + b.estimatedTokens, 0);
-    out(`${result.subjects.length} subject(s), ${result.cachedCount} already cached, ${result.batches.length} request(s) planned, ~${tokens.toLocaleString()} input tokens, ~$${((tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
-    return 0;
+    return printDryRun(result, rules, opts, out, log);
   }
   if (opts.record) {
     writeFileSync(opts.record, `${JSON.stringify(buildRecord(result, { arm: opts.arm, cutoffs: opts.at, unsureBelow: opts.unsureBelow }), null, 2)}\n`);
     log(`recorded to ${opts.record}`);
   }
   const rows = gapReport(result.all, rules, { cutoffs: opts.at });
+  const exit = rows.some((r) => r.verdict === "rewrite" || r.verdict === "silent") ? 1 : 0;
+  if (opts.format === "json") {
+    out(JSON.stringify({ gaps: rows, stats: result.stats, cached: result.cachedCount ?? 0, spent: result.spent }, null, 2));
+    return exit;
+  }
   out(formatGaps(rows, { color: opts.color }));
   out("");
   out(
     `${result.stats.subjects} subject(s), ${result.cachedCount} cached, ${result.spent.calls} request(s), $${result.spent.usd.toFixed(5)}`,
   );
-  if (opts.format === "json") out(JSON.stringify(rows, null, 2));
-  return rows.some((r) => r.verdict === "rewrite" || r.verdict === "silent") ? 1 : 0;
+  return exit;
 }
 
 export async function cmdCalibrate({ rules, paths, diffRanges, opts, client = null, out, log }: CommandArgs): Promise<number> {
@@ -95,14 +98,33 @@ export async function cmdCalibrate({ rules, paths, diffRanges, opts, client = nu
     );
   }
 
-  out(formatGaps(gapReport(mergeRuns(runs), rules, { cutoffs: opts.at }), { color: opts.color }));
-  out("");
-  if (repeat > 1) {
-    out(formatStability(stabilityReport(runs, rules, { cutoffs: opts.at }), { color: opts.color }));
+  const merged = mergeRuns(runs);
+  const gaps = gapReport(merged, rules, { cutoffs: opts.at });
+  const stability = repeat > 1 ? stabilityReport(runs, rules, { cutoffs: opts.at }) : null;
+  if (opts.format === "json") {
+    const fits = readLabels(opts.labels, log);
+    out(
+      JSON.stringify(
+        {
+          passes: repeat,
+          gaps,
+          stability,
+          fits: fits ? fitCutoffs(merged, fits, rules) : null,
+          spent: last?.spent ?? null,
+        },
+        null,
+        2,
+      ),
+    );
+  } else {
+    out(formatGaps(gaps, { color: opts.color }));
     out("");
+    if (stability) {
+      out(formatStability(stability, { color: opts.color }));
+      out("");
+    }
+    emitFits(opts.labels, merged, rules, out, log);
   }
-
-  emitFits(opts.labels, mergeRuns(runs), rules, out, log);
 
   if (opts.record && last) {
     writeFileSync(
@@ -116,6 +138,17 @@ export async function cmdCalibrate({ rules, paths, diffRanges, opts, client = nu
     log(`recorded ${repeat} pass(es) to ${opts.record}`);
   }
   return 0;
+}
+
+/** The labels at `--labels`, or null -- after saying why -- when there are none to read. */
+export function readLabels(labelPath: string | null, log: Log): Labels | null {
+  if (!labelPath) return null;
+  try {
+    return JSON.parse(readFileSync(labelPath, "utf8")) as Labels;
+  } catch (err: unknown) {
+    log(`could not read labels from ${labelPath}: ${String(err).slice(0, 160)}`);
+    return null;
+  }
 }
 
 /**
@@ -133,14 +166,8 @@ export function emitFits(
   out: Log,
   log: Log,
 ): void {
-  if (!labelPath) return;
-  let labels: Labels | null = null;
-  try {
-    labels = JSON.parse(readFileSync(labelPath, "utf8")) as Labels;
-  } catch (err: unknown) {
-    log(`could not read labels from ${labelPath}: ${String(err).slice(0, 160)}`);
-    return;
-  }
+  const labels = readLabels(labelPath, log);
+  if (!labels) return;
 
   const fits = fitCutoffs(all, labels, rules);
   out("fitted cutoffs (against the labeled corpus):");
