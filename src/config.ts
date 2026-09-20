@@ -241,7 +241,7 @@ export function initialConfig(): string {
 # arm: null
 
 # Parallel requests, subjects per request, subjects per rule-axis request.
-# concurrency: 4
+# concurrency: 32
 # batchSize: 256
 # ruleBatchCap: 32
 
@@ -289,8 +289,8 @@ export interface Configurable {
  * Fold a config file into the options, without stepping on a flag.
  *
  * `explicit` holds the flags actually passed on the command line. Checking it
- * is what makes the precedence real: `opts.concurrency` is already 4 by the
- * time this runs whether or not anyone asked for 4, so comparing against the
+ * is what makes the precedence real: `opts.concurrency` is already the default by the
+ * time this runs whether or not anyone asked for it, so comparing against the
  * default would let the file override a flag that happened to match it.
  */
 export function applyConfig(

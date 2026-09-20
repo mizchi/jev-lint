@@ -48,7 +48,7 @@ import {
 import { ARMS, ARM_BLURB } from "./state.ts";
 import { DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { Cache, DEFAULT_CACHE_PATH } from "./cache.ts";
-import { USD_PER_MTOK, API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_MODEL, fromEnv } from "./jev.ts";
+import { USD_PER_MTOK, API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_MODEL, DEFAULT_CONCURRENCY, fromEnv } from "./jev.ts";
 import { CONFIG_NAMES, applyConfig, findConfig, initialConfig, initialHook, loadConfig } from "./config.ts";
 import { GROUP_MODES, SEVERITIES, STATE_ARMS } from "./types.ts";
 import type { Finding, GroupMode, Labels, Rule, RunResult, Severity, StateArm, Subject } from "./types.ts";
@@ -134,7 +134,7 @@ options:
       --fail-on <severity> exit 1 only for findings at or above hint | info |
                            warning | error (default: any finding)
       --format <fmt>       pretty | json | github
-      --concurrency <n>    parallel requests (default 4)
+      --concurrency <n>    most requests in flight at once (default ${DEFAULT_CONCURRENCY}; a 429 narrows it)
       --batch-size <n>     subjects per request (default ${DEFAULT_BATCH_SIZE})
       --repeat <n>         calibrate: how many times to re-ask (default 3)
       --labels <path>      calibrate or replay: labeled corpus JSON, to fit cutoffs
@@ -220,7 +220,7 @@ function parseArgs(argv: string[]): Options {
     base: null,
     staged: false,
     format: "pretty",
-    concurrency: 4,
+    concurrency: DEFAULT_CONCURRENCY,
     batchSize: DEFAULT_BATCH_SIZE,
     repeat: 3,
     labels: null,

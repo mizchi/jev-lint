@@ -244,8 +244,8 @@ Two rules there:
 ### `config.ts` — the precedence, and the two refusals
 
 `applyConfig` takes the set of flags that were **actually passed**, not the
-parsed options. That is the whole mechanism: `opts.concurrency` is already 4
-before any file is read, so a merge that compared against the default would let
+parsed options. That is the whole mechanism: `opts.concurrency` is already
+the default before any file is read, so a merge that compared against the default would let
 the file win over a flag that happened to match it.
 
 Two things the file will not do, both enforced as errors rather than as silent
@@ -293,10 +293,37 @@ input** — anything that can write it can silence a rule.
 
 ### `jev.ts` — the client
 
-`ask()` retries on 429 and 5xx with backoff; `askSplitting()` halves the question
+`ask()` retries on 5xx with backoff; `askSplitting()` halves the question
 set on the server's own `max_tokens_exceeded` and recurses. Error kinds:
 `too_big` (send fewer questions), `auth` (retrying will not help), `transient`
 (retry), `other` (give up on this batch).
+
+A 429 is none of those. The server limits **input tokens**, not requests --
+40 small requests at once go through, 20 of the largest at once go through,
+and the same 20 a second later lose 4, then 14, then 16 -- and it answers
+with a bare 429: no `retry-after`, no ratelimit headers. The fit is a token
+bucket of about 1.6M refilling at 200-250k per second. `Pacer` mirrors it:
+each request is charged its estimate when sent (the planner's
+`estimateTokens`, corrected to the server's `usage.input_tokens` on return)
+and waits until the mirror can pay. A 429 empties the mirror and lowers its
+rate by a quarter; a success while requests have had to wait raises the rate
+by two percent, at most once per 500 ms, so a key with a higher limit finds
+it without a run's worth of 429s. The mirror starts at 1.2M / 200k a second
+-- under the measurement, so a run that begins with a full bucket draws no
+429 -- and `JEV_LINT_TOKEN_BURST` / `JEV_LINT_TOKENS_PER_SECOND` override
+it. A 429 that does arrive is waited out (300 ms, growing by half, jittered)
+and re-sent up to `rateLimitRetries` (8) times; it is counted in
+`spent.rateLimited` and does not spend `retries`.
+
+Concurrency is separate from pacing: `run()` bounds requests in flight with
+`mapLimit` at `--concurrency` (32). Latency is 260 ms plus 5.7 ms per
+thousand tokens, and the server's latency grows with what it is holding, so
+on the full self-lint (79 requests, 2.15M tokens) 4 abreast is 9.6 s, 16 is
+4.8, 32 is 3.6-5.1 and 64 no better. The `--retry` passes are not run one
+after another: every (pass, batch) pair is one job in the same map, so an
+eval's three passes over fifteen requests are forty-five in flight together.
+`spent.ms` is the sum of request latencies; `spent.wallMs` is what the
+asking took.
 
 Measured facts about the endpoint that the code depends on: the two budgets
 above are independent; question count is not a limit (1,220 work) and 255 is the

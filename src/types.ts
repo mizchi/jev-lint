@@ -420,8 +420,15 @@ export interface Spend {
   calls: number;
   inputTokens: number;
   outputTokens?: number;
+  /** The sum of every request's latency; with requests in flight together, more than the run took. */
   ms: number;
+  /** What the asking took end to end. */
+  wallMs?: number;
   retried?: number;
+  /** 429s met, each waited out and sent again. */
+  rateLimited?: number;
+  /** The paced input-token rate as the run ended, per second. */
+  tokensPerSecond?: number;
   splits?: number;
   usd: number;
 }
@@ -433,6 +440,17 @@ export interface RunError {
 }
 
 /** Everything a report, a record or a replay needs from one pass. */
+/** One pass's answer to one subject, as an eval records it. */
+export interface Sample {
+  rule: string;
+  file: string;
+  line: number;
+  endLine: number;
+  kind: Answer["kind"] | null;
+  value: number | null;
+  confidence: number | null;
+}
+
 export interface RunResult extends GateResult {
   rules: Rule[];
   group?: GroupMode;
@@ -446,6 +464,12 @@ export interface RunResult extends GateResult {
   ignored?: IgnoreStats;
   /** How many times everything was asked; above 1 with `--retry`. */
   retry?: number;
+  /**
+   * Every answer of every pass, before the mean: one list per pass, one
+   * entry per subject asked in it. What an eval records, so that a record
+   * carries the samples and not only the decision.
+   */
+  samples?: Sample[][];
   /** Present when `group: "auto"`: what the scheduler decided, and why. */
   schedule?: unknown;
   cachedCount: number;

@@ -58,7 +58,7 @@ const paths = arg("paths", "").split(",").filter(Boolean);
 const rulePaths = arg("rules", "rules").split(",");
 const labelPath = arg("labels", "");
 const outPath = arg("out", null);
-const concurrency = Number(arg("concurrency", "4"));
+const concurrency = Number(arg("concurrency", "32"));
 
 const { rules, errors } = loadRules(rulePaths);
 for (const e of errors) process.stderr.write(`rule error: ${e}\n`);

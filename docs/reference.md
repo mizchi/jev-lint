@@ -58,7 +58,7 @@ failed and nothing was reported.
 | `--show-missing` | list subjects that got no verdict |
 | `--show-subjects` | with `--dry-run`: list every subject with its line, node kind and captures |
 | `--format <fmt>` | `pretty`, `json`, `github` |
-| `--concurrency <n>` / `--batch-size <n>` | default 4 and 256 |
+| `--concurrency <n>` / `--batch-size <n>` | default 32 and 256; the client also paces its input tokens against the server's rate limit, see `JEV_LINT_TOKENS_PER_SECOND` |
 | `--model <id>` | Jev model |
 | `--quiet` / `--no-color` | |
 
@@ -67,7 +67,11 @@ failed and nothing was reported.
 
 Environment: **`TYPESAFE_API_KEY`** (required for anything that asks), with
 `TYPESAFEAI_API_KEY` accepted as a fallback; `TYPESAFE_BASE_URL`,
-`JEV_LINT_MODEL`, `JEV_LINT_AST_GREP`.
+`JEV_LINT_MODEL`, `JEV_LINT_AST_GREP`; `JEV_LINT_TOKENS_PER_SECOND` and
+`JEV_LINT_TOKEN_BURST` (defaults 200000 and 1200000), the client's mirror of
+the server's input-token rate limit, which it paces itself against and
+adjusts on a 429 -- raise them if your key has a higher limit and a large
+run's summary says `paced to` a rate under it.
 
 Two lines of output are never noise. **`N rules matched nothing`** is the only
 place a dead matcher is visible — check it before trusting a clean run. On a

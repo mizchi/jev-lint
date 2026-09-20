@@ -15,7 +15,7 @@
  * at once, instead of once per rule per file.
  */
 import { readFileSync } from "node:fs";
-import { Jev, JevError, mapLimit, type AskClient } from "./jev.ts";
+import { Jev, JevError, mapLimit, DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
 import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.ts";
 import { resolveSubject, widenCommentCapture } from "./state.ts";
 import { questionId, readAnswer } from "./questions.ts";
@@ -226,7 +226,7 @@ export async function run({
   cachePath = null,
   force = false,
   dryRun = false,
-  concurrency = 4,
+  concurrency = DEFAULT_CONCURRENCY,
   batchSize = DEFAULT_BATCH_SIZE,
   group = "file",
   ruleBatchCap = DEFAULT_RULE_BATCH_CAP,
@@ -331,16 +331,18 @@ export async function run({
   let refused: JevError | null = null;
 
   /**
-   * One pass over every batch.
+   * One batch, asked once, its verdicts appended to `out`.
    *
-   * Called once per `retry`. The matcher and the planner ran once above, so
-   * what repeats is only the asking -- the batches, the states and the question
-   * ids are identical across passes, which is what makes the answers
-   * comparable.
+   * Called `retry` times per batch. The matcher and the planner ran once
+   * above, so what repeats is only the asking -- the batches, the states and
+   * the question ids are identical across passes, which is what makes the
+   * answers comparable. The passes are not run one after another: every
+   * (pass, batch) pair is one job in a single bounded-concurrency map, so
+   * three passes over fifteen small requests are forty-five requests in
+   * flight together rather than three waits of fifteen. A pass is a sample,
+   * and samples do not care about the order they were drawn in.
    */
-  const askOnce = async (): Promise<Scored[]> => {
-    const out: Scored[] = [];
-    await mapLimit(batches, concurrency, async (batch, i) => {
+  const askBatch = async (batch: Batch, out: Scored[]): Promise<void> => {
     try {
       if (refused) throw refused;
       const res = await jev.askSplitting(batch.state, batch.questions);
@@ -404,16 +406,17 @@ export async function run({
         }
       }
     }
-    onProgress?.({ done: i + 1, total: batches.length, file: batch.file });
-    });
-    return out;
   };
 
-  const perPass: Scored[][] = [];
-  for (let pass = 0; pass < passes; pass += 1) {
-    if (refused) break;
-    perPass.push(await askOnce());
-  }
+  const perPass: Scored[][] = Array.from({ length: passes }, () => []);
+  const jobs = perPass.flatMap((out) => batches.map((batch) => ({ batch, out })));
+  const askingStarted = Date.now();
+  let done = 0;
+  await mapLimit(jobs, concurrency, async ({ batch, out }) => {
+    await askBatch(batch, out);
+    done += 1;
+    onProgress?.({ done, total: jobs.length, file: batch.file });
+  });
   const asked = passes === 1 ? (perPass[0] ?? []) : mergePasses(perPass, cutoffs);
   results.push(...asked);
 
@@ -445,7 +448,18 @@ export async function run({
     duplicateGrammars,
     schedule: plan,
     cachedCount: results.filter((r) => r.cached).length,
-    spent: jev.spent,
+    spent: { ...jev.spent, wallMs: Date.now() - askingStarted },
+    samples: perPass.map((pass) =>
+      pass.map((r) => ({
+        rule: r.subject.rule.id,
+        file: r.subject.file,
+        line: r.subject.line,
+        endLine: r.subject.endLine,
+        kind: r.answer?.kind ?? null,
+        value: r.answer?.value ?? null,
+        confidence: r.answer?.confidence ?? null,
+      })),
+    ),
     servedModel: jev.servedModel,
     ignored,
     retry: passes,

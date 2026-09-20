@@ -141,7 +141,7 @@ for (const arm of arms) {
       // nothing, and repeats that read pass one measure the cache.
       cachePath: null,
       force: true,
-      concurrency: 4,
+      concurrency: 32,
     });
     spent = {
       calls: spent.calls + r.spent.calls,

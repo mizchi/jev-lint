@@ -29,7 +29,7 @@ import { join, relative } from "node:path";
 import { fitCutoffs, labelFor } from "./calibrate.ts";
 import { cutoffFor, loadRules, ruleTextHash } from "./rules.ts";
 import { run } from "./run.ts";
-import type { AskClient } from "./jev.ts";
+import { DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
 import type { Label, Labels, Rule } from "./types.ts";
 
 export interface EvalSuite {
@@ -105,15 +105,15 @@ export function discoverEvals(roots: string[]): EvalSuite[] {
     } catch {
       return;
     }
-    const labels = join(dir, "evals", "labels.json");
-    if (existsSync(labels)) {
+    const labelsFile = join(dir, "evals", "labels.json");
+    if (existsSync(labelsFile)) {
       const ruleFile = ["rule.yml", "rule.yaml"].map((n) => join(dir, n)).find((p) => existsSync(p)) ?? join(dir, "rule.yml");
       out.push({
         name: relative(join(dir, ".."), dir) || dir,
         dir,
         ruleFile,
         cases: join(dir, "evals", "cases"),
-        labels,
+        labels: labelsFile,
         baseline: join(dir, "evals", "baseline.json"),
         last: join(dir, "evals", "last.json"),
       });
@@ -309,32 +309,26 @@ export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Prom
   const repeat = Math.max(1, opts.repeat ?? 1);
   const { rules, errors } = loadSuite(suite);
   if (errors.length) throw new Error(errors.join("\n"));
-  const passes: EvalAnswer[][] = [];
-  let spent = { calls: 0, inputTokens: 0, usd: 0, ms: 0 };
-  let model: string | null = null;
-  for (let i = 0; i < repeat; i += 1) {
-    const r = await run({
-      rules,
-      paths: [suite.cases],
-      cutoffs: opts.cutoffs ?? {},
-      cachePath: null,
-      force: true,
-      concurrency: opts.concurrency ?? 4,
-      model: opts.model ?? null,
-      client: opts.client ?? null,
-    });
-    passes.push(
-      r.all.map((f) => ({ rule: f.rule, file: f.file, line: f.line, endLine: f.endLine, kind: f.kind ?? null, value: f.value, confidence: f.confidence ?? null })),
-    );
-    spent = {
-      calls: spent.calls + r.spent.calls,
-      inputTokens: spent.inputTokens + r.spent.inputTokens,
-      usd: spent.usd + r.spent.usd,
-      ms: spent.ms + r.spent.ms,
-    };
-    model = r.servedModel ?? model;
-    opts.log?.(`${suite.name}: pass ${i + 1}/${repeat}, ${r.stats.subjects} subject(s), ${r.spent.calls} request(s), $${r.spent.usd.toFixed(5)}`);
-  }
+  // One run, `repeat` passes: the runner interleaves the passes' requests,
+  // so three passes over a suite cost the wall time of one and a bit,
+  // and the cases are scanned once rather than once per pass.
+  const r = await run({
+    rules,
+    paths: [suite.cases],
+    cutoffs: opts.cutoffs ?? {},
+    cachePath: null,
+    force: true,
+    retry: repeat,
+    concurrency: opts.concurrency ?? DEFAULT_CONCURRENCY,
+    model: opts.model ?? null,
+    client: opts.client ?? null,
+  });
+  const passes: EvalAnswer[][] = (r.samples ?? []).map((pass) =>
+    pass.map((s) => ({ rule: s.rule, file: s.file, line: s.line, endLine: s.endLine, kind: s.kind, value: s.value, confidence: s.confidence })),
+  );
+  const spent = { calls: r.spent.calls, inputTokens: r.spent.inputTokens, usd: r.spent.usd, ms: r.spent.wallMs ?? r.spent.ms };
+  const model: string | null = r.servedModel ?? null;
+  opts.log?.(`${suite.name}: ${repeat} pass(es), ${r.stats.subjects} subject(s), ${r.spent.calls} request(s), $${r.spent.usd.toFixed(5)}, ${spent.ms} ms`);
   const record: EvalRecord = {
     schema: "jev-lint-eval-1",
     recorded: new Date().toISOString(),
