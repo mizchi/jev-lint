@@ -5,7 +5,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { applyConfig, findConfig, initialConfig, initialHook, initialPushHook, loadConfig } from "../src/config.ts";
 import { blocks } from "../src/gate.ts";
-import { test, testAsync, configurable } from "./helpers.ts";
+import { configurable } from "./builders.ts";
+import { test, testAsync } from "./harness.ts";
 
 const writeConfig = (dir: string, body: string): string => {
   const p = join(dir, ".jev-lint.yaml");

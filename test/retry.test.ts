@@ -1,7 +1,8 @@
 import { strict as assert } from "node:assert";
 import { gate } from "../src/gate.ts";
 import { mergePasses } from "../src/run.ts";
-import { test, scoreRule, noulRule, subjectOf, answer } from "./helpers.ts";
+import { scoreRule, noulRule, subjectOf, answer } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("retry: the mean decides, and the pass count is kept beside it", () => {
   const rule = noulRule({ id: "n", at: 0.6 });

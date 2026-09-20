@@ -5,7 +5,7 @@ import { join, relative, sep } from "node:path";
 import { FileIndex, listFiles, isUnder } from "../src/files.ts";
 import { findTestFiles } from "../src/paired.ts";
 import { findTextFiles } from "../src/text.ts";
-import { test } from "./helpers.ts";
+import { test } from "./harness.ts";
 
 test("files: one index walks each root once, and a later caller adds only the roots it is missing", () => {
   const dir = mkdtempSync(join(tmpdir(), "jev-files-"));

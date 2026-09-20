@@ -2,7 +2,8 @@ import { strict as assert } from "node:assert";
 import { decide, gate } from "../src/gate.ts";
 import { formatGithub, formatJson, formatPretty, silentRules, idleLanguages } from "../src/report.ts";
 import type { Rule, Subject } from "../src/types.ts";
-import { test, scoreRule, noulRule, subjectOf, answer } from "./helpers.ts";
+import { scoreRule, noulRule, subjectOf, answer } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("report: a language with no files is one idle line, not a list of dead matchers", () => {
   const ts = { ...scoreRule({ id: "a" }), languageDir: "typescript" };

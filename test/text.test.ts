@@ -1,7 +1,7 @@
 import { strict as assert } from "node:assert";
 import { blocks } from "../src/gate.ts";
 import { splitBlocks } from "../src/text.ts";
-import { test } from "./helpers.ts";
+import { test } from "./harness.ts";
 
 test("text: a file splits into blocks at each header, each block named by the header's groups", () => {
   const src = [

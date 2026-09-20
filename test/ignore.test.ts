@@ -1,7 +1,7 @@
 import { strict as assert } from "node:assert";
 import { writeFileSync } from "node:fs";
 import { renamedRuleHint, parseIgnores, isIgnored, unknownIgnoredRules } from "../src/ignore.ts";
-import { test } from "./helpers.ts";
+import { test } from "./harness.ts";
 
 test("ignore: a suppression naming a pre-0.3 language-suffixed id is told the new name", () => {
   // `fn-name-promises-rust` became `rust/fn-name-promises`, and a comment

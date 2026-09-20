@@ -8,7 +8,8 @@ import { normalizeRule, loadRules, cutoffFor, ruleTextHash, normalizeLanguage, d
 import { emitRuleFile, ruleLanguages } from "../src/scan.ts";
 import { explain } from "../src/schedule.ts";
 import { PROBE_PREFIX, LANGUAGE_DIRS, TIER_ONE } from "../src/types.ts";
-import { test, testAsync, scoreRule, noulRule, subjectOf } from "./helpers.ts";
+import { scoreRule, noulRule, subjectOf } from "./builders.ts";
+import { test, testAsync } from "./harness.ts";
 
 test("rules: a project's own ./rules wins, and a fresh install still finds the packs", () => {
   // Every fresh install used to exit 2 with "no usable rules found in rules":

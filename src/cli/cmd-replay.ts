@@ -7,7 +7,7 @@ import { gate, blocks } from "../gate.ts";
 import { formatPretty, formatJson, formatGithub, formatGaps } from "../report.ts";
 import type { Finding, Rule, Subject } from "../types.ts";
 import type { Options, Log } from "./args.ts";
-import { emitFits, mergeRuns } from "./calibrate.ts";
+import { emitFits, mergeRuns } from "./cmd-calibrate.ts";
 
 export function cmdReplay(opts: Options, out: Log, log: Log): number {
   const path = opts.paths[0];

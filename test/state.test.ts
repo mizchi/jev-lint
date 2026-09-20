@@ -2,7 +2,8 @@ import { strict as assert } from "node:assert";
 import { enclosingSymbol, moduleIdentity } from "../src/scan.ts";
 import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture, OUTLINE_TEXT_LIMIT } from "../src/state.ts";
 import type { AstGrepMatch, StateArm } from "../src/types.ts";
-import { test, scoreRule, subjectOf, sampleEntry } from "./helpers.ts";
+import { scoreRule, subjectOf, sampleEntry } from "./builders.ts";
+import { test } from "./harness.ts";
 
 const matchAt = (start: number, end: number, over: Partial<AstGrepMatch> = {}): AstGrepMatch => ({
   ruleId: "r",

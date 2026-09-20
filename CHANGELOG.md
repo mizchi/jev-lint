@@ -82,10 +82,13 @@ change are in [docs/findings.md](docs/findings.md).
   source) that assemble it. A commit or block rule's `matcher` is null, not
   `{}`; the draft hash treats it as before, so no baseline retired.
 - `src/cli.ts` (1,418 lines, `main` alone 278) is `src/cli/`: one module
-  per step -- `args`, `context`, `select`, `targets`, `check`, `dry-run`
-  -- and one per command, with `main.ts` only the order they happen in.
-  The two places a positional and a config path had been the same
-  variable are two named values. `dist/cli.js` is still the bin.
+  per step -- `args`, `context`, `select`, `targets`, `dry-run` -- and
+  one per command (`cmd-check`, `cmd-eval`, ...; the prefix so that none
+  shares a stem with the module it drives, which the `paired` arm pairs
+  on), with `main.ts` only the order they happen in. The two places a
+  positional and a config path had been the same variable are two named
+  values, and the steps have tests of their own. `dist/cli.js` is still
+  the bin.
 - What the tool said about its own code, acted on: one `tryReadFile` /
   `tryReadDir` where five modules each swallowed a read error in their
   own words; `computeCalls` that assigned is `linkCalls`, `toRecord` that
@@ -95,6 +98,11 @@ change are in [docs/findings.md](docs/findings.md).
   drifted from their code; tests for the failure paths of `runAstGrep`,
   `defaultRange`, `loadSuite`, `planEval` and `collectRows`. 42 findings
   on the tree, then 13, the rest within 0.05 of a cutoff or arguable.
+- A file that defines `test` is not a test file: the suite's harness under
+  `test/` paired with every module and took a share of every excerpt. The
+  harness is `test/harness.ts`, the fixture builders `test/builders.ts`.
+- `evalCorpus` (the experiments' corpus) reports a suite whose expect file
+  does not parse instead of dropping it in silence; the tools print it.
 - The node kind of a test subject is `test` (a suite's, `test suite`),
   not `composite match`. The six rules' baselines were re-accepted:
   precision and recall 1.00 on each.

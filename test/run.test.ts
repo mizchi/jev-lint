@@ -15,7 +15,8 @@ import { explain } from "../src/schedule.ts";
 import { splitBlocks, textSubjects, MAX_BLOCK_CHARS } from "../src/text.ts";
 import { LANGUAGE_DIRS } from "../src/types.ts";
 import type { Rule } from "../src/types.ts";
-import { test, testAsync, scoreRule, noulRule, tempRepo, commitRule } from "./helpers.ts";
+import { scoreRule, noulRule, tempRepo, commitRule } from "./builders.ts";
+import { test, testAsync } from "./harness.ts";
 
 const blockRule = (over: Record<string, unknown> = {}): Rule =>
   normalizeRule({

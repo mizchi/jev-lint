@@ -59,7 +59,7 @@ right.
 
 | file | responsibility |
 | --- | --- |
-| `cli.ts`, `cli/` | the entry, and one module per step: `args.ts` (every flag, `USAGE` -- a second source of truth for flag docs, change both), `context.ts` (the config, found and folded in), `select.ts` (which rules: loaded, or `run`'s one), `targets.ts` (which files, or which commits), `check.ts` + `dry-run.ts` (the run and its report, or its plan), and `eval.ts`, `calibrate.ts`, `replay.ts`, `init.ts`, `rules.ts` for those commands; `main.ts` is only the order |
+| `cli.ts`, `cli/` | the entry, and one module per step: `args.ts` (every flag, `USAGE` -- a second source of truth for flag docs, change both), `context.ts` (the config, found and folded in), `select.ts` (which rules: loaded, or `run`'s one), `targets.ts` (which files, or which commits), `cmd-check.ts` + `dry-run.ts` (the run and its report, or its plan), and `cmd-eval.ts`, `cmd-calibrate.ts`, `cmd-replay.ts`, `cmd-init.ts`, `cmd-rules.ts` for those commands -- `cmd-` so that none shares a stem with the module it drives, which is what the `paired` arm pairs on; `main.ts` is only the order |
 | `cost.ts` | a plan's price per rule: each rule's questions, and its share of every batch's state |
 | `scan.ts` | the ast-grep driver: rule translation, structural probes, the symbol table and call graph |
 | `run.ts` | `collectSubjects`, `run`, `mergePasses`, `buildRecord` |
@@ -412,7 +412,7 @@ decisions to decisions, so its exit code means what it says.
 
 `test/` needs no API key and no network, and is run directly by Node:
 `test/test.ts` imports one file per module under test, in order, and
-`test/helpers.ts` holds the harness and the fixture builders. The suite was
+`test/harness.ts` holds the harness and `test/builders.ts` the fixture builders. The suite was
 one file until it was the largest thing the tool judged, and the file every
 module paired with on the `paired` arm; `npm test <substring>` runs the
 tests whose name contains it.

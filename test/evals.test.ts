@@ -4,7 +4,8 @@ import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { discoverEvals, scoreEval, compareEvals, relocateLabels, relocateRecord, runEval, readEvalRecord, draftsChanged, loadSuite } from "../src/evals.ts";
 import { loadRules } from "../src/rules.ts";
-import { test, testAsync, noulRule, answer } from "./helpers.ts";
+import { noulRule, answer } from "./builders.ts";
+import { test, testAsync } from "./harness.ts";
 
 const evalRule = (id: string, at: number) => noulRule({ id, at });
 
@@ -196,7 +197,7 @@ test("evals: comparing two records names the case that got worse, and only that 
 });
 
 await testAsync("evals: a suite whose expect file does not parse reports it, and planning or generating from it stops there", async () => {
-  const { loadSuite, planEval, discoverEvals } = await import("../src/evals.ts");
+  const { loadSuite, planEval, discoverEvals, evalCorpus } = await import("../src/evals.ts");
   const { collectRows } = await import("../tools/rules-md.ts");
   const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-bad-suite-")));
   try {
@@ -214,6 +215,12 @@ await testAsync("evals: a suite whose expect file does not parse reports it, and
     assert.equal(loaded.errors.length, 1);
     assert.match(loaded.errors[0]!, /expect\.yml/);
     await assert.rejects(() => planEval(suite!), /expect\.yml/);
+    // The experiments' corpus still scans the suite's cases and says the
+    // labels are missing, rather than dropping the suite without a word.
+    const corpus = evalCorpus([dir]);
+    assert.deepEqual(corpus.paths, [suite!.fixtures]);
+    assert.equal(corpus.errors.length, 1);
+    assert.match(corpus.errors[0]!, /expect\.yml/);
     // And a rule that does not load is the generator's error, not a row.
     writeFileSync(join(ruleDir, "rule.yml"), "id: r\nlanguage: TypeScript\n");
     assert.throws(() => collectRows(dir), /ask|rule/);

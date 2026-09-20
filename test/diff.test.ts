@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parseUnifiedDiff, touchesChange, changedRanges, changedFilesUnder } from "../src/diff.ts";
 import type { ChangedRanges } from "../src/diff.ts";
-import { test, testAsync } from "./helpers.ts";
+import { test, testAsync } from "./harness.ts";
 
 test("diff: hunk headers become post-image line ranges", () => {
   const ranges = parseUnifiedDiff(

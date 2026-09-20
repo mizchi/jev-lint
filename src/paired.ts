@@ -253,10 +253,14 @@ export function languageFamily(path: string): string {
   return ext;
 }
 
-/** Lines that open a test or a suite, in the common runners. */
-const TEST_OPENER = /\b(?:describe|test|it|suite|context)\s*(?:\.\w+)?\s*\(|^\s*#\[test\]|^\s*fn test_|^\s*def test_|^\s*func Test\w*\s*\(/;
+/**
+ * Lines that open a test or a suite, in the common runners. A call, not a
+ * definition: `function test(name, fn)` is a harness, and a harness under
+ * `test/` paired with every module until this said so.
+ */
+const TEST_OPENER = /(?<!function\s+)(?<!\bconst\s+)(?<!\blet\s+)\b(?:describe|test|it|suite|context)\s*(?:\.\w+)?\s*\(|^\s*#\[test\]|^\s*fn test_|^\s*def test_|^\s*func Test\w*\s*\(/;
 /** The same, anywhere in a file: does this file open a test at all? */
-const TEST_OPENER_ANYWHERE = /\b(?:describe|test|it|suite|context)\s*(?:\.\w+)?\s*\(|#\[test\]|\bfn test_|\bdef test_|\bfunc Test\w*\s*\(/;
+const TEST_OPENER_ANYWHERE = /(?<!function\s+)(?<!\bconst\s+)(?<!\blet\s+)\b(?:describe|test|it|suite|context)\s*(?:\.\w+)?\s*\(|#\[test\]|\bfn test_|\bdef test_|\bfunc Test\w*\s*\(/;
 
 /** A test block this long or shorter is kept whole once any line in it matched. */
 const WHOLE_BLOCK_LINES = 40;

@@ -10,8 +10,8 @@
  * break a build is worse than no review tool, so every way this can fail has to
  * land on "no verdict" rather than on an exception.
  *
- * One file per module under test, run in this order; `helpers.ts` holds the
- * harness and the fixture builders. `npm test <substring>` runs the tests
+ * One file per module under test, run in this order; `harness.ts` holds the
+ * harness and `builders.ts` the fixture builders. `npm test <substring>` runs the tests
  * whose name contains it.
  */
 import "./rules.test.ts";
@@ -36,7 +36,8 @@ import "./evals.test.ts";
 import "./retry.test.ts";
 import "./config.test.ts";
 import "./cost.test.ts";
+import "./testcalls.test.ts";
 import "./cli.test.ts";
-import { report } from "./helpers.ts";
+import { report } from "./harness.ts";
 
 report();

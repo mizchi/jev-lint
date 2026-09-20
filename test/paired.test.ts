@@ -5,7 +5,7 @@ import { join, relative } from "node:path";
 import { findConfig, loadConfig } from "../src/config.ts";
 import { gate } from "../src/gate.ts";
 import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, inSourceTests, excerptBudget, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET, TEST_EXCERPT_PER_SUBJECT, TEST_EXCERPT_MAX } from "../src/paired.ts";
-import { test } from "./helpers.ts";
+import { test } from "./harness.ts";
 
 test("paired: a test file is recognised by its name or its directory, in the usual spellings", () => {
   for (const p of ["src/a.test.ts", "src/a.spec.tsx", "src/a_test.js", "test/a.ts", "tests/unit/a.mjs", "src/__tests__/a.ts", "spec/a_spec.rb", "pkg/cart_test.go", "pkg/test_cart.py"]) {
@@ -227,6 +227,11 @@ test("paired: the walk finds test files under the paths and the conventional roo
     writeFileSync(join(dir, "test/helpers.ts"), 'export function run() { it("x", () => {}); }');
     const found = findTestFiles(["src"], dir).sort();
     assert.deepEqual(found, ["src/cart.test.ts", "test/cart.test.ts", "test/helpers.ts", "tests/x.spec.js"], "the fixture is not a test; the helper that opens tests is");
+    // A file that DEFINES `test` -- a suite's harness -- opens no test, and
+    // is not one: this repository's test/helpers.ts paired with every
+    // module, and took a share of every excerpt budget, for a definition.
+    writeFileSync(join(dir, "test/harness.ts"), "export function test(name: string, fn: () => void): void { fn(); }\nexport const it = test;\n");
+    assert.ok(!findTestFiles(["src"], dir).includes("test/harness.ts"), "a definition is not an opener");
     // pairTests reads and compacts, keyed by the source file.
     writeFileSync(join(dir, "test/cart.test.ts"), 'it("totals", () => total([]));');
     writeFileSync(join(dir, "src/cart.test.ts"), "const setup = 1;");

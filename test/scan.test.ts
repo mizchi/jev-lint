@@ -8,7 +8,8 @@ import { normalizeRule, loadRules } from "../src/rules.ts";
 import { buildSymbols, emitRuleFile, astGrepRuleId, baseRuleId, toAstGrepRule } from "../src/scan.ts";
 import type { AstGrepMatch } from "../src/types.ts";
 import { isMatcherRule } from "../src/types.ts";
-import { probeMatch, test, testAsync, scoreRule, noulRule } from "./helpers.ts";
+import { probeMatch, scoreRule, noulRule } from "./builders.ts";
+import { test, testAsync } from "./harness.ts";
 
 test("scan: emitted rules are valid ast-grep rules with jev-lint fields stripped", () => {
   const r = scoreRule({ at: 2, note: "x" });
@@ -242,5 +243,33 @@ await testAsync("scan: a missing ast-grep binary is a named error, not a stack t
   } finally {
     if (was === undefined) delete process.env.JEV_LINT_AST_GREP;
     else process.env.JEV_LINT_AST_GREP = was;
+  }
+});
+
+await testAsync("scan: Go types are named by their type_spec, and a parameter type is not an exported name", async () => {
+  const { collectSubjects } = await import("../src/run.ts");
+  const dir = mkdtempSync(join(tmpdir(), "jev-go-"));
+  try {
+    writeFileSync(join(dir, "a.go"), [
+      "package x",
+      "",
+      "type User struct{ Name string }",
+      "",
+      "func (u User) Greet() string { return u.Name }",
+      "",
+      "func displayName(u User) string { return u.Name }",
+      "",
+    ].join("\n"));
+    const rule = scoreRule({ language: "Go", rule: { kind: "function_declaration" }, state: "graph" });
+    const { symbols } = await collectSubjects({ rules: [rule], paths: ["a.go"], cwd: dir });
+    const entry = symbols.get("a.go")!;
+    const byName = new Map(entry.symbols.map((s) => [s.name, s]));
+    assert.ok(byName.has("User"), `the type is a named symbol: ${[...byName.keys()].join(", ")}`);
+    assert.equal(byName.get("User")!.role, "type");
+    assert.equal(byName.get("User")!.exported, true);
+    assert.equal(byName.get("Greet")!.exported, true, "a capitalised method with a receiver");
+    assert.equal(byName.get("displayName")!.exported, false, "a lower-case func with an exported parameter type is private");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
 });

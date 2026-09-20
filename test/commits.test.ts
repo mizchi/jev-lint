@@ -7,7 +7,8 @@ import { planBatches } from "../src/batch.ts";
 import { listCommits, commitDiff, commitSubjects, squashSubjects, defaultRange, MAX_DIFF_CHARS } from "../src/commits.ts";
 import { decide } from "../src/gate.ts";
 import { formatPretty } from "../src/report.ts";
-import { test, scoreRule, tempRepo, commitRule } from "./helpers.ts";
+import { scoreRule, tempRepo, commitRule } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("commits: a diff over the budget keeps the stat and the first hunks and says so", () => {
   const big = Array.from({ length: 4000 }, (_, i) => `line ${i} of a very long file that will not fit in one state`).join("\n");
@@ -108,6 +109,32 @@ test("commits: without an upstream there is no default range", () => {
     execFileSync("git", ["init", "-q", "-b", "main"], { cwd: dir });
     execFileSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "root"], { cwd: dir });
     assert.equal(defaultRange(dir), null);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: a range lists its commits oldest first, with subject, body and parents", () => {
+  const dir = tempRepo([
+    { message: "Add cart", files: { "cart.ts": "export const cart = 1;\n" } },
+    { message: "Fix the total\n\nIt was off by one.", files: { "cart.ts": "export const cart = 2;\n" } },
+  ]);
+  try {
+    const commits = listCommits("HEAD", dir);
+    assert.equal(commits.length, 2);
+    assert.equal(commits[0]!.subject, "Add cart", "oldest first, so a review reads in order");
+    assert.equal(commits[1]!.subject, "Fix the total");
+    assert.equal(commits[1]!.message, "Fix the total\n\nIt was off by one.");
+    assert.equal(commits[0]!.parents.length, 0);
+    assert.equal(commits[1]!.parents.length, 1);
+    assert.match(commits[1]!.sha, /^[0-9a-f]{40}$/);
+    assert.deepEqual(listCommits(`${commits[0]!.sha}..HEAD`, dir).map((c) => c.subject), ["Fix the total"]);
+    // The diff: files touched, a stat, the patch, and whether it was cut.
+    const d = commitDiff(commits[1]!.sha, dir);
+    assert.deepEqual(d.files, ["cart.ts"]);
+    assert.match(d.stat, /cart\.ts/);
+    assert.match(d.diff, /-export const cart = 1;\n\+export const cart = 2;/);
+    assert.equal(d.truncated, false);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

@@ -1,7 +1,8 @@
 import { strict as assert } from "node:assert";
 import { planBatches, planRuleBatches, estimateTokens, MAX_STATE_TOKENS, STATE_BUDGET, REQUEST_BUDGET, STATE_MARGIN, REQUEST_MARGIN, DEFAULT_BATCH_SIZE } from "../src/batch.ts";
 import { schedule } from "../src/schedule.ts";
-import { test, scoreRule, subjectOf, sampleEntry, manySubjects } from "./helpers.ts";
+import { scoreRule, subjectOf, sampleEntry, manySubjects } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("batch: every subject lands in exactly one batch and none is empty", () => {
   const subjects = manySubjects(700);

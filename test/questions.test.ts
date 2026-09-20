@@ -3,7 +3,8 @@ import { decide, describe as describeFinding } from "../src/gate.ts";
 import { buildQuestion, buildExplainQuestion, questionId, readAnswer, readChoice } from "../src/questions.ts";
 import { SCORE_LEVELS } from "../src/rules.ts";
 import { explain } from "../src/schedule.ts";
-import { test, scoreRule, noulRule, subjectOf } from "./helpers.ts";
+import { scoreRule, noulRule, subjectOf } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("questions: a noul question nests its criteria and carries no threshold", () => {
   const q = buildQuestion(noulRule(), subjectOf(), "q0000");

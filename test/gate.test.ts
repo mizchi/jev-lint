@@ -3,7 +3,8 @@ import { decide, gate, describe as describeFinding, blocks, looseFloor } from ".
 import { formatPretty } from "../src/report.ts";
 import { cutoffFor } from "../src/rules.ts";
 import type { Finding } from "../src/types.ts";
-import { test, scoreRule, noulRule, subjectOf, answer } from "./helpers.ts";
+import { scoreRule, noulRule, subjectOf, answer } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("gate: score findings fire at the cutoff and are named by level", () => {
   const rule = scoreRule({ at: 2 });

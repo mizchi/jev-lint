@@ -63,6 +63,7 @@ if (rules.length === 0) {
 }
 // With no --paths/--labels, every rule's evals/ suite is the corpus.
 const fromEvals = evalCorpus(rulePaths);
+for (const e of fromEvals.errors) process.stderr.write(`expect error: ${e}\n`);
 if (paths.length === 0) paths.push(...fromEvals.paths);
 const labels = labelPath ? (JSON.parse(readFileSync(labelPath, "utf8")) as Labels) : fromEvals.labels;
 

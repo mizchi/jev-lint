@@ -2,7 +2,8 @@ import { strict as assert } from "node:assert";
 import { Jev, JevError, Pacer, API_KEY_VARS, DEFAULT_BASE_URL, fromEnv } from "../src/jev.ts";
 import { questionId } from "../src/questions.ts";
 import type { Question } from "../src/types.ts";
-import { test, testAsync, configurable } from "./helpers.ts";
+import { configurable } from "./builders.ts";
+import { test, testAsync } from "./harness.ts";
 
 await testAsync("jev: no API key is an auth error, not a crash mid-run", async () => {
   const jev = new Jev({ apiKey: "" });

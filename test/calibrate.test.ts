@@ -1,7 +1,8 @@
 import { strict as assert } from "node:assert";
 import { relative } from "node:path";
 import { widestGap, gapReport, fitCutoffs, labelFor, stabilityReport } from "../src/calibrate.ts";
-import { labelsOf, test, scoreRule, noulRule } from "./helpers.ts";
+import { labelsOf, scoreRule, noulRule } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("calibrate: widestGap finds the largest step and where it sits", () => {
   const g = widestGap([0.1, 0.15, 0.9, 0.95]);

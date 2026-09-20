@@ -1,7 +1,8 @@
 import { strict as assert } from "node:assert";
 import { schedule, planMixed, explain } from "../src/schedule.ts";
 import type { Rule } from "../src/types.ts";
-import { test, scoreRule, subjectOf, manySubjects } from "./helpers.ts";
+import { scoreRule, subjectOf, manySubjects } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("schedule: a file-bearing arm holds its rule on the file axis", () => {
   // The constraint that protects accuracy. It is structural: the rule axis

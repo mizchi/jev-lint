@@ -4,7 +4,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Cache, verdictKey, contextKey } from "../src/cache.ts";
 import type { Answer, StateArm } from "../src/types.ts";
-import { test, scoreRule, subjectOf, answer } from "./helpers.ts";
+import { scoreRule, subjectOf, answer } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("cache: on an arm that shows context, identical text in different contexts is two questions", () => {
   // Found by two candidate rules at once: a `logger.info("cache hit")` in

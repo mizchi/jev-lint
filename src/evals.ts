@@ -429,16 +429,22 @@ export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Prom
  * the same convention the single corpus had, and the same caveat: a defect
  * for rule A sitting in rule B's cases is B's false positive until labelled.
  */
-export function evalCorpus(roots: string[]): { paths: string[]; labels: Labels } {
+export function evalCorpus(roots: string[]): { paths: string[]; labels: Labels; errors: string[] } {
   const labels: Labels = { $default: "clean" };
   const paths: string[] = [];
+  const errors: string[] = [];
   for (const suite of discoverEvals(roots)) {
     if (!existsSync(suite.fixtures)) continue;
     paths.push(suite.fixtures);
     let own: Labels;
     try {
       own = readExpect(suite);
-    } catch {
+    } catch (err: unknown) {
+      // The suite's cases are still scanned; its labels are missing, and a
+      // missing label reads as clean, which is a corpus lying quietly. Said
+      // here for the caller to print, since a suite with a broken expect
+      // file used to vanish from the corpus without a word.
+      errors.push(`${suite.expect}: ${String(err).slice(0, 160)}`);
       continue;
     }
     for (const [k, v] of Object.entries(own)) {
@@ -446,5 +452,5 @@ export function evalCorpus(roots: string[]): { paths: string[]; labels: Labels }
       labels[k] = [...((labels[k] as Label[] | undefined) ?? []), ...(v as Label[])];
     }
   }
-  return { paths, labels };
+  return { paths, labels, errors };
 }

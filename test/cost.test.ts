@@ -1,7 +1,8 @@
 import { strict as assert } from "node:assert";
 import { planBatches } from "../src/batch.ts";
 import { costByRule, formatCostByRule } from "../src/cost.ts";
-import { test, scoreRule, noulRule, subjectOf } from "./helpers.ts";
+import { scoreRule, noulRule, subjectOf } from "./builders.ts";
+import { test } from "./harness.ts";
 
 test("cost: a dry run prices each rule -- its share of every batch's state, and its own questions", () => {
   // Two rules over one file share a batch: the file travels once, and the

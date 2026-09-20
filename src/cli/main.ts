@@ -7,13 +7,13 @@
  */
 import { readFileSync } from "node:fs";
 import { parseArgs, USAGE, type Log } from "./args.ts";
-import { cmdCalibrate, cmdGaps } from "./calibrate.ts";
-import { cmdCheck } from "./check.ts";
+import { cmdCalibrate, cmdGaps } from "./cmd-calibrate.ts";
+import { cmdCheck } from "./cmd-check.ts";
 import { resolveContext } from "./context.ts";
-import { cmdEval } from "./eval.ts";
-import { cmdInit } from "./init.ts";
-import { cmdReplay } from "./replay.ts";
-import { cmdRules } from "./rules.ts";
+import { cmdEval } from "./cmd-eval.ts";
+import { cmdInit } from "./cmd-init.ts";
+import { cmdReplay } from "./cmd-replay.ts";
+import { cmdRules } from "./cmd-rules.ts";
 import { selectForRun } from "./select.ts";
 import { resolveTargets } from "./targets.ts";
 
