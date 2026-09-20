@@ -20,10 +20,9 @@
  * ordinary modules; the excerpt keeps four related files under a few thousand
  * tokens.
  */
-import { readFileSync } from "node:fs";
 import { basename, dirname, isAbsolute, join, posix, relative, sep } from "node:path";
 import { moduleIdentity } from "./scan.ts";
-import { FileIndex } from "./files.ts";
+import { FileIndex, tryReadFile } from "./files.ts";
 
 /** One related test, as the state carries it. */
 export interface RelatedTest {
@@ -38,13 +37,25 @@ export interface RelatedTest {
 export const MAX_RELATED_TESTS = 4;
 
 /**
- * Characters of test excerpt per source file, shared by its related tests.
+ * Characters of test excerpt per source file, shared by its related tests,
+ * for one subject in the file; each further subject adds
+ * `TEST_EXCERPT_PER_SUBJECT`, up to `TEST_EXCERPT_MAX`.
  *
  * One related file gets all of it; four get a quarter each. Over a file's
- * share, the middle is cut and the cut is marked. About 2,500 tokens at
- * most, which leaves the 32Ki state budget to the subjects.
+ * share, what the lowest-priority keywords alone matched is dropped and the
+ * cut is marked. The tests are evidence per subject: a file with ten
+ * exported functions asked about at once needs ten functions' tests in
+ * the excerpt, and at a flat 8,000 characters -- 180 lines of a
+ * repository's one test file -- the model read most of them as untested.
  */
 export const TEST_EXCERPT_BUDGET = 8000;
+export const TEST_EXCERPT_PER_SUBJECT = 2000;
+export const TEST_EXCERPT_MAX = 32_000;
+
+/** The excerpt budget for a file with `subjects` subjects asked about. */
+export function excerptBudget(subjects: number): number {
+  return Math.min(TEST_EXCERPT_MAX, TEST_EXCERPT_BUDGET + Math.max(0, subjects - 1) * TEST_EXCERPT_PER_SUBJECT);
+}
 
 /** How many lines around a matching line an excerpt keeps. */
 const EXCERPT_CONTEXT_LINES = 2;
@@ -82,7 +93,7 @@ const CONVENTIONAL_ROOTS = ["test", "tests", "__tests__", "spec"];
  * an index is given.
  */
 export function findTestFiles(roots: string[], cwd: string = process.cwd(), index: FileIndex = new FileIndex(cwd)): string[] {
-  const all = index.list([...roots, ...CONVENTIONAL_ROOTS]);
+  const all = index.extend([...roots, ...CONVENTIONAL_ROOTS]);
   return all.filter((rel) => isTestFile(rel, readIfUnderTestDirectory(join(cwd, rel), rel)));
 }
 
@@ -93,11 +104,8 @@ export function findTestFiles(roots: string[], cwd: string = process.cwd(), inde
  */
 function readIfUnderTestDirectory(full: string, rel: string): string | undefined {
   if (TEST_NAME.test(basename(rel)) || !TEST_DIRECTORY.test(dirname(rel) + "/")) return undefined;
-  try {
-    return readFileSync(full, "utf8");
-  } catch {
-    return "";
-  }
+  // Unreadable is empty: a file that cannot be read opens no test.
+  return tryReadFile(full) ?? "";
 }
 
 /**
@@ -254,16 +262,23 @@ const TITLE_LOOKBACK_LINES = 60;
 
 /**
  * The part of a test file worth sending: the lines that mention any of the
- * `keywords` (the module's exported names, and the module's stem) with a
- * little context around each, and for each of those the nearest line above
- * that opens a test -- its title, which is the claim the call is there to
- * establish. Runs of kept lines are joined; a gap is marked so the model
- * knows it is reading an excerpt.
+ * `keywords` with a little context around each, and for each of those the
+ * nearest line above that opens a test -- its title, which is the claim the
+ * call is there to establish. Runs of kept lines are joined; a gap is
+ * marked so the model knows it is reading an excerpt.
  *
- * Openers are not kept on their own. In a repository with one test file for
- * everything, every `test(` line kept would fill the excerpt with titles of
- * tests about other modules and push the lines that call THIS module past
- * the cut.
+ * `keywords` are in priority order: the names of the subjects being asked
+ * about first, the module's other exports after, its stem last. Over the
+ * budget, the regions a lower-priority keyword alone matched are dropped
+ * before any a higher one did, and file order is kept among what stays.
+ * In a repository with one test file for everything, keyed on the stem
+ * alone `config` matched three hundred lines of `--config` flags and the
+ * excerpt was cut from the middle, where the one test of `findConfig`'s
+ * throw sat; the rule then reported a failure path no test reached.
+ *
+ * Openers are not kept on their own. Every `test(` line kept would fill the
+ * excerpt with titles of tests about other modules and push the lines that
+ * call THIS module past the cut.
  *
  * A file where nothing matched is sent whole -- an empty excerpt would say
  * "this file tests nothing", which is not what was measured.
@@ -278,16 +293,22 @@ export function compactTest(
   const needles = keywords
     .filter((k) => k.length > 0)
     .map((k) => new RegExp(`\\b${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i"));
-  const keep = new Set<number>();
+  // Each kept line carries the best (lowest) keyword rank that reached it.
+  const rank = new Map<number, number>();
+  const keep = (j: number, r: number) => {
+    const have = rank.get(j);
+    if (have === undefined || r < have) rank.set(j, r);
+  };
   for (let i = 0; i < lines.length; i += 1) {
     const line = lines[i]!;
-    if (!needles.some((k) => k.test(line))) continue;
+    const r = needles.findIndex((k) => k.test(line));
+    if (r < 0) continue;
     for (let j = Math.max(0, i - EXCERPT_CONTEXT_LINES); j <= Math.min(lines.length - 1, i + EXCERPT_CONTEXT_LINES); j += 1) {
-      keep.add(j);
+      keep(j, r);
     }
     for (let j = i - 1; j >= 0 && j >= i - TITLE_LOOKBACK_LINES; j -= 1) {
       if (!TEST_OPENER.test(lines[j]!)) continue;
-      keep.add(j);
+      keep(j, r);
       // A short test is kept whole from its opener to its close, found by
       // indentation: the first later line at the opener's depth that begins
       // a closer. The assertion that proves a failure path was reached sits
@@ -301,28 +322,59 @@ export function compactTest(
           break;
         }
       }
-      if (end >= 0) for (let k = j; k <= end; k += 1) keep.add(k);
+      if (end >= 0) for (let k = j; k <= end; k += 1) keep(k, r);
       break;
     }
   }
-  let code: string;
-  if (keep.size === 0 || keep.size === lines.length) {
-    code = content;
-  } else {
-    const out: string[] = [];
-    let last = -2;
-    for (const i of [...keep].sort((a, b) => a - b)) {
-      if (i !== last + 1 && out.length > 0) out.push("…");
-      out.push(lines[i]!);
-      last = i;
+  if (rank.size === 0) return { path, code: fit(content, limit) };
+  // Runs of adjacent kept lines of one rank are the regions. Regions enter
+  // by rank, then by position, while they fit; the first always enters,
+  // cut from the middle if it must be. What was kept and then dropped for
+  // room is marked like any other gap.
+  const kept = [...rank.keys()].sort((a, b) => a - b);
+  const regions: Array<{ from: number; to: number; rank: number; size: number }> = [];
+  for (const i of kept) {
+    const last = regions.at(-1);
+    const r = rank.get(i)!;
+    if (last && i === last.to + 1 && last.rank === r) {
+      last.to = i;
+      last.size += lines[i]!.length + 1;
+    } else {
+      regions.push({ from: i, to: i, rank: r, size: lines[i]!.length + 1 });
     }
-    code = out.join("\n");
   }
-  if (code.length > limit) {
-    const side = Math.floor((limit - 3) / 2);
-    code = `${code.slice(0, side)}\n…\n${code.slice(-side)}`;
+  if (regions.length === 1 && rank.size === lines.length) return { path, code: fit(content, limit) };
+  const byRank = [...regions].sort((a, b) => a.rank - b.rank || a.from - b.from);
+  const chosen = new Set<(typeof regions)[number]>();
+  let used = 0;
+  for (const region of byRank) {
+    const gap = chosen.size > 0 ? 2 : 0;
+    if (chosen.size > 0 && used + gap + region.size > limit) continue;
+    chosen.add(region);
+    used += gap + region.size;
   }
-  return { path, code };
+  const out: string[] = [];
+  let lastLine = -1;
+  let dropped = false;
+  for (const region of regions) {
+    if (!chosen.has(region)) {
+      dropped = true;
+      continue;
+    }
+    if (out.length > 0 ? region.from !== lastLine + 1 : dropped) out.push("…");
+    for (let i = region.from; i <= region.to; i += 1) out.push(lines[i]!);
+    lastLine = region.to;
+    dropped = false;
+  }
+  if (dropped) out.push("…");
+  return { path, code: fit(out.join("\n"), limit) };
+}
+
+/** Within `limit`, cut from the middle: both ends of a region survive. */
+function fit(code: string, limit: number): string {
+  if (code.length <= limit) return code;
+  const side = Math.floor((limit - 3) / 2);
+  return `${code.slice(0, side)}\n…\n${code.slice(-side)}`;
 }
 
 function indentOf(line: string): number {
@@ -337,6 +389,8 @@ export interface PairOptions {
   index?: FileIndex;
   /** What to look for in a test: a file's exported names, typically. */
   keywords?: (file: string) => string[];
+  /** Characters of excerpt for a file, `excerptBudget(subjects)` typically; the default is one subject's. */
+  budget?: (file: string) => number;
   /** Test file discovery, injectable for tests of this module. */
   testFiles?: string[];
   readSource?: (path: string) => string;
@@ -352,18 +406,11 @@ export interface PairOptions {
  */
 export function pairTests(
   files: Iterable<string>,
-  { roots, cwd = process.cwd(), keywords = () => [], testFiles, readSource, index }: PairOptions,
+  { roots, cwd = process.cwd(), keywords = () => [], budget = () => TEST_EXCERPT_BUDGET, testFiles, readSource, index }: PairOptions,
 ): Map<string, RelatedTest[]> {
   const candidates = testFiles ?? findTestFiles(roots, cwd, index);
-  const read =
-    readSource ??
-    ((p: string) => {
-      try {
-        return readFileSync(isAbsolute(p) ? p : join(cwd, p), "utf8");
-      } catch {
-        return "";
-      }
-    });
+  // An unreadable test file has no tests in it, and pairs with nothing.
+  const read = readSource ?? ((p: string) => tryReadFile(isAbsolute(p) ? p : join(cwd, p)) ?? "");
   // Each test file is read once, however many source files it pairs with.
   const contents = new Map<string, string>();
   const source = (p: string) => {
@@ -377,9 +424,12 @@ export function pairTests(
     // is paired with that block first: the tests nearest the code.
     const own = inSourceTests(source(file));
     if (related.length === 0 && own === null) continue;
+    // Priority order: what the caller names first (the subjects asked
+    // about, then the module's exports), the module's own name last -- it
+    // is the loosest match, and in one test file for everything it floods.
     const id = moduleIdentity(file);
-    const words = [...new Set([id.named_by_directory ?? id.stem, ...keywords(file)])];
-    const share = Math.floor(TEST_EXCERPT_BUDGET / (related.length + (own === null ? 0 : 1)));
+    const words = [...new Set([...keywords(file), id.named_by_directory ?? id.stem])];
+    const share = Math.floor(budget(file) / (related.length + (own === null ? 0 : 1)));
     out.set(
       file,
       [

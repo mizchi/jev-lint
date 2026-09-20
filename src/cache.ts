@@ -66,6 +66,8 @@ export const CACHE_SCHEMA = "jev-lint-cache-4";
 export function contextKey(
   subject: Pick<Subject, "file" | "context" | "enclosing" | "promoted" | "line" | "subjectLine">,
   arm: StateArm,
+  /** `paired` only: the related-test excerpts the state carries, which are the evidence. */
+  evidence: string | null = null,
 ): string | null {
   // A promoted subject's question says "the code in `matched` at line N", so
   // where in the container the match sits is part of the question: two
@@ -79,7 +81,10 @@ export function contextKey(
   const path = subject.enclosing?.path ? `<${subject.enclosing.path.join(">")}` : "";
   if (arm === "bare") return where + path || null;
   const around = arm === "local" ? subject.context ?? `${subject.file}\u0000${subject.enclosing?.name ?? ""}` : `${subject.file}\u0000${subject.enclosing?.name ?? ""}`;
-  return around + where + path;
+  // The tests shown on `paired` are what the answer is about; a different
+  // excerpt of them is a different question, however the code stayed.
+  const shown = arm === "paired" && evidence !== null ? `\u0000${evidence}` : "";
+  return around + where + path + shown;
 }
 
 export function verdictKey(

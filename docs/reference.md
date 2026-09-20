@@ -90,6 +90,16 @@ has no type declarations to match, plus whatever TypeScript rule found no
 node. **`N without a verdict`** means
 requests failed, and a run with failures never reads as a clean repository.
 
+### Reading a long report: `--summary`
+
+`--summary` adds two lines after the findings: the count by rule, and by
+file with the subjects judged there, densest first. On a whole tree the
+list reads by its clusters -- eight `catch-hides-failure` findings that
+were one idiom in six modules, sixteen `tests-cover-failure-paths` that
+were one test file too big to excerpt -- and the two lines are where they
+show. `--format json` carries the same as `stats.byRule` and
+`stats.byFile`.
+
 ### Silencing a finding
 
 ```ts

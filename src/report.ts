@@ -49,7 +49,7 @@ const TAG: Record<string, (c: Palette) => string> = {
 
 export function formatPretty(
   result: ReportInput,
-  { color = true, showMissing = false }: { color?: boolean; showMissing?: boolean } = {},
+  { color = true, showMissing = false, summary = false }: { color?: boolean; showMissing?: boolean; summary?: boolean } = {},
 ): string {
   const c = palette(color);
   const out: string[] = [];
@@ -98,6 +98,20 @@ export function formatPretty(
         );
       }
     }
+    out.push("");
+  }
+
+  // `--summary`: the findings grouped, by rule and by file. On a whole
+  // tree the list is read by its clusters -- one idiom repeated across
+  // modules, one file too big for its reviewer -- and this is where they
+  // show. Files with nothing reported are left out.
+  if (summary && findings.length > 0) {
+    const rules = Object.entries(stats.byRule).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    out.push(c.bold("by rule:  ") + rules.map(([r, n]) => `${r} ${n}`).join(" · "));
+    const files = Object.entries(stats.byFile ?? {})
+      .filter(([, n]) => n.findings > 0)
+      .sort((a, b) => b[1].findings / b[1].subjects - a[1].findings / a[1].subjects || b[1].findings - a[1].findings || a[0].localeCompare(b[0]));
+    out.push(c.bold("by file:  ") + files.map(([f, n]) => `${f} ${n.findings}/${n.subjects}`).join(" · "));
     out.push("");
   }
 

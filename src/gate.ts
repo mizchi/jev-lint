@@ -165,8 +165,17 @@ export function gate(
       unsure: all.filter((f) => f.messageId === "unsure").length,
       review: review.length,
       byRule: countBy(findings, (f) => f.rule),
+      byFile: byFile(all, findings),
     },
   };
+}
+
+/** Every file a subject was in, with how many were judged there and how many reported. */
+function byFile(all: Finding[], findings: Finding[]): Record<string, { findings: number; subjects: number }> {
+  const out: Record<string, { findings: number; subjects: number }> = {};
+  for (const f of all) (out[f.file] ??= { findings: 0, subjects: 0 }).subjects += 1;
+  for (const f of findings) out[f.file]!.findings += 1;
+  return out;
 }
 
 function countBy<T>(items: T[], key: (item: T) => string): Record<string, number> {

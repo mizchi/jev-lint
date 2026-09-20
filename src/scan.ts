@@ -511,7 +511,7 @@ export function buildSymbols(probes: AstGrepMatch[], languages: Language[]): Sym
         s.exported = entry.exportRanges.some(([a, b]) => a <= s.start && b >= s.end);
       }
     }
-    computeCalls(entry);
+    linkCalls(entry);
   }
   return byFile;
 }
@@ -527,7 +527,7 @@ export function buildSymbols(probes: AstGrepMatch[], languages: Language[]): Sym
  * over-inclusive edge list is the safer error. Cross-file edges are out of
  * scope here; `imports` is the cross-file signal instead.
  */
-function computeCalls(entry: FileSymbols): void {
+function linkCalls(entry: FileSymbols): void {
   for (const s of entry.symbols) {
     s.calls = [];
     s.calledBy = [];

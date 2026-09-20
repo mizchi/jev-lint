@@ -11,8 +11,8 @@
  * file, `bare` does not. No matcher, so no loose-matcher caveat.
  */
 import { readFileSync } from "node:fs";
-import { extname, isAbsolute, join, sep } from "node:path";
-import { FileIndex, isUnder } from "./files.ts";
+import { extname, isAbsolute, join } from "node:path";
+import { FileIndex, isUnder, walkName } from "./files.ts";
 import type { Rule, Subject } from "./types.ts";
 
 /**
@@ -68,10 +68,11 @@ export function splitBlocks(source: string, header: RegExp | null): TextBlock[] 
 
 /**
  * Every file under `paths` (files or directories) with one of the
- * extensions, relative to `cwd`, sorted. The walk is the run's shared one
- * when an index is given; a file the index knows from another root (the
- * paired arm's conventional test directories) is not one of these unless
- * it is under `paths`.
+ * extensions, sorted, named the way the walk names them: relative to `cwd`
+ * when under it, absolute otherwise. The walk is the run's shared one when
+ * an index is given; a file the index knows from another root (the paired
+ * arm's conventional test directories) is not one of these unless it is
+ * under `paths`.
  */
 export function findTextFiles(
   paths: string[],
@@ -80,9 +81,12 @@ export function findTextFiles(
   index: FileIndex = new FileIndex(cwd),
 ): string[] {
   const wanted = new Set(extensions.map((e) => (e.startsWith(".") ? e : `.${e}`).toLowerCase()));
+  // The roots named as the walk names files, so a root outside the cwd
+  // (absolute in the walk, `../x` as given) still contains its own files.
+  const roots = paths.map((p) => walkName(isAbsolute(p) ? p : join(cwd, p), cwd));
   return index
-    .list(paths)
-    .filter((rel) => wanted.has(extname(rel).toLowerCase()) && paths.some((p) => isUnder(rel, p) || rel === p.split(sep).join("/")));
+    .extend(paths)
+    .filter((rel) => wanted.has(extname(rel).toLowerCase()) && roots.some((r) => isUnder(rel, r) || rel === r));
 }
 
 /**

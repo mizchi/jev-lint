@@ -18,7 +18,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
 import { loadRules, cutoffFor, defaultRulePaths, shippedRulesPath, selectRules } from "./rules.ts";
-import { run, collectSubjects, toRecord } from "./run.ts";
+import { run, collectSubjects, buildRecord } from "./run.ts";
 import { defaultRange } from "./commits.ts";
 import { changedRanges, changedFiles, changedFilesUnder } from "./diff.ts";
 import {
@@ -83,6 +83,8 @@ interface Options {
   file: string | null;
   squash: boolean;
   message: string | null;
+  /** `--message-file`: read after parsing, so the parser reads nothing. */
+  messageFile: string | null;
   accept: boolean;
   acceptLast: boolean;
   replay: boolean;
@@ -99,6 +101,7 @@ interface Options {
   force: boolean;
   dryRun: boolean;
   showMissing: boolean;
+  summary: boolean;
   showSubjects: boolean;
   color: boolean;
   quiet: boolean;
@@ -181,6 +184,7 @@ options:
       --compare            eval: the two positional records, scored at their own cutoffs
       --dry-run            plan and price the run without asking anything
       --show-missing       list subjects that got no verdict
+      --summary            the findings counted by rule, and by file densest first
       --show-subjects      with --dry-run: list every subject the matchers found,
                            with its node kind and captures -- the free way to
                            see what a rule would ask about, and about what
@@ -231,7 +235,7 @@ environment:
   belongs in version control.
 `;
 
-function parseArgs(argv: string[]): Options {
+function parseArgs(argv: string[], { color }: { color: boolean }): Options {
   const opts: Options = {
     rules: [],
     rulesAreShipped: false,
@@ -253,6 +257,7 @@ function parseArgs(argv: string[]): Options {
     file: null,
     squash: false,
     message: null,
+    messageFile: null,
     accept: false,
     acceptLast: false,
     replay: false,
@@ -269,8 +274,9 @@ function parseArgs(argv: string[]): Options {
     force: false,
     dryRun: false,
     showMissing: false,
+    summary: false,
     showSubjects: false,
-    color: process.stdout.isTTY === true && !process.env.NO_COLOR,
+    color,
     quiet: false,
     paths: [],
   };
@@ -374,14 +380,10 @@ function parseArgs(argv: string[]): Options {
         opts.message = need(i, a);
         i += 1;
         break;
-      case "--message-file": {
-        // `-` is stdin, so `gh pr view --json title,body -q ... | jev-lint
-        // commits --squash --message-file -` needs no temporary file.
-        const path = need(i, a);
-        opts.message = readFileSync(path === "-" ? 0 : path, "utf8");
+      case "--message-file":
+        opts.messageFile = need(i, a);
         i += 1;
         break;
-      }
       case "--pre-commit":
         opts.preCommit = true;
         break;
@@ -441,6 +443,9 @@ function parseArgs(argv: string[]): Options {
         break;
       case "--show-missing":
         opts.showMissing = true;
+        break;
+      case "--summary":
+        opts.summary = true;
         break;
       case "--show-subjects":
         opts.showSubjects = true;
@@ -598,10 +603,21 @@ async function main(argv: string[]): Promise<number> {
   const rest = argv[0] && !argv[0].startsWith("-") ? argv.slice(1) : argv;
   let opts: Options;
   try {
-    opts = parseArgs(rest);
+    // The terminal decides the colour default, not the parser.
+    opts = parseArgs(rest, { color: process.stdout.isTTY === true && !process.env.NO_COLOR });
   } catch (err: unknown) {
     process.stderr.write(`${(err as Error).message}\n\n${USAGE}`);
     return 2;
+  }
+  if (opts.messageFile !== null) {
+    // `-` is stdin, so `gh pr view --json title,body -q ... | jev-lint
+    // commits --squash --message-file -` needs no temporary file.
+    try {
+      opts.message = readFileSync(opts.messageFile === "-" ? 0 : opts.messageFile, "utf8");
+    } catch (err: unknown) {
+      process.stderr.write(`--message-file ${opts.messageFile}: ${(err as Error).message}\n`);
+      return 2;
+    }
   }
   if (opts.help || command === "help") {
     process.stdout.write(USAGE);
@@ -684,9 +700,9 @@ async function main(argv: string[]): Promise<number> {
     // A commit rule's subjects are commits, so `run` with one is `commits`
     // and the positional after the id is a range. Mixing the two kinds in
     // one run has no single source of subjects.
-    const commitRules = rules.filter((r) => r.subject === "commit").length;
-    if (commitRules === rules.length) command = "commits";
-    else if (commitRules > 0) {
+    const commitRuleCount = rules.filter((r) => r.subject === "commit").length;
+    if (commitRuleCount === rules.length) command = "commits";
+    else if (commitRuleCount > 0) {
       log("run: a commit rule and a file rule cannot run together; name one, or pick a file with one kind");
       return 2;
     } else command = "check";
@@ -846,14 +862,14 @@ async function main(argv: string[]): Promise<number> {
   if (opts.record) {
     writeFileSync(
       opts.record,
-      `${JSON.stringify(toRecord(result, { arm: opts.arm, cutoffs: opts.at, unsureBelow: opts.unsureBelow }), null, 2)}\n`,
+      `${JSON.stringify(buildRecord(result, { arm: opts.arm, cutoffs: opts.at, unsureBelow: opts.unsureBelow }), null, 2)}\n`,
     );
     log(`recorded ${result.all.length} answer(s) to ${opts.record}`);
   }
 
   if (opts.format === "json") out(formatJson(result));
   else if (opts.format === "github") out(formatGithub(result));
-  else out(formatPretty(result, { color: opts.color, showMissing: opts.showMissing }));
+  else out(formatPretty(result, { color: opts.color, showMissing: opts.showMissing, summary: opts.summary }));
 
   // Exit 1 when something was reported, 0 when clean. A request failure is not
   // a finding, but it must not read as success either -- hence 3.
@@ -1152,7 +1168,7 @@ async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, out, log }: 
     return 0;
   }
   if (opts.record) {
-    writeFileSync(opts.record, `${JSON.stringify(toRecord(result, { arm: opts.arm, cutoffs: opts.at, unsureBelow: opts.unsureBelow }), null, 2)}\n`);
+    writeFileSync(opts.record, `${JSON.stringify(buildRecord(result, { arm: opts.arm, cutoffs: opts.at, unsureBelow: opts.unsureBelow }), null, 2)}\n`);
     log(`recorded to ${opts.record}`);
   }
   const rows = gapReport(result.all, rules, { cutoffs: opts.at });
@@ -1208,7 +1224,7 @@ async function cmdCalibrate({ rules, paths, diffRanges, opts, out, log }: Comman
     writeFileSync(
       opts.record,
       `${JSON.stringify(
-        { ...toRecord(last, { arm: opts.arm, cutoffs: opts.at, unsureBelow: opts.unsureBelow }), passes: runs },
+        { ...buildRecord(last, { arm: opts.arm, cutoffs: opts.at, unsureBelow: opts.unsureBelow }), passes: runs },
         null,
         2,
       )}\n`,
@@ -1347,7 +1363,7 @@ function cmdReplay(opts: Options, out: Log, log: Log): number {
 
   if (opts.format === "json") out(formatJson(result));
   else if (opts.format === "github") out(formatGithub(result));
-  else out(formatPretty(result, { color: opts.color, showMissing: opts.showMissing }));
+  else out(formatPretty(result, { color: opts.color, showMissing: opts.showMissing, summary: opts.summary }));
 
   // A `calibrate --repeat n` record carries every pass, and its top-level
   // `answers` is only the last one. The gap and fit tables average the passes,

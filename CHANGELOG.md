@@ -27,6 +27,20 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Fixed
 
+- The `paired` arm's test excerpt is chosen by relevance and sized by the
+  subjects in the file. It was keyed on the module's stem and cut from
+  the middle at a flat 8,000 characters, and in a repository with one
+  test file for everything the stem (`config`) matched three hundred
+  lines of `--config` flags while the one test of `findConfig`'s throw
+  was in the cut; sixteen functions of this repository read as untested,
+  and after the fix six, each of them really so. Keywords are in priority
+  order -- the subjects' own names, the module's exports, the stem last
+  -- and the budget grows by 2,000 characters per subject to 32,000. The
+  excerpt is in the verdict key on that arm, so a better excerpt is a
+  new question and not a cache hit.
+- A text rule's root outside the working directory (`check ../queries`)
+  found nothing: the walk names such a file absolutely and the root was
+  compared as given.
 - `commits --base <ref>` with `paths:` in the config judged every commit
   touching the first path -- the config's path had become the git range.
   Found by running the tool on its own history: 52 commits "in src" for
@@ -39,8 +53,23 @@ change are in [docs/findings.md](docs/findings.md).
   `jev-lint-cache-4`, and a cache from 0.4.x is dropped loudly and rebuilt
   by one warm run.
 
+### Added (from running the tool on itself)
+
+- `--summary`: the findings counted by rule, and by file with the
+  subjects judged there, densest first; `stats.byRule` / `stats.byFile`
+  in `--format json`.
+
 ### Changed
 
+- What the tool said about its own code, acted on: one `tryReadFile` /
+  `tryReadDir` where five modules each swallowed a read error in their
+  own words; `computeCalls` that assigned is `linkCalls`, `toRecord` that
+  read the clock is `buildRecord`, `parseArgs` no longer reads the
+  `--message-file` or the terminal; a `FileIndex.list(roots)` that
+  returned more than the roots is `extend`; three comments that had
+  drifted from their code; tests for the failure paths of `runAstGrep`,
+  `defaultRange`, `loadSuite`, `planEval` and `collectRows`. 42 findings
+  on the tree, then 13, the rest within 0.05 of a cutoff or arguable.
 - The node kind of a test subject is `test` (a suite's, `test suite`),
   not `composite match`. The six rules' baselines were re-accepted:
   precision and recall 1.00 on each.

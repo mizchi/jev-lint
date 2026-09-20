@@ -14,7 +14,6 @@
  * The benefit is that the expensive step happens once per file for every rule
  * at once, instead of once per rule per file.
  */
-import { readFileSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
 import { Jev, JevError, mapLimit, DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
 import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.ts";
@@ -27,10 +26,10 @@ import { gate } from "./gate.ts";
 import { touchesChange } from "./diff.ts";
 import { ruleTextHash, cutoffFor } from "./rules.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
-import { pairTests, type RelatedTest } from "./paired.ts";
+import { excerptBudget, pairTests, type RelatedTest } from "./paired.ts";
 import { commitSubjects, squashSubjects } from "./commits.ts";
 import { textSubjects } from "./text.ts";
-import { FileIndex } from "./files.ts";
+import { FileIndex, tryReadFile } from "./files.ts";
 import type {
   Answer,
   Batch,
@@ -92,14 +91,10 @@ export async function collectSubjects({
   const sources = new Map<string, string>();
   const readSource = (file: string): string => {
     if (sources.has(file)) return sources.get(file)!;
-    let text = "";
-    try {
-      // ast-grep reports paths relative to the cwd it was run in, which is
-      // not always the process's.
-      text = readFileSync(isAbsolute(file) ? file : join(cwd, file), "utf8");
-    } catch {
-      text = "";
-    }
+    // ast-grep reports paths relative to the cwd it was run in, which is
+    // not always the process's. A file that cannot be read is an empty one
+    // here: nothing in it is judged, and nothing is reported about it.
+    const text = tryReadFile(isAbsolute(file) ? file : join(cwd, file)) ?? "";
     sources.set(file, text);
     return text;
   };
@@ -108,7 +103,7 @@ export async function collectSubjects({
   // already has to load. Applied here rather than at the gate so an ignored
   // subject is never sent: a suppression is the cheapest way to quiet a rule.
   const ignoresFor = new Map<string, FileIgnores>();
-  const readIgnores = (file: string): FileIgnores => {
+  const ignoresOf = (file: string): FileIgnores => {
     let ig = ignoresFor.get(file);
     if (!ig) {
       ig = parseIgnores(readSource(file));
@@ -146,7 +141,7 @@ export async function collectSubjects({
       skippedByDiff += 1;
       continue;
     }
-    if (isIgnored(readIgnores(m.file), resolved.line, rule.id)) {
+    if (isIgnored(ignoresOf(m.file), resolved.line, rule.id)) {
       ignoredSubjects += 1;
       continue;
     }
@@ -196,8 +191,18 @@ export async function collectSubjects({
       roots: paths,
       cwd,
       index,
-      keywords: (file) =>
-        (symbols.get(file)?.symbols ?? []).filter((sym) => sym.exported && sym.name).map((sym) => sym.name!),
+      // The subjects' own names first: the excerpt's budget goes to the
+      // tests of the functions being asked about, then to the module's
+      // other exports.
+      keywords: (file) => {
+        const asked = subjects
+          .filter((s) => s.arm === "paired" && s.file === file)
+          .map((s) => s.captured.NAME ?? s.contextName ?? s.enclosing?.name ?? null)
+          .filter((n): n is string => n !== null);
+        const exported = (symbols.get(file)?.symbols ?? []).filter((sym) => sym.exported && sym.name).map((sym) => sym.name!);
+        return [...new Set([...asked, ...exported])];
+      },
+      budget: (file) => excerptBudget(subjects.filter((s) => s.arm === "paired" && s.file === file).length),
     });
     const dropped = new Set<string>();
     for (let i = subjects.length - 1; i >= 0; i -= 1) {
@@ -330,7 +335,7 @@ export async function run({
   // cache. Bypassed rather than merely ignored on read: writing one pass's
   // answer while deciding on the mean of several would leave the cache holding
   // a verdict the report never used.
-  const useCache = passes === 1 ? cachePath : null;
+  const persistTo = passes === 1 ? cachePath : null;
 
   const collected = commits
     ? collectCommits(rules, commits.range, cwd, commits.label, commits.squash)
@@ -338,7 +343,7 @@ export async function run({
   const { subjects, symbols, sources, tests, stderr, skippedByDiff, duplicateGrammars, ignored, unpaired } = collected;
   const commitStats = commits && "commits" in collected ? (collected as { commits: RunResult["commits"] }).commits : undefined;
 
-  const cache = useCache ? Cache.load(useCache) : new Cache(null);
+  const cache = persistTo ? Cache.load(persistTo) : new Cache(null);
   // Under `auto` the axis is decided per rule, and the axis is part of what
   // the model saw -- so the cache key needs the axis this subject actually
   // took, not the mode that was requested.
@@ -354,6 +359,10 @@ export async function run({
   // A commit's verdict is about the message AND the diff: the same message
   // over a different change is a different question, so the diff is in the
   // key beside the message.
+  // On `paired`, the related tests are in the key too: they are the
+  // evidence, and a better excerpt of them is a new question.
+  const evidence = (s: Subject): string | null =>
+    s.arm === "paired" ? (tests?.get(s.file) ?? []).map((t) => `${t.path}\u0000${t.code}`).join("\u0001") : null;
   const keyed = subjects.map((s) => ({
     ...s,
     key: verdictKey(
@@ -362,7 +371,7 @@ export async function run({
       s.commit ? `${s.text}\u0000${s.commit.diff}` : s.text,
       effectiveAxis(s),
       s.promoted ? (s.matchText ?? null) : null,
-      contextKey(s, s.arm),
+      contextKey(s, s.arm, evidence(s)),
       s.captured,
     ),
   }));
@@ -374,7 +383,7 @@ export async function run({
   const toAsk: Subject[] = [];
   const wanted = new Map<string, Subject[]>();
   for (const s of keyed) {
-    const hit = force || !useCache ? null : cache.get(s.key, s.rule.kind);
+    const hit = force || !persistTo ? null : cache.get(s.key, s.rule.kind);
     if (hit) {
       results.push({ subject: s, answer: hit, cached: true });
       continue;
@@ -463,7 +472,7 @@ export async function run({
         for (const twin of wanted.get(s.key!) ?? [s]) {
           out.push({ subject: { ...twin, arm: batch.arm }, answer, cached: false });
         }
-        if (answer && useCache) {
+        if (answer && persistTo) {
           // Stored under the arm the question was ACTUALLY asked at, which is
           // not always the arm it was looked up under: `s.key` carries the arm
           // the rule asked for, and a batch over the state budget steps down.
@@ -474,7 +483,7 @@ export async function run({
           const storeKey =
             batch.arm === s.arm
               ? s.key!
-              : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null, contextKey(s, batch.arm), s.captured);
+              : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null, contextKey(s, batch.arm, evidence(s)), s.captured);
           cache.set(storeKey, answer, {
             rule: s.rule.id,
             draft: ruleTextHash(s.rule),
@@ -518,7 +527,7 @@ export async function run({
   const asked = passes === 1 ? (perPass[0] ?? []) : mergePasses(perPass, cutoffs);
   results.push(...asked);
 
-  if (useCache) cache.save({ model: jev.servedModel ?? jev.model });
+  if (persistTo) cache.save({ model: jev.servedModel ?? jev.model });
 
   const gated = gate(results, { cutoffs, unsureBelow, loose });
   if (explain && !refused) await explainFindings(gated.findings, batches, jev, errors);
@@ -732,7 +741,7 @@ export function mergePasses(perPass: Scored[][], cutoffs: Record<string, number>
  * every report published before the change, and there is no way to tell a model
  * difference from a threshold edit afterwards.
  */
-export function toRecord(
+export function buildRecord(
   result: RunResult,
   { arm, cutoffs, unsureBelow }: { arm: StateArm | null; cutoffs: Record<string, number>; unsureBelow: number | null },
 ): Record<string, unknown> {

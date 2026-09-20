@@ -110,10 +110,11 @@ export type ResolvedLabel = "bad" | "clean" | "unlabeled";
 /**
  * The only fields these reports read.
  *
- * Narrower than `Finding` on purpose: gap, stability and threshold fitting need
- * a rule, a location and a number, and nothing else. Declaring the whole
- * `Finding` would claim a dependency that does not exist and force every caller
- * -- including a replay reading a recorded run, and every test -- to
+ * Narrower than `Finding` on purpose: gap, stability and threshold fitting
+ * need a rule, a location and a number, and the stability report the
+ * subject's text to tell two matches on one line apart. Declaring the whole
+ * `Finding` would claim a dependency that does not exist and force every
+ * caller -- including a replay reading a recorded run, and every test -- to
  * manufacture fields no code here looks at.
  */
 export type ScoredSubject = Pick<Finding, "rule" | "file" | "line" | "value"> & {
@@ -303,22 +304,20 @@ export function stabilityReport(
 }
 
 /**
- * Fit cutoffs against a labeled corpus.
+ * Fit cutoffs against a labeled corpus, one per rule.
  *
- * The procedure, not the numbers, is the transferable part:
+ * Where the labeled-bad answers all sit above the labeled-clean ones, the
+ * cutoff is the midpoint of that gap: not "highest clean answer plus a
+ * hair", which sits exactly on the false-positive boundary and is crossed
+ * by the next sample -- measured happening after adding ten functions to a
+ * corpus. Where the two sets overlap, no cutoff is clean, and the one
+ * maximising recall minus false positives is returned with `separable:
+ * false` and a reason saying so.
  *
- *   1. Take the highest answer among subjects labeled CLEAN for this rule.
- *   2. Put the cutoff a step above it, not immediately above it.
- *
- * Step two is the whole lesson. A cutoff fitted to "highest clean answer plus
- * a hair" sits exactly on the false-positive boundary, and the next sample
- * crosses it -- this has been measured happening after adding ten functions to
- * a corpus. Where a gap exists between the clean set and the labeled-bad set,
- * the midpoint of that gap is the right answer and this returns it.
- *
- * With no labels there is nothing to fit against, and `gapReport`'s suggestion
- * -- the midpoint of the widest gap, wherever the truth lies -- is the best
- * available guess. It is a starting point, not a calibration.
+ * A rule with no labeled bad or no labeled clean answer gets `fitted: null`
+ * and the reason; there is nothing to fit against. The caller falls back to
+ * `gapReport`'s suggestion -- the midpoint of the widest gap, wherever the
+ * truth lies -- which is a starting point, not a calibration.
  */
 export function fitCutoffs(all: ScoredSubject[], labels: Labels, rules: Rule[]): CutoffFit[] {
   const byRule = new Map<string, Array<ScoredSubject & { label: ResolvedLabel }>>();

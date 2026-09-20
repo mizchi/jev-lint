@@ -13,7 +13,7 @@
 import { strict as assert } from "node:assert";
 import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync, existsSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, isAbsolute, sep } from "node:path";
+import { join, isAbsolute, relative, sep } from "node:path";
 
 import { PROBE_PREFIX, LANGUAGE_DIRS, TIER_ONE } from "../src/types.ts";
 import {
@@ -33,8 +33,8 @@ import { buildQuestion, buildExplainQuestion, questionId, readAnswer, readChoice
 import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture, OUTLINE_TEXT_LIMIT } from "../src/state.ts";
 import { execFileSync } from "node:child_process";
 import { splitBlocks, textSubjects, findTextFiles, MAX_BLOCK_CHARS } from "../src/text.ts";
-import { listCommits, commitDiff, commitSubjects, commitFixtureSubjects, patchRepo, squashSubjects, MAX_DIFF_CHARS } from "../src/commits.ts";
-import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, inSourceTests, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET } from "../src/paired.ts";
+import { listCommits, commitDiff, commitSubjects, commitFixtureSubjects, patchRepo, squashSubjects, defaultRange, MAX_DIFF_CHARS } from "../src/commits.ts";
+import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, inSourceTests, excerptBudget, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET, TEST_EXCERPT_PER_SUBJECT, TEST_EXCERPT_MAX } from "../src/paired.ts";
 import {
   planBatches,
   planRuleBatches,
@@ -1216,7 +1216,7 @@ test("report: a language with no files is one idle line, not a list of dead matc
   const result = { rules: [ts, tsSilent, py1, py2], subjects: [subjectOf({ rule: ts })] };
   assert.deepEqual(idleLanguages(result), [{ language: "python", rules: 2 }]);
   assert.deepEqual(silentRules(result), ["typescript/b"], "the TypeScript matcher that missed is still named; Python is idle, not silent");
-  const pretty = formatPretty({ ...result, findings: [], all: [], review: [], stats: { subjects: 1, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {} } }, { color: false });
+  const pretty = formatPretty({ ...result, findings: [], all: [], review: [], stats: { subjects: 1, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } }, { color: false });
   assert.match(pretty, /no files for python \(2 rules\)/);
   assert.match(pretty, /1 rule\(s\) matched nothing: typescript\/b/);
 });
@@ -1241,8 +1241,8 @@ test("files: one index walks each root once, and a later caller adds only the ro
     }
     assert.deepEqual(listFiles(["src"], dir), ["src/a.ts", "src/q.sql"]);
     const index = new FileIndex(dir);
-    assert.deepEqual(index.list(["src"]), ["src/a.ts", "src/q.sql"]);
-    assert.deepEqual(index.list(["src", "test", "nope"]), ["src/a.ts", "src/q.sql", "test/a.test.ts"], "test/ added, src/ not walked again, a missing root ignored");
+    assert.deepEqual(index.extend(["src"]), ["src/a.ts", "src/q.sql"]);
+    assert.deepEqual(index.extend(["src", "test", "nope"]), ["src/a.ts", "src/q.sql", "test/a.test.ts"], "test/ added, src/ not walked again, a missing root ignored");
     assert.ok(isUnder("src/q.sql", "src") && isUnder("src/q.sql", ".") && !isUnder("test/a.test.ts", "src"));
     // Both consumers see one tree: a .sql under test/ is a text file only when test/ was asked for.
     writeFileSync(join(dir, "test/t.sql"), "");
@@ -1250,6 +1250,17 @@ test("files: one index walks each root once, and a later caller adds only the ro
     assert.deepEqual(findTextFiles(["src"], ["sql"], dir, shared), ["src/q.sql"]);
     assert.deepEqual(findTestFiles(["src"], dir, shared), ["test/a.test.ts"]);
     assert.deepEqual(findTextFiles(["src"], ["sql"], dir, shared), ["src/q.sql"], "the test/ root the paired arm added is not one of the text rule's paths");
+    // A root outside the cwd is named absolutely by the walk, and is still
+    // under itself: `jev-lint check ../queries` from a subdirectory found
+    // nothing, because the relative root never matched the absolute name.
+    const outside = mkdtempSync(join(tmpdir(), "jev-outside-"));
+    try {
+      writeFileSync(join(outside, "o.sql"), "");
+      const found = findTextFiles([relative(dir, outside)], ["sql"], dir, new FileIndex(dir));
+      assert.deepEqual(found, [join(outside, "o.sql").split(sep).join("/")]);
+    } finally {
+      rmSync(outside, { recursive: true, force: true });
+    }
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -1391,6 +1402,45 @@ test("paired: an excerpt keeps the lines that name the subject or open a test, w
   assert.ok(cut.startsWith('it("case 0"') && cut.trimEnd().endsWith("399));"), "both ends survive");
   // The default is the whole budget: one related file gets all of it.
   assert.ok(compactTest("t.ts", long, ["parseCart"]).code.length <= TEST_EXCERPT_BUDGET + 8);
+});
+
+test("paired: over the budget, the excerpt keeps the tests that name the first keywords and drops the rest", () => {
+  // One test file for a whole repository, every module paired with it.
+  // Keyed on the module's stem, `config` matched three hundred lines of
+  // `--config` flags and the excerpt was cut from the middle -- which is
+  // where the one test of `findConfig`'s throw sat. Keywords are in
+  // priority order, the subjects' own names first and the stem last, and
+  // what goes over the budget is the lowest-priority region, not the middle.
+  const flood = Array.from({ length: 300 }, (_, i) => `test("config flag ${i}", () => { run(["--config", "c${i}.yaml"]); });`);
+  const wanted = [
+    `test("findConfig throws on two spellings in one directory", () => {`,
+    `  writeFileSync(join(dir, ".jev-lint.yaml"), "");`,
+    `  writeFileSync(join(dir, "jev-lint.yaml"), "");`,
+    `  assert.throws(() => findConfig(dir), /2 config files/);`,
+    `});`,
+  ];
+  const content = [...flood.slice(0, 150), ...wanted, ...flood.slice(150)].join("\n");
+  const cut = compactTest("test/test.ts", content, ["findConfig", "loadConfig", "config"], 2000).code;
+  assert.ok(cut.length <= 2000 + 8, `${cut.length} chars`);
+  assert.ok(cut.includes("assert.throws(() => findConfig(dir)"), `the findConfig test survives:\n${cut}`);
+  assert.ok(cut.includes("…"), "and the cut is marked");
+  // With room for everything, file order is kept.
+  const whole = compactTest("t.ts", "gate();\nx;\nx;\nx;\nx;\nx;\naggregate();", ["aggregate", "gate"]).code;
+  assert.equal(whole, "gate();\nx;\nx;\n…\nx;\nx;\naggregate();");
+});
+
+test("paired: the excerpt budget grows with the subjects asked about in the file, to a cap", () => {
+  assert.equal(excerptBudget(1), TEST_EXCERPT_BUDGET);
+  assert.equal(excerptBudget(0), TEST_EXCERPT_BUDGET);
+  assert.equal(excerptBudget(10), TEST_EXCERPT_BUDGET + 9 * TEST_EXCERPT_PER_SUBJECT);
+  assert.equal(excerptBudget(1000), TEST_EXCERPT_MAX);
+  const source = "export function a() { throw 1; }\nexport function b() { throw 2; }\n";
+  const test = Array.from({ length: 400 }, (_, i) => `it("a ${i}", () => { expect(() => a()).toThrow(); });`).join("\n");
+  const read = (p: string) => (p === "src/m.ts" ? source : test);
+  const small = pairTests(["src/m.ts"], { roots: ["src"], testFiles: ["src/m.test.ts"], readSource: read, keywords: () => ["a", "b"] });
+  const large = pairTests(["src/m.ts"], { roots: ["src"], testFiles: ["src/m.test.ts"], readSource: read, keywords: () => ["a", "b"], budget: () => excerptBudget(4) });
+  assert.ok(small.get("src/m.ts")![0]!.code.length <= TEST_EXCERPT_BUDGET + 8);
+  assert.ok(large.get("src/m.ts")![0]!.code.length > TEST_EXCERPT_BUDGET + 8, "four subjects buy a longer excerpt");
 });
 
 test("paired: the walk finds test files under the paths and the conventional roots, and skips the usual junk", () => {
@@ -1908,6 +1958,31 @@ test("gate: score findings fire at the cutoff and are named by level", () => {
   assert.equal(high.level, "violation");
 });
 
+test("gate: the stats count findings and subjects per file, and --summary prints the densest first", () => {
+  // Forty-two findings over a tree read as noise until they were grouped:
+  // eight of one rule were one idiom in six modules, sixteen of another
+  // were one test file too big to excerpt. The grouping is in the stats,
+  // and `--summary` prints it, so the reader gets the clusters and not
+  // the list.
+  const rule = noulRule({ id: "r", at: 0.5 });
+  const other = noulRule({ id: "s", at: 0.5 });
+  const g = gate([
+    { subject: subjectOf({ rule, file: "src/a.ts", line: 1 }), answer: { value: 0.9, confidence: null, kind: "noul" } },
+    { subject: subjectOf({ rule, file: "src/a.ts", line: 5 }), answer: { value: 0.1, confidence: null, kind: "noul" } },
+    { subject: subjectOf({ rule: other, file: "src/a.ts", line: 9 }), answer: { value: 0.9, confidence: null, kind: "noul" } },
+    { subject: subjectOf({ rule, file: "src/b.ts", line: 1 }), answer: { value: 0.9, confidence: null, kind: "noul" } },
+    { subject: subjectOf({ rule, file: "src/c.ts", line: 1 }), answer: { value: 0.1, confidence: null, kind: "noul" } },
+  ]);
+  assert.deepEqual(g.stats.byRule, { r: 2, s: 1 });
+  assert.deepEqual(g.stats.byFile, { "src/a.ts": { findings: 2, subjects: 3 }, "src/b.ts": { findings: 1, subjects: 1 }, "src/c.ts": { findings: 0, subjects: 1 } });
+  const plain = formatPretty(g, { color: false });
+  assert.doesNotMatch(plain, /by rule/);
+  const summary = formatPretty(g, { color: false, summary: true });
+  assert.match(summary, /by rule: {2}r 2 · s 1/);
+  assert.match(summary, /by file: {2}src\/b\.ts 1\/1 · src\/a\.ts 2\/3/, "densest first, findings over subjects, files with none left out");
+  assert.doesNotMatch(summary, /src\/c\.ts/);
+});
+
 test("gate: low confidence changes the message and never suppresses the finding", () => {
   // Gating on confidence was measured costing recall for nothing, because clean
   // and broken code occupy the same confidence band.
@@ -2054,6 +2129,12 @@ test("cache: on an arm that shows context, identical text in different contexts 
   }
   assert.equal(contextKey(top, "bare"), null);
   assert.equal(contextKey({ ...under, enclosing: { name: "cart", role: "suite" } }, "bare"), null, "no path, nothing on bare");
+  // On `paired` the tests shown are the evidence: a better excerpt of the
+  // same test file is a new question. Keyed without it, every verdict on
+  // the arm survived the excerpt being fixed and reported the old reading.
+  const fn = subjectOf({ file: "src/a.ts", enclosing: null });
+  assert.notEqual(contextKey(fn, "paired", "it('a throws')"), contextKey(fn, "paired", "it('a throws', () => expect(a).toThrow())"));
+  assert.equal(contextKey(fn, "located", "x"), contextKey(fn, "located", "y"), "the other arms do not show tests");
 });
 
 test("cache: a key covers the draft, the arm and the axis, but not the threshold", () => {
@@ -2963,7 +3044,7 @@ test("rules: a block rule splits text files by a header regex, and is Text only"
   // And the finding says so, in every format: a verdict on the part sent.
   const cutFinding = decide(big!, { value: 0.9, confidence: null, kind: "noul" });
   assert.deepEqual(cutFinding.cut, { judged: big!.text.length, of: long.length });
-  const cutReport = { findings: [cutFinding], all: [cutFinding], review: [], stats: { subjects: 1, reported: 1, missing: 0, unsure: 0, review: 0, byRule: {} } };
+  const cutReport = { findings: [cutFinding], all: [cutFinding], review: [], stats: { subjects: 1, reported: 1, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } };
   assert.match(formatPretty(cutReport, { color: false }), /judged on the first [\d,]+ of [\d,]+ characters/);
   assert.match(formatGithub(cutReport), /judged on the first/);
   assert.equal(JSON.parse(formatJson(cutReport)).findings[0].cut.of, long.length);
@@ -3169,7 +3250,7 @@ test("commits: --squash judges a whole range as one change against a message of 
     assert.equal(squashSubjects([rule], first!.sha, "m", dir).subjects[0]!.file, `${first!.sha}..HEAD`);
     // And the pretty report names a range by the range, not a cut sha.
     const f = decide(s!, { value: 0.9, confidence: null, kind: "noul" });
-    assert.match(formatPretty({ findings: [f], all: [f], review: [], stats: { subjects: 1, reported: 1, missing: 0, unsure: 0, review: 0, byRule: {} } }, { color: false }), new RegExp(`${first!.sha}\\.\\.HEAD  "Add coupons to the cart"`));
+    assert.match(formatPretty({ findings: [f], all: [f], review: [], stats: { subjects: 1, reported: 1, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } }, { color: false }), new RegExp(`${first!.sha}\\.\\.HEAD  "Add coupons to the cart"`));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -3265,6 +3346,9 @@ await testAsync("jev: a too-big request is halved until it fits, and answers mer
   jev.ask = async (_state: unknown, questions: Record<string, Question>) => {
     calls += 1;
     const names = Object.keys(questions);
+    // A stand-in server whose limit is two questions: over it, it answers
+    // as the real one does to a request over its token limit.
+    // jev-lint-ignore-next-line error-message-matches-condition
     if (names.length > 2) {
       throw new JevError("max_tokens_exceeded", { status: 400, kind: "too_big" });
     }
@@ -4128,6 +4212,60 @@ await testAsync("config: the pre-commit hook init writes is a shell script that 
   assert.match(hook, /review --staged/, "it judges what the commit contains, not the working tree");
   assert.match(hook, /--fail-on error/, "and blocks only on what a rule has earned");
   assert.match(hook, /TYPESAFE_API_KEY/, "and stands aside on a machine without a key");
+});
+
+test("commits: without an upstream there is no default range", () => {
+  // The pre-push hook steps aside on a branch with no upstream; that path
+  // was the hook's shell, and the function under it was never called
+  // without one. `tests-cover-failure-paths` said so.
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-no-upstream-")));
+  try {
+    execFileSync("git", ["init", "-q", "-b", "main"], { cwd: dir });
+    execFileSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "root"], { cwd: dir });
+    assert.equal(defaultRange(dir), null);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("scan: a missing ast-grep binary is a named error, not a stack trace", async () => {
+  const { runAstGrep, AstGrepError } = await import("../src/scan.ts");
+  const was = process.env.JEV_LINT_AST_GREP;
+  process.env.JEV_LINT_AST_GREP = "/nonexistent/ast-grep";
+  try {
+    const rule = noulRule({ id: "r", language: "TypeScript", rule: { kind: "function_declaration" } });
+    await assert.rejects(() => runAstGrep([rule], ["src/scan.ts"]), (err: unknown) => err instanceof AstGrepError && /ENOENT|ast-grep/.test(String((err as Error).message)));
+  } finally {
+    if (was === undefined) delete process.env.JEV_LINT_AST_GREP;
+    else process.env.JEV_LINT_AST_GREP = was;
+  }
+});
+
+await testAsync("evals: a suite whose expect file does not parse reports it, and planning or generating from it stops there", async () => {
+  const { loadSuite, planEval, discoverEvals } = await import("../src/evals.ts");
+  const { collectRows } = await import("../tools/rules-md.ts");
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-bad-suite-")));
+  try {
+    const ruleDir = join(dir, "typescript", "r");
+    mkdirSync(join(ruleDir, "fixtures"), { recursive: true });
+    writeFileSync(
+      join(ruleDir, "rule.yml"),
+      ["id: r", "language: TypeScript", "kind: noul", "at: 0.5", "rule: { kind: function_declaration }", "ask: x.", "criteria: { 'true': a, 'false': b }"].join("\n"),
+    );
+    writeFileSync(join(ruleDir, "fixtures", "a.ts"), "export function a() {}\n");
+    writeFileSync(join(ruleDir, "expect.yml"), "default: clean\nfixtures/a.ts: [ { line: 1, label: bad ]\n");
+    const [suite] = discoverEvals([dir]);
+    assert.ok(suite);
+    const loaded = loadSuite(suite!);
+    assert.equal(loaded.errors.length, 1);
+    assert.match(loaded.errors[0]!, /expect\.yml/);
+    await assert.rejects(() => planEval(suite!), /expect\.yml/);
+    // And a rule that does not load is the generator's error, not a row.
+    writeFileSync(join(ruleDir, "rule.yml"), "id: r\nlanguage: TypeScript\n");
+    assert.throws(() => collectRows(dir), /ask|rule/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 await testAsync("cli: `commits --base <ref>` with `paths:` in the config judges the range, not the paths", async () => {

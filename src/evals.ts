@@ -25,7 +25,8 @@
  * Expectations are keyed relative to the rule directory, so it is portable;
  * they are resolved to the paths a run reports before scoring.
  */
-import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { tryReadDir } from "./files.ts";
 import { basename, dirname, join, sep } from "node:path";
 import YAML from "yaml";
 import { fitCutoffs, labelFor } from "./calibrate.ts";
@@ -106,12 +107,7 @@ export interface EvalDiff {
 export function discoverEvals(roots: string[]): EvalSuite[] {
   const out: EvalSuite[] = [];
   const visit = (dir: string) => {
-    let entries;
-    try {
-      entries = readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
-    } catch {
-      return;
-    }
+    const entries = tryReadDir(dir).sort((a, b) => a.name.localeCompare(b.name));
     const expect = join(dir, "expect.yml");
     if (existsSync(expect)) {
       const ruleFile = ["rule.yml", "rule.yaml"].map((n) => join(dir, n)).find((p) => existsSync(p)) ?? join(dir, "rule.yml");

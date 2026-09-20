@@ -523,6 +523,8 @@ export interface GateStats {
   /** Subjects in the `--loose` band; 0 when the run did not ask for it. */
   review: number;
   byRule: Record<string, number>;
+  /** Findings and subjects per file: the density a reader groups a long report by. */
+  byFile: Record<string, { findings: number; subjects: number }>;
 }
 
 /** What suppression comments removed from a run, for reporting. */

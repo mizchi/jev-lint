@@ -216,7 +216,7 @@ export function buildState({
     if (tests && tests.length > 0) {
       state.related_tests = tests.map((t) => ({
         path: t.path,
-        paired_by: t.via === "import" ? "it imports this file" : "its name",
+        paired_by: t.via === "import" ? "it imports this file" : t.via === "in-source" ? "it is this file's own test block" : "its name",
         code: t.code,
       }));
       state.note_on_related_tests =

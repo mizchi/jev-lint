@@ -7,8 +7,33 @@
  * both shipped rules loaded walked it twice. This is the one walk, done
  * lazily and once per run, that both filter.
  */
-import { readdirSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, statSync, type Dirent } from "node:fs";
 import { isAbsolute, join, relative, sep } from "node:path";
+
+/**
+ * The one decision about a file or directory that cannot be read: it is
+ * treated as absent. A run over a tree is not stopped by one unreadable
+ * entry -- a permission, a race with a build, a dangling link -- and this
+ * is where that is decided, once, with a name that says the failure is
+ * swallowed. A caller that must tell "absent" from "empty" gets null and
+ * decides for itself.
+ */
+export function tryReadFile(path: string): string | null {
+  try {
+    return readFileSync(path, "utf8");
+  } catch {
+    return null;
+  }
+}
+
+/** As `tryReadFile`, for a directory's entries: empty when it cannot be read. */
+export function tryReadDir(dir: string): Dirent[] {
+  try {
+    return readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+}
 
 /** Directories no source lives in, whatever they are called. */
 export const SKIPPED_DIRECTORIES = new Set([
@@ -27,13 +52,7 @@ export function listFiles(roots: Iterable<string>, cwd: string = process.cwd()):
   const walk = (dir: string) => {
     if (seen.has(dir)) return;
     seen.add(dir);
-    let entries;
-    try {
-      entries = readdirSync(dir, { withFileTypes: true });
-    } catch {
-      return;
-    }
-    for (const e of entries) {
+    for (const e of tryReadDir(dir)) {
       if (e.name.startsWith(".")) continue;
       const full = join(dir, e.name);
       if (e.isDirectory()) {
@@ -43,13 +62,7 @@ export function listFiles(roots: Iterable<string>, cwd: string = process.cwd()):
       }
     }
   };
-  // A path is reported relative to `cwd` when it is under it, the way
-  // ast-grep reports its matches, and as given when it is not: a file
-  // outside the tree keeps its absolute path rather than a `../../` one.
-  const name = (full: string): string => {
-    const rel = relative(cwd, full);
-    return rel.startsWith("..") || isAbsolute(rel) ? full.split(sep).join("/") : rel.split(sep).join("/");
-  };
+  const name = (full: string) => walkName(full, cwd);
   for (const root of roots) {
     const full = isAbsolute(root) ? root : join(cwd, root);
     let st;
@@ -62,6 +75,18 @@ export function listFiles(roots: Iterable<string>, cwd: string = process.cwd()):
     else if (st.isFile()) found.add(name(full));
   }
   return [...found].sort();
+}
+
+/**
+ * How the walk names a path: relative to `cwd` with forward slashes when it
+ * is under it, the way ast-grep reports its matches, and absolute when it
+ * is not -- a file outside the tree keeps its absolute path rather than a
+ * `../../` one. A caller comparing a root it was given against the walk's
+ * names has to name the root the same way.
+ */
+export function walkName(full: string, cwd: string = process.cwd()): string {
+  const rel = relative(cwd, full);
+  return rel.startsWith("..") || isAbsolute(rel) ? full.split(sep).join("/") : rel.split(sep).join("/");
 }
 
 /**
@@ -79,8 +104,8 @@ export class FileIndex {
     this.cwd = cwd;
   }
 
-  /** The files under every root asked for so far, walking only the roots not walked yet. */
-  list(roots: Iterable<string>): string[] {
+  /** Add these roots, walking only the ones not walked yet, and return the files under every root asked for so far. */
+  extend(roots: Iterable<string>): string[] {
     const fresh = [...roots].filter((r) => !this.roots.has(r));
     if (fresh.length > 0) {
       for (const r of fresh) this.roots.add(r);
