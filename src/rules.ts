@@ -246,11 +246,11 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
     if (typeof c !== "object" || Array.isArray(c)) {
       return { error: `${id}: \`criteria\` must be a mapping with \`true\` and \`false\`` };
     }
-    const yes = normalizeCriterion(c.true ?? c["true"], `${id}: \`criteria.true\``);
-    if (yes.error) return { error: yes.error };
-    const no = normalizeCriterion(c.false ?? c["false"], `${id}: \`criteria.false\``);
-    if (no.error) return { error: no.error };
-    criteria = { true: yes.criterion!, false: no.criterion! };
+    const trueBranch = normalizeCriterion(c.true ?? c["true"], `${id}: \`criteria.true\``);
+    if (trueBranch.error) return { error: trueBranch.error };
+    const falseBranch = normalizeCriterion(c.false ?? c["false"], `${id}: \`criteria.false\``);
+    if (falseBranch.error) return { error: falseBranch.error };
+    criteria = { true: trueBranch.criterion!, false: falseBranch.criterion! };
   } else if (raw.criteria !== undefined) {
     return { error: `${id}: \`criteria\` only applies to \`kind: noul\`; a score rule uses the shared scale` };
   }
