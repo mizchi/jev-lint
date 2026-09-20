@@ -31,7 +31,7 @@ import {
 import { buildQuestion, buildExplainQuestion, questionId, readAnswer, readChoice } from "../src/questions.ts";
 import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture, OUTLINE_TEXT_LIMIT } from "../src/state.ts";
 import { execFileSync } from "node:child_process";
-import { listCommits, commitDiff, commitSubjects, commitFixtureSubjects, patchRepo, MAX_DIFF_CHARS } from "../src/commits.ts";
+import { listCommits, commitDiff, commitSubjects, commitFixtureSubjects, patchRepo, squashSubjects, MAX_DIFF_CHARS } from "../src/commits.ts";
 import { isTestFile, findTestFiles, relatedTestFiles, compactTest, pairTests, importsModule, MAX_RELATED_TESTS, TEST_EXCERPT_BUDGET } from "../src/paired.ts";
 import {
   planBatches,
@@ -2771,6 +2771,37 @@ test("commits: subjects are one per commit per commit rule; merges are skipped a
     assert.equal(q.instructions.message, "Fix cart", "the question names the message, not `code`");
     assert.equal(q.instructions.code, undefined);
     assert.equal(q.instructions.matched_because, undefined, "no matcher, so no loose-matcher caveat");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: --squash judges a whole range as one change against a message of its own", () => {
+  // A pull request's description, or a changelog entry, is a claim about
+  // the whole branch, not about any one commit. One subject: the message
+  // given, the diff of the range from its merge base.
+  const dir = tempRepo([
+    { message: "Add cart", files: { "cart.ts": "export const cart = 1;\n" } },
+    { message: "Add coupon", files: { "coupon.ts": "export const coupon = 1;\n" } },
+    { message: "Fix total", files: { "cart.ts": "export const cart = 2;\n" } },
+  ]);
+  try {
+    const [first] = listCommits("HEAD", dir);
+    const rule = commitRule();
+    const { subjects } = squashSubjects([rule], `${first!.sha}..HEAD`, "Add coupons to the cart\n\nAlso fixes the total.", dir);
+    assert.equal(subjects.length, 1);
+    const [s] = subjects;
+    assert.equal(s!.text, "Add coupons to the cart\n\nAlso fixes the total.");
+    assert.equal(s!.file, `${first!.sha}..HEAD`, "the finding is named by the range");
+    assert.deepEqual(s!.captured, { SUBJECT: "Add coupons to the cart" });
+    assert.deepEqual(s!.commit!.files.sort(), ["cart.ts", "coupon.ts"], "every file the range touched");
+    assert.ok(s!.commit!.diff.includes("+export const coupon = 1;") && s!.commit!.diff.includes("-export const cart = 1;"));
+    assert.match(s!.commit!.stat, /2 files changed/);
+    // A bare ref means "that ref to HEAD".
+    assert.equal(squashSubjects([rule], first!.sha, "m", dir).subjects[0]!.file, `${first!.sha}..HEAD`);
+    // And the pretty report names a range by the range, not a cut sha.
+    const f = decide(s!, { value: 0.9, confidence: null, kind: "noul" });
+    assert.match(formatPretty({ findings: [f], all: [f], review: [], stats: { subjects: 1, reported: 1, missing: 0, unsure: 0, review: 0, byRule: {} } }, { color: false }), new RegExp(`${first!.sha}\\.\\.HEAD  "Add coupons to the cart"`));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

@@ -81,6 +81,8 @@ interface Options {
   preCommit: boolean;
   prePush: boolean;
   file: string | null;
+  squash: boolean;
+  message: string | null;
   accept: boolean;
   acceptLast: boolean;
   replay: boolean;
@@ -118,6 +120,9 @@ usage:
   jev-lint review [paths...]       judge only what the diff touched
   jev-lint commits [range]         judge commit messages against their diffs
                                    (default @{upstream}..HEAD; or --base <ref>)
+  jev-lint commits --squash [range] --message-file <path|->
+                                   judge the whole range as one change against
+                                   that message: a PR description, a changelog entry
   jev-lint gaps [paths...]         per-rule separation report (read this first)
   jev-lint calibrate [paths...]    repeat runs, and fit cutoffs if labels exist
   jev-lint rules                   list loaded rules and validation errors
@@ -130,6 +135,9 @@ usage:
 
 options:
       --file <path>        run: a rule file to use instead of the shipped rules
+      --squash             commits: the range as one diff, judged against --message
+      --message <text>     commits --squash: the claim about the range
+      --message-file <p>   commits --squash: the same, from a file, or - for stdin
       --config <path>      config file (default: nearest .jev-lint.yaml,
                            searching upwards); --no-config ignores it
       --base-url <url>     the API endpoint (default ${DEFAULT_BASE_URL})
@@ -241,6 +249,8 @@ function parseArgs(argv: string[]): Options {
     preCommit: false,
     prePush: false,
     file: null,
+    squash: false,
+    message: null,
     accept: false,
     acceptLast: false,
     replay: false,
@@ -355,6 +365,21 @@ function parseArgs(argv: string[]): Options {
         opts.file = need(i, a);
         i += 1;
         break;
+      case "--squash":
+        opts.squash = true;
+        break;
+      case "--message":
+        opts.message = need(i, a);
+        i += 1;
+        break;
+      case "--message-file": {
+        // `-` is stdin, so `gh pr view --json title,body -q ... | jev-lint
+        // commits --squash --message-file -` needs no temporary file.
+        const path = need(i, a);
+        opts.message = readFileSync(path === "-" ? 0 : path, "utf8");
+        i += 1;
+        break;
+      }
       case "--pre-commit":
         opts.preCommit = true;
         break;
@@ -681,6 +706,14 @@ async function main(argv: string[]): Promise<number> {
       log("commits: no `subject: commit` rule is loaded; the shipped one is rules/git/commit-message-describes-diff");
       return 2;
     }
+    if (opts.squash && opts.message === null) {
+      log("commits --squash needs the message to judge the range against: --message <text> or --message-file <path|->");
+      return 2;
+    }
+    if (!opts.squash && opts.message !== null) {
+      log("commits: --message is for --squash; each commit has its own message");
+      return 2;
+    }
     commitsRange = range;
     paths = [];
   } else if (paths.length === 0) {
@@ -715,7 +748,7 @@ async function main(argv: string[]): Promise<number> {
     explain: opts.explain,
     loose: opts.loose,
     model: opts.model,
-    commits: commitsRange ? { range: commitsRange } : null,
+    commits: commitsRange ? { range: commitsRange, ...(opts.squash ? { squash: opts.message! } : {}) } : null,
   });
 
   const runCache = result.cache as Cache | undefined;
@@ -746,7 +779,8 @@ async function main(argv: string[]): Promise<number> {
     if (result.commits) {
       out(`${result.commits.total} commit(s) in ${result.commits.range}` + (result.commits.skippedMerges ? `, ${result.commits.skippedMerges} merge(s) skipped` : ""));
       for (const s of result.subjects) {
-        out(`  ${s.file.slice(0, 8)}  "${s.captured?.SUBJECT ?? ""}"  ${s.commit?.files.length ?? 0} file(s)${s.commit?.truncated ? "  diff cut to fit" : ""}`);
+        const ref = /^[0-9a-f]{40}$/.test(s.file) ? s.file.slice(0, 8) : s.file;
+        out(`  ${ref}  "${s.captured?.SUBJECT ?? ""}"  ${s.commit?.files.length ?? 0} file(s)${s.commit?.truncated ? "  diff cut to fit" : ""}`);
       }
     }
     if (opts.showSubjects && !result.commits) {

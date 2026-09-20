@@ -59,6 +59,9 @@ export interface CommitSubjects {
   skippedMerges: number;
 }
 
+// `--no-ext-diff` on every diff-producing call: a user's `diff.external`
+// (difftastic, delta) would otherwise replace the unified diff the model is
+// asked to read with a rendering the model was never shown in calibration.
 function git(args: string[], cwd: string): string {
   return execFileSync("git", args, {
     cwd,
@@ -95,7 +98,7 @@ export function listCommits(range: string, cwd: string = process.cwd()): Commit[
 
 /** The change one commit made, cut to what a state can carry. */
 export function commitDiff(sha: string, cwd: string = process.cwd(), budget: number = MAX_DIFF_CHARS): CommitDiff {
-  const allFiles = git(["show", "--format=", "--name-only", "--no-color", sha], cwd)
+  const allFiles = git(["show", "--format=", "--name-only", "--no-ext-diff", "--no-color", sha], cwd)
     .split("\n")
     .map((l) => l.trim())
     .filter((l) => l !== "");
@@ -103,13 +106,13 @@ export function commitDiff(sha: string, cwd: string = process.cwd(), budget: num
     allFiles.length > MAX_FILES
       ? [...allFiles.slice(0, MAX_FILES), `… and ${allFiles.length - MAX_FILES} more files`]
       : allFiles;
-  const statLines = git(["show", "--format=", "--stat=100", "--no-color", sha], cwd).trim().split("\n");
+  const statLines = git(["show", "--format=", "--stat=100", "--no-ext-diff", "--no-color", sha], cwd).trim().split("\n");
   // The summary line at the end of a stat is the one that must survive a cut.
   const stat =
     statLines.length > MAX_STAT_LINES
       ? [...statLines.slice(0, MAX_STAT_LINES - 1), `… ${statLines.length - MAX_STAT_LINES} more files not listed`, statLines[statLines.length - 1]!].join("\n")
       : statLines.join("\n");
-  const full = git(["show", "--format=", "--no-color", sha], cwd);
+  const full = git(["show", "--format=", "--no-ext-diff", "--no-color", sha], cwd);
   if (full.length <= budget) return { sha, files, stat, diff: full.trimEnd(), truncated: false };
   // Cut at the last hunk or file boundary under the budget, so the model
   // never sees half a hunk and reads the missing half as unchanged.
@@ -162,6 +165,57 @@ export function commitSubjects(
     }
   }
   return { subjects, commits: commits.length, skippedMerges };
+}
+
+/**
+ * A whole range as one change, judged against a message of its own: a pull
+ * request's description, a changelog entry. `A..B` and `A...B` are given to
+ * `git diff` as they are (the second is from the merge base); a bare ref is
+ * that ref to HEAD. The subject is named by the range, since no one commit
+ * is the subject.
+ */
+export function squashSubjects(rules: Rule[], range: string, message: string, cwd: string = process.cwd()): CommitSubjects {
+  const commitRules = rules.filter((r) => r.subject === "commit");
+  const spec = range.includes("..") ? range : `${range}..HEAD`;
+  const commits = listCommits(spec, cwd).filter((c) => c.parents.length <= 1);
+  if (commitRules.length === 0 || commits.length === 0) return { subjects: [], commits: commits.length, skippedMerges: 0 };
+  const diff = rangeDiff(spec, cwd);
+  const text = message.replace(/\s+$/, "");
+  const subjects: Subject[] = commitRules.map((rule) => ({
+    rule,
+    file: spec,
+    language: "Git",
+    arm: "bare",
+    text,
+    line: 1,
+    endLine: 1,
+    nodeKind: "commit",
+    enclosing: null,
+    promoted: false,
+    captured: { SUBJECT: text.split("\n")[0] ?? "" },
+    commit: diff,
+  }));
+  return { subjects, commits: commits.length, skippedMerges: 0 };
+}
+
+/** `commitDiff` for a range: the same caps, from `git diff` instead of `git show`. */
+function rangeDiff(spec: string, cwd: string, budget: number = MAX_DIFF_CHARS): CommitDiff {
+  const allFiles = git(["diff", "--name-only", "--no-ext-diff", "--no-color", spec], cwd)
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l !== "");
+  const files =
+    allFiles.length > MAX_FILES ? [...allFiles.slice(0, MAX_FILES), `… and ${allFiles.length - MAX_FILES} more files`] : allFiles;
+  const statLines = git(["diff", "--stat=100", "--no-ext-diff", "--no-color", spec], cwd).trim().split("\n");
+  const stat =
+    statLines.length > MAX_STAT_LINES
+      ? [...statLines.slice(0, MAX_STAT_LINES - 1), `… ${statLines.length - MAX_STAT_LINES} more files not listed`, statLines[statLines.length - 1]!].join("\n")
+      : statLines.join("\n");
+  const full = git(["diff", "--no-ext-diff", "--no-color", spec], cwd);
+  if (full.length <= budget) return { sha: spec, files, stat, diff: full.trimEnd(), truncated: false };
+  const head = full.slice(0, budget);
+  const at = Math.max(head.lastIndexOf("\ndiff --git "), head.lastIndexOf("\n@@ "));
+  return { sha: spec, files, stat, diff: (at > 0 ? head.slice(0, at) : head).trimEnd(), truncated: true };
 }
 
 /** Is this the range git means when nothing was given: what is not yet pushed? */

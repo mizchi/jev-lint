@@ -27,7 +27,7 @@ import { touchesChange } from "./diff.ts";
 import { ruleTextHash, cutoffFor } from "./rules.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
 import { pairTests, type RelatedTest } from "./paired.ts";
-import { commitSubjects } from "./commits.ts";
+import { commitSubjects, squashSubjects } from "./commits.ts";
 import type {
   Answer,
   Batch,
@@ -272,7 +272,12 @@ export interface RunOptions {
    * subject each per `subject: commit` rule. `paths` is then ignored and
    * ast-grep never runs.
    */
-  commits?: { range: string; label?: (sha: string) => string } | null;
+  commits?: {
+    range: string;
+    label?: (sha: string) => string;
+    /** Judge the whole range as one change against this message (a PR description, a changelog entry). */
+    squash?: string;
+  } | null;
 }
 
 export async function run({
@@ -308,7 +313,7 @@ export async function run({
   const useCache = passes === 1 ? cachePath : null;
 
   const collected = commits
-    ? collectCommits(rules, commits.range, cwd, commits.label)
+    ? collectCommits(rules, commits.range, cwd, commits.label, commits.squash)
     : await collectSubjects({ rules, paths, arm, diffRanges, cwd });
   const { subjects, symbols, sources, tests, stderr, skippedByDiff, duplicateGrammars, ignored, unpaired } = collected;
   const commitStats = commits && "commits" in collected ? (collected as { commits: RunResult["commits"] }).commits : undefined;
@@ -553,8 +558,10 @@ function collectCommits(
   range: string,
   cwd: string,
   label?: (sha: string) => string,
+  squash?: string,
 ): CollectResult & { commits: { range: string; total: number; skippedMerges: number } } {
-  const { subjects, commits, skippedMerges } = commitSubjects(rules, range, cwd, label);
+  const { subjects, commits, skippedMerges } =
+    squash !== undefined ? squashSubjects(rules, range, squash, cwd) : commitSubjects(rules, range, cwd, label);
   return {
     subjects,
     symbols: new Map(),

@@ -63,7 +63,7 @@ export function formatPretty(
   for (const [file, list] of [...byFile.entries()].sort()) {
     // A commit is named by its short sha and subject line, not by a path.
     const commit = list[0]?.commit;
-    out.push(c.bold(commit ? `${file.slice(0, 8)}  "${commit.subject}"` : file));
+    out.push(c.bold(commit ? `${shortRef(file)}  "${commit.subject}"` : file));
     for (const f of list.sort((a, b) => a.line - b.line)) {
       const loc = `${f.line}`.padStart(5);
       const tag = (f.messageId ? TAG[f.messageId]?.(c) : null) ?? String(f.messageId);
@@ -103,7 +103,7 @@ export function formatPretty(
     );
     for (const f of review) {
       const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
-      const where = f.commit ? `${f.file.slice(0, 8)}  "${f.commit.subject}"` : `${f.file}:${f.line}`;
+      const where = f.commit ? `${shortRef(f.file)}  "${f.commit.subject}"` : `${f.file}:${f.line}`;
       out.push(c.dim(`  ${where}  ${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  ${f.message ?? f.ask}`));
     }
     out.push("");
@@ -265,6 +265,11 @@ export function idleLanguages(result: Partial<ReportInput>): Array<{ language: s
     .map(([language, rules]) => ({ language, rules }));
 }
 
+/** A sha shortened to eight; a range (`main..HEAD`) as it is. */
+function shortRef(file: string): string {
+  return /^[0-9a-f]{40}$/.test(file) ? file.slice(0, 8) : file;
+}
+
 /** `lang/id` under the layout, else the id: what two languages' twins are told apart by. */
 function ruleKey(r: { id: string; languageDir?: string | null }): string {
   return r.languageDir ? `${r.languageDir}/${r.id}` : r.id;
@@ -337,7 +342,7 @@ export function formatGithub(result: ReportInput): string {
     const title = `${f.rule}${f.messageId === "unsure" ? " (unsure)" : ""}`;
     const num = f.kind === "score" ? `${f.value!.toFixed(2)}/3` : f.value!.toFixed(2);
     const why = f.explanation ? `; why: ${f.explanation.choice}` : "";
-    const where = f.commit ? `commit ${f.file.slice(0, 8)} "${f.commit.subject}": ` : "";
+    const where = f.commit ? `commit ${shortRef(f.file)} "${f.commit.subject}": ` : "";
     const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}]`;
     out.push(
       `::${level} file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(title)}::${escape(body)}`,
