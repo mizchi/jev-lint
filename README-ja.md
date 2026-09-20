@@ -4,6 +4,8 @@
 
 従来の linter には検査できなかったものを検査する linter。関数は名前どおりのことをしているか、コメントはまだ真実か、テストは名前が主張する振る舞いを本当に検証しているか。
 
+**TypeScript、JavaScript、Rust、Python、Go** のルールを同梱し、Markdown、`package.json`、sqlc の `.sql`、git のコミットにも当たる。自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、Bash、HTML、CSS、JSON、YAML)。マッチャーが ast-grep そのものだから。
+
 [`examples/cart.ts`](examples/cart.ts) は 38 行で、嘘が三つ入っている。`null` を返すと書いた doc コメントの下で throw する本体、文字列を返す `isEmpty`、カートを保存もしてしまう `applyDiscount`。[`examples/cart.test.ts`](examples/cart.test.ts) には、主張する振る舞いが壊れていても通るテストがある。どれも型検査は文句を言わない。
 
 ```bash

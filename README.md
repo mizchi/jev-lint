@@ -6,6 +6,12 @@ A linter for the things a linter could never check: whether a function does
 what its name says, whether a comment is still true, whether a test verifies
 what it claims.
 
+Rules ship for **TypeScript, JavaScript, Rust, Python and Go**, plus
+Markdown, `package.json`, sqlc `.sql` files and git commits. Your own rule
+can target any language ast-grep parses -- Java, Kotlin, Swift, C, C++,
+C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, Bash, HTML,
+CSS, JSON, YAML -- since the matcher is ast-grep's.
+
 [`examples/cart.ts`](examples/cart.ts) is thirty-eight lines with three
 lies in it: a doc comment that promises `null` above a body that throws, an
 `isEmpty` that returns a string, an `applyDiscount` that also saves the
