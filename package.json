@@ -59,8 +59,8 @@
   },
   "files": [
     "dist",
-    "rules",
-    "!rules/**/last.json",
+    "rules/**/rule.yml",
+    "rules/README.md",
     "README.md",
     "RULES.md",
     "LICENSE"

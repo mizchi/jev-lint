@@ -56,7 +56,7 @@ failed and nothing was reported.
 | `commits [range]` | judge each non-merge commit's message against its diff with the `subject: commit` rules; the range is a positional (`main..HEAD`), else `--base <ref>`, else `@{upstream}..HEAD`. Findings are `<sha>:1`, named by short sha and subject line in every format. `--retry`, `--loose`, `--explain` and the cache apply; the cache keys on message and diff together |
 | `commits --squash [range] --message-file <path\|->` | the whole range as one change — the diff from its merge base — judged against that message: a pull request's description (`gh pr view --json title,body -q '.title+"\n\n"+.body' \| jev-lint commits --squash main..HEAD --message-file -`), a changelog entry. `--message <text>` inline. One subject, named by the range |
 | `init --pre-push` | write a hook running `commits '@{upstream}..HEAD' --fail-on error`; steps aside with no key or no upstream |
-| `eval [dirs...]` | run every `rules/<lang>/<id>/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression or a changed question |
+| `eval [dirs...]` | in a checkout of this repository, or over your own rule directories: run every `rules/<lang>/<id>/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression or a changed question |
 | `--repeat <n>` / `--labels <path>` | `calibrate`: re-ask n times, fit against labels |
 | `--record <path>` | write a replayable run record — do this for anything you will quote |
 | `--force` | ignore cached verdicts |
@@ -918,9 +918,16 @@ the batching axis invalidates the verdicts that depended on them.
 - **Your own rule files are unchanged**: a flat `rules/*.yml` loads as it
   did. Only rules placed as `rules/<lang>/<id>/rule.yml` get the language
   directory's checks and fixtures; `labels.json` there is `expect.yml`.
-- **The committed verdict cache misses once** for every rule not on the
-  `bare` arm, because 0.3.1 keys a verdict on the context the arm shows
-  and not on the subject's text alone. One warm run refills it.
+- **The committed verdict cache is dropped once, and says so.** 0.3.1
+  keys a verdict on the context the arm shows and not on the subject's
+  text alone; the cache file carries its own schema now, and one written
+  before loads as "written for schema jev-lint-2 … its N verdict(s) …
+  are dropped". One warm run rewrites it. Commit the rewritten file.
+- **The npm package carries the rules, not their fixtures.** `rules/**/
+  rule.yml` and `RULES.md` ship; `fixtures/`, `expect.yml` and
+  `baseline.json` stay in the repository, which is where `jev-lint eval`
+  is for. The package is a fifth of its 0.3.2 size, and RULES.md is the
+  record of every shipped rule's fit.
 - **A `check` walks the tree for tests and `.sql` files** once each per
   run, for the `paired` arm and the `subject: block` rule, skipping
   `node_modules` and the usual build directories. On a repository with

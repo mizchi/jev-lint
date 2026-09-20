@@ -2070,6 +2070,12 @@ test("cache: a missing, unreadable, malformed or stale file means no verdict, ne
     const fromStaleSchema = Cache.load(join(dir, "old.json"));
     assert.equal(fromStaleSchema.get("k", "score"), null);
     assert.ok(fromStaleSchema.loadError);
+    // A cache from before the key changed shape (0.3.0 wrote `jev-lint-2`)
+    // is dropped with a line that says how many verdicts went and why,
+    // rather than missing on every entry and keeping them all.
+    writeFileSync(join(dir, "v2.json"), JSON.stringify({ schema: "jev-lint-2", entries: { a: { value: 1, kind: "noul" }, b: { value: 2, kind: "noul" } } }));
+    const fromV2 = Cache.load(join(dir, "v2.json"));
+    assert.match(fromV2.loadError ?? "", /jev-lint-2.*2 verdict\(s\).*dropped/);
 
     // A directory is unreadable as a file.
     mkdirSync(join(dir, "adir"));

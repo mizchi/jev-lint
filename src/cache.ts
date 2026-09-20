@@ -41,10 +41,20 @@
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, renameSync } from "node:fs";
 import { dirname } from "node:path";
-import { SCHEMA, ruleTextHash } from "./rules.ts";
+import { ruleTextHash } from "./rules.ts";
 import type { Answer, CacheEntry, Grouping, Rule, RuleKind, StateArm, Subject } from "./types.ts";
 
 export const DEFAULT_CACHE_PATH = ".jev-lint-cache.json";
+
+/**
+ * The cache's own schema: what a key is made of. Separate from the rule
+ * draft's `SCHEMA` because the two change for different reasons. Bumped
+ * when the key changes shape -- 0.3.1 added the context the arm shows --
+ * so a cache from before loads as "written for an older schema, ignored"
+ * and is rebuilt, instead of every entry silently missing and the file
+ * carrying its dead weight forever.
+ */
+export const CACHE_SCHEMA = "jev-lint-cache-3";
 
 /**
  * What a subject's question shows beyond its text, at this arm: the part of
@@ -93,7 +103,7 @@ export function verdictKey(
   // branch answered exactly what its twin in the hit branch did. `contextKey`
   // decides it per arm; it only ever matters where the model can see it.
   return createHash("sha256")
-    .update([SCHEMA, rule.id, ruleTextHash(rule), arm, group, subjectText, matchText ?? "", context ?? ""].join("\n"))
+    .update([CACHE_SCHEMA, rule.id, ruleTextHash(rule), arm, group, subjectText, matchText ?? "", context ?? ""].join("\n"))
     .digest("hex")
     .slice(0, 24);
 }
@@ -111,7 +121,7 @@ export class Cache {
   constructor(path: string | null = DEFAULT_CACHE_PATH) {
     this.path = path;
     this.entries = new Map();
-    this.meta = { schema: SCHEMA };
+    this.meta = { schema: CACHE_SCHEMA };
     this.hits = 0;
     this.misses = 0;
     this.writes = 0;
@@ -128,9 +138,10 @@ export class Cache {
       // A cache written by a different question schema is not upgradeable: the
       // verdicts answered questions that no longer exist. Dropping it is the
       // only honest option.
-      if (raw?.schema !== SCHEMA) {
+      if (raw?.schema !== CACHE_SCHEMA) {
+        const n = Object.keys(raw?.entries ?? {}).length;
         cache.loadError = raw?.schema
-          ? `cache at ${path} was written for schema ${raw.schema}, this build is ${SCHEMA}; ignoring it`
+          ? `cache at ${path} was written for schema ${raw.schema}, this build is ${CACHE_SCHEMA}: its ${n} verdict(s) answer questions keyed another way and are dropped; the next warm run rewrites it`
           : null;
         return cache;
       }
@@ -179,7 +190,7 @@ export class Cache {
 
   save({ model = null, extra = {} }: { model?: string | null; extra?: Record<string, unknown> } = {}): boolean {
     const payload = {
-      schema: SCHEMA,
+      schema: CACHE_SCHEMA,
       model,
       written: new Date().toISOString(),
       ...extra,

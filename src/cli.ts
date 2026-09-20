@@ -1085,7 +1085,9 @@ function cmdRules(opts: Options, out: Log, log: Log): number {
     if (r.loose !== null) out(`  loose floor (--loose): ${r.loose}`);
     // A shipped rule outside the first tier may ship without a baseline;
     // say so where the cutoff is printed, since that cutoff was never fitted.
-    if (r.languageDir && r.source && !existsSync(join(dirname(r.source), "baseline.json"))) {
+    // Only where the suite is present at all: the npm package carries the
+    // rules and not their fixtures, and RULES.md is its record of the fit.
+    if (r.languageDir && r.source && existsSync(join(dirname(r.source), "expect.yml")) && !existsSync(join(dirname(r.source), "baseline.json"))) {
       out(`  uncalibrated: no baseline.json beside it${(TIER_ONE as readonly string[]).includes(r.languageDir) ? " -- a tier-one rule must have one" : ""}`);
     }
     out(`  from: ${r.source}`);
