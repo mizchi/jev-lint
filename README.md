@@ -285,15 +285,15 @@ docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules
 
-45 rules ship in `rules/`, one directory per language and one per rule
+53 rules ship in `rules/`, one directory per language and one per rule
 under it, each with the cases that prove it, used when the project has no
 `rules/` directory of its own. Two languages are first tier — `typescript`
-(15 rules, admitting TypeScript, Tsx, JavaScript and Jsx) and `rust` (7) —
+(20 rules, admitting TypeScript, Tsx, JavaScript and Jsx) and `rust` (8) —
 and every rule under them carries fixtures, expectations and an accepted
-baseline. `python` (11) and `go` (9) are second tier: ported from the
+baseline. `python` (12) and `go` (9) are second tier: ported from the
 TypeScript rules with the same sentence, calibrated to the same bar, not
 yet promised. `javascript` (1) and `json` (1) hold what only fits there,
-and `git` (1) holds the commit-message rule. The same id under several
+`git` (1) holds the commit-message rule, and `text` (1) the sqlc query rule. The same id under several
 languages is one rule in several languages, and the loader warns if the
 copies of its sentence drift. Grouped here by what they ask, naming the
 TypeScript rule; the table in `docs/reference.md` says which languages
@@ -309,6 +309,7 @@ each exists in:
 | `test-name-verifies-claim` | would this test still pass if the behaviour its name claims were broken? |
 | `module-name-describes-contents` | is this module named for what it contains? |
 | `module-naming-consistent` | do this module's exports name the same kind of operation with the same words? |
+| `type-name-describes-shape` | does this type's name describe its members, as the file builds and uses it? (`UserId` that is a session; `Config` that is a list of errors) |
 
 **Guarantees** — the name makes a specific promise; does the body keep it?
 
@@ -317,6 +318,7 @@ each exists in:
 | `safe-name-is-safe` | `safe*` / `try*` / `*OrNull`: does a failure still escape as a throw? |
 | `idempotent-name` | `ensure*` / `upsert*` / `register*`: does a second call do something different from the first? |
 | `pure-name-is-pure` | `compute*` / `format*` / `parse*` / `to*`: does the body reach outside itself — mutate an argument, write a cache, read the clock or the environment? |
+| `catch-hides-failure` | the inverse: a `catch` in a function *not* named `safe*` / `try*` / `*OrNull` that returns a default, an empty value or nothing while the name or return type promises a result |
 
 On the corpus behind this pack, `fn-name-promises` flags none of the 22
 labelled defects at its cutoff — the narrower promise separates where the
@@ -336,12 +338,15 @@ general question does not.
 | --- | --- |
 | `comment-describes-declaration` | does the comment above this declaration still hold? |
 | `comment-describes-block` | does a comment inside a body describe the lines under it? |
+| `doc-errors-match-body` | does the doc's failure contract — JSDoc `@throws`, a docstring's `Raises:`, rustdoc's `# Errors` / `# Panics` — match what the body throws, raises, returns or panics on? Nothing else checks that it is *true* |
 
 **Messages** — messages for a human, versus what the code does
 
 | rule | asks |
 | --- | --- |
 | `log-level-matches-event` | does this log call's level match the severity of the path it sits on? |
+| `log-message-matches-event` | does its message describe the event on that path? (`"cache hit"` in the miss branch; `"deleted %d rows"` logging the candidate count) |
+| `error-message-matches-condition` | does a thrown error's message describe the condition the branch checked? (`"user not found"` from a permission check) |
 
 **Config** — names in configuration files (ast-grep parses JSON and YAML)
 
@@ -355,16 +360,16 @@ general question does not.
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On their own evals, 38 of the 45 rules reach precision and recall 1.00 at
+On their own evals, 46 of the 53 rules reach precision and recall 1.00 at
 their shipped cutoffs; the seven that do not each miss one labelled defect
 the rule cannot see, and the rule file says which. The evals are small —
-343 labelled defects across the 45, one to thirty-one per rule — and they
+391 labelled defects across the 53, one to thirty-one per rule — and they
 are marker-free: an earlier version carried `// DEFECT: named seconds, holds
 milliseconds` above each defect, inside the file the model was shown, and
 the fits it produced were better than the rules. `jev-lint eval --replay`
 re-derives every number with no request. The full table, with what the
 packs found on this repository's own code and on an unseen one, is in
-[docs/reference.md](docs/reference.md#the-shipped-packs). Fourteen more
+[docs/reference.md](docs/reference.md#the-shipped-packs). Sixteen more
 rules were built and measured the same way and are not shipped; they live
 in `experiments/rule-candidates/<lang>/` under the same layout, each with
 the report that says why.

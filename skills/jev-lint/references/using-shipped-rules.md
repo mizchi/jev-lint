@@ -1,6 +1,6 @@
 # Using the shipped rules
 
-jev-lint ships 45 rules in the npm package's `rules/` directory, one
+jev-lint ships 53 rules in the npm package's `rules/` directory, one
 directory per rule under its language (`rules/typescript/<id>/`,
 `rules/rust/<id>/`, …) with `rule.yml`, the `fixtures/` that prove it and
 `expect.yml`.
@@ -28,6 +28,7 @@ cover — see [cookbook.md](cookbook.md).
 | --- | --- | --- | --- |
 | `comment-describes-declaration` | does the comment above this declaration still hold? | a declaration with a comment directly above it | `located` |
 | `comment-describes-block` | does a comment inside a body describe the lines under it? | a statement with a comment directly above it, inside a block; judged with its enclosing function | `bare` |
+| `doc-errors-match-body` | does the doc's failure contract (`@throws`, `Raises:`, `# Errors` / `# Panics`) match the body? | a function whose doc comment makes a failure claim | `located` |
 
 **Guarantees** — a name that makes a specific promise
 
@@ -51,7 +52,16 @@ match the name" does not.
 
 **Messages** — `log-level-matches-event`: does the level of a
 `logger.<level>(...)` call match the severity of the path it sits on?
-`local`.
+`local`. `log-message-matches-event`: does its message describe the event
+on that path? `local`. `error-message-matches-condition`: does a `throw`'s
+message describe the condition the guarding `if` checked? `local`.
+
+**Also**: `type-name-describes-shape` (a type's name against its members,
+`located`); `catch-hides-failure` (a `catch` that returns a default or only
+logs in a function not named `safe*`/`try*`/`*OrNull`, `local`);
+`query-name-describes-sql` (an sqlc `-- name:` against its SQL, the one
+`subject: block` rule, `located`); `commit-message-describes-diff` (run by
+`jev-lint commits`).
 
 **Config** — `script-name-does`: does a `package.json` script's name
 describe the command it runs? JSON, `bare`.
@@ -170,8 +180,8 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted on each rule's own fixtures (`rules/<lang>/<id>/`, 343 labelled defects
-across the 45 rules, three passes each). 38 of the 45 reach precision and
+Fitted on each rule's own fixtures (`rules/<lang>/<id>/`, 391 labelled defects
+across the 53 rules, three passes each). 46 of the 53 reach precision and
 recall 1.00 at their shipped cutoffs; the seven that do not each miss one
 labelled defect the rule file names — a binding holding one branch of a
 union result, a Rust field taken under another field's name, an inline

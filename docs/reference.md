@@ -436,7 +436,7 @@ refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
 
 ## The shipped packs
 
-45 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
+53 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
 grouped here by what they ask. Which languages each exists in:
 
 | rule | typescript | rust | python | go | other |
@@ -447,16 +447,21 @@ grouped here by what they ask. Which languages each exists in:
 | `test-name-verifies-claim` | ✓ | ✓ | | ✓ | |
 | `module-name-describes-contents` | ✓ | ✓ | ✓ | ✓ | |
 | `module-naming-consistent` | ✓ | | | | |
+| `type-name-describes-shape` | ✓ | | | | |
 | `comment-describes-declaration` | ✓ | ✓ | ✓ | | javascript |
 | `comment-describes-block` | ✓ | ✓ | ✓ | | |
+| `doc-errors-match-body` | ✓ | ✓ | ✓ | | |
 | `safe-name-is-safe` | ✓ | | ✓ | ✓ | |
 | `idempotent-name` | ✓ | | ✓ | ✓ | |
 | `pure-name-is-pure` | ✓ | | ✓ | ✓ | |
+| `catch-hides-failure` | ✓ | | | | |
 | `must-name-panics` | | | | ✓ | |
 | `test-mocks-subject` | ✓ | | | | |
 | `snapshot-only-behaviour-claim` | ✓ | | | | |
 | `tests-cover-failure-paths` | ✓ | | ✓ | ✓ | |
 | `log-level-matches-event` | ✓ | | ✓ | | |
+| `log-message-matches-event` | ✓ | | | | |
+| `error-message-matches-condition` | ✓ | | | | |
 | `script-name-does` | | | | | json |
 | `commit-message-describes-diff` | | | | | git |
 | `query-name-describes-sql` | | | | | text |
@@ -480,6 +485,7 @@ The notes the former packs shipped with are in `rules/README.md`.
 | `test-name-verifies-claim` | would it still pass if the named behaviour broke? |
 | `module-name-describes-contents` | is this module named for what it contains? |
 | `module-naming-consistent` | do this module's exports name the same kind of operation with the same words? |
+| `type-name-describes-shape` | does this type's name describe its members, judged against how the file builds and uses it? |
 
 `module-naming-consistent` is the one rule that reads a convention off the
 file instead of being told it: the outline carries every export's signature,
@@ -499,6 +505,7 @@ wrong-case class and only one fires on weak assertions.
 | --- | --- |
 | `comment-describes-declaration` | does the comment above this declaration still hold? |
 | `comment-describes-block` | does a comment inside a body describe the lines under it? |
+| `doc-errors-match-body` | does the doc's failure contract (`@throws`, `Raises:`, `# Errors` / `# Panics`) match what the body throws, raises, returns or panics on? |
 
 A comment is a claim in the one notation nothing checks. Deliberately *not*
 asked: style, redundancy, whether a comment should exist. One axis only — is the
@@ -511,6 +518,7 @@ claim false. A vague or redundant comment is not a defect.
 | `safe-name-is-safe` | `safe*`, `try*`, `*OrNull`, `*OrDefault`, `*OrUndefined` | does a failure of the kind the name absorbs still escape as a throw or rejection? |
 | `idempotent-name` | `ensure*`, `upsert*`, `setup*`, `install*`, `register*` | does a second call leave a different result from the first? |
 | `pure-name-is-pure` | `compute*`, `calculate*`, `derive*`, `format*`, `to*`, `parse*` | does the body reach outside itself: mutate an argument, write its own result into a cache that outlives the call, read the clock, the environment or a random source, even only on a fallback path? |
+| `catch-hides-failure` | any function NOT named `safe*`, `try*`, `maybe*`, `*OrNull`, `*OrDefault`, `*OrUndefined`, `*OrElse` (the exclusion is in the matcher) | does a `catch` return a default, an empty value or nothing, or only log, while the name or return type promises a result? |
 
 These are narrower cousins of `fn-name-promises`, and the narrowing is the
 point: on the corpus behind this pack, `fn-name-promises` at its cutoff flags
@@ -560,6 +568,8 @@ yields no subject; the report says how many. See findings §14.
 | rule | asks |
 | --- | --- |
 | `log-level-matches-event` | does the level of this `logger.<level>(...)` call match the severity of the code path it sits on? |
+| `log-message-matches-event` | does its message describe the event on that path? |
+| `error-message-matches-condition` | does a `throw`'s message describe the condition the guarding `if` checked? Test doubles (`Fake*`, `Mock*`, `Stub*`) are excluded in the matcher |
 
 Siblings not shipped, in `experiments/reports/c-human-messages/`:
 `assertion-message-matches` — its first revision's four unseen findings were
@@ -622,7 +632,7 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 On a one-language repository every other language's rules are idle, and
 the report says so in one line rather than listing them as silent.
 
-Of the 45, **38 reach precision 1.00 and recall 1.00 at their shipped cutoffs
+Of the 53, **46 reach precision 1.00 and recall 1.00 at their shipped cutoffs
 on their own fixtures** (`rules/*/*/baseline.json`, three passes each,
 decisions on the mean; `jev-lint eval --replay` re-derives every number below
 with no request). Read that with the positive counts beside them: per rule,
@@ -884,8 +894,8 @@ the batching axis invalidates the verdicts that depended on them.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **The cutoffs are fitted to small evals.** 160 labelled fixtures, 343
-  labelled defects across 45 rules, one to thirty-one per rule. Expect to refit; see
+- **The cutoffs are fitted to small evals.** 179 labelled fixtures, 391
+  labelled defects across 53 rules, one to thirty-one per rule. Expect to refit; see
   [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.

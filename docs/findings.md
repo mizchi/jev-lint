@@ -13,7 +13,8 @@ tool applied to its own source, which is where its four worst bugs were found.
 Section 14 is what was taken from a sibling project built on the same model,
 `jev-review`, and what each piece measured as. Section 15 is the split of
 `rules/` by language, the Python and Go ports, and the commit-message rule,
-with what the ports found wrong in the tool.
+with what the ports found wrong in the tool. Section 16 is the round of
+new rules that followed, and the verdict-key bug two of them found.
 Where a number changed, the later one is the live one and the earlier one is
 left standing because how it changed is part of the evidence. Four claims are
 explicitly **retracted**, and every one of them is section 9 retracting its own
@@ -1249,3 +1250,84 @@ in 1,700 lines of two running agents' half-built candidates, and a second
 thing it exists for, on the day it was written, to the person writing it.
 Neither history was rewritten; the candidates landed properly in their
 own commits, and every commit since is under 0.40.
+
+---
+
+## 16. Ten more rules, and the twin that answered for the copy
+
+Asked what else the tool should check, the answer was the list in
+section 14's terms: claims the code makes about itself that nothing
+verifies. Four families went to four agents at once, each to the bar in
+`experiments/BRIEF.md`; two subject sources were added by hand. $0.13 in
+requests for the round.
+
+| rule | language | verdict | at | headroom |
+| --- | --- | --- | --- | --- |
+| `type-name-describes-shape` | ts | SHIP | 0.42 | 0.21 / 0.22 |
+| `error-message-matches-condition` | ts | SHIP | 0.65 | 0.29 / 0.19 |
+| `catch-hides-failure` | ts | SHIP | 0.55 | 0.17 / 0.24 |
+| `todo-describes-work` | ts | COOKBOOK | 0.47 | one hard clean's clearance is fitted, not measured |
+| `doc-errors-match-body` | ts / py / rs | SHIP ×3 | 0.56 / 0.70 / 0.54 | 0.18 / 0.18 / 0.13 |
+| `log-message-matches-event` | ts | SHIP | 0.62 | 0.17 / 0.17 |
+| `safety-comment-holds` | rs | COOKBOOK | 0.58 | recall 0.89; an `unreachable_unchecked` whose slot a release empties sits at 0.50–0.56 |
+| `query-name-describes-sql` | text | SHIP | 0.61 | 0.31 / 0.30 |
+
+Three of the four recipes the cookbook had carried for months separated
+on a corpus at the first or second sentence; the doc-contract family took
+three sentences before Rust separated, and the sentence that worked says
+an `unwrap` counts only against a claim the doc makes -- the section's
+existence is clippy's, its truth is this rule's. On unseen code the family
+found one real defect in `filelock` (a `:raises OSError:` over a body that
+returns `False`) and one false positive that needed API knowledge (that
+`PermissionError` is an `OSError`), which is section 1 of the deep dive
+again.
+
+### The twin
+
+Two of the agents, on different rules, hit one bug and described it the
+same way. A `logger.info("cache hit")` pasted into the miss branch
+answered 0.05 across three passes -- exactly what its twin in the hit
+branch answered -- and 0.95 the moment its text was made to differ. A
+Rust `unsafe { slice::from_raw_parts(self.ptr, self.len) }` did the same
+beside an identical block in a function that leaked it. The cause was the
+cost optimisation section 5 was proud of: identical subject text under one
+rule draft is one question, so duplicated code costs one request. That is
+sound on `bare`, where the text is all the model sees. On `local` the
+enclosing function is the evidence and on the file-bearing arms the file
+is, and there the two copies are two questions with different answers,
+one of which was never asked. A third agent found the promoted form: two
+byte-identical `throw`s in one function, one per branch, were one question
+although the question itself names the match's line.
+
+The verdict key now carries what the arm shows beyond the text -- nothing
+on `bare`, the enclosing code on `local`, the file and the container on
+the rest, and for a promoted subject the match's offset inside its
+container, so an edit elsewhere in the file keeps the verdict. Every
+committed cache for a non-`bare` rule misses once. The seven rules
+shipped in this round were re-evaluated under the new key and hold. The
+class this hid is the one a message rule exists for: the copy pasted into
+the wrong branch.
+
+### Two more sources of subjects
+
+`commits --squash <range> --message-file <path|->` judges a whole range
+as one change against a message of its own, for a pull request's
+description or a changelog entry. On this repository's 24-commit branch a
+faithful description answered 0.36 and "Fix a typo in the README" was a
+finding. It also found that with `diff.external` set to difftastic,
+`git diff` returned a side-by-side rendering the model was never
+calibrated on; every diff-producing call now passes `--no-ext-diff`, and
+the per-commit path was never affected because `git show` defaults to it.
+
+`subject: block` splits a text file no grammar parses at every line
+matching a rule's `split:` regex, the header's named groups being the
+captures. The first such rule is the sqlc query rule above; the one
+corpus correction it needed was a soft-delete `DeleteUser` read as
+misnamed at 0.68 while an identical `SoftDeleteUser` sat beside it, and
+fell to 0.30 with the twin gone -- the corpus contradicting itself, not
+the model.
+
+What was not built: a README's code examples against the module's public
+API. The claim is in one file and the evidence in another, which needs an
+arm like `paired` for Markdown, and that is a second cross-file arm to
+justify rather than a rule to write.
