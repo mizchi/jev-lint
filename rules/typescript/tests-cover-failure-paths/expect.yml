@@ -127,3 +127,16 @@ fixtures/validate-signup.ts:
     label: bad
     window: 0
     reason: "validateSignup has three rejection branches: email shape, password under 12 characters, reserved username. The tests reach the email branch once ('rejects an email without an @'); the password branch and the reserved-username branch are never triggered -- every other call uses the good fixture, whose password is 21 characters and whose username is 'pat'."
+fixtures/coupon.ts:
+  - line: 10
+    label: clean
+    window: 0
+    reason: "in-source tests: parseCoupon's throw on a malformed coupon is asserted by the block at the bottom of the same file."
+  - line: 16
+    label: bad
+    window: 0
+    reason: "applyCoupon throws on an expired coupon and on a percent out of range; the one in-source test passes a live coupon at 10% and asserts the discount. Neither guard is reached."
+  - line: 22
+    label: clean
+    window: 0
+    reason: "describeCoupon has no failure path."

@@ -319,6 +319,38 @@ pair in the text — and why the comment rules use `follows:` with a pattern,
 which propagates its capture into metavariables, so `$DOC` names the claim and
 the matched node is the code.
 
+### A test, in any framework: `matches: jev-test-call`
+
+Two matchers are built in for the ECMAScript grammars, because every rule
+about a test needs the same one and a framework a rule does not know is a
+test it never asks about:
+
+```yaml
+rule:
+  matches: jev-test-call     # $TITLE, $BODY: it / test and their x/f prefixes with any chain
+                             # of .only .skip .concurrent .fails .fixme .skipIf(..) .if(..)
+                             # .each(..) ...; test(name, { options }, fn) from node:test and
+                             # t.test(...) subtests; Deno.test("x", fn), Deno.test({ name, fn }),
+                             # Deno.test(function x() {}); bun's test.if(cond)("x", fn)
+rule:
+  matches: jev-suite-call    # $TITLE, $BODY: describe / suite / context with their modifiers,
+                             # Playwright's test.describe(.serial|.parallel|...), and a
+                             # node:test test whose body opens subtests
+```
+
+A call with no function to judge (`it.todo("x")`, a `RegExp.test`) is not
+a test, and `test.step` is a step of one. Vitest in-source tests, under
+`if (import.meta.vitest)` in the module itself, match like any other; for
+the `paired` arm such a module is its own related test, excerpted as that
+block. A rule's own `utils:` entry of the same name replaces the built-in.
+
+The five shipped test rules use these, and the container probe that names
+the statements inside a test uses the same definition, so the question
+carries the test's whole address: `inside: suite \`cart\` > suite
+\`removeItem\`` for an `it("leaves the others")` two describes deep,
+which is the only reading under which that title claims anything. The
+path is part of the verdict's cache key on every arm.
+
 ### One sentence, several grammars
 
 `languages: [TypeScript, Tsx]` works when the matcher is valid in both. Rust and

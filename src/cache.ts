@@ -71,9 +71,13 @@ export function contextKey(
   // The offset from the container's first line, not the line itself, so an
   // edit elsewhere in the file does not retire the verdict.
   const where = subject.promoted ? `@${subject.line - (subject.subjectLine ?? subject.line)}` : "";
-  if (arm === "bare") return where || null;
+  // The suites around a test are in the question on every arm, the file
+  // included or not, so two tests of one title under different describes
+  // are two questions.
+  const path = subject.enclosing?.path ? `<${subject.enclosing.path.join(">")}` : "";
+  if (arm === "bare") return where + path || null;
   const around = arm === "local" ? subject.context ?? `${subject.file}\u0000${subject.enclosing?.name ?? ""}` : `${subject.file}\u0000${subject.enclosing?.name ?? ""}`;
-  return around + where;
+  return around + where + path;
 }
 
 export function verdictKey(

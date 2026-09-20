@@ -1,811 +1,811 @@
 {
- "schema": "jev-lint-eval-1",
- "recorded": "2026-09-19T17:48:30.144Z",
- "model": "jev-1.13.0",
- "suite": "typescript/test-name-describes-code",
- "rules": [
-  {
-   "id": "test-name-describes-code",
-   "draft": "4ba123317e3b",
-   "at": 0.72
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T14:42:12.041Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/test-name-describes-code",
+  "rules": [
+    {
+      "id": "test-name-describes-code",
+      "draft": "0106e1ca2985",
+      "at": 0.72
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 24,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 28,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 32,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 40,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 48,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 59,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 68,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 76,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 30,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 36,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 43,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 48,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 53,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 63,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 67,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 71,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 77,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 82,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 88,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 94,
+        "endLine": 96,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 98,
+        "endLine": 100,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 102,
+        "endLine": 108,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 112,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 117,
+        "endLine": 120,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 122,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 126,
+        "endLine": 128,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 24,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 28,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 32,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 40,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 48,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 59,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 68,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 76,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 30,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 36,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 43,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 48,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 53,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 63,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 67,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 71,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 77,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 82,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 88,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 94,
+        "endLine": 96,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 98,
+        "endLine": 100,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 102,
+        "endLine": 108,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 112,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 117,
+        "endLine": 120,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 122,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 126,
+        "endLine": 128,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 24,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 28,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 32,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 40,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 48,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 59,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 68,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
+        "line": 76,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.51,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 30,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 36,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 43,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 48,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 53,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 63,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 67,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 71,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 77,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 82,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 88,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 94,
+        "endLine": 96,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 98,
+        "endLine": 100,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 102,
+        "endLine": 108,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 112,
+        "endLine": 115,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 117,
+        "endLine": 120,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 122,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
+        "line": 126,
+        "endLine": 128,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 70872,
+    "usd": 0.002976624,
+    "ms": 942
   }
- ],
- "cutoffs": {},
- "passes": [
-  [
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 24,
-    "endLine": 26,
-    "kind": "noul",
-    "value": 0.96,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 28,
-    "endLine": 30,
-    "kind": "noul",
-    "value": 0.97,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 32,
-    "endLine": 34,
-    "kind": "noul",
-    "value": 0.92,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 36,
-    "endLine": 38,
-    "kind": "noul",
-    "value": 0.56,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 40,
-    "endLine": 42,
-    "kind": "noul",
-    "value": 0.03,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 44,
-    "endLine": 46,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 48,
-    "endLine": 50,
-    "kind": "noul",
-    "value": 0.03,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 59,
-    "endLine": 65,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 68,
-    "endLine": 73,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 76,
-    "endLine": 82,
-    "kind": "noul",
-    "value": 0.1,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 26,
-    "endLine": 28,
-    "kind": "noul",
-    "value": 0.56,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 30,
-    "endLine": 34,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 36,
-    "endLine": 39,
-    "kind": "noul",
-    "value": 0.19,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 43,
-    "endLine": 46,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 48,
-    "endLine": 51,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 53,
-    "endLine": 59,
-    "kind": "noul",
-    "value": 0.13,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 63,
-    "endLine": 65,
-    "kind": "noul",
-    "value": 0.96,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 67,
-    "endLine": 69,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 71,
-    "endLine": 73,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 77,
-    "endLine": 80,
-    "kind": "noul",
-    "value": 0.91,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 82,
-    "endLine": 86,
-    "kind": "noul",
-    "value": 0.92,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 88,
-    "endLine": 92,
-    "kind": "noul",
-    "value": 0.04,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 94,
-    "endLine": 96,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 98,
-    "endLine": 100,
-    "kind": "noul",
-    "value": 0.03,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 102,
-    "endLine": 108,
-    "kind": "noul",
-    "value": 0.04,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 112,
-    "endLine": 115,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 117,
-    "endLine": 120,
-    "kind": "noul",
-    "value": 0.96,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 122,
-    "endLine": 124,
-    "kind": "noul",
-    "value": 0.08,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 126,
-    "endLine": 128,
-    "kind": "noul",
-    "value": 0.04,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 24,
-    "endLine": 26,
-    "kind": "noul",
-    "value": 0.96,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 28,
-    "endLine": 30,
-    "kind": "noul",
-    "value": 0.97,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 32,
-    "endLine": 34,
-    "kind": "noul",
-    "value": 0.9,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 36,
-    "endLine": 38,
-    "kind": "noul",
-    "value": 0.56,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 40,
-    "endLine": 42,
-    "kind": "noul",
-    "value": 0.04,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 44,
-    "endLine": 46,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 48,
-    "endLine": 50,
-    "kind": "noul",
-    "value": 0.03,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 59,
-    "endLine": 65,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 68,
-    "endLine": 73,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 76,
-    "endLine": 82,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 26,
-    "endLine": 28,
-    "kind": "noul",
-    "value": 0.46,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 30,
-    "endLine": 34,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 36,
-    "endLine": 39,
-    "kind": "noul",
-    "value": 0.23,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 43,
-    "endLine": 46,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 48,
-    "endLine": 51,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 53,
-    "endLine": 59,
-    "kind": "noul",
-    "value": 0.17,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 63,
-    "endLine": 65,
-    "kind": "noul",
-    "value": 0.96,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 67,
-    "endLine": 69,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 71,
-    "endLine": 73,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 77,
-    "endLine": 80,
-    "kind": "noul",
-    "value": 0.92,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 82,
-    "endLine": 86,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 88,
-    "endLine": 92,
-    "kind": "noul",
-    "value": 0.04,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 94,
-    "endLine": 96,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 98,
-    "endLine": 100,
-    "kind": "noul",
-    "value": 0.03,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 102,
-    "endLine": 108,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 112,
-    "endLine": 115,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 117,
-    "endLine": 120,
-    "kind": "noul",
-    "value": 0.96,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 122,
-    "endLine": 124,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 126,
-    "endLine": 128,
-    "kind": "noul",
-    "value": 0.04,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 24,
-    "endLine": 26,
-    "kind": "noul",
-    "value": 0.96,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 28,
-    "endLine": 30,
-    "kind": "noul",
-    "value": 0.97,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 32,
-    "endLine": 34,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 36,
-    "endLine": 38,
-    "kind": "noul",
-    "value": 0.49,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 40,
-    "endLine": 42,
-    "kind": "noul",
-    "value": 0.03,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 44,
-    "endLine": 46,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 48,
-    "endLine": 50,
-    "kind": "noul",
-    "value": 0.03,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 59,
-    "endLine": 65,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 68,
-    "endLine": 73,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/cart.test.ts",
-    "line": 76,
-    "endLine": 82,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 26,
-    "endLine": 28,
-    "kind": "noul",
-    "value": 0.51,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 30,
-    "endLine": 34,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 36,
-    "endLine": 39,
-    "kind": "noul",
-    "value": 0.28,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 43,
-    "endLine": 46,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 48,
-    "endLine": 51,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 53,
-    "endLine": 59,
-    "kind": "noul",
-    "value": 0.12,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 63,
-    "endLine": 65,
-    "kind": "noul",
-    "value": 0.96,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 67,
-    "endLine": 69,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 71,
-    "endLine": 73,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 77,
-    "endLine": 80,
-    "kind": "noul",
-    "value": 0.7,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 82,
-    "endLine": 86,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 88,
-    "endLine": 92,
-    "kind": "noul",
-    "value": 0.04,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 94,
-    "endLine": 96,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 98,
-    "endLine": 100,
-    "kind": "noul",
-    "value": 0.03,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 102,
-    "endLine": 108,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 112,
-    "endLine": 115,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 117,
-    "endLine": 120,
-    "kind": "noul",
-    "value": 0.96,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 122,
-    "endLine": 124,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "test-name-describes-code",
-    "file": "rules/typescript/test-name-describes-code/fixtures/inventory.test.ts",
-    "line": 126,
-    "endLine": 128,
-    "kind": "noul",
-    "value": 0.04,
-    "confidence": null
-   }
-  ]
- ],
- "spent": {
-  "calls": 12,
-  "inputTokens": 119778,
-  "usd": 0.005030676,
-  "ms": 5238
- }
 }

@@ -76,13 +76,11 @@ at: 0.72
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning
+# One test call in any of the frameworks src/testcalls.ts knows -- jest,
+# vitest (in-source included), node:test, Playwright, Deno.test, bun:test --
+# with the title as $TITLE. A todo without a body is not matched.
 rule:
-  any:
-    - pattern: it($TITLE, $BODY)
-    - pattern: test($TITLE, $BODY)
-    - pattern: it($TITLE, $BODY, $TIMEOUT)
-    - pattern: test($TITLE, $BODY, $TIMEOUT)
-    - pattern: it.each($CASES)($TITLE, $BODY)
+  matches: jev-test-call
 ask: >-
   The operation, input or outcome this test's code exercises is not the one its
   name names.

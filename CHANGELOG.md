@@ -6,6 +6,31 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/findings.md](docs/findings.md).
 
+## Unreleased
+
+### Added
+
+- One built-in matcher for a test, `matches: jev-test-call` (and
+  `jev-suite-call`), used by the five TypeScript test rules and the
+  container probe: jest, vitest, vitest in-source, node:test (the options
+  object, `t.test` subtests, a parent with subtests as a suite),
+  `@playwright/test` (`test.describe` and its modifiers, `test.fixme`),
+  `Deno.test` in its string, object and named-function forms, and
+  `bun:test` (`test.if`, `test.skipIf`). A todo with no body and
+  `test.step` are not tests. Fixtures for each shape under
+  `test-name-verifies-claim`: every defect flagged, every clean passed.
+- A test's question carries its whole address: `inside: suite \`cart\` >
+  suite \`removeItem\`` for a test two describes deep, on every arm, and
+  in the verdict's cache key.
+- A module with vitest in-source tests is its own related test on the
+  `paired` arm; `tests-cover-failure-paths` has a fixture for it.
+
+### Changed
+
+- The node kind of a test subject is `test` (a suite's, `test suite`),
+  not `composite match`. The six rules' baselines were re-accepted:
+  precision and recall 1.00 on each.
+
 ## 0.4.1 — 2026-09-20
 
 ### Added

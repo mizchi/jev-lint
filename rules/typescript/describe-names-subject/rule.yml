@@ -33,16 +33,11 @@ state: bare
 at: 0.45
 axis: file
 severity: warning
+# One suite call in any of the frameworks src/testcalls.ts knows --
+# `describe` / `suite` / `context` with their modifiers, Playwright's
+# `test.describe` -- with the title as $TITLE.
 rule:
-  any:
-    - pattern: describe($TITLE, $BODY)
-    - pattern: describe.only($TITLE, $BODY)
-    - pattern: describe.skip($TITLE, $BODY)
-    - pattern: describe.each($CASES)($TITLE, $BODY)
-    - pattern: describe.concurrent($TITLE, $BODY)
-    - pattern: describe.sequential($TITLE, $BODY)
-    - pattern: context($TITLE, $BODY)
-    - pattern: suite($TITLE, $BODY)
+  matches: jev-suite-call
 ask: >-
   The tests inside this describe block exercise something other than what its
   title ($TITLE) names.

@@ -237,3 +237,37 @@ fixtures/signup.test.ts:
     label: bad
     window: 0
     reason: title claims the invitation is marked accepted; the assertion is that update was called, with anything
+fixtures/frameworks.test.ts:
+  - line: 21
+    label: bad
+    window: 0
+    reason: "node:test with an options object. The title says the item is dropped; a length over zero holds whether or not it was."
+  - line: 31
+    label: bad
+    window: 0
+    reason: "a node:test subtest on the context. The title says it rejects; the body asserts the type of a result it got."
+  - line: 43
+    label: bad
+    window: 0
+    reason: "Playwright test under test.describe. The title is about the pay button; the body asserts the page has a title."
+  - line: 54
+    label: clean
+    window: 0
+    reason: "Deno's object form; the body checks what the name says."
+  - line: 62
+    label: bad
+    window: 0
+    reason: "Deno's named-function form. The name claims the other items are kept; `assert.ok(next)` holds for any cart."
+  - line: 71
+    label: clean
+    window: 0
+    reason: "hard clean: it.each with placeholders in the title; each row asserts the value the row names."
+fixtures/insource.ts:
+  - line: 30
+    label: bad
+    window: 0
+    reason: "vitest in-source, under if (import.meta.vitest). The title says it throws; the body parses a well-formed coupon and checks it is defined."
+  - line: 40
+    label: bad
+    window: 0
+    reason: "in-source. The title claims false; the body asserts the type is boolean, which true also is."

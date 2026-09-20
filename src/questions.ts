@@ -135,7 +135,12 @@ function subjectFields(rule: Rule, subject: Subject, id: string): Record<string,
     shared.matcher_captured = subject.captured;
   }
   if (subject.enclosing?.name) {
-    shared.inside = `${subject.enclosing.role} \`${subject.enclosing.name}\``;
+    // A test's address is the whole chain of suites: the title claims
+    // nothing on its own that the `describe`s above it do not complete.
+    const path = subject.enclosing.path;
+    shared.inside = path
+      ? path.map((name, i) => `${i < path.length - 1 ? "suite" : subject.enclosing!.role} \`${name}\``).join(" > ")
+      : `${subject.enclosing.role} \`${subject.enclosing.name}\``;
   }
   if (subject.promoted) {
     shared.note_on_subject = `The rule selected the code in \`matched\` at line ${subject.line}. Judge THAT; the \`code\` field is the container it sits in, supplied so you can see what it does in context.`;

@@ -28,13 +28,11 @@ kind: noul
 subject: node
 state: located
 at: 0.3
+# One test call in any of the frameworks src/testcalls.ts knows -- jest,
+# vitest (in-source included), node:test, Playwright, Deno.test, bun:test --
+# with the title as $TITLE. A todo without a body is not matched.
 rule:
-  any:
-    - pattern: it($TITLE, $BODY)
-    - pattern: test($TITLE, $BODY)
-    - pattern: it($TITLE, $BODY, $TIMEOUT)
-    - pattern: test($TITLE, $BODY, $TIMEOUT)
-    - pattern: it.each($CASES)($TITLE, $BODY)
+  matches: jev-test-call
 ask: The behaviour this test's name attributes to the code under test is
   performed by a mock or stub, and the assertion reads back the stub's canned
   value unchanged.

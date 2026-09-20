@@ -330,7 +330,13 @@ export interface ResolvedSubject {
    */
   matchText?: string;
   nodeKind: string;
-  enclosing: { name: string | null; role: string } | null;
+  /**
+   * The narrowest named thing around the match. For a test, `path` is every
+   * suite and test around it from the outside in, titles as written: what
+   * `it("leaves the others")` claims is only readable with the
+   * `describe("cart") > describe("removeItem")` it sits in.
+   */
+  enclosing: { name: string | null; role: string; path?: string[] } | null;
   /** The `local` arm's context: the enclosing function, when there is one. */
   context?: string | null;
   contextName?: string | null;

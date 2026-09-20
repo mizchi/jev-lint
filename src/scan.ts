@@ -26,6 +26,7 @@ import { createRequire } from "node:module";
 import { promisify } from "node:util";
 import YAML from "yaml";
 import { PROBE_PREFIX } from "./types.ts";
+import { referencedBuiltinUtils, suiteCallRule, testCallRule } from "./testcalls.ts";
 import type {
   AstGrepMatch,
   FileSymbols,
@@ -175,35 +176,12 @@ function tsStructure({ typed }: { typed: boolean }): LanguageStructure {
       // `subject: enclosing` rule promoted it to nothing, and the model judged
       // one line and its comment. That is what read every test preamble in
       // this repository as a false claim about the first `const` under it.
-      {
-        kind: "call_expression",
-        role: "test",
-        nameField: null,
-        isTest: true,
-        rule: {
-          kind: "call_expression",
-          all: [
-            { has: { field: "function", regex: "^(it|test)(\\.(only|skip|todo|concurrent|each\\(.*\\)))?$" } },
-            { has: { field: "arguments", has: { nthChild: 1, any: [{ kind: "string" }, { kind: "template_string" }], pattern: "$JEVNAME" } } },
-            { has: { field: "arguments", has: { any: [{ kind: "arrow_function" }, { kind: "function_expression" }] } } },
-          ],
-        },
-      },
+      // The shape is `testcalls.ts`'s, the one the test rules match with,
+      // so every framework it knows is a container here too.
+      { kind: "call_expression", role: "test", nameField: null, isTest: true, rule: testCallRule("$JEVNAME") },
       // And a `describe(...)` block is a suite, so a test inside one has a
       // named container above it and an outline can group them.
-      {
-        kind: "call_expression",
-        role: "suite",
-        nameField: null,
-        rule: {
-          kind: "call_expression",
-          all: [
-            { has: { field: "function", regex: "^(describe|suite|context)(\\.(only|skip))?$" } },
-            { has: { field: "arguments", has: { nthChild: 1, any: [{ kind: "string" }, { kind: "template_string" }], pattern: "$JEVNAME" } } },
-            { has: { field: "arguments", has: { any: [{ kind: "arrow_function" }, { kind: "function_expression" }] } } },
-          ],
-        },
-      },
+      { kind: "call_expression", role: "suite", nameField: null, rule: suiteCallRule("$JEVNAME") },
     ],
     imports: ["import_statement"],
     // A TypeScript declaration does not carry its own visibility: `export`
@@ -304,7 +282,10 @@ export function toAstGrepRule(rule: Rule, language: Language): Record<string, un
     rule: rule.matcher,
   };
   if (rule.constraints) out.constraints = rule.constraints;
-  if (rule.utils) out.utils = rule.utils;
+  // A rule that says `matches: jev-test-call` gets that util from here; its
+  // own utils are kept and win on a name they share.
+  const utils = { ...referencedBuiltinUtils(rule.matcher, rule.utils ?? null, language), ...(rule.utils ?? {}) };
+  if (Object.keys(utils).length > 0) out.utils = utils;
   return out;
 }
 

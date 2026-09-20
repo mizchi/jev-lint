@@ -28,8 +28,8 @@ import { FileIndex } from "./files.ts";
 /** One related test, as the state carries it. */
 export interface RelatedTest {
   path: string;
-  /** What made it related: its name, or that it imports the file. */
-  via: "name" | "import";
+  /** What made it related: its name, that it imports the file, or that it IS the file (vitest in-source tests). */
+  via: "name" | "import" | "in-source";
   /** The excerpt, or the whole file when nothing in it matched. */
   code: string;
 }
@@ -159,6 +159,30 @@ export function relatedTests(
     .sort((a, b) => b.score - a.score || a.t.localeCompare(b.t))
     .slice(0, MAX_RELATED_TESTS)
     .map(({ t, via }) => ({ path: t, via }));
+}
+
+/** The opener of a vitest in-source test block. */
+const IN_SOURCE_OPENER = /^[ \t]*if\s*\(\s*import\.meta\.vitest\s*\)\s*\{/m;
+
+/**
+ * The `if (import.meta.vitest) { ... }` block of a module, braces balanced
+ * from the opener, or null when the module has none. Braces inside strings
+ * are counted too; a block cut short by one is still the tests, shorter.
+ */
+export function inSourceTests(source: string): string | null {
+  const m = IN_SOURCE_OPENER.exec(source);
+  if (!m) return null;
+  const from = m.index;
+  let depth = 0;
+  for (let i = from + m[0].length - 1; i < source.length; i += 1) {
+    const ch = source[i];
+    if (ch === "{") depth += 1;
+    else if (ch === "}") {
+      depth -= 1;
+      if (depth === 0) return source.slice(from, i + 1);
+    }
+  }
+  return source.slice(from);
 }
 
 /**
@@ -347,15 +371,19 @@ export function pairTests(
   const out = new Map<string, RelatedTest[]>();
   for (const file of files) {
     const related = relatedTests(file, candidates, source);
-    if (related.length === 0) continue;
+    // A module carrying its own tests (`if (import.meta.vitest) { ... }`)
+    // is paired with that block first: the tests nearest the code.
+    const own = inSourceTests(source(file));
+    if (related.length === 0 && own === null) continue;
     const id = moduleIdentity(file);
     const words = [...new Set([id.named_by_directory ?? id.stem, ...keywords(file)])];
-    const share = Math.floor(TEST_EXCERPT_BUDGET / related.length);
+    const share = Math.floor(TEST_EXCERPT_BUDGET / (related.length + (own === null ? 0 : 1)));
     out.set(
       file,
-      related
-        .map(({ path, via }) => ({ ...compactTest(path, source(path), words, share), via }))
-        .filter((t) => t.code.trim() !== ""),
+      [
+        ...(own === null ? [] : [{ path: file, via: "in-source" as const, code: own.length > share ? own.slice(0, share) : own }]),
+        ...related.map(({ path, via }) => ({ ...compactTest(path, source(path), words, share), via })),
+      ].filter((t) => t.code.trim() !== ""),
     );
     if (out.get(file)!.length === 0) out.delete(file);
   }

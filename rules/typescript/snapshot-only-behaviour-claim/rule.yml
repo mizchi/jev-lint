@@ -8,13 +8,11 @@ kind: noul
 subject: node
 state: located
 at: 0.67
+# One test call in any of the frameworks src/testcalls.ts knows -- jest,
+# vitest (in-source included), node:test, Playwright, Deno.test, bun:test --
+# with the title as $TITLE. A todo without a body is not matched.
 rule:
-  any:
-    - pattern: it($TITLE, $BODY)
-    - pattern: test($TITLE, $BODY)
-    - pattern: it($TITLE, $BODY, $TIMEOUT)
-    - pattern: test($TITLE, $BODY, $TIMEOUT)
-    - pattern: it.each($CASES)($TITLE, $BODY)
+  matches: jev-test-call
 ask: This test's name claims a specific behaviour, but the body only compares a
   snapshot.
 criteria:

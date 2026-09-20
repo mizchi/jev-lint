@@ -2684,6 +2684,113 @@ await testAsync("run: a paired subject with no related test is dropped and count
   }
 });
 
+await testAsync("scan: the test-call matcher knows jest, vitest, node:test, playwright, deno and bun, and only calls with a body", async () => {
+  // One matcher, shared by the five test rules and the container probe, so
+  // a framework added here is added everywhere at once. Each line below is
+  // one shape a framework writes a test in; the title is what the model is
+  // asked about, so it has to come out of every shape by the same name.
+  const { collectSubjects } = await import("../src/run.ts");
+  const { rules } = loadRules(["rules"]);
+  const rule = rules.find((r) => r.languageDir === "typescript" && r.id === "test-name-verifies-claim")!;
+  const dir = mkdtempSync(join(tmpdir(), "jev-frameworks-"));
+  try {
+    writeFileSync(
+      join(dir, "frameworks.test.ts"),
+      [
+        `import { test, describe, it } from "node:test";`,
+        `test("node plain", () => {});`,
+        `test("node with options", { timeout: 100 }, async () => {});`,
+        `test("node parent of subtests is their suite, not a test", async (t) => { await t.test("node subtest", () => {}); });`,
+        `test.only("node only", () => {});`,
+        `test.describe("pw suite", () => { test("pw test", async ({ page }) => {}); });`,
+        `test.fixme("pw fixme", async () => {});`,
+        `test.step("pw step is not a test", async () => {});`,
+        `Deno.test("deno plain", () => {});`,
+        `Deno.test({ name: "deno object", fn() {} });`,
+        `Deno.test(function denoNamed() {});`,
+        `Deno.test.ignore("deno ignore", () => {});`,
+        `Deno.test("deno opts", { permissions: "none" }, () => {});`,
+        `test.if(true)("bun if", () => {});`,
+        `test.skipIf(false)("vitest skipIf", () => {});`,
+        `it.each([1, 2])("each %d", (n) => {});`,
+        `it.concurrent.skip("vitest concurrent skip", () => {});`,
+        `test.fails("vitest fails", () => {});`,
+        `it.todo("todo has no body to judge");`,
+        `test("timeout third", () => {}, 1000);`,
+        `xit("jest xit", () => {}); fit("jest fit", () => {});`,
+        `it("named function body", function () {});`,
+        `/x/.test("a regex test is not a test", () => {});`,
+        `if (import.meta.vitest) { const { it } = import.meta.vitest; it("in-source", () => {}); }`,
+      ].join("\n"),
+    );
+    const { subjects } = await collectSubjects({ rules: [rule], paths: ["frameworks.test.ts"], cwd: dir });
+    const titles = subjects.map((s) => s.captured.TITLE).sort();
+    assert.deepEqual(titles, [
+      `"bun if"`, `"deno ignore"`, `"deno object"`, `"deno opts"`, `"deno plain"`, `"each %d"`, `"in-source"`,
+      `"jest fit"`, `"jest xit"`, `"named function body"`, `"node only"`, `"node plain"`, `"node subtest"`,
+      `"node with options"`, `"pw fixme"`, `"pw test"`, `"timeout third"`, `"vitest concurrent skip"`,
+      `"vitest fails"`, `"vitest skipIf"`, `denoNamed`,
+    ]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("scan: a test inside nested describes carries the whole path, and the question says it", async () => {
+  // `it("leaves the others")` claims nothing on its own; under
+  // `describe("cart") > describe("removeItem")` it claims that removeItem
+  // leaves the other items. The title alone was what the bare arm sent.
+  const { collectSubjects } = await import("../src/run.ts");
+  const { rules } = loadRules(["rules"]);
+  const rule = rules.find((r) => r.languageDir === "typescript" && r.id === "test-name-verifies-claim")!;
+  const dir = mkdtempSync(join(tmpdir(), "jev-suites-"));
+  try {
+    writeFileSync(
+      join(dir, "cart.test.ts"),
+      [
+        `describe("cart", () => {`,
+        `  test.describe("removeItem", () => {`,
+        `    it("leaves the others", () => { expect(1).toBe(1); });`,
+        `  });`,
+        `  it("starts empty", () => { expect(1).toBe(1); });`,
+        `});`,
+        `it("top level", () => { expect(1).toBe(1); });`,
+      ].join("\n"),
+    );
+    const { subjects } = await collectSubjects({ rules: [rule], paths: ["cart.test.ts"], cwd: dir });
+    const byTitle = new Map(subjects.map((s) => [s.captured.TITLE, s]));
+    assert.deepEqual(byTitle.get(`"leaves the others"`)!.enclosing, { name: "removeItem", role: "suite", path: ["cart", "removeItem"] });
+    assert.deepEqual(byTitle.get(`"starts empty"`)!.enclosing, { name: "cart", role: "suite", path: ["cart"] });
+    assert.equal(byTitle.get(`"top level"`)!.enclosing, null);
+    const q = buildQuestion(rule, byTitle.get(`"leaves the others"`)!, "q1");
+    assert.equal((q.instructions as { inside?: string }).inside, "suite `cart` > suite `removeItem`");
+    // The path is part of what the model saw, so it is part of the key even
+    // on the bare arm, where the file is not.
+    assert.notEqual(contextKey(byTitle.get(`"leaves the others"`)!, "bare"), contextKey(byTitle.get(`"starts empty"`)!, "bare"));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("paired: a file with vitest in-source tests is its own related test", () => {
+  const source = [
+    `export function parse(s: string) { if (!s) throw new Error("empty"); return s; }`,
+    `if (import.meta.vitest) {`,
+    `  const { it, expect } = import.meta.vitest;`,
+    `  it("parse returns the string", () => { expect(parse("a")).toBe("a"); });`,
+    `}`,
+  ].join("\n");
+  const read = (p: string) => (p === "src/parse.ts" ? source : "");
+  const paired = pairTests(["src/parse.ts"], { roots: ["src"], testFiles: [], readSource: read });
+  const related = paired.get("src/parse.ts")!;
+  assert.equal(related.length, 1);
+  assert.equal(related[0]!.path, "src/parse.ts");
+  assert.equal(related[0]!.via, "in-source");
+  assert.ok(related[0]!.code.includes(`it("parse returns the string"`));
+  assert.ok(!related[0]!.code.includes("export function parse"), "the excerpt is the test block, not the module");
+  assert.ok(isTestFile("src/parse.ts", source) === false, "the file is not a test file: it is a module that carries tests");
+});
+
 await testAsync("run: --explain asks a second question of the findings only, and attaches the label", async () => {
   // jev-review's shape: a cheap screen, then a follow-up classification of
   // what came over the threshold. Here the matcher is the screen and the

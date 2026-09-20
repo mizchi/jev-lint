@@ -426,12 +426,13 @@ export function resolveSubject(
   }
 
   const encl = pickEnclosing(entry, start, end, { start, end });
+  const path = encl ? suitePath(entry, start, end, { start, end }) : [];
   return {
     text: truncate(match.text),
     line,
     endLine,
     nodeKind: matcherLabel(rule),
-    enclosing: encl ? { name: encl.name, role: encl.role } : null,
+    enclosing: encl ? { name: encl.name, role: encl.role, ...(path.length > 0 ? { path } : {}) } : null,
     // The `local` arm's context: the smallest named thing containing the match,
     // but ONLY when the match is a fragment inside one.
     //
@@ -463,6 +464,9 @@ export function resolveSubject(
 export function matcherLabel(rule: Rule): string {
   const m = (rule.matcher ?? {}) as Record<string, unknown>;
   if (typeof m.kind === "string") return m.kind;
+  // The built-in test matchers name what they match; a project's util is named by its rule.
+  if (m.matches === "jev-test-call") return "test";
+  if (m.matches === "jev-suite-call") return "test suite";
   if (typeof m.pattern === "string") return "pattern match";
   if (m.all || m.any) return "composite match";
   return "node";
@@ -489,6 +493,28 @@ function pickEnclosing(
     if (!best || s.end - s.start <= best.end - best.start) best = s;
   }
   return best;
+}
+
+/** The roles whose nesting is a test's address: `describe` in `describe`, a subtest in its test. */
+const SUITE_ROLES = new Set(["suite", "test"]);
+
+/**
+ * The titles of every suite and test around the match, outermost first,
+ * when the narrowest container is one of them; empty otherwise, so a
+ * function inside a class gets no path and its question does not change.
+ */
+function suitePath(
+  entry: FileSymbols | null,
+  start: number,
+  end: number,
+  self: { start: number; end: number },
+): string[] {
+  const chain = (entry?.symbols ?? [])
+    .filter((s) => s.name && s.start <= start && s.end >= end && !(s.start === self.start && s.end === self.end))
+    .sort((a, b) => a.start - b.start || b.end - a.end);
+  const innermost = chain.at(-1);
+  if (!innermost || !SUITE_ROLES.has(innermost.role)) return [];
+  return chain.filter((s) => SUITE_ROLES.has(s.role)).map((s) => s.name!);
 }
 
 /**

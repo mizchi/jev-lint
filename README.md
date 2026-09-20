@@ -416,6 +416,13 @@ general question does not.
 | `describe-names-subject` | does a `describe("X")` block's title name what the tests inside it exercise? |
 | `tests-cover-failure-paths` | does this exported function have a failure path — a throw, a rejection, an error result, a guard — that none of the file's related tests reaches? The one rule on the `paired` arm, which carries excerpts of those tests |
 
+A test is recognised in the shape every framework writes it — jest, vitest
+(in-source included), node:test with its options object and `t.test`
+subtests, Playwright's `test.describe`, `Deno.test` in its three forms,
+bun's `test.if` — by one built-in matcher (`matches: jev-test-call`), and
+the question carries the test's address: `suite \`cart\` > suite
+\`removeItem\`` for an `it("leaves the others")` two describes deep.
+
 **Comments** — is the comment still true?
 
 | rule | asks |

@@ -269,6 +269,8 @@ subject 1,000 件あたり 3.9 セント。同じツリーへの `--dry-run` の
 | `describe-names-subject` | `describe("X")` ブロックのタイトルは、中のテストが叩くものを名指ししているか? |
 | `tests-cover-failure-paths` | この export された関数に、ファイルの関連テストのどれも届かない失敗経路 (throw、reject、エラー結果、ガード) はあるか? `paired` arm 上の唯一のルールで、そのテストの抜粋を運ぶ |
 
+テストは各フレームワークが書く形のまま認識する。jest、vitest (in-source 含む)、options オブジェクトと `t.test` サブテストを持つ node:test、Playwright の `test.describe`、三つの形の `Deno.test`、bun の `test.if`。一つの組み込みマッチャー (`matches: jev-test-call`) が全部を担い、問いにはテストの住所が付く。describe 二段の下の `it("leaves the others")` なら `suite \`cart\` > suite \`removeItem\``。
+
 **コメント** — コメントはまだ真実か?
 
 | rule | 問い |
