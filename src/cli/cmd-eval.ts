@@ -16,9 +16,10 @@ import type { Options, Log } from "./args.ts";
  * Three modes. Plain: ask, write last.json, compare. `--replay`: no
  * requests -- re-score the baseline at the cutoffs as they are now, which
  * is the free regression gate for CI, and refuse if a rule's question has
- * changed since the baseline was taken. `--accept`: copy last.json over
- * baseline.json, after a run or on its own. Exit 1 on a regression or a
- * stale baseline, so the gate can fail a build.
+ * changed since the baseline was taken. `--accept`: make this run's record
+ * the baseline; with `--accept-last`, the previous run's last.json, no
+ * requests. Exit 1 on a regression or a stale baseline, so the gate can
+ * fail a build.
  */
 export async function cmdEval(opts: Options, out: Log, log: Log): Promise<number> {
   if (opts.compare) return cmdEvalCompare(opts, out, log);

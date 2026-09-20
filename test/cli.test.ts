@@ -139,8 +139,8 @@ await testAsync("cli: main answers help, a bad flag and a bad --message-file wit
   // output stays the suite's.
   const { main } = await import("../src/cli/main.ts");
   const captured = { out: "", err: "" };
-  const stdout = process.stdout.write.bind(process.stdout);
-  const stderr = process.stderr.write.bind(process.stderr);
+  const writeStdout = process.stdout.write.bind(process.stdout);
+  const writeStderr = process.stderr.write.bind(process.stderr);
   process.stdout.write = ((s: string | Uint8Array) => { captured.out += String(s); return true; }) as typeof process.stdout.write;
   process.stderr.write = ((s: string | Uint8Array) => { captured.err += String(s); return true; }) as typeof process.stderr.write;
   try {
@@ -154,8 +154,8 @@ await testAsync("cli: main answers help, a bad flag and a bad --message-file wit
     assert.equal(await main(["frobnicate", "--no-config", "-R", join(realpathSync("."), "rules", "git")]), 2);
     assert.match(captured.err, /unknown command `frobnicate`/);
   } finally {
-    process.stdout.write = stdout;
-    process.stderr.write = stderr;
+    process.stdout.write = writeStdout;
+    process.stderr.write = writeStderr;
   }
 });
 
@@ -182,9 +182,9 @@ await testAsync("cli: init writes the starter config once, and replay refuses wh
     assert.match(said.at(-1)!, /record path/);
     assert.equal(cmdReplay(parseArgs([join(dir, "missing.json")], { color: false }), out, log), 2);
     assert.match(said.at(-1)!, /could not read/);
-    const wrongSchema = join(dir, "wrong.json");
-    writeFileSync(wrongSchema, JSON.stringify({ schema: "something-else" }));
-    assert.equal(cmdReplay(parseArgs([wrongSchema], { color: false }), out, log), 2);
+    const wrongSchemaPath = join(dir, "wrong.json");
+    writeFileSync(wrongSchemaPath, JSON.stringify({ schema: "something-else" }));
+    assert.equal(cmdReplay(parseArgs([wrongSchemaPath], { color: false }), out, log), 2);
     assert.match(said.at(-1)!, /unexpected schema/);
     const record = join(realpathSync("."), "docs", "data", "self-lint-2026-09-20.json");
     assert.equal(cmdReplay(parseArgs([record, "--format", "json"], { color: false }), out, log), 1, "a recorded run with findings replays to exit 1");
