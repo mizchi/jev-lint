@@ -337,6 +337,36 @@ absence is established, and the scheduler should rest on the structural argument
 instead — which it does: a rule-axis state spans files, so it cannot carry one,
 and a rule whose evidence *is* the file loses it.
 
+### One observation the other way: a batch of defects makes its neighbours suspect
+
+The sweep above says batch *size* does not move answers. Batch *composition*
+may, and one measurement from the rule-improvement round says so, on one
+subject, in one direction:
+
+- `workflow-step-name`'s corpus file batches a clean `Setup MoonBit` step
+  beside eight labelled defects. On the accepted run that step answered
+  **0.42** (three passes, 0.34–0.49).
+- The same step, in the same rule's unseen check over agent-cluster's own
+  workflows — an all-clean batch of 39 steps — answered **0.15**.
+
+Same rule, same sentence, same subject, same state arm; the only thing that
+changed is what sat next to it. A 0.27 shift, on a subject whose pass-to-pass
+spread is 0.15 and whose cutoff is 0.62, is outside the noise, and it is the
+direction a reader would predict: a model handed eight misnamed steps reads the
+ninth more harshly.
+
+What follows from one observation is a reading rule, not a design change. A
+corpus is *made* of defects — a third to a half of its subjects, against
+0.2% on real code — so **a clean case's corpus answer is an upper bound on its
+real-code answer**, and the clean-side headroom measured on a corpus is the
+pessimistic one. That is the right way round for a cutoff, and it is why the
+calibration guide's step 5 (run on unseen code) can come back *lower* than the
+corpus led you to expect. The reverse concern — a lone defect in an all-clean
+batch answering lower than it does in the corpus — has not been measured, and
+the bad-side headroom should be read with that in mind. Establishing either
+effect properly needs the same subject in batches of controlled composition,
+which nobody has run.
+
 ### What the scheduler actually does on the shipped configuration
 
 Because every calibrated rule pins `axis: file`, **`auto` moves only the two

@@ -146,7 +146,12 @@ of them learned by getting it wrong:
    case: the wobble is far from the cutoff. **A decision inside the wobble
    band should not be automated** — route it to a person.
 5. **Run on code the corpus has never seen and expect the clean band to be
-   higher.** This is the step that finds the hole.
+   higher.** This is the step that finds the hole. It can also come back
+   lower for a case the corpus had near the cutoff: a corpus batches its
+   clean cases beside defects, and one clean step measured 0.42 beside
+   eight defects and 0.15 in an all-clean batch of real workflows. A clean
+   case's corpus answer is an upper bound on its real-code answer, not an
+   estimate of it.
 6. **Set the cutoff for headroom, not at the midpoint,** where the gap is
    narrow. The midpoint of a narrow gap is a coin flip on the next sample.
 7. **Write it into the rule as `at:`, and commit the record.** Then any later
