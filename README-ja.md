@@ -143,10 +143,22 @@ npx -y jev-lint run --file myrule.yml src       # 自作のルールファイル
 
 ```bash
 npm install --save-dev jev-lint
-npx jev-lint init                     # .jev-lint.yaml を書く。全部コメントアウト済み
+npx jev-lint init                     # .jev-lint.yaml を書く: files と、全ルール on
 ```
 
-`paths:` のコメントを外せば `jev-lint check` に引数が要らなくなる。API キーは環境変数からだけ読み、このファイルからは決して読まない。`apiKey:` を書くとエラー。プロジェクト自身の `rules/` ディレクトリがあると、同梱セットの*代わりに*それが読み込まれる。`-R <dir>` で他の場所を指定でき、繰り返せる。
+ESLint と同じく、config がルールを選ぶ。`init` は同梱ルール全部を on で列挙するので、要らないものを消すか off にし、変えたいものを上書きする:
+
+```yaml
+files: [src, test]
+exclude: [test/fixtures]
+rules:
+  fn-name-promises: on
+  rust/fn-name-promises: off          # id のうち一言語だけ
+  comment-describes-block: { at: 0.7, severity: error }
+  my-rule: warning                    # .jev-lint/rules/ から
+```
+
+id はその id を持つ全言語のルール、`lang/id` は一言語分。config があって `rules:` が無ければ何も走らず、そう言う。config が無ければ同梱ルール全部が走る。API キーは環境変数からだけ読み、このファイルからは決して読まない。`apiKey:` を書くとエラー。判定キャッシュは `.jev-lint/baseline.json` で、コミットする前提: 同じコミットへの実行はそこから答え、CI はキー無しで lint できる。`-R <dir>` はその一回だけ、同梱と `.jev-lint/rules/` の代わりにそのディレクトリを読む。
 
 ### コミット
 
@@ -304,7 +316,7 @@ subject 1,000 件あたり 3.9 セント。同じツリーへの `--dry-run` の
 
 ## ルールを足す
 
-ルールは YAML ファイル一つ。`./rules/` に置く。平置き (`rules/mine.yml`) でも、fixture と baseline を横に置きたければ同梱ルールのレイアウト `rules/<language>/<id>/rule.yml` でもいい。ast-grep が理解するものは `rule:` にそのまま書ける。`pattern`、`kind`、`regex`、`all`/`any`/`not`、`inside`/`has`、`utils`、`constraints`:
+ルールは YAML ファイル一つ。`.jev-lint/rules/` に置く。平置き (`.jev-lint/rules/mine.yml`) でも、fixture と baseline を横に置きたければ同梱ルールのレイアウト `.jev-lint/rules/<language>/<id>/rule.yml` でもよく、config の `rules:` で同梱ルールと同じように名指しする。ast-grep が理解するものは `rule:` にそのまま書ける。`pattern`、`kind`、`regex`、`all`/`any`/`not`、`inside`/`has`、`utils`、`constraints`:
 
 ```yaml
 id: catch-hides-failure

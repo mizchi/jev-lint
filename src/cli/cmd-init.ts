@@ -6,6 +6,7 @@ import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { CONFIG_NAMES, initialConfig, initialHook, initialPushHook } from "../config.ts";
 import { API_KEY_VARS, fromEnv } from "../jev.ts";
+import { loadRules, shippedRulesPath } from "../rules.ts";
 import type { Options, Log } from "./args.ts";
 
 /**
@@ -22,8 +23,11 @@ export function cmdInit(opts: Options, out: Log, log: Log): number {
     log(`${target} already exists; pass --force to overwrite it`);
     return 2;
   }
+  // The starter lists every shipped rule, on: the catalogue, to prune.
+  const shippedDir = shippedRulesPath();
+  const ids = shippedDir ? [...new Set(loadRules([shippedDir]).rules.map((r) => r.id))].sort() : [];
   try {
-    writeFileSync(target, initialConfig());
+    writeFileSync(target, initialConfig(ids));
   } catch (err: unknown) {
     log(`could not write ${target}: ${String(err).slice(0, 160)}`);
     return 2;

@@ -4,39 +4,58 @@ import { tmpdir } from "node:os";
 import { join, isAbsolute } from "node:path";
 import { decide, describe as describeFinding } from "../src/gate.ts";
 import { buildQuestion } from "../src/questions.ts";
-import { normalizeRule, loadRules, cutoffFor, ruleTextHash, normalizeLanguage, defaultRulePaths, shippedRulesPath, selectRules, DEFAULT_SCORE_AT, scaleOf } from "../src/rules.ts";
+import { normalizeRule, loadRules, cutoffFor, ruleTextHash, normalizeLanguage, ruleSources, USER_RULES_DIR, applyRuleSettings, shippedRulesPath, selectRules, DEFAULT_SCORE_AT, scaleOf } from "../src/rules.ts";
 import { emitRuleFile, ruleLanguages } from "../src/scan.ts";
 import { explain } from "../src/schedule.ts";
 import { PROBE_PREFIX, LANGUAGE_DIRS, TIER_ONE } from "../src/types.ts";
 import { scoreRule, noulRule, subjectOf } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
 
-test("rules: a project's own ./rules wins, and a fresh install still finds the packs", () => {
-  // Every fresh install used to exit 2 with "no usable rules found in rules":
-  // the default was the literal relative path `rules`, and the shipped packs
-  // live in `node_modules/jev-lint/rules`, so `npm install jev-lint && npx
-  // jev-lint check src` could not work at all. An audit of the README's own
-  // install block caught it. Both directions are pinned, because the wrong one
-  // silently judges someone's code against cutoffs fitted to a corpus their
-  // code has never seen.
-  const here = process.cwd();
+test("rules: the sources are the shipped packs and, when it exists, .jev-lint/rules/ -- never a bare ./rules", () => {
+  // A fresh install used to exit 2 with "no usable rules found in rules":
+  // the default was the literal `rules`, and the packs live in
+  // `node_modules/jev-lint/rules`. Since 0.5 a project's own rules live in
+  // `.jev-lint/rules/` and ADD to the shipped set -- they are selected by
+  // id in the config like any other -- and a `./rules` directory is no
+  // longer anything to this tool.
   const dir = mkdtempSync(join(tmpdir(), "jev-lint-rules-"));
   try {
-    process.chdir(dir);
-    const [fallback, isShipped] = defaultRulePaths();
-    assert.equal(isShipped, true, "no ./rules here, so the packaged packs must be used");
-    assert.ok(isAbsolute(fallback[0]!), "and by absolute path, since the cwd is not the package");
-    assert.ok(existsSync(fallback[0]!), `${fallback[0]} must exist`);
-    assert.ok(loadRules(fallback).rules.length > 0, "and must actually load");
-
+    const shipped = ruleSources(dir);
+    assert.equal(shipped.length, 1);
+    assert.ok(isAbsolute(shipped[0]!) && existsSync(shipped[0]!), `${shipped[0]} must be the package's own rules`);
+    assert.ok(loadRules(shipped).rules.length > 0, "and must actually load");
     mkdirSync(join(dir, "rules"));
-    const [local, stillShipped] = defaultRulePaths();
-    assert.deepEqual(local, ["rules"], "a project's own rules win once they exist");
-    assert.equal(stillShipped, false);
+    assert.equal(ruleSources(dir).length, 1, "./rules is not a source");
+    mkdirSync(join(dir, ".jev-lint", "rules"), { recursive: true });
+    const both = ruleSources(dir);
+    assert.equal(both.length, 2);
+    assert.equal(both[1], join(dir, USER_RULES_DIR));
   } finally {
-    process.chdir(here);
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("rules: the config's `rules:` selects and overrides, and names nothing it cannot find", () => {
+  const ts = normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a" }).rule!;
+  const rs = normalizeRule({ id: "a", language: "Rust", rule: { kind: "x" }, ask: "a" }).rule!;
+  const b = normalizeRule({ id: "b", language: "TypeScript", rule: { kind: "x" }, ask: "b", severity: "info" }).rule!;
+  const loaded = [{ ...ts, languageDir: "typescript" }, { ...rs, languageDir: "rust" }, { ...b, languageDir: "typescript" }];
+  // `a: on` is both languages; `rust/a: off` is one of them, and wins over the bare id.
+  const one = applyRuleSettings(loaded, { a: { enabled: true }, "rust/a": { enabled: false }, b: { enabled: true, severity: "error", at: 2.5, loose: 1 } });
+  assert.deepEqual(one.errors, []);
+  assert.deepEqual(one.rules.map((r) => `${r.languageDir}/${r.id}`), ["typescript/a", "typescript/b"]);
+  const overridden = one.rules.find((r) => r.id === "b")!;
+  assert.equal(overridden.severity, "error");
+  assert.equal(overridden.at, 2.5);
+  assert.equal(overridden.loose, 1);
+  assert.equal(one.rules.find((r) => r.id === "a")!.severity, "warning", "`on` keeps the rule's own");
+  // A rule the config does not name does not run.
+  assert.deepEqual(applyRuleSettings(loaded, { b: { enabled: true } }).rules.map((r) => r.id), ["b"]);
+  // A name that matches nothing is an error, as ESLint's "definition not found" is.
+  const missing = applyRuleSettings(loaded, { c: { enabled: true }, "python/a": { enabled: false } });
+  assert.equal(missing.errors.length, 2);
+  assert.match(missing.errors[0]!, /`c`/);
+  assert.match(missing.errors[1]!, /`python\/a`/);
 });
 
 test("rules: a rule under <lang>/<id>/rule.yml carries its language dir and may only name that dir's grammars", () => {

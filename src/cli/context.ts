@@ -6,12 +6,16 @@
  * someone override one setting for one run.
  */
 import { existsSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { DEFAULT_CACHE_PATH, OLD_CACHE_PATH } from "../cache.ts";
 import { applyConfig, findConfig, loadConfig, type Config } from "../config.ts";
 import type { Log, Options } from "./args.ts";
 
 export interface Context {
   config: Config;
   configPath: string | null;
+  /** The directory the config is in, or the cwd: where `.jev-lint/` lives. */
+  baseDir: string;
   /** The positionals as typed, before the config's `paths:` fill `opts.paths`. */
   argPaths: string[];
   cachePath: string | null;
@@ -50,6 +54,13 @@ export function resolveContext(opts: Options, rest: string[], log: Log): Context
   applyConfig(opts, config, explicit);
   if (configPath && !opts.quiet) log(`using ${configPath}`);
 
-  const cachePath = opts.cache === "none" ? null : opts.cache;
-  return { config, configPath, argPaths, cachePath };
+  const baseDir = configPath ? dirname(resolve(configPath)) : process.cwd();
+  // The cache moved in 0.5. The old file is not read -- its keys are of
+  // another schema anyway -- and it is named so it does not sit there as a
+  // second, stale cache.
+  if (existsSync(join(baseDir, OLD_CACHE_PATH)) && !opts.quiet) {
+    log(`${OLD_CACHE_PATH} is 0.4's cache; since 0.5 it is ${DEFAULT_CACHE_PATH}, so delete the old file`);
+  }
+  const cachePath = opts.cache === "none" ? null : resolve(baseDir, opts.cache);
+  return { config, configPath, baseDir, argPaths, cachePath };
 }

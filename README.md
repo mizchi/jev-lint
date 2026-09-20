@@ -214,13 +214,30 @@ npx -y jev-lint run --file myrule.yml src       # a rule file of your own, nothi
 
 ```bash
 npm install --save-dev jev-lint
-npx jev-lint init                     # writes .jev-lint.yaml, everything commented out
+npx jev-lint init                     # writes .jev-lint.yaml: files, and every rule on
 ```
 
-Uncomment `paths:` so `jev-lint check` needs no argument. The API key is read
-from the environment only, never from that file; `apiKey:` in it is an error.
-A `rules/` directory of the project's own is loaded *instead of* the shipped
-set; `-R <dir>` names any other, and repeats.
+The config picks the rules, as ESLint's does. `init` lists every shipped
+rule turned on; delete or turn off what you do not want, override what you
+do:
+
+```yaml
+files: [src, test]
+exclude: [test/fixtures]
+rules:
+  fn-name-promises: on
+  rust/fn-name-promises: off          # one language of the id
+  comment-describes-block: { at: 0.7, severity: error }
+  my-rule: warning                    # from .jev-lint/rules/
+```
+
+An id names the rule in every language that has it, `lang/id` one. With a
+config and no `rules:`, nothing runs and the run says so; with no config at
+all, every shipped rule runs. The API key is read from the environment only,
+never from that file; `apiKey:` in it is an error. The verdict cache is
+`.jev-lint/baseline.json`, meant to be committed: a run over the same commit
+answers from it, and CI can lint from it with no key. `-R <dir>` loads a
+directory in place of the shipped set and `.jev-lint/rules/`, for one run.
 
 ### Commits
 
@@ -473,9 +490,11 @@ the report that says why.
 
 ## Adding your rule
 
-A rule is a YAML file. Put it in `./rules/` — flat (`rules/mine.yml`) or,
-if you want fixtures and a baseline beside it, in the layout the shipped
-rules use: `rules/<language>/<id>/rule.yml`. Everything ast-grep
+A rule is a YAML file. Put it in `.jev-lint/rules/` — flat
+(`.jev-lint/rules/mine.yml`) or, if you want fixtures and a baseline beside
+it, in the layout the shipped rules use:
+`.jev-lint/rules/<language>/<id>/rule.yml` — and name it in the config's
+`rules:` like any shipped one. Everything ast-grep
 understands works in `rule:` unchanged — `pattern`, `kind`, `regex`,
 `all`/`any`/`not`, `inside`/`has`, `utils`, `constraints`:
 

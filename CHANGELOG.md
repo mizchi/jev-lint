@@ -6,7 +6,24 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/findings.md](docs/findings.md).
 
-## Unreleased
+## Unreleased (0.5.0)
+
+### Breaking
+
+- The config selects the rules, as ESLint's does. `rules:` is a mapping of
+  rule id to `on` / `off` / a severity / `{ severity, at, loose }`; an id
+  names the rule in every language that has it, `lang/id` one. A name that
+  matches no loaded rule is an error. A config with no `rules:` runs
+  nothing and says what to write; with no config, every loaded rule runs.
+  `paths:` is `files:`; `at:` moved under each rule; the old keys are
+  refused with the new spelling. `jev-lint init` writes `files:` and every
+  shipped rule on.
+- A project's own rules live in `.jev-lint/rules/` and add to the shipped
+  set; `./rules/` is nothing to the tool. `-R <dir>` loads a directory in
+  place of both for one run.
+- The verdict cache is `.jev-lint/baseline.json`, relative to the config's
+  directory. `.jev-lint-cache.json` is not read, and a run that finds it
+  says to delete it.
 
 ### Added
 

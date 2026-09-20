@@ -3,13 +3,13 @@
  */
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { loadRules, cutoffFor } from "../rules.ts";
+import { loadRules, cutoffFor, ruleSources } from "../rules.ts";
 import { ARMS, ARM_BLURB } from "../state.ts";
 import { TIER_ONE, type Rule } from "../types.ts";
 import type { Options, Log } from "./args.ts";
 
-export function cmdRules(opts: Options, out: Log, log: Log): number {
-  const { rules, errors, warnings } = loadRules(opts.rules);
+export function cmdRules(opts: Options, out: Log, log: Log, baseDir: string = process.cwd()): number {
+  const { rules, errors, warnings } = loadRules(opts.rules.length > 0 ? opts.rules : ruleSources(baseDir));
   for (const e of errors) log(`rule error: ${e}`);
   for (const w of warnings) log(`rule warning: ${w}`);
   const uncalibrated = (r: Rule): boolean =>

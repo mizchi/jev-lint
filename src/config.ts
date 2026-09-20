@@ -24,9 +24,9 @@
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import YAML from "yaml";
-import { GROUP_MODES, STATE_ARMS } from "./types.ts";
+import { GROUP_MODES, SEVERITIES, STATE_ARMS } from "./types.ts";
 import { API_KEY_VARS, BASE_URL_VARS, fromEnv } from "./jev.ts";
-import type { GroupMode, StateArm } from "./types.ts";
+import type { GroupMode, Severity, StateArm } from "./types.ts";
 
 /** The file names looked for, in order, walking up from the working directory. */
 /**
@@ -41,11 +41,29 @@ export const CONFIG_NAMES = [
   ".jevlint.yaml", ".jevlint.yml", "jevlint.yaml", "jevlint.yml",
 ] as const;
 
+/**
+ * What a config says about one rule: on or off, and what it overrides.
+ * `on` is `{ enabled: true }` and takes the rule's own severity and cutoff.
+ */
+export interface RuleSetting {
+  enabled: boolean;
+  severity?: Severity;
+  at?: number;
+  loose?: number;
+}
+
 /** Everything a config file may set. Every field is optional. */
 export interface Config {
-  rules?: string[];
-  paths?: string[];
+  /** What `check` looks at with no positional. */
+  files?: string[];
   exclude?: string[];
+  /**
+   * The rules that run, by id (`fn-name-promises`, every language that has
+   * it) or `lang/id` (one), from the shipped set and `.jev-lint/rules/`.
+   * Present, only these run; absent, a config that names nothing runs
+   * nothing and says so.
+   */
+  rules?: Record<string, RuleSetting>;
   cache?: string | null;
   model?: string;
   baseUrl?: string;
@@ -57,7 +75,6 @@ export interface Config {
   ruleBatchCap?: number;
   retry?: number;
   unsureBelow?: number | null;
-  at?: Record<string, number>;
 }
 
 export interface LoadedConfig {
@@ -113,11 +130,21 @@ export function loadConfig(path: string | null): LoadedConfig {
   const src = raw as Record<string, unknown>;
 
   const KNOWN = new Set([
-    "rules", "paths", "exclude", "cache", "model", "baseUrl", "apiKeyEnv", "group", "arm",
-    "concurrency", "batchSize", "ruleBatchCap", "retry", "unsureBelow", "at",
+    "files", "exclude", "rules", "cache", "model", "baseUrl", "apiKeyEnv", "group", "arm",
+    "concurrency", "batchSize", "ruleBatchCap", "retry", "unsureBelow",
   ]);
+  // The 0.4 spellings, refused by name: a key read as nothing would run
+  // every rule over the whole tree and say nothing about it.
+  const MOVED: Record<string, string> = {
+    paths: "`paths` is `files` since 0.5",
+    at: "`at` moved under `rules` since 0.5: `rules: { <id>: { at: 0.7 } }`",
+  };
   for (const k of Object.keys(src)) {
-    if (k === "apiKey" || k === "api_key") {
+    if (k in MOVED) {
+      errors.push(`${where(k)}: ${MOVED[k]}`);
+    } else if (k === "rules" && (Array.isArray(src.rules) || typeof src.rules === "string")) {
+      errors.push(`${where(k)}: \`rules\` names rules since 0.5 (\`rules: { fn-name-promises: on }\`); a rule directory is \`.jev-lint/rules/\`, or \`-R <dir>\` for one run`);
+    } else if (k === "apiKey" || k === "api_key") {
       errors.push(
         `${where(k)} is not supported: a config file belongs in version control and an API key does not. ` +
           `Set the key in the environment, or name the variable with \`apiKeyEnv\`.`,
@@ -129,7 +156,7 @@ export function loadConfig(path: string | null): LoadedConfig {
     }
   }
 
-  const stringList = (k: "rules" | "paths" | "exclude"): void => {
+  const stringList = (k: "files" | "exclude"): void => {
     const v = src[k];
     if (v === undefined) return;
     const list = typeof v === "string" ? [v] : v;
@@ -139,9 +166,25 @@ export function loadConfig(path: string | null): LoadedConfig {
     }
     if (list.length > 0) config[k] = list as string[];
   };
-  stringList("rules");
-  stringList("paths");
+  stringList("files");
   stringList("exclude");
+
+  if (src.rules !== undefined && !Array.isArray(src.rules) && typeof src.rules !== "string") {
+    if (typeof src.rules !== "object" || src.rules === null) {
+      errors.push(`${where("rules")} must be a mapping of rule id to on, off, a severity, or { severity, at, loose }`);
+    } else {
+      const rules: Record<string, RuleSetting> = {};
+      for (const [id, v] of Object.entries(src.rules as Record<string, unknown>)) {
+        const setting = ruleSetting(v);
+        if (typeof setting === "string") {
+          errors.push(`${path}: \`rules.${id}\` ${setting}`);
+          continue;
+        }
+        rules[id] = setting;
+      }
+      config.rules = rules;
+    }
+  }
 
   const str = (k: "model" | "baseUrl" | "apiKeyEnv"): void => {
     const v = src[k];
@@ -196,48 +239,70 @@ export function loadConfig(path: string | null): LoadedConfig {
     } else errors.push(`${where("unsureBelow")} must be null or a number from 0 to 1`);
   }
 
-  if (src.at !== undefined) {
-    if (typeof src.at !== "object" || src.at === null || Array.isArray(src.at)) {
-      errors.push(`${where("at")} must be a mapping of rule id to number`);
-    } else {
-      const at: Record<string, number> = {};
-      for (const [id, v] of Object.entries(src.at as Record<string, unknown>)) {
-        if (typeof v !== "number" || Number.isNaN(v)) {
-          errors.push(`${path}: \`at.${id}\` must be a number`);
-          continue;
-        }
-        at[id] = v;
-      }
-      if (Object.keys(at).length > 0) config.at = at;
-    }
-  }
-
   return { config, path, errors };
 }
 
-/** The file `jev-lint init` writes. Every setting commented with its default. */
-export function initialConfig(): string {
-  return `# jev-lint configuration. Every setting here is a DEFAULT: a command-line flag
-# of the same name overrides it, so a project can commit this and still let
-# someone change one thing for one run.
-#
-# Delete anything you do not need -- an absent setting takes the built-in
-# default, which is what the comment after it shows.
+/** One rule's setting as written, normalized; a string says what is wrong with it. */
+function ruleSetting(v: unknown): RuleSetting | string {
+  if (v === true || v === "on") return { enabled: true };
+  if (v === false || v === "off") return { enabled: false };
+  if (typeof v === "string" && (SEVERITIES as readonly string[]).includes(v)) return { enabled: true, severity: v as Severity };
+  if (typeof v !== "object" || v === null || Array.isArray(v)) {
+    return `must be on, off, one of ${SEVERITIES.join(", ")}, or a mapping of severity / at / loose`;
+  }
+  const o = v as Record<string, unknown>;
+  const out: RuleSetting = { enabled: true };
+  for (const k of Object.keys(o)) {
+    if (k === "severity") {
+      if (typeof o.severity !== "string" || !(SEVERITIES as readonly string[]).includes(o.severity)) return `\`severity\` must be one of ${SEVERITIES.join(", ")}`;
+      out.severity = o.severity as Severity;
+    } else if (k === "at" || k === "loose") {
+      if (typeof o[k] !== "number" || Number.isNaN(o[k])) return `\`${k}\` must be a number`;
+      out[k] = o[k] as number;
+    } else if (k === "enabled") {
+      if (typeof o.enabled !== "boolean") return "`enabled` must be true or false";
+      out.enabled = o.enabled;
+    } else {
+      return `has an unknown field \`${k}\`; the fields are severity, at, loose`;
+    }
+  }
+  return out;
+}
 
-# Where the rules come from. With no \`rules\` here and no ./rules directory,
-# the packs inside the installed package are used -- and their cutoffs were
-# fitted to that package's corpus, not to your code, so calibrate before
-# trusting them: https://github.com/mizchi/jev-lint#calibrating
-# rules: [rules]
+/**
+ * The file `jev-lint init` writes: the files to look at, every rule the
+ * package ships turned on -- a reader deletes what they do not want, and
+ * the list is the catalogue -- and every other setting commented with its
+ * default.
+ */
+export function initialConfig(ruleIds: string[]): string {
+  return `# jev-lint configuration. A flag of the same name overrides a setting here,
+# so a project can commit this and still let someone change one thing for one
+# run. A commented setting takes the built-in default shown after it.
 
-# What \`jev-lint check\` looks at when given no paths, and what under those
+# What \`jev-lint check\` looks at with no path given, and what under those
 # paths it never judges: fixtures with planted defects, vendored code.
-# paths: [src]
+files: [src]
 # exclude: [src/fixtures]
 
-# The verdict cache. \`none\` disables it. Treat it as trusted input: anything
-# that can edit it can silence a rule or invent a finding.
-# cache: .jev-lint-cache.json
+# The rules that run: \`on\`, \`off\`, a severity (hint, info, warning, error),
+# or a mapping -- \`{ severity: error, at: 0.7 }\`. An id names the rule in
+# every language that has it; \`rust/<id>\` names one language's. Every rule
+# the package ships is listed here, on; delete or turn off what you do not
+# want. Their cutoffs were fitted to the package's own corpus, not to your
+# code: https://github.com/mizchi/jev-lint#calibrating
+#
+# A rule of your own goes in .jev-lint/rules/ (a rule.yml, or the shipped
+# layout <language>/<id>/rule.yml with fixtures beside it) and is named here
+# like any other.
+rules:
+${ruleIds.map((id) => `  ${id}: on`).join("\n")}
+
+# The verdict cache, keyed on each rule and each subject, meant to be
+# committed: a run over the same commit answers from it, and CI can lint
+# from it with no API key. \`none\` disables it. Treat it as trusted input:
+# anything that can edit it can silence a rule or invent a finding.
+# cache: .jev-lint/baseline.json
 
 # The model, and the endpoint it is asked at. Point \`baseUrl\` at a proxy or a
 # self-hosted deployment to move the whole tool off the default service.
@@ -269,13 +334,6 @@ export function initialConfig(): string {
 # Confidence below which a finding is worded as a question for a human rather
 # than as a verdict. Confidence routes; it never suppresses.
 # unsureBelow: 0.55
-
-# Per-rule cutoffs, overriding whatever the rule file says. Fit these against
-# your own labelled corpus -- \`jev-lint calibrate --labels\` -- rather than
-# guessing: a cutoff is a claim about a specific set of answers.
-# at:
-#   fn-name-promises: 0.76
-#   var-name-describes-value: 0.61
 `;
 }
 
@@ -286,10 +344,13 @@ export function initialConfig(): string {
  * can be tested without loading `cli.ts` -- which runs `main()` on import.
  */
 export interface Configurable {
+  /** `-R` directories; empty means the shipped set and `.jev-lint/rules/`. */
   rules: string[];
   rulesAreShipped: boolean;
   paths: string[];
   exclude: string[];
+  /** The config's `rules:`, applied after loading; null when the config has none. */
+  ruleSettings: Record<string, RuleSetting> | null;
   cache: string;
   model: string | null;
   baseUrl: string | null;
@@ -318,11 +379,8 @@ export function applyConfig(
 ): void {
   const unset = (...flags: string[]): boolean => !flags.some((f) => explicit.has(f));
 
-  if (config.rules && unset("-R", "--rules")) {
-    opts.rules = config.rules;
-    opts.rulesAreShipped = false;
-  }
-  if (config.paths && opts.paths.length === 0) opts.paths = config.paths;
+  if (config.rules) opts.ruleSettings = config.rules;
+  if (config.files && opts.paths.length === 0) opts.paths = config.files;
   if (config.exclude && unset("--exclude")) opts.exclude = config.exclude;
   if (config.cache !== undefined && unset("-c", "--cache")) {
     opts.cache = config.cache === null ? "none" : config.cache;
@@ -338,10 +396,6 @@ export function applyConfig(
   if (config.unsureBelow !== undefined && unset("--unsure-below")) {
     opts.unsureBelow = config.unsureBelow;
   }
-  // `--at` is repeatable and per rule, so it merges rather than replaces: a
-  // flag overrides the file for THAT rule and leaves the others standing.
-  if (config.at) opts.at = { ...config.at, ...opts.at };
-
   // Not a jev-lint variable, so it is set rather than read: the client reads
   // the environment itself, and `apiKeyEnv` names where the key lives.
   if (config.apiKeyEnv) {

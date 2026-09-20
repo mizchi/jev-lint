@@ -44,7 +44,9 @@ import { dirname } from "node:path";
 import { ruleTextHash } from "./rules.ts";
 import type { Answer, CacheEntry, Grouping, Rule, RuleKind, StateArm, Subject } from "./types.ts";
 
-export const DEFAULT_CACHE_PATH = ".jev-lint-cache.json";
+export const DEFAULT_CACHE_PATH = ".jev-lint/baseline.json";
+/** Where 0.4 kept it; found, it is named and not read. */
+export const OLD_CACHE_PATH = ".jev-lint-cache.json";
 
 /**
  * The cache's own schema: what a key is made of. Separate from the rule

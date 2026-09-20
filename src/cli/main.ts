@@ -51,13 +51,13 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
 
   const context = resolveContext(opts, rest, log);
   if (!context) return 2;
-  const { config, argPaths, cachePath } = context;
+  const { config, configPath, baseDir, argPaths, cachePath } = context;
 
-  if (command === "rules") return cmdRules(opts, out, log);
+  if (command === "rules") return cmdRules(opts, out, log, baseDir);
   if (command === "replay") return cmdReplay(opts, out, log);
-  if (command === "eval") return cmdEval({ ...opts, paths: argPaths }, out, log, client);
+  if (command === "eval") return cmdEval({ ...opts, paths: argPaths }, out, log, client, baseDir);
 
-  const selected = selectForRun(command, opts, config, argPaths, log);
+  const selected = selectForRun(command, opts, config, argPaths, log, baseDir, configPath !== null);
   if (!selected) return 2;
   const { rules, rangeArg } = selected;
   command = selected.command;

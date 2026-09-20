@@ -2,27 +2,46 @@
  * Which rules a run judges with: the loaded set, or for `run` the one
  * named by id or by file. Says what it loaded and why it stopped.
  */
-import { loadRules, selectRules, shippedRulesPath } from "../rules.ts";
+import { applyRuleSettings, loadRules, ruleSources, selectRules, shippedRulesPath } from "../rules.ts";
 import type { Config } from "../config.ts";
 import type { Rule } from "../types.ts";
 import type { Log, Options } from "./args.ts";
 
-export function loadOrDie(opts: Options, log: Log): { rules: Rule[]; errors: string[] } | null {
-  const { rules, errors, warnings } = loadRules(opts.rules);
-  // Judging someone's code against packaged rules is reasonable; doing it
-  // without saying so is not, because their cutoffs were fitted to a corpus
-  // this code has never seen.
-  if (opts.rulesAreShipped && rules.length > 0) {
-    log(`no ./rules directory: using the ${rules.length} packaged rule(s) from ${opts.rules[0]}`);
-    log(`their cutoffs were fitted to this package's own corpus -- see docs/deepdive.md`);
-  }
+/**
+ * The rules a run judges with, from `-R` or the default sources, narrowed
+ * to the config's `rules:` when the config has one. A config with no
+ * `rules:` selects nothing, and that is said rather than run as
+ * everything: since 0.5 a config chooses its rules, as ESLint's does.
+ */
+export function loadOrDie(opts: Options, log: Log, baseDir: string = process.cwd(), hasConfig = false): { rules: Rule[]; errors: string[] } | null {
+  const sources = opts.rules.length > 0 ? opts.rules : ruleSources(baseDir);
+  const { rules: loaded, errors, warnings } = loadRules(sources);
   // Loudly, always. A rule that failed to load reports nothing, which is
   // indistinguishable from a rule that found nothing wrong.
   for (const e of errors) log(`rule error: ${e}`);
   for (const w of warnings) log(`rule warning: ${w}`);
-  if (rules.length === 0) {
-    log(`no usable rules found in ${opts.rules.join(", ")}`);
+  if (loaded.length === 0) {
+    log(`no usable rules found in ${sources.join(", ")}`);
     return null;
+  }
+  let rules = loaded;
+  if (opts.ruleSettings) {
+    const selected = applyRuleSettings(loaded, opts.ruleSettings);
+    for (const e of selected.errors) log(`config error: rules: ${e}`);
+    if (selected.errors.length > 0) return null;
+    rules = selected.rules;
+    if (rules.length === 0) {
+      log("the config's `rules:` turns every rule off; nothing to run");
+      return null;
+    }
+  } else if (hasConfig && opts.rules.length === 0) {
+    log("the config names no `rules:`, so nothing runs. List the rules to run -- `rules: { fn-name-promises: on, ... }` -- or `jev-lint init --force` writes them all");
+    return null;
+  } else if (opts.rulesAreShipped) {
+    // Judging someone's code against packaged rules is reasonable; doing it
+    // without saying so is not, because their cutoffs were fitted to a
+    // corpus this code has never seen.
+    log(`no config: running all ${rules.length} packaged rule(s); their cutoffs were fitted to this package's own corpus -- \`jev-lint init\` writes a config that picks`);
   }
   return { rules, errors };
 }
@@ -42,7 +61,7 @@ export interface Selection {
  * with `paths: [src]` in the config once judged every commit that touched
  * `src`.
  */
-export function selectForRun(command: string, opts: Options, config: Config, argPaths: string[], log: Log): Selection | null {
+export function selectForRun(command: string, opts: Options, config: Config, argPaths: string[], log: Log, baseDir: string = process.cwd(), hasConfig = false): Selection | null {
   let rules: Rule[];
   let rangeArg: string | undefined = argPaths[0];
   // `run`: one rule, chosen by id or by file, then judged exactly as `check`
@@ -51,7 +70,10 @@ export function selectForRun(command: string, opts: Options, config: Config, arg
   if (command === "run") {
     const [head, ...tail] = opts.paths;
     const shipped = shippedRulesPath();
-    const project = opts.rulesAreShipped ? [] : opts.rules;
+    // `run <id>` looks in the shipped packs and `.jev-lint/rules/`, or in
+    // the `-R` directories when given; the config's `rules:` does not
+    // narrow it -- the id on the command line is the selection.
+    const project = opts.rulesAreShipped ? ruleSources(baseDir).filter((s) => s !== shipped) : opts.rules;
     let picked = selectRules({ id: head ?? null, file: opts.file, shipped, projectRules: project });
     let paths = tail;
     if (picked.rules.length === 0 && opts.file && head !== undefined) {
@@ -67,7 +89,7 @@ export function selectForRun(command: string, opts: Options, config: Config, arg
     // The id took the first positional, so the config's `paths:` -- which
     // applies only when no positional was given -- was skipped. Without
     // this, `run <id>` scanned the whole tree while `check` scanned `paths:`.
-    opts.paths = paths.length > 0 ? paths : (config.paths ?? []);
+    opts.paths = paths.length > 0 ? paths : (config.files ?? []);
     if (!opts.quiet) log(`run: ${rules.map((r) => (r.languageDir ? `${r.languageDir}/${r.id}` : r.id)).join(", ")} from ${picked.from}`);
     // A commit rule's subjects are commits, so `run` with one is `commits`
     // and the positional after the id is a range. Mixing the two kinds in
@@ -79,7 +101,7 @@ export function selectForRun(command: string, opts: Options, config: Config, arg
       return null;
     } else command = "check";
   } else {
-    const loaded = loadOrDie(opts, log);
+    const loaded = loadOrDie(opts, log, baseDir, hasConfig);
     if (!loaded) return null;
     rules = loaded.rules;
   }

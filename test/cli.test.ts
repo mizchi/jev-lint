@@ -28,7 +28,7 @@ await testAsync("cli: `commits --base <ref>` with `paths:` in the config judges 
       git(["commit", "-q", "-m", `commit ${n}`]);
     }
     const base = git(["rev-parse", "HEAD~1"]).trim();
-    writeFileSync(join(dir, ".jev-lint.yaml"), "paths: [src]\n");
+    writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nrules: { commit-message-describes-diff: on }\n");
     const cli = join(realpathSync("."), "src/cli.ts");
     const shipped = join(realpathSync("."), "rules");
     const out = execFileSync("node", ["--experimental-strip-types", cli, "commits", "--base", base, "--dry-run", "--cache", "none", "-R", shipped, "--no-color"], {
@@ -61,7 +61,7 @@ test("cli: the config folds into the options under the flags, and two spellings 
   const said: string[] = [];
   const log = (s: string) => void said.push(s);
   try {
-    writeFileSync(join(dir, ".jev-lint.yaml"), "paths: [src]\nexclude: [src/fixtures]\nretry: 3\n");
+    writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nexclude: [src/fixtures]\nretry: 3\n");
     const opts = parseArgs(["--config", join(dir, ".jev-lint.yaml"), "--retry", "1"], { color: false });
     const ctx = resolveContext(opts, ["--config", join(dir, ".jev-lint.yaml"), "--retry", "1"], log);
     assert.ok(ctx);
@@ -92,7 +92,7 @@ test("cli: `run <id>` selects one shipped rule and scans the config's paths; a c
   const shipped = join(realpathSync("."), "rules");
   const opts = parseArgs(["fn-name-promises", "--quiet", "-R", shipped], { color: false });
   opts.rulesAreShipped = true;
-  const picked = selectForRun("run", opts, { paths: ["src"] }, ["fn-name-promises"], log);
+  const picked = selectForRun("run", opts, { files: ["src"] }, ["fn-name-promises"], log);
   assert.ok(picked);
   assert.equal(picked!.command, "check");
   assert.ok(picked!.rules.every((r) => r.id === "fn-name-promises"));
@@ -101,7 +101,7 @@ test("cli: `run <id>` selects one shipped rule and scans the config's paths; a c
   assert.equal(picked!.rangeArg, undefined);
   const commits = parseArgs(["commit-message-describes-diff", "main..HEAD", "--quiet", "-R", shipped], { color: false });
   commits.rulesAreShipped = true;
-  const asCommits = selectForRun("run", commits, { paths: ["src"] }, ["commit-message-describes-diff", "main..HEAD"], log);
+  const asCommits = selectForRun("run", commits, { files: ["src"] }, ["commit-message-describes-diff", "main..HEAD"], log);
   assert.equal(asCommits!.command, "commits");
   assert.equal(asCommits!.rangeArg, "main..HEAD", "the positional after the id is the range");
   const none = selectForRun("run", parseArgs(["no-such-rule", "-R", shipped], { color: false }), {}, ["no-such-rule"], log);

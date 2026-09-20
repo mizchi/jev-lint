@@ -38,9 +38,9 @@ failed and nothing was reported.
 
 | flag | |
 | --- | --- |
-| `-R, --rules <path>` | rule file or directory, repeatable (default `./rules`, else the packaged packs) |
+| `-R, --rules <path>` | rule file or directory, repeatable, loaded in place of the packaged packs and `.jev-lint/rules/` for this run |
 | `-r, --retry <n>` | ask everything n times and decide on the mean (default 1) — see [Asking more than once](#asking-more-than-once) |
-| `-c, --cache <path>` | verdict cache (default `.jev-lint-cache.json`; `none` to disable) |
+| `-c, --cache <path>` | verdict cache (default `.jev-lint/baseline.json`, relative to the config's directory; `none` to disable) |
 | `--at <rule=n>` | override one cutoff, repeatable |
 | `--unsure-below <n>` | confidence under which a finding is worded as a question |
 | `--arm <name>` | override every rule's state arm: `bare`, `local`, `located`, `graph`, `full` |
@@ -1039,6 +1039,58 @@ the batching axis invalidates the verdicts that depended on them.
   [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.
+
+## The config
+
+`.jev-lint.yaml` (any spelling of it), found by searching upwards; a flag
+of the same name beats a setting in it. Since 0.5 it picks the rules, as
+ESLint's does:
+
+```yaml
+files: [src, test]              # what `check` looks at with no path given
+exclude: [test/fixtures]        # under those, never judged
+rules:                          # only these run
+  fn-name-promises: on          # the rule's own severity and cutoff
+  rust/fn-name-promises: off    # one language of the id
+  comment-describes-block: { at: 0.7, severity: error, loose: 0.4 }
+  my-rule: warning              # a severity: on, at that severity
+cache: .jev-lint/baseline.json  # the default; `none` disables
+```
+
+A rule is named by its id, which is every language that has it, or by
+`lang/id`, which is one and wins over the bare id for that language. The
+value is `on`, `off`, a severity (`hint`, `info`, `warning`, `error`) or a
+mapping of `severity`, `at` and `loose`. A name that matches no loaded rule
+is an error, exit 2 -- a misspelt id that ran nothing would look like a
+clean rule. A config with no `rules:` runs nothing and says what to write;
+with no config at all, every loaded rule runs and the run says so.
+
+The rules load from the package's own packs and, when the directory
+exists, `.jev-lint/rules/` beside the config: a flat `*.yml` there, or the
+shipped layout `<language>/<id>/rule.yml` with `fixtures/`, `expect.yml`
+and `baseline.json` beside it, which `jev-lint eval` finds on its own. A
+rule of one's own with a shipped id is a duplicate and the loader says so;
+turn the shipped one off instead. `-R <dir>` loads a directory in place of
+both, for one run.
+
+The verdict cache is `.jev-lint/baseline.json`, relative to the config's
+directory, and is meant to be committed: a run over the same commit answers
+from it, and CI lints from it with no API key. It is trusted input --
+anything that can edit it can silence a rule or invent a finding.
+
+## Upgrading from 0.4
+
+- **The config selects the rules.** `paths:` is `files:`; `rules:` is a
+  mapping of rule id to `on` / `off` / a severity / `{ severity, at, loose
+  }`, not a list of directories; `at:` moved under each rule. Each of the
+  old keys is refused with the new spelling, exit 2, rather than read as
+  something else. `jev-lint init --force` writes a config with every
+  shipped rule on.
+- **`./rules/` is nothing to the tool.** A project's own rules live in
+  `.jev-lint/rules/` and add to the shipped set; they are selected by id
+  like any other. A directory of rules for one run is `-R <dir>`.
+- **The cache moved** to `.jev-lint/baseline.json`. `.jev-lint-cache.json`
+  is not read; a run that finds it says to delete it.
 
 ## Upgrading from 0.2
 

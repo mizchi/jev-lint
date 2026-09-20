@@ -5,9 +5,9 @@
  */
 import { DEFAULT_BATCH_SIZE } from "../batch.ts";
 import type { AskClient } from "../jev.ts";
+import type { RuleSetting } from "../config.ts";
 import { DEFAULT_CACHE_PATH } from "../cache.ts";
 import { API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_CONCURRENCY } from "../jev.ts";
-import { defaultRulePaths } from "../rules.ts";
 import { DEFAULT_RULE_BATCH_CAP } from "../schedule.ts";
 import { ARMS } from "../state.ts";
 import { GROUP_MODES, SEVERITIES, STATE_ARMS } from "../types.ts";
@@ -15,9 +15,12 @@ import type { GroupMode, Severity, StateArm } from "../types.ts";
 
 /** Everything the command line can set. */
 export interface Options {
+  /** `-R` directories; empty means the shipped packs and `.jev-lint/rules/`. */
   rules: string[];
-  /** True when `rules` is the installed package's own packs, not the project's. */
+  /** True when `rules` was not given and the defaults are in use. */
   rulesAreShipped: boolean;
+  /** The config's `rules:`; null when there is no config or it names none. */
+  ruleSettings: Record<string, RuleSetting> | null;
   /** How many times to ask everything, to see which findings reproduce. */
   retry: number;
   /** An explicit config path, "none" to ignore any file, or null to search. */
@@ -114,8 +117,8 @@ options:
                            searching upwards; two in one directory is an error);
                            --no-config ignores it
       --base-url <url>     the API endpoint (default ${DEFAULT_BASE_URL})
-  -R, --rules <path>       rule file or directory (repeatable; default ./rules,
-                           else the packs inside the installed package)
+  -R, --rules <path>       rule file or directory (repeatable) to load INSTEAD of
+                           the packs inside the package and .jev-lint/rules/
   -r, --retry <n>          ask everything n times and report what reproduces
                            (default 1). Above 1 the verdict cache is bypassed,
                            since a cached answer reproduces itself.
@@ -211,6 +214,7 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
   const opts: Options = {
     rules: [],
     rulesAreShipped: false,
+    ruleSettings: null,
     retry: 1,
     config: null,
     baseUrl: null,
@@ -445,11 +449,9 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
         opts.paths.push(a);
     }
   }
-  if (opts.rules.length === 0) {
-    const [paths, shipped] = defaultRulePaths();
-    opts.rules = paths;
-    opts.rulesAreShipped = shipped;
-  }
+  // With no -R, the sources are decided once the config's directory is
+  // known: the shipped packs and the project's `.jev-lint/rules/`.
+  opts.rulesAreShipped = opts.rules.length === 0;
   if (opts.arm && !STATE_ARMS.includes(opts.arm)) {
     throw new Error(`--arm must be one of ${ARMS.join(", ")}`);
   }

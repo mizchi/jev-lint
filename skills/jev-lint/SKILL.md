@@ -1,6 +1,6 @@
 ---
 name: jev-lint
-description: "Use when running jev-lint, adding it to a repository or its CI, choosing which of its shipped rule packs to use, writing a new jev-lint rule (an ast-grep matcher plus one sentence a model judges), or calibrating a rule's cutoff. Triggers: `jev-lint`, `.jev-lint.yaml`, a `rules/*.yml` file with `ask:` in it, questions like 'lint whether function names match their bodies' or 'find comments that are no longer true', and any request to check code for something a conventional linter cannot decide. Also use it before claiming a jev-lint rule 'works' — this skill defines what that requires."
+description: "Use when running jev-lint, adding it to a repository or its CI, choosing which of its shipped rule packs to use, writing a new jev-lint rule (an ast-grep matcher plus one sentence a model judges), or calibrating a rule's cutoff. Triggers: `jev-lint`, `.jev-lint.yaml`, a `.jev-lint/rules/*.yml` or `rules/*.yml` file with `ask:` in it, questions like 'lint whether function names match their bodies' or 'find comments that are no longer true', and any request to check code for something a conventional linter cannot decide. Also use it before claiming a jev-lint rule 'works' — this skill defines what that requires."
 ---
 
 # jev-lint
@@ -61,7 +61,7 @@ npx -y jev-lint run fn-name-promises src        # one shipped rule; rust/<id> fo
 npx -y jev-lint run --file myrule.yml src       # a rule file of your own, and nothing else
 npx -y jev-lint review --base main     # judge only what the diff touched
 npx -y jev-lint commits --base main    # judge each commit's message against its diff
-npx -y jev-lint init                   # write .jev-lint.yaml, all commented out
+npx -y jev-lint init                   # write .jev-lint.yaml: files, and every shipped rule on
 npx -y jev-lint rules                  # what loaded, and every validation error
 ```
 
@@ -91,12 +91,15 @@ When paths are configured or given, `review` scans only the changed files
 under them, never the whole tree.
 
 **Settings**: `.jev-lint.yaml` (or `jev-lint.yaml`, `.jevlint.yml`, any spelling; two in one directory is an error), nearest one searching upwards, a flag beats
-it. `paths:` there lets `jev-lint check` take no argument; `rules:` names the
-rule sources; `at:` overrides cutoffs per rule. Unknown keys are errors. A
-`-R` run inside a repository that has a config still merges that config —
-its `at:`, its `paths:` — so pass **`--no-config`** when testing a rule in
-isolation, and **`--cache none`** so no earlier verdict is reused (`-c
-<path>` names a different cache file).
+it. `files:` there lets `jev-lint check` take no argument; `rules:` picks the
+rules, ESLint-style — `fn-name-promises: on`, `rust/fn-name-promises: off`,
+`comment-describes-block: { at: 0.7, severity: error }` — from the shipped
+packs and the project's own `.jev-lint/rules/`; a config with no `rules:`
+runs nothing. Unknown keys are errors. A `-R` run inside a repository that
+has a config still merges that config — its `rules:`, its `files:` — so pass
+**`--no-config`** when testing a rule in isolation, and **`--cache none`** so
+no earlier verdict is reused (the cache is `.jev-lint/baseline.json`; `-c
+<path>` names another).
 
 **Two output lines that are never noise:**
 
@@ -124,7 +127,7 @@ cache and costs n times the tokens. (`-r` is retry; `-R` is rules.)
 
 ## Writing a rule: the loop
 
-A rule is YAML in a file under `rules/` (or anywhere, passed with `-R`).
+A rule is YAML in a file under `.jev-lint/rules/` (or anywhere, passed with `-R`), named in the config's `rules:` like a shipped one.
 Start from the nearest recipe in [references/cookbook.md](references/cookbook.md);
 every recipe there is validated to load and to match.
 
@@ -193,9 +196,9 @@ Work in this order, and do not skip a step because the rule "looks right":
    fails the whole scan.
 5. **Ask, on a few files, with `--retry 3` and an `--at` you guess**, and read
    every finding against the code. Then, if the rule will be kept, give it
-   fixtures: `rules/<lang>/<id>/fixtures/` with a handful of defects and the
+   fixtures: `.jev-lint/rules/<lang>/<id>/fixtures/` with a handful of defects and the
    hard clean cases, `expect.yml` beside them, and `jev-lint eval
-   rules/<lang>/<id> --repeat 3 --accept` — see
+   .jev-lint/rules/<lang>/<id> --repeat 3 --accept` — see
    [references/calibration.md](references/calibration.md). A rule ships
    with a fitted `at:` and an accepted baseline, not a guess.
 

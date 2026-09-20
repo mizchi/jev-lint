@@ -7,6 +7,7 @@ import { relative } from "node:path";
 import { compareEvals, discoverEvals, draftsChanged, loadSuite, planEval, readEvalRecord, recordedAts, runEval, scoreEval } from "../evals.ts";
 import type { CaseScore, EvalDiff, EvalRecord, EvalScore, EvalSuite } from "../evals.ts";
 import { USD_PER_MTOK, type AskClient } from "../jev.ts";
+import { ruleSources } from "../rules.ts";
 import type { Options, Log } from "./args.ts";
 
 /**
@@ -21,9 +22,10 @@ import type { Options, Log } from "./args.ts";
  * requests. Exit 1 on a regression or a stale baseline, so the gate can
  * fail a build.
  */
-export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClient | null = null): Promise<number> {
-  if (opts.compare) return cmdEvalCompare(opts, out, log);
-  const roots = opts.paths.length > 0 ? opts.paths : opts.rules;
+export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClient | null = null, baseDir: string = process.cwd()): Promise<number> {
+  const sources = opts.rules.length > 0 ? opts.rules : ruleSources(baseDir);
+  if (opts.compare) return cmdEvalCompare({ ...opts, rules: sources }, out, log);
+  const roots = opts.paths.length > 0 ? opts.paths : sources;
   const suites = discoverEvals(roots);
   if (suites.length === 0) {
     log(`no evals under ${roots.join(", ")}: a suite is a rule directory holding expect.yml and fixtures/`);

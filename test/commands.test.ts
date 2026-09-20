@@ -338,3 +338,71 @@ await testAsync("commands: eval --json is one document too, for a run, a dry run
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+await testAsync("commands: since 0.5 a config picks its rules by id, .jev-lint/rules/ adds to the shipped set, and the cache lives in .jev-lint/", async () => {
+  const { dir, rules, src } = project();
+  const here = process.cwd();
+  try {
+    // The project's own rule, beside the shipped ones, selected like them.
+    mkdirSync(join(dir, ".jev-lint", "rules"), { recursive: true });
+    writeFileSync(
+      join(dir, ".jev-lint", "rules", "body-short.yml"),
+      ["id: body-short", "language: TypeScript", "kind: score", "at: 2", "rule: { kind: function_declaration }", "ask: This function's body is too short.", ""].join("\n"),
+    );
+    process.chdir(dir);
+    // No config: everything loaded runs, and the run says so.
+    const all = await cli(["check", "src", "--cache", "none", "--json"]);
+    assert.equal(all.code, 1, all.log);
+    assert.match(all.log, /no config: running all \d+ packaged rule/);
+    assert.ok(Object.keys(JSON.parse(all.out).stats.byRule).length >= 1);
+    assert.ok(all.client.asked.some((q) => String(JSON.stringify(q)).includes("body is too short")), "the project's own rule ran");
+    // A config that names no rules runs nothing, and says what to write.
+    writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\n");
+    const none = await cli(["check", "--cache", "none"]);
+    assert.equal(none.code, 2);
+    assert.match(none.log, /names no `rules:`/);
+    // A config that names rules runs those, with what it overrides.
+    writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nrules:\n  body-short: { severity: error, at: 0.5 }\n  fn-name-promises: off\n");
+    const some = await cli(["check", "--cache", "none", "--json"]);
+    assert.equal(some.code, 1, some.log);
+    const report = JSON.parse(some.out);
+    assert.deepEqual(Object.keys(report.stats.byRule), ["body-short"]);
+    assert.equal(report.findings[0].severity, "error");
+    assert.equal(report.findings[0].cutoff, 0.5);
+    assert.ok(!some.client.asked.some((q) => String(JSON.stringify(q)).includes("name promises")), "a rule turned off is not asked");
+    // Everything off is nothing to run, and said.
+    writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nrules:\n  body-short: off\n");
+    const off = await cli(["check", "--cache", "none"]);
+    assert.equal(off.code, 2);
+    assert.match(off.log, /turns every rule off/);
+    // A misspelt id is an error, not a rule that quietly found nothing.
+    writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nrules:\n  body-shrot: on\n");
+    const typo = await cli(["check", "--cache", "none"]);
+    assert.equal(typo.code, 2);
+    assert.match(typo.log, /`body-shrot` names no loaded rule/);
+    // The cache is written under .jev-lint/, and the old file is named.
+    writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nrules: { body-short: { at: 0.5 } }\n");
+    writeFileSync(join(dir, ".jev-lint-cache.json"), "{}");
+    const cached = await cli(["check"]);
+    assert.equal(cached.code, 1, cached.log);
+    assert.ok(existsSync(join(dir, ".jev-lint", "baseline.json")), "the cache at its 0.5 path");
+    assert.match(cached.log, /\.jev-lint-cache\.json is 0\.4's cache/);
+    // `run <id>` still reaches the project's rule, config or not.
+    const one = await cli(["run", "body-short", "src", "--cache", "none", "--json", "--at", "body-short=0.5"]);
+    assert.equal(one.code, 1, one.log);
+    assert.deepEqual(Object.keys(JSON.parse(one.out).stats.byRule), ["body-short"]);
+    // `-R` is the whole set for that run, and a config rule it does not hold is an error.
+    const only = await cli(["check", "src", "--cache", "none", "-R", rules, "--json"]);
+    assert.equal(only.code, 1, only.log);
+    // `init` lists every shipped rule and writes to .jev-lint.yaml's spelling.
+    const started = await cli(["init", "--force", "--json"]);
+    assert.equal(started.code, 0);
+    const written = readFileSync(join(dir, ".jev-lint.yaml"), "utf8");
+    assert.match(written, /^files: \[src\]$/m);
+    assert.match(written, /^  fn-name-promises: on$/m);
+    assert.match(written, /^  document-is-slop: on$/m);
+  } finally {
+    process.chdir(here);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

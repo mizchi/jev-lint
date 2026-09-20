@@ -20,9 +20,13 @@ test("config: a valid file parses into every setting it names", () => {
     const p = writeConfig(
       dir,
       [
-        "rules: my-rules",
-        "paths: [src, lib]",
+        "files: [src, lib]",
         "exclude: [src/fixtures]",
+        "rules:",
+        "  fn-name-promises: on",
+        "  rust/fn-name-promises: off",
+        "  comment-describes-block: { at: 0.7, severity: error }",
+        "  my-rule: warning",
         "cache: none",
         "model: jev-1.13.0",
         "baseUrl: https://proxy.example/v1",
@@ -32,15 +36,20 @@ test("config: a valid file parses into every setting it names", () => {
         "concurrency: 2",
         "retry: 3",
         "unsureBelow: 0.4",
-        "at:",
-        "  fn-name-promises: 0.8",
       ].join("\n"),
     );
     const { config, errors } = loadConfig(p);
     assert.deepEqual(errors, []);
-    assert.deepEqual(config.rules, ["my-rules"], "a bare string becomes a one-item list");
-    assert.deepEqual(config.paths, ["src", "lib"]);
+    assert.deepEqual(config.files, ["src", "lib"]);
     assert.deepEqual(config.exclude, ["src/fixtures"]);
+    // ESLint's shape: a rule is on, off, a severity, or a mapping of what to
+    // override. `on` keeps the rule's own severity and cutoff.
+    assert.deepEqual(config.rules, {
+      "fn-name-promises": { enabled: true },
+      "rust/fn-name-promises": { enabled: false },
+      "comment-describes-block": { enabled: true, at: 0.7, severity: "error" },
+      "my-rule": { enabled: true, severity: "warning" },
+    });
     assert.equal(config.cache, null, "`none` disables the cache");
     // `applyConfig` publishes `baseUrl` to the environment for the client
     // to find; apply only the setting under test so nothing leaks past this test.
@@ -55,7 +64,6 @@ test("config: a valid file parses into every setting it names", () => {
     assert.equal(config.arm, "bare");
     assert.equal(config.retry, 3);
     assert.equal(config.unsureBelow, 0.4);
-    assert.deepEqual(config.at, { "fn-name-promises": 0.8 });
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -84,8 +92,8 @@ test("config: an unknown key, a bad value and bad YAML are all reported", () => 
     assert.match(loadConfig(writeConfig(dir, "retry: 0\n")).errors[0]!, /positive integer/);
     assert.match(loadConfig(writeConfig(dir, "arm: wide\n")).errors[0]!, /must be null or one of/);
     assert.match(loadConfig(writeConfig(dir, "unsureBelow: 2\n")).errors[0]!, /0 to 1/);
-    assert.match(loadConfig(writeConfig(dir, "at: [1, 2]\n")).errors[0]!, /mapping of rule id/);
-    assert.match(loadConfig(writeConfig(dir, "at:\n  r: yes\n")).errors[0]!, /must be a number/);
+    assert.match(loadConfig(writeConfig(dir, "rules: 3\n")).errors[0]!, /mapping of rule id/);
+    assert.match(loadConfig(writeConfig(dir, "rules:\n  r: { at: yes }\n")).errors[0]!, /must be a number/);
     assert.match(loadConfig(writeConfig(dir, "- a\n- b\n")).errors[0]!, /not a mapping/);
     assert.match(loadConfig(writeConfig(dir, "a: [unclosed\n")).errors.length ? "ok" : "", /ok/);
     // An empty file is valid and sets nothing.
@@ -116,19 +124,33 @@ test("config: a flag beats the file, and the file beats the default", () => {
   assert.equal(fromFlag.group, "rule", "and leaves the settings it did not name");
 });
 
-test("config: per-rule cutoffs merge, so a flag overrides one and keeps the rest", () => {
-  const opts = configurable({ at: { "fn-name-promises": 0.5 } });
-  applyConfig(opts, { at: { "fn-name-promises": 0.99, "var-name-describes-value": 0.42 } }, new Set(["--at"]));
-  assert.deepEqual(opts.at, { "fn-name-promises": 0.5, "var-name-describes-value": 0.42 });
+test("config: the 0.4 keys are refused with the 0.5 spelling, not read as something else", () => {
+  // `paths:` is `files:`; `rules:` no longer names directories but rules;
+  // `at:` moved under each rule. Silently ignoring any of these would run
+  // every rule over the whole tree at the shipped cutoffs and say nothing.
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
+  try {
+    const { errors } = loadConfig(writeConfig(dir, "paths: [src]\nrules: [my-rules]\nat: { fn-name-promises: 0.8 }\n"));
+    assert.equal(errors.length, 3, errors.join("\n"));
+    assert.match(errors[0]!, /`paths` is `files` since 0\.5/);
+    assert.match(errors[1]!, /`rules` names rules since 0\.5.*\.jev-lint\/rules/);
+    assert.match(errors[2]!, /`at` moved under `rules` since 0\.5/);
+    const bad = loadConfig(writeConfig(dir, "rules:\n  x: maybe\n  y: { at: high }\n  z: { severity: loud }\n  w: [1]\n"));
+    assert.equal(bad.errors.length, 4, bad.errors.join("\n"));
+    assert.match(bad.errors[0]!, /rules\.x/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
-test("config: naming the rules in the file means they are not the packaged ones", () => {
-  // Otherwise the run would announce that it fell back to the packaged packs
-  // while actually using the project's, which is the confusing half of both.
-  const opts = configurable({ rules: ["/pkg/rules"], rulesAreShipped: true });
-  applyConfig(opts, { rules: ["my-rules"] }, new Set());
-  assert.deepEqual(opts.rules, ["my-rules"]);
-  assert.equal(opts.rulesAreShipped, false);
+test("config: `files:` fills the paths only when none were typed, and `rules:` is carried whole", () => {
+  const opts = configurable();
+  applyConfig(opts, { files: ["src"], rules: { a: { enabled: true } } }, new Set());
+  assert.deepEqual(opts.paths, ["src"]);
+  assert.deepEqual(opts.ruleSettings, { a: { enabled: true } });
+  const typed = configurable({ paths: ["lib"] });
+  applyConfig(typed, { files: ["src"] }, new Set());
+  assert.deepEqual(typed.paths, ["lib"], "a positional beats the file");
 });
 
 test("config: the file is found by walking up, and only names jev-lint's own", () => {
@@ -200,16 +222,20 @@ await testAsync("config: the pre-push hook judges the commits about to be pushed
   assert.match(hook, /TYPESAFE_API_KEY/, "and stands aside on a machine without a key");
 });
 
-test("config: the file init writes is valid, and sets nothing until uncommented", () => {
+test("config: the file init writes is valid, names the files and every shipped rule, and nothing else is set", () => {
   // A starter config that errors, or that silently changes behaviour, is worse
-  // than none.
+  // than none. Since 0.5 a config selects its rules, so the starter lists
+  // every shipped id turned on -- a reader deletes what they do not want --
+  // and every other setting commented with its default.
   const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
   try {
-    const { config, errors } = loadConfig(writeConfig(dir, initialConfig()));
+    const text = initialConfig(["fn-name-promises", "comment-describes-block"]);
+    const { config, errors } = loadConfig(writeConfig(dir, text));
     assert.deepEqual(errors, [], "the shipped starter config must parse clean");
-    assert.deepEqual(config, {}, "and change nothing until a line is uncommented");
-    assert.match(initialConfig(), /apiKeyEnv/, "and it must say where the key goes");
-    assert.ok(!/^\s*apiKey:/m.test(initialConfig()), "and never suggest putting the key in it");
+    assert.deepEqual(config, { files: ["src"], rules: { "fn-name-promises": { enabled: true }, "comment-describes-block": { enabled: true } } });
+    assert.match(text, /apiKeyEnv/, "and it must say where the key goes");
+    assert.ok(!/^\s*apiKey:/m.test(text), "and never suggest putting the key in it");
+    assert.match(text, /\.jev-lint\/rules/, "and says where a rule of one's own goes");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

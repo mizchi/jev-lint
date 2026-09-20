@@ -28,6 +28,7 @@ import { basename, dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import YAML from "yaml";
+import type { RuleSetting } from "./config.ts";
 import {
   GROUPINGS,
   KINDS,
@@ -549,23 +550,59 @@ function criterionText(c: Criterion): string {
   return typeof c === "string" ? c : canonical(c);
 }
 
+/** Where a project's own rules live, under the directory the config is in. */
+export const USER_RULES_DIR = ".jev-lint/rules";
+
 /**
- * Where rules come from when `-r` was not given.
+ * Where rules come from when `-R` was not given: the packs inside the
+ * installed package, and the project's own under `.jev-lint/rules/` when
+ * that directory exists. Both, since 0.5: a project's rule is selected by
+ * id in the config like a shipped one, and a shipped one is turned off
+ * there rather than shadowed. A rule of one's own with a shipped id is a
+ * duplicate, and the loader says so.
  *
- * `./rules` first, because a project's own rules are the point of the tool.
- * Failing that, the packs inside the installed package -- without this,
- * `npm install jev-lint && npx jev-lint check src` cannot work at all: the
- * default was the literal relative path `rules`, the shipped packs live in
- * `node_modules/jev-lint/rules`, and every fresh install exited with "no usable
- * rules found in rules". Found by an audit of the README's own install block.
- *
- * Never both. Merging them would silently judge someone's code against rules
- * they did not write, and a duplicate id would be dropped as a rule error.
+ * Without the package's own path, `npm install jev-lint && npx jev-lint
+ * check src` could not work at all: the default was once the literal
+ * `rules`, and every fresh install exited with "no usable rules found".
  */
-export function defaultRulePaths(): [string[], boolean] {
-  if (existsSync(resolve("rules"))) return [["rules"], false];
+export function ruleSources(base: string = process.cwd()): string[] {
   const shipped = shippedRulesPath();
-  return shipped ? [[shipped], true] : [["rules"], false];
+  const own = join(base, USER_RULES_DIR);
+  return [...(shipped ? [shipped] : []), ...(existsSync(own) ? [own] : [])];
+}
+
+/**
+ * The config's `rules:` applied to what loaded: only the rules it names and
+ * turns on run, with the severity, cutoff and loose floor it gives them.
+ * `id` names the rule in every language that has it; `lang/id` names one,
+ * and wins over the bare id for that language. A name that matches no
+ * loaded rule is an error -- ESLint's "definition for rule not found" --
+ * since a misspelt id that ran nothing would look like a clean rule.
+ */
+export function applyRuleSettings(
+  rules: Rule[],
+  settings: Record<string, RuleSetting>,
+): { rules: Rule[]; errors: string[] } {
+  const errors: string[] = [];
+  const used = new Set<string>();
+  const out: Rule[] = [];
+  for (const rule of rules) {
+    const qualified = rule.languageDir ? `${rule.languageDir}/${rule.id}` : null;
+    const setting = (qualified && settings[qualified]) ?? settings[rule.id];
+    if (qualified && settings[qualified]) used.add(qualified);
+    if (settings[rule.id]) used.add(rule.id);
+    if (!setting || !setting.enabled) continue;
+    out.push({
+      ...rule,
+      ...(setting.severity ? { severity: setting.severity } : {}),
+      ...(setting.at !== undefined ? { at: setting.at } : {}),
+      ...(setting.loose !== undefined ? { loose: setting.loose } : {}),
+    });
+  }
+  for (const name of Object.keys(settings)) {
+    if (!used.has(name)) errors.push(`\`${name}\` names no loaded rule (see \`jev-lint rules\` for the ids)`);
+  }
+  return { rules: out, errors };
 }
 
 /** The packaged rules, wherever this copy of the tool is installed; null if not found. */
