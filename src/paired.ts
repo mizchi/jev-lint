@@ -178,8 +178,9 @@ export function relatedTests(
   // `shopping-cart.test.ts` name something else. A hyphen is part of a
   // name, so `my-module.test.ts` still pairs with `my-module.ts`.
   const names = (base: string) => base.split(/[._]/);
+  const family = languageFamily(file);
   return testFiles
-    .filter((t) => t !== file)
+    .filter((t) => t !== file && languageFamily(t) === family)
     .map((t) => {
       const lower = t.toLowerCase();
       const base = basename(lower);
@@ -238,6 +239,19 @@ function modulePaths(file: string): Set<string> {
 
 /** `from "..."`, `import("...")` and `require("...")`, single or double quoted. */
 const IMPORT_SPECIFIER = /(?:\bfrom\s*|\bimport\s*\(\s*|\brequire\s*\(\s*)(?:"([^"]+)"|'([^']+)')/g;
+
+/**
+ * The language a file's tests are written in, by extension: the ECMAScript
+ * grammars are one family, everything else is its own. A test in another
+ * family is never this file's test, whatever it is called -- without this,
+ * a Go `cart.go` paired with a `cart.test.ts` under the conventional
+ * `test/` root, and the excerpt budget went three ways.
+ */
+export function languageFamily(path: string): string {
+  const ext = (path.split(".").pop() ?? "").toLowerCase();
+  if (["ts", "tsx", "js", "jsx", "mjs", "cjs", "mts", "cts"].includes(ext)) return "ecmascript";
+  return ext;
+}
 
 /** Lines that open a test or a suite, in the common runners. */
 const TEST_OPENER = /\b(?:describe|test|it|suite|context)\s*(?:\.\w+)?\s*\(|^\s*#\[test\]|^\s*fn test_|^\s*def test_|^\s*func Test\w*\s*\(/;

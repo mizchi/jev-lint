@@ -1104,6 +1104,34 @@ const manySubjects = (n: number, over: Partial<Subject> = {}): Subject[] =>
     subjectOf({ line: i + 1, endLine: i + 1, text: `call${i}()`, ...over }),
   );
 
+await testAsync("scan: Go types are named by their type_spec, and a parameter type is not an exported name", async () => {
+  const { collectSubjects } = await import("../src/run.ts");
+  const dir = mkdtempSync(join(tmpdir(), "jev-go-"));
+  try {
+    writeFileSync(join(dir, "a.go"), [
+      "package x",
+      "",
+      "type User struct{ Name string }",
+      "",
+      "func (u User) Greet() string { return u.Name }",
+      "",
+      "func displayName(u User) string { return u.Name }",
+      "",
+    ].join("\n"));
+    const rule = scoreRule({ language: "Go", rule: { kind: "function_declaration" }, state: "graph" });
+    const { symbols } = await collectSubjects({ rules: [rule], paths: ["a.go"], cwd: dir });
+    const entry = symbols.get("a.go")!;
+    const byName = new Map(entry.symbols.map((s) => [s.name, s]));
+    assert.ok(byName.has("User"), `the type is a named symbol: ${[...byName.keys()].join(", ")}`);
+    assert.equal(byName.get("User")!.role, "type");
+    assert.equal(byName.get("User")!.exported, true);
+    assert.equal(byName.get("Greet")!.exported, true, "a capitalised method with a receiver");
+    assert.equal(byName.get("displayName")!.exported, false, "a lower-case func with an exported parameter type is private");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 // ---------------------------------------------------------------- paired
 
 test("paired: a test file is recognised by its name or its directory, in the usual spellings", () => {
@@ -1113,6 +1141,10 @@ test("paired: a test file is recognised by its name or its directory, in the usu
   // Python's prefix and Go's suffix pair like the others.
   assert.deepEqual(relatedTestFiles("pkg/cart.py", ["pkg/test_cart.py", "pkg/test_other.py"]), ["pkg/test_cart.py"]);
   assert.deepEqual(relatedTestFiles("pkg/cart.go", ["pkg/cart_test.go", "pkg/other_test.go"]), ["pkg/cart_test.go"]);
+  // A test in another language is never this file's test, whatever its name:
+  // a Go module's cart.go once paired with test/fixtures/cookbook/cart.test.ts.
+  assert.deepEqual(relatedTestFiles("pkg/cart.go", ["test/cart.test.ts", "test/cart.rs", "pkg/cart_test.go"]), ["pkg/cart_test.go"]);
+  assert.deepEqual(relatedTestFiles("src/cart.ts", ["src/cart.test.js", "src/cart.test.tsx", "src/cart_test.go"]), ["src/cart.test.js", "src/cart.test.tsx"], "the ECMAScript family is one language");
   assert.ok(isTestFile("test/helpers.go", "func TestCart(t *testing.T) {}"), "a Go test opener");
   for (const p of ["src/a.ts", "src/testing.ts", "src/contest/a.ts", "src/latest.ts", "src/spec-parser.ts"]) {
     assert.ok(!isTestFile(p), `${p} is not`);

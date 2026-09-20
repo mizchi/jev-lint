@@ -131,10 +131,20 @@ export const STRUCTURE: Partial<Record<Language, LanguageStructure>> = {
     containers: [
       { kind: "function_declaration", role: "function", nameField: "name" },
       { kind: "method_declaration", role: "method", nameField: "name" },
-      { kind: "type_declaration", role: "type", nameField: null },
+      // A Go type's name sits on the `type_spec` inside the declaration,
+      // not on the declaration itself.
+      {
+        kind: "type_declaration",
+        role: "type",
+        nameField: null,
+        rule: { kind: "type_declaration", has: { kind: "type_spec", has: { field: "name", pattern: "$JEVNAME" } } },
+      },
     ],
     imports: ["import_declaration"],
-    exportedIf: (text: string) => /\b(func|type)\s+\(?[^)]*\)?\s*[A-Z]/.test(text),
+    // Exported when the NAME is capitalised: `func (r *Repo) Get` and `type
+    // User`, not `func displayName(u User)`, whose parameter type once
+    // passed for the name.
+    exportedIf: (text: string) => /^(func\s+(\([^)]*\)\s*)?|type\s+)[A-Z]/.test(text),
     exports: [],
     testMarker: /\bfunc\s+Test[A-Z_]/,
   },
