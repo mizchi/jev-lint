@@ -23,16 +23,30 @@
   # 0.45. The `score` variant was dropped: on the same corpus it put the
   # two-groups clean at 2.67 with confidence 0.65 against a bad band from
   # 2.81, narrower than the noul on either side.
+  #
+  # A fourth shape, parameter packaging, added after the unseen check: its
+  # one real finding (`loop-service.ts`, six `execute*Phase` taking one
+  # params object and one taking the same three fields as positionals)
+  # answered 0.44, because the ask said "order" and nothing else about
+  # parameters. With the clause and a corpus case for it (`phases.ts`, the
+  # same shape) that case answers 0.78 and loop-service 0.59; the hard
+  # clean beside it (`exporters.ts`, the same params object plus an optional
+  # signal) 0.14. The clause cost the async-ness defect `formatters.ts` 0.06
+  # (0.71 to 0.65), which is why the cutoff moved from 0.60 to 0.55: 29
+  # modules, 10 bad in 0.65-0.92, 19 clean in 0.05-0.42, 0 flips, headroom
+  # 0.10 on the bad side and 0.13 on the clean. Unseen highest clean stays
+  # 0.45 (`hub-pr-watch.ts`, a large mixed module with no single odd item).
   state: graph
   axis: file
-  at: 0.6
+  at: 0.55
   rule:
     kind: program
   ask: >-
     One public function of this module does the same kind of work as its
     siblings but in a different signature shape: it reports failure
     differently, it is synchronous where they are asynchronous or the
-    reverse, or it takes the same parameters in a different order.
+    reverse, it takes the same parameters in a different order, or it takes
+    as separate parameters what its siblings take as one object.
   criteria:
     "true": >-
       The public functions share one signature shape -- the same way of
@@ -43,7 +57,9 @@
       Promise<Result<T>>; one throws where the rest return T | null, or
       returns Result where the rest throw; one is a plain function where the
       rest are async, or async where the rest are plain, for the same kind
-      of work; one takes (input, ctx) where the rest take (ctx, input).
+      of work; one takes (input, ctx) where the rest take (ctx, input); one
+      takes (request, baseCommit, deps) as three parameters where the rest
+      take one params object holding the same three fields, or the reverse.
       Nothing in the module says why.
     "false": >-
       Every public function has the same shape; or several shapes appear
@@ -56,12 +72,14 @@
       placeholder (a noop* name, an unused parameter, an empty body), a
       comment beside it says why, or the only difference is an extra
       optional parameter. A sibling that takes a different parameter is not
-      a reordering; only the same parameters in another order count. A
+      a reordering; only the same parameters in another order, or the same
+      parameters unpacked from or packed into one object, count. A
       function whose only difference is its name -- a different verb, or a
       prefix moved to a suffix -- with the same signature shape as its
       siblings is not a deviation for this rule.
   note: >-
-    Judge signature shapes only: how failure is reported, async-ness and
-    parameter order. Names are another rule's subject. The outline gives
+    Judge signature shapes only: how failure is reported, async-ness,
+    parameter order and parameter packaging. Names are another rule's
+    subject. The outline gives
     each public item's signature: async shows itself, and the return type
     shows whether failure is a value (Result, | null, | undefined) or not.

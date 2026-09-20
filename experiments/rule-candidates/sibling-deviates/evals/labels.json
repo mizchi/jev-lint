@@ -242,5 +242,23 @@
       "window": 1000000,
       "reason": "hard clean: putExport takes an extra optional opts parameter; the shared (bucket, key, body) => Promise<void> shape is intact."
     }
+  ],
+  "phases.ts": [
+    {
+      "line": 1,
+      "label": "bad",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "parameter packaging: four execute*Phase take one params object {request, baseCommit, deps}; executeSubmitPhase takes the same three as positionals for the same kind of work. The shape a 25k-line worker in an unseen repository had at 0.44, under-answered because the ask said only \"order\"."
+    }
+  ],
+  "exporters.ts": [
+    {
+      "line": 1,
+      "label": "clean",
+      "rule": "sibling-deviates",
+      "window": 1000000,
+      "reason": "hard clean: exportAll takes the same params object plus an optional signal, and is a combinator over its siblings; an extra optional parameter is not a packaging change."
+    }
   ]
 }

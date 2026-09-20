@@ -142,3 +142,44 @@ Headroom on real code: 0.15 above the highest clean.
 
 Across the three rules of this brief: ~610 requests, ~2.7M input tokens,
 ~$0.12 of the $0.60 budget.
+
+## Addendum, 2026-09-20: the fourth shape, and the module that got no verdict
+
+Two follow-ups from the unseen check, done together.
+
+**Parameter packaging.** `loop-service.ts` (six `execute*Phase` taking one
+params object, `executeLoopIterateSubmitPhase(request, baseCommit, deps)`
+taking the same three as positionals) answered 0.44 because the ask named
+"order" and nothing else about parameters. One clause in each of ask,
+true-criteria and note ("takes as separate parameters what its siblings
+take as one object", "or the reverse"), one bad case in that shape
+(`phases.ts`) and one hard clean beside it (`exporters.ts`: the same params
+object plus an optional `AbortSignal`, on a combinator over its siblings):
+
+| case | before | after |
+| --- | --- | --- |
+| `phases.ts` (bad, packaging) | 0.40 | 0.78 |
+| `exporters.ts` (clean, extra optional) | 0.14 | 0.14 |
+| `formatters.ts` (bad, async-ness) | 0.71 | 0.65 |
+| `sync.ts` (highest clean) | 0.48 | 0.42 |
+| unseen `loop-service.ts` | 0.44 | 0.59 |
+| unseen highest clean (`hub-pr-watch.ts`) | 0.39 | 0.45 |
+
+Every other case moved 0.04 or less. The clause cost `formatters.ts` 0.06,
+so `at` moved from 0.60 to 0.55: 10 bad in 0.65-0.92, 19 clean in
+0.05-0.42, 0 flips, headroom 0.10 bad / 0.13 clean on the corpus, 0.10 on
+the unseen clean side. `loop-service.ts` is now a finding at 0.04 over --
+in the wobble band, and this rule is `info`, so that is where it belongs.
+Baseline accepted; a second unseen run cost $0.027 (58 modules x 3 passes).
+
+**`worker.ts` (25k lines).** Its outline rendered at 127k characters and no
+arm could carry it. The tool now caps an outline at `OUTLINE_TEXT_LIMIT`
+(16,000 characters: every export, then private symbols from the top until
+the budget, then "… and N more private symbols not shown"), and nests a
+symbol under the symbol that contains it -- the same outline had listed a
+`log` declared inside `createLogger`, and nine methods of two classes, as
+"public API" siblings. `worker.ts` now answers 0.30 on this rule and 0.32
+on `module-name-describes-contents`, on `bare` (the `graph` arm's full
+symbol table of 950 entries still steps down; the outline is the subject
+either way). The three file-subject suites re-ran with the nested outline:
+same decisions on all of them, every mean within 0.03.

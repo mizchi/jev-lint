@@ -1,13 +1,13 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-19T17:58:24.885Z",
+  "recorded": "2026-09-20T05:56:21.189Z",
   "model": "jev-1.13.0",
   "suite": "sibling-deviates",
   "rules": [
     {
       "id": "sibling-deviates",
-      "draft": "98cedd4eb4fc",
-      "at": 0.6
+      "draft": "bba3232d6441",
+      "at": 0.55
     }
   ],
   "cutoffs": {},
@@ -19,7 +19,533 @@
         "line": 1,
         "endLine": 32,
         "kind": "noul",
-        "value": 0.11,
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/auth_routes.ts",
+        "line": 1,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/accounts.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/commands.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/fetchers.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/factories.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/formatters.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/handlers.ts",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/exporters.ts",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/lookups.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/jobs.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/notifications.ts",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/order_service.ts",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/middleware.ts",
+        "line": 1,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/parsers.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/permissions.ts",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/preferences.ts",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/phases.ts",
+        "line": 1,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/product_source.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/project_files.ts",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/serializers.ts",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/session_events.ts",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/rate_limiter.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/sync.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/uploads.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/worker_routes.ts",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/settings.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/validators.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/user_repository.ts",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/commands.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/auth_routes.ts",
+        "line": 1,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/accounts.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/codec.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/factories.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/fetchers.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/formatters.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/exporters.ts",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/handlers.ts",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/jobs.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/lookups.ts",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/middleware.ts",
+        "line": 1,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/notifications.ts",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/parsers.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/order_service.ts",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/permissions.ts",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/phases.ts",
+        "line": 1,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/preferences.ts",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/product_source.ts",
+        "line": 1,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/project_files.ts",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/rate_limiter.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/serializers.ts",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/session_events.ts",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/settings.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/sync.ts",
+        "line": 1,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.43,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/uploads.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/user_repository.ts",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/validators.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/worker_routes.ts",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/codec.ts",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.13,
         "confidence": null
       },
       {
@@ -51,20 +577,20 @@
       },
       {
         "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/formatters.ts",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/exporters.ts",
         "line": 1,
-        "endLine": 22,
+        "endLine": 36,
         "kind": "noul",
-        "value": 0.67,
+        "value": 0.14,
         "confidence": null
       },
       {
         "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/handlers.ts",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/factories.ts",
         "line": 1,
-        "endLine": 36,
+        "endLine": 19,
         "kind": "noul",
-        "value": 0.78,
+        "value": 0.11,
         "confidence": null
       },
       {
@@ -73,7 +599,16 @@
         "line": 1,
         "endLine": 35,
         "kind": "noul",
-        "value": 0.88,
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/formatters.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.64,
         "confidence": null
       },
       {
@@ -82,7 +617,7 @@
         "line": 1,
         "endLine": 29,
         "kind": "noul",
-        "value": 0.16,
+        "value": 0.18,
         "confidence": null
       },
       {
@@ -96,20 +631,29 @@
       },
       {
         "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/factories.ts",
-        "line": 1,
-        "endLine": 19,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
         "file": "experiments/rule-candidates/sibling-deviates/evals/cases/middleware.ts",
         "line": 1,
         "endLine": 48,
         "kind": "noul",
-        "value": 0.15,
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/handlers.ts",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/order_service.ts",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.19,
         "confidence": null
       },
       {
@@ -123,20 +667,11 @@
       },
       {
         "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/order_service.ts",
-        "line": 1,
-        "endLine": 31,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
         "file": "experiments/rule-candidates/sibling-deviates/evals/cases/parsers.ts",
         "line": 1,
         "endLine": 32,
         "kind": "noul",
-        "value": 0.8,
+        "value": 0.74,
         "confidence": null
       },
       {
@@ -145,7 +680,7 @@
         "line": 1,
         "endLine": 24,
         "kind": "noul",
-        "value": 0.11,
+        "value": 0.12,
         "confidence": null
       },
       {
@@ -159,11 +694,20 @@
       },
       {
         "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/phases.ts",
+        "line": 1,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
         "file": "experiments/rule-candidates/sibling-deviates/evals/cases/product_source.ts",
         "line": 1,
         "endLine": 29,
         "kind": "noul",
-        "value": 0.37,
+        "value": 0.33,
         "confidence": null
       },
       {
@@ -172,16 +716,7 @@
         "line": 1,
         "endLine": 25,
         "kind": "noul",
-        "value": 0.82,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/rate_limiter.ts",
-        "line": 1,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.18,
+        "value": 0.78,
         "confidence": null
       },
       {
@@ -190,16 +725,16 @@
         "line": 1,
         "endLine": 30,
         "kind": "noul",
-        "value": 0.79,
+        "value": 0.84,
         "confidence": null
       },
       {
         "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/settings.ts",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/rate_limiter.ts",
         "line": 1,
-        "endLine": 22,
+        "endLine": 35,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.21,
         "confidence": null
       },
       {
@@ -208,16 +743,16 @@
         "line": 1,
         "endLine": 27,
         "kind": "noul",
-        "value": 0.74,
+        "value": 0.73,
         "confidence": null
       },
       {
         "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/uploads.ts",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/settings.ts",
         "line": 1,
         "endLine": 22,
         "kind": "noul",
-        "value": 0.14,
+        "value": 0.05,
         "confidence": null
       },
       {
@@ -226,7 +761,25 @@
         "line": 1,
         "endLine": 35,
         "kind": "noul",
-        "value": 0.53,
+        "value": 0.42,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/user_repository.ts",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "sibling-deviates",
+        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/uploads.ts",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.18,
         "confidence": null
       },
       {
@@ -236,15 +789,6 @@
         "endLine": 32,
         "kind": "noul",
         "value": 0.2,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/user_repository.ts",
-        "line": 1,
-        "endLine": 23,
-        "kind": "noul",
-        "value": 0.04,
         "confidence": null
       },
       {
@@ -256,502 +800,12 @@
         "value": 0.85,
         "confidence": null
       }
-    ],
-    [
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/accounts.ts",
-        "line": 1,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.32,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/commands.ts",
-        "line": 1,
-        "endLine": 28,
-        "kind": "noul",
-        "value": 0.92,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/codec.ts",
-        "line": 1,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.12,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/auth_routes.ts",
-        "line": 1,
-        "endLine": 41,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/fetchers.ts",
-        "line": 1,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.87,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/factories.ts",
-        "line": 1,
-        "endLine": 19,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/handlers.ts",
-        "line": 1,
-        "endLine": 36,
-        "kind": "noul",
-        "value": 0.75,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/formatters.ts",
-        "line": 1,
-        "endLine": 22,
-        "kind": "noul",
-        "value": 0.75,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/jobs.ts",
-        "line": 1,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/lookups.ts",
-        "line": 1,
-        "endLine": 28,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/middleware.ts",
-        "line": 1,
-        "endLine": 48,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/notifications.ts",
-        "line": 1,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/order_service.ts",
-        "line": 1,
-        "endLine": 31,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/parsers.ts",
-        "line": 1,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.79,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/permissions.ts",
-        "line": 1,
-        "endLine": 24,
-        "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/preferences.ts",
-        "line": 1,
-        "endLine": 30,
-        "kind": "noul",
-        "value": 0.22,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/product_source.ts",
-        "line": 1,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.33,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/rate_limiter.ts",
-        "line": 1,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.17,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/project_files.ts",
-        "line": 1,
-        "endLine": 25,
-        "kind": "noul",
-        "value": 0.81,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/serializers.ts",
-        "line": 1,
-        "endLine": 30,
-        "kind": "noul",
-        "value": 0.81,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/session_events.ts",
-        "line": 1,
-        "endLine": 27,
-        "kind": "noul",
-        "value": 0.75,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/settings.ts",
-        "line": 1,
-        "endLine": 22,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/user_repository.ts",
-        "line": 1,
-        "endLine": 23,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/uploads.ts",
-        "line": 1,
-        "endLine": 22,
-        "kind": "noul",
-        "value": 0.15,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/sync.ts",
-        "line": 1,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.48,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/validators.ts",
-        "line": 1,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.19,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/worker_routes.ts",
-        "line": 1,
-        "endLine": 31,
-        "kind": "noul",
-        "value": 0.87,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/codec.ts",
-        "line": 1,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.12,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/accounts.ts",
-        "line": 1,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.28,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/commands.ts",
-        "line": 1,
-        "endLine": 28,
-        "kind": "noul",
-        "value": 0.93,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/auth_routes.ts",
-        "line": 1,
-        "endLine": 41,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/fetchers.ts",
-        "line": 1,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.87,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/factories.ts",
-        "line": 1,
-        "endLine": 19,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/formatters.ts",
-        "line": 1,
-        "endLine": 22,
-        "kind": "noul",
-        "value": 0.72,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/handlers.ts",
-        "line": 1,
-        "endLine": 36,
-        "kind": "noul",
-        "value": 0.82,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/middleware.ts",
-        "line": 1,
-        "endLine": 48,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/jobs.ts",
-        "line": 1,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.15,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/lookups.ts",
-        "line": 1,
-        "endLine": 28,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/notifications.ts",
-        "line": 1,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/order_service.ts",
-        "line": 1,
-        "endLine": 31,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/parsers.ts",
-        "line": 1,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.79,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/permissions.ts",
-        "line": 1,
-        "endLine": 24,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/preferences.ts",
-        "line": 1,
-        "endLine": 30,
-        "kind": "noul",
-        "value": 0.22,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/product_source.ts",
-        "line": 1,
-        "endLine": 29,
-        "kind": "noul",
-        "value": 0.33,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/project_files.ts",
-        "line": 1,
-        "endLine": 25,
-        "kind": "noul",
-        "value": 0.84,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/rate_limiter.ts",
-        "line": 1,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.17,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/serializers.ts",
-        "line": 1,
-        "endLine": 30,
-        "kind": "noul",
-        "value": 0.83,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/session_events.ts",
-        "line": 1,
-        "endLine": 27,
-        "kind": "noul",
-        "value": 0.75,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/sync.ts",
-        "line": 1,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.44,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/settings.ts",
-        "line": 1,
-        "endLine": 22,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/uploads.ts",
-        "line": 1,
-        "endLine": 22,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/user_repository.ts",
-        "line": 1,
-        "endLine": 23,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/validators.ts",
-        "line": 1,
-        "endLine": 32,
-        "kind": "noul",
-        "value": 0.2,
-        "confidence": null
-      },
-      {
-        "rule": "sibling-deviates",
-        "file": "experiments/rule-candidates/sibling-deviates/evals/cases/worker_routes.ts",
-        "line": 1,
-        "endLine": 31,
-        "kind": "noul",
-        "value": 0.87,
-        "confidence": null
-      }
     ]
   ],
   "spent": {
-    "calls": 81,
-    "inputTokens": 118230,
-    "usd": 0.00496566,
-    "ms": 21535
+    "calls": 87,
+    "inputTokens": 133272,
+    "usd": 0.005597424,
+    "ms": 23010
   }
 }
