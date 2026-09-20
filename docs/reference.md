@@ -926,7 +926,7 @@ the batching axis invalidates the verdicts that depended on them.
 - **The npm package carries the rules, not their fixtures.** `rules/**/
   rule.yml` and `RULES.md` ship; `fixtures/`, `expect.yml` and
   `baseline.json` stay in the repository, which is where `jev-lint eval`
-  is for. The package is a fifth of its 0.3.2 size, and RULES.md is the
+  is for. The package is a fifth of its 0.3.2 size (0.4.0), and RULES.md is the
   record of every shipped rule's fit.
 - **A `check` walks the tree for tests and `.sql` files** once each per
   run, for the `paired` arm and the `subject: block` rule, skipping
