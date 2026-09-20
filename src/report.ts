@@ -205,6 +205,7 @@ export function formatPretty(
   if (stats.review) bits.push(c.dim(`${stats.review} for a reader (--loose)`));
   if (stats.missing) bits.push(c.yellow(`${stats.missing} without a verdict`));
   if (result.skippedByDiff) bits.push(c.dim(`${result.skippedByDiff} outside the diff`));
+  if (result.excluded) bits.push(c.dim(`${result.excluded} under an excluded path`));
   if (result.commits) {
     bits.push(`${result.commits.total} commit(s) in ${result.commits.range}`);
     if (result.commits.skippedMerges) bits.push(c.dim(`${result.commits.skippedMerges} merge(s) skipped`));

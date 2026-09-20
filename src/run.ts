@@ -29,7 +29,7 @@ import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "
 import { excerptBudget, pairTests, type RelatedTest } from "./paired.ts";
 import { commitSubjects, squashSubjects } from "./commits.ts";
 import { textSubjects } from "./text.ts";
-import { FileIndex, tryReadFile } from "./files.ts";
+import { FileIndex, isUnder, tryReadFile } from "./files.ts";
 import type {
   Answer,
   Batch,
@@ -59,6 +59,8 @@ export interface CollectOptions {
   paths: string[];
   arm?: StateArm | null;
   diffRanges?: ChangedRanges | null;
+  /** Paths under the roots whose files are never subjects: fixtures with planted defects, vendored code. */
+  exclude?: string[];
   cwd?: string;
 }
 
@@ -71,6 +73,7 @@ export interface CollectResult {
   matches: unknown[];
   stderr: string;
   skippedByDiff: number;
+  excluded: number;
   duplicateGrammars: number;
   ignored: IgnoreStats;
   unpaired: UnpairedStats;
@@ -81,8 +84,11 @@ export async function collectSubjects({
   paths,
   arm = null,
   diffRanges = null,
+  exclude = [],
   cwd = process.cwd(),
 }: CollectOptions): Promise<CollectResult> {
+  const isExcluded = (file: string) => exclude.some((p) => isUnder(file, p));
+  let excluded = 0;
   const { matches, probes, stderr } = await runAstGrep(rules, paths, { cwd });
   const languages = ruleLanguages(rules);
   const symbols = buildSymbols(probes, languages);
@@ -129,6 +135,10 @@ export async function collectSubjects({
     // maps back to the one jev-lint rule that owns the sentence.
     const rule = byId.get(baseRuleId(m.ruleId));
     if (!rule) continue;
+    if (isExcluded(m.file)) {
+      excluded += 1;
+      continue;
+    }
     const identity = `${m.file}\u0000${m.range.byteOffset.start}\u0000${m.range.byteOffset.end}\u0000${rule.id}`;
     if (seenNodes.has(identity)) {
       duplicateGrammars += 1;
@@ -168,6 +178,10 @@ export async function collectSubjects({
   // Block rules: text files split at a header line, beside what ast-grep
   // found. Read through `readSource` so the `located` state has the file.
   for (const s of textSubjects(rules, paths, cwd, (file) => readSource(file), index)) {
+    if (isExcluded(s.file)) {
+      excluded += 1;
+      continue;
+    }
     if (diffRanges && !touchesChange(diffRanges, s.file, s.line, s.endLine)) {
       skippedByDiff += 1;
       continue;
@@ -234,6 +248,7 @@ export async function collectSubjects({
     matches,
     stderr,
     skippedByDiff,
+    excluded,
     duplicateGrammars,
     ignored,
     unpaired,
@@ -254,6 +269,8 @@ export interface RunOptions {
   cutoffs?: Record<string, number>;
   unsureBelow?: number | null;
   diffRanges?: ChangedRanges | null;
+  /** Paths under the roots whose files are never judged. */
+  exclude?: string[];
   cachePath?: string | null;
   force?: boolean;
   dryRun?: boolean;
@@ -312,6 +329,7 @@ export async function run({
   cutoffs = {},
   unsureBelow = null,
   diffRanges = null,
+  exclude = [],
   cachePath = null,
   force = false,
   dryRun = false,
@@ -339,8 +357,8 @@ export async function run({
 
   const collected = commits
     ? collectCommits(rules, commits.range, cwd, commits.label, commits.squash)
-    : await collectSubjects({ rules, paths, arm, diffRanges, cwd });
-  const { subjects, symbols, sources, tests, stderr, skippedByDiff, duplicateGrammars, ignored, unpaired } = collected;
+    : await collectSubjects({ rules, paths, arm, diffRanges, exclude, cwd });
+  const { subjects, symbols, sources, tests, stderr, skippedByDiff, excluded, duplicateGrammars, ignored, unpaired } = collected;
   const commitStats = commits && "commits" in collected ? (collected as { commits: RunResult["commits"] }).commits : undefined;
 
   const cache = persistTo ? Cache.load(persistTo) : new Cache(null);
@@ -416,6 +434,7 @@ export async function run({
       cache,
       stderr,
       skippedByDiff,
+      excluded,
       duplicateGrammars,
       ignored,
       unpaired,
@@ -553,6 +572,7 @@ export async function run({
     errors,
     stderr,
     skippedByDiff,
+    excluded,
     duplicateGrammars,
     schedule: plan,
     cachedCount: results.filter((r) => r.cached).length,
@@ -601,6 +621,7 @@ function collectCommits(
     matches: [],
     stderr: "",
     skippedByDiff: 0,
+    excluded: 0,
     duplicateGrammars: 0,
     ignored: { subjects: 0, files: [], unknownRules: [] },
     unpaired: { subjects: 0, files: [] },

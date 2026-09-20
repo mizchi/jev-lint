@@ -318,8 +318,8 @@ Every flag, and the config file's precedence, is in
 ## What a full run costs
 
 This repository lints itself: `.jev-lint.yaml` points the shipped packs at
-`src`, `tools`, `test/test.ts` and `package.json`, and leaves out `corpus/`
-and the cookbook fixtures, which hold planted defects. One full pass, all 23
+`src`, `tools`, `test` and `package.json`, and excludes `test/fixtures`,
+which holds planted defects. One full pass, all 23
 rules, nothing cached, on a laptop over a home connection, recorded in
 `docs/data/self-lint-2026-09-20.json`:
 

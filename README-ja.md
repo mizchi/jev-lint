@@ -212,7 +212,7 @@ export function summarize(rows: Row[]): Total { … }
 
 ## 一周の費用
 
-このリポジトリは自分自身を lint する。`.jev-lint.yaml` は同梱パックを `src`、`tools`、`test/test.ts`、`package.json` に向け、埋め込み欠陥を持つ `corpus/` とクックブックの fixture は外してある。全 23 ルール、キャッシュなし、家庭回線のラップトップで一周、`docs/data/self-lint-2026-09-20.json` に記録:
+このリポジトリは自分自身を lint する。`.jev-lint.yaml` は同梱パックを `src`、`tools`、`test`、`package.json` に向け、埋め込み欠陥を持つ `test/fixtures` は `exclude:` で外してある。全 23 ルール、キャッシュなし、家庭回線のラップトップで一周、`docs/data/self-lint-2026-09-20.json` に記録:
 
 | | |
 | --- | --- |

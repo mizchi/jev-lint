@@ -618,6 +618,8 @@ export interface RunResult extends GateResult {
   errors?: RunError[];
   stderr?: string;
   skippedByDiff?: number;
+  /** Subjects under an `exclude` path, never judged. */
+  excluded?: number;
   duplicateGrammars?: number;
   ignored?: IgnoreStats;
   unpaired?: UnpairedStats;

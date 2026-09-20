@@ -90,6 +90,15 @@ has no type declarations to match, plus whatever TypeScript rule found no
 node. **`N without a verdict`** means
 requests failed, and a run with failures never reads as a clean repository.
 
+### Leaving a path out: `--exclude`
+
+`--exclude <path>` (repeatable), or `exclude:` in the config, names a path
+under the roots whose files are never subjects: fixtures with planted
+defects, vendored code, a generated directory. The walk still passes
+through it -- an excluded test file can still be a `paired` arm's evidence
+-- but nothing in it is judged, and the run's last line counts what was
+left out. The flag replaces the config's list rather than adding to it.
+
 ### Reading a long report: `--summary`
 
 `--summary` adds two lines after the findings: the count by rule, and by
@@ -287,15 +296,20 @@ text.
 file**. A test file is related when its name contains the module's stem
 (`cart.ts` ↔ `cart.test.ts`, `test/cart.test.ts`, `__tests__/cart.spec.ts`)
 or when it imports the module — the second is what pairs a repository whose
-tests all live in one file. What travels is an excerpt: the lines of each
-related test that name the module's exported symbols, a little context
-around each, and the title of the test they sit in; `…` marks a cut. The
-state says they are excerpts. A file with no related test yields no subject
-on this arm — the runner drops those and prints how many, because "no test
+tests all live in one file, and a name match outranks an import. Of the
+related files, the four that name the most of what is being asked about
+travel — the subjects' own names first, then the module's other exports —
+and the excerpt budget (8,000 characters for one subject in the file,
+2,000 more per further subject, 32,000 at most) is split among them by
+that same relevance. What travels of each is an excerpt: the lines that
+name those symbols, a little context around each, and the title of the
+test they sit in, the regions a lower-priority keyword alone matched
+dropped first when the file's share runs out; `…` marks a cut. The state
+says they are excerpts. A file with no related test yields no subject on
+this arm — the runner drops those and prints how many, because "no test
 reaches this path" with no tests in the state is true of everything and
-says nothing. The cache does not key on the tests any more than `located`
-keys on the file: adding a test later does not retire a verdict, and
-`--force` is the escape hatch.
+says nothing. The excerpts are in the verdict key: a test added or a
+better excerpt is a new question, and the old verdict is not reused.
 
 
 **This is not a quality knob.** More context is not better; it is a choice of

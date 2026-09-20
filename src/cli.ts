@@ -106,6 +106,7 @@ interface Options {
   color: boolean;
   quiet: boolean;
   paths: string[];
+  exclude: string[];
   help?: boolean;
 }
 
@@ -185,6 +186,8 @@ options:
       --dry-run            plan and price the run without asking anything
       --show-missing       list subjects that got no verdict
       --summary            the findings counted by rule, and by file densest first
+      --exclude <path>     a path under the roots whose files are never judged (repeatable;
+                           \`exclude:\` in the config)
       --show-subjects      with --dry-run: list every subject the matchers found,
                            with its node kind and captures -- the free way to
                            see what a rule would ask about, and about what
@@ -279,6 +282,7 @@ function parseArgs(argv: string[], { color }: { color: boolean }): Options {
     color,
     quiet: false,
     paths: [],
+    exclude: [],
   };
   const need = (i: number, flag: string): string => {
     if (i + 1 >= argv.length) throw new Error(`${flag} needs a value`);
@@ -446,6 +450,10 @@ function parseArgs(argv: string[], { color }: { color: boolean }): Options {
         break;
       case "--summary":
         opts.summary = true;
+        break;
+      case "--exclude":
+        opts.exclude.push(need(i, a));
+        i += 1;
         break;
       case "--show-subjects":
         opts.showSubjects = true;
@@ -774,6 +782,7 @@ async function main(argv: string[]): Promise<number> {
     cutoffs: opts.at,
     unsureBelow: opts.unsureBelow,
     diffRanges,
+    exclude: opts.exclude,
     cachePath,
     force: opts.force,
     dryRun: opts.dryRun,
@@ -1151,6 +1160,7 @@ async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, out, log }: 
     ruleBatchCap: opts.ruleBatchCap,
     cutoffs: opts.at,
     diffRanges,
+    exclude: opts.exclude,
     cachePath,
     force: opts.force,
     concurrency: opts.concurrency,
@@ -1198,6 +1208,7 @@ async function cmdCalibrate({ rules, paths, diffRanges, opts, out, log }: Comman
       ruleBatchCap: opts.ruleBatchCap,
       cutoffs: opts.at,
       diffRanges,
+      exclude: opts.exclude,
       cachePath: null,
       force: true,
       concurrency: opts.concurrency,

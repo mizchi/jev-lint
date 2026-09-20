@@ -133,11 +133,12 @@ export function relatedTestFiles(
   return relatedTests(file, testFiles, readSource).map(({ path }) => path);
 }
 
-/** As `relatedTestFiles`, with how each was paired. */
+/** As `relatedTestFiles`, with how each was paired; `limit` is how many, best first. */
 export function relatedTests(
   file: string,
   testFiles: string[],
   readSource?: (path: string) => string,
+  limit: number = MAX_RELATED_TESTS,
 ): Array<{ path: string; via: RelatedTest["via"] }> {
   const id = moduleIdentity(file);
   const name = (id.named_by_directory ?? id.stem).toLowerCase();
@@ -161,11 +162,14 @@ export function relatedTests(
       const byImport = !byName && readSource !== undefined && importsModule(readSource(t), file, t);
       const byDir = dir !== "" && lower.startsWith(dir);
       const via: RelatedTest["via"] = byName ? "name" : "import";
-      return { t, via, score: byName || byImport ? 2 + (byDir || mirrored ? 1 : 0) : 0 };
+      // A file named for the module outranks one that merely imports it:
+      // every test file may import a module for a fixture builder, and
+      // the four that did, alphabetically, once shut out `rules.test.ts`.
+      return { t, via, score: byName ? 4 + (byDir || mirrored ? 1 : 0) : byImport ? 2 + (byDir || mirrored ? 1 : 0) : 0 };
     })
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score || a.t.localeCompare(b.t))
-    .slice(0, MAX_RELATED_TESTS)
+    .slice(0, limit)
     .map(({ t, via }) => ({ path: t, via }));
 }
 
@@ -419,22 +423,38 @@ export function pairTests(
   };
   const out = new Map<string, RelatedTest[]>();
   for (const file of files) {
-    const related = relatedTests(file, candidates, source);
+    // Every related file, then the best `MAX_RELATED_TESTS` by what they
+    // mention. The keywords are in priority order -- the subjects asked
+    // about first, the module's other exports, its name last -- and a file
+    // scores by the keywords it names, earlier ones counting more; the
+    // pairing order breaks ties. The module's own name is not scored: every
+    // related file has it.
+    const words = [...new Set([...keywords(file), moduleIdentity(file).named_by_directory ?? moduleIdentity(file).stem])];
+    const needles = words.slice(0, -1).map((k) => new RegExp(`\\b${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`));
+    const relevance = (path: string): number => {
+      const text = source(path);
+      return needles.reduce((n, k, i) => n + (k.test(text) ? needles.length - i : 0), 0);
+    };
+    const related = relatedTests(file, candidates, source, Infinity)
+      .map((r, order) => ({ ...r, order, hits: relevance(r.path) }))
+      .sort((a, b) => b.hits - a.hits || a.order - b.order)
+      .slice(0, MAX_RELATED_TESTS);
     // A module carrying its own tests (`if (import.meta.vitest) { ... }`)
     // is paired with that block first: the tests nearest the code.
     const own = inSourceTests(source(file));
     if (related.length === 0 && own === null) continue;
-    // Priority order: what the caller names first (the subjects asked
-    // about, then the module's exports), the module's own name last -- it
-    // is the loosest match, and in one test file for everything it floods.
-    const id = moduleIdentity(file);
-    const words = [...new Set([...keywords(file), id.named_by_directory ?? id.stem])];
-    const share = Math.floor(budget(file) / (related.length + (own === null ? 0 : 1)));
+    // The budget is split by relevance, not evenly: a file naming most of
+    // the subjects gets most of the room, and one that only pairs gets
+    // the least. The in-source block, when there is one, counts as the
+    // most relevant file there is.
+    const weights = [...(own === null ? [] : [Math.max(1, ...related.map((r) => r.hits)) + 1]), ...related.map((r) => r.hits + 1)];
+    const total = weights.reduce((a, b) => a + b, 0);
+    const shareOf = (i: number) => Math.floor((budget(file) * weights[i]!) / total);
     out.set(
       file,
       [
-        ...(own === null ? [] : [{ path: file, via: "in-source" as const, code: own.length > share ? own.slice(0, share) : own }]),
-        ...related.map(({ path, via }) => ({ ...compactTest(path, source(path), words, share), via })),
+        ...(own === null ? [] : [{ path: file, via: "in-source" as const, code: own.length > shareOf(0) ? own.slice(0, shareOf(0)) : own }]),
+        ...related.map(({ path, via }, i) => ({ ...compactTest(path, source(path), words, shareOf(i + (own === null ? 0 : 1))), via })),
       ].filter((t) => t.code.trim() !== ""),
     );
     if (out.get(file)!.length === 0) out.delete(file);

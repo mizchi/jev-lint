@@ -37,7 +37,11 @@ change are in [docs/findings.md](docs/findings.md).
   order -- the subjects' own names, the module's exports, the stem last
   -- and the budget grows by 2,000 characters per subject to 32,000. The
   excerpt is in the verdict key on that arm, so a better excerpt is a
-  new question and not a cache hit.
+  new question and not a cache hit. Among the related test files, a name
+  match outranks an import (every test file may import a module for a
+  fixture builder, and alphabetically the four that did once shut out
+  `rules.test.ts`), the four that name the most of what is asked about
+  are chosen, and the budget is split among them by that relevance.
 - A text rule's root outside the working directory (`check ../queries`)
   found nothing: the walk names such a file absolutely and the root was
   compared as given.
@@ -55,6 +59,11 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added (from running the tool on itself)
 
+- `exclude:` in the config and `--exclude <path>`: a path under the roots
+  whose files are never judged. This repository's suite was one 4,300-line
+  file, named in the config so that `test/fixtures` stayed out; split into
+  `test/<module>.test.ts`, the config names `test` and carves the fixtures
+  out of it.
 - `--summary`: the findings counted by rule, and by file with the
   subjects judged there, densest first; `stats.byRule` / `stats.byFile`
   in `--format json`.

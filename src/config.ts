@@ -45,6 +45,7 @@ export const CONFIG_NAMES = [
 export interface Config {
   rules?: string[];
   paths?: string[];
+  exclude?: string[];
   cache?: string | null;
   model?: string;
   baseUrl?: string;
@@ -112,7 +113,7 @@ export function loadConfig(path: string | null): LoadedConfig {
   const src = raw as Record<string, unknown>;
 
   const KNOWN = new Set([
-    "rules", "paths", "cache", "model", "baseUrl", "apiKeyEnv", "group", "arm",
+    "rules", "paths", "exclude", "cache", "model", "baseUrl", "apiKeyEnv", "group", "arm",
     "concurrency", "batchSize", "ruleBatchCap", "retry", "unsureBelow", "at",
   ]);
   for (const k of Object.keys(src)) {
@@ -128,7 +129,7 @@ export function loadConfig(path: string | null): LoadedConfig {
     }
   }
 
-  const stringList = (k: "rules" | "paths"): void => {
+  const stringList = (k: "rules" | "paths" | "exclude"): void => {
     const v = src[k];
     if (v === undefined) return;
     const list = typeof v === "string" ? [v] : v;
@@ -140,6 +141,7 @@ export function loadConfig(path: string | null): LoadedConfig {
   };
   stringList("rules");
   stringList("paths");
+  stringList("exclude");
 
   const str = (k: "model" | "baseUrl" | "apiKeyEnv"): void => {
     const v = src[k];
@@ -228,8 +230,10 @@ export function initialConfig(): string {
 # trusting them: https://github.com/mizchi/jev-lint#calibrating
 # rules: [rules]
 
-# What \`jev-lint check\` looks at when given no paths.
+# What \`jev-lint check\` looks at when given no paths, and what under those
+# paths it never judges: fixtures with planted defects, vendored code.
 # paths: [src]
+# exclude: [src/fixtures]
 
 # The verdict cache. \`none\` disables it. Treat it as trusted input: anything
 # that can edit it can silence a rule or invent a finding.
@@ -285,6 +289,7 @@ export interface Configurable {
   rules: string[];
   rulesAreShipped: boolean;
   paths: string[];
+  exclude: string[];
   cache: string;
   model: string | null;
   baseUrl: string | null;
@@ -318,6 +323,7 @@ export function applyConfig(
     opts.rulesAreShipped = false;
   }
   if (config.paths && opts.paths.length === 0) opts.paths = config.paths;
+  if (config.exclude && unset("--exclude")) opts.exclude = config.exclude;
   if (config.cache !== undefined && unset("-c", "--cache")) {
     opts.cache = config.cache === null ? "none" : config.cache;
   }
