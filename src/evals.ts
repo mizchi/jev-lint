@@ -333,6 +333,29 @@ export function loadSuite(suite: EvalSuite): { rules: Rule[]; labels: Labels; er
   return { rules, labels, errors };
 }
 
+/**
+ * What an eval of this suite would ask, and what it would cost, without
+ * asking. `--dry-run` used to be accepted by `eval` and silently ignored,
+ * which sent real requests from the one command the calibration procedure
+ * says to price first.
+ */
+export async function planEval(suite: EvalSuite, repeat = 1): Promise<{ subjects: number; requests: number; tokens: number }> {
+  const { rules, errors } = loadSuite(suite);
+  if (errors.length) throw new Error(errors.join("\n"));
+  const commitSuite = rules.some((rule) => rule.subject === "commit") ? patchRepo(suite.fixtures) : null;
+  const r = await run({
+    rules,
+    paths: [suite.fixtures],
+    ...(commitSuite ? { commits: { range: commitSuite.range, label: commitSuite.label }, cwd: commitSuite.cwd } : {}),
+    cachePath: null,
+    force: true,
+    dryRun: true,
+  });
+  const tokens = r.batches.reduce((a, b) => a + b.estimatedTokens, 0);
+  // `r.subjects`, not the gate's count: a dry run decides nothing.
+  return { subjects: r.subjects.length, requests: r.batches.length * Math.max(1, repeat), tokens: tokens * Math.max(1, repeat) };
+}
+
 /** Ask the suite's rule about its cases, `repeat` times, and record it. */
 export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Promise<EvalRecord> {
   const repeat = Math.max(1, opts.repeat ?? 1);
@@ -341,9 +364,9 @@ export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Prom
   // One run, `repeat` passes: the runner interleaves the passes' requests,
   // so three passes over a suite cost the wall time of one and a bit,
   // and the cases are scanned once rather than once per pass.
-  // A commit suite's fixtures are patches: applied to a throwaway
-  // repository, judged as commits, and named by their patch files so the
-  // expectations key on `fixtures/<n>.patch` at line 1.
+  // A commit suite's fixtures are cases: each made a commit of a throwaway
+  // repository, judged as commits, and named by their case directories so
+  // the expectations key on `fixtures/<case>` at line 1.
   const commitSuite = rules.some((rule) => rule.subject === "commit") ? patchRepo(suite.fixtures) : null;
   const r = await run({
     rules,

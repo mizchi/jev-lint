@@ -26,6 +26,7 @@ import {
   discoverEvals,
   draftsChanged,
   loadSuite,
+  planEval,
   readEvalRecord,
   recordedAts,
   runEval,
@@ -804,6 +805,17 @@ async function cmdEval(opts: Options, out: Log, log: Log): Promise<number> {
         failed += 1;
         continue;
       }
+    }
+    if (!record && opts.dryRun) {
+      // Plan and price, ask nothing: the same promise `check --dry-run` makes.
+      try {
+        const plan = await planEval(suite, opts.repeat);
+        out(`${suite.name}: ${plan.subjects} subject(s), ${plan.requests} request(s) over ${opts.repeat} pass(es), ~${plan.tokens.toLocaleString()} input tokens, ~$${((plan.tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
+      } catch (err: unknown) {
+        log(`${suite.name}: ${String((err as Error)?.message ?? err).slice(0, 240)}`);
+        failed += 1;
+      }
+      continue;
     }
     if (!record) {
       try {
