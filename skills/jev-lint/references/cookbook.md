@@ -103,8 +103,8 @@ npx -y jev-lint check src/one-file.ts -R rules/mine.yml --no-config --cache none
 
 `--show-subjects` prints every subject with its line, node kind and
 captures, so a count of 4 can be checked against the four nodes you meant.
-`--no-config` keeps the repository's `.jev-lint.yaml` — its `at:`, its
-`paths:` — out of the test. Zero subjects on code that contains the case is
+`--no-config` keeps the repository's `.jev-lint.yaml` — its `rules:`, its
+`files:` — out of the test. Zero subjects on code that contains the case is
 a matcher problem. Findings that all sit mid-scale are a `subject`/`state`
 problem, not a wording one.
 

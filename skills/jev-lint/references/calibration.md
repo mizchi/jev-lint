@@ -8,7 +8,9 @@ to do when it fails.
 
 ## Where the cases live
 
-A rule is a directory under its language, and its cases live beside it:
+A rule is a directory under its language, and its cases live beside it --
+`rules/<lang>/<id>/` in a checkout of jev-lint, `.jev-lint/rules/<lang>/<id>/`
+in a project of your own; the commands below take either:
 
 ```
 rules/<lang>/<id>/

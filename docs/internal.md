@@ -259,12 +259,14 @@ drops:
   A configuration that quietly does something other than what it says is worse
   than no configuration — the same argument as for an unknown rule field.
 
-`at:` merges rather than replaces, so `--at one=0.5` overrides that rule and
-leaves the file's other cutoffs standing.
+`rules:` is the selection, applied after loading by `applyRuleSettings`:
+only the ids it turns on run, each with the severity, cutoff and loose floor
+its entry gives it; an id matching nothing is an error. `--at one=0.5` still
+overrides one rule for one run and leaves the others standing.
 
-The starter file `init` writes is entirely commented out, and a test asserts
-both that it parses clean and that it sets nothing — a starter config that
-errors, or that silently changes behaviour, is worse than none.
+The starter file `init` writes sets `files:` and every shipped rule on, and
+nothing else; a test asserts that it parses to exactly that -- a starter
+config that errors, or that silently changes more, is worse than none.
 
 ### `cache.ts` — what a key must cover
 
@@ -338,9 +340,10 @@ prints every reason loudly, because a rule that silently failed to load looks
 exactly like a rule that found nothing. An unknown field is an error, so a typo
 cannot quietly do nothing.
 
-`defaultRulePaths()` resolves `./rules` first and the installed package's own
-`rules/` second, never both. Merging them would judge someone's code against
-rules they did not write.
+`ruleSources()` is the installed package's own `rules/` and, when it exists,
+`.jev-lint/rules/` beside the config, both. A duplicate id across them is a
+load error, so a project's copy of a shipped rule has to take its own id and
+turn the shipped one off in `rules:`; nothing is shadowed in silence.
 
 ## Known imprecisions
 

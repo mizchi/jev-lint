@@ -83,17 +83,23 @@ The two test rules are nested, not orthogonal: a test that exercises the wrong
 case also fails to establish its name, so both fire on that class and only
 one fires on a weak assertion.
 
-## How the packs are found
+## How the packs are found, and which run
 
-| situation | what is used |
+The rules load from the packs inside the installed package and, when the
+directory exists, the project's own `.jev-lint/rules/`. Which of them run
+is the config's decision, as ESLint's is:
+
+| situation | what runs |
 | --- | --- |
-| `./rules` exists | `./rules`, and only that |
-| no `./rules` | the packs inside the installed package, and jev-lint says so on stdout because their cutoffs were fitted to *its* corpus |
-| `-R <path>` (repeatable) | exactly those paths, files or directories |
-| `rules: [...]` in `.jev-lint.yaml` | those, unless `-R` is passed |
+| no `.jev-lint.yaml` | every loaded rule, and jev-lint says so on stderr because the packs' cutoffs were fitted to *its* corpus |
+| `.jev-lint.yaml` with `rules:` | only the rules it names and turns on, with the severity / cutoff / loose floor it gives them; a name that matches nothing is an error |
+| `.jev-lint.yaml` without `rules:` | nothing, and the run says what to write |
+| `-R <path>` (repeatable) | exactly those files or directories, in place of the packs and `.jev-lint/rules/`, for that run |
+| `run <id>` | that rule from the packs or `.jev-lint/rules/`, whatever the config says |
 
 So the zero-configuration path is: install nothing, run `npx -y jev-lint
-check src`, get the packs.
+check src`, get the packs. The configured path is `jev-lint init`, which
+writes `files:` and every shipped rule on, to prune.
 
 ## Three ways to adopt them
 
@@ -112,28 +118,30 @@ jev-lint check src --at var-name-describes-value=0.7 --at fn-name-promises=0.8
 
 ```yaml
 # .jev-lint.yaml
-at:
-  var-name-describes-value: 0.7
-  fn-name-promises: 0.8
+rules:
+  var-name-describes-value: { at: 0.7 }
+  fn-name-promises: { at: 0.8, severity: error }
+  rust/fn-name-promises: off
 ```
 
-`at:` in the config merges: overriding one rule leaves the others at their
-shipped values. This is the right first move when a rule is noisy on your
+A rule's entry overrides that rule and leaves the others at their shipped
+values. This is the right first move when a rule is noisy on your
 code — the shipped cutoff sits where the corpus's clean band ended, and real
 code's clean band goes higher. `var-name-describes-value` and
 `module-name-describes-contents` are the two with the least headroom and the
 first to refit.
 
-### 2. Copy them and edit
+### 2. Copy one and edit
 
 ```bash
-mkdir -p rules
-cp -R node_modules/jev-lint/rules/fn-name-promises rules/   # one rule, with its evals; or all of them
+mkdir -p .jev-lint/rules/typescript
+cp -R node_modules/jev-lint/rules/typescript/fn-name-promises .jev-lint/rules/typescript/acme-fn-name-promises
 ```
 
-Now `./rules` exists and the packaged copies are ignored entirely. Delete the
-rules you do not want, change `severity:`, rewrite `criteria:` for your
-domain, add `note:` with your exceptions. Two things to know before editing:
+Give the copy its own id (`acme-...`; a copy with the shipped id is a
+duplicate and the loader says so), turn the shipped one off in `rules:`
+and the copy on, then rewrite `criteria:` for your domain and add `note:`
+with your exceptions. Two things to know before editing:
 
 - **Editing `ask`, `criteria`, `note`, `rule`, `subject` or `state`
   invalidates that rule's cached verdicts** — it is a new question. Editing
@@ -146,22 +154,22 @@ Dropping a language variant is a deletion, not a `languages:` edit: the Rust
 rule names Rust node kinds, and ast-grep rejects a kind absent from the target
 grammar — one rejected rule fails the whole scan.
 
-### 3. Combine with your own
+### 3. Add your own beside them
 
-```bash
-jev-lint check src -R node_modules/jev-lint/rules -R rules/mine.yml
-```
+A rule file under `.jev-lint/rules/` -- flat, or `<language>/<id>/rule.yml`
+with fixtures beside it -- loads with the packs, and is named in `rules:`
+like any of them:
 
 ```yaml
 # .jev-lint.yaml
 rules:
-  - node_modules/jev-lint/rules
-  - rules/mine.yml
+  fn-name-promises: on
+  acme-endpoint-names-resource: warning     # .jev-lint/rules/acme-endpoint-names-resource.yml
 ```
 
 Ids must be unique across every source; a duplicate is a validation error
 naming both files. Prefix your own (`acme-...`) to make the split visible in
-reports.
+reports. For one run over a directory of rules and nothing else: `-R <dir>`.
 
 ## Picking a subset
 
@@ -207,10 +215,10 @@ two or three rules that produced false positives with
     TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
 ```
 
-Review mode judges only the lines the diff touched. Commit
-`.jev-lint-cache.json` if you want reviewers to see the verdicts you saw and
-CI to re-gate without a key; treat it as trusted input in review, since
-anything that edits it can silence a rule.
+Review mode judges only the lines the diff touched. The cache,
+`.jev-lint/baseline.json`, is meant to be committed: reviewers see the
+verdicts you saw and CI re-gates without a key; treat it as trusted input
+in review, since anything that edits it can silence a rule.
 
 Locally, `jev-lint init --pre-commit` writes a hook that runs
 `review --staged --fail-on error` on every commit: the staged diff only,

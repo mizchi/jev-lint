@@ -182,8 +182,8 @@ Work in this order, and do not skip a step because the rule "looks right":
 4. **Validate, without spending anything:**
 
    ```bash
-   npx -y jev-lint rules -R rules/my-rule.yml --no-config       # loaded? or the exact validation error
-   npx -y jev-lint check src -R rules/my-rule.yml --no-config --cache none --dry-run --show-subjects
+   npx -y jev-lint rules -R .jev-lint/rules/my-rule.yml --no-config       # loaded? or the exact validation error
+   npx -y jev-lint check src -R .jev-lint/rules/my-rule.yml --no-config --cache none --dry-run --show-subjects
    ```
 
    The dry run lists, per file, how many subjects the matcher found;
