@@ -90,6 +90,17 @@ has no type declarations to match, plus whatever TypeScript rule found no
 node. **`N without a verdict`** means
 requests failed, and a run with failures never reads as a clean repository.
 
+### Pricing a run: `--dry-run`
+
+`--dry-run` plans a run and prices it without a request: the batches, the
+tokens each would carry, the total, and -- when more than one rule is
+loaded -- a table per rule, dearest first, of its subjects, the requests it
+is in, its tokens and their price, and its share of the plan. A rule's
+questions are its own; a batch's state, which travels once for every
+subject in it, is charged to each rule in proportion to the subjects it
+put there, so the shares sum to the plan. Which rule to drop, or to `run`
+alone, is a decision the total alone cannot inform.
+
 ### Leaving a path out: `--exclude`
 
 `--exclude <path>` (repeatable), or `exclude:` in the config, names a path

@@ -1,0 +1,76 @@
+/**
+ * The command line's entry: parse, find the config, pick the command.
+ *
+ * Each command is its own module; this is only the order they happen in.
+ * `check`, `review` and `commits` share one path -- select the rules,
+ * resolve the targets, run -- and the rest take the options as parsed.
+ */
+import { readFileSync } from "node:fs";
+import { parseArgs, USAGE, type Log } from "./args.ts";
+import { cmdCalibrate, cmdGaps } from "./calibrate.ts";
+import { cmdCheck } from "./check.ts";
+import { resolveContext } from "./context.ts";
+import { cmdEval } from "./eval.ts";
+import { cmdInit } from "./init.ts";
+import { cmdReplay } from "./replay.ts";
+import { cmdRules } from "./rules.ts";
+import { selectForRun } from "./select.ts";
+import { resolveTargets } from "./targets.ts";
+
+export async function main(argv: string[]): Promise<number> {
+  let command = argv[0] && !argv[0].startsWith("-") ? argv[0] : "check";
+  const rest = argv[0] && !argv[0].startsWith("-") ? argv.slice(1) : argv;
+  let opts;
+  try {
+    // The terminal decides the colour default, not the parser.
+    opts = parseArgs(rest, { color: process.stdout.isTTY === true && !process.env.NO_COLOR });
+  } catch (err: unknown) {
+    process.stderr.write(`${(err as Error).message}\n\n${USAGE}`);
+    return 2;
+  }
+  if (opts.messageFile !== null) {
+    // `-` is stdin, so `gh pr view --json title,body -q ... | jev-lint
+    // commits --squash --message-file -` needs no temporary file.
+    try {
+      opts.message = readFileSync(opts.messageFile === "-" ? 0 : opts.messageFile, "utf8");
+    } catch (err: unknown) {
+      process.stderr.write(`--message-file ${opts.messageFile}: ${(err as Error).message}\n`);
+      return 2;
+    }
+  }
+  if (opts.help || command === "help") {
+    process.stdout.write(USAGE);
+    return 0;
+  }
+
+  const log: Log = (s) => process.stderr.write(`${s}\n`);
+  const out: Log = (s) => process.stdout.write(`${s}\n`);
+
+  if (command === "init") return cmdInit(opts, out, log);
+
+  const context = resolveContext(opts, rest, log);
+  if (!context) return 2;
+  const { config, argPaths, cachePath } = context;
+
+  if (command === "rules") return cmdRules(opts, out, log);
+  if (command === "replay") return cmdReplay(opts, out, log);
+  if (command === "eval") return cmdEval({ ...opts, paths: argPaths }, out, log);
+
+  const selected = selectForRun(command, opts, config, argPaths, log);
+  if (!selected) return 2;
+  const { rules, rangeArg } = selected;
+  command = selected.command;
+
+  const targets = await resolveTargets(command, rules, opts, rangeArg, out, log);
+  if ("exit" in targets) return targets.exit;
+  const { paths, diffRanges } = targets;
+
+  if (command === "gaps") return cmdGaps({ rules, paths, diffRanges, opts, cachePath, out, log });
+  if (command === "calibrate") return cmdCalibrate({ rules, paths, diffRanges, opts, cachePath, out, log });
+  if (command !== "check" && command !== "review" && command !== "commits") {
+    log(`unknown command \`${command}\``);
+    process.stderr.write(USAGE);
+    return 2;
+  }
+  return cmdCheck(rules, targets, opts, cachePath, out, log);
+}

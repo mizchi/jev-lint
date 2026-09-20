@@ -35,6 +35,7 @@ import "./commits.test.ts";
 import "./evals.test.ts";
 import "./retry.test.ts";
 import "./config.test.ts";
+import "./cost.test.ts";
 import "./cli.test.ts";
 import { report } from "./helpers.ts";
 

@@ -59,9 +59,10 @@ right.
 
 | file | responsibility |
 | --- | --- |
-| `cli.ts` | flags, commands, wiring. Also `USAGE`, which is a second source of truth for flag docs — change both. |
+| `cli.ts`, `cli/` | the entry, and one module per step: `args.ts` (every flag, `USAGE` -- a second source of truth for flag docs, change both), `context.ts` (the config, found and folded in), `select.ts` (which rules: loaded, or `run`'s one), `targets.ts` (which files, or which commits), `check.ts` + `dry-run.ts` (the run and its report, or its plan), and `eval.ts`, `calibrate.ts`, `replay.ts`, `init.ts`, `rules.ts` for those commands; `main.ts` is only the order |
+| `cost.ts` | a plan's price per rule: each rule's questions, and its share of every batch's state |
 | `scan.ts` | the ast-grep driver: rule translation, structural probes, the symbol table and call graph |
-| `run.ts` | `collectSubjects`, `run`, `mergePasses`, `toRecord` |
+| `run.ts` | `collectSubjects`, `run`, `mergePasses`, `buildRecord` |
 | `state.ts` | the five state arms, subject resolution, the module outline |
 | `rules.ts` | rule schema, validation, defaults, `defaultRulePaths()`, `ruleTextHash()` |
 | `types.ts` | every shared type. Unions derive from `as const` arrays so the validator and the type cannot diverge. |
@@ -409,9 +410,12 @@ decisions to decisions, so its exit code means what it says.
 
 ## Testing
 
-`test/test.ts` needs no API key and no network, and is run directly by Node. It
-is a single file on purpose: the assertions are cheap and the suite is read as
-documentation of the invariants.
+`test/` needs no API key and no network, and is run directly by Node:
+`test/test.ts` imports one file per module under test, in order, and
+`test/helpers.ts` holds the harness and the fixture builders. The suite was
+one file until it was the largest thing the tool judged, and the file every
+module paired with on the `paired` arm; `npm test <substring>` runs the
+tests whose name contains it.
 
 Two conventions to keep:
 

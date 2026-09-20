@@ -59,6 +59,9 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added (from running the tool on itself)
 
+- `--dry-run` prices the plan per rule: subjects, requests, tokens, dollars
+  and share, dearest first, with each batch's state charged to its rules
+  by the subjects they put there (`src/cost.ts`).
 - `exclude:` in the config and `--exclude <path>`: a path under the roots
   whose files are never judged. This repository's suite was one 4,300-line
   file, named in the config so that `test/fixtures` stayed out; split into
@@ -70,6 +73,11 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Changed
 
+- `src/cli.ts` (1,418 lines, `main` alone 278) is `src/cli/`: one module
+  per step -- `args`, `context`, `select`, `targets`, `check`, `dry-run`
+  -- and one per command, with `main.ts` only the order they happen in.
+  The two places a positional and a config path had been the same
+  variable are two named values. `dist/cli.js` is still the bin.
 - What the tool said about its own code, acted on: one `tryReadFile` /
   `tryReadDir` where five modules each swallowed a read error in their
   own words; `computeCalls` that assigned is `linkCalls`, `toRecord` that

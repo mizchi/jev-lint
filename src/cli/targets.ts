@@ -1,0 +1,69 @@
+/**
+ * What a run looks at: the files, narrowed to a diff for `review`, or the
+ * commit range for `commits`. Null after saying why when there is nothing
+ * to look at or the range is unusable; `exit` says which code.
+ */
+import { defaultRange } from "../commits.ts";
+import { changedFiles, changedFilesUnder, changedRanges, type ChangedRanges } from "../diff.ts";
+import type { Rule } from "../types.ts";
+import type { Log, Options } from "./args.ts";
+
+export interface Targets {
+  paths: string[];
+  diffRanges: ChangedRanges | null;
+  commitsRange: string | null;
+}
+
+export async function resolveTargets(
+  command: string,
+  rules: Rule[],
+  opts: Options,
+  rangeArg: string | undefined,
+  out: Log,
+  log: Log,
+): Promise<Targets | { exit: number }> {
+  // Which files to look at.
+  let paths = opts.paths;
+  let diffRanges: ChangedRanges | null = null;
+  let commitsRange: string | null = null;
+  if (command === "review") {
+    diffRanges = await changedRanges({ base: opts.base, staged: opts.staged });
+    // Scan only the changed files: matching the whole tree and discarding
+    // everything outside the diff would cost the same as `check`. Paths given
+    // on the command line or in the config narrow WHICH changed files, they
+    // do not widen the scan back to the tree.
+    const files = changedFilesUnder(changedFiles(diffRanges), paths);
+    if (files.length === 0) {
+      if (!opts.quiet) out("no changed files");
+      return { exit: 0 };
+    }
+    paths = files;
+  } else if (command === "commits") {
+    // The range is a positional (`main..HEAD`), else `--base <ref>`, else
+    // what is not yet pushed. A repository with no upstream and no `--base`
+    // has no default worth guessing at.
+    const range = rangeArg ?? (opts.base ? `${opts.base}..HEAD` : defaultRange());
+    if (!range) {
+      log("commits: no range. Give one (`main..HEAD`), or --base <ref>, or set an upstream");
+      return { exit: 2 };
+    }
+    if (!rules.some((r) => r.subject === "commit")) {
+      log("commits: no `subject: commit` rule is loaded; the shipped one is rules/git/commit-message-describes-diff");
+      return { exit: 2 };
+    }
+    if (opts.squash && opts.message === null) {
+      log("commits --squash needs the message to judge the range against: --message <text> or --message-file <path|->");
+      return { exit: 2 };
+    }
+    if (!opts.squash && opts.message !== null) {
+      log("commits: --message is for --squash; each commit has its own message");
+      return { exit: 2 };
+    }
+    commitsRange = range;
+    paths = [];
+  } else if (paths.length === 0) {
+    paths = ["."];
+  }
+
+  return { paths, diffRanges, commitsRange };
+}
