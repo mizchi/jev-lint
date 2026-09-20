@@ -1119,9 +1119,21 @@ async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, out, log }: 
     concurrency: opts.concurrency,
     batchSize: opts.batchSize,
     model: opts.model,
+    dryRun: opts.dryRun,
   });
   const gapsCache = result.cache as Cache | undefined;
   if (gapsCache?.loadError) log(gapsCache.loadError);
+  if (opts.dryRun) {
+    // The same promise every command makes of the flag: plan, price, ask
+    // nothing. It was accepted here and ignored.
+    const tokens = result.batches.reduce((a, b) => a + b.estimatedTokens, 0);
+    out(`${result.subjects.length} subject(s), ${result.cachedCount} already cached, ${result.batches.length} request(s) planned, ~${tokens.toLocaleString()} input tokens, ~$${((tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
+    return 0;
+  }
+  if (opts.record) {
+    writeFileSync(opts.record, `${JSON.stringify(toRecord(result, { arm: opts.arm, cutoffs: opts.at, unsureBelow: opts.unsureBelow }), null, 2)}\n`);
+    log(`recorded to ${opts.record}`);
+  }
   const rows = gapReport(result.all, rules, { cutoffs: opts.at });
   out(formatGaps(rows, { color: opts.color }));
   out("");
