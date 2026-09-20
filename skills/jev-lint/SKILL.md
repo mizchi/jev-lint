@@ -90,7 +90,7 @@ no unstaged edits, though a partially staged file is judged as it is on disk.
 When paths are configured or given, `review` scans only the changed files
 under them, never the whole tree.
 
-**Settings**: `.jev-lint.yaml`, nearest one searching upwards, a flag beats
+**Settings**: `.jev-lint.yaml` (or `jev-lint.yaml`, `.jevlint.yml`, any spelling; two in one directory is an error), nearest one searching upwards, a flag beats
 it. `paths:` there lets `jev-lint check` take no argument; `rules:` names the
 rule sources; `at:` overrides cutoffs per rule. Unknown keys are errors. A
 `-R` run inside a repository that has a config still merges that config —

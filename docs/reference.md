@@ -68,7 +68,7 @@ failed and nothing was reported.
 | `--model <id>` | Jev model |
 | `--quiet` / `--no-color` | |
 
-| `--config <path>` | config file (default: the nearest `.jev-lint.yaml`, searching upwards); `--no-config` ignores it |
+| `--config <path>` | config file (default: the nearest `.jev-lint.yaml`, searching upwards — any spelling of it is recognised: with or without the dot, with or without the hyphen, `.yaml` or `.yml`; two spellings in one directory are an error, exit 2, since jev-lint will not guess which is in force); `--no-config` ignores it |
 | `--base-url <url>` | the API endpoint, for a proxy or a self-hosted deployment |
 
 Environment: **`TYPESAFE_API_KEY`** (required for anything that asks), with

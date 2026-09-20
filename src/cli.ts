@@ -138,8 +138,10 @@ options:
       --squash             commits: the range as one diff, judged against --message
       --message <text>     commits --squash: the claim about the range
       --message-file <p>   commits --squash: the same, from a file, or - for stdin
-      --config <path>      config file (default: nearest .jev-lint.yaml,
-                           searching upwards); --no-config ignores it
+      --config <path>      config file (default: the nearest .jev-lint.yaml --
+                           or jev-lint.yaml, .jevlint.yml, any spelling of it --
+                           searching upwards; two in one directory is an error);
+                           --no-config ignores it
       --base-url <url>     the API endpoint (default ${DEFAULT_BASE_URL})
   -R, --rules <path>       rule file or directory (repeatable; default ./rules,
                            else the packs inside the installed package)
@@ -621,8 +623,15 @@ async function main(argv: string[]): Promise<number> {
   // not what `eval` looks at: its positional arguments are rule directories,
   // and with none it walks the rule sources.
   const argPaths = [...opts.paths];
-  const configPath =
-    opts.config === "none" ? null : (opts.config ?? findConfig());
+  let configPath: string | null;
+  try {
+    configPath = opts.config === "none" ? null : (opts.config ?? findConfig());
+  } catch (err: unknown) {
+    // Two spellings in one directory. Stopping is the point: running with
+    // one of them silently would be a configuration nobody chose.
+    log(`config error: ${String((err as Error).message)}`);
+    return 2;
+  }
   if (opts.config && opts.config !== "none" && !existsSync(opts.config)) {
     log(`config not found: ${opts.config}`);
     return 2;

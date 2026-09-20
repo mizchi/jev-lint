@@ -3829,6 +3829,24 @@ test("config: the file is found by walking up, and only names jev-lint's own", (
     assert.equal(findConfig(), null, "nothing above a temp dir");
     writeConfig(dir, "concurrency: 2\n");
     assert.equal(findConfig(), join(dir, ".jev-lint.yaml"), "found two levels up");
+    // Every spelling is recognised: with or without the dot, with or
+    // without the hyphen, .yaml or .yml.
+    for (const name of ["jev-lint.yaml", "jevlint.yaml", ".jevlint.yml", "jevlint.yml", ".jev-lint.yml", "jev-lint.yml", ".jevlint.yaml"]) {
+      const d = join(dir, "spell", name.replace(/\W/g, "_"));
+      mkdirSync(d, { recursive: true });
+      writeFileSync(join(d, name), "concurrency: 2\n");
+      assert.equal(findConfig(d), join(d, name), name);
+    }
+    // Two spellings in one directory is a mistake, not a choice: the
+    // finder throws naming both, and the CLI stops rather than pick one.
+    writeFileSync(join(dir, "jevlint.yaml"), "concurrency: 3\n");
+    assert.throws(() => findConfig(), /\.jev-lint\.yaml.*jevlint\.yaml|jevlint\.yaml.*\.jev-lint\.yaml/);
+    assert.throws(() => findConfig(), /one config file/);
+    rmSync(join(dir, "jevlint.yaml"));
+    // But a config nearer than another is not a conflict: the nearest wins,
+    // as it always did, and the search stops there.
+    writeFileSync(join(dir, "a", "jevlint.yml"), "concurrency: 4\n");
+    assert.equal(findConfig(), join(dir, "a", "jevlint.yml"));
   } finally {
     process.chdir(here);
     rmSync(dir, { recursive: true, force: true });

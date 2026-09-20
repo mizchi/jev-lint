@@ -22,14 +22,24 @@
  * avoid.
  */
 import { existsSync, readFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import YAML from "yaml";
 import { GROUP_MODES, STATE_ARMS } from "./types.ts";
 import { API_KEY_VARS, BASE_URL_VARS, fromEnv } from "./jev.ts";
 import type { GroupMode, StateArm } from "./types.ts";
 
 /** The file names looked for, in order, walking up from the working directory. */
-export const CONFIG_NAMES = [".jev-lint.yaml", ".jev-lint.yml"] as const;
+/**
+ * The spellings a config file may have: with or without the leading dot,
+ * with or without the hyphen, `.yaml` or `.yml`. The first is what `init`
+ * writes and the documentation shows; the rest are recognised because
+ * every one of them has been typed. Two of them in one directory is a
+ * mistake -- which one is in force? -- and the finder refuses to guess.
+ */
+export const CONFIG_NAMES = [
+  ".jev-lint.yaml", ".jev-lint.yml", "jev-lint.yaml", "jev-lint.yml",
+  ".jevlint.yaml", ".jevlint.yml", "jevlint.yaml", "jevlint.yml",
+] as const;
 
 /** Everything a config file may set. Every field is optional. */
 export interface Config {
@@ -61,10 +71,13 @@ export interface LoadedConfig {
 export function findConfig(from: string = process.cwd()): string | null {
   let dir = resolve(from);
   for (;;) {
-    for (const name of CONFIG_NAMES) {
-      const candidate = join(dir, name);
-      if (existsSync(candidate)) return candidate;
+    const present = CONFIG_NAMES.map((name) => join(dir, name)).filter((p) => existsSync(p));
+    if (present.length > 1) {
+      throw new Error(
+        `${present.length} config files in ${dir}: ${present.map((p) => basename(p)).join(", ")} -- keep one config file per directory; jev-lint will not guess which is in force`,
+      );
     }
+    if (present.length === 1) return present[0]!;
     const up = dirname(dir);
     if (up === dir) return null;
     dir = up;
