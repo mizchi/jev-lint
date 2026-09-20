@@ -164,7 +164,7 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted on each rule's own evals (`rules/<id>/evals/`, 197 labelled defects
+Fitted on each rule's own evals (`rules/<id>/evals/`, 200 labelled defects
 across the 23 rules, three passes each). 20 of the 23 reach precision and
 recall 1.00 at their shipped cutoffs; the three that do not each miss one
 labelled defect the rule file names — a binding holding one branch of a

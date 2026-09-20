@@ -307,7 +307,7 @@ exist. One axis only — is the claim false.
 On their own evals, 20 of the 23 rules reach precision and recall 1.00 at
 their shipped cutoffs; the three that do not each miss one labelled defect
 the rule cannot see, and the rule file says which. The evals are small —
-197 labelled defects across the 23, two to thirty-one per rule — and they
+200 labelled defects across the 23, one to thirty-one per rule — and they
 are marker-free: an earlier version carried `// DEFECT: named seconds, holds
 milliseconds` above each defect, inside the file the model was shown, and
 the fits it produced were better than the rules. `jev-lint eval --replay`
