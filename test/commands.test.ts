@@ -239,6 +239,21 @@ await testAsync("commands: eval and calibrate say what they cannot read, and exi
     const noSuite = await cli(["eval", "--compare", join(dir, "b.json"), join(dir, "b.json"), "--no-config", "-R", dir]);
     assert.equal(noSuite.code, 2);
     assert.match(noSuite.log, /no suite named/);
+    // Two records of different suites cannot be compared.
+    writeFileSync(join(dir, "c.json"), JSON.stringify({ schema: "jev-lint-eval-1", suite: "other/other", passes: [[]], recorded: "x", model: "m", rules: [], cutoffs: {}, spent: {} }));
+    const apart = await cli(["eval", "--compare", join(dir, "b.json"), join(dir, "c.json"), "--no-config", "-R", dir]);
+    assert.equal(apart.code, 2);
+    assert.match(apart.log, /different suites/);
+    // A suite whose expect file does not parse fails the eval, and says so.
+    const suite = join(dir, "typescript", "r");
+    mkdirSync(join(suite, "fixtures"), { recursive: true });
+    writeFileSync(join(suite, "rule.yml"), ["id: r", "language: TypeScript", "kind: noul", "at: 0.5", "rule: { kind: function_declaration }", "ask: x.", "criteria: { 'true': a, 'false': b }"].join("\n"));
+    writeFileSync(join(suite, "fixtures", "a.ts"), "export function a() {}\n");
+    writeFileSync(join(suite, "expect.yml"), "default: clean\nfixtures/a.ts: [ { line: 1, label: bad ]\n");
+    const broken = await cli(["eval", suite, "--no-config", "-R", dir]);
+    assert.equal(broken.code, 1);
+    assert.match(broken.log, /expect\.yml/);
+    assert.match(broken.out, /1 of 1 suite\(s\) failed/);
     // Labels that cannot be read are said, and the run still reports.
     const { dir: proj, rules, src } = project();
     try {

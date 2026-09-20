@@ -102,14 +102,14 @@ export async function cmdCalibrate({ rules, paths, diffRanges, opts, client = nu
   const gaps = gapReport(merged, rules, { cutoffs: opts.at });
   const stability = repeat > 1 ? stabilityReport(runs, rules, { cutoffs: opts.at }) : null;
   if (opts.format === "json") {
-    const fits = readLabels(opts.labels, log);
+    const labels = readLabels(opts.labels, log);
     out(
       JSON.stringify(
         {
           passes: repeat,
           gaps,
           stability,
-          fits: fits ? fitCutoffs(merged, fits, rules) : null,
+          fits: labels ? fitCutoffs(merged, labels, rules) : null,
           spent: last?.spent ?? null,
         },
         null,

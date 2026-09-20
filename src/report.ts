@@ -292,7 +292,7 @@ export function idleLanguages(result: Partial<ReportInput>): Array<{ language: s
     .map(([language, rules]) => ({ language, rules }));
 }
 
-/** A sha shortened to eight; a range (`main..HEAD`) as it is. */
+/** A full sha shortened to eight; anything else -- a range like `main..HEAD`, a short ref -- as it is. */
 function shortRef(file: string): string {
   return /^[0-9a-f]{40}$/.test(file) ? file.slice(0, 8) : file;
 }

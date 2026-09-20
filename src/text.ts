@@ -67,12 +67,10 @@ export function splitBlocks(source: string, header: RegExp | null): TextBlock[] 
 }
 
 /**
- * Every file under `paths` (files or directories) with one of the
- * extensions, sorted, named the way the walk names them: relative to `cwd`
- * when under it, absolute otherwise. The walk is the run's shared one when
- * an index is given; a file the index knows from another root (the paired
- * arm's conventional test directories) is not one of these unless it is
- * under `paths`.
+ * The files with one of the extensions that are under, or are, one of
+ * `paths`, sorted, named as the walk names files. The index is the run's
+ * shared walk when one is given; it may know files from other roots (the
+ * paired arm's conventional test directories), and those are left out.
  */
 export function findTextFiles(
   paths: string[],
