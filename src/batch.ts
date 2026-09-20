@@ -167,6 +167,15 @@ function cost(value: unknown): number {
  */
 const QUESTION_ENTRY_OVERHEAD = 4;
 
+export interface PlanOptions {
+  batchSize?: number;
+  sources?: Map<string, string> | null;
+  symbols?: SymbolIndex | null;
+  /** The `paired` arm's evidence, per file. */
+  tests?: Map<string, RelatedTest[]> | null;
+  group?: Grouping;
+}
+
 /**
  * Group subjects into requests.
  *
@@ -193,15 +202,6 @@ const QUESTION_ENTRY_OVERHEAD = 4;
  * file with many MATCHES is not that case: the subject list is the part of a
  * state that a split does shrink, so it is split instead of degraded.
  */
-export interface PlanOptions {
-  batchSize?: number;
-  sources?: Map<string, string> | null;
-  symbols?: SymbolIndex | null;
-  /** The `paired` arm's evidence, per file. */
-  tests?: Map<string, RelatedTest[]> | null;
-  group?: Grouping;
-}
-
 export function planBatches(
   subjects: Subject[],
   { batchSize = DEFAULT_BATCH_SIZE, sources, symbols, tests, group = "file" }: PlanOptions = {},
