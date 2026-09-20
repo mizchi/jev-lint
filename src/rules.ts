@@ -32,6 +32,7 @@ import {
   GROUPINGS,
   KINDS,
   LANGUAGES,
+  LANGUAGE_DIRS,
   PROBE_PREFIX,
   STATE_ARMS,
   SUBJECTS,
@@ -363,8 +364,37 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
       docs: typeof raw.docs === "string" ? raw.docs : null,
       tags: Array.isArray(raw.tags) ? raw.tags.filter((t: unknown) => typeof t === "string") : [],
       explain,
+      languageDir: null,
     },
   };
+}
+
+/**
+ * The grammars a language directory admits: the listed family for the
+ * three named directories, else the one grammar the directory is named for.
+ * null when the name is not a language at all, so a directory called
+ * `experimental` under a rules root is not mistaken for a language.
+ */
+export function languageDirGrammars(dir: string): readonly Language[] | null {
+  const listed = LANGUAGE_DIRS[dir];
+  if (listed) return listed;
+  const one = normalizeLanguage(dir);
+  return one ? [one] : null;
+}
+
+/**
+ * The layout convention: `<lang>/<id>/rule.yml` under a rules root.
+ *
+ * Only that shape, so a project's flat `rules/mine.yml` or a rule file
+ * passed by path is a rule file as it always was.
+ */
+function layoutOf(path: string): { languageDir: string; id: string } | null {
+  const parts = path.split(/[\\/]/);
+  if (parts.length < 3) return null;
+  if (!/^rule\.ya?ml$/.test(parts[parts.length - 1]!)) return null;
+  const id = parts[parts.length - 2]!;
+  const dir = parts[parts.length - 3]!;
+  return languageDirGrammars(dir) ? { languageDir: dir, id } : null;
 }
 
 /**
@@ -447,6 +477,9 @@ export function defaultRulePaths(): [string[], boolean] {
 }
 
 export function cutoffFor(rule: Rule, overrides: Record<string, number> = {}): number {
+  // `rust/id` names one language's rule; `id` names every language's.
+  const qualified = rule.languageDir ? overrides[`${rule.languageDir}/${rule.id}`] : undefined;
+  if (typeof qualified === "number") return qualified;
   const override = overrides[rule.id];
   if (typeof override === "number") return override;
   if (typeof rule.at === "number") return rule.at;
@@ -502,8 +535,15 @@ function canonical(value: unknown): string {
   ) ?? "";
 }
 
-/** Load every rule from a YAML file, a directory of them, or a list of paths. */
-export function loadRules(paths: string | string[]): { rules: Rule[]; errors: string[] } {
+/**
+ * Load every rule from a YAML file, a directory of them, or a list of paths.
+ *
+ * `warnings` are what loaded but deserve a look: today, one id under two
+ * language directories whose sentences differ. The sentence is a copy per
+ * language by design, and a copy drifts; the warning is where a deliberate
+ * difference gets a comment and an accidental one gets fixed.
+ */
+export function loadRules(paths: string | string[]): { rules: Rule[]; errors: string[]; warnings: string[] } {
   const files: Array<{ path: string; missing?: boolean }> = [];
   for (const p of Array.isArray(paths) ? paths : [paths]) {
     let st;
@@ -559,6 +599,7 @@ export function loadRules(paths: string | string[]): { rules: Rule[]; errors: st
           ? value.rules
           : [value];
 
+      const layout = layoutOf(path);
       items.forEach((item: unknown, j: number) => {
         const where =
           items.length > 1 || docs.length > 1 ? `${path}#${docs.length > 1 ? i : j}` : path;
@@ -567,16 +608,67 @@ export function loadRules(paths: string | string[]): { rules: Rule[]; errors: st
           errors.push(error ?? `${where}: could not be normalized`);
           return;
         }
-        if (seen.has(rule.id)) {
-          errors.push(`${rule.id}: duplicate id (also in ${seen.get(rule.id)})`);
+        if (layout) {
+          // Under the layout the directory names the rule and bounds its
+          // grammars; a document that disagrees with its path is an error,
+          // not a rule that quietly lives somewhere else.
+          if (rule.id !== layout.id) {
+            errors.push(`${where}: id \`${rule.id}\` must be the directory's name \`${layout.id}\``);
+            return;
+          }
+          const admitted = languageDirGrammars(layout.languageDir)!;
+          const outside = rule.languages.filter((l) => !admitted.includes(l));
+          if (outside.length > 0) {
+            errors.push(
+              `${where}: ${outside.join(", ")} is not a grammar of the \`${layout.languageDir}\` directory (it admits ${admitted.join(", ")})`,
+            );
+            return;
+          }
+          rule.languageDir = layout.languageDir;
+        }
+        const key = `${rule.languageDir ?? ""}/${rule.id}`;
+        if (seen.has(key)) {
+          errors.push(`${rule.id}: duplicate id (also in ${seen.get(key)})`);
           return;
         }
-        seen.set(rule.id, where);
-        rules.push({ ...rule, source: path, pack: basename(path, extname(path)) });
+        seen.set(key, where);
+        rules.push({ ...rule, source: path, pack: layout ? layout.languageDir : basename(path, extname(path)) });
       });
     });
   }
-  return { rules, errors };
+  return { rules, errors, warnings: driftWarnings(rules) };
+}
+
+/**
+ * One id, several languages, different sentences.
+ *
+ * Compared on what the model reads -- ask, criteria, note, explain -- and
+ * not on the matcher, cutoff or state, which are the parts a language is
+ * expected to have its own of.
+ */
+function driftWarnings(rules: Rule[]): string[] {
+  const byId = new Map<string, Rule[]>();
+  for (const r of rules) {
+    if (!r.languageDir) continue;
+    if (!byId.has(r.id)) byId.set(r.id, []);
+    byId.get(r.id)!.push(r);
+  }
+  const out: string[] = [];
+  for (const [id, group] of byId) {
+    if (group.length < 2) continue;
+    const first = group[0]!;
+    for (const other of group.slice(1)) {
+      const differ = (["ask", "criteria", "note", "explain"] as const).filter(
+        (k) => canonical(first[k]) !== canonical(other[k]),
+      );
+      if (differ.length > 0) {
+        out.push(
+          `${id}: drift between ${first.languageDir} and ${other.languageDir} in ${differ.join(", ")} -- the same rule in two languages should ask the same question, or say in a comment why not`,
+        );
+      }
+    }
+  }
+  return out;
 }
 
 function* walkYaml(dir: string): Generator<string> {

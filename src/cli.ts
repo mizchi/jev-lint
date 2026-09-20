@@ -137,7 +137,7 @@ options:
                            a reader, closest to the cutoff first, at most n.
                            Never a finding: does not count, does not fail. Free.
       --explain-schedule   print the axis chosen per rule, and why
-      --at <rule=n>        override one cutoff (repeatable)
+      --at <rule=n>        override one cutoff (repeatable); rust/<rule>=n for one language
       --unsure-below <n>   confidence under which a finding is worded as a question
       --base <ref>         review against a merge base (e.g. --base main)
       --staged             review only staged changes, as a pre-commit hook does
@@ -512,7 +512,7 @@ function cmdInitHook(opts: Options, out: Log, log: Log): number {
 }
 
 function loadOrDie(opts: Options, log: Log): { rules: Rule[]; errors: string[] } | null {
-  const { rules, errors } = loadRules(opts.rules);
+  const { rules, errors, warnings } = loadRules(opts.rules);
   // Judging someone's code against packaged rules is reasonable; doing it
   // without saying so is not, because their cutoffs were fitted to a corpus
   // this code has never seen.
@@ -523,6 +523,7 @@ function loadOrDie(opts: Options, log: Log): { rules: Rule[]; errors: string[] }
   // Loudly, always. A rule that failed to load reports nothing, which is
   // indistinguishable from a rule that found nothing wrong.
   for (const e of errors) log(`rule error: ${e}`);
+  for (const w of warnings) log(`rule warning: ${w}`);
   if (rules.length === 0) {
     log(`no usable rules found in ${opts.rules.join(", ")}`);
     return null;
@@ -931,8 +932,9 @@ function formatEvalSuite(
 }
 
 function cmdRules(opts: Options, out: Log, log: Log): number {
-  const { rules, errors } = loadRules(opts.rules);
+  const { rules, errors, warnings } = loadRules(opts.rules);
   for (const e of errors) log(`rule error: ${e}`);
+  for (const w of warnings) log(`rule warning: ${w}`);
   for (const r of rules) {
     out(
       `${r.id}\n  ${r.languages.join(", ")}  kind=${r.kind}  subject=${r.subject}  arm=${r.state}  cutoff=${cutoffFor(r, opts.at).toFixed(2)}  severity=${r.severity}`,

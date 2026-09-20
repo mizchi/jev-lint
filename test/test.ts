@@ -15,7 +15,7 @@ import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync, existsSync
 import { tmpdir } from "node:os";
 import { join, isAbsolute } from "node:path";
 
-import { PROBE_PREFIX } from "../src/types.ts";
+import { PROBE_PREFIX, LANGUAGE_DIRS, TIER_ONE } from "../src/types.ts";
 import {
   normalizeRule,
   loadRules,
@@ -203,6 +203,65 @@ test("rules: a project's own ./rules wins, and a fresh install still finds the p
     process.chdir(here);
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("rules: a rule under <lang>/<id>/rule.yml carries its language dir and may only name that dir's grammars", () => {
+  // The layout convention: a path shaped `<lang>/<id>/rule.yml` under a
+  // rules root gives the rule a language directory, and the directory
+  // constrains the grammars -- which is what keeps a Rust matcher out of
+  // the TypeScript file. Any other path is a rule file as before.
+  const root = mkdtempSync(join(tmpdir(), "jev-lang-"));
+  try {
+    const write = (rel: string, text: string) => {
+      mkdirSync(join(root, rel, ".."), { recursive: true });
+      writeFileSync(join(root, rel), text);
+    };
+    write("typescript/a/rule.yml", "id: a\nlanguages: [TypeScript, Jsx]\nrule: { kind: x }\nask: q\n");
+    write("rust/a/rule.yml", "id: a\nlanguage: Rust\nrule: { kind: y }\nask: q\n");
+    write("rust/b/rule.yml", "id: b\nlanguages: [Rust, TypeScript]\nrule: { kind: y }\nask: q\n");
+    write("typescript/c/rule.yml", "id: not-c\nlanguage: TypeScript\nrule: { kind: y }\nask: q\n");
+    write("flat.yml", "id: flat\nlanguages: [Rust, TypeScript]\nrule: { kind: y }\nask: q\n");
+    const { rules, errors } = loadRules([root]);
+    const ids = rules.map((r) => `${r.languageDir}/${r.id}`).sort();
+    assert.deepEqual(ids, ["null/flat", "rust/a", "typescript/a"], "same id under two dirs is two rules; a flat file has no dir");
+    assert.equal(errors.length, 2, errors.join("\n"));
+    assert.match(errors.find((e) => e.includes("b"))!, /TypeScript.*rust/, "a grammar outside its directory");
+    assert.match(errors.find((e) => e.includes("not-c"))!, /directory.*c/, "the id must be the directory's name");
+    assert.deepEqual(LANGUAGE_DIRS.typescript, ["TypeScript", "Tsx", "JavaScript", "Jsx"]);
+    assert.deepEqual(TIER_ONE, ["typescript", "rust"]);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rules: the same id under two language dirs with different sentences is a drift warning, not an error", () => {
+  const root = mkdtempSync(join(tmpdir(), "jev-drift-"));
+  try {
+    const write = (rel: string, text: string) => {
+      mkdirSync(join(root, rel, ".."), { recursive: true });
+      writeFileSync(join(root, rel), text);
+    };
+    write("typescript/a/rule.yml", "id: a\nlanguage: TypeScript\nrule: { kind: x }\nask: one\n");
+    write("rust/a/rule.yml", "id: a\nlanguage: Rust\nrule: { kind: y }\nask: two\n");
+    write("typescript/b/rule.yml", "id: b\nlanguage: TypeScript\nrule: { kind: x }\nask: same\nnote: n\n");
+    write("rust/b/rule.yml", "id: b\nlanguage: Rust\nrule: { kind: y }\nask: same\nnote: n\n");
+    const { rules, errors, warnings } = loadRules([root]);
+    assert.equal(rules.length, 4);
+    assert.deepEqual(errors, []);
+    assert.equal(warnings.length, 1, warnings.join("\n"));
+    assert.match(warnings[0]!, /a.*drift|drift.*a/);
+    assert.match(warnings[0]!, /ask/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rules: cutoffFor prefers lang/id over id, and both over the rule's own", () => {
+  const rule = { ...scoreRule({ at: 1.5 }), languageDir: "rust" };
+  assert.equal(cutoffFor(rule, {}), 1.5);
+  assert.equal(cutoffFor(rule, { r: 2.5 }), 2.5, "the id applies to every language");
+  assert.equal(cutoffFor(rule, { r: 2.5, "rust/r": 2.9 }), 2.9, "the language-qualified one wins");
+  assert.equal(cutoffFor(rule, { "typescript/r": 2.9 }), 1.5, "another language's override is not this rule's");
 });
 
 test("rules: a minimal score rule is valid and defaults are the documented ones", () => {

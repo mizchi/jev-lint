@@ -28,6 +28,27 @@ export const LANGUAGES = [
 ] as const;
 export type Language = (typeof LANGUAGES)[number];
 
+/**
+ * The shipped layout: `rules/<lang>/<id>/rule.yml`. A language directory
+ * admits these grammars and no other, which is what keeps one language's
+ * matcher out of another's file. `typescript` admits the ECMAScript
+ * family, since one matcher usually serves all four. A directory named
+ * for any other grammar (`python`, `go`) admits that grammar alone.
+ */
+export const LANGUAGE_DIRS: Record<string, readonly Language[]> = {
+  typescript: ["TypeScript", "Tsx", "JavaScript", "Jsx"],
+  javascript: ["JavaScript", "Jsx"],
+  rust: ["Rust"],
+};
+
+/**
+ * The languages a shipped rule is held to the full bar for: fixtures, an
+ * expect file and an accepted baseline, checked by the test suite. A rule
+ * under any other language directory loads without them and is reported
+ * as uncalibrated.
+ */
+export const TIER_ONE = ["typescript", "rust"] as const;
+
 /** What the question asks for, and therefore what the answer means. */
 export const KINDS = ["score", "noul"] as const;
 export type RuleKind = (typeof KINDS)[number];
@@ -166,6 +187,12 @@ export interface Rule {
    * holds. Never part of the verdict question, so never part of the draft.
    */
   explain: Record<string, string> | null;
+  /**
+   * The language directory the rule was loaded from under the shipped
+   * layout (`rules/<lang>/<id>/rule.yml`), or null for any other rule
+   * file. With the id, the rule's identity: `rust/fn-name-promises`.
+   */
+  languageDir: string | null;
   /** Where it was loaded from. Absent on rules built in memory. */
   source?: string;
   pack?: string;
