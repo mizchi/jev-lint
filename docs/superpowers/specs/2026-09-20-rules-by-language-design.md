@@ -142,6 +142,41 @@ Node kinds, for the matchers: Python `function_definition`,
 --show-subjects` over the fixtures confirms each matcher before anything
 is asked.
 
+## Phase 3: commits
+
+A commit message is a claim and its diff is the body, which is the class
+this tool exists for: "Fix the retry loop" over a diff that adds a
+feature; "Refactor, no behaviour change" over a diff that changes a
+default. Added on request, in the new layout, as `rules/git/`.
+
+- **Subject.** A commit is not an AST node, so `subject: commit` is a new
+  subject mode with no ast-grep matcher: `rule:` is absent, `languages` is
+  `[Git]`, a pseudo-grammar the loader admits only under `git/` and only
+  with `subject: commit`. Nothing else about a rule changes: `kind`,
+  `criteria`, `note`, `at`, `loose`, `explain` all apply.
+- **Command.** `jev-lint commits [--base <ref> | <range>]` (default
+  `@{upstream}..HEAD`, else `--base main`) builds one subject per commit:
+  the message is the subject text and travels in the question; the state
+  is `{reviewing: "one commit", message, files, diff}`. The diff is
+  `git show --format= --no-color <sha>` capped to the state budget; over
+  it, the state keeps `--stat` and the first hunks and says what it cut.
+  Merge commits are skipped and counted. Findings report `<sha>:1`, and
+  every format prints the sha and the subject line. `--retry`, `--loose`,
+  `--explain` and the cache (keyed on message + diff) work unchanged.
+- **Rule.** `git/commit-message-describes-diff`, a noul: the message
+  claims something the diff does not do, or the diff does something
+  material the message does not mention. Criteria in terms of what the
+  diff shows; the note says a subject line is a summary and a body may
+  say "also"; a `Co-Authored-By` trailer or a version bump is not a claim.
+- **Fixtures.** `fixtures/*.patch`, `git format-patch` output: message
+  and diff in one file, reproducible with `git am`. `expect.yml` keys the
+  patch file at line 1. The corpus is built and calibrated to the same
+  bar as any rule; hard cleans are the terse-but-true subject line, the
+  "also" body, the mechanical rename.
+- **Hook.** `jev-lint init` offers a `pre-push` line running `commits`
+  on `@{upstream}..HEAD` with `--fail-on error` off, so it prints and
+  never blocks until a project earns it.
+
 ## Out of scope
 
 Changing what a rule asks, any cutoff, or the cache format. Language
