@@ -54,6 +54,7 @@ failed and nothing was reported.
 | `init --pre-commit` | write a hook running `review --staged --fail-on error`; refuses to overwrite an existing hook without `--force` |
 | `run <rule> [paths...]` | `check` with one rule: a shipped id (every language that has it), `lang/<id>` (one), or a project rule when no shipped one has the id; an unknown id names the nearest. `--file <rules.yml>` uses that file's rules instead — all of them, or the one `<rule>` names in it. Every `check` flag applies |
 | `commits [range]` | judge each non-merge commit's message against its diff with the `subject: commit` rules; the range is a positional (`main..HEAD`), else `--base <ref>`, else `@{upstream}..HEAD`. Findings are `<sha>:1`, named by short sha and subject line in every format. `--retry`, `--loose`, `--explain` and the cache apply; the cache keys on message and diff together |
+| `commits --squash [range] --message-file <path\|->` | the whole range as one change — the diff from its merge base — judged against that message: a pull request's description (`gh pr view --json title,body -q '.title+"\n\n"+.body' \| jev-lint commits --squash main..HEAD --message-file -`), a changelog entry. `--message <text>` inline. One subject, named by the range |
 | `init --pre-push` | write a hook running `commits '@{upstream}..HEAD' --fail-on error`; steps aside with no key or no upstream |
 | `eval [dirs...]` | run every `rules/<lang>/<id>/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression or a changed question |
 | `--repeat <n>` / `--labels <path>` | `calibrate`: re-ask n times, fit against labels |
@@ -173,7 +174,9 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
-| `subject` | `node` (default), `enclosing`, `file`, `commit` | what code is judged. `commit` is the one subject with no matcher: `language: Git`, no `rule:`, `state: bare`; its subjects are the commits `jev-lint commits` lists, the message is judged and the diff is the state |
+| `subject` | `node` (default), `enclosing`, `file`, `commit`, `block` | what code is judged. `commit` and `block` have no matcher: `commit` is `language: Git`, its subjects the commits `jev-lint commits` lists, the message judged and the diff the state; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |
+| `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\w+)`) are the captures. A block runs from its header to the line before the next |
+| `extensions` | `block` only | the files the rule reads, by extension (`[sql]`); no grammar claims them, so the rule has to say |
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context for the model only |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
@@ -247,6 +250,12 @@ problem and is not one.
   `git/commit-message-describes-diff`, whose fixtures are
   `fixtures/<case>/{message, before/, after/}` — each case becomes one
   commit on its own branch of a throwaway repository when the eval runs.
+- `block` — a block of a text file no grammar parses, split at every line
+  matching `split:`: an sqlc query file at each `-- name: GetUser :one`.
+  No matcher, `language: Text`, `state: bare` or `located`; the header's
+  named groups are the captures and the block is the subject's text. Runs
+  under `check` and `review` beside the ast-grep rules, over the files whose
+  extension the rule names. The one shipped is `text/query-name-describes-sql`.
 
 ### `state`: what else the model sees
 
@@ -450,6 +459,7 @@ grouped here by what they ask. Which languages each exists in:
 | `log-level-matches-event` | ✓ | | ✓ | | |
 | `script-name-does` | | | | | json |
 | `commit-message-describes-diff` | | | | | git |
+| `query-name-describes-sql` | | | | | text |
 
 `typescript` and `rust` are first tier; `python` and `go` were ported on
 2026-09-20 from the TypeScript rules with the sentence copied and the
@@ -584,6 +594,16 @@ the clean top and no flips. On this repository's own commits its first
 unseen run found one true finding: a docs commit whose `git add -A` had
 swept in 1,700 lines of two other agents' half-built rule candidates.
 Report: `experiments/reports/k-commits`.
+
+**Queries** — `text/query-name-describes-sql`: does an sqlc query's
+`-- name: GetUserByEmail :one` describe the SQL under it? The first
+`subject: block` rule. Sixteen queries — six defects (a `ByEmail` over a
+`WHERE` on id, a `Latest` over `ORDER BY … ASC`, a `Count` tagged `:many`
+returning rows, a `Get` that deletes, `Invoices` over the orders table, an
+`Active` with no filter) at 0.91–0.96, nine cleans topping at 0.30 —
+separate at 0.61 with no flips. One corpus correction is in the rule file:
+a soft-delete `DeleteUser` read as misnamed while an identical
+`SoftDeleteUser` sat beside it, which was the corpus contradicting itself.
 
 **Go only** — `must-name-panics`: a `Must*` function promises to panic on
 the failure its name names; does it return it, log it, or swallow it in a

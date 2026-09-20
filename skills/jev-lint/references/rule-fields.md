@@ -28,7 +28,9 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
-| `subject` | `node` (default), `enclosing`, `file`, `commit` | what code is judged. `commit` is the one subject with no matcher: `language: Git`, no `rule:`, `state: bare`; its subjects are the commits `jev-lint commits` lists, the message is judged and the diff is the state |
+| `subject` | `node` (default), `enclosing`, `file`, `commit`, `block` | what code is judged. `commit` and `block` have no matcher: `commit` is `language: Git`, its subjects the commits `jev-lint commits` lists; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |
+| `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\w+)`) are the captures. A block runs from its header to the line before the next |
+| `extensions` | `block` only | the files the rule reads, by extension (`[sql]`) |
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context the model reads before answering, never shown in a finding. `criteria` *define* the two answers; `note` scopes them — which cases are out of bounds, which conventions count as honoured |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
@@ -110,6 +112,22 @@ problem and is not one.
   `git/commit-message-describes-diff`, whose fixtures are
   `fixtures/<case>/{message, before/, after/}` — each case becomes one
   commit on its own branch of a throwaway repository when the eval runs.
+- `block` — a block of a text file no grammar parses, split at every line
+  matching `split:` (an sqlc query file at each `-- name: GetUser :one`).
+  No matcher, `language: Text`, `state: bare` or `located`; the header's
+  named groups are the captures. Runs under `check` and `review` over the
+  files whose extension the rule names. Shipped: `text/query-name-describes-sql`.
+  Shape:
+
+  ```yaml
+  id: query-name-describes-sql
+  language: Text
+  subject: block
+  split: "^-- name: (?<NAME>\\w+) :(?<KIND>\\w+)"
+  extensions: [sql]
+  state: located
+  ask: This query's name ($NAME) misdescribes the SQL under it.
+  ```
 
 ## `state`: what else the model sees
 

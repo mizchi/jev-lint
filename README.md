@@ -151,6 +151,8 @@ defect, in the one place a repository writes a claim about every change.
 npx -y jev-lint commits --base main   # does each message describe its diff?
 npx -y jev-lint commits               # the commits not yet pushed (@{upstream}..HEAD)
 npx jev-lint init --pre-push          # a hook that runs that before every push
+gh pr view --json title,body -q '.title + "\n\n" + .body' \
+  | npx -y jev-lint commits --squash main..HEAD --message-file -   # the PR description against the whole branch
 ```
 
 One subject per non-merge commit: the message is judged, the diff (capped,
@@ -346,7 +348,8 @@ general question does not.
 | rule | asks |
 | --- | --- |
 | `script-name-does` | does this `package.json` script's name describe the command it runs? |
-| `commit-message-describes-diff` | does this commit's message describe its diff? (`jev-lint commits`) |
+| `commit-message-describes-diff` | does this commit's message describe its diff? (`jev-lint commits`; `--squash` for a PR description against the branch) |
+| `query-name-describes-sql` | does an sqlc query's `-- name:` describe the SQL under it? The first rule over a file no grammar parses: `subject: block` splits the file at each header |
 | `must-name-panics` (Go only) | does a `Must*` function panic on the failure its name promises to panic on, rather than return it? |
 
 Deliberately not asked anywhere: style, redundancy, whether something should
