@@ -1,0 +1,23 @@
+default: clean
+fixtures/test_cart.py:
+  - { line: 18, label: bad, window: 0, reason: "the title names the empty case; the body never sets it up, so nothing about the empty cart is established." }
+  - { line: 23, label: bad, window: 0, reason: "the title says remove; nothing is removed, so a broken remove passes." }
+  - { line: 29, label: bad, window: 0, reason: "the title promises a raise; no negative qty is ever added and no raise asserted." }
+  - { line: 35, label: bad, window: 0, reason: "the title claims an ordering; the body checks only the length, which holds whether or not the sort works." }
+  - { line: 41, label: clean, window: 0, reason: "hard clean: terse title, but the exact total is asserted." }
+  - { line: 46, label: clean, window: 0, reason: "the remaining skus are asserted exactly; a remove that removed nothing fails." }
+  - { line: 52, label: clean, window: 0, reason: "hard clean: the title claims only that the total is reduced; `< 300` fails if it is not." }
+  - { line: 58, label: bad, window: 0, reason: "the title claims a rejection; the body asserts paid, so a checkout that never rejects passes." }
+  - { line: 64, label: bad, window: 0, reason: "asserts nothing at all, so nothing it claims is established." }
+  - { line: 69, label: bad, window: 0, reason: "`cart is not None` holds whether or not the coupon applied to anything." }
+  - { line: 75, label: bad, window: 0, reason: "the title claims the cheapest is first; `is not None` holds for any first element." }
+  - { line: 81, label: clean, window: 0, reason: "hard clean: compound claim; the exact remaining count is asserted." }
+  - { line: 88, label: clean, window: 0, reason: "hard clean: setup before the named operation; the exact total is asserted and fails (800) if the 500-cent gift item is counted." }
+  - { line: 95, label: bad, window: 0, reason: "the title claims a warning is logged; the body checks a count that holds whether or not anything was logged." }
+  - { line: 102, label: clean, window: 0, reason: "pytest.raises(KeyError) fails if get does not raise." }
+fixtures/test_inventory.py:
+  - { line: 16, label: bad, window: 0, reason: "reserve is never called, so a broken reserve passes." }
+  - { line: 20, label: clean, window: 0, reason: "hard clean: assertRaises around the oversell." }
+  - { line: 24, label: clean, window: 0, reason: "hard clean: the title claims an interaction with the ledger and the body asserts the call, once, with these arguments; the Mock is the collaborator, not the subject." }
+  - { line: 31, label: clean, window: 0, reason: "assertEqual(..., 0) on an unknown sku fails if quantity does not return zero." }
+  - { line: 34, label: bad, window: 0, reason: "the title claims the remaining quantity is returned; assertIsNotNone holds for any return value but None." }

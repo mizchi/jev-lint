@@ -3,7 +3,15 @@ language: Python
 kind: noul
 subject: node
 state: bare
-at: 0.7   # uncalibrated
+# 0.79, fitted 2026-09-20 on this rule's own evals (22 subjects: 6 defects,
+# 16 cleans of which 11 hard, 3 passes). Cleans top out at 0.65
+# (`test_items_are_sorted_by_price`, which calls sorted_items and checks
+# only the length: the right thing, weakly) then 0.46 and 0.41 (the
+# tautological `is not None` asserts, same class); defects answer
+# 0.94-0.96. Midpoint of the gap, 0.14 of headroom on each side, no
+# decision flips, max spread 0.07. The three hard cleans near the cutoff
+# are the other rule's defects, which is the split the two rules exist for.
+at: 0.79
 axis: file
 severity: warning
 rule:

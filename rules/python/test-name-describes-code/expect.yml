@@ -1,0 +1,21 @@
+default: clean
+fixtures/test_cart.py:
+  - { line: 18, label: bad, window: 0, reason: "the title names the empty case; the body builds the two-item cart and expects 300. Wrong input." }
+  - { line: 23, label: bad, window: 0, reason: "wrong operation: the title says remove; the body calls get and removes nothing." }
+  - { line: 29, label: bad, window: 0, reason: "the title promises a raise on a negative qty; the body adds qty 2 and expects an ordinary value." }
+  - { line: 35, label: clean, window: 0, reason: "hard clean: sorted_items() is called; the assertion is only a length, which is the other rule's question." }
+  - { line: 41, label: clean, window: 0, reason: "hard clean: a one-word title, and the body asserts the total." }
+  - { line: 46, label: clean, window: 0, reason: "hard clean: 'drop' is a synonym for remove, which the body calls." }
+  - { line: 52, label: clean, window: 0, reason: "hard clean: the title claims a reduction; the body applies a coupon and asserts the total is lower." }
+  - { line: 58, label: bad, window: 0, reason: "opposite outcome: the title says rejects; the body expects the expired card to be paid." }
+  - { line: 64, label: clean, window: 0, reason: "hard clean: checkout is called with a card; no assertion, but about the named thing." }
+  - { line: 69, label: clean, window: 0, reason: "hard clean: the coupon is applied to the two-item cart; the assertion is tautological, which is the other rule's question." }
+  - { line: 75, label: clean, window: 0, reason: "hard clean: sorted_items is called and the first element read; the assertion is weak, not about something else." }
+  - { line: 81, label: clean, window: 0, reason: "hard clean: a compound title whose body does both parts." }
+  - { line: 88, label: clean, window: 0, reason: "hard clean: setup adds a gift item and applies a no-op coupon before asserting the total." }
+  - { line: 95, label: bad, window: 0, reason: "the title refers to a warning being logged; the body touches no logger, it counts items." }
+fixtures/test_inventory.py:
+  - { line: 16, label: bad, window: 0, reason: "wrong operation: the title says reserve reduces; the body calls restock and checks the quantity went up." }
+  - { line: 20, label: clean, window: 0, reason: "hard clean: a camelCase unittest method; the body asserts the raise the title names." }
+  - { line: 24, label: clean, window: 0, reason: "the title claims a ledger interaction and the body asserts on the ledger call." }
+  - { line: 34, label: clean, window: 0, reason: "hard clean: reserve is called and its return read; assertIsNotNone is weak, not about something else." }

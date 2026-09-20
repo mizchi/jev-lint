@@ -1,0 +1,76 @@
+id: tests-cover-failure-paths
+language: Python
+kind: noul
+subject: node
+state: paired
+# 0.52, fitted 2026-09-20 on this rule's own evals (12 subjects over two
+# paired modules, `cart.py` / `test_cart.py` and `env.py` / `test_env.py`:
+# 4 defects, 8 cleans of which 6 hard, 3 passes). Cleans top out at 0.40
+# (`parse_sku`, whose raise is reached only through `add_item`'s test) then
+# 0.19; defects start at 0.65 (`apply_coupon`, which returns None for an
+# unknown code and is tested with SAVE10 only; 0.58-0.69 across passes) and
+# the three raises never tripped answer 0.89-0.92. Midpoint of the gap,
+# 0.12 of headroom on each side, no decision flips, max spread 0.11.
+# The `test_` prefix pairs `test_cart.py` with `cart.py` (the runner splits
+# a test file's name on `_`); a helper defined in a test file matches the
+# matcher and is dropped as unpaired, which the run reports as one subject.
+at: 0.52
+axis: file
+rule:
+  all:
+    - kind: function_definition
+    # Module-level, directly or under a decorator; a leading underscore is
+    # Python's "not exported".
+    - inside:
+        any:
+          - kind: module
+          - kind: decorated_definition
+            inside: { kind: module }
+    - has:
+        field: name
+        pattern: $NAME
+        regex: ^[^_]
+    # A test is not a function under test; without this every `test_*` in
+    # the test files matches and is dropped as unpaired.
+    - not:
+        has:
+          field: name
+          regex: ^test_
+ask: >-
+  This function ($NAME) has a failure path of its own that none of the related
+  tests reaches.
+criteria:
+  "true": >-
+    The body itself throws, rejects, returns an error value, or refuses an input
+    through a guard on some path, and no related test in the state drives $NAME
+    down that path: no test passes an input that trips the guard, asserts a
+    throw or a rejection from it, or asserts the error result -- neither by
+    calling $NAME nor through another function in this file that calls it. A
+    related test that never calls $NAME, directly or through a caller, while the
+    body has such a path, is that case.
+  "false": >-
+    Every failure path the body declares is reached by some related test -- a
+    test passes the bad input, asserts that the call throws or rejects, or
+    asserts the error result it returns, whether it calls $NAME itself or calls
+    a function in this file that calls $NAME, and in whatever vocabulary the
+    runner uses (`toThrow`, `rejects`, `assert.throws`, a `try`/`catch` around
+    the call, an `.ok` read as false) -- or the body has no failure path of its
+    own: it cannot fail, or the only failures on its paths come from callees it
+    does not guard, which are those callees' paths and not this function's. A
+    throw behind one condition with several operands is one path, and a test
+    that trips any one operand has reached it.
+note: >-
+  A failure path is one throw, one reject, or one return of an error value (`{
+  ok: false }`, `null`, `undefined` on a checked condition): a single throw
+  behind a condition with several `||` operands is one path, reached when any
+  operand is tripped. Only the paths this body DECLARES count; a callee that may
+  throw is not this function's path unless the body catches and re-reports it.
+  Judge what a test's body does, not what its title says: a test whose title
+  claims a failure but whose body never trips $NAME's guard reaches nothing, and
+  a test whose title is about something else but whose body passes the bad input
+  and asserts the throw reaches it. The related tests are excerpts, so a call to
+  $NAME counts even when the assertion around it was cut; but a call with
+  ordinary input does not reach a guard that ordinary input never trips, and a
+  mention of $NAME only in an import reaches nothing. Returning the input
+  unchanged, or a default, when a condition is not met is a fallback and not a
+  failure path: nothing is refused and nothing reports an error.

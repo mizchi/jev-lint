@@ -1,0 +1,45 @@
+id: idempotent-name
+language: Python
+kind: noul
+subject: node
+state: located
+# 0.68, fitted 2026-09-20 on this rule's own evals (16 subjects: 6 defects,
+# 10 cleans of which 9 hard, 3 passes). Cleans top out at 0.48
+# (`setup_workdir`: mkdir with exist_ok, then a write_text that overwrites
+# a lock file with the same pid) then 0.28 (an ALTER TABLE behind a
+# user_version guard); defects answer 0.88-0.95 (a plain INSERT on a keyed
+# table, os.mkdir without exist_ok, CREATE TABLE without IF NOT EXISTS, two
+# appends, and logging's addHandler on every call). Midpoint of the gap,
+# 0.20 of headroom on each side, no decision flips, max spread 0.06.
+at: 0.68
+axis: file
+rule:
+  all:
+    - kind: function_definition
+    - has:
+        field: name
+        pattern: $NAME
+        regex: ^(ensure|upsert|setup|install|register)(_|$)
+ask: This function's name ($NAME) says a repeated call is harmless, but calling
+  it a second time with the same arguments leaves a different result from
+  calling it once.
+criteria:
+  "true": "The body performs its effect without finding out whether it is already
+    in place, and repeating the effect accumulates or fails: it appends to a
+    list or adds a listener, creates a record, index, table, column or resource
+    that would then exist twice or make the second creation fail, inserts where
+    a matching row may already be, or runs a step that is not itself safe to
+    repeat -- with no existence check, no keyed overwrite and no guard that
+    makes the second call a no-op. One such step is enough, even when the other
+    steps of the body are safe to repeat."
+  "false": "A second call finds the effect already in place and leaves the state
+    as the first call left it: the body checks for existence before acting,
+    writes by key so a repeat overwrites the same entry, assigns rather than
+    appends, uses an operation that is inherently repeatable (put, set, mkdir
+    with recursive, CREATE IF NOT EXISTS, ON CONFLICT), returns early on a flag
+    it sets, or has no effect at all beyond its return value."
+note: Only this body is judged. A helper it calls whose own name says it is
+  repeat-safe (ensure*, upsert*, put*, set*, *IfNotExists) is assumed to be.
+  Logging on each call, or returning a fresh object each call, is not a
+  different result. A function whose name says ensure but is a pure conversion
+  of its argument has nothing to repeat and is not a violation.

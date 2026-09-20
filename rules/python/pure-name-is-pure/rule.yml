@@ -1,0 +1,57 @@
+id: pure-name-is-pure
+language: Python
+kind: noul
+subject: node
+state: local
+# 0.58, fitted 2026-09-20 on this rule's own evals (17 subjects: 6 defects,
+# 11 cleans of which 8 hard, 3 passes). Cleans top out at 0.30
+# (`parse_args`, which builds an argparse parser and parses the argv it was
+# handed) and every other clean answers 0.03-0.04; defects answer 0.85-0.97
+# (a file read in a compute_, a clock default in a to_, a log line in a
+# format_, a cache write in a derive_, a counter and an argument mutated).
+# Midpoint of the gap, 0.27 of headroom on each side, no decision flips,
+# max spread 0.03.
+at: 0.58
+axis: file
+severity: info
+rule:
+  all:
+    - kind: function_definition
+    - has:
+        field: name
+        pattern: $NAME
+        regex: ^(compute|calculate|derive|format|to|parse)(_|$)
+ask: This function's name ($NAME) presents it as a computation of a result from
+  its inputs, but its body changes state outside itself or performs I/O.
+criteria:
+  "true": "The body mutates an argument or something reachable through one,
+    assigns to a module-level binding, a field of `this` or an object it did not
+    create, stores something it computed into a cache, Map, Set or other store
+    that outlives the call, logs, emits or increments a metric, or reads or
+    writes a file, network, database, environment, clock or random source --
+    directly, or through a call whose name or arguments show it does so (fetch,
+    a path, a URL, a query, send, save). One such read or write on any path is
+    enough: a default taken from the clock, the environment or a random source
+    when a field is missing, or an effect in a fallback branch, makes the body
+    impure even though its common path is not."
+  "false": The body derives its result from its parameters, from `this`, from
+    module-level values it only reads, and from dependencies it obtains -- a
+    module, binding, table, formatter, parser or backend handed back by a
+    loader, resolver or registry lookup -- and returns it. A mutable local
+    accumulator, a copy of an argument that is then modified, and a local object
+    built up and returned are not effects outside the function.
+note: "Obtaining a dependency is not an effect. Calling or awaiting a helper
+  that hands back a module, native binding, compiled table, backend or client
+  (get*Module, load*, require, resolve*, a dynamic import) acquires something
+  the body needs; that the helper memoises what it loaded is the helper's
+  business, not this body's. What is judged is what the body then does with its
+  inputs: calling a pure function of an acquired module is a computation, using
+  an acquired client to fetch, read, write or send is I/O. The line is what gets
+  written: a body that puts its own result -- a value it computed, a key it
+  generated, a formatter it built -- into a cache, Map or Set that outlives the
+  call changes what later calls observe and is an effect even when it is only
+  memoisation; a body that only takes a dependency out of such a store is not. A
+  helper that receives its input from a parameter (readEnvInt(raw.count, ...))
+  reads that argument, not the environment, whatever its name says. Reading
+  `this` in a toJSON, toString or similar method is reading, not writing.
+  Sorting or mutating a copy the body made itself is not mutating the argument."

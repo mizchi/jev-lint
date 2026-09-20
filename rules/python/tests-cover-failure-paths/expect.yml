@@ -1,0 +1,15 @@
+default: clean
+fixtures/cart.py:
+  - { line: 29, label: clean, window: 0, reason: "hard clean: parse_sku's raise is reached through add_item, which test_add_item_rejects_malformed_sku drives with 'not a sku' under pytest.raises." }
+  - { line: 36, label: clean, window: 0, reason: "the qty guard is tripped by test_add_item_rejects_zero_qty." }
+  - { line: 44, label: bad, window: 0, reason: "raises KeyError for a missing sku; the only test removes a sku that is present." }
+  - { line: 51, label: clean, window: 0, reason: "hard clean: total cannot fail." }
+  - { line: 55, label: bad, window: 0, reason: "returns None for an unknown code, a checked error value; the only test passes SAVE10." }
+  - { line: 62, label: clean, window: 0, reason: "hard clean: an unknown code falls back to 0; nothing is refused, so there is no failure path, and the fallback is tested anyway." }
+  - { line: 67, label: bad, window: 0, reason: "two paths: the expired-card raise is reached; the empty-cart Receipt(ok=False) is not -- every test checks out make_cart()." }
+  - { line: 75, label: clean, window: 0, reason: "hard clean: the empty-sku raise is reached inside test_sku_display_width, whose title says nothing about failure." }
+fixtures/env.py:
+  - { line: 17, label: clean, window: 0, reason: "the non-numeric raise is reached by test_read_port_rejects_non_numeric." }
+  - { line: 24, label: clean, window: 0, reason: "hard clean: a missing flag returns False, a fallback and not a failure." }
+  - { line: 31, label: bad, window: 0, reason: "raises KeyError when the variable is missing or empty; the only test passes a present DSN, and read_config's test sets every variable." }
+  - { line: 38, label: clean, window: 0, reason: "hard clean: read_config declares no path of its own; the raises belong to read_port and require." }

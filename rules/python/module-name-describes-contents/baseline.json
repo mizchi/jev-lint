@@ -1,0 +1,271 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:47:36.872Z",
+  "model": "jev-1.13.0",
+  "suite": "python/module-name-describes-contents",
+  "rules": [
+    {
+      "id": "module-name-describes-contents",
+      "draft": "d62d8cb87c67",
+      "at": 0.46
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/billing/__init__.py",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/models.py",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/utils.py",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/user_repository.py",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/conftest.py",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/session_store.py",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/shipping.py",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/cli.py",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/sessions/__init__.py",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/sessions/__init__.py",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/user_repository.py",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/billing/__init__.py",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/conftest.py",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/cli.py",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/shipping.py",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/models.py",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/session_store.py",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/utils.py",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/sessions/__init__.py",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/models.py",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/billing/__init__.py",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.52,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/user_repository.py",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/session_store.py",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/conftest.py",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/utils.py",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/cli.py",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "experiments/rule-candidates/python/module-name-describes-contents/fixtures/shipping.py",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 27,
+    "inputTokens": 33186,
+    "usd": 0.0013938120000000001,
+    "ms": 639
+  }
+}

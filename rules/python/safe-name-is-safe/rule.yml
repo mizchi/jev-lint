@@ -1,0 +1,41 @@
+id: safe-name-is-safe
+language: Python
+kind: noul
+subject: node
+state: local
+# 0.59, fitted 2026-09-20 on this rule's own evals (15 subjects: 6 defects,
+# 9 cleans of which 6 hard, 3 passes). Cleans top out at 0.47 (`try_lock`,
+# which turns every OSError from the open into False and closes the fd
+# outside the try) then 0.30 (`first_or_default`, which cannot fail);
+# defects start at 0.71 (`safe_load_json`, whose read_text sits outside the
+# try) and 0.82 (`port_or_default`, an int() outside any try), the rest
+# 0.90-0.95. Midpoint of the gap, 0.12 of headroom on each side, no
+# decision flips, max spread 0.10 (the try_lock clean).
+at: 0.59
+axis: file
+rule:
+  all:
+    - kind: function_definition
+    - has:
+        field: name
+        pattern: $NAME
+        regex: ^(safe|try)(_|$)|_or_(none|default)$
+ask: This function's name ($NAME) says that failure is absorbed and reported as
+  a value, but its body has a path on which a failure escapes as a throw or a
+  rejection.
+criteria:
+  "true": "A failure of the kind the name promises to absorb can reach the caller
+    as an exception or a rejected promise: the operation that can fail is
+    outside any try, the catch rethrows or throws a new error, a failing case is
+    detected and answered with a throw instead of the null, undefined, default,
+    false or result value the name promises, or the fallback itself is computed
+    by something that can fail."
+  "false": "Every failure of the kind the name refers to is turned into the value
+    the name promises: null, undefined, a default, a boolean, or a result object
+    the caller can inspect. A body that cannot fail at all, and so has nothing
+    to catch, honours the name."
+note: "A throw on a programmer error -- an argument of the wrong type, a misuse
+  of the function's own API -- is not the failure such a name promises to absorb
+  and does not count. Logging before returning the fallback is fine. The failure
+  that counts is the one the name and the parameters are about: parsing, lookup,
+  I/O, connection, conversion."

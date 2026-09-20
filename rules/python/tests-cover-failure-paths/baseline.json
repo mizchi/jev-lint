@@ -1,0 +1,352 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:54:06.275Z",
+  "model": "jev-1.13.0",
+  "suite": "python/tests-cover-failure-paths",
+  "rules": [
+    {
+      "id": "tests-cover-failure-paths",
+      "draft": "68b0b807ce80",
+      "at": 0.52
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 17,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 31,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 38,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 36,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 44,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 51,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 55,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 62,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 67,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 75,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 17,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 31,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 38,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 36,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 44,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 51,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 55,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 62,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 67,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 75,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 17,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 31,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/env.py",
+        "line": 38,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 36,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 44,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 51,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 55,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 62,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 67,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "experiments/rule-candidates/python/tests-cover-failure-paths/fixtures/cart.py",
+        "line": 75,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 34074,
+    "usd": 0.0014311080000000002,
+    "ms": 773
+  }
+}

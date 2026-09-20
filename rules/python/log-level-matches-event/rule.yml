@@ -1,0 +1,50 @@
+id: log-level-matches-event
+language: Python
+kind: noul
+subject: node
+state: local
+# 0.60, fitted 2026-09-20 on this rule's own evals (16 subjects: 6 defects,
+# 10 cleans of which 5 hard, 3 passes). Cleans top out at 0.44 (`info` for
+# a refused login, the expected business rejection the criteria name) then
+# 0.23 (`error` for a failed notify the function recovers from by queueing);
+# defects start at 0.76 (`warning` followed by sys.exit) and 0.79 (`debug`
+# for a declined payment; `debug` where the fetch gives up), up to 0.90.
+# Midpoint of the gap, 0.16 of headroom on each side, no decision flips,
+# max spread 0.05. `$LOGGER` matches `self.log` and the `logging` module
+# as well as a bare `logger`.
+at: 0.60
+axis: file
+rule:
+  any:
+    - pattern: $LOGGER.$LEVEL($MSG, $$$REST)
+    - pattern: $LOGGER.$LEVEL($MSG)
+constraints:
+  # `logging.exception` logs at ERROR with the traceback; `critical` is
+  # Python's `fatal`.
+  LEVEL:
+    regex: ^(debug|info|warn|warning|error|exception|critical|fatal)$
+  LOGGER:
+    regex: (?i)(log|console)
+ask: The level of this log call ($LEVEL) misstates the severity of what the
+  surrounding code is handling at that point.
+criteria:
+  "true": "What the code is doing where the call sits belongs at a clearly
+    different level than the one used: the call is at info, debug or trace but
+    sits on a path where the operation has failed and the function gives up,
+    rethrows, exits, discards data or returns a failure the caller must act on;
+    the call is at debug or trace for an outcome the function reports to its
+    caller, such as a refusal or a rejection, rather than for progress or detail
+    on the way to an outcome; the call is at error or fatal but sits on the
+    ordinary success path or on a routine, expected branch such as a cache miss,
+    a normal rejection or a validation failure; or the call is at warn but the
+    code immediately exits or throws with no recovery."
+  "false": "The level fits what the code around the call shows: error or warn
+    where something went wrong that an operator should see, even if the function
+    recovers from it; info for routine outcomes including expected business
+    rejections and refused logins; debug or trace for per-item progress in loops
+    and other chatter; warn for a degraded or transient condition the code goes
+    on to handle; error on stderr for a usage error in a command-line entry
+    point. Whether the message text is well written is not the question."
+note: Judge the level against the code path the call sits on, not against words
+  in the message. A logger call whose first argument is not a message for a
+  human is not a violation.

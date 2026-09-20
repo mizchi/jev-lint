@@ -1,0 +1,18 @@
+default: clean
+fixtures/idempotent.py:
+  - { line: 16, label: bad, window: 0, reason: "CREATE TABLE without IF NOT EXISTS: the second call raises OperationalError." }
+  - { line: 21, label: clean, window: 0, reason: "hard clean: two creations, both IF NOT EXISTS." }
+  - { line: 27, label: bad, window: 0, reason: "appends (name, fn) to a module list with no check; the handler is registered twice." }
+  - { line: 31, label: clean, window: 0, reason: "hard clean: appends, but returns early when the hook is already in the list." }
+  - { line: 37, label: bad, window: 0, reason: "addHandler on every call: the second call attaches a second StreamHandler and every line logs twice." }
+  - { line: 43, label: clean, window: 0, reason: "hard clean: signal.signal assigns the handler; a repeat overwrites the same slot." }
+  - { line: 48, label: bad, window: 0, reason: "a plain INSERT on a keyed table; the second call with the same id violates the primary key." }
+  - { line: 53, label: clean, window: 0, reason: "ON CONFLICT DO UPDATE: the repeat overwrites the same row." }
+  - { line: 61, label: bad, window: 0, reason: "os.mkdir without exist_ok: the second call raises FileExistsError." }
+  - { line: 66, label: clean, window: 0, reason: "hard clean: makedirs with exist_ok=True." }
+  - { line: 71, label: clean, window: 0, reason: "hard clean: ensure_ on a pure conversion; nothing to repeat." }
+  - { line: 83, label: clean, window: 0, reason: "hard clean: returns early on the flag it sets." }
+  - { line: 89, label: clean, window: 0, reason: "hard clean: logs on each call, then writes by key; the second call overwrites the same entry." }
+  - { line: 93, label: bad, window: 0, reason: "appends the listener with no check; a second call registers it twice." }
+  - { line: 96, label: clean, window: 0, reason: "hard clean: mkdir with exist_ok and a write_text that overwrites the same file with the same pid." }
+  - { line: 103, label: clean, window: 0, reason: "hard clean: an ALTER TABLE that is not repeatable, behind a user_version guard that makes the second call a no-op." }

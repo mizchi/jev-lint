@@ -1,0 +1,19 @@
+default: clean
+fixtures/utils.py:
+  - { line: 1, label: bad, window: 1000000, reason: "every public item is about one nameable concern -- coupons and discounts -- and the file is called utils. A reader looking for the discount logic has no reason to open this." }
+fixtures/user_repository.py:
+  - { line: 1, label: bad, window: 1000000, reason: "named for users; holds lookups for users, orders, carts and invoices alike." }
+fixtures/shipping.py:
+  - { line: 1, label: bad, window: 1000000, reason: "named shipping; every public item is a sales-tax rate or line and nothing here ships anything." }
+fixtures/billing/__init__.py:
+  - { line: 1, label: bad, window: 1000000, reason: "named by its directory, billing; the package's public items send welcome and password-reset email and touch no billing." }
+fixtures/session_store.py:
+  - { line: 1, label: clean, window: 1000000, reason: "named for the store it holds; the Session dataclass and a private clock helper belong to it." }
+fixtures/models.py:
+  - { line: 1, label: clean, window: 1000000, reason: "hard clean: `models` is a conventional Django/FastAPI-style name for a module of dataclasses that share no narrower concern than being the data model." }
+fixtures/cli.py:
+  - { line: 1, label: clean, window: 1000000, reason: "hard clean: a parser builder, a main and a __main__ guard are what a module called cli holds." }
+fixtures/sessions/__init__.py:
+  - { line: 1, label: clean, window: 1000000, reason: "hard clean: a package __init__ named by its directory, sessions, re-exporting session and token items." }
+fixtures/conftest.py:
+  - { line: 1, label: clean, window: 1000000, reason: "hard clean: conftest is pytest's fixed name for a fixtures module; its items are fixtures." }

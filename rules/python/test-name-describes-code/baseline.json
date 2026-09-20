@@ -1,0 +1,622 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-20T09:43:53.815Z",
+  "model": "jev-1.13.0",
+  "suite": "python/test-name-describes-code",
+  "rules": [
+    {
+      "id": "test-name-describes-code",
+      "draft": "b4abdd8f9b60",
+      "at": 0.79
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 29,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 35,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 46,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.45,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 52,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 58,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 64,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 69,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 75,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 81,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 88,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 95,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 102,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 16,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 20,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 24,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 31,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 16,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 20,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 24,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 31,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 29,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 35,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 46,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 52,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 58,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 64,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 69,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 75,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 81,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 88,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 95,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 102,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 16,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 20,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 24,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 31,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_inventory.py",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 29,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 35,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 46,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.56,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 52,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 58,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 64,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 69,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 75,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.45,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 81,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 88,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 95,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "experiments/rule-candidates/python/test-name-describes-code/fixtures/test_cart.py",
+        "line": 102,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 49119,
+    "usd": 0.0020629980000000003,
+    "ms": 723
+  }
+}

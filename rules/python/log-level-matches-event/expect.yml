@@ -1,0 +1,18 @@
+default: clean
+fixtures/worker.py:
+  - { line: 29, label: bad, window: 0, reason: "error on a routine cache miss." }
+  - { line: 31, label: clean, window: 0, reason: "debug for a cache hit: chatter." }
+  - { line: 42, label: bad, window: 0, reason: "info on the path where the connect has failed and the function re-raises." }
+  - { line: 53, label: clean, window: 0, reason: "hard clean: warning for a transient failure the loop goes on to retry." }
+  - { line: 55, label: bad, window: 0, reason: "debug where the function gives up after three attempts and discards the job." }
+  - { line: 61, label: bad, window: 0, reason: "debug for a declined payment, an outcome the function reports to its caller." }
+  - { line: 63, label: clean, window: 0, reason: "info for a successful charge." }
+  - { line: 69, label: clean, window: 0, reason: "hard clean: info for a refused login, an expected business rejection." }
+  - { line: 78, label: clean, window: 0, reason: "debug for per-job progress in a loop." }
+  - { line: 90, label: clean, window: 0, reason: "hard clean: warning for a degraded condition (a slow batch) the code goes on from." }
+  - { line: 91, label: bad, window: 0, reason: "critical on the ordinary success path, reporting the count processed." }
+  - { line: 99, label: clean, window: 0, reason: "hard clean: error where the notify failed and an operator should see it, even though the function recovers by queueing." }
+  - { line: 110, label: clean, window: 0, reason: "hard clean: exception (error with traceback) in the except before re-raising." }
+  - { line: 119, label: bad, window: 0, reason: "warning immediately followed by sys.exit(1) with no recovery." }
+  - { line: 125, label: clean, window: 0, reason: "hard clean: error for a usage error in the command-line entry point, which then returns 2." }
+  - { line: 127, label: clean, window: 0, reason: "info for startup on the module logger." }

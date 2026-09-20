@@ -1,0 +1,17 @@
+default: clean
+fixtures/safe.py:
+  - { line: 16, label: bad, window: 0, reason: "path.read_text() sits outside the try; a missing file escapes as FileNotFoundError." }
+  - { line: 24, label: clean, window: 0, reason: "hard clean: logs, then returns None on the decode error." }
+  - { line: 32, label: clean, window: 0, reason: "catches both the None and the non-numeric case and returns the default." }
+  - { line: 39, label: bad, window: 0, reason: "the except re-raises a new ValueError; try_ promised None." }
+  - { line: 46, label: clean, window: 0, reason: "returns None on the parse failure." }
+  - { line: 53, label: bad, window: 0, reason: "the missing row is detected and answered with KeyError instead of the None the name promises." }
+  - { line: 60, label: bad, window: 0, reason: "the zero divisor is detected and answered with a raise instead of None." }
+  - { line: 66, label: bad, window: 0, reason: "int(raw) is outside any try; a non-numeric string escapes as ValueError." }
+  - { line: 70, label: clean, window: 0, reason: "hard clean: the read and the decode are both inside the try and both exceptions map to the default." }
+  - { line: 77, label: bad, window: 0, reason: "the except throws a new ConnectionError; try_ promised None." }
+  - { line: 84, label: clean, window: 0, reason: "hard clean: every OSError from the open (the lock exists, a missing directory, a permission) becomes False; the close after a successful open sits outside the try and is not a failure the name is about. First written catching FileExistsError only, which answered 0.67: a missing parent directory escaped, and the model was right that an I/O failure escaping a try_ is the named failure." }
+  - { line: 93, label: clean, window: 0, reason: "hard clean: cannot fail; the isinstance guard returns None rather than raising." }
+  - { line: 102, label: clean, window: 0, reason: "hard clean: OSError covers the missing file and the permission failure alike; both become False." }
+  - { line: 110, label: clean, window: 0, reason: "hard clean: the only raise is a TypeError on a programmer error, which the note excludes; the lookup itself is a .get." }
+  - { line: 116, label: clean, window: 0, reason: "next() with a default cannot fail on an empty iterable." }

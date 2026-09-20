@@ -85,9 +85,9 @@ def test_add_then_remove_leaves_cart_empty():
     assert len(cart.items) == 0
 
 
-def test_total_ignores_free_items():
+def test_total_ignores_gift_items():
     cart = make_cart()
-    cart.add(Item(sku="gift", price_cents=0, qty=3))
+    cart.add(Item(sku="gift", price_cents=500, qty=1, gift=True))
     cart.apply_coupon("NONE")
     assert cart.total() == 300
 

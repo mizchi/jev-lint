@@ -1,0 +1,46 @@
+id: module-name-describes-contents
+language: Python
+kind: noul
+subject: file
+# `full`, not the TypeScript variant's `graph`, and this was measured. On
+# `graph` (9 subjects, 3 passes) the package `billing/__init__.py`, whose
+# public items send email, answered 0.44-0.57 against `conftest.py` at
+# 0.41-0.47: no cutoff. The outline already says "named by its directory,
+# so its subject is: billing" and lists the senders, so the graph is not
+# missing anything; the source is what moved the answer. With it, the same
+# package answers 0.67-0.69 and conftest 0.22-0.26. `full` costs the state
+# budget sooner on a large module; the outline that is the subject is
+# capped regardless.
+state: full
+# 0.46, fitted 2026-09-20 on this rule's own evals (9 modules: 4 defects, 5
+# cleans of which 4 hard, 3 passes). Cleans top out at 0.29
+# (`sessions/__init__.py`, named by its directory) then 0.24 (`conftest.py`,
+# pytest's fixed name); defects start at 0.63 (`user_repository` holding
+# order, cart and invoice lookups) and 0.68 (the `billing` package above).
+# Midpoint of the gap, 0.17 of headroom on each side, no decision flips.
+# The accepted run has the `billing` package at 0.52-0.76 across passes
+# (mean 0.64): the widest spread in this pack, and its low pass clears the
+# cutoff by 0.06, so on a package whose __init__ misnames its contents
+# expect a `--retry 3` to matter.
+at: 0.46
+axis: file
+severity: info
+rule:
+  kind: module
+ask: >-
+  This module's name does not describe what the module contains.
+criteria:
+  "true": >-
+    The filename and path name a subject that the module's public items do not
+    match: the items belong to a different concern than the name states, the
+    name names one thing while the module holds an unrelated assortment, the
+    name is narrower or broader than the items it holds, or the name is a
+    placeholder such as utils, helpers, misc, common or manager for items that
+    share a concern that could be named.
+  "false": >-
+    The filename and path describe what the module's public items are about,
+    closely enough that someone looking for those items would look here.
+note: >-
+  A module holding one cohesive group of items is not a mismatch merely for
+  holding several of them, and a conventional entry-point name (index, mod, lib,
+  main) is named by its directory rather than by itself.
