@@ -113,7 +113,8 @@ usage:
   jev-lint run <rule> [paths...]   judge with one shipped rule: an id (every
                                    language that has it) or rust/<id> (one);
                                    --file <rules.yml> judges with that file's
-                                   rules instead, or the one <rule> names in it
+                                   rules instead, or the one <rule> names in it.
+                                   A commit rule runs as commits and takes a range
   jev-lint review [paths...]       judge only what the diff touched
   jev-lint commits [range]         judge commit messages against their diffs
                                    (default @{upstream}..HEAD; or --base <ref>)
@@ -636,7 +637,15 @@ async function main(argv: string[]): Promise<number> {
     rules = picked.rules;
     opts.paths = paths;
     if (!opts.quiet) log(`run: ${rules.map((r) => (r.languageDir ? `${r.languageDir}/${r.id}` : r.id)).join(", ")} from ${picked.from}`);
-    command = "check";
+    // A commit rule's subjects are commits, so `run` with one is `commits`
+    // and the positional after the id is a range. Mixing the two kinds in
+    // one run has no single source of subjects.
+    const commitRules = rules.filter((r) => r.subject === "commit").length;
+    if (commitRules === rules.length) command = "commits";
+    else if (commitRules > 0) {
+      log("run: a commit rule and a file rule cannot run together; name one, or pick a file with one kind");
+      return 2;
+    } else command = "check";
   } else {
     const loaded = loadOrDie(opts, log);
     if (!loaded) return 2;

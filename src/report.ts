@@ -234,6 +234,8 @@ export function formatPretty(
 
 /** Rules that produced no subject at all. */
 export function silentRules(result: Partial<ReportInput>): string[] {
+  // An empty range is a fact about the range, not about any rule.
+  if (result.commits && result.commits.total === 0) return [];
   const fired = new Set((result.subjects ?? []).map((s) => ruleKey(s.rule)));
   const idle = new Set(idleLanguages(result).map((l) => l.language));
   // In commits mode only commit rules can fire, and in file mode only the
