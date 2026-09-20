@@ -46,6 +46,7 @@ import {
   formatGaps,
   formatStability,
   silentRules,
+  idleLanguages,
 } from "./report.ts";
 import { ARMS, ARM_BLURB } from "./state.ts";
 import { DEFAULT_BATCH_SIZE } from "./batch.ts";
@@ -738,6 +739,8 @@ async function main(argv: string[]): Promise<number> {
     if (result.retry && result.retry > 1) {
       out(`--retry ${result.retry}: every request above would be made ${result.retry} times`);
     }
+    const idle = idleLanguages(result);
+    if (idle.length && !result.commits) out(`no files for ${idle.map((l) => `${l.language} (${l.rules})`).join(", ")}`);
     const silent = silentRules(result);
     if (silent.length) out(`${silent.length} rule(s) matched nothing: ${silent.join(", ")}`);
     return 0;

@@ -57,7 +57,7 @@ import {
   baseRuleId,
   toAstGrepRule,
 } from "../src/scan.ts";
-import { formatGithub, formatJson, formatPretty, silentRules } from "../src/report.ts";
+import { formatGithub, formatJson, formatPretty, silentRules, idleLanguages } from "../src/report.ts";
 import { Jev, JevError, Pacer, API_KEY_VARS, DEFAULT_BASE_URL, fromEnv } from "../src/jev.ts";
 import {
   applyConfig,
@@ -1130,6 +1130,19 @@ await testAsync("scan: Go types are named by their type_spec, and a parameter ty
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("report: a language with no files is one idle line, not a list of dead matchers", () => {
+  const ts = { ...scoreRule({ id: "a" }), languageDir: "typescript" };
+  const tsSilent = { ...scoreRule({ id: "b" }), languageDir: "typescript" };
+  const py1 = { ...scoreRule({ id: "a", language: "Python", rule: { kind: "x" } }), languageDir: "python" };
+  const py2 = { ...scoreRule({ id: "b", language: "Python", rule: { kind: "x" } }), languageDir: "python" };
+  const result = { rules: [ts, tsSilent, py1, py2], subjects: [subjectOf({ rule: ts })] };
+  assert.deepEqual(idleLanguages(result), [{ language: "python", rules: 2 }]);
+  assert.deepEqual(silentRules(result), ["typescript/b"], "the TypeScript matcher that missed is still named; Python is idle, not silent");
+  const pretty = formatPretty({ ...result, findings: [], all: [], review: [], stats: { subjects: 1, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {} } }, { color: false });
+  assert.match(pretty, /no files for python \(2 rules\)/);
+  assert.match(pretty, /1 rule\(s\) matched nothing: typescript\/b/);
 });
 
 // ---------------------------------------------------------------- paired

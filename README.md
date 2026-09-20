@@ -280,10 +280,19 @@ docs/data/self-lint-2026-09-20.json` reproduces the table with no API key.
 
 ## Rules
 
-24 rules ship in `rules/`, one directory each with the cases that prove it,
-used when the project has no `rules/` directory of its own. The naming and
-comment rules exist in an ECMAScript and a Rust variant sharing one sentence;
-the rest are ECMAScript or JSON. Grouped here by what they ask:
+45 rules ship in `rules/`, one directory per language and one per rule
+under it, each with the cases that prove it, used when the project has no
+`rules/` directory of its own. Two languages are first tier — `typescript`
+(15 rules, admitting TypeScript, Tsx, JavaScript and Jsx) and `rust` (7) —
+and every rule under them carries fixtures, expectations and an accepted
+baseline. `python` (11) and `go` (9) are second tier: ported from the
+TypeScript rules with the same sentence, calibrated to the same bar, not
+yet promised. `javascript` (1) and `json` (1) hold what only fits there,
+and `git` (1) holds the commit-message rule. The same id under several
+languages is one rule in several languages, and the loader warns if the
+copies of its sentence drift. Grouped here by what they ask, naming the
+TypeScript rule; the table in `docs/reference.md` says which languages
+each exists in:
 
 **Naming** — does the code do what it calls itself?
 
@@ -334,22 +343,25 @@ general question does not.
 | rule | asks |
 | --- | --- |
 | `script-name-does` | does this `package.json` script's name describe the command it runs? |
+| `commit-message-describes-diff` | does this commit's message describe its diff? (`jev-lint commits`) |
+| `must-name-panics` (Go only) | does a `Must*` function panic on the failure its name promises to panic on, rather than return it? |
 
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On their own evals, 21 of the 24 rules reach precision and recall 1.00 at
-their shipped cutoffs; the three that do not each miss one labelled defect
+On their own evals, 38 of the 45 rules reach precision and recall 1.00 at
+their shipped cutoffs; the seven that do not each miss one labelled defect
 the rule cannot see, and the rule file says which. The evals are small —
-207 labelled defects across the 24, one to thirty-one per rule — and they
+343 labelled defects across the 45, one to thirty-one per rule — and they
 are marker-free: an earlier version carried `// DEFECT: named seconds, holds
 milliseconds` above each defect, inside the file the model was shown, and
 the fits it produced were better than the rules. `jev-lint eval --replay`
 re-derives every number with no request. The full table, with what the
 packs found on this repository's own code and on an unseen one, is in
-[docs/reference.md](docs/reference.md#the-shipped-packs). Seven more rules
-were built and measured the same way and are not shipped yet; they live in
-`experiments/rule-candidates/` under the same layout.
+[docs/reference.md](docs/reference.md#the-shipped-packs). Fourteen more
+rules were built and measured the same way and are not shipped; they live
+in `experiments/rule-candidates/<lang>/` under the same layout, each with
+the report that says why.
 
 ## Adding your rule
 

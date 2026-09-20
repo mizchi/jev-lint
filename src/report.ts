@@ -115,6 +115,12 @@ export function formatPretty(
     if (missing.length) out.push("");
   }
 
+  const idle = idleLanguages(result);
+  if (idle.length > 0 && !result.commits) {
+    out.push(
+      c.dim(`no files for ${idle.map((l) => `${l.language} (${l.rules} rule${l.rules === 1 ? "" : "s"})`).join(", ")}`),
+    );
+  }
   const silent = silentRules(result);
   if (silent.length > 0) {
     out.push(
@@ -228,11 +234,38 @@ export function formatPretty(
 
 /** Rules that produced no subject at all. */
 export function silentRules(result: Partial<ReportInput>): string[] {
-  const fired = new Set((result.subjects ?? []).map((s) => s.rule.id));
+  const fired = new Set((result.subjects ?? []).map((s) => ruleKey(s.rule)));
+  const idle = new Set(idleLanguages(result).map((l) => l.language));
   // In commits mode only commit rules can fire, and in file mode only the
-  // others can; a rule of the other kind is not silent, it is off duty.
-  const onDuty = (result.rules ?? []).filter((r) => (r.subject === "commit") === Boolean(result.commits));
-  return onDuty.map((r) => r.id).filter((id) => !fired.has(id));
+  // others can; a rule of the other kind is not silent, it is off duty. So
+  // is every rule of a language the run saw no file of.
+  const onDuty = (result.rules ?? []).filter(
+    (r) => (r.subject === "commit") === Boolean(result.commits) && !(r.languageDir && idle.has(r.languageDir)),
+  );
+  return onDuty.map((r) => ruleKey(r)).filter((id) => !fired.has(id));
+}
+
+/**
+ * Language directories none of whose rules matched anything: a repository
+ * with no Python in it makes every Python rule silent, and that is one fact
+ * about the repository, not eleven dead matchers. Reported as one line so
+ * the list of silent rules keeps meaning "check this matcher".
+ */
+export function idleLanguages(result: Partial<ReportInput>): Array<{ language: string; rules: number }> {
+  const fired = new Set((result.subjects ?? []).map((s) => s.rule.languageDir));
+  const byDir = new Map<string, number>();
+  for (const r of result.rules ?? []) {
+    if (!r.languageDir || r.subject === "commit") continue;
+    byDir.set(r.languageDir, (byDir.get(r.languageDir) ?? 0) + 1);
+  }
+  return [...byDir.entries()]
+    .filter(([dir]) => !fired.has(dir))
+    .map(([language, rules]) => ({ language, rules }));
+}
+
+/** `lang/id` under the layout, else the id: what two languages' twins are told apart by. */
+function ruleKey(r: { id: string; languageDir?: string | null }): string {
+  return r.languageDir ? `${r.languageDir}/${r.id}` : r.id;
 }
 
 export function formatJson(result: ReportInput): string {
@@ -273,6 +306,7 @@ export function formatJson(result: ReportInput): string {
           reason: b.degraded!.reason,
         })),
       silentRules: silentRules(result),
+      idleLanguages: idleLanguages(result),
       ignored: result.ignored ?? null,
       unpaired: result.unpaired ?? null,
       retry: result.retry ?? 1,

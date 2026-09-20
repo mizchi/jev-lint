@@ -79,9 +79,13 @@ run's summary says `paced to` a rate under it.
 
 Two lines of output are never noise. **`N rules matched nothing`** is the only
 place a dead matcher is visible — check it before trusting a clean run. On a
-TypeScript-only repository expect 8 of the 24 shipped rules there: the 7
-under `rust/`, plus `javascript/comment-describes-declaration`, which exists
-because JavaScript has no type declarations to match. **`N without a verdict`** means
+one-language repository expect a line first naming the languages it saw
+no file of (`no files for python (11 rules), go (9), rust (7)`) — those
+rules are idle, not silent — and then only the silent rules of the
+languages it did see; on a TypeScript-only repository that is
+`javascript/comment-describes-declaration`, which exists because JavaScript
+has no type declarations to match, plus whatever TypeScript rule found no
+node. **`N without a verdict`** means
 requests failed, and a run with failures never reads as a clean repository.
 
 ### Silencing a finding
@@ -422,11 +426,38 @@ refuses to move a rule on a file-bearing arm. Pin any rule you calibrated with
 
 ## The shipped packs
 
-24 rules, one directory each under `rules/` with its evals beside it,
-grouped here by what they ask. The naming and comment rules carry an
-ECMAScript and a Rust variant sharing one sentence; the rest are ECMAScript
-or JSON only. The notes the former packs shipped with are in
-`rules/README.md`.
+45 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
+grouped here by what they ask. Which languages each exists in:
+
+| rule | typescript | rust | python | go | other |
+| --- | --- | --- | --- | --- | --- |
+| `fn-name-promises` | ✓ | ✓ | ✓ | ✓ | |
+| `var-name-describes-value` | ✓ | ✓ | ✓ | ✓ | |
+| `test-name-describes-code` | ✓ | ✓ | ✓ | | |
+| `test-name-verifies-claim` | ✓ | ✓ | | ✓ | |
+| `module-name-describes-contents` | ✓ | ✓ | ✓ | ✓ | |
+| `module-naming-consistent` | ✓ | | | | |
+| `comment-describes-declaration` | ✓ | ✓ | ✓ | | javascript |
+| `comment-describes-block` | ✓ | ✓ | ✓ | | |
+| `safe-name-is-safe` | ✓ | | ✓ | ✓ | |
+| `idempotent-name` | ✓ | | ✓ | ✓ | |
+| `pure-name-is-pure` | ✓ | | ✓ | ✓ | |
+| `must-name-panics` | | | | ✓ | |
+| `test-mocks-subject` | ✓ | | | | |
+| `snapshot-only-behaviour-claim` | ✓ | | | | |
+| `tests-cover-failure-paths` | ✓ | | ✓ | ✓ | |
+| `log-level-matches-event` | ✓ | | ✓ | | |
+| `script-name-does` | | | | | json |
+| `commit-message-describes-diff` | | | | | git |
+
+`typescript` and `rust` are first tier; `python` and `go` were ported on
+2026-09-20 from the TypeScript rules with the sentence copied and the
+matcher, state, cutoff and fixtures their own (reports under
+`experiments/reports/i-python` and `j-go`), and the families that did not
+separate there — Python's `test-name-verifies-claim`; Go's two comment
+rules, `test-name-describes-code` and `log-level-matches-event` — are
+candidates under `experiments/rule-candidates/<lang>/` with the reason.
+The notes the former packs shipped with are in `rules/README.md`.
 
 **Naming** — does the code do what it calls itself?
 
@@ -534,6 +565,30 @@ re-measuring).
 | --- | --- |
 | `script-name-does` | does this `package.json` script's name describe the command it runs? |
 
+**Commits** — the message against the diff
+
+| rule | asks |
+| --- | --- |
+| `commit-message-describes-diff` | does the message claim something the diff does not do, or does the diff do something material the message does not mention? |
+
+The one rule with no matcher, run by `jev-lint commits`. Sixteen cases —
+seven messages that lie (a fix that adds a feature, a removal that only
+deprecates, a "no behaviour change" over a changed timeout, a rename that
+changes the contract, a test added and another deleted, a fix attributed
+to the wrong cause, a flag plus `strict: false`), nine clean of which seven
+are hard (a terse subject over a large faithful move, an "also" body, a
+mechanical rename, an honest refactor, intent over mechanism, a version
+bump alongside, a revert) — separate at 0.65 with 0.30 of headroom above
+the clean top and no flips. On this repository's own commits its first
+unseen run found one true finding: a docs commit whose `git add -A` had
+swept in 1,700 lines of two other agents' half-built rule candidates.
+Report: `experiments/reports/k-commits`.
+
+**Go only** — `must-name-panics`: a `Must*` function promises to panic on
+the failure its name names; does it return it, log it, or swallow it in a
+deferred recover instead? The inverse of `safe-name-is-safe`, which is why
+it is its own rule.
+
 The matcher is the whole `"name": "command"` pair under `scripts`, so the
 claim and the evidence are one node and `bare` is the arm. Siblings not
 shipped: `workflow-step-name` (GitHub Actions `name:` versus `run:`, separates
@@ -543,10 +598,10 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 
 ### What the cutoffs are worth
 
-On a TypeScript-only repository the seven rules under `rust/` and the one
-under `javascript/` report "matched nothing": 8 of the 24.
+On a one-language repository every other language's rules are idle, and
+the report says so in one line rather than listing them as silent.
 
-Of the 24, **21 reach precision 1.00 and recall 1.00 at their shipped cutoffs
+Of the 45, **38 reach precision 1.00 and recall 1.00 at their shipped cutoffs
 on their own fixtures** (`rules/*/*/baseline.json`, three passes each,
 decisions on the mean; `jev-lint eval --replay` re-derives every number below
 with no request). Read that with the positive counts beside them: per rule,
@@ -808,8 +863,8 @@ the batching axis invalidates the verdicts that depended on them.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **The cutoffs are fitted to small evals.** 98 case files, 207 labelled
-  defects across 24 rules, one to thirty-one per rule. Expect to refit; see
+- **The cutoffs are fitted to small evals.** 160 labelled fixtures, 343
+  labelled defects across 45 rules, one to thirty-one per rule. Expect to refit; see
   [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.

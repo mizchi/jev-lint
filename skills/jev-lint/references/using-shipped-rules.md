@@ -1,6 +1,6 @@
 # Using the shipped rules
 
-jev-lint ships 24 rules in the npm package's `rules/` directory, one
+jev-lint ships 45 rules in the npm package's `rules/` directory, one
 directory per rule under its language (`rules/typescript/<id>/`,
 `rules/rust/<id>/`, …) with `rule.yml`, the `fixtures/` that prove it and
 `expect.yml`.
@@ -60,12 +60,14 @@ Not asked, deliberately: style, redundancy, whether a comment should exist.
 One axis only — is the claim false.
 
 The naming and comment rules each exist under `typescript/` (`TypeScript,
-Tsx, JavaScript, Jsx`) and `rust/`, same id, same sentence;
-`comment-describes-declaration` also exists under `javascript/`, because
-JavaScript has no type declarations to match. **On a TypeScript-only
-repository 8 of the 24 rules report "matched nothing"** — the seven under
-`rust/` and the one under `javascript/`. That line is expected
-there, and nowhere else.
+Tsx, JavaScript, Jsx`), `rust/`, `python/` and `go/` where the port
+separated, same id, same sentence; `comment-describes-declaration` also
+exists under `javascript/`, because JavaScript has no type declarations to
+match; `must-name-panics` exists only under `go/`. On a repository with
+one language the report prints one line per language it saw no file of —
+`no files for python (11 rules), go (9), rust (7)` — and those rules are
+idle, not silent. **The `matched nothing` line names only the rules of a
+language the run did see**, and that line is the one to check.
 
 The two test rules are nested, not orthogonal: a test that exercises the wrong
 case also fails to establish its name, so both fire on that class and only
@@ -168,12 +170,13 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted on each rule's own fixtures (`rules/<lang>/<id>/`, 207 labelled defects
-across the 24 rules, three passes each). 21 of the 24 reach precision and
-recall 1.00 at their shipped cutoffs; the three that do not each miss one
+Fitted on each rule's own fixtures (`rules/<lang>/<id>/`, 343 labelled defects
+across the 45 rules, three passes each). 38 of the 45 reach precision and
+recall 1.00 at their shipped cutoffs; the seven that do not each miss one
 labelled defect the rule file names — a binding holding one branch of a
 union result, a Rust field taken under another field's name, an inline
-comment that is only false together with the loop after it. Read all of it
+comment that is only false together with the loop after it, and their
+Python and Go cousins. Read all of it
 as "separates the classes in a small set of cases", not as a guarantee. The
 cases are marker-free; the fits produced while `// DEFECT` lines sat above
 each defect were better than the rules.
