@@ -413,9 +413,9 @@ const round = (n: unknown) => (typeof n === "number" ? Math.round(n * 1000) / 10
 /** The gap table -- the first thing to read when authoring rules. */
 export function formatGaps(rows: GapRow[], { color = true }: { color?: boolean } = {}): string {
   const c = palette(color);
-  const head = ["rule", "kind", "matched", "reported", "cutoff", "median", "top<at", "head", "gap", "suggest", "verdict"];
+  const headings = ["rule", "kind", "matched", "reported", "cutoff", "median", "top<at", "head", "gap", "suggest", "verdict"];
   const widths = [28, 5, 7, 8, 6, 6, 6, 6, 5, 7, 7];
-  const lines: string[] = [head.map((h, i) => h.padEnd(widths[i]!)).join(" ")];
+  const lines: string[] = [headings.map((h, i) => h.padEnd(widths[i]!)).join(" ")];
   lines.push(c.dim(widths.map((w) => "-".repeat(w)).join(" ")));
 
   const tag: Record<string, Painter> = {

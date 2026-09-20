@@ -83,7 +83,7 @@ export async function cmdEval(opts: Options, out: Log, log: Log): Promise<number
       }
     }
 
-    const stale = draftsChanged(record, rules);
+    const changedDrafts = draftsChanged(record, rules);
     const score = scoreEval(record.passes, labels, rules, opts.at);
     let diff: EvalDiff | null = null;
     if (baselineRecord) {
@@ -102,9 +102,9 @@ export async function cmdEval(opts: Options, out: Log, log: Log): Promise<number
     if (!ok) failed += 1;
 
     if (opts.format === "json") {
-      results.push({ suite: suite.name, dir: suite.dir, ok, score, diff, stale, recorded: record.recorded, passes: record.passes.length });
+      results.push({ suite: suite.name, dir: suite.dir, ok, score, diff, stale: changedDrafts, recorded: record.recorded, passes: record.passes.length });
     } else {
-      out(formatEvalSuite(suite, score, diff, wrong, stale, record, baselineRecord, opts.replay));
+      out(formatEvalSuite(suite, score, diff, wrong, changedDrafts, record, baselineRecord, opts.replay));
     }
 
     if (opts.accept && !opts.replay) {
@@ -186,7 +186,7 @@ export function formatEvalSuite(
   score: EvalScore,
   diff: EvalDiff | null,
   wrong: CaseScore[],
-  stale: string[],
+  changedDrafts: string[],
   record: EvalRecord,
   baseline: EvalRecord | null,
   replay: boolean,
@@ -210,8 +210,8 @@ export function formatEvalSuite(
     const at = score.rules.find((r) => r.rule === c.rule)?.at;
     lines.push(`  ~ ${rel(c.file)}:${c.line}  ${c.rule}  ${c.label}, right on the mean but ${vals(c)} across ${at}`);
   }
-  if (stale.length > 0 && replay) {
-    lines.push(`  ! the question changed since this baseline for: ${stale.join(", ")} -- run the eval and accept a new one`);
+  if (changedDrafts.length > 0 && replay) {
+    lines.push(`  ! the question changed since this baseline for: ${changedDrafts.join(", ")} -- run the eval and accept a new one`);
   }
   if (diff && baseline) {
     const head = replay

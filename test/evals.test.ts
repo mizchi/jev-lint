@@ -217,6 +217,13 @@ await testAsync("evals: a suite whose expect file does not parse reports it, and
     await assert.rejects(() => planEval(suite!), /expect\.yml/);
     // The experiments' corpus still scans the suite's cases and says the
     // labels are missing, rather than dropping the suite without a word.
+    // A record that is not one -- unreadable, or another schema -- is null,
+    // and a baseline that is null is "no baseline", never an exception.
+    assert.equal(readEvalRecord(join(dir, "missing.json")), null);
+    writeFileSync(join(dir, "other.json"), JSON.stringify({ schema: "jev-lint-run-1", passes: [] }));
+    assert.equal(readEvalRecord(join(dir, "other.json")), null);
+    writeFileSync(join(dir, "garbage.json"), "{");
+    assert.equal(readEvalRecord(join(dir, "garbage.json")), null);
     const corpus = evalCorpus([dir]);
     assert.deepEqual(corpus.paths, [suite!.fixtures]);
     assert.equal(corpus.errors.length, 1);

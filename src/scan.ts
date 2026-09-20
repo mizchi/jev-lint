@@ -426,16 +426,21 @@ export async function runAstGrep(
 
     const matches: AstGrepMatch[] = [];
     const probes: AstGrepMatch[] = [];
+    let unreadable = 0;
     for (const line of stdout.split("\n")) {
       if (line.trim() === "") continue;
       let j: AstGrepMatch;
       try {
         j = JSON.parse(line) as AstGrepMatch;
       } catch {
+        // A line of ast-grep's stream that is not a match. It is skipped,
+        // and said: a match lost here is a subject never asked about.
+        unreadable += 1;
         continue;
       }
       (j.ruleId?.startsWith(PROBE_PREFIX) ? probes : matches).push(j);
     }
+    if (unreadable > 0) stderr = `${stderr}\n${unreadable} line(s) of ast-grep output were not JSON and were skipped`.trim();
     return { matches, probes, stderr };
   } finally {
     rmSync(dir, { recursive: true, force: true });

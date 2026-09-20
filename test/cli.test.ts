@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync, realpathSync } from "node:fs";
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync, realpathSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadRules } from "../src/rules.ts";
@@ -113,21 +113,132 @@ await testAsync("cli: the targets of `commits` come from the positional, --base,
   const said: string[] = [];
   const log = (s: string) => void said.push(s);
   const out = (s: string) => void said.push(s);
-  const commitRule = loadRules([join(realpathSync("."), "rules", "git")]).rules;
-  assert.equal(commitRule.length, 1);
-  const base = parseArgs(["--base", "main"], { color: false });
-  base.paths = ["src"]; // as the config would fill it
-  const t1 = await resolveTargets("commits", commitRule, base, undefined, out, log);
+  const commitRules = loadRules([join(realpathSync("."), "rules", "git")]).rules;
+  assert.equal(commitRules.length, 1);
+  const withBase = parseArgs(["--base", "main"], { color: false });
+  withBase.paths = ["src"]; // as the config would fill it
+  const t1 = await resolveTargets("commits", commitRules, withBase, undefined, out, log);
   assert.deepEqual(t1, { paths: [], diffRanges: null, commitsRange: "main..HEAD" });
-  const t2 = await resolveTargets("commits", commitRule, base, "a..b", out, log);
+  const t2 = await resolveTargets("commits", commitRules, withBase, "a..b", out, log);
   assert.equal((t2 as { commitsRange: string }).commitsRange, "a..b", "a positional range wins over --base");
-  const noRule = await resolveTargets("commits", [], base, "a..b", out, log);
+  const noRule = await resolveTargets("commits", [], withBase, "a..b", out, log);
   assert.deepEqual(noRule, { exit: 2 });
   assert.match(said.at(-1)!, /subject: commit/);
   const squash = parseArgs(["--squash"], { color: false });
-  assert.deepEqual(await resolveTargets("commits", commitRule, squash, "a..b", out, log), { exit: 2 });
+  assert.deepEqual(await resolveTargets("commits", commitRules, squash, "a..b", out, log), { exit: 2 });
   assert.match(said.at(-1)!, /--message/);
   // `check` with nothing named looks at the tree.
-  const check = await resolveTargets("check", commitRule, parseArgs([], { color: false }), undefined, out, log);
+  const check = await resolveTargets("check", commitRules, parseArgs([], { color: false }), undefined, out, log);
   assert.deepEqual(check, { paths: ["."], diffRanges: null, commitsRange: null });
+});
+
+await testAsync("cli: main answers help, a bad flag and a bad --message-file without running anything", async () => {
+  // The exits before any command: usage on stdout for help, the message and
+  // the usage on stderr for a flag it does not know, and the file's error
+  // for a --message-file it cannot read. Captured, so the suite's own
+  // output stays the suite's.
+  const { main } = await import("../src/cli/main.ts");
+  const captured = { out: "", err: "" };
+  const stdout = process.stdout.write.bind(process.stdout);
+  const stderr = process.stderr.write.bind(process.stderr);
+  process.stdout.write = ((s: string | Uint8Array) => { captured.out += String(s); return true; }) as typeof process.stdout.write;
+  process.stderr.write = ((s: string | Uint8Array) => { captured.err += String(s); return true; }) as typeof process.stderr.write;
+  try {
+    assert.equal(await main(["help"]), 0);
+    assert.match(captured.out, /^jev-lint -- lint rules/);
+    assert.equal(await main(["check", "--bogus"]), 2);
+    assert.match(captured.err, /bogus/);
+    assert.match(captured.err, /usage:/);
+    assert.equal(await main(["commits", "--squash", "--message-file", "/nonexistent/message"]), 2);
+    assert.match(captured.err, /--message-file \/nonexistent\/message/);
+    assert.equal(await main(["frobnicate", "--no-config", "-R", join(realpathSync("."), "rules", "git")]), 2);
+    assert.match(captured.err, /unknown command `frobnicate`/);
+  } finally {
+    process.stdout.write = stdout;
+    process.stderr.write = stderr;
+  }
+});
+
+await testAsync("cli: init writes the starter config once, and replay refuses what is not a run record", async () => {
+  const { cmdInit } = await import("../src/cli/cmd-init.ts");
+  const { cmdReplay } = await import("../src/cli/cmd-replay.ts");
+  const { cmdRules } = await import("../src/cli/cmd-rules.ts");
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-cli-cmd-")));
+  const said: string[] = [];
+  const log = (s: string) => void said.push(s);
+  const out = (s: string) => void said.push(s);
+  try {
+    const target = join(dir, ".jev-lint.yaml");
+    const opts = parseArgs(["--config", target], { color: false });
+    assert.equal(cmdInit(opts, out, log), 0);
+    assert.ok(existsSync(target));
+    assert.equal(cmdInit(opts, out, log), 2, "not twice");
+    assert.match(said.at(-1)!, /already exists/);
+    assert.equal(cmdInit(parseArgs(["--config", target, "--force"], { color: false }), out, log), 0, "unless forced");
+    assert.equal(cmdInit(parseArgs(["--config", join(dir, "no/such/dir/.jev-lint.yaml")], { color: false }), out, log), 2);
+    assert.match(said.at(-1)!, /could not write/);
+
+    assert.equal(cmdReplay(parseArgs([], { color: false }), out, log), 2);
+    assert.match(said.at(-1)!, /record path/);
+    assert.equal(cmdReplay(parseArgs([join(dir, "missing.json")], { color: false }), out, log), 2);
+    assert.match(said.at(-1)!, /could not read/);
+    const wrongSchema = join(dir, "wrong.json");
+    writeFileSync(wrongSchema, JSON.stringify({ schema: "something-else" }));
+    assert.equal(cmdReplay(parseArgs([wrongSchema], { color: false }), out, log), 2);
+    assert.match(said.at(-1)!, /unexpected schema/);
+    const record = join(realpathSync("."), "docs", "data", "self-lint-2026-09-20.json");
+    assert.equal(cmdReplay(parseArgs([record, "--format", "json"], { color: false }), out, log), 1, "a recorded run with findings replays to exit 1");
+    assert.ok(said.some((s) => s.startsWith("{")), "and prints the report");
+
+    // `rules` lists what loaded and exits 0, or names what did not and exits 2.
+    const before = said.length;
+    assert.equal(cmdRules(parseArgs(["-R", join(realpathSync("."), "rules", "git")], { color: false }), out, log), 0);
+    assert.ok(said.slice(before).some((s) => s.startsWith("git/commit-message-describes-diff")));
+    const broken = join(dir, "rules.yml");
+    writeFileSync(broken, "id: x\nlanguage: TypeScript\n");
+    const beforeBroken = said.length;
+    assert.equal(cmdRules(parseArgs(["-R", broken], { color: false }), out, log), 2);
+    assert.ok(said.slice(beforeBroken).some((s) => /^rule error: /.test(s)), "the error is named, before the listing");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("cli: init --pre-commit writes the hook where git keeps hooks, once, and only inside a repository", async () => {
+  const { cmdInitHook } = await import("../src/cli/cmd-init.ts");
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-cli-hook-")));
+  const said: string[] = [];
+  const log = (s: string) => void said.push(s);
+  const out = (s: string) => void said.push(s);
+  const here = process.cwd();
+  try {
+    mkdirSync(join(dir, "repo"));
+    mkdirSync(join(dir, "bare"));
+    execFileSync("git", ["init", "-q", "-b", "main"], { cwd: join(dir, "repo") });
+    process.chdir(join(dir, "repo"));
+    const opts = parseArgs([], { color: false });
+    assert.equal(cmdInitHook(opts, out, log, "pre-commit"), 0);
+    const hook = join(dir, "repo", ".git", "hooks", "pre-commit");
+    assert.ok(existsSync(hook));
+    assert.equal(cmdInitHook(opts, out, log, "pre-commit"), 2, "an existing hook is not overwritten");
+    assert.match(said.at(-1)!, /review --staged/, "the one line to add to it is printed");
+    assert.equal(cmdInitHook(parseArgs(["--force"], { color: false }), out, log, "pre-push"), 0);
+    assert.ok(existsSync(join(dir, "repo", ".git", "hooks", "pre-push")));
+    // Outside a repository there is nowhere to put it. HOME and the tmpdir
+    // are not repositories; GIT_CEILING_DIRECTORIES keeps the search from
+    // finding one above the temp directory anyway.
+    process.chdir(join(dir, "bare"));
+    const ceiling = process.env.GIT_CEILING_DIRECTORIES;
+    process.env.GIT_CEILING_DIRECTORIES = dir;
+    try {
+      assert.equal(cmdInitHook(opts, out, log, "pre-commit"), 2);
+      assert.match(said.at(-1)!, /not inside a git repository/);
+    } finally {
+      if (ceiling === undefined) delete process.env.GIT_CEILING_DIRECTORIES;
+      else process.env.GIT_CEILING_DIRECTORIES = ceiling;
+    }
+  } finally {
+    process.chdir(here);
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

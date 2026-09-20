@@ -6,6 +6,16 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/findings.md](docs/findings.md).
 
+## Unreleased
+
+### Changed
+
+- The CLI's commands have tests of their own: `main`'s exits before any
+  command, `init` and its hooks, `replay`'s refusals, `rules`; and
+  `readEvalRecord`'s nulls. A line of ast-grep's output that is not a
+  match is counted and said, not skipped in silence. Names the self-lint
+  called wrong: `stale` (a list of rule ids) is `changedDrafts`.
+
 ## 0.4.3 — 2026-09-21
 
 ### Added
