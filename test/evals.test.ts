@@ -2,10 +2,10 @@ import { strict as assert } from "node:assert";
 import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync, existsSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
-import { discoverEvals, scoreEval, compareEvals, relocateLabels, relocateRecord, runEval, readEvalRecord, draftsChanged, loadSuite, unanswered } from "../src/evals.ts";
+import { discoverEvals, scoreEval, compareEvals, relocateLabels, relocateRecord, runEval, readEvalRecord, draftsChanged, loadSuite, unanswered, blindTrouble, BLIND_THRESHOLD, MIN_MARGIN_SUBJECTS } from "../src/evals.ts";
 import { loadRules } from "../src/rules.ts";
 import { commitFixtureSubjects } from "../src/commits.ts";
-import { noulRule, answer, changeRule } from "./builders.ts";
+import { noulRule, scoreRule, answer, changeRule } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
 
 const evalRule = (id: string, at: number) => noulRule({ id, at });
@@ -105,6 +105,148 @@ test("evals: a suite is scored at the SHIPPED cutoff on the mean of its passes, 
   assert.equal(c.right, true);
   assert.ok(Math.abs(c.mean - 0.52) < 0.001);
   assert.deepEqual(c.values, [0.45, 0.55, 0.56]);
+});
+
+/**
+ * Enough distinct subjects for `MIN_MARGIN_SUBJECTS` to stop calling the
+ * corpus thin: lines 1-2 explicitly bad, 3-4 explicitly clean, 5-6 unlabelled
+ * (so `$default: clean` decides them, exercising the `cleanTop`/margin split).
+ */
+const marginLabels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+  { line: 1, label: "bad" as const, rule: "a", window: 0 },
+  { line: 2, label: "bad" as const, rule: "a", window: 0 },
+  { line: 3, label: "clean" as const, rule: "a", window: 0 },
+  { line: 4, label: "clean" as const, rule: "a", window: 0 },
+] };
+const widePasses = [[
+  answer("a", 1, 0.9), answer("a", 2, 0.95), answer("a", 3, 0.05), answer("a", 4, 0.1),
+  answer("a", 5, 0.5), answer("a", 6, 0.5),
+]];
+
+test("evals: both margins wide fails, at the shared 0.25-of-scale threshold, with no `blind:` declared", () => {
+  const rule = evalRule("a", 0.5);
+  const score = scoreEval(widePasses, marginLabels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.ok(a.fnMargin !== null && a.fnMargin >= BLIND_THRESHOLD, `fnMargin ${a.fnMargin} should be wide`);
+  assert.ok(a.fpMargin !== null && a.fpMargin >= BLIND_THRESHOLD, `fpMargin ${a.fpMargin} should be wide`);
+  assert.equal(a.blind, true);
+  assert.equal(a.blindReason, null);
+  const diff = compareEvals(score, score, { draftChanged: false });
+  assert.equal(diff.ok, false, "a blind suite with no declaration fails eval --replay's own gate");
+  assert.match(diff.reasons.join(" "), /a: blind/);
+  assert.deepEqual(blindTrouble(score).length, 1);
+});
+
+test("evals: a near-boundary case on either side keeps a suite un-blind, and it passes", () => {
+  const rule = evalRule("a", 0.5);
+  // The defect at line 1 now sits 0.05 over the cutoff instead of 0.4: the
+  // FN-margin narrows under the threshold and the suite is not blind, no
+  // matter how wide the FP side is.
+  const nearBoundary = [[
+    answer("a", 1, 0.55), answer("a", 2, 0.95), answer("a", 3, 0.05), answer("a", 4, 0.1),
+    answer("a", 5, 0.5), answer("a", 6, 0.5),
+  ]];
+  const score = scoreEval(nearBoundary, marginLabels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.ok(a.fnMargin !== null && a.fnMargin < BLIND_THRESHOLD, `fnMargin ${a.fnMargin} should be narrow`);
+  assert.equal(a.blind, false);
+  const diff = compareEvals(score, score, { draftChanged: false });
+  assert.equal(diff.ok, true);
+  assert.deepEqual(blindTrouble(score), []);
+});
+
+test("evals: a `blind:` reason on a suite that IS blind suppresses the failure and is carried on the score", () => {
+  const reasoned = noulRule({ id: "a", at: 0.5, blind: "Nine boundary-aimed candidates over two rounds all resolved confidently to one side. Recorded 2026-09-22." });
+  const score = scoreEval(widePasses, marginLabels, [reasoned]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.blind, true);
+  assert.equal(a.blindReason, "Nine boundary-aimed candidates over two rounds all resolved confidently to one side. Recorded 2026-09-22.", "the declared reason is on the score, in the verdict's place");
+  const diff = compareEvals(score, score, { draftChanged: false });
+  assert.equal(diff.ok, true, "a declared reason suppresses the blind failure");
+  assert.deepEqual(blindTrouble(score), []);
+});
+
+test("evals: a `blind:` declared on a rule that is NOT blind is an error", () => {
+  const reasoned = noulRule({ id: "a", at: 0.5, blind: "declared just in case" });
+  // Narrow margins on both sides: nothing near the boundary was labelled.
+  const narrowLabels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "bad" as const, rule: "a", window: 0 },
+    { line: 2, label: "bad" as const, rule: "a", window: 0 },
+    { line: 3, label: "clean" as const, rule: "a", window: 0 },
+    { line: 4, label: "clean" as const, rule: "a", window: 0 },
+  ] };
+  const narrowPasses = [[
+    answer("a", 1, 0.55), answer("a", 2, 0.6), answer("a", 3, 0.4), answer("a", 4, 0.45),
+    answer("a", 5, 0.5), answer("a", 6, 0.5),
+  ]];
+  const score = scoreEval(narrowPasses, narrowLabels, [reasoned]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.blind, false, "the margins are not both wide");
+  assert.equal(a.blindReason, "declared just in case");
+  const diff = compareEvals(score, score, { draftChanged: false });
+  assert.equal(diff.ok, false, "a stale `blind:` fails, same as none on an actually-blind suite");
+  assert.match(diff.reasons.join(" "), /declares `blind:.*stale/);
+});
+
+test("evals: a margin needs an EXPLICIT label of its class -- an implicit `$default` clean does not set FP-margin", () => {
+  // Only bad labels are written; everything else, including three subjects
+  // right beside the cutoff, is clean by `$default` alone. `cleanTop` (which
+  // already resolves through `$default`, unchanged) is not null, but the
+  // FP-margin -- a claim that someone looked at a specific loudest-clean
+  // location -- has nothing to be built from.
+  const rule = evalRule("a", 0.5);
+  const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "bad" as const, rule: "a", window: 0 },
+    { line: 2, label: "bad" as const, rule: "a", window: 0 },
+  ] };
+  const passes = [[
+    answer("a", 1, 0.9), answer("a", 2, 0.95), answer("a", 3, 0.48), answer("a", 4, 0.49),
+    answer("a", 5, 0.1), answer("a", 6, 0.1),
+  ]];
+  const score = scoreEval(passes, labels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.ok(a.cleanTop !== null, "cleanTop still resolves through $default, as it always has");
+  assert.equal(a.fpMargin, null, "but the FP-margin does not -- no one labelled a clean case");
+  assert.equal(a.blind, false, "a suite that has not spoken on one side is not reported blind");
+});
+
+test("evals: below the calibration floor, margins are computed but `blind` withholds a verdict", () => {
+  // One labelled defect, one labelled clean, both far from the cutoff: the
+  // margins themselves are wide, but two matched subjects is well under
+  // calibration.md's floor of six, so this is "too little corpus to speak",
+  // not "spoke and came back wide".
+  const rule = evalRule("a", 0.5);
+  const passes = [[answer("a", 1, 0.95), answer("a", 2, 0.05)]];
+  const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "bad" as const, rule: "a", window: 0 },
+    { line: 2, label: "clean" as const, rule: "a", window: 0 },
+  ] };
+  const score = scoreEval(passes, labels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.ok(a.subjects < MIN_MARGIN_SUBJECTS);
+  assert.ok(a.fnMargin !== null && a.fnMargin >= BLIND_THRESHOLD);
+  assert.ok(a.fpMargin !== null && a.fpMargin >= BLIND_THRESHOLD);
+  assert.equal(a.blind, false, "the floor was not met, so blind is withheld rather than asserted");
+});
+
+test("evals: a score rule's margins are normalised by its own scale (scaleOf), not the raw 0-3 distance", () => {
+  const rule = scoreRule({ id: "s", at: 2 });
+  const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "bad" as const, rule: "s", window: 0 },
+    { line: 2, label: "bad" as const, rule: "s", window: 0 },
+    { line: 3, label: "clean" as const, rule: "s", window: 0 },
+    { line: 4, label: "clean" as const, rule: "s", window: 0 },
+  ] };
+  const passes = [[
+    answer("s", 1, 2.9), answer("s", 2, 3), answer("s", 3, 0.5), answer("s", 4, 0.5),
+    answer("s", 5, 2), answer("s", 6, 2),
+  ]];
+  const score = scoreEval(passes, labels, [rule]);
+  const s = score.rules.find((r) => r.rule === "s")!;
+  // Raw: fn = 2.9 - 2 = 0.9, fp = 2 - 0.5 = 1.5, on a 0-3 scale.
+  assert.equal(s.fnMargin, 0.3, "0.9 / 3");
+  assert.equal(s.fpMargin, 0.5, "1.5 / 3");
+  assert.equal(s.blind, true);
 });
 
 test("evals: comparing with a baseline names the cases that got worse, and a changed question", () => {

@@ -346,11 +346,24 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     divergent = raw.divergent.trim();
   }
 
+  // Why this suite's margins (evals.ts) are both wide and that is accepted
+  // rather than a defect. Whether a suite actually is blind is only knowable
+  // once its eval is scored, so the other half of this validation -- a
+  // `blind:` on a rule that turns out not to be blind is an error -- lives
+  // in evals.ts, beside the margins it is judged against.
+  let blind: string | null = null;
+  if (raw.blind !== undefined && raw.blind !== null) {
+    if (typeof raw.blind !== "string" || raw.blind.trim() === "") {
+      return { error: `${id}: \`blind\` must say why this suite cannot see its rule drift` };
+    }
+    blind = raw.blind.trim();
+  }
+
   const known = new Set([
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
     "note", "kind", "criteria", "at", "subject", "state", "axis", "severity",
     "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions", "levels",
-    "divergent",
+    "divergent", "blind",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
   if (unknown.length > 0) {
@@ -370,6 +383,7 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     severity,
     unsureBelow,
     divergent,
+    blind,
     message: typeof raw.message === "string" ? raw.message : null,
     docs: typeof raw.docs === "string" ? raw.docs : null,
     tags: Array.isArray(raw.tags) ? raw.tags.filter((t: unknown) => typeof t === "string") : [],

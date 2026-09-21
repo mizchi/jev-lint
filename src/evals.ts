@@ -30,7 +30,7 @@ import { tryReadDir } from "./files.ts";
 import { basename, dirname, join, sep } from "node:path";
 import YAML from "yaml";
 import { fitCutoffs, labelFor } from "./calibrate.ts";
-import { cutoffFor, languageDirGrammars, loadRules, ruleTextHash } from "./rules.ts";
+import { cutoffFor, languageDirGrammars, loadRules, ruleTextHash, scaleOf } from "./rules.ts";
 import { patchRepo } from "./commits.ts";
 import { run } from "./run.ts";
 import { DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
@@ -88,6 +88,89 @@ export interface RuleScore {
   fitReason: string;
   /** The highest mean a labelled-clean subject reached: the floor a `loose:` should clear. */
   cleanTop: number | null;
+  /**
+   * How far the quietest labelled defect's mean sits above the cutoff,
+   * normalised by `scaleOf` (0..1 for a noul, 0..1 of the rubric for a
+   * score) so it is comparable across rules. Small means a defect sits near
+   * the boundary: a rule that starts missing things fails the eval before it
+   * fails silently in the wild. `null` when the suite has no EXPLICITLY
+   * labelled defect for this rule -- see `MIN_MARGIN_SUBJECTS` below for why
+   * "explicitly".
+   */
+  fnMargin: number | null;
+  /**
+   * How far the cutoff sits above the loudest labelled clean's mean,
+   * normalised the same way. Small means a clean sits near the boundary: a
+   * rule that starts over-flagging fails the eval. `null` when the suite has
+   * no explicitly labelled clean for this rule.
+   */
+  fpMargin: number | null;
+  /**
+   * Both margins at or over `BLIND_THRESHOLD`, with the corpus past
+   * `MIN_MARGIN_SUBJECTS`: this suite's own fixtures cannot see the rule
+   * drift, so `RULES.md`'s precision and recall from it are not worth much.
+   * `false` when either margin is `null`, either is narrow, or the corpus is
+   * too small to say -- a suite that cannot speak yet is not the same claim
+   * as a suite that spoke and came back wide.
+   */
+  blind: boolean;
+  /** This rule's own `blind:` declaration in its `rule.yml`, verbatim, or null. */
+  blindReason: string | null;
+}
+
+/**
+ * 0.25 of a rule's own scale (`scaleOf`): the value this repository's own
+ * survey of its 65 suites used to separate "blind" from the rest, decided
+ * by inspection of where a corpus stopped being able to say anything about
+ * drift -- a convention picked once, not a measurement that could drift
+ * itself. A suite whose FN-margin and FP-margin are both at or over this,
+ * normalised, is reported `blind`.
+ */
+export const BLIND_THRESHOLD = 0.25;
+
+/**
+ * The floor `calibration.md` sets for a gap to mean anything: "six or more
+ * matches per rule, both classes present" (the same number `gapReport`'s
+ * `thin` verdict uses). A margin computed from one labelled defect and one
+ * labelled clean is a real number and a weak claim; under this many matched
+ * subjects for the rule, `blind` is reported `false` rather than asserted
+ * either way -- a suite that has not spoken yet is not a suite that spoke
+ * and came back wide.
+ */
+export const MIN_MARGIN_SUBJECTS = 6;
+
+/**
+ * A label from an entry someone actually wrote, never from `$default`.
+ *
+ * `expect.yml`'s `default: clean` makes every subject a labelled corpus
+ * scores against, and `labelFor` (calibrate.ts) rightly resolves through it
+ * for precision/recall and for `cleanTop` -- unlabelled is clean, as in a
+ * corpus. A margin is a different claim: it says a specific location is the
+ * quietest defect or the loudest clean anyone found, evidence a rule's
+ * cutoff is safe. A subject nobody looked at is not that evidence -- it is
+ * the vast majority of any fixture file, at whatever value the model
+ * happens to give it, and letting it set the FP-margin would let a suite
+ * that never wrote a single hard-clean fixture read as un-blind by accident
+ * of what the model returned for lines nobody chose. One shipped suite was
+ * entirely `$default`-clean until its boundary fixtures were added; this is
+ * why it read as blind rather than as clean-by-luck.
+ *
+ * So: only an entry that names this file and line, for this rule (or with
+ * no `rule:`, for every rule), counts. `null` when nothing explicit covers
+ * it, whether or not `$default` would resolve it to something.
+ */
+function explicitLabelFor(labels: Labels, file: string, line: number, rule: string): "bad" | "clean" | null {
+  const forFile = labels[file];
+  if (!Array.isArray(forFile)) return null;
+  let result: "bad" | "clean" | null = null;
+  for (const l of forFile as Label[]) {
+    const within = Math.abs((l.line ?? -1) - line) <= (l.window ?? 3);
+    if (!within) continue;
+    if (l.rule && l.rule !== rule) continue;
+    if (l.label === "bad") return "bad";
+    if (l.label === "clean") result = "clean";
+  }
+  return result;
 }
 
 export interface EvalScore {
@@ -219,9 +302,28 @@ export function scoreEval(
     const fp = mine.filter((c) => c.label !== "bad" && c.decision === "flag").length;
     const fn = mine.filter((c) => c.label === "bad" && c.decision === "pass").length;
     const fit = fits.get(r.id);
+    const at = atFor.get(r.id)!;
+    const scale = scaleOf(r);
+
+    // Explicit-only, unlike `cleanTop` above: see `explicitLabelFor`.
+    const explicitBad = mine
+      .filter((c) => explicitLabelFor(labels, c.file, c.line, c.rule) === "bad")
+      .map((c) => c.mean);
+    const explicitClean = mine
+      .filter((c) => explicitLabelFor(labels, c.file, c.line, c.rule) === "clean")
+      .map((c) => c.mean);
+    const fnMargin = explicitBad.length > 0 ? round((Math.min(...explicitBad) - at) / scale) : null;
+    const fpMargin = explicitClean.length > 0 ? round((at - Math.max(...explicitClean)) / scale) : null;
+    const blind =
+      mine.length >= MIN_MARGIN_SUBJECTS &&
+      fnMargin !== null &&
+      fpMargin !== null &&
+      fnMargin >= BLIND_THRESHOLD &&
+      fpMargin >= BLIND_THRESHOLD;
+
     return {
       rule: r.id,
-      at: atFor.get(r.id)!,
+      at,
       subjects: mine.length,
       tp, fp, fn,
       precision: tp + fp > 0 ? round(tp / (tp + fp)) : null,
@@ -232,6 +334,10 @@ export function scoreEval(
       cleanTop: mine.some((c) => c.label !== "bad")
         ? round(Math.max(...mine.filter((c) => c.label !== "bad").map((c) => c.mean)))
         : null,
+      fnMargin,
+      fpMargin,
+      blind,
+      blindReason: r.blind,
     };
   });
   return { rules: ruleScores, cases };
@@ -240,12 +346,40 @@ export function scoreEval(
 const round = (n: number): number => Math.round(n * 100) / 100;
 
 /**
+ * `blind:` and the margins disagreeing, named per rule: a suite blind with
+ * no declaration, or a declaration on a suite that is not (any more) blind.
+ *
+ * Read by `compareEvals` below and folded into its `reasons`, so `eval
+ * --replay` fails on this through the one exit-code path it already has for
+ * a regression, rather than a second mechanism beside it: `cmdEval` reads
+ * only `diff.ok`/`diff.reasons`, unchanged.
+ */
+export function blindTrouble(score: EvalScore): string[] {
+  const fmt = (n: number | null) => (n === null ? "-" : n.toFixed(2));
+  const reasons: string[] = [];
+  for (const r of score.rules) {
+    if (r.blind && !r.blindReason) {
+      reasons.push(
+        `${r.rule}: blind -- FN-margin ${fmt(r.fnMargin)} and FP-margin ${fmt(r.fpMargin)} are both >= ${BLIND_THRESHOLD} of scale, ` +
+          "so this corpus cannot see the rule drift. Declare `blind:` in its rule.yml with why, or aim a fixture at the boundary.",
+      );
+    } else if (!r.blind && r.blindReason) {
+      reasons.push(
+        `${r.rule}: declares \`blind: ${r.blindReason.slice(0, 80)}\` but its margins (FN-margin ${fmt(r.fnMargin)}, FP-margin ${fmt(r.fpMargin)}) are not both wide -- stale exemption, drop it.`,
+      );
+    }
+  }
+  return reasons;
+}
+
+/**
  * What changed since the baseline, case by case.
  *
  * A regression is a case that was decided rightly and now is not; an
  * improvement the reverse. A case only one side has is reported, not judged.
  * With `draftChanged` the baseline answered a different question, and the
- * comparison is refused rather than made.
+ * comparison is refused rather than made. A suite blind with no `blind:`,
+ * or declaring one it no longer earns, fails here too -- see `blindTrouble`.
  */
 export function compareEvals(
   baseline: EvalScore,
@@ -274,6 +408,7 @@ export function compareEvals(
     reasons.push("the rule's question changed since the baseline (sentence, criteria, note, matcher, subject or state); its answers cannot be compared. Run the eval and accept a new baseline.");
   }
   if (regressions.length > 0) reasons.push(`${regressions.length} case(s) decided rightly in the baseline are decided wrongly now`);
+  reasons.push(...blindTrouble(current));
   return { ok: reasons.length === 0, reasons, regressions, improvements, added, removed };
 }
 

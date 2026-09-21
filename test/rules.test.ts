@@ -701,6 +701,20 @@ test("rules: `divergent` must say why, not just that", () => {
   }
 });
 
+test("rules: `blind` says why a suite cannot see its rule drift, and must say why", () => {
+  const good = normalizeRule({
+    id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a.",
+    blind: "Nine boundary-aimed candidates over two rounds all resolved confidently to one side.",
+  });
+  assert.equal(good.error, undefined);
+  assert.equal(good.rule!.blind, "Nine boundary-aimed candidates over two rounds all resolved confidently to one side.");
+  assert.equal(normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a." }).rule!.blind, null, "no declaration means null, not empty string");
+  const empty = normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a.", blind: "   " });
+  assert.match(empty.error!, /`blind` must say why/);
+  const truthy = normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a.", blind: true });
+  assert.match(truthy.error!, /`blind` must say why/);
+});
+
 test("rules: every field `normalizeRule` validates refuses a bad value by name", () => {
   // A table, because the branches are the point: `jev-lint review` found that
   // a third of `normalizeRule`'s failure paths had never been driven, which is

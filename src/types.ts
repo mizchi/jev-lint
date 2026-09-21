@@ -270,6 +270,18 @@ export interface RuleBase {
    */
   divergent: string | null;
   /**
+   * Why this rule's own eval corpus cannot see the rule drift: both
+   * margins (`evals.ts`: FN-margin and FP-margin, the distance from the
+   * cutoff to the quietest labelled defect and the loudest labelled clean)
+   * are wide despite the fixtures being genuinely aimed at the boundary.
+   *
+   * A non-empty value suppresses `eval`'s `blind` failure for this rule and
+   * is shown in its place; null or empty on a suite that is in fact blind
+   * fails, and so does a non-empty value on a suite that is not -- a stale
+   * exemption is worse than none. Never read by the model.
+   */
+  blind: string | null;
+  /**
    * Labels for a follow-up `choice`, asked of this rule's findings only when
    * the run is given `--explain`: which of these best names why the verdict
    * holds. Never part of the verdict question, so never part of the draft.
