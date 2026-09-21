@@ -1565,3 +1565,40 @@ Nineteen rules. What does not port: `describe-names-subject` and
 `test-mocks-subject`, which MoonBit writes neither of, and
 `must-name-panics`, which is Go's `Must*` convention. Nothing else of
 this tool applies to a MoonBit file.
+
+## 19. A trait's name is a claim about its methods
+
+The first rule written for MoonBit and Rust before TypeScript, and the
+first new question since the markdown pack: `trait-name-describes-methods`.
+
+`type-name-describes-shape` asks whether a type's name describes its
+members, which is a claim about data. A trait's name claims a capability
+-- what implementing it lets a value do -- and the compiler checks that
+the methods exist and never that the name is about them.
+
+| | rust | moonbit |
+|---|---|---|
+| subjects / defects | 10 / 4 | 11 / 5 |
+| cutoff | 0.62 | 0.60 |
+| cleans top at | 0.44 | 0.46 |
+| defects start at | 0.81 | 0.75 |
+| headroom | 0.18 a side | 0.14 / 0.15 |
+
+The two languages agree case by case, which is what one expects of one
+sentence over the same ten declarations written twice: `Comparable` with
+a `render` at 0.91-0.92 in both, `Serializable` with a `byte_len` at
+0.80-0.85, `Named` with three unrelated methods at 0.75-0.83.
+
+The clean band is the interesting half. A marker trait with no method
+(0.21-0.25) has nothing to contradict its name. A method whose name
+repeats the trait's -- `Printable::to_line`, `Copyable::copy` -- reads as
+what the name says rather than as a tautology (0.06-0.08). Several
+methods that add up to the name, and a default method body, are the name
+kept (0.11-0.18). The top of both clean bands is the same case:
+`Sortable` with one `sort_key`, an adjective over a noun-returning
+method, at 0.44 and 0.46 -- and that is where the cutoffs come from.
+
+MoonBit's `type-name-describes-shape` matched `trait_definition` as well.
+Asking both rules of one declaration reports the same name twice under
+two sentences, so the trait alternative came out and its two cases moved
+to the new rule; that baseline was re-accepted unchanged otherwise.

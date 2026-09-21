@@ -1,0 +1,42 @@
+default: clean
+fixtures/render.rs:
+  - line: 13
+    label: bad
+    window: 0
+    reason: "`Comparable` claims an ordering; the one method renders a string."
+  - line: 17
+    label: bad
+    window: 0
+    reason: "`Serializable` claims a serialisation; the one method measures a length."
+  - line: 25
+    label: bad
+    window: 0
+    reason: "`Named` claims one capability and the methods are three: a name, an ordering and a serialisation."
+  - line: 47
+    label: bad
+    window: 0
+    reason: "`Summable` claims addition; the methods render a table and a header."
+  - line: 9
+    label: clean
+    window: 0
+    reason: "hard clean: one method, named for what it produces, under a name that says the same."
+  - line: 21
+    label: clean
+    window: 0
+    reason: "hard clean: a sort key is what a sortable thing provides."
+  - line: 31
+    label: clean
+    window: 0
+    reason: "hard clean: two methods, and caching is what they add up to -- a key and a lifetime."
+  - line: 36
+    label: clean
+    window: 0
+    reason: "the errors are how a validatable thing reports itself invalid."
+  - line: 40
+    label: clean
+    window: 0
+    reason: "hard clean: a default method body counts as what the trait provides, and `len` plus `is_empty` is what countable means."
+  - line: 52
+    label: clean
+    window: 0
+    reason: "hard clean: a marker trait has no method to contradict its name."

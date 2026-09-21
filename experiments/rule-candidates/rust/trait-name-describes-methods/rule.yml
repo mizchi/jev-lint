@@ -1,0 +1,53 @@
+# --------------------------------------------------------------------------
+# Does a trait's name describe what its methods do?
+# --------------------------------------------------------------------------
+#
+# A type name claims a shape (type-name-describes-shape); a trait name claims
+# a CAPABILITY -- what implementing it lets a value do. The compiler checks
+# that the methods exist and never that the name is about them, and a linter
+# can enforce casing and nothing else. `Comparable` whose one method renders,
+# `Serializable` that only measures a length, `Named` that also sorts and
+# serialises: each is a claim a reader acts on and the methods contradict.
+id: trait-name-describes-methods
+language: Rust
+kind: noul
+subject: node
+# `located`: the methods are the evidence and they are in the declaration,
+# but the file is what shows how the trait is implemented and used -- a
+# conventional name (Show, Eq, Default) reads as conventional only beside
+# its neighbours.
+state: located
+axis: file
+severity: warning
+# GUESS, not a fit: 0.5. Refitted from the fixtures beside it.
+at: 0.5
+rule:
+  all:
+    - kind: trait_item
+    - has: { field: name, pattern: $NAME }
+ask: >-
+  This trait's name ($NAME) misdescribes what its methods do: someone who knew
+  only the name would be wrong about the behaviour an implementer provides.
+criteria:
+  "true": >-
+    The methods do not provide the capability the name claims: the name names
+    one behaviour (comparing, serialising, formatting, iterating, validating)
+    and every method does something else; the name promises a broader contract
+    than the methods declare, or a narrower one than they do -- a name for one
+    capability over methods that also do an unrelated second; or the name names
+    a thing rather than what implementing it lets a value do, while the methods
+    are one operation that has its own name.
+  "false": >-
+    The methods provide what the name claims, even where the name is terse or
+    conventional. A trait named for the one thing its single method produces is
+    accurate. A conventional name of the language (Show, Eq, Compare, Hash,
+    Default, Display, Debug, Clone, Iterator, From, Into, Error) over the
+    methods that convention implies is accurate however short it is. A marker
+    trait with no methods claims only that a type is in a category, and has no
+    method to contradict it. A name broader than a single method, where the
+    methods together add up to it, is accurate.
+note: >-
+  Judge the name against the methods declared here, not against what an
+  implementation might add. A default method body is part of what the trait
+  provides. A trait with one method whose name repeats the trait's is not a
+  tautology to punish: `Printable` with `to_line` is what the name says.

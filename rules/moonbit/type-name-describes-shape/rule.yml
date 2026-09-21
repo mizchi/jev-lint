@@ -22,8 +22,10 @@ at: 0.28
 axis: file
 severity: warning
 # The declaration forms, each named by the identifier directly under it.
-# `trait_definition` is included: a trait's name claims what its methods
-# do, which is the same claim in another shape. `type_definition` is the
+# A trait is NOT one of them: a trait's name claims a capability rather
+# than a shape, and `trait-name-describes-methods` asks that question
+# against the methods. Asking both of one declaration reported the same
+# name twice. `type_definition` is the
 # newtype (`type Cents Int`). The alias (`typealias Int as Cents`) is NOT
 # matched: its own name is the second identifier inside
 # `type_alias_targets`, and capturing that one rather than the aliased
@@ -38,9 +40,6 @@ rule:
         - has: { kind: identifier, pattern: $NAME }
     - all:
         - kind: type_definition
-        - has: { kind: identifier, pattern: $NAME }
-    - all:
-        - kind: trait_definition
         - has: { kind: identifier, pattern: $NAME }
 # The same sentence as typescript/type-name-describes-shape, by copy.
 ask: >-

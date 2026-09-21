@@ -1,0 +1,298 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T05:27:28.656Z",
+  "model": "jev-1.13.0",
+  "suite": "rust/trait-name-describes-methods",
+  "rules": [
+    {
+      "id": "trait-name-describes-methods",
+      "draft": "284f8acd3997",
+      "at": 0.62
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 25,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 31,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 47,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 25,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 31,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 47,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.44,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 25,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 31,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 47,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/rust/trait-name-describes-methods/fixtures/render.rs",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 19023,
+    "usd": 0.0007989660000000001,
+    "ms": 252
+  }
+}

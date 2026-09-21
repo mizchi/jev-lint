@@ -10,7 +10,14 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added
 
-- `rules/moonbit/`: nineteen rules ported to MoonBit, every one this tool
+- `trait-name-describes-methods`, a new rule in Rust (0.62) and MoonBit
+  (0.60): does a trait's name describe what its methods do -- the
+  capability an implementer gains, which the compiler never checks. 10 and
+  11 subjects, precision and recall 1.00, 0.18 and 0.14 of headroom;
+  `experiments/reports/trait-name-describes-methods/` has the measurement.
+  MoonBit's `type-name-describes-shape` no longer matches a trait, since
+  asking both of one declaration reported the same name twice.
+- `rules/moonbit/`: twenty rules in MoonBit, nineteen of them ports, every one this tool
   has that a MoonBit file can carry -- `fn-name-promises` (0.44),
   `var-name-describes-value` (0.50), `type-name-describes-shape` (0.28),
   `module-name-describes-contents` (0.55), `idempotent-name` (0.49),

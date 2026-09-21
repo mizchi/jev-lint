@@ -114,7 +114,7 @@ npx -y jev-lint check src              # 聞く
 | `.rs` | `rust/` — 8、first tier | 関数、コメント、テスト、束縛について同じこと。`# Errors` / `# Panics` と本体の突き合わせ |
 | `.py` | `python/` — 12 | TypeScript ルールの移植。`Raises:` と本体の突き合わせ |
 | `.go` | `go/` — 9 | 移植に加えて `must-name-panics`: `MustX` は名前が約束する失敗で panic するか |
-| `.mbt` | `moonbit/` — 19 | MoonBit のファイルが持ちうるルールは全部: 命名、保証、コメント、失敗契約、ログ、テストとスナップショット。MoonBit は ast-grep 組み込みの文法ではないので、[parser を宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば動く。宣言が無ければ skip され、その旨が出る |
+| `.mbt` | `moonbit/` — 20 | MoonBit のファイルが持ちうるルールは全部: 命名、保証、コメント、失敗契約、ログ、テストとスナップショット。MoonBit は ast-grep 組み込みの文法ではないので、[parser を宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば動く。宣言が無ければ skip され、その旨が出る |
 | `package.json` | `json/` — 1 | script の名前は実行するコマンドを表しているか |
 | `.sql` (sqlc のカタログ) | `text/` — 1 | `-- name: GetUserByEmail` はその下の SQL を表しているか |
 | `.md` `.mdx` | `markdown/` — 11 | この文書は slop か、filler か、曖昧か、水増しか (JevSlop の八つのシグナル、0–4 で採点)。節は次の予告で終わっていないか、議題の宣言で始まっていないか、立てた問いを放置していないか |
@@ -263,6 +263,7 @@ subject 1,000 件あたり 3.9 セント。同じツリーへの `--dry-run` の
 | `module-name-describes-contents` | このモジュールは中身どおりの名前か? |
 | `module-naming-consistent` | このモジュールの export は同じ種類の操作に同じ語を使っているか? |
 | `type-name-describes-shape` | この型の名前は、ファイルが組み立てて使うとおりのメンバーを表しているか? (セッションである `UserId`、エラーのリストである `Config`) |
+| `trait-name-describes-methods` (Rust, MoonBit) | trait の名前は、そのメソッドがすること — 実装者が得る能力 — を表しているか? (描画するだけの `Comparable`、並べ替えも直列化もする `Named`) |
 
 **保証** — 名前が特定の約束をしている。本体は守っているか?
 

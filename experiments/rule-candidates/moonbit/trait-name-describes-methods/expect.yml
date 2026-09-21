@@ -1,0 +1,46 @@
+default: clean
+fixtures/render.mbt:
+  - line: 13
+    label: bad
+    window: 0
+    reason: "`Comparable` claims an ordering; the one method renders a string."
+  - line: 18
+    label: bad
+    window: 0
+    reason: "`Serializable` claims a serialisation; the one method measures a length."
+  - line: 28
+    label: bad
+    window: 0
+    reason: "`Named` claims one capability and the methods are three: a name, an ordering and a serialisation."
+  - line: 52
+    label: bad
+    window: 0
+    reason: "`Summable` claims addition; the methods render a table and a header."
+  - line: 63
+    label: bad
+    window: 0
+    reason: "`Closeable` claims a close; the one method opens."
+  - line: 8
+    label: clean
+    window: 0
+    reason: "hard clean: one method, named for what it produces, under a name that says the same."
+  - line: 23
+    label: clean
+    window: 0
+    reason: "hard clean: a sort key is what a sortable thing provides."
+  - line: 35
+    label: clean
+    window: 0
+    reason: "hard clean: two methods, and caching is what they add up to -- a key and a lifetime."
+  - line: 41
+    label: clean
+    window: 0
+    reason: "the errors are how a validatable thing reports itself invalid."
+  - line: 46
+    label: clean
+    window: 0
+    reason: "hard clean: two methods that together are what countable means."
+  - line: 58
+    label: clean
+    window: 0
+    reason: "hard clean: one method whose name repeats the trait's, which is what the name says and not a tautology to punish."

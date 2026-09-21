@@ -1,0 +1,325 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T05:27:28.372Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/trait-name-describes-methods",
+  "rules": [
+    {
+      "id": "trait-name-describes-methods",
+      "draft": "26de1c50cee1",
+      "at": 0.6
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 8,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.45,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 28,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 35,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 46,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 52,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 58,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 63,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 8,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.42,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 28,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 35,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 46,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 52,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 58,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 63,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 8,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 28,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 35,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 46,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 52,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 58,
+        "endLine": 60,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "trait-name-describes-methods",
+        "file": "rules/moonbit/trait-name-describes-methods/fixtures/render.mbt",
+        "line": 63,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 20511,
+    "usd": 0.0008614620000000001,
+    "ms": 268
+  }
+}

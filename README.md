@@ -175,10 +175,10 @@ the end of the run. Nothing to select.
 | point it at | what runs | asks, for example |
 | --- | --- | --- |
 | `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 21 rules, first tier | does this function do what its name promises; is the comment above it still true; would this test still pass if its claim were broken; does `catch` hide a failure |
-| `.rs` | `rust/` — 8, first tier | the same for functions, comments, tests, bindings; `# Errors` / `# Panics` against the body |
+| `.rs` | `rust/` — 9, first tier | the same for functions, comments, tests, bindings; `# Errors` / `# Panics` against the body; whether a trait's name describes its methods |
 | `.py` | `python/` — 12 | ports of the TypeScript rules; `Raises:` against the body |
 | `.go` | `go/` — 9 | ports, plus `must-name-panics`: does `MustX` panic on the failure its name promises |
-| `.mbt` | `moonbit/` — 19 | every rule of this tool that a MoonBit file can carry: the naming rules, the guarantees, the comments, the failure contract, the log lines, the tests and their snapshots. MoonBit is not a grammar ast-grep has built in: [declare the parser](docs/reference.md#a-language-ast-grep-does-not-have-built-in) and these run; without it they are skipped and the run says so |
+| `.mbt` | `moonbit/` — 20 | every rule of this tool that a MoonBit file can carry: the naming rules, the guarantees, the comments, the failure contract, the log lines, the tests and their snapshots. MoonBit is not a grammar ast-grep has built in: [declare the parser](docs/reference.md#a-language-ast-grep-does-not-have-built-in) and these run; without it they are skipped and the run says so |
 | `package.json` | `json/` — 1 | does a script's name describe the command it runs |
 | `.sql` (an sqlc catalog) | `text/` — 1 | does `-- name: GetUserByEmail` describe the SQL under it |
 | `.md` `.mdx` | `markdown/` — 11 | is this document slop, filler, vague, padded (JevSlop's eight signals, scored 0–4); does a section end by previewing the next, open with an agenda, abandon a question it raised |
@@ -419,6 +419,7 @@ each exists in:
 | `module-name-describes-contents` | is this module named for what it contains? |
 | `module-naming-consistent` | do this module's exports name the same kind of operation with the same words? |
 | `type-name-describes-shape` | does this type's name describe its members, as the file builds and uses it? (`UserId` that is a session; `Config` that is a list of errors) |
+| `trait-name-describes-methods` (Rust, MoonBit) | does a trait's name describe what its methods do — the capability an implementer gains? (`Comparable` whose one method renders; `Named` that also sorts and serialises) |
 
 **Guarantees** — the name makes a specific promise; does the body keep it?
 

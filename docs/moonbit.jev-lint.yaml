@@ -33,5 +33,6 @@ rules:
   test-name-describes-code: on
   test-name-verifies-claim: on
   tests-cover-failure-paths: on
+  trait-name-describes-methods: on
   type-name-describes-shape: on
   var-name-describes-value: on
