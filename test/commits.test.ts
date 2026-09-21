@@ -4,7 +4,7 @@ import { mkdtempSync, writeFileSync, rmSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { planBatches } from "../src/batch.ts";
-import { listCommits, commitDiff, commitSubjects, squashSubjects, defaultRange, MAX_DIFF_CHARS } from "../src/commits.ts";
+import { listCommits, commitDiff, commitSubjects, squashSubjects, stagedSubjects, defaultRange, MAX_DIFF_CHARS } from "../src/commits.ts";
 import { decide } from "../src/gate.ts";
 import { formatPretty } from "../src/report.ts";
 import { scoreRule, tempRepo, commitRule, changeRule } from "./builders.ts";
@@ -194,6 +194,32 @@ test("commits: an empty commit gets no change subject either, even with an instr
     assert.equal(forEmptyCommit.length, 1, "only the commit rule gets a subject for the empty commit");
     assert.equal(forEmptyCommit[0]!.rule.subject, "commit");
     assert.equal(noInstructionDoc, 0, "there was a standard; the diff was simply empty, which is a different reason");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits --staged: the index is one change, judged by the instructions in the index", () => {
+  const dir = tempRepo([{ message: "Set the rules", files: { "AGENTS.md": "- Never use `any`.\n" } }]);
+  try {
+    writeFileSync(join(dir, "cart.ts"), "export const cart: any = {}\n");
+    execFileSync("git", ["add", "-A"], { cwd: dir, stdio: ["ignore", "pipe", "pipe"] });
+    const { subjects } = stagedSubjects([commitRule(), changeRule()], dir);
+    assert.equal(subjects.length, 1, "a commit rule makes no subject: there is no message yet");
+    const [s] = subjects;
+    assert.equal(s!.rule.subject, "change");
+    assert.equal(s!.file, "staged");
+    assert.match(s!.commit!.diff, /cart\.ts/);
+    assert.match(s!.instructions!.docs[0]!.text, /Never use/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits --staged: nothing staged is no subjects, not an empty change", () => {
+  const dir = tempRepo([{ message: "Set the rules", files: { "AGENTS.md": "- x\n" } }]);
+  try {
+    assert.deepEqual(stagedSubjects([changeRule()], dir).subjects, []);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

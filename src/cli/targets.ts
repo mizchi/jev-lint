@@ -41,6 +41,22 @@ export async function resolveTargets(
     // with nothing in it, rather than a line of prose where JSON was asked for.
     paths = files;
   } else if (command === "commits") {
+    // `--staged` first: it names no range, since it judges the index, not
+    // a commit -- and it is a different question from every other case
+    // below, which all revolve around choosing a range.
+    if (opts.staged) {
+      // The index has no message yet, so only a change rule has anything
+      // to ask about it -- a commit rule's question does not exist there.
+      if (!rules.some((r) => r.subject === "change")) {
+        log("commits --staged: no `subject: change` rule is loaded; the shipped one is rules/git/diff-follows-instructions");
+        return { exit: 2 };
+      }
+      if (opts.squash) {
+        log("commits: --staged and --squash are different questions; pass one");
+        return { exit: 2 };
+      }
+      return { paths: [], diffRanges: null, commitsRange: "staged" };
+    }
     // The range is a positional (`main..HEAD`), else `--base <ref>`, else
     // what is not yet pushed. A repository with no upstream and no `--base`
     // has no default worth guessing at.
@@ -49,8 +65,10 @@ export async function resolveTargets(
       log("commits: no range. Give one (`main..HEAD`), or --base <ref>, or set an upstream");
       return { exit: 2 };
     }
-    if (!rules.some((r) => r.subject === "commit")) {
-      log("commits: no `subject: commit` rule is loaded; the shipped one is rules/git/commit-message-describes-diff");
+    if (!rules.some((r) => r.subject === "commit" || r.subject === "change")) {
+      log(
+        "commits: no `subject: commit` or `subject: change` rule is loaded; the shipped ones are rules/git/commit-message-describes-diff and rules/git/diff-follows-instructions",
+      );
       return { exit: 2 };
     }
     if (opts.squash && opts.message === null) {

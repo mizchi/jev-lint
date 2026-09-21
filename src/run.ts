@@ -27,7 +27,7 @@ import { touchesChange } from "./diff.ts";
 import { ruleTextHash, cutoffFor, extensionsOf, undeclared as undeclaredLanguages } from "./rules.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
 import { excerptBudget, pairTests, type RelatedTest } from "./paired.ts";
-import { commitSubjects, squashSubjects } from "./commits.ts";
+import { commitSubjects, squashSubjects, stagedSubjects } from "./commits.ts";
 import { findTextFiles, textSubjects } from "./text.ts";
 import { FileIndex, isUnder, tryReadFile } from "./files.ts";
 import type {
@@ -336,6 +336,8 @@ export interface RunOptions {
     label?: (sha: string) => string;
     /** Judge the whole range as one change against this message (a PR description, a changelog entry). */
     squash?: string;
+    /** The index instead of a range: `subject: change` rules only, since there is no message yet. */
+    staged?: boolean;
   } | null;
 }
 
@@ -374,7 +376,7 @@ export async function run({
   const persistTo = passes === 1 ? cachePath : null;
 
   const collected = commits
-    ? collectCommits(rules, commits.range, cwd, commits.label, commits.squash)
+    ? collectCommits(rules, commits.range, cwd, commits.label, commits.squash, commits.staged)
     : await collectSubjects({ rules, paths, arm, diffRanges, exclude, languages, cwd });
   const { subjects, symbols, sources, tests, stderr, skippedByDiff, excluded, undeclared, duplicateGrammars, ignored, unpaired } = collected;
   const commitStats = commits && "commits" in collected ? (collected as { commits: RunResult["commits"] }).commits : undefined;
@@ -630,9 +632,13 @@ function collectCommits(
   cwd: string,
   label?: (sha: string) => string,
   squash?: string,
+  staged?: boolean,
 ): CollectResult & { commits: { range: string; total: number; skippedMerges: number; noInstructionDoc: number } } {
-  const { subjects, commits, skippedMerges, noInstructionDoc } =
-    squash !== undefined ? squashSubjects(rules, range, squash, cwd) : commitSubjects(rules, range, cwd, label);
+  const { subjects, commits, skippedMerges, noInstructionDoc } = staged
+    ? stagedSubjects(rules, cwd)
+    : squash !== undefined
+      ? squashSubjects(rules, range, squash, cwd)
+      : commitSubjects(rules, range, cwd, label);
   return {
     subjects,
     symbols: new Map(),
