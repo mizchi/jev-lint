@@ -132,6 +132,16 @@ function isCopy(text: string, already: InstructionDoc[]): boolean {
  * and back -- both get dropped here, leaving `docs: []`, indistinguishable
  * from a repository with neither file. That's fine: a symlink loop has
  * nothing to read either way.
+ *
+ * What is NOT fine, and is the cost of this being a drop rather than a
+ * resolve: a repository that keeps the real document at `docs/AGENTS.md`
+ * and symlinks the root at it gets `docs: []`, so no subject and no
+ * judging at all. The link is recognised and then nothing follows it,
+ * because the target is outside the root-only scope. Dropping beats the
+ * alternative that shipped before -- the literal string `docs/AGENTS.md`
+ * handed to a model as a standard -- but it is silence where a reader
+ * would expect their instructions to be read. Following one hop is a
+ * `git show <ref>:<target>` away if that layout turns out to be common.
  */
 function isPointer(text: string): boolean {
   const lines = text
