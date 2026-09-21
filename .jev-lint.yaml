@@ -3,7 +3,13 @@
 
 # test/fixtures holds planted defects for the cookbook test, so it is
 # carved out of test/, which is otherwise the suite.
-files: [src, tools, test, package.json]
+#
+# `docs` and `AGENTS.md` are here so the markdown rules have something to
+# read: without them every run printed `no files for markdown (11 rules)`,
+# which is eleven rules carried and never once asked. AGENTS.md is also
+# what `commits` judges a change against, so it is the one file in this
+# repository that has to be true about the others.
+files: [src, tools, test, docs, AGENTS.md, package.json]
 exclude: [test/fixtures]
 
 # Every shipped rule, on. The markdown rules see no file here (docs/ is
