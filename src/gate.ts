@@ -156,7 +156,21 @@ export function gate(
   results: Array<{ subject: Subject; answer: Answer | null }>,
   options: GateOptions = {},
 ): GateResult {
-  const all = results.map(({ subject, answer }) => decide(subject, answer, options));
+  return collect(
+    results.map(({ subject, answer }) => decide(subject, answer, options)),
+    options,
+  );
+}
+
+/**
+ * The lists and the counts, derived from the findings.
+ *
+ * Separate from `gate` because a pass after the verdicts can change a
+ * finding -- the attribution pass retracts one it cannot attribute -- and
+ * the counts a report prints have to follow it. Deriving twice from the
+ * same array is cheaper and safer than adjusting the counts by hand.
+ */
+export function collect(all: Finding[], options: GateOptions = {}): GateResult {
   const byMargin = (a: Finding, b: Finding) =>
     (b.margin ?? 0) - (a.margin ?? 0) || a.file.localeCompare(b.file) || a.line - b.line;
   const findings = all.filter((f) => f.reported).sort(byMargin);
