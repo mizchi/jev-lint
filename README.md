@@ -21,9 +21,18 @@ cart. [`examples/cart.test.ts`](examples/cart.test.ts) has a test that
 would pass with its claim broken. Nothing a type checker minds.
 
 ```bash
-$ export TYPESAFE_API_KEY=...
+$ export TYPESAFE_API_KEY=...          # required: a key from https://typesafe.ai
 $ npx -y jev-lint check examples
 ```
+
+The key is what pays for the verdicts. It is read from the environment only
+— `TYPESAFE_API_KEY`, or `TYPESAFEAI_API_KEY`, or the variable `apiKeyEnv:`
+names — and never from the config file, which belongs in version control
+and a key does not. Everything that does not ask the model works without
+one: `--dry-run` prices a run, `jev-lint rules` lists what would run,
+`jev-lint replay` re-scores a recorded run, `jev-lint eval --replay`
+re-derives every number in [RULES.md](RULES.md) from the committed
+baselines, and CI can lint from a committed cache with no key at all.
 
 ```
 examples/cart.test.ts

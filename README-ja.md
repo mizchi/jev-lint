@@ -9,9 +9,17 @@
 [`examples/cart.ts`](examples/cart.ts) は 38 行で、嘘が三つ入っている。`null` を返すと書いた doc コメントの下で throw する本体、文字列を返す `isEmpty`、カートを保存もしてしまう `applyDiscount`。[`examples/cart.test.ts`](examples/cart.test.ts) には、主張する振る舞いが壊れていても通るテストがある。どれも型検査は文句を言わない。
 
 ```bash
-$ export TYPESAFE_API_KEY=...
+$ export TYPESAFE_API_KEY=...          # 必須。キーは https://typesafe.ai で取る
 $ npx -y jev-lint check examples
 ```
+
+判定の代金を払うのがこのキー。読み込むのは環境変数からだけで (`TYPESAFE_API_KEY`、
+`TYPESAFEAI_API_KEY`、または `apiKeyEnv:` が指す変数)、config ファイルからは読まない。
+config はバージョン管理に入るものであり、キーはそうではないから。モデルに聞かない操作は
+キー無しで動く。`--dry-run` は実行前に値段を出し、`jev-lint rules` は何が走るかを並べ、
+`jev-lint replay` は記録済みの実行を採点し直し、`jev-lint eval --replay` は
+[RULES.md](RULES.md) の数値をコミット済み baseline から再導出する。CI は
+コミットされたキャッシュからキー無しで lint できる。
 
 ```
 examples/cart.test.ts
