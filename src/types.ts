@@ -111,11 +111,12 @@ export const KINDS = ["score", "noul"] as const;
 export type RuleKind = (typeof KINDS)[number];
 
 /**
- * What code the question is actually about. `commit` is the one subject
- * with no ast-grep matcher: the message is the subject and the diff is the
- * state, both from git.
+ * What code the question is actually about. `commit` and `change` are the
+ * two subjects with no ast-grep matcher: both are built from git. `commit`
+ * judges the message, with the diff as evidence; `change` judges the diff
+ * itself, so it exists before a commit does.
  */
-export const SUBJECTS = ["node", "enclosing", "file", "commit", "block"] as const;
+export const SUBJECTS = ["node", "enclosing", "file", "commit", "change", "block"] as const;
 export type SubjectMode = (typeof SUBJECTS)[number];
 
 /** Which sections of state accompany the questions. */
@@ -298,7 +299,15 @@ export type RuleSource =
       extensions: null;
     }
   | {
-      subject: "commit";
+      /**
+       * Two subjects with no matcher, both built from git.
+       *
+       * `commit`: the message is the subject and the diff is what it is
+       * judged against. `change`: the change is the subject and the diff
+       * plus the repository's instruction documents are its state, so it
+       * exists before a commit does and `--staged` can produce one.
+       */
+      subject: "commit" | "change";
       matcher: null;
       constraints: null;
       utils: null;
@@ -333,7 +342,12 @@ export type Rule = RuleBase & RuleJudgment & RuleSource;
 export type MatcherRule = Rule & { subject: "node" | "enclosing" | "file" };
 
 export function isMatcherRule(rule: Rule): rule is MatcherRule {
-  return rule.subject !== "commit" && rule.subject !== "block";
+  return rule.subject !== "commit" && rule.subject !== "change" && rule.subject !== "block";
+}
+
+/** The two subjects git builds: no matcher, `language: Git`, `state: bare`. */
+export function isGitSubject(subject: string): boolean {
+  return subject === "commit" || subject === "change";
 }
 
 /** The result of validating one rule: the rule, or the reason it is not one, never both. */

@@ -165,6 +165,47 @@ test("rules: a commit rule has no matcher, only the Git grammar, and never reach
   assert.deepEqual(ruleLanguages([rule!, ordinary]), ["TypeScript"]);
 });
 
+test("rules: a `subject: change` rule is Git, matcherless and bare, like a commit rule", () => {
+  const { rule, error } = normalizeRule({
+    id: "diff-follows-instructions",
+    language: "Git",
+    subject: "change",
+    kind: "noul",
+    ask: "This change breaks an instruction.",
+    criteria: { true: "y", false: "n" },
+    at: 0.6,
+  });
+  assert.equal(error, undefined, `should load: ${error}`);
+  assert.equal(rule!.subject, "change");
+  assert.equal(rule!.matcher, null);
+  assert.equal(rule!.state, "bare", "a change rule has no file to locate in");
+});
+
+test("rules: a `subject: change` rule with a matcher is rejected", () => {
+  const { error } = normalizeRule({
+    id: "x",
+    language: "Git",
+    subject: "change",
+    kind: "noul",
+    rule: { kind: "function_declaration" },
+    ask: "a",
+    criteria: { true: "y", false: "n" },
+  });
+  assert.match(String(error), /takes no matcher/);
+});
+
+test("rules: a `subject: change` rule in a real grammar is rejected", () => {
+  const { error } = normalizeRule({
+    id: "x",
+    language: "TypeScript",
+    subject: "change",
+    kind: "noul",
+    ask: "a",
+    criteria: { true: "y", false: "n" },
+  });
+  assert.match(String(error), /is `language: Git`/);
+});
+
 test("rules: `run` selects one shipped rule by id, in every language or one, or the rules of a file", () => {
   // `jev-lint run fn-name-promises src`: the shipped rule, whatever the
   // project's own rules/ holds, in every language that has it; with a
