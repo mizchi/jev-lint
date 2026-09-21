@@ -2,6 +2,10 @@
 
 [日本語](README-ja.md)
 
+A lint tool that uses [Jev](https://typesafe.ai/) -- a fast classifier that
+answers a natural-language question with a calibrated probability instead of
+writing text -- to decide what a parser cannot.
+
 This function is wrong, and nothing in your toolchain will say so:
 
 ```ts
