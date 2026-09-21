@@ -45,20 +45,38 @@ it, nothing is reported. Six findings over two files, for a tenth of a cent;
 
 ## What it catches
 
-The conventions teams argue about in review, which a parser cannot decide:
+Forty-seven questions ship, most of them asked in several languages -- 98
+rules in all. Roughly:
 
-- **A name that drifted from its implementation.** `applyDiscount` that also
-  saves the cart; `isAdmin` bound to a string; a test called `rejects an
-  expired token` that never passes one.
-- **A comment that became a lie.** A doc comment separated from its function
-  by a later refactor, still claiming a `null` return the function no longer
-  makes.
-- **Design consistency.** Whether a module is named for what it contains,
-  whether `catch` blocks hide failures, whether a `fetch` has a timeout
-  unless it sits inside a retry wrapper that sets one.
+- **A name against the thing it names.** A function, method, binding, type,
+  class, trait or module; an npm script against the command it runs; an sqlc
+  query name against its SQL. `applyDiscount` that also saves the cart,
+  `isAdmin` bound to a string.
+- **A guarantee the name implies.** Whether `safe*` is safe, `pure*` is pure,
+  an idempotent-sounding function is idempotent, whether Go's `MustX` panics
+  on the failure its name promises.
+- **A comment against the code under it.** The doc comment above a
+  declaration, a comment inside a block, and a stated failure contract --
+  `@throws`, `# Errors`, `Raises:` -- against the body.
+- **A test against what it claims.** A test that would pass with the
+  behaviour its name claims broken; a failure path no test reaches; a
+  snapshot standing in for a behaviour claim; a mock that has replaced the
+  subject.
+- **A failure that goes quiet.** A `catch` that hides one, an error message
+  that does not match its condition, a log level that does not match the
+  event.
+- **What a shell script does to the machine** that its reader cannot see:
+  run code it downloaded, read secrets it was not given, install
+  persistence, delete past its own scope, weaken a defence, open a way in,
+  take orders from elsewhere, hide what it runs.
+- **Whether a document is worth reading.** Slop, filler, padding, vagueness;
+  a section that opens with an agenda or ends by previewing the next.
+- **A commit message against its diff.**
 
-All of them are visible only to a reader who understands both the contract
-the code declares about itself and the body.
+[RULES.md](RULES.md) is all of them, each with its cutoff and its score on
+its own fixtures. What makes them one family is that each holds a claim the
+code makes about itself against what the code does -- which is visible only
+to a reader who has read both.
 
 It is **not** for anything a compiler, type checker or ESLint already
 decides. This kind of model is good at code that contradicts itself and poor
