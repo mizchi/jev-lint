@@ -45,7 +45,7 @@ it, nothing is reported. Six findings over two files, for a tenth of a cent;
 
 ## What it catches
 
-Forty-seven questions ship, most of them asked in several languages -- 98
+Forty-eight questions ship, most of them asked in several languages -- 99
 rules in all. Roughly:
 
 - **A name against the thing it names.** A function, method, binding, type,
@@ -145,7 +145,7 @@ covers the exit code that will stop you committing while offline.
 
 ## What ships
 
-98 rules under `rules/<language>/<id>/`, and the files you point it at decide
+99 rules under `rules/<language>/<id>/`, and the files you point it at decide
 which run. Nothing to select.
 
 | point it at | what runs |
@@ -157,11 +157,11 @@ which run. Nothing to select.
 | `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |
 | `.md` `.mdx` | `markdown/` — 11 writing rules |
 | `package.json`, sqlc `.sql` | `json/` — 1, `text/` — 1 |
-| commits | `git/` — 1 |
+| commits | `git/` — 2 |
 
 `typescript` and `rust` are first tier: every rule under them carries
 fixtures, expectations and an accepted baseline. The rest are calibrated to
-the same bar and not yet promised. [RULES.md](RULES.md) lists all 98 with
+the same bar and not yet promised. [RULES.md](RULES.md) lists all 99 with
 their question, cutoff and score on their own fixtures.
 
 Your own rule can target any language ast-grep parses — Java, Kotlin, Swift,
