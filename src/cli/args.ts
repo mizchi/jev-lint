@@ -6,6 +6,7 @@
 import { DEFAULT_BATCH_SIZE } from "../batch.ts";
 import type { AskClient } from "../jev.ts";
 import type { RuleSetting } from "../config.ts";
+import type { CustomLanguages } from "../types.ts";
 import { DEFAULT_CACHE_PATH } from "../cache.ts";
 import { API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_CONCURRENCY } from "../jev.ts";
 import { DEFAULT_RULE_BATCH_CAP } from "../schedule.ts";
@@ -21,6 +22,8 @@ export interface Options {
   rulesAreShipped: boolean;
   /** The config's `rules:`; null when there is no config or it names none. */
   ruleSettings: Record<string, RuleSetting> | null;
+  /** The config's `languages:`: grammars ast-grep does not have built in. */
+  languages: CustomLanguages;
   /** How many times to ask everything, to see which findings reproduce. */
   retry: number;
   /** An explicit config path, "none" to ignore any file, or null to search. */
@@ -215,6 +218,7 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
     rules: [],
     rulesAreShipped: false,
     ruleSettings: null,
+    languages: {},
     retry: 1,
     config: null,
     baseUrl: null,

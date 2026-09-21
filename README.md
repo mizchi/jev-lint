@@ -10,7 +10,9 @@ Rules ship for **TypeScript, JavaScript, Rust, Python and Go**, plus
 Markdown, `package.json`, sqlc `.sql` files and git commits. Your own rule
 can target any language ast-grep parses -- Java, Kotlin, Swift, C, C++,
 C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, Bash, HTML,
-CSS, JSON, YAML -- since the matcher is ast-grep's.
+CSS, JSON, YAML -- since the matcher is ast-grep's, and any other grammar
+you compile: a tree-sitter parser declared in the config, [MoonBit
+included](docs/reference.md#a-language-ast-grep-does-not-have-built-in).
 
 [`examples/cart.ts`](examples/cart.ts) is thirty-eight lines with three
 lies in it: a doc comment that promises `null` above a body that throws, an

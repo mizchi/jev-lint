@@ -15,7 +15,7 @@ import type { Log, Options } from "./args.ts";
  */
 export function loadOrDie(opts: Options, log: Log, baseDir: string = process.cwd(), hasConfig = false): { rules: Rule[]; errors: string[] } | null {
   const sources = opts.rules.length > 0 ? opts.rules : ruleSources(baseDir);
-  const { rules: loaded, errors, warnings } = loadRules(sources);
+  const { rules: loaded, errors, warnings } = loadRules(sources, opts.languages);
   // Loudly, always. A rule that failed to load reports nothing, which is
   // indistinguishable from a rule that found nothing wrong.
   for (const e of errors) log(`rule error: ${e}`);

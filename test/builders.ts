@@ -12,7 +12,7 @@ import { join } from "node:path";
 import type { Configurable } from "../src/config.ts";
 import type { AskClient } from "../src/jev.ts";
 import { normalizeRule } from "../src/rules.ts";
-import type { AstGrepMatch, FileSymbols, Question, Rule, StateArm, Subject, Labels } from "../src/types.ts";
+import type { AstGrepMatch, CustomLanguages, FileSymbols, Question, Rule, StateArm, Subject, Labels } from "../src/types.ts";
 
 /** Typed label fixtures, so the `$`-prefixed metadata keys check out. */
 export const labelsOf = (o: Record<string, unknown>): Labels => o as Labels;
@@ -53,16 +53,23 @@ export const scoreRule = (over: Record<string, unknown> = {}): Rule => {
   return rule!;
 };
 
-export const noulRule = (over: Record<string, unknown> = {}): Rule =>
-  normalizeRule({
-    id: "n",
-    language: "Rust",
-    kind: "noul",
-    rule: { kind: "function_item" },
-    ask: "this function hides a failure",
-    criteria: { true: "it does", false: "it does not" },
-    ...over,
-  }).rule!;
+export const noulRule = (over: Record<string, unknown> = {}, custom: CustomLanguages = {}): Rule => {
+  const { rule, error } = normalizeRule(
+    {
+      id: "n",
+      language: "Rust",
+      kind: "noul",
+      rule: { kind: "function_item" },
+      ask: "this function hides a failure",
+      criteria: { true: "it does", false: "it does not" },
+      ...over,
+    },
+    "rule",
+    custom,
+  );
+  assert.equal(error, undefined, `fixture rule invalid: ${error}`);
+  return rule!;
+};
 
 export const subjectOf = (over: Partial<Subject> = {}): Subject => ({
   rule: scoreRule(),
@@ -156,6 +163,7 @@ export const configurable = (over: Partial<Configurable> = {}): Configurable => 
   paths: [],
   exclude: [],
   ruleSettings: null,
+  languages: {},
   cache: ".jev-lint/baseline.json",
   model: null,
   baseUrl: null,

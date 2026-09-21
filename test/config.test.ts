@@ -124,6 +124,34 @@ test("config: a flag beats the file, and the file beats the default", () => {
   assert.equal(fromFlag.group, "rule", "and leaves the settings it did not name");
 });
 
+test("config: `languages:` declares a grammar ast-grep does not have built in", () => {
+  // ast-grep reads a tree-sitter parser compiled to a dynamic library, named
+  // in its own sgconfig.yml. A jev-lint config declares the same thing, and
+  // the path is resolved from the config's directory, since that is what a
+  // reader of the file means by a relative path.
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-lint-cfg-")));
+  try {
+    const p = writeConfig(dir, ["languages:", "  moonbit:", "    libraryPath: parsers/moonbit.dylib", "    extensions: [mbt, mbti]", "    expandoChar: _"].join("\n"));
+    const { config, errors } = loadConfig(p);
+    assert.deepEqual(errors, []);
+    assert.deepEqual(config.languages, {
+      moonbit: { libraryPath: join(dir, "parsers/moonbit.dylib"), extensions: ["mbt", "mbti"], expandoChar: "_" },
+    });
+    // An absolute path is left alone, and `expandoChar` is optional.
+    const abs = loadConfig(writeConfig(dir, `languages:\n  x:\n    libraryPath: /opt/x.so\n    extensions: [x]\n`));
+    assert.deepEqual(abs.config.languages, { x: { libraryPath: "/opt/x.so", extensions: ["x"] } });
+    // What a declaration cannot be.
+    const bad = (body: string): string => loadConfig(writeConfig(dir, body)).errors[0] ?? "";
+    assert.match(bad("languages: [moonbit]\n"), /mapping of language name/);
+    assert.match(bad("languages:\n  moonbit: {}\n"), /`libraryPath`/);
+    assert.match(bad("languages:\n  moonbit: { libraryPath: x.so }\n"), /`extensions`/);
+    assert.match(bad("languages:\n  moonbit: { libraryPath: x.so, extensions: [mbt], expandoChar: ab }\n"), /one character/);
+    assert.match(bad("languages:\n  Rust: { libraryPath: x.so, extensions: [rs] }\n"), /already a language ast-grep has built in/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("config: the 0.4 keys are refused with the 0.5 spelling, not read as something else", () => {
   // `paths:` is `files:`; `rules:` no longer names directories but rules;
   // `at:` moved under each rule. Silently ignoring any of these would run

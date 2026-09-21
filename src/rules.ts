@@ -37,6 +37,7 @@ import {
   PROBE_PREFIX,
   STATE_ARMS,
   SUBJECTS,
+  type CustomLanguages,
   type Criterion,
   type CriterionDetail,
   type Grouping,
@@ -165,7 +166,7 @@ export const DEFAULT_UNSURE_BELOW = 0.5;
 
 
 
-export function normalizeLanguage(raw: unknown): Language | null {
+export function normalizeLanguage(raw: unknown, custom: CustomLanguages = {}): Language | null {
   if (typeof raw !== "string") return null;
   const t = raw.trim();
   // `includes` on a readonly tuple does not narrow, so the membership test and
@@ -175,14 +176,19 @@ export function normalizeLanguage(raw: unknown): Language | null {
   const alias = LANG_ALIASES[t.toLowerCase()];
   if (alias) return alias;
   const exact = LANGUAGES.find((l) => l.toLowerCase() === t.toLowerCase());
-  return exact ?? null;
+  if (exact) return exact;
+  // A declared language comes back spelled as the declaration spells it:
+  // ast-grep matches a rule's `language:` against its sgconfig key exactly,
+  // and `MoonBit` against a `moonbit:` key is "cannot parse rule".
+  const declared = Object.keys(custom).find((name) => name.toLowerCase() === t.toLowerCase());
+  return declared ?? null;
 }
 
 /**
  * Validate and normalize one rule object.
  * Returns `{rule}` or `{error}`; never throws.
  */
-export function normalizeRule(raw: any, where = "rule"): RuleResult {
+export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages = {}): RuleResult {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
     return { error: `${where}: not a mapping` };
   }
@@ -212,10 +218,13 @@ export function normalizeRule(raw: any, where = "rule"): RuleResult {
   const list = Array.isArray(rawLangs) ? rawLangs : [rawLangs];
   const languages: Language[] = [];
   for (const l of list) {
-    const norm = normalizeLanguage(l);
+    const norm = normalizeLanguage(l, custom);
     if (!norm) {
+      const declared = Object.keys(custom);
       return {
-        error: `${id}: unknown language ${JSON.stringify(l)}; expected one of ${LANGUAGES.join(", ")}`,
+        error:
+          `${id}: unknown language ${JSON.stringify(l)}; expected one of ${LANGUAGES.join(", ")}` +
+          (declared.length > 0 ? `, or one declared in the config: ${declared.join(", ")}` : ", or one declared in the config's `languages:`"),
       };
     }
     if (!languages.includes(norm)) languages.push(norm);
@@ -469,26 +478,27 @@ function normalizeJudgment(raw: any, id: string): RuleJudgment | { error: string
  * null when the name is not a language at all, so a directory called
  * `experimental` under a rules root is not mistaken for a language.
  */
-export function languageDirGrammars(dir: string): readonly Language[] | null {
+export function languageDirGrammars(dir: string, custom: CustomLanguages = {}): readonly Language[] | null {
   const listed = LANGUAGE_DIRS[dir];
   if (listed) return listed;
-  const one = normalizeLanguage(dir);
+  const one = normalizeLanguage(dir, custom);
   return one ? [one] : null;
 }
 
 /**
- * The layout convention: `<lang>/<id>/rule.yml` under a rules root.
- *
- * Only that shape, so a project's flat `rules/mine.yml` or a rule file
- * passed by path is a rule file as it always was.
+ * The layout convention: a path ending `<lang>/<id>/rule.yml`, where
+ * `<lang>` is a language directory -- one of the listed families, a
+ * grammar's own name, or a declared language's. Null for any other path,
+ * so a flat `rules/mine.yml`, a rule file passed by path, and a directory
+ * named for nothing in particular are rule files as they always were.
  */
-function layoutOf(path: string): { languageDir: string; id: string } | null {
+function layoutOf(path: string, custom: CustomLanguages = {}): { languageDir: string; id: string } | null {
   const parts = path.split(/[\\/]/);
   if (parts.length < 3) return null;
   if (!/^rule\.ya?ml$/.test(parts[parts.length - 1]!)) return null;
   const id = parts[parts.length - 2]!;
   const dir = parts[parts.length - 3]!;
-  return languageDirGrammars(dir) ? { languageDir: dir, id } : null;
+  return languageDirGrammars(dir, custom) ? { languageDir: dir, id } : null;
 }
 
 /**
@@ -748,7 +758,11 @@ function canonical(value: unknown): string {
  * language by design, and a copy drifts; the warning is where a deliberate
  * difference gets a comment and an accidental one gets fixed.
  */
-export function loadRules(paths: string | string[]): { rules: Rule[]; errors: string[]; warnings: string[] } {
+export function loadRules(
+  paths: string | string[],
+  /** Languages the config declared: a rule may name one, and a directory may be called one. */
+  custom: CustomLanguages = {},
+): { rules: Rule[]; errors: string[]; warnings: string[] } {
   const files: Array<{ path: string; missing?: boolean }> = [];
   for (const p of Array.isArray(paths) ? paths : [paths]) {
     let st;
@@ -804,11 +818,11 @@ export function loadRules(paths: string | string[]): { rules: Rule[]; errors: st
           ? value.rules
           : [value];
 
-      const layout = layoutOf(path);
+      const layout = layoutOf(path, custom);
       items.forEach((item: unknown, j: number) => {
         const where =
           items.length > 1 || docs.length > 1 ? `${path}#${docs.length > 1 ? i : j}` : path;
-        const { rule, error } = normalizeRule(item, where);
+        const { rule, error } = normalizeRule(item, where, custom);
         if (error || !rule) {
           errors.push(error ?? `${where}: could not be normalized`);
           return;
@@ -821,7 +835,7 @@ export function loadRules(paths: string | string[]): { rules: Rule[]; errors: st
             errors.push(`${where}: id \`${rule.id}\` must be the directory's name \`${layout.id}\``);
             return;
           }
-          const admitted = languageDirGrammars(layout.languageDir)!;
+          const admitted = languageDirGrammars(layout.languageDir, custom)!;
           const outside = rule.languages.filter((l) => !admitted.includes(l));
           if (outside.length > 0) {
             errors.push(

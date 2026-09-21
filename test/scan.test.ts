@@ -11,6 +11,29 @@ import { isMatcherRule } from "../src/types.ts";
 import { probeMatch, scoreRule, noulRule } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
 
+await testAsync("scan: a declared language reaches ast-grep as its own sgconfig, and a library that will not load is an error, not a silence", async () => {
+  // ast-grep takes a custom grammar through `customLanguages` in an
+  // sgconfig.yml. jev-lint writes one beside the rule file it already
+  // writes, with the library path as given -- absolute by the time the
+  // config layer is done -- and passes `-c`.
+  const { sgconfigFor, runAstGrep, AstGrepError } = await import("../src/scan.ts");
+  const languages = { moonbit: { libraryPath: "/opt/parsers/moonbit.dylib", extensions: ["mbt"], expandoChar: "_" } };
+  const text = sgconfigFor(languages);
+  assert.ok(text);
+  assert.match(text!, /customLanguages:/);
+  assert.match(text!, /moonbit:/);
+  assert.match(text!, /libraryPath: \/opt\/parsers\/moonbit\.dylib/);
+  assert.match(text!, /expandoChar: _/);
+  assert.equal(sgconfigFor({}), null, "no declaration, no config file, and no -c");
+  // The wiring: a library that does not exist has to surface as the named
+  // error a configuration mistake gets, not as zero matches.
+  const rule = noulRule({ id: "m", language: "moonbit", rule: { kind: "function_definition" } }, languages);
+  await assert.rejects(
+    () => runAstGrep([rule], ["src"], { languages }),
+    (err: unknown) => err instanceof AstGrepError && /moonbit|library|dylib/i.test(String((err as Error).message)),
+  );
+});
+
 test("scan: emitted rules are valid ast-grep rules with jev-lint fields stripped", () => {
   const r = scoreRule({ at: 2, note: "x" });
   assert.ok(isMatcherRule(r));

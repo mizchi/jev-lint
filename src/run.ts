@@ -31,6 +31,7 @@ import { commitSubjects, squashSubjects } from "./commits.ts";
 import { textSubjects } from "./text.ts";
 import { FileIndex, isUnder, tryReadFile } from "./files.ts";
 import type {
+  CustomLanguages,
   Answer,
   Batch,
   Finding,
@@ -61,6 +62,8 @@ export interface CollectOptions {
   diffRanges?: ChangedRanges | null;
   /** Paths under the roots whose files are never subjects: fixtures with planted defects, vendored code. */
   exclude?: string[];
+  /** Grammars ast-grep does not have built in, declared by the config. */
+  languages?: CustomLanguages;
   cwd?: string;
 }
 
@@ -85,13 +88,14 @@ export async function collectSubjects({
   arm = null,
   diffRanges = null,
   exclude = [],
+  languages = {},
   cwd = process.cwd(),
 }: CollectOptions): Promise<CollectResult> {
   const isExcluded = (file: string) => exclude.some((p) => isUnder(file, p));
   let excluded = 0;
-  const { matches, probes, stderr } = await runAstGrep(rules, paths, { cwd });
-  const languages = ruleLanguages(rules);
-  const symbols = buildSymbols(probes, languages);
+  const { matches, probes, stderr } = await runAstGrep(rules, paths, { cwd, languages });
+  const grammars = ruleLanguages(rules);
+  const symbols = buildSymbols(probes, grammars);
   const byId = new Map(rules.map((r) => [r.id, r]));
 
   const sources = new Map<string, string>();
@@ -271,6 +275,8 @@ export interface RunOptions {
   diffRanges?: ChangedRanges | null;
   /** Paths under the roots whose files are never judged. */
   exclude?: string[];
+  /** Grammars ast-grep does not have built in, declared by the config. */
+  languages?: CustomLanguages;
   cachePath?: string | null;
   force?: boolean;
   dryRun?: boolean;
@@ -330,6 +336,7 @@ export async function run({
   unsureBelow = null,
   diffRanges = null,
   exclude = [],
+  languages = {},
   cachePath = null,
   force = false,
   dryRun = false,
@@ -357,7 +364,7 @@ export async function run({
 
   const collected = commits
     ? collectCommits(rules, commits.range, cwd, commits.label, commits.squash)
-    : await collectSubjects({ rules, paths, arm, diffRanges, exclude, cwd });
+    : await collectSubjects({ rules, paths, arm, diffRanges, exclude, languages, cwd });
   const { subjects, symbols, sources, tests, stderr, skippedByDiff, excluded, duplicateGrammars, ignored, unpaired } = collected;
   const commitStats = commits && "commits" in collected ? (collected as { commits: RunResult["commits"] }).commits : undefined;
 

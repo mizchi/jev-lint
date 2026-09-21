@@ -6,6 +6,22 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/findings.md](docs/findings.md).
 
+## Unreleased
+
+### Added
+
+- `languages:` in the config declares a grammar ast-grep does not have
+  built in -- a tree-sitter parser compiled to a dynamic library, as
+  ast-grep's own `customLanguages` takes it. A rule may then name it, a
+  rule directory may be called it, and jev-lint writes ast-grep an
+  `sgconfig.yml` per run with the library path resolved from the config's
+  directory. Structural probes ship for `moonbit`
+  (moonbitlang/tree-sitter-moonbit), so `subject: enclosing`, the `graph`
+  arm and the `paired` arm work there; any other declared language runs on
+  `bare` and `located`. The caveats each language brings -- the name must
+  match the declaration exactly, `expandoChar` or no patterns, fields may
+  not exist -- are in `docs/reference.md`.
+
 ## 0.5.0 — 2026-09-21
 
 ### Breaking

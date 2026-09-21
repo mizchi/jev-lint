@@ -38,6 +38,7 @@ export async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, clien
     concurrency: opts.concurrency,
     batchSize: opts.batchSize,
     model: opts.model,
+    languages: opts.languages,
     client,
     dryRun: opts.dryRun,
   });
@@ -89,6 +90,7 @@ export async function cmdCalibrate({ rules, paths, diffRanges, opts, client = nu
       concurrency: opts.concurrency,
       batchSize: opts.batchSize,
       model: opts.model,
+      languages: opts.languages,
       client,
     });
     runs.push(r.all);

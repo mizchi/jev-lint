@@ -35,6 +35,22 @@ test("rules: the sources are the shipped packs and, when it exists, .jev-lint/ru
   }
 });
 
+test("rules: a declared language is one a rule may name, and an undeclared one is still unknown", () => {
+  const moonbit = { moonbit: { libraryPath: "/opt/moonbit.so", extensions: ["mbt"] } };
+  assert.equal(normalizeLanguage("moonbit"), null, "not built in");
+  assert.equal(normalizeLanguage("moonbit", moonbit), "moonbit");
+  assert.equal(normalizeLanguage("MoonBit", moonbit), "moonbit", "named as the declaration spells it: that is what ast-grep matches on");
+  assert.equal(normalizeLanguage("elm", moonbit), null, "declaring one language does not open the door to another");
+  assert.equal(normalizeLanguage("Rust", moonbit), "Rust", "and the built-ins are unaffected");
+  // A rule may name it, and a rule directory may be called it.
+  const { rule, error } = normalizeRule({ id: "m", language: "moonbit", rule: { kind: "function_definition" }, ask: "a." }, "rule", moonbit);
+  assert.equal(error, undefined, error ?? "");
+  assert.deepEqual(rule!.languages, ["moonbit"]);
+  assert.match(normalizeRule({ id: "m", language: "moonbit", rule: { kind: "x" }, ask: "a." }).error!, /unknown language/);
+  assert.deepEqual(languageDirGrammars("moonbit", moonbit), ["moonbit"]);
+  assert.equal(languageDirGrammars("moonbit"), null);
+});
+
 test("rules: the config's `rules:` selects and overrides, and names nothing it cannot find", () => {
   const ts = normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a" }).rule!;
   const rs = normalizeRule({ id: "a", language: "Rust", rule: { kind: "x" }, ask: "a" }).rule!;

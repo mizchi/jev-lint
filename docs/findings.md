@@ -1334,3 +1334,46 @@ What was not built: a README's code examples against the module's public
 API. The claim is in one file and the evidence in another, which needs an
 arm like `paired` for Markdown, and that is a second cross-file arm to
 justify rather than a rule to write.
+
+## 17. A grammar ast-grep does not have: MoonBit
+
+ast-grep parses 26 grammars and takes any other as a tree-sitter parser
+compiled to a dynamic library, declared in its `sgconfig.yml` under
+`customLanguages`. jev-lint never wrote one of those, so a language
+outside the 26 was not reachable at all. `languages:` in the config now
+says the same thing, and a run writes ast-grep an sgconfig beside the
+rule file it already writes.
+
+Measured on [moonbitlang/tree-sitter-moonbit](https://github.com/moonbitlang/tree-sitter-moonbit),
+built with `tree-sitter build --output moonbit.dylib` (1.2 MB, about a
+minute), against a four-function MoonBit file:
+
+- **The rule's `language:` must be the sgconfig key, exactly.** `moonbit`
+  loads; `MoonBit` and `Moonbit` are `Cannot parse rule`. jev-lint
+  normalises case at the config boundary and emits the declaration's
+  spelling, so a rule may say either.
+- **`expandoChar` decides whether patterns work at all.** With
+  `expandoChar: _`, `pattern: "fn $NAME() -> Int { 1 }"` matches and
+  `$NAME` captures `f`. Without it the same pattern is
+  `Pattern contains an ERROR node` and matches nothing -- a silent zero,
+  which is the failure this tool exists to avoid. A `kind:` + `has:` rule
+  needs no expando.
+- **That grammar declares no fields.** `node-types.json` gives
+  `function_definition` an empty `fields`, so `has: { field: name, ... }`
+  -- what every shipped naming rule uses -- matches nothing. The working
+  form is `has: { kind: function_identifier, stopBy: end, pattern: $NAME }`,
+  and the shipped probes for `moonbit` are written that way.
+- **An absolute `libraryPath` in a config anywhere works.** The sgconfig
+  jev-lint writes lives in a temp directory, so the config layer resolves
+  the path from the config's own directory first.
+
+End to end, with one project rule under `.jev-lint/rules/moonbit/`: three
+subjects, one request, $0.00005, and `save_and_total` -- which totals and
+does not save -- answered 0.79 against a 0.55 cutoff while `total` and
+`is_empty` passed. The probes give the file a symbol table:
+`function:total (pub), function:is_empty (pub), function:save_and_total
+(pub), test:total sums the items (test)`, so `enclosing`, `graph` and
+`paired` are available and not only `bare` and `located`.
+
+No MoonBit rule ships. A shipped rule needs fixtures, an accepted
+baseline and a fitted cutoff, and the cutoff above is a guess.

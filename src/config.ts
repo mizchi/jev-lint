@@ -24,9 +24,9 @@
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import YAML from "yaml";
-import { GROUP_MODES, SEVERITIES, STATE_ARMS } from "./types.ts";
+import { GROUP_MODES, LANGUAGES, SEVERITIES, STATE_ARMS } from "./types.ts";
 import { API_KEY_VARS, BASE_URL_VARS, fromEnv } from "./jev.ts";
-import type { GroupMode, Severity, StateArm } from "./types.ts";
+import type { CustomLanguage, CustomLanguages, GroupMode, Severity, StateArm } from "./types.ts";
 
 /** The file names looked for, in order, walking up from the working directory. */
 /**
@@ -75,6 +75,11 @@ export interface Config {
   ruleBatchCap?: number;
   retry?: number;
   unsureBelow?: number | null;
+  /**
+   * Grammars ast-grep does not have built in, as its own `customLanguages`
+   * takes them; `libraryPath` is resolved from the config's directory.
+   */
+  languages?: CustomLanguages;
 }
 
 export interface LoadedConfig {
@@ -130,7 +135,7 @@ export function loadConfig(path: string | null): LoadedConfig {
   const src = raw as Record<string, unknown>;
 
   const KNOWN = new Set([
-    "files", "exclude", "rules", "cache", "model", "baseUrl", "apiKeyEnv", "group", "arm",
+    "files", "exclude", "rules", "languages", "cache", "model", "baseUrl", "apiKeyEnv", "group", "arm",
     "concurrency", "batchSize", "ruleBatchCap", "retry", "unsureBelow",
   ]);
   // The 0.4 spellings, refused by name: a key read as nothing would run
@@ -239,7 +244,57 @@ export function loadConfig(path: string | null): LoadedConfig {
     } else errors.push(`${where("unsureBelow")} must be null or a number from 0 to 1`);
   }
 
+  if (src.languages !== undefined) {
+    if (typeof src.languages !== "object" || src.languages === null || Array.isArray(src.languages)) {
+      errors.push(`${where("languages")} must be a mapping of language name to { libraryPath, extensions, expandoChar }`);
+    } else {
+      const languages: CustomLanguages = {};
+      const base = dirname(resolve(path));
+      for (const [name, v] of Object.entries(src.languages as Record<string, unknown>)) {
+        const declared = customLanguage(v, base);
+        if (typeof declared === "string") {
+          errors.push(`${path}: \`languages.${name}\` ${declared}`);
+          continue;
+        }
+        if (LANGUAGES.some((l) => l === name)) {
+          errors.push(`${path}: \`languages.${name}\` is already a language ast-grep has built in; a declaration cannot replace one`);
+          continue;
+        }
+        languages[name] = declared;
+      }
+      config.languages = languages;
+    }
+  }
+
   return { config, path, errors };
+}
+
+/**
+ * One declared language as written, normalized; a string says what is
+ * wrong with it. The library path is resolved from the config's directory,
+ * which is what a reader of that file means by a relative path -- jev-lint
+ * writes ast-grep's sgconfig elsewhere, so the path has to survive the move.
+ */
+function customLanguage(v: unknown, base: string): CustomLanguage | string {
+  if (typeof v !== "object" || v === null || Array.isArray(v)) return "must be a mapping of libraryPath, extensions and expandoChar";
+  const o = v as Record<string, unknown>;
+  for (const k of Object.keys(o)) {
+    if (!["libraryPath", "extensions", "expandoChar"].includes(k)) return `has an unknown field \`${k}\`; the fields are libraryPath, extensions, expandoChar`;
+  }
+  if (typeof o.libraryPath !== "string" || o.libraryPath.trim() === "") {
+    return "needs `libraryPath`, the tree-sitter parser compiled to a dynamic library (`tree-sitter build --output x.so`)";
+  }
+  if (!Array.isArray(o.extensions) || o.extensions.length === 0 || o.extensions.some((e) => typeof e !== "string" || e.trim() === "")) {
+    return "needs `extensions`, a non-empty list of the file extensions it claims";
+  }
+  if (o.expandoChar !== undefined && (typeof o.expandoChar !== "string" || [...o.expandoChar].length !== 1)) {
+    return "`expandoChar` is one character: what `$` becomes inside a pattern, for a language where `$VAR` is not valid syntax";
+  }
+  return {
+    libraryPath: resolve(base, o.libraryPath.trim()),
+    extensions: (o.extensions as string[]).map((e) => e.trim().replace(/^\./, "")),
+    ...(o.expandoChar === undefined ? {} : { expandoChar: o.expandoChar }),
+  };
 }
 
 /** One rule's setting as written, normalized; a string says what is wrong with it. */
@@ -298,6 +353,18 @@ files: [src]
 rules:
 ${ruleIds.map((id) => `  ${id}: on`).join("\n")}
 
+# A grammar ast-grep does not have built in: a tree-sitter parser compiled to
+# a dynamic library (\`tree-sitter build --output moonbit.dylib\`), named here
+# as ast-grep's own \`customLanguages\` names it. The name is what a rule's
+# \`language:\` must say, exactly. \`expandoChar\` is what \`$\` becomes inside a
+# pattern, needed where \`$VAR\` is not valid syntax -- without it a pattern
+# with a metavariable matches nothing.
+# languages:
+#   moonbit:
+#     libraryPath: parsers/moonbit.dylib
+#     extensions: [mbt]
+#     expandoChar: _
+
 # The verdict cache, keyed on each rule and each subject, meant to be
 # committed: a run over the same commit answers from it, and CI can lint
 # from it with no API key. \`none\` disables it. Treat it as trusted input:
@@ -349,6 +416,8 @@ export interface Configurable {
   rulesAreShipped: boolean;
   paths: string[];
   exclude: string[];
+  /** Languages declared in the config, by name. */
+  languages: CustomLanguages;
   /** The config's `rules:`, applied after loading; null when the config has none. */
   ruleSettings: Record<string, RuleSetting> | null;
   cache: string;
@@ -379,6 +448,7 @@ export function applyConfig(
 ): void {
   const unset = (...flags: string[]): boolean => !flags.some((f) => explicit.has(f));
 
+  if (config.languages) opts.languages = config.languages;
   if (config.rules) opts.ruleSettings = config.rules;
   if (config.files && opts.paths.length === 0) opts.paths = config.files;
   if (config.exclude && unset("--exclude")) opts.exclude = config.exclude;

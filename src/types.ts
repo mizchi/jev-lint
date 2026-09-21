@@ -31,7 +31,36 @@ export const LANGUAGES = [
   "Python", "Ruby", "Rust", "Scala", "Solidity", "Swift", "Tsx", "TypeScript",
   "Yaml", "Git", "Text",
 ] as const;
-export type Language = (typeof LANGUAGES)[number];
+/**
+ * A built-in name, or a language a config declared. The union keeps the
+ * built-ins spelled correctly where they are written by hand; the open
+ * half is a declared language's name, which is whatever the config called
+ * it -- ast-grep matches a rule's `language:` against its `sgconfig.yml`
+ * key exactly, so there is nothing to normalize it to. `normalizeLanguage`
+ * is the gate: it takes the declarations and returns null for a name that
+ * is neither.
+ */
+export type Language = (typeof LANGUAGES)[number] | (string & {});
+
+/**
+ * A grammar ast-grep does not have built in: a tree-sitter parser compiled
+ * to a dynamic library, as its `customLanguages` takes it.
+ */
+export interface CustomLanguage {
+  /** The compiled parser (.so / .dylib / .dll), absolute by the time a run sees it. */
+  libraryPath: string;
+  /** The file extensions it claims, without the dot. */
+  extensions: string[];
+  /**
+   * The character `$` becomes inside a pattern, for a language where `$VAR`
+   * is not valid syntax. Without it a pattern with a metavariable parses to
+   * an ERROR node and matches nothing -- measured on MoonBit, where `_` works.
+   */
+  expandoChar?: string;
+}
+
+/** Declared languages, by the name a rule's `language:` must use. */
+export type CustomLanguages = Record<string, CustomLanguage>;
 
 /** The one language that is not a grammar. */
 export const COMMIT_LANGUAGE: Language = "Git";

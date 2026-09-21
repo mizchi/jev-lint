@@ -28,6 +28,7 @@ import YAML from "yaml";
 import { PROBE_PREFIX, isMatcherRule } from "./types.ts";
 import { referencedBuiltinUtils, suiteCallRule, testCallRule } from "./testcalls.ts";
 import type {
+  CustomLanguages,
   MatcherRule,
   AstGrepMatch,
   FileSymbols,
@@ -95,6 +96,11 @@ interface LanguageStructure {
   testMarker: RegExp | null;
 }
 
+/** A container matched by kind, named by the first `inner` under it: for a grammar with no fields. */
+function namedBy(kind: string, inner: string): Record<string, unknown> {
+  return { kind, has: { kind: inner, stopBy: "end", pattern: "$JEVNAME" } };
+}
+
 export const STRUCTURE: Partial<Record<Language, LanguageStructure>> = {
   Rust: {
     containers: [
@@ -110,6 +116,34 @@ export const STRUCTURE: Partial<Record<Language, LanguageStructure>> = {
     exportedIf: (text: string) => /^\s*pub(\s|\()/.test(text),
     exports: [],
     testMarker: /#\[\s*(test|tokio::test|async_std::test)\s*\]|#\[\s*cfg\s*\(\s*test\s*\)\s*\]/,
+  },
+  /**
+   * MoonBit, the one declared language this ships probes for.
+   *
+   * The grammar is moonbitlang/tree-sitter-moonbit, and the probes name its
+   * kinds: a probe naming a kind the grammar does not have fails the WHOLE
+   * scan, so a project declaring `moonbit` against another grammar hears a
+   * named ast-grep error rather than silence. Nothing here is a field --
+   * that grammar declares none -- so each container is matched by a rule
+   * that captures the identifier under it.
+   */
+  moonbit: {
+    containers: [
+      { kind: "function_definition", role: "function", nameField: null, rule: namedBy("function_definition", "function_identifier") },
+      { kind: "impl_definition", role: "impl", nameField: null, rule: namedBy("impl_definition", "function_identifier") },
+      { kind: "struct_definition", role: "struct", nameField: null, rule: namedBy("struct_definition", "identifier") },
+      { kind: "enum_definition", role: "enum", nameField: null, rule: namedBy("enum_definition", "identifier") },
+      { kind: "trait_definition", role: "trait", nameField: null, rule: namedBy("trait_definition", "identifier") },
+      { kind: "type_definition", role: "type", nameField: null, rule: namedBy("type_definition", "identifier") },
+      // `test "name" { ... }`: the string is the title, as an ECMAScript
+      // `it(...)` title is, and the block is the body.
+      { kind: "test_definition", role: "test", nameField: null, isTest: true, rule: namedBy("test_definition", "string_literal") },
+    ],
+    imports: ["import_declaration"],
+    /** MoonBit announces visibility in the item's own text, as Rust does. */
+    exportedIf: (text: string) => /^\s*(?:\/\/[^\n]*\n\s*)*pub(\s|\()/.test(text),
+    exports: [],
+    testMarker: null,
   },
   // The four ECMAScript grammars share most kinds, but not all: `ast-grep`
   // REJECTS a rule naming a kind absent from the target grammar, and one
@@ -375,20 +409,50 @@ export interface ScanResult {
   stderr: string;
 }
 
+/**
+ * ast-grep's own config, when a run has a language ast-grep does not have
+ * built in; null when it has none, and then no `-c` is passed. Written
+ * beside the rule file, so the library paths have to be absolute -- the
+ * config layer resolves them from the config's directory before a run
+ * sees them.
+ */
+export function sgconfigFor(languages: CustomLanguages): string | null {
+  const names = Object.keys(languages);
+  if (names.length === 0) return null;
+  return YAML.stringify({
+    customLanguages: Object.fromEntries(
+      names.map((name) => {
+        const l = languages[name]!;
+        return [name, { libraryPath: l.libraryPath, extensions: l.extensions, ...(l.expandoChar ? { expandoChar: l.expandoChar } : {}) }];
+      }),
+    ),
+  });
+}
+
 export async function runAstGrep(
   rules: Rule[],
   paths: string[],
-  { cwd = process.cwd(), maxBuffer = 512 * 1024 * 1024 } = {},
+  { cwd = process.cwd(), maxBuffer = 512 * 1024 * 1024, languages = {} }: { cwd?: string; maxBuffer?: number; languages?: CustomLanguages } = {},
 ): Promise<ScanResult> {
   if (astGrepRules(rules).length === 0 || paths.length === 0) {
     return { matches: [], probes: [], stderr: "" };
   }
-  const languages = ruleLanguages(rules);
+  const grammars = ruleLanguages(rules);
   const dir = mkdtempSync(join(tmpdir(), "jev-lint-"));
   const rulePath = join(dir, "rules.yml");
   try {
-    writeFileSync(rulePath, emitRuleFile(rules, languages));
-    const args = ["scan", "--rule", rulePath, "--json=stream", "--", ...paths];
+    writeFileSync(rulePath, emitRuleFile(rules, grammars));
+    // A declared language reaches ast-grep only through its own config, so
+    // one is written beside the rule file and named with `-c`. Without a
+    // declaration there is none, and ast-grep keeps its usual search.
+    const sgconfig = sgconfigFor(languages);
+    const configPath = join(dir, "sgconfig.yml");
+    if (sgconfig) writeFileSync(configPath, sgconfig);
+    const args = [
+      "scan",
+      ...(sgconfig ? ["-c", configPath] : []),
+      "--rule", rulePath, "--json=stream", "--", ...paths,
+    ];
     let stdout = "";
     let stderr = "";
     try {

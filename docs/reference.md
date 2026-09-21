@@ -1073,6 +1073,49 @@ rule of one's own with a shipped id is a duplicate and the loader says so;
 turn the shipped one off instead. `-R <dir>` loads a directory in place of
 both, for one run.
 
+### A language ast-grep does not have built in
+
+ast-grep parses 26 grammars; anything else is a tree-sitter parser you
+compile and declare. `languages:` in the config says the same thing
+ast-grep's own `customLanguages` does, and jev-lint writes it an
+`sgconfig.yml` of its own per run:
+
+```yaml
+languages:
+  moonbit:
+    libraryPath: parsers/moonbit.dylib   # resolved from this file's directory
+    extensions: [mbt]
+    expandoChar: _
+```
+
+```bash
+git clone --depth 1 https://github.com/moonbitlang/tree-sitter-moonbit
+cd tree-sitter-moonbit && tree-sitter build --output ../parsers/moonbit.dylib
+```
+
+Four things decide whether it works, each measured on MoonBit:
+
+- **The name is the name.** A rule's `language:` must be the key here,
+  spelled the same way; ast-grep answers `Cannot parse rule` for
+  `MoonBit` against a `moonbit:` key. jev-lint normalises case for you,
+  and emits the declaration's spelling.
+- **`expandoChar` or no patterns.** Where `$VAR` is not valid syntax, a
+  `pattern:` with a metavariable parses to an ERROR node and matches
+  nothing, silently. With `expandoChar: _`, `pattern: "fn $NAME() -> Int
+  { 1 }"` matches and `$NAME` captures. A rule written as `kind:` plus
+  `has:` needs none of this.
+- **Fields may not exist.** MoonBit's grammar declares none, so
+  `has: { field: name, ... }` matches nothing there; `has: { kind:
+  function_identifier, stopBy: end, pattern: $NAME }` is the way to
+  capture a name.
+- **Structure is per grammar.** `subject: enclosing`, the `graph` arm and
+  the `paired` arm need to know what a container is. jev-lint ships those
+  probes for `moonbit` (moonbitlang/tree-sitter-moonbit: functions,
+  impls, structs, enums, traits, types, and `test "…" { }` as a test).
+  A different grammar under that name will fail the scan with a named
+  ast-grep error rather than pass silently. Any other declared language
+  runs on `bare` and `located`, which need no probes.
+
 The verdict cache is `.jev-lint/baseline.json`, relative to the config's
 directory, and is meant to be committed: a run over the same commit answers
 from it, and CI lints from it with no API key. It is trusted input --

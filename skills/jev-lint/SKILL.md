@@ -91,7 +91,10 @@ When paths are configured or given, `review` scans only the changed files
 under them, never the whole tree.
 
 **Settings**: `.jev-lint.yaml` (or `jev-lint.yaml`, `.jevlint.yml`, any spelling; two in one directory is an error), nearest one searching upwards, a flag beats
-it. `files:` there lets `jev-lint check` take no argument; `rules:` picks the
+it. `languages:` declares a grammar ast-grep does not have built in (a
+tree-sitter parser compiled to a dynamic library — see
+[the reference](../../docs/reference.md#a-language-ast-grep-does-not-have-built-in);
+MoonBit is measured there). `files:` there lets `jev-lint check` take no argument; `rules:` picks the
 rules, ESLint-style — `fn-name-promises: on`, `rust/fn-name-promises: off`,
 `comment-describes-block: { at: 0.7, severity: error }` — from the shipped
 packs and the project's own `.jev-lint/rules/`; a config with no `rules:`
