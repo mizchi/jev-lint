@@ -22,7 +22,16 @@ state: full
 # (mean 0.64): the widest spread in this pack, and its low pass clears the
 # cutoff by 0.06, so on a package whose __init__ misnames its contents
 # expect a `--retry 3` to matter.
-at: 0.46
+#
+# 2026-09-22, moved to 0.4: at 0.46 `billing`'s own spread (0.24, from the
+# 0.52-0.76 above) was wider than its FN-margin (0.18), which is what "its
+# low pass clears the cutoff by 0.06" already implied -- 0.06 is well
+# inside a 0.24 spread, and `eval --replay`'s interval-aware fit calls that
+# unstable rather than merely worth a retry. The loudest clean is
+# `conftest.py` (mean 0.2633, passes 0.25/0.27/0.27, spread 0.02). 0.4
+# clears `billing` by 0.24 and `conftest.py` by 0.14, both past their own
+# spreads. Same 4 defects caught, same 0 false positives.
+at: 0.4
 axis: file
 severity: info
 rule:

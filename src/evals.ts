@@ -335,9 +335,12 @@ export function scoreEval(
   cases.sort((a, b) => a.rule.localeCompare(b.rule) || a.file.localeCompare(b.file) || a.line - b.line);
 
   // The fit beside the score: what the cutoff WOULD be, for the human reading
-  // the report, never for the verdict.
+  // the report, never for the verdict. `min`/`max` carry each case's own
+  // range across its passes, not just its mean -- see `fitCutoffs`'s
+  // docstring for why a fit needs the range to say whether a gap is stable.
   const meanAnswers = cases.map((c) => ({
-    rule: c.rule, file: c.file, line: c.line, endLine: c.line, value: c.mean, confidence: null,
+    rule: c.rule, file: c.file, line: c.line, endLine: c.line, value: c.mean,
+    min: Math.min(...c.values), max: Math.max(...c.values), confidence: null,
     messageId: null, kind: "noul" as const, ask: "", severity: "warning" as const, message: null, cutoff: 0, margin: 0,
   }));
   const fits = new Map(fitCutoffs(meanAnswers as never, labels, rules).map((f) => [f.rule, f]));

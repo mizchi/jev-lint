@@ -107,6 +107,27 @@ test("evals: a suite is scored at the SHIPPED cutoff on the mean of its passes, 
   assert.deepEqual(c.values, [0.45, 0.55, 0.56]);
 });
 
+test("evals: the fit beside the score is fit on each case's range across passes, not its mean", () => {
+  // A clean case wobbling 0.15-0.25 (mean 0.20) and a defect wobbling
+  // 0.25-0.35 (mean 0.30): the means don't overlap, but the ranges touch at
+  // 0.25. `scoreEval` must hand `fitCutoffs` that range, or the report next
+  // to the shipped `at` keeps telling the same lie `fitCutoffs`'s own tests
+  // catch at the unit level.
+  const rules = [evalRule("a", 0.5)];
+  const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "clean" as const, rule: "a", window: 0 },
+    { line: 2, label: "bad" as const, rule: "a", window: 0 },
+  ] };
+  const passes = [
+    [answer("a", 1, 0.15), answer("a", 2, 0.35)],
+    [answer("a", 1, 0.2), answer("a", 2, 0.3)],
+    [answer("a", 1, 0.25), answer("a", 2, 0.25)],
+  ];
+  const score = scoreEval(passes, labels, rules);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.fitReason, "means separate but the observed ranges overlap; no cutoff is stable here");
+});
+
 /**
  * Enough distinct subjects for `MIN_MARGIN_SUBJECTS` to stop calling the
  * corpus thin: lines 1-2 explicitly bad, 3-4 explicitly clean, 5-6 unlabelled

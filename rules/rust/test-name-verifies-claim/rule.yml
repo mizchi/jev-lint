@@ -10,7 +10,16 @@ state: bare
 # snapshot under a claim that a footer is omitted). The gap is 0.11 and the
 # cutoff sits in its middle; the snapshot axis is what keeps it narrow, in
 # both directions, and is the same limit the TypeScript variant has.
-at: 0.54
+#
+# 2026-09-22, moved to 0.53: on the current baseline the quietest defect is
+# `ledger_test.rs:39` (mean 0.57, passes 0.55/0.57/0.59, spread 0.04); at
+# 0.54 its FN-margin (0.03) sat under that spread, so `eval --replay` read
+# the suite unstable. The loudest clean is `ledger_test.rs:25` (mean
+# 0.4533, passes 0.44/0.45/0.47, spread 0.03). 0.53 clears the defect by
+# 0.04 and the clean by 0.0767, both past their own spreads -- the same
+# narrow snapshot-axis gap as above, just below its old midpoint. Same 17
+# defects caught, same 0 false positives.
+at: 0.53
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

@@ -33,16 +33,25 @@ state: bare
 # Re-measured on evals/ after the suite grew to 31 defects and 52 cleans
 # (16 labelled hard) and a note was added -- see the note below. With it,
 # every defect but one answers 0.76 and up and every clean but one 0.44 and
-# under. The two exceptions both sit at 0.54: profile.test.ts:164, a
+# under. The two exceptions were the closest pair: profile.test.ts:164, a
 # label-only snapshot title ("matches the snapshot with a pending email
 # change") that the model half-reads as a claim about the pending email,
 # and inventory.test.ts:77, a title saying "reserves" over a body that
 # restocks, which `test-name-describes-code` catches at 0.89 and this rule
-# half-catches. No cutoff separates a clean and a defect at the same value.
-# 0.62 chooses precision: the clean is passed with 0.08 to spare, the
-# adjacent-name defect is left to the other rule, and the next real file's
-# clean band, which sits higher than a corpus's, has 0.18 of room.
-at: 0.62
+# half-catches. 0.62 chose precision: the clean was passed with room to
+# spare, the adjacent-name defect left to the other rule.
+#
+# 2026-09-22, moved to 0.66. The suite has grown again since the paragraph
+# above (as of this baseline, profile.test.ts:164 answers a mean of 0.5767,
+# passes 0.60/0.55/0.58, spread 0.05; inventory.test.ts:77 answers a mean
+# of 0.7567, passes 0.76/0.79/0.72, spread 0.07) -- the same closest pair,
+# further apart than they were, but at 0.62 the clean's FP-margin (0.04)
+# was still under its own spread, so `eval --replay`'s interval-aware fit
+# called the suite unstable: a pass this corpus already produced (0.60)
+# very nearly crosses 0.62. 0.66 clears profile.test.ts:164 by 0.0833 and
+# inventory.test.ts:77 by 0.0967, both past their own spreads. Same 37
+# defects caught, same 0 false positives.
+at: 0.66
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

@@ -37,9 +37,26 @@ state: located
 # the boundary is supposed to risk. No decision flips against the pre-port
 # population; the one addition that would have been a miss at the old
 # cutoff is instead correctly caught by the refit one.
-# The matcher is `assignment` with an `identifier` on the left, so a
-# dataclass field default and a module constant are subjects too; `self.x =`
-# (an `attribute` on the left) and tuple unpacking are not.
+#
+# 2026-09-22: the crossing this comment warned about showed up under
+# `eval --replay`'s interval-aware fit, which checks each margin against
+# its OWN case's pass-to-pass spread rather than the mean alone. On the
+# current baseline `users` (jobs.py:32) answers mean 0.5067 (passes
+# 0.57/0.48/0.47, spread 0.10) and `healthy` (test_client.py:60) answers
+# mean 0.3367 (passes 0.33/0.29/0.39, spread 0.10). Clearing `users`' own
+# spread needs `at` <= 0.41; clearing `healthy`'s needs `at` >= 0.43 -- the
+# two requirements do not overlap, so no cutoff resolves both, checked by
+# hand against every two-decimal value from 0.40 to 0.44. `at: 0.44` is
+# kept: it is the shipped value this paragraph already chose deliberately,
+# it still clears `healthy` (FP-margin 0.10, equal to spread), and only
+# `users` remains inside its own noise band (FN-margin 0.07, spread 0.10).
+inconclusive: >-
+  `users` (jobs.py:32, mean 0.5067, spread 0.10) and `healthy`
+  (test_client.py:60, mean 0.3367, spread 0.10) sit close enough, and wobble
+  enough pass to pass, that no cutoff clears both cases' own spread: fixing
+  `users`' FN-margin needs at <= 0.41, fixing `healthy`'s FP-margin needs at
+  >= 0.43. This is the crossing the `at:` comment above already predicted
+  when the corpus was ported, not a new defect in the rule.
 at: 0.44
 axis: file
 severity: warning

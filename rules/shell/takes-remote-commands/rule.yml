@@ -36,7 +36,17 @@ state: located
 # flips over three passes at this value (the safe window, by individual pass,
 # is (0.26, 0.39)). The old cutoff, 0.50, sat inside the new defect floor and
 # would have missed both preview_tunnel.sh and the detached-shell case.
-at: 0.33
+#
+# 2026-09-22, moved to 0.31, inside the safe window named above: 0.33 put
+# `preview_tunnel.sh` (mean 0.38, passes 0.37/0.35/0.42, spread 0.07) at an
+# FN-margin of 0.05, under its own spread, so `eval --replay`'s
+# interval-aware fit read the suite unstable even though the mean-gap
+# midpoint looked fine. The loudest clean, `feature_flag_migration.sh`
+# (mean 0.2633, passes 0.26/0.26/0.27, spread 0.01), has room to spare
+# either way. 0.31 clears `preview_tunnel.sh` by 0.07 (equal to its own
+# spread) and the clean by 0.0467, both past what `eval --replay` requires.
+# Same 10 defects caught, same 0 false positives.
+at: 0.31
 axis: file
 severity: warning
 # Five places a shell meets a socket, over-matched on purpose: the tools that

@@ -92,8 +92,19 @@ export interface CutoffFit {
   rule: string;
   fitted: number | null;
   reason: string;
+  /**
+   * True when the labelled-bad and labelled-clean RANGES do not overlap --
+   * every value any bad case produced on any pass sits above every value any
+   * clean case produced on any pass. Not the same claim as the means not
+   * overlapping: a rule can have wide, non-overlapping means while its
+   * quietest defect and loudest clean each wobble across the boundary from
+   * pass to pass, and that rule is not separable. See `reason` for which of
+   * the two non-separable shapes applies.
+   */
   separable?: boolean;
+  /** The highest value any labelled-clean case reached, on any pass. */
   hiClean?: number;
+  /** The lowest value any labelled-bad case reached, on any pass. */
   loBad?: number;
   bad: number;
   clean: number;
@@ -119,6 +130,17 @@ export type ResolvedLabel = "bad" | "clean" | "unlabeled";
  */
 export type ScoredSubject = Pick<Finding, "rule" | "file" | "line" | "value"> & {
   text?: string;
+  /**
+   * The lowest and highest value this subject's passes actually produced.
+   * Both optional, and independently: a caller that only ever saw one pass
+   * -- or merged its passes to a mean before handing them here -- has no
+   * range to report, and omitting `min`/`max` defaults each to `value`,
+   * a zero-width interval. `fitCutoffs` fits on these, not on `value` alone,
+   * so a caller that wants interval-aware separability has to pass them;
+   * one that does not gets exactly the point-fit this module always did.
+   */
+  min?: number;
+  max?: number;
 };
 
 /** Largest step between consecutive sorted values, and where it sits. */
@@ -306,13 +328,36 @@ export function stabilityReport(
 /**
  * Fit cutoffs against a labeled corpus, one per rule.
  *
- * Where the labeled-bad answers all sit above the labeled-clean ones, the
- * cutoff is the midpoint of that gap: not "highest clean answer plus a
- * hair", which sits exactly on the false-positive boundary and is crossed
- * by the next sample -- measured happening after adding ten functions to a
- * corpus. Where the two sets overlap, no cutoff is clean, and the one
- * maximising recall minus false positives is returned with `separable:
- * false` and a reason saying so.
+ * Fits on each case's RANGE (`min`..`max` across whatever passes the caller
+ * saw), not its mean: a mean is a single point, and a single point cannot
+ * say whether a cutoff placed near it is stable. Where every labelled-bad
+ * case's range sits entirely above every labelled-clean case's range, the
+ * cutoff is the midpoint of the gap between the nearest edges -- the
+ * bad-range floor and the clean-range ceiling -- not "highest clean answer
+ * plus a hair", which sits exactly on the false-positive boundary and is
+ * crossed by the next sample. That midpoint is reported `separable: true`.
+ *
+ * Ranges can overlap two different ways, and they are told apart because
+ * they call for different fixes:
+ *
+ *   - The MEANS also overlap: no cutoff is clean on this corpus even
+ *     ignoring wobble. `separable: false`, the existing "no separating
+ *     cutoff" reason, and a best-trade-off fit.
+ *   - The means DON'T overlap but the ranges do: a cutoff placed between the
+ *     means looks clean on average and is crossed by ordinary pass-to-pass
+ *     noise, on the very case that sets the gap. This corpus cannot support
+ *     ANY cutoff yet, which is a more useful statement than `separable:
+ *     true` -- that flag used to mean "the means don't overlap", which is
+ *     weaker than what a reader takes `separable` to promise. Reported
+ *     `separable: false` too, with its own reason distinguishing it from
+ *     the case above, and a best-trade-off fit as a starting point, not a
+ *     calibration.
+ *
+ * A case with no `min`/`max` (see `ScoredSubject`) has a zero-width range at
+ * its `value`, so a caller that never measured more than one pass -- or
+ * merged its passes to a mean before calling here -- gets exactly the
+ * point-based fit this module always did; interval-awareness is opt-in by
+ * supplying the range.
  *
  * A rule with no labeled bad or no labeled clean answer gets `fitted: null`
  * and the reason; there is nothing to fit against. The caller falls back to
@@ -328,46 +373,70 @@ export function fitCutoffs(all: ScoredSubject[], labels: Labels, rules: Rule[]):
     byRule.get(f.rule)!.push({ ...f, label });
   }
 
+  // A case with no explicit range is a point: both edges sit at its value,
+  // which is what makes the single-pass caller's fit identical to today's.
+  const lowOf = (a: ScoredSubject): number => a.min ?? a.value!;
+  const highOf = (a: ScoredSubject): number => a.max ?? a.value!;
+
   const fits: CutoffFit[] = [];
   for (const rule of rules) {
     const answers = byRule.get(rule.id) ?? [];
     const scale = scaleOf(rule);
-    const bad = answers.filter((a) => a.label === "bad").map((a) => a.value!) as number[];
-    const clean = answers.filter((a) => a.label === "clean").map((a) => a.value!) as number[];
+    const badAnswers = answers.filter((a) => a.label === "bad");
+    const cleanAnswers = answers.filter((a) => a.label === "clean");
 
-    if (bad.length === 0 || clean.length === 0) {
+    if (badAnswers.length === 0 || cleanAnswers.length === 0) {
       fits.push({
         rule: rule.id,
         fitted: null,
-        reason: bad.length === 0 ? "no labeled violations matched" : "no labeled clean matches",
-        bad: bad.length,
-        clean: clean.length,
+        reason: badAnswers.length === 0 ? "no labeled violations matched" : "no labeled clean matches",
+        bad: badAnswers.length,
+        clean: cleanAnswers.length,
       });
       continue;
     }
 
-    const hiClean = Math.max(...clean);
-    const loBad = Math.min(...bad);
-    const separable = loBad > hiClean;
-    // Separable: put it in the middle of the gap. Overlapping: no cutoff is
-    // clean, so take the one maximising (recall - false positives) and say so.
-    const fitted = separable ? round2((hiClean + loBad) / 2) : bestTradeoff(answers, scale);
+    // The edges the ranges actually reached: the loudest a clean case got on
+    // any pass, and the quietest a bad case got on any pass.
+    const hiClean = Math.max(...cleanAnswers.map(highOf));
+    const loBad = Math.min(...badAnswers.map(lowOf));
+    const rangesSeparable = loBad > hiClean;
+
+    // The same comparison on the means alone, to tell the two non-separable
+    // shapes apart -- ranges overlapping the means also overlap, from
+    // ranges overlapping only because of pass-to-pass wobble.
+    const meanHiClean = Math.max(...cleanAnswers.map((a) => a.value!));
+    const meanLoBad = Math.min(...badAnswers.map((a) => a.value!));
+    const meansSeparable = meanLoBad > meanHiClean;
+
+    let fitted: number;
+    let reason: string;
+    if (rangesSeparable) {
+      fitted = round2((hiClean + loBad) / 2);
+      reason = "midpoint of the clean/violation gap";
+    } else if (meansSeparable) {
+      fitted = bestTradeoff(answers, scale);
+      reason = "means separate but the observed ranges overlap; no cutoff is stable here";
+    } else {
+      fitted = bestTradeoff(answers, scale);
+      reason = "no separating cutoff; best trade-off";
+    }
     const { tp, fp, fn } = score(answers, fitted);
 
     fits.push({
       rule: rule.id,
       fitted,
-      separable,
+      separable: rangesSeparable,
       hiClean: round2(hiClean),
       loBad: round2(loBad),
-      bad: bad.length,
-      clean: clean.length,
+      bad: badAnswers.length,
+      clean: cleanAnswers.length,
       precision: tp + fp > 0 ? round2(tp / (tp + fp)) : null,
       recall: tp + fn > 0 ? round2(tp / (tp + fn)) : null,
       tp,
       fp,
       fn,
-      reason: separable ? "midpoint of the clean/violation gap" : "no separating cutoff; best trade-off",
+      reason,
     });
   }
   return fits;

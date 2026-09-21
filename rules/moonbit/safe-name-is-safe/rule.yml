@@ -20,7 +20,17 @@ state: located
 # is wide enough that the cutoff was never the difficult number here. The
 # wording of the loop clause was; see
 # experiments/reports/moonbit-safe-name-is-safe/REPORT.md.
-at: 0.39
+#
+# 2026-09-22, moved to 0.33: `eval --replay`'s current baseline has
+# `oldest_or_default` (queue.mbt:51) at mean 0.5333, passes 0.45/0.61/0.54,
+# spread 0.16 -- wider than the 0.13 recorded above, and at 0.39 its
+# FN-margin (0.14) came in under that spread, so the suite read unstable.
+# The loudest clean is `try_config`, now at mean 0.18 (config.mbt:117,
+# passes 0.16/0.18/0.20, spread 0.04). 0.33 clears `oldest_or_default` by
+# 0.20 and `try_config` by 0.15, both past their own spreads, and is inside
+# the same clean/defect gap the 2026-09-21 fit already found. Same 5
+# defects caught, same 0 false positives.
+at: 0.33
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

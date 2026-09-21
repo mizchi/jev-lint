@@ -36,7 +36,22 @@ state: located
 # up from 0.59: worst-pass headroom is 0.08 on the clean side and 0.09 on
 # the defect side -- tighter than the other three languages' refits,
 # because `has_entries`'s wobble band is itself wide.
-at: 0.71
+#
+# 2026-09-22, refit with `jev-lint eval --replay` against this same
+# baseline, after `fitCutoffs` started fitting on each case's RANGE across
+# its three passes instead of its mean. 0.71 put the mean-gap midpoint
+# between `has_entries` (mean 0.61) and `purge` (mean 0.77) but never
+# checked either case's own wobble: `purge`'s passes ran 0.71/0.78/0.81
+# (spread 0.10) and its FN-margin at 0.71 was only 0.06 -- smaller than its
+# own spread, so `eval --replay` called this suite unstable. `at: 0.67` is
+# the highest two-decimal cutoff whose FN-margin against `purge` (0.10, its
+# mean minus 0.67) still clears `purge`'s own spread, and the lowest whose
+# FP-margin against `has_entries` (mean 0.61, passes 0.59/0.59/0.65, spread
+# 0.06) still clears ITS spread -- both margins land exactly at their
+# case's own spread, which is the tightest this corpus supports without new
+# fixtures. Same 8 defects caught, same 0 false positives; only the cutoff
+# moved.
+at: 0.67
 axis: file
 severity: warning
 # MoonBit writes a doc comment as `///|` followed by `/// ...` lines, and an

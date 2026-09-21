@@ -12,6 +12,18 @@
 # unseen clean band tops at 0.50 -- 0.05 of headroom, which is why this
 # ships at `severity: info`. Full account in
 # experiments/reports/b-guarantee-names/REPORT.md.
+#
+# 2026-09-22, moved to 0.54: `eval --replay`'s interval-aware fit reports
+# this suite's own mean-gap midpoint at 0.42, but that number ignores the
+# 0.50 unseen-repository clean band above -- moving all the way down would
+# spend the headroom this rule was deliberately set above its own corpus's
+# midpoint to keep. The actual defect was narrower: `pure.ts:380` (mean
+# 0.5533, passes 0.55/0.55/0.56, spread 0.01) had an FN-margin of 0.00 at
+# 0.55, under its own (tiny) spread, so the suite read unstable on a
+# wobble of one hundredth. 0.54 is the smallest move that clears it (margin
+# 0.0133, rounds to 0.01, equal to the spread) while leaving 0.04 of the
+# 0.05 headroom against the unseen clean band intact. Same 13 defects
+# caught, same 0 false positives.
 id: pure-name-is-pure
 languages:
   - TypeScript
@@ -21,7 +33,7 @@ languages:
 kind: noul
 subject: node
 state: local
-at: 0.55
+at: 0.54
 rule:
   any:
     - all:

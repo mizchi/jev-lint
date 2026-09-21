@@ -13,7 +13,22 @@ state: local
 # `error`, which is what a branch that gives up earns; and `debug` for
 # deleting one record was missed at 0.27, so the case says what it does --
 # every record of a tenant.
-at: 0.6
+#
+# 2026-09-22, moved to 0.49: keeping 0.6 for cross-language alignment with
+# typescript stopped being free once `jev-lint eval --replay` started
+# checking each case's own pass-to-pass range, not just its mean.
+# `worker.mbt:39` (mean 0.6267, passes 0.60/0.62/0.66, spread 0.06) is the
+# quietest defect; at 0.6 its FN-margin was 0.03, under its own spread, so
+# the suite came back unstable -- a pass this corpus already produced
+# (0.60) sits AT the old cutoff. 0.49 is the mean-gap midpoint the 2026-09-
+# 21 fit already computed and set aside for consistency; it clears
+# `worker.mbt:39` by 0.14 and the loudest clean, `worker.mbt:53` (mean
+# 0.3567, passes 0.34/0.35/0.38, spread 0.04), by 0.13 -- both well past
+# their own spreads. Same 4 defects caught, same 0 false positives; the
+# alignment with typescript's 0.6 is now a coincidence of two independently
+# fitted corpora rather than a deliberate match, which is what per-language
+# fitting always meant to be.
+at: 0.49
 axis: file
 severity: warning
 # Two shapes reach a leveled logger in MoonBit. A package call --

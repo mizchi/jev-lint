@@ -17,7 +17,32 @@ state: located
 # (0.47-0.71), `bytes` bound to a String (0.32-0.72) and `ids` bound to
 # names (0.13-0.60). 0.5 flags the first two on the mean and misses `ids`;
 # no cutoff holds all three steady, so this is the residue, not a fit.
-at: 0.5
+#
+# 2026-09-22: `eval --replay`'s interval-aware fit gives this residue a
+# name instead of a shrug. On the current baseline `ids` (worker.rs:46,
+# "holds `owner_name` cloned from each job, while Job has an `id` field
+# that is not used") answers mean 0.4367, passes 0.40/0.54/0.37 -- already
+# below 0.5 on the mean, a real miss (FN-margin -0.06), not a boundary
+# wobble a cutoff could fix: 0.54 would have to be within `ids`' spread of
+# the cutoff, and it is, but so is a cutoff of 0.30, because the spread
+# (0.17) spans most of the gap this rule has to work in. Lowering `at` to
+# catch it costs `ttl` (cache.rs:46, a `Duration` correctly named, "terse
+# and accurate"), whose own wobble runs 0.19-0.38 -- wider than the 0.25-
+# 0.39 recorded above -- and any `at` under roughly 0.50 puts its own
+# spread inside the cutoff too. That trade is refused, same as
+# `shell/installs-persistence` and `moonbit/var-name-describes-value`
+# refuse theirs (see their own `at:` comments). What the fit DOES buy for
+# free: `at: 0.52` clears `ttl`'s FP-margin (0.2033, past its own 0.19
+# spread) without touching `ids` or any other decision -- precision and
+# recall unchanged (1.00 / 0.90, the same accepted miss as before).
+inconclusive: >-
+  `ids` (worker.rs:46, mean 0.4367, spread 0.17) is a real, wobbly miss --
+  its passes ran 0.37/0.40/0.54, straddling any cutoff this corpus could
+  defend -- not a boundary a refit can move past without flagging `ttl`
+  (cache.rs:46, mean 0.3167, spread 0.19), a correctly-named clean whose own
+  noise reaches 0.38. No cutoff clears both; documented in the `at:` comment
+  above.
+at: 0.52
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

@@ -124,6 +124,92 @@ test("calibrate: an overlapping corpus reports no separating cutoff rather than 
   assert.match(fit.reason, /no separating cutoff/);
 });
 
+test("calibrate: means that separate but ranges that overlap are not `separable` -- a distinct reason from a genuine overlap", () => {
+  // The bug this fitter replaces: means 0.2 and 0.3 don't overlap, so the old
+  // point-fit called this `separable: true` and put the cutoff at their
+  // midpoint (0.25) -- exactly where the clean case's own 0.25 pass and the
+  // defect's own 0.25 pass land, a coin flip on the very corpus that was
+  // supposed to justify the cutoff.
+  const rule = noulRule({ id: "n" });
+  const all = [
+    { rule: "n", file: "a.rs", line: 1, value: 0.2, min: 0.15, max: 0.25 },
+    { rule: "n", file: "a.rs", line: 2, value: 0.3, min: 0.25, max: 0.35 },
+  ];
+  const labels = labelsOf({
+    $default: "clean",
+    "a.rs": [{ line: 2, label: "bad", rule: "n", window: 0 }],
+  });
+  const fit = fitCutoffs(all, labels, [rule])[0]!;
+  assert.equal(fit.separable, false, "the ranges touch at 0.25, so this is not separable even though the means are");
+  assert.match(fit.reason, /means separate but the observed ranges overlap/);
+  assert.doesNotMatch(fit.reason, /no separating cutoff; best trade-off/, "a distinct reason from a genuine (mean) overlap");
+});
+
+test("calibrate: a genuine overlap -- means overlap too -- keeps its own reason, not the ranges-overlap one", () => {
+  const rule = noulRule({ id: "n" });
+  const all = [
+    { rule: "n", file: "a.rs", line: 1, value: 0.8, min: 0.6, max: 0.9 },
+    { rule: "n", file: "a.rs", line: 2, value: 0.3, min: 0.1, max: 0.7 },
+  ];
+  const labels = labelsOf({
+    $default: "clean",
+    "a.rs": [{ line: 2, label: "bad", rule: "n", window: 0 }],
+  });
+  const fit = fitCutoffs(all, labels, [rule])[0]!;
+  assert.equal(fit.separable, false);
+  assert.match(fit.reason, /^no separating cutoff; best trade-off$/);
+});
+
+test("calibrate: a case with no min/max is a zero-width interval -- identical to a single-pass fit", () => {
+  const rule = noulRule({ id: "n" });
+  const labels = labelsOf({
+    $default: "clean",
+    "a.rs": [{ line: 3, label: "bad", rule: "n", window: 0 }],
+  });
+  const pointOnly = [
+    { rule: "n", file: "a.rs", line: 1, value: 0.1 },
+    { rule: "n", file: "a.rs", line: 2, value: 0.2 },
+    { rule: "n", file: "a.rs", line: 3, value: 0.9 },
+  ];
+  // The same cases, with an explicit zero-width range at each value -- what
+  // a caller that measured exactly one pass would report.
+  const explicitZeroWidth = pointOnly.map((a) => ({ ...a, min: a.value, max: a.value }));
+  const withoutRange = fitCutoffs(pointOnly, labels, [rule])[0]!;
+  const withZeroWidthRange = fitCutoffs(explicitZeroWidth, labels, [rule])[0]!;
+  assert.deepEqual(withoutRange, withZeroWidthRange);
+  assert.equal(withoutRange.separable, true);
+  assert.ok(Math.abs(withoutRange.fitted! - 0.55) < 0.01);
+});
+
+test("calibrate: interval fitting normalises through `scaleOf` for a score rule's 0-3 rubric, not a 0-1 assumption", () => {
+  const rule = scoreRule({ id: "s", kind: "score" });
+  const all = [
+    { rule: "s", file: "a.ts", line: 1, value: 1.0, min: 0.8, max: 1.2 },
+    { rule: "s", file: "a.ts", line: 2, value: 2.0, min: 1.8, max: 2.2 },
+  ];
+  const labels = labelsOf({
+    $default: "clean",
+    "a.ts": [{ line: 2, label: "bad", rule: "s", window: 0 }],
+  });
+  const fit = fitCutoffs(all, labels, [rule])[0]!;
+  // The ranges (0.8-1.2 clean, 1.8-2.2 bad) don't overlap on the raw 0-3
+  // scale, so this is separable at their midpoint (1.5) -- not at some
+  // fraction of 3, which is what a stray /scale in the interval comparison
+  // would have produced.
+  assert.equal(fit.separable, true);
+  assert.ok(Math.abs(fit.fitted! - 1.5) < 0.01, `expected 1.5 on the raw scale, got ${fit.fitted}`);
+
+  // Shrink the gap to overlap on the same 0-3 scale: means still separate
+  // (1.0 vs 2.0) but the ranges now touch at 1.5.
+  const overlapping = [
+    { rule: "s", file: "a.ts", line: 1, value: 1.0, min: 0.5, max: 1.5 },
+    { rule: "s", file: "a.ts", line: 2, value: 2.0, min: 1.5, max: 2.5 },
+  ];
+  const overlapFit = fitCutoffs(overlapping, labels, [rule])[0]!;
+  assert.equal(overlapFit.separable, false);
+  assert.match(overlapFit.reason, /means separate but the observed ranges overlap/);
+});
+
 test("calibrate: a fit over one pass is not the fit over the mean of two", () => {
   // Why `replay --labels` averages a record's passes instead of scoring its
   // top-level `answers` (the last pass alone): a per-pass fit and a
