@@ -643,3 +643,36 @@ test("rules: `divergent` must say why, not just that", () => {
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("rules: every field `normalizeRule` validates refuses a bad value by name", () => {
+  // A table, because the branches are the point: `jev-lint review` found that
+  // a third of `normalizeRule`'s failure paths had never been driven, which is
+  // how the `unsureBelow` override of section 6 shipped doing nothing. Each
+  // row is one refusal, and the regex is what the message must still say --
+  // the field's name, so a typo in a rule file lands on the field and not on
+  // a stack trace. One good rule, mutated one field at a time.
+  const good = { id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a." };
+  const rows: [string, unknown, RegExp][] = [
+    ["not a mapping at all", ["id: a"], /not a mapping/],
+    ["no language", { id: "a", rule: { kind: "x" }, ask: "a." }, /missing `language`/],
+    ["an arm that is not one", { ...good, state: "sideways" }, /`state` must be one of/],
+    ["an axis that is not one", { ...good, axis: "diagonal" }, /`axis` must be/],
+    ["a severity that is not one", { ...good, severity: "loud" }, /`severity` must be/],
+    ["an unsureBelow outside 0..1", { ...good, unsureBelow: 2 }, /`unsureBelow` must be a number between 0 and 1/],
+    ["a subject that is not one", { ...good, subject: "paragraph" }, /`subject` must be/],
+    ["a matcher that is not a mapping", { ...good, rule: "kind: x" }, /`rule` must be a mapping, not string/],
+    ["a kind that is not one", { ...good, kind: "guess" }, /`kind` must be/],
+    ["criteria that are not the two branches", { ...good, kind: "noul", criteria: "yes" }, /`criteria` must be a mapping with `true` and `false`/],
+    ["a criterion's not_for that is not a sentence", { ...good, kind: "noul", criteria: { true: { what: "w", not_for: 3 }, false: "f" } }, /not_for must be a non-empty string/],
+    ["a block rule's split that is not a regex string", { id: "a", language: "Text", subject: "block", split: 42, extensions: ["sql"], ask: "a." }, /`split` must be a regex matched at the start of each line/],
+    ["split on a rule that is not a block rule", { ...good, split: "^(?<NAME>\\w+)" }, /`split` and `extensions` belong to `subject: block` rules/],
+  ];
+  for (const [what, raw, expected] of rows) {
+    const { rule, error } = normalizeRule(raw as never);
+    assert.equal(rule, undefined, `${what}: should not have normalized`);
+    assert.match(error!, expected, what);
+  }
+  // And the good rule itself normalizes, so the table is measuring the field
+  // under test and not a typo shared by every row.
+  assert.equal(normalizeRule(good).error, undefined);
+});

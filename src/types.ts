@@ -201,14 +201,10 @@ export interface NoulCriteria {
 }
 
 /**
- * A validated, normalized rule: what every rule has, and then what its kind
- * and its subject decide. `Rule` is the intersection, so the fields a
- * `kind: noul` rule has (`criteria`) and a `kind: score` rule has
- * (`levels`), or a matcher rule has (`matcher`, `constraints`, `utils`), a
- * commit rule lacks and a block rule has instead (`split`, `extensions`),
- * narrow on `rule.kind` and `rule.subject`. The other part's fields are
- * present as null rather than absent, so a reader that does not narrow
- * still sees one shape.
+ * What every rule has, whatever its kind and its subject: its identity, the
+ * grammars it reads, the sentence the model answers, the cutoff the answer
+ * is gated at, and how a finding is reported. What differs is in
+ * `RuleJudgment` and `RuleSource`; `Rule` is the three together.
  */
 export interface RuleBase {
   id: string;
@@ -320,6 +316,14 @@ export type RuleSource =
       extensions: string[];
     };
 
+/**
+ * A validated, normalized rule: `RuleBase`, and then what its kind and its
+ * subject decide. Narrow on `rule.kind` for `criteria` against `levels`,
+ * and on `rule.subject` for a matcher rule's `matcher`, `constraints` and
+ * `utils` against a block rule's `split` and `extensions` -- a commit rule
+ * has neither. The other arm's fields are present as null rather than
+ * absent, so a reader that does not narrow still sees one shape.
+ */
 export type Rule = RuleBase & RuleJudgment & RuleSource;
 
 /** A rule whose subjects ast-grep finds: the only kind with a matcher. */
@@ -329,7 +333,7 @@ export function isMatcherRule(rule: Rule): rule is MatcherRule {
   return rule.subject !== "commit" && rule.subject !== "block";
 }
 
-/** `normalizeRule` returns one or the other, never both, and never throws. */
+/** The result of validating one rule: the rule, or the reason it is not one, never both. */
 export type RuleResult = { rule: Rule; error?: undefined } | { rule?: undefined; error: string };
 
 // ------------------------------------------------------------------ ast-grep
@@ -504,7 +508,7 @@ export interface Choice {
 /** A usable answer. Absent rather than zero when unusable. */
 export interface Answer {
   value: number;
-  /** A score carries one; a noul never does. */
+  /** A noul never carries one; a score does when the model returned one. */
   confidence: number | null;
   kind: RuleKind;
   probabilities?: Record<string, number> | null;
