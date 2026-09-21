@@ -4,11 +4,32 @@ kind: noul
 subject: enclosing
 state: bare
 # `bare` is enough here: a Rust test is a named `fn`, so `subject:
-# enclosing` promotes every match and the model sees the body. Ten labelled
-# defects (0.60-0.95) over eight hard cleans (0.06-0.12), fitted midpoint
-# 0.36; 0.45 for headroom on real code, where 40 subjects in five wasmtime
-# files answered 0.51 at most (a comment naming QEMU above an `if` that
-# tests another variable -- a fair candidate) and 0.41 next.
+# enclosing` promotes every match and the model sees the body. 0.45 was
+# fitted on ten labelled defects over eight hard cleans, but every defect in
+# `fixtures/scheduler.rs` sat inside an `impl Sink` method and every clean
+# sat inside `#[cfg(test)] mod tests`: on a 33-file repository-wide audit
+# (2026-09-21) that same split -- defect-in-implementation,
+# clean-in-test-body -- reached AUC >= 0.85 against a null mean of 22.6/33
+# (p = 0.009), meaning the rule's own corpus let a model answer from where a
+# comment sits, never from what it says, and its behaviour on commented test
+# code went untested here even though the TypeScript sibling spent a whole
+# round on exactly that shape (see its rule.yml).
+#
+# 2026-09-22: added one clean inside `impl Sink` (`append`, "goes to the
+# end and keeps insertion order" -- true of `Vec::push`) and one defect
+# inside `mod tests` (`prune_at_removes_every_stale_entry_at_once`, whose
+# comment claims all three entries are stale and the sink ends empty when
+# only two of three are before the cutoff). Neither location predicts its
+# label any more, and the classes still separate: eleven defects over nine
+# cleans (mean of 3 accepted passes), cleans topping out at 0.21 (the same
+# preamble case as before, now in a bigger batch), defects starting at 0.58
+# (`double the backoff` -- still the closest case), gap 0.37, fitted
+# midpoint 0.40. 0.45 stays: 0.13 of headroom under the lowest defect, 0.24
+# over the highest clean, and the wasmtime headroom below still holds since
+# nothing there changed.
+# 40 subjects in five wasmtime files answered 0.51 at most (a comment naming
+# QEMU above an `if` that tests another variable -- a fair candidate) and
+# 0.41 next.
 at: 0.45
 severity: info
 # A statement or a block's tail expression that follows a comment, as a

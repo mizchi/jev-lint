@@ -9,67 +9,75 @@ fixtures/budget.rs:
     window: 0
     reason: says it rounds up, and integer division truncates.
 fixtures/scheduler.rs:
-  - line: 37
+  - line: 29
+    label: clean
+    window: 0
+    reason: says the entry goes to the end and keeps insertion order; push does both, inside impl Sink.
+  - line: 38
     label: bad
     window: 0
     reason: says ten; truncate keeps 20, and the first 20, not the most recent.
-  - line: 43
+  - line: 44
     label: bad
     window: 0
     reason: says newest first; sort_by_key on `at` is ascending, oldest first.
-  - line: 49
+  - line: 50
     label: bad
     window: 0
     reason: says seconds to milliseconds; multiplies by a million.
-  - line: 56
+  - line: 57
     label: bad
     window: 0
     reason: says three retries; the range is 0..5.
-  - line: 70
+  - line: 71
     label: bad
     window: 0
     reason: says it skips done entries; `!e.done` skips the pending ones.
-  - line: 81
+  - line: 82
     label: bad
     window: 0
     reason: says round down; (secs + 59) / 60 rounds up.
-  - line: 86
+  - line: 87
     label: bad
     window: 0
     reason: says double; it adds a constant.
-  - line: 94
+  - line: 95
     label: bad
     window: 0
     reason: says the head is removed; first().cloned() leaves it.
-  - line: 102
+  - line: 103
     label: clean
     window: 0
     reason: a why-comment about the unit, and the code does use seconds (as_secs); DOC is its last line only.
-  - line: 105
+  - line: 106
     label: clean
     window: 0
     reason: vague but true, above a tail expression.
-  - line: 110
+  - line: 111
     label: clean
     window: 0
     reason: conventional label for an early return.
-  - line: 126
+  - line: 127
     label: clean
     window: 0
     reason: preamble naming the bug the test guards against; DOC is its last line only.
-  - line: 138
+  - line: 139
     label: clean
     window: 0
     reason: "section heading: 'two entries' spans the two appends beneath it."
-  - line: 143
+  - line: 144
     label: clean
     window: 0
     reason: "section heading: the let beneath it plus the asserts after it are the verification."
-  - line: 153
+  - line: 154
     label: clean
     window: 0
     reason: a trailing comment on the previous line (the continue), not a claim about the append beneath it.
-  - line: 164
+  - line: 165
     label: clean
     window: 0
     reason: preamble saying the retry count is not what is tested, above an ordinary first statement.
+  - line: 184
+    label: bad
+    window: 0
+    reason: says all three are stale and the sink ends empty; only two (0 and 10) are before cutoff 20, one (40) survives, inside mod tests.

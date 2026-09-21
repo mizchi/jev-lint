@@ -25,6 +25,7 @@ impl Sink {
     }
 
     pub fn append(&mut self, entry: Entry) {
+        // Adds the entry to the end, keeping insertion order.
         self.entries.push(entry);
     }
 
@@ -170,5 +171,18 @@ mod tests {
         });
         assert_eq!(sent, 0);
         assert!(calls > 0);
+    }
+
+    #[test]
+    fn prune_at_removes_every_stale_entry_at_once() {
+        let mut sink = Sink::with_retention(Duration::from_secs(30));
+        sink.append(Entry::new("a", 0));
+        sink.append(Entry::new("b", 10));
+        sink.append(Entry::new("c", 40));
+        // All three entries are older than the thirty-second window, so
+        // prune_at reports three removed and leaves the sink empty.
+        let dropped = sink.prune_at(50);
+        assert_eq!(dropped, 2);
+        assert_eq!(sink.entries().len(), 1);
     }
 }
