@@ -1,0 +1,325 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T05:49:22.679Z",
+  "model": "jev-1.13.0",
+  "suite": "python/method-name-promises",
+  "rules": [
+    {
+      "id": "method-name-promises",
+      "draft": "7b3074a4a249",
+      "at": 0.47
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 13,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 16,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 19,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 28,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 31,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 37,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 40,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 43,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 49,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 13,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 16,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 19,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 28,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 31,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 37,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 40,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 43,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.42,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 49,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 13,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 16,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 19,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 28,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 31,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 37,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 40,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 43,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/python/method-name-promises/fixtures/repository.py",
+        "line": 49,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 22947,
+    "usd": 0.000963774,
+    "ms": 273
+  }
+}

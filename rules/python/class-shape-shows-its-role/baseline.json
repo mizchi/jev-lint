@@ -1,0 +1,244 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T05:49:23.247Z",
+  "model": "jev-1.13.0",
+  "suite": "python/class-shape-shows-its-role",
+  "rules": [
+    {
+      "id": "class-shape-shows-its-role",
+      "draft": "3a64e36d3fbf",
+      "at": 0.38
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 6,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 22,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 34,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 49,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 61,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 76,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 100,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 105,
+        "endLine": 114,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 6,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 22,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 34,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 49,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 61,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 76,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 100,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 105,
+        "endLine": 114,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 6,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 22,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 34,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 49,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 61,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 76,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 100,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/python/class-shape-shows-its-role/fixtures/services.py",
+        "line": 105,
+        "endLine": 114,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 19641,
+    "usd": 0.000824922,
+    "ms": 270
+  }
+}

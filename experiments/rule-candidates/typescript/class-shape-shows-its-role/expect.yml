@@ -1,0 +1,34 @@
+default: clean
+fixtures/services.ts:
+  - line: 23
+    label: bad
+    window: 0
+    reason: "`PriceCache` holds a user's profile and offers a setter and a getter for it: the name says prices and caching, the field says a person, the methods say neither."
+  - line: 35
+    label: bad
+    window: 0
+    reason: "`ReportBuilder` builds a report AND sends mail: two roles, one of them carrying a field (`smtpHost`) that the other never touches."
+  - line: 92
+    label: bad
+    window: 0
+    reason: "`SessionConfig` reads as settings and holds the current request's state: a timeout beside a user and a request id, with a method that begins a request."
+  - line: 125
+    label: bad
+    window: 0
+    reason: "`CsvParser` parses, and carries an `smtpPort` it never uses -- a field whose presence tells a reader the wrong thing about what the class is for."
+  - line: 7
+    label: clean
+    window: 0
+    reason: "hard clean: one field, and three methods that put, get and count it."
+  - line: 53
+    label: clean
+    window: 0
+    reason: "hard clean: two fields for one job -- how many attempts and how long to wait -- and two methods that answer from them."
+  - line: 71
+    label: clean
+    window: 0
+    reason: "hard clean: a locale beside the lines is not a second role; it is what formatting a total needs."
+  - line: 119
+    label: clean
+    window: 0
+    reason: "hard clean: no field at all, one method, and the name says exactly what it is for."

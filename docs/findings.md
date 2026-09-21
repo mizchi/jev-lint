@@ -1602,3 +1602,50 @@ MoonBit's `type-name-describes-shape` matched `trait_definition` as well.
 Asking both rules of one declaration reports the same name twice under
 two sentences, so the trait alternative came out and its two cases moved
 to the new rule; that baseline was re-accepted unchanged otherwise.
+
+## 20. The class level: a method read on its class, and a class read as a shape
+
+Two rules the naming pack never had, in TypeScript and Python. Every
+question before them was about one member at a time.
+
+**`method-name-promises`** is `fn-name-promises` with the class in the
+question: the matcher captures `$CLASS` and `$NAME`, so the comparison is
+between two things the code states rather than between a body and a guess.
+TypeScript 0.50, Python 0.47; 11 subjects each, precision and recall 1.00.
+
+What the class buys is visible in two cases. `CartRepository.save`
+returning the new size is clean at 0.23-0.28 -- a Repository's `save` is a
+write and the return is a detail -- while `CartRepository.validate` that
+also stores the row answers 0.89: on a Repository, a store is exactly what
+a reader would not expect from `validate`, and a rule without the class
+name has no reason to say so.
+
+Python's gap is half TypeScript's (0.12 a side against 0.21) because its
+clean band sits higher: where every attribute is public, a method that
+writes surprises a reader less, and `find_or_create` and `save` are the
+cases that climb.
+
+**`class-shape-shows-its-role`** asks the question a reader asks meeting a
+class: name, fields, method signatures -- what is this FOR? 0.38 in both
+languages, 8 subjects each, cleans to 0.21 and defects from 0.56.
+
+The four defects are four ways the three can disagree: a name about prices
+over fields holding a person (0.90-0.93); two roles in one class, mail
+beside report building, with a field only one of them touches (0.82-0.86);
+settings holding a request's mutable state (0.56-0.60); a parser carrying
+an `smtpPort` it never uses (0.83-0.85).
+
+The cutoff came from the third. Its first version -- a timeout, a user and
+a request id, with one method that begins a request -- answered 0.46-0.50
+and flipped across passes. Adding what the role actually implies (a start
+time, an `endRequest` that clears both fields) moved it to 0.56-0.62
+without making it a different kind of defect. The hard cleans stayed where
+they were: two fields for one job, a locale beside the lines it formats, a
+class with no field at all, a store whose three methods serve its one
+field -- none above 0.21.
+
+Both languages agree case by case on both rules, which is the third time
+one sentence over the same declarations written twice has done that
+(rust/moonbit traits, moonbit/typescript names). It is the cheapest
+evidence available that the sentence, and not the corpus, is doing the
+work.

@@ -1,0 +1,244 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T05:49:22.960Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/class-shape-shows-its-role",
+  "rules": [
+    {
+      "id": "class-shape-shows-its-role",
+      "draft": "5aa410f0128a",
+      "at": 0.38
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 7,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 23,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 35,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 53,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 71,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 92,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 119,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 125,
+        "endLine": 140,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 7,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 23,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 35,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 53,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 71,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 92,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 119,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 125,
+        "endLine": 140,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 7,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 23,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 35,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 53,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 71,
+        "endLine": 90,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 92,
+        "endLine": 117,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 119,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "class-shape-shows-its-role",
+        "file": "rules/typescript/class-shape-shows-its-role/fixtures/services.ts",
+        "line": 125,
+        "endLine": 140,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 19845,
+    "usd": 0.0008334900000000001,
+    "ms": 251
+  }
+}

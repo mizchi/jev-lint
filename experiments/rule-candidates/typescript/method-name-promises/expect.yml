@@ -1,0 +1,46 @@
+default: clean
+fixtures/repository.ts:
+  - line: 19
+    label: bad
+    window: 0
+    reason: "`count` returns the rows, not a count."
+  - line: 23
+    label: bad
+    window: 0
+    reason: "`has` reads as a predicate on a repository and returns a string."
+  - line: 27
+    label: bad
+    window: 0
+    reason: "`clear` counts the rows and clears nothing."
+  - line: 59
+    label: bad
+    window: 0
+    reason: "`validate` also writes the row it was asked to check -- work the name does not mention, and on a Repository the write is exactly what a reader would not expect from `validate`."
+  - line: 10
+    label: clean
+    window: 0
+    reason: "hard clean: `save` on a Repository writes, and returning the new size is less than the name says rather than other than it."
+  - line: 15
+    label: clean
+    window: 0
+    reason: "the row or null."
+  - line: 33
+    label: clean
+    window: 0
+    reason: "the sum of the cents."
+  - line: 39
+    label: clean
+    window: 0
+    reason: "hard clean: `remove` returns whether it removed, which is what a Map's delete gives and what the name allows."
+  - line: 43
+    label: clean
+    window: 0
+    reason: "hard clean: `audit` appends to the audit log -- a second field, which on this class is what auditing is."
+  - line: 47
+    label: clean
+    window: 0
+    reason: "loads every row given."
+  - line: 51
+    label: clean
+    window: 0
+    reason: "hard clean: `findOrCreate` writes, and says so in its name."

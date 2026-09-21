@@ -1,0 +1,34 @@
+default: clean
+fixtures/services.py:
+  - line: 22
+    label: bad
+    window: 0
+    reason: "`PriceCache` holds a name and an email and offers a setter and a getter for them: the name says prices and caching, the fields say a person, the methods say neither."
+  - line: 34
+    label: bad
+    window: 0
+    reason: "`ReportBuilder` builds a report AND sends mail: two roles, one of them carrying a field (`smtp_host`) the other never touches."
+  - line: 76
+    label: bad
+    window: 0
+    reason: "`SessionConfig` reads as settings and holds the current request's mutable state: a timeout beside a user, a request id and a start time, with methods that begin and end a request."
+  - line: 105
+    label: bad
+    window: 0
+    reason: "`CsvParser` parses, and carries an `smtp_port` it never uses -- a field whose presence tells a reader the wrong thing about what the class is for."
+  - line: 6
+    label: clean
+    window: 0
+    reason: "hard clean: one field, and three methods that put, get and count it."
+  - line: 49
+    label: clean
+    window: 0
+    reason: "hard clean: two fields for one job -- how many attempts and how long to wait -- and two methods that answer from them."
+  - line: 61
+    label: clean
+    window: 0
+    reason: "hard clean: a locale beside the lines is not a second role; it is what formatting a total needs."
+  - line: 100
+    label: clean
+    window: 0
+    reason: "hard clean: no field at all, one method, and the name says exactly what it is for."

@@ -1,0 +1,62 @@
+# --------------------------------------------------------------------------
+# Does a method's body do what its name, read on its class, promises?
+# --------------------------------------------------------------------------
+#
+# fn-name-promises at the method level, with the class in the question. A
+# method name is read against its class: `save` on a Repository promises a
+# write, `render` on a Formatter promises a string and nothing else. Both
+# halves are handed to the model by name, so the comparison is between two
+# things the code states and not between the body and a guess.
+id: method-name-promises
+kind: noul
+subject: node
+# `located`: the file shows what the method touches -- the field it writes,
+# the helper it delegates to, the sibling method whose name it should have.
+state: located
+axis: file
+severity: warning
+# GUESS, not a fit: 0.55, what fn-name-promises takes in typescript.
+at: 0.55
+languages: [TypeScript, Tsx]
+# A method of a class, with the class's name captured beside its own. A
+# constructor has no name to judge; a method of an object literal or of an
+# interface has no body.
+rule:
+  all:
+    - kind: method_definition
+    - has: { field: name, pattern: $NAME }
+    - inside:
+        kind: class_body
+        inside:
+          any:
+            - kind: class_declaration
+            - kind: class
+          has: { field: name, pattern: $CLASS }
+ask: >-
+  This method's body does something materially different from what its name
+  ($NAME) promises on a $CLASS.
+criteria:
+  "true": >-
+    Someone who read only `$CLASS.$NAME` and the parameter list would be wrong
+    about what the method does: it changes state when the name says it only
+    reads, checks or looks up; it can fail or return nothing when the name
+    promises a value; it returns a different kind of thing than the name
+    suggests; it handles a narrower case than the name claims; it never
+    performs the effect the name names; or it does substantial work the name
+    does not mention, including work that belongs to a different thing than
+    the class is named for -- a `Repository.save` that also charges a card, a
+    `Formatter.render` that writes a file.
+  "false": >-
+    The name, read on this class, describes what the body does. A terse or
+    conventional name (run, handle, get, to_string, len, next) that the body
+    fits is not a violation, and neither is a name that says less than the
+    body as long as what it says is true. The class name may carry part of the
+    meaning: `CartRepository.save` need not say what it saves, and
+    `Clock.now` need not say the time. A comment inside the body that is wrong
+    about the body is a wrong comment, not a wrong name.
+note: >-
+  Judge the name against the body, with the class name as context for what the
+  method is about. A method that delegates to a helper named for the thing the
+  method promises keeps its promise. Whether the CLASS is well named is
+  another rule's question; here the class name is only the setting the method
+  is read in.

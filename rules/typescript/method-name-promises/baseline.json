@@ -1,0 +1,325 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T05:49:22.394Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/method-name-promises",
+  "rules": [
+    {
+      "id": "method-name-promises",
+      "draft": "9ad0431b5108",
+      "at": 0.5
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 10,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 15,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 19,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 27,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 33,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 43,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 47,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 51,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 59,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 10,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 15,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 19,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 27,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 33,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 43,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 47,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 51,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 59,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 10,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 15,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 19,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 27,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 33,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 43,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 47,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 51,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "method-name-promises",
+        "file": "rules/typescript/method-name-promises/fixtures/repository.ts",
+        "line": 59,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 23028,
+    "usd": 0.000967176,
+    "ms": 719
+  }
+}

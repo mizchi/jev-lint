@@ -1,0 +1,46 @@
+default: clean
+fixtures/repository.py:
+  - line: 16
+    label: bad
+    window: 0
+    reason: "`count` returns the rows, not a count."
+  - line: 19
+    label: bad
+    window: 0
+    reason: "`has` reads as a predicate on a repository and returns a string."
+  - line: 22
+    label: bad
+    window: 0
+    reason: "`clear` counts the rows and clears nothing."
+  - line: 49
+    label: bad
+    window: 0
+    reason: "`validate` also writes the row it was asked to check -- work the name does not mention, and on a Repository the write is exactly what a reader would not expect from `validate`."
+  - line: 9
+    label: clean
+    window: 0
+    reason: "hard clean: `save` on a Repository writes, and returning the new size is less than the name says rather than other than it."
+  - line: 13
+    label: clean
+    window: 0
+    reason: "the row or None."
+  - line: 28
+    label: clean
+    window: 0
+    reason: "the sum of the cents."
+  - line: 31
+    label: clean
+    window: 0
+    reason: "hard clean: `remove` returns whether it removed, which is what the name allows."
+  - line: 37
+    label: clean
+    window: 0
+    reason: "hard clean: `audit` appends to the audit log -- a second field, which on this class is what auditing is."
+  - line: 40
+    label: clean
+    window: 0
+    reason: "loads every row given."
+  - line: 43
+    label: clean
+    window: 0
+    reason: "hard clean: `find_or_create` writes, and says so in its name."

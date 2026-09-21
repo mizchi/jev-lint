@@ -1,0 +1,59 @@
+# --------------------------------------------------------------------------
+# Do a class's name, fields and method signatures add up to one role?
+# --------------------------------------------------------------------------
+#
+# The class-level question, above the method one. A reader meeting a class
+# for the first time reads three things -- its name, the fields it holds,
+# the signatures of what it offers -- and infers what it is FOR. This rule
+# asks whether that inference lands: whether the three agree on one role, or
+# whether the name says one thing, the fields another and the methods a
+# third. It is not about whether each name is accurate (fn-name-promises,
+# method-name-promises, type-name-describes-shape do that, one member at a
+# time) but about whether the shape as a whole declares something a reader
+# could name.
+id: class-shape-shows-its-role
+kind: noul
+subject: node
+# `located`: the class declaration is the subject, and the file shows how
+# the class is built and used -- a role the declaration only hints at is
+# visible at the call sites.
+state: located
+axis: file
+severity: info
+# GUESS, not a fit: 0.5.
+at: 0.5
+language: Python
+rule:
+  all:
+    - kind: class_definition
+    - has: { field: name, pattern: $NAME }
+ask: >-
+  The name, the fields and the method signatures of this class ($NAME) do not
+  add up to one role: a reader could not say what it is for, or would say
+  something the members contradict.
+criteria:
+  "true": >-
+    The three disagree. The name says one thing and the fields hold another (a
+    Cache whose fields are a user's profile; a Config that holds request
+    state); the methods offer a capability nothing in the name or the fields
+    suggests; the members split into two roles that share no state -- a group
+    of methods over one field and another group over a second, with nothing
+    passing between them; or the class carries a field it never uses and whose
+    presence tells a reader the wrong thing about what it is for. What makes it
+    a violation is that a reader inferring the role from the shape would infer
+    wrongly, not that a different arrangement could be imagined.
+  "false": >-
+    The name, the fields and the methods say the same thing, even where the
+    class is small, general or conventional. A class with one field and the
+    methods that read and write it is coherent however dull. A name broader
+    than its members (Store, Service, Client, Manager) is not a violation when
+    the members are what that word covers in this file. Holding several fields
+    for one job -- a connection and a retry count, a template and a locale --
+    is one role. A class whose methods are all about the same field, or whose
+    fields are all serving the same method, declares its role clearly.
+note: >-
+  Read the shape as a whole; each member may be well named on its own and the
+  class still fail this. Judge the members that are DECLARED: a private helper
+  is part of the role, an inherited member is not shown here and is not
+  missing. Being a thin wrapper, a data holder or a namespace of related
+  functions is a role like any other.

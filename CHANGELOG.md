@@ -10,6 +10,17 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added
 
+- `method-name-promises`, a new rule in TypeScript (0.50) and Python
+  (0.47): does a method's body do what its name promises ON ITS CLASS?
+  Both halves reach the model by name (`$CLASS.$NAME`), so
+  `CartRepository.validate` storing the row it was asked to check is a
+  finding that `fn-name-promises` alone has no reason to make.
+- `class-shape-shows-its-role`, a new rule in TypeScript and Python
+  (0.38): do a class's name, its fields and its method signatures add up
+  to one role a reader could name? A `PriceCache` holding a person, a
+  `ReportBuilder` that also sends mail, a parser carrying an `smtpPort` it
+  never uses. 8 subjects each, precision and recall 1.00;
+  `experiments/reports/class-level-naming/` has the measurement.
 - `trait-name-describes-methods`, a new rule in Rust (0.62) and MoonBit
   (0.60): does a trait's name describe what its methods do -- the
   capability an implementer gains, which the compiler never checks. 10 and

@@ -174,9 +174,9 @@ the end of the run. Nothing to select.
 
 | point it at | what runs | asks, for example |
 | --- | --- | --- |
-| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 21 rules, first tier | does this function do what its name promises; is the comment above it still true; would this test still pass if its claim were broken; does `catch` hide a failure |
+| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 rules, first tier | does this function do what its name promises; is the comment above it still true; would this test still pass if its claim were broken; does `catch` hide a failure |
 | `.rs` | `rust/` — 9, first tier | the same for functions, comments, tests, bindings; `# Errors` / `# Panics` against the body; whether a trait's name describes its methods |
-| `.py` | `python/` — 12 | ports of the TypeScript rules; `Raises:` against the body |
+| `.py` | `python/` — 14 | ports of the TypeScript rules; `Raises:` against the body; the class-level pair |
 | `.go` | `go/` — 9 | ports, plus `must-name-panics`: does `MustX` panic on the failure its name promises |
 | `.mbt` | `moonbit/` — 20 | every rule of this tool that a MoonBit file can carry: the naming rules, the guarantees, the comments, the failure contract, the log lines, the tests and their snapshots. MoonBit is not a grammar ast-grep has built in: [declare the parser](docs/reference.md#a-language-ast-grep-does-not-have-built-in) and these run; without it they are skipped and the run says so |
 | `package.json` | `json/` — 1 | does a script's name describe the command it runs |
@@ -419,6 +419,8 @@ each exists in:
 | `module-name-describes-contents` | is this module named for what it contains? |
 | `module-naming-consistent` | do this module's exports name the same kind of operation with the same words? |
 | `type-name-describes-shape` | does this type's name describe its members, as the file builds and uses it? (`UserId` that is a session; `Config` that is a list of errors) |
+| `method-name-promises` (TypeScript, Python) | does this method's body do what its name promises **on this class**? (`CartRepository.validate` that also stores the row; `count` that returns the rows) |
+| `class-shape-shows-its-role` (TypeScript, Python) | do a class's name, its fields and its method signatures add up to one role a reader could name? (a `PriceCache` holding a person; a `ReportBuilder` that also sends mail) |
 | `trait-name-describes-methods` (Rust, MoonBit) | does a trait's name describe what its methods do — the capability an implementer gains? (`Comparable` whose one method renders; `Named` that also sorts and serialises) |
 
 **Guarantees** — the name makes a specific promise; does the body keep it?
