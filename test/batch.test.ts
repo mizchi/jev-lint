@@ -1,7 +1,7 @@
 import { strict as assert } from "node:assert";
 import { planBatches, planRuleBatches, estimateTokens, MAX_STATE_TOKENS, STATE_BUDGET, REQUEST_BUDGET, STATE_MARGIN, REQUEST_MARGIN, DEFAULT_BATCH_SIZE } from "../src/batch.ts";
 import { schedule } from "../src/schedule.ts";
-import { scoreRule, subjectOf, sampleEntry, manySubjects } from "./builders.ts";
+import { scoreRule, subjectOf, sampleEntry, manySubjects, commitRule, changeRule } from "./builders.ts";
 import { test } from "./harness.ts";
 
 test("batch: every subject lands in exactly one batch and none is empty", () => {
@@ -357,4 +357,26 @@ test("batch: a batch stamps its effective arm onto its subjects", () => {
     symbols: new Map(),
   });
   for (const b of fileAxis) assert.ok(b.subjects.every((s) => s.arm === b.arm));
+});
+
+test("batch: a commit and a change subject over one commit do not share a state", () => {
+  // They share an arm (`bare`) and a file (the sha), which is the whole
+  // grouping key for the file axis, so they used to land in one batch. The
+  // two states are different documents -- one says the message is judged
+  // and carries it, the other says the diff is judged and carries the
+  // instruction documents it is judged against -- and `buildState` reads
+  // `subjects[0]`, so the change rule was asked its question against a
+  // state with no instructions in it. A model handed no standard answers
+  // anyway, so nothing failed; it just answered about nothing.
+  const diff = { files: ["cart.ts"], stat: " 1 file changed", diff: "d", truncated: false };
+  const shared = { file: "abc1234", line: 1, endLine: 1, arm: "bare" as const, language: "Git", enclosing: null, promoted: false, captured: {} };
+  const commit = subjectOf({ ...shared, rule: commitRule(), text: "Add cart", nodeKind: "commit", commit: diff });
+  const change = subjectOf({ ...shared, rule: changeRule(), text: " 1 file changed", nodeKind: "change", commit: diff, instructions: { docs: [{ file: "AGENTS.md", text: "- x\n" }], truncated: false } });
+  const batches = planBatches([commit, change]);
+  assert.equal(batches.length, 2, "one batch each, not one batch of both");
+  const byKind = Object.fromEntries(batches.map((b) => [b.subjects[0]!.rule.subject, b.state]));
+  assert.ok(byKind.change!.instructions, "the change batch carries what its rule is judged against");
+  assert.equal(byKind.change!.message, undefined);
+  assert.equal(byKind.commit!.instructions, undefined);
+  assert.equal(byKind.commit!.message, "Add cart");
 });

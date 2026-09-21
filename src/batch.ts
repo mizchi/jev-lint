@@ -210,7 +210,17 @@ export function planBatches(
   const cap = Number.isInteger(batchSize) && batchSize > 0 ? batchSize : DEFAULT_BATCH_SIZE;
   const groups = new Map<string, Subject[]>();
   for (const s of subjects) {
-    const key = `${s.arm}\u0000${s.file}`;
+    // A commit and a change subject over the same commit share an arm
+    // (`bare`) and a file (the sha), and their states are not the same
+    // document: one says the message is judged and carries it, the other
+    // says the diff is judged and carries the instruction documents it is
+    // judged against. Grouped together, `buildState` reads `subjects[0]`
+    // and the second kind is asked its question against the first kind's
+    // state -- silently, since a model handed no instructions answers
+    // anyway. Keying on the subject kind keeps the two apart; for every
+    // other subject `rule.subject` is constant within a file anyway, so
+    // nothing else regroups.
+    const key = `${s.arm}\u0000${s.file}\u0000${s.rule.subject}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key)!.push(s);
   }
