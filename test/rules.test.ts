@@ -135,8 +135,8 @@ test("rules: cutoffFor prefers lang/id over id, and both over the rule's own", (
 });
 
 test("rules: a commit rule has no matcher, only the Git grammar, and never reaches ast-grep", () => {
-  // A commit is not an AST node. `subject: commit` is the one subject with
-  // no ast-grep matcher: the runner builds its subjects from git instead.
+  // A commit is not an AST node. `commit` and `change` are the two subjects
+  // with no ast-grep matcher: the runner builds their subjects from git instead.
   const { rule, error } = normalizeRule({
     id: "commit-message-describes-diff",
     language: "Git",
@@ -179,6 +179,20 @@ test("rules: a `subject: change` rule is Git, matcherless and bare, like a commi
   assert.equal(rule!.subject, "change");
   assert.equal(rule!.matcher, null);
   assert.equal(rule!.state, "bare", "a change rule has no file to locate in");
+  // `state: located` is a commit-rule mistake too (line 158 above); a change
+  // rule rejects it the same way, and the message names the subject it was
+  // actually given rather than defaulting to "commit".
+  const stateError = normalizeRule({
+    id: "x",
+    language: "Git",
+    subject: "change",
+    kind: "noul",
+    ask: "a",
+    criteria: { true: "y", false: "n" },
+    state: "located",
+  }).error;
+  assert.match(String(stateError), /bare/);
+  assert.match(String(stateError), /subject: change/, "names the subject it was given, not commit");
 });
 
 test("rules: a `subject: change` rule with a matcher is rejected", () => {
@@ -192,6 +206,7 @@ test("rules: a `subject: change` rule with a matcher is rejected", () => {
     criteria: { true: "y", false: "n" },
   });
   assert.match(String(error), /takes no matcher/);
+  assert.match(String(error), /subject: change/, "names the subject it was given, not commit");
 });
 
 test("rules: a `subject: change` rule in a real grammar is rejected", () => {
@@ -204,6 +219,7 @@ test("rules: a `subject: change` rule in a real grammar is rejected", () => {
     criteria: { true: "y", false: "n" },
   });
   assert.match(String(error), /is `language: Git`/);
+  assert.match(String(error), /subject: change/, "names the subject it was given, not commit");
 });
 
 test("rules: `run` selects one shipped rule by id, in every language or one, or the rules of a file", () => {

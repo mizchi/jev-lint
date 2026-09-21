@@ -387,13 +387,13 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
  * rule with `extensions`, are errors here, not silences.
  */
 function normalizeSource(raw: any, id: string, languages: Language[]): RuleSource | { error: string } {
-  const subject = raw.subject === undefined ? "node" : raw.subject;
+  const subject: SubjectMode = raw.subject === undefined ? "node" : raw.subject;
   if (!SUBJECTS.includes(subject)) {
     return { error: `${id}: \`subject\` must be ${SUBJECTS.join(" or ")}` };
   }
   // `commit` and `change` are both built from git: no matcher, the Git
   // pseudo-grammar, and `state: bare` because there is no file to locate in.
-  const isGit = subject === "commit" || subject === "change";
+  const isGit = isGitSubject(subject);
   const isBlock = subject === "block";
   const hasGit = languages.includes("Git");
   const hasText = languages.includes("Text");
@@ -413,10 +413,10 @@ function normalizeSource(raw: any, id: string, languages: Language[]): RuleSourc
   }
   if (isGit) {
     if (raw.rule !== undefined) {
-      return { error: `${id}: a \`subject: ${subject}\` rule takes no matcher; its subjects are ${subject === "commit" ? "commits" : "changes"}, not nodes` };
+      return { error: `${id}: a \`subject: ${subject}\` rule takes no matcher; its subjects are ${subject}s, not nodes` };
     }
     if (raw.state !== undefined && raw.state !== "bare") {
-      return { error: `${id}: a \`subject: ${subject}\` rule is \`state: bare\`; the diff is its state and there is no file to locate in` };
+      return { error: `${id}: a \`subject: ${subject}\` rule is \`state: bare\`; its state is built from git and there is no file to locate in` };
     }
   } else if (isBlock) {
     // A block rule's matcher is its header regex; the files it reads are

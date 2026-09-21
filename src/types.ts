@@ -342,11 +342,11 @@ export type Rule = RuleBase & RuleJudgment & RuleSource;
 export type MatcherRule = Rule & { subject: "node" | "enclosing" | "file" };
 
 export function isMatcherRule(rule: Rule): rule is MatcherRule {
-  return rule.subject !== "commit" && rule.subject !== "change" && rule.subject !== "block";
+  return !isGitSubject(rule.subject) && rule.subject !== "block";
 }
 
-/** The two subjects git builds: no matcher, `language: Git`, `state: bare`. */
-export function isGitSubject(subject: string): boolean {
+/** The two subjects built from git rather than an ast-grep matcher; see the `RuleSource` union arm. */
+export function isGitSubject(subject: SubjectMode): subject is "commit" | "change" {
   return subject === "commit" || subject === "change";
 }
 
