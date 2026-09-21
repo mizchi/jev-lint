@@ -1,0 +1,26 @@
+default: clean
+fixtures/colours.mbt:
+  - line: 1
+    label: bad
+    window: 0
+    reason: "named for colours; every export parses a configuration line."
+fixtures/util.mbt:
+  - line: 1
+    label: bad
+    window: 0
+    reason: "`util` describes nothing: a clamp and a string repeat have no more in common than that someone had nowhere else to put them. Labelled clean at first, on the argument that `util` is a convention; the rule answered 0.66-0.67 and the family's own note exempts only an entry-point name (index, mod, lib, main), which is named by its directory. A convention for giving up on a name is not a description."
+fixtures/cart.mbt:
+  - line: 1
+    label: clean
+    window: 0
+    reason: "a cart's line, its total and how to add to it."
+fixtures/retry.mbt:
+  - line: 1
+    label: clean
+    window: 0
+    reason: "hard clean: three exports about retrying, none of which has `retry` in its own name."
+fixtures/strings.mbt:
+  - line: 1
+    label: clean
+    window: 0
+    reason: "hard clean: three helpers, all about strings, in a file named for strings -- the shape `util.mbt` only looks like."

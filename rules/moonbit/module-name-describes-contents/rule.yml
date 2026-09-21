@@ -1,0 +1,36 @@
+id: module-name-describes-contents
+language: moonbit
+kind: noul
+subject: file
+state: graph
+# 0.55, kept after the fit 2026-09-21 on the fixtures beside it (5 files:
+# 2 defects, 3 cleans, 3 passes). Cleans top at 0.24 (`cart.mbt`, three
+# exports about a cart), defects are `colours.mbt`, whose every export
+# parses a config line (0.95), and `util.mbt`, a clamp beside a string
+# repeat (0.66-0.67). The midpoint is 0.46; rust's 0.55 sits in the same
+# gap and is kept so the copies agree.
+at: 0.55
+axis: file
+severity: info
+# The file's root. The subject is the module outline -- its path and its
+# symbols -- not the source, so the matcher only has to fire once per file.
+rule:
+  kind: structure
+# The same sentence as rust/module-name-describes-contents, by copy.
+ask: >-
+  This module's name does not describe what the module contains.
+criteria:
+  "true": >-
+    The filename and path name a subject that the module's public items do not
+    match: the items belong to a different concern than the name states, the
+    name names one thing while the module holds an unrelated assortment, the
+    name is narrower or broader than the items it holds, or the name is a
+    placeholder such as utils, helpers, misc, common or manager for items that
+    share a concern that could be named.
+  "false": >-
+    The filename and path describe what the module's public items are about,
+    closely enough that someone looking for those items would look here.
+note: >-
+  A module holding one cohesive group of items is not a mismatch merely for
+  holding several of them, and a conventional entry-point name (index, mod, lib,
+  main) is named by its directory rather than by itself.

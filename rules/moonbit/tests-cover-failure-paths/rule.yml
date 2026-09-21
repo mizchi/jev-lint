@@ -1,0 +1,65 @@
+id: tests-cover-failure-paths
+language: moonbit
+kind: noul
+subject: node
+# `paired`: the evidence is in another file -- the `_test.mbt` beside this
+# one, or the `test "..." { }` blocks in the module itself, which the
+# pairing picks up as its own related test.
+state: paired
+# 0.68, kept after the fit 2026-09-21 on the fixtures beside it (4
+# subjects: 2 defects, 2 cleans, 3 passes; the smallest corpus of the
+# MoonBit set, since one file of four public functions is what a pairing
+# test needs). Cleans top at 0.09, defects start at 0.86; the midpoint is
+# 0.47 and typescript's 0.68 sits in the same gap. The pairing is by name
+# -- `basket.mbt` with `basket_test.mbt`, MoonBit's own convention --
+# which `collectSubjects` reports as `paired_by: its name`.
+at: 0.68
+axis: file
+severity: warning
+# A public function: `pub` or `pub(all)` in its own text, which is how
+# MoonBit spells visibility. A `test "..." { }` block is a test_definition,
+# not a function, so no exclusion is needed.
+rule:
+  all:
+    - kind: function_definition
+    - has: { kind: visibility }
+    - has: { kind: function_identifier, stopBy: end, pattern: $NAME }
+# The same sentence as typescript/tests-cover-failure-paths, by copy.
+ask: >-
+  This function ($NAME) has a failure path of its own that none of the related
+  tests reaches.
+criteria:
+  "true": >-
+    The body itself throws, rejects, returns an error value, or refuses an input
+    through a guard on some path, and no related test in the state drives $NAME
+    down that path: no test passes an input that trips the guard, asserts a
+    throw or a rejection from it, or asserts the error result -- neither by
+    calling $NAME nor through another function in this file that calls it. A
+    related test that never calls $NAME, directly or through a caller, while the
+    body has such a path, is that case.
+  "false": >-
+    Every failure path the body declares is reached by some related test -- a
+    test passes the bad input, asserts that the call throws or rejects, or
+    asserts the error result it returns, whether it calls $NAME itself or calls
+    a function in this file that calls $NAME, and in whatever vocabulary the
+    runner uses (`toThrow`, `rejects`, `assert.throws`, a `try`/`catch` around
+    the call, an `.ok` read as false) -- or the body has no failure path of its
+    own: it cannot fail, or the only failures on its paths come from callees it
+    does not guard, which are those callees' paths and not this function's. A
+    throw behind one condition with several operands is one path, and a test
+    that trips any one operand has reached it.
+note: >-
+  A failure path is one throw, one reject, or one return of an error value (`{
+  ok: false }`, `null`, `undefined` on a checked condition): a single throw
+  behind a condition with several `||` operands is one path, reached when any
+  operand is tripped. Only the paths this body DECLARES count; a callee that may
+  throw is not this function's path unless the body catches and re-reports it.
+  Judge what a test's body does, not what its title says: a test whose title
+  claims a failure but whose body never trips $NAME's guard reaches nothing, and
+  a test whose title is about something else but whose body passes the bad input
+  and asserts the throw reaches it. The related tests are excerpts, so a call to
+  $NAME counts even when the assertion around it was cut; but a call with
+  ordinary input does not reach a guard that ordinary input never trips, and a
+  mention of $NAME only in an import reaches nothing. Returning the input
+  unchanged, or a default, when a condition is not met is a fallback and not a
+  failure path: nothing is refused and nothing reports an error.

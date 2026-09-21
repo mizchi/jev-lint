@@ -1,0 +1,298 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:30:34.045Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/error-message-matches-condition",
+  "rules": [
+    {
+      "id": "error-message-matches-condition",
+      "draft": "419b0f752c05",
+      "at": 0.76
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 6,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 22,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 25,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 33,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 56,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 64,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 72,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 6,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 22,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 25,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 33,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 56,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 64,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 72,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 6,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 22,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 25,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 33,
+        "endLine": 35,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 56,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 64,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "error-message-matches-condition",
+        "file": "rules/moonbit/error-message-matches-condition/fixtures/orders.mbt",
+        "line": 72,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 23496,
+    "usd": 0.000986832,
+    "ms": 718
+  }
+}

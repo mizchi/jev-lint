@@ -1483,3 +1483,43 @@ lower, topping at 0.13.
 
 Ten rules now, and the two that moved a label moved it the same way both
 times -- toward what the rest of the family already says.
+
+The last five, and MoonBit has every rule this tool has that its files can
+carry:
+
+| rule | at | subjects | defects | recall |
+| --- | --- | --- | --- | --- |
+| `module-name-describes-contents` | 0.55 | 5 files | 2 | 1.00 |
+| `test-name-describes-code` | 0.70 | 11 | 4 | 0.75 |
+| `tests-cover-failure-paths` | 0.68 | 4 | 2 | 1.00 |
+| `catch-hides-failure` | 0.55 | 8 | 4 | 1.00 |
+| `error-message-matches-condition` | 0.76 | 10 | 4 | 1.00 |
+
+Two of them re-taught a lesson the TypeScript copies already record.
+
+`error-message-matches-condition` matched the `raise` alone at first, and
+`ship` -- two branches, the address check and the items check, both
+raising `"no items to ship"` -- had one of them labelled clean and both
+answered 0.89. A promoted subject is keyed on the enclosing text plus the
+matched text, and the same raise twice in one function is the same key;
+worse, the model shown the same function and the same matched line cannot
+tell which branch it is being asked about. The matcher takes the guarding
+`if` AND the failure inside it as one node, which is what the TypeScript
+copy's own comment says it learned. With the condition in the match the
+twins separate: 0.90 for the address check, 0.26 for the items check.
+
+`test-name-describes-code` had a clean answer 0.36-0.46 alone and
+0.77-0.79 once a sibling in the same request claimed more precisely --
+`remove drops the line` beside `remove_at drops the line at that index
+and keeps the rest`. Same request, same file, one of them looks lazy. The
+fixture says what it asserts now. It also ships with one miss: a title
+that says `counts the lines` over an assertion on the sum, 0.24-0.33,
+where the title names `total` and the body calls `total_of` and the model
+takes the subject matching for the operation matching.
+
+Four of the fifteen cutoffs differ from the language they were copied
+from, and each difference is a band, not a taste: `type-name` at 0.28
+against TypeScript's 0.42, `error-message` at 0.76 against 0.65,
+`fn-name-promises` at 0.44 against 0.55, `comment-describes-block` kept
+at rust's 0.45 with its miss. MoonBit's clean bands sit lower for names
+and higher for messages.

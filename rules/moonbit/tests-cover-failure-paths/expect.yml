@@ -1,0 +1,19 @@
+default: clean
+fixtures/basket.mbt:
+  - line: 16
+    label: bad
+    window: 0
+    reason: "apply_coupon refuses a percent out of range and an expired coupon; the one test passes 10 percent and a live coupon, so neither raise is reached."
+  - line: 43
+    label: bad
+    window: 0
+    reason: "price_at aborts on a position outside the basket; the one test asks for a position inside it."
+  - line: 6
+    label: clean
+    window: 0
+    reason: "basket_total has no failure path to reach, and the tests cover the empty and the populated basket anyway."
+  - line: 28
+    label: clean
+    window: 0
+    reason: "hard clean: the failure path is a None rather than a raise, and a test reaches it."
+fixtures/basket_test.mbt: []

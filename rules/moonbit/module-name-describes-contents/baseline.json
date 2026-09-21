@@ -1,0 +1,163 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:28:27.388Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/module-name-describes-contents",
+  "rules": [
+    {
+      "id": "module-name-describes-contents",
+      "draft": "d6d2af00eecd",
+      "at": 0.55
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/retry.mbt",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/colours.mbt",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/cart.mbt",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/strings.mbt",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/util.mbt",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/cart.mbt",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/strings.mbt",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/util.mbt",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.61,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/retry.mbt",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/colours.mbt",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/cart.mbt",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/util.mbt",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/retry.mbt",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/colours.mbt",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/moonbit/module-name-describes-contents/fixtures/strings.mbt",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 15,
+    "inputTokens": 13647,
+    "usd": 0.000573174,
+    "ms": 560
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-21T04:07:37.825Z",
+  "recorded": "2026-09-21T04:28:25.166Z",
   "model": "jev-1.13.0",
   "suite": "moonbit/comment-describes-block",
   "rules": [
@@ -19,135 +19,7 @@
         "line": 5,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.8,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 17,
-        "endLine": 17,
-        "kind": "noul",
-        "value": 0.66,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 24,
-        "endLine": 28,
-        "kind": "noul",
-        "value": 0.83,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 36,
-        "endLine": 36,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 49,
-        "endLine": 54,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 6,
-        "endLine": 6,
-        "kind": "noul",
-        "value": 0.87,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 12,
-        "endLine": 14,
-        "kind": "noul",
-        "value": 0.28,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 21,
-        "endLine": 21,
-        "kind": "noul",
-        "value": 0.79,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 29,
-        "endLine": 31,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 33,
-        "endLine": 33,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 39,
-        "endLine": 39,
-        "kind": "noul",
-        "value": 0.21,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 45,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 51,
-        "endLine": 55,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 62,
-        "endLine": 62,
-        "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 5,
-        "endLine": 5,
-        "kind": "noul",
-        "value": 0.77,
+        "value": 0.81,
         "confidence": null
       },
       {
@@ -165,7 +37,7 @@
         "line": 24,
         "endLine": 28,
         "kind": "noul",
-        "value": 0.86,
+        "value": 0.85,
         "confidence": null
       },
       {
@@ -174,7 +46,7 @@
         "line": 36,
         "endLine": 36,
         "kind": "noul",
-        "value": 0.1,
+        "value": 0.12,
         "confidence": null
       },
       {
@@ -201,7 +73,7 @@
         "line": 12,
         "endLine": 14,
         "kind": "noul",
-        "value": 0.2,
+        "value": 0.22,
         "confidence": null
       },
       {
@@ -210,135 +82,7 @@
         "line": 21,
         "endLine": 21,
         "kind": "noul",
-        "value": 0.81,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 29,
-        "endLine": 31,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 33,
-        "endLine": 33,
-        "kind": "noul",
-        "value": 0.2,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 39,
-        "endLine": 39,
-        "kind": "noul",
-        "value": 0.21,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 45,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 51,
-        "endLine": 55,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 62,
-        "endLine": 62,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 5,
-        "endLine": 5,
-        "kind": "noul",
-        "value": 0.79,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 17,
-        "endLine": 17,
-        "kind": "noul",
-        "value": 0.64,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 24,
-        "endLine": 28,
-        "kind": "noul",
-        "value": 0.84,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 36,
-        "endLine": 36,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
-        "line": 49,
-        "endLine": 54,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 6,
-        "endLine": 6,
-        "kind": "noul",
-        "value": 0.87,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 12,
-        "endLine": 14,
-        "kind": "noul",
-        "value": 0.34,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-block",
-        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
-        "line": 21,
-        "endLine": 21,
-        "kind": "noul",
-        "value": 0.81,
+        "value": 0.83,
         "confidence": null
       },
       {
@@ -365,7 +109,7 @@
         "line": 39,
         "endLine": 39,
         "kind": "noul",
-        "value": 0.21,
+        "value": 0.19,
         "confidence": null
       },
       {
@@ -392,7 +136,263 @@
         "line": 62,
         "endLine": 62,
         "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 21,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 33,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 51,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 62,
+        "endLine": 62,
+        "kind": "noul",
         "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.61,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 36,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 49,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 36,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/queue.mbt",
+        "line": 49,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 21,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 33,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 51,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-block",
+        "file": "rules/moonbit/comment-describes-block/fixtures/backoff.mbt",
+        "line": 62,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.12,
         "confidence": null
       }
     ]
@@ -401,6 +401,6 @@
     "calls": 6,
     "inputTokens": 35466,
     "usd": 0.001489572,
-    "ms": 707
+    "ms": 673
   }
 }

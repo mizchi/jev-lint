@@ -1,0 +1,34 @@
+default: clean
+fixtures/loader.mbt:
+  - line: 15
+    label: bad
+    window: 0
+    reason: "`load_config` returns an empty string for a file it could not read, and its name and return type promise the config."
+  - line: 46
+    label: bad
+    window: 0
+    reason: "`count_lines` counts zero for a file it could not read, which the caller cannot tell from an empty file."
+  - line: 56
+    label: bad
+    window: 0
+    reason: "`read_all` pushes an empty string for every path it could not read, so the array comes back the right length and wrong."
+  - line: 93
+    label: bad
+    window: 0
+    reason: "`total_size` adds nothing for a path it could not read and reports a total."
+  - line: 36
+    label: clean
+    window: 0
+    reason: "logs and re-raises: the caller still hears about it."
+  - line: 67
+    label: clean
+    window: 0
+    reason: "hard clean: the failure becomes a None, which the return type declares."
+  - line: 74
+    label: clean
+    window: 0
+    reason: "hard clean: the failure is translated into this module's own error and raised."
+  - line: 84
+    label: clean
+    window: 0
+    reason: "hard clean: `is_readable` asks a question whose answer is the boolean; the failure IS the answer."

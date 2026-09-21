@@ -1,0 +1,136 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:28:29.129Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/tests-cover-failure-paths",
+  "rules": [
+    {
+      "id": "tests-cover-failure-paths",
+      "draft": "8502f7540c0a",
+      "at": 0.68
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 6,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 16,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 28,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 43,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 6,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 16,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 28,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 43,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 6,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 16,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 28,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "rules/moonbit/tests-cover-failure-paths/fixtures/basket.mbt",
+        "line": 43,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 11694,
+    "usd": 0.0004911480000000001,
+    "ms": 269
+  }
+}

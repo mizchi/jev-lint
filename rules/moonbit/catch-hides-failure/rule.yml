@@ -1,0 +1,67 @@
+id: catch-hides-failure
+language: moonbit
+kind: noul
+subject: enclosing
+# `local`: the enclosing function is what says whether the failure was the
+# caller's to know about -- its name, its return type, and whether the
+# `raise` is gone from the signature.
+state: local
+# 0.55, kept after the fit 2026-09-21 on the fixtures beside it (8
+# subjects: 4 defects, 4 hard cleans, 3 passes). Cleans top at 0.33
+# (`is_readable`, whose boolean IS the answer to the failure) and the
+# defects start at 0.70; the midpoint is 0.51 and typescript's 0.55 sits
+# in the same gap. The two functions named for absorbing failure --
+# `try_read` and `load_config_or_default` -- are excluded by the matcher,
+# which `--show-subjects` confirms: 8 catches in the file, 6 matched.
+at: 0.55
+axis: file
+severity: warning
+# The `catch` arm of a `try ... catch { }` or of an expression-level
+# `x catch { }`. A catch inside a function whose name declares that failure
+# is absorbed is safe-name-is-safe's subject, not this rule's; MoonBit's
+# grammar declares no fields, so the exclusion matches the identifier by
+# kind and regex.
+rule:
+  all:
+    - kind: try_catch_clause
+    - not:
+        inside:
+          stopBy: end
+          all:
+            - kind: function_definition
+            - has:
+                kind: function_identifier
+                stopBy: end
+                regex: "^(safe|try|maybe)(_|$)|(_or_null|_or_default|_or_else|_or)$"
+# The same sentence as typescript/catch-hides-failure, by copy.
+ask: >-
+  This catch block hides a failure the function's caller needed to know
+  about.
+criteria:
+  "true": >-
+    The catch block neither rethrows, returns an error value the signature
+    admits, nor reports through a channel the function is documented to use;
+    it returns a default, an empty value, a made-up value or nothing, or only
+    logs, and the function's name or return type promises a real result --
+    a value that was fetched, parsed or computed, or an operation such as a
+    save or a send that the caller will assume happened.
+  "false": >-
+    The failure is propagated -- rethrown, wrapped, or logged and then
+    rethrown; converted into a value the caller can distinguish from success,
+    such as a Result, an error entry the return value carries, or null or
+    undefined when the return type admits it; or absorbed where absorbing is
+    the point: a cleanup or best-effort step after the real result is
+    already in hand, a catch whose only job is to fall back to the next
+    attempt or the next source, a catch that swallows only the case in which
+    the operation's goal already holds -- removing what is already gone,
+    creating what already exists -- and rethrows everything else, or a
+    top-level entry point that reports and exits with a non-zero status.
+note: >-
+  Only the catch captured as the match is judged, against the function it
+  sits in. A function returning an optional (T | null | undefined) or a
+  Result-like type has declared that it absorbs failure; a function whose
+  return type is void and whose name is an operation (save, send, publish)
+  has not -- its caller assumes the operation happened. A secondary failure
+  -- removing a temporary file, closing a handle, flushing a metric -- that
+  is swallowed after the function's real work has succeeded is not the
+  failure the caller needed.

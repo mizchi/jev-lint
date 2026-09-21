@@ -1,0 +1,325 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:28:28.471Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/test-name-describes-code",
+  "rules": [
+    {
+      "id": "test-name-describes-code",
+      "draft": "95b8e1e9c53c",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 44,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 50,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 55,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 60,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 44,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 50,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 55,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 60,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 44,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 50,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 55,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-describes-code",
+        "file": "rules/moonbit/test-name-describes-code/fixtures/cart_test.mbt",
+        "line": 60,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 22035,
+    "usd": 0.0009254700000000001,
+    "ms": 277
+  }
+}

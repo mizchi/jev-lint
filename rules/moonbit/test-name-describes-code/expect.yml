@@ -1,0 +1,46 @@
+default: clean
+fixtures/cart_test.mbt:
+  - line: 23
+    label: bad
+    window: 0
+    reason: "the title says add appends; the body removes."
+  - line: 29
+    label: bad
+    window: 0
+    reason: "the title says it counts the lines; the body totals their values. MISSED at 0.28-0.33: the title names `total` and the body calls `total_of`, and the model takes the subject matching for the operation matching. The rule file records it."
+  - line: 12
+    label: clean
+    window: 0
+    reason: "the empty cart the title names."
+  - line: 7
+    label: clean
+    window: 0
+    reason: "sums the lines, as it says."
+  - line: 17
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims a shorter cart and the body asserts the length. Its first wording, `remove drops the line`, answered 0.36-0.46 alone and 0.77-0.79 once a sibling in the same request said `remove_at drops the line at that index and keeps the rest` -- the corpus's own precision, not the test's fault. Reworded to claim what it asserts."
+  - line: 34
+    label: clean
+    window: 0
+    reason: "the discount the title names."
+  - line: 39
+    label: clean
+    window: 0
+    reason: "hard clean: a zero-percent case, asserted exactly."
+  - line: 44
+    label: clean
+    window: 0
+    reason: "hard clean: the title names the index and what survives, and the body does both. Its first wording -- `remove leaves the other lines alone` -- answered 0.66-0.69, since a title that says what is LEFT alone reads as a test that removes nothing."
+  - line: 50
+    label: bad
+    window: 0
+    reason: "the title says it rejects a percent over one hundred; the body passes fifty."
+  - line: 55
+    label: bad
+    window: 0
+    reason: "the title says negative prices are ignored; the body passes two positive ones."
+  - line: 60
+    label: clean
+    window: 0
+    reason: "hard clean: the index past the end is in the body, and the cart comes back unchanged."

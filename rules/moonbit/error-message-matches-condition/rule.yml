@@ -1,0 +1,97 @@
+id: error-message-matches-condition
+language: moonbit
+kind: noul
+subject: enclosing
+# `local`: the condition is in the enclosing function, and the message is
+# in the match. The whole file is not needed and costs more.
+state: local
+# 0.76, fitted 2026-09-21 on the fixtures beside it (10 subjects: 4
+# defects, 6 cleans of which 3 are hard twins -- the same message over the
+# branch that earns it, beside the branch that does not, 3 passes). Cleans
+# top at 0.66 (`quantity is required` over `text.is_empty()`, a message
+# that names the value rather than the emptiness), defects start at 0.86.
+# typescript ships at 0.65, which sits INSIDE this corpus's clean band and
+# flipped that case across passes; the midpoint leaves 0.10 above the
+# clean band and 0.10 below the defects.
+at: 0.76
+axis: file
+severity: warning
+# The guarding branch AND the failure inside it as ONE match, so that two
+# branches raising the same message in one function are two different
+# matches. Matching the `raise` alone made them one: a promoted subject is
+# keyed on the enclosing text plus the match text, and `raise
+# OrderError("no items to ship")` twice in one function is one key -- and
+# the model, shown the same function and the same matched line twice,
+# answered 0.89 for both. The copied message is the defect class this rule
+# exists for, so the condition has to be in the match. The same lesson the
+# typescript copy records.
+#
+# Where MoonBit says a failure with words: `raise SomeError("...")`,
+# `abort("...")` and `fail("...")`, inside an `if` or a `guard ... else`.
+# A message with a value in it is a `string_interpolation` rather than a
+# `string_literal`, and most real messages are one, so both are matched.
+rule:
+  all:
+    - any:
+        - kind: if_expression
+        - kind: guard_expression
+    - has:
+        stopBy: end
+        any:
+          - all:
+              - kind: raise_expression
+              - has:
+                  any:
+                    - kind: string_literal
+                    - kind: string_interpolation
+                  stopBy: end
+                  pattern: $MESSAGE
+          - all:
+              - kind: apply_expression
+              # The callee is a `qualified_identifier`, so the name is a
+              # grandchild rather than a child.
+              - has:
+                  kind: qualified_identifier
+                  has: { kind: lowercase_identifier, regex: "^(abort|fail|panic)$" }
+              - has:
+                  any:
+                    - kind: string_literal
+                    - kind: string_interpolation
+                  stopBy: end
+                  pattern: $MESSAGE
+# The same sentence as typescript/error-message-matches-condition, by copy.
+ask: >-
+  The message given to this error ($MESSAGE) misdescribes the condition
+  that leads to the throw.
+criteria:
+  "true": >-
+    The message names a different cause, value, operation or expectation
+    than the condition guarding the throw actually checks: it says a thing
+    is missing when the check is about its permission, form or range; it
+    names one field or operand when the condition tests another; it names one
+    failure (a timeout, an expiry) when the status or state tested is a
+    different one (a 404, an absence); it states a bound or direction the
+    condition does not test; or it is a copy of another throw's message in
+    the same function and describes that throw's condition rather than this
+    one.
+  "false": >-
+    The message describes the condition that leads to the throw, whether it
+    states the failed requirement, its consequence, or the intent the check
+    serves. A message that is short, generic or lacks detail is not wrong,
+    only unhelpful; a generic message on a generic guard is a match. A
+    message that quotes the offending input, that names what cannot proceed
+    rather than the value that failed, or that wraps a caught error with the
+    name of the operation that failed, is a match. In a test file, a throw
+    whose condition compares a call count, a route, an id or an amount with
+    a fixed sentinel value and whose message names a failure of the real
+    dependency is a test double simulating that failure: its message
+    describes the scenario the test sets up, not the condition, and is a
+    match.
+note: >-
+  Judge only the throw whose message is captured as MESSAGE -- matched together
+  with the if that guards it, when one does -- against the
+  condition or branch in the enclosing function that leads to it. Whether
+  the check itself is correct, and whether the other throws in the function
+  are right, is not the question. A throw with no condition -- a rethrow, a
+  wrapper in a catch, an unconditional failure at the end of a function --
+  is judged against the operation it reports.

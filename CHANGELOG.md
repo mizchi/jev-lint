@@ -10,10 +10,13 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added
 
-- `rules/moonbit/`: ten rules ported to MoonBit -- `fn-name-promises`
-  (0.44), `var-name-describes-value` (0.50),
-  `type-name-describes-shape` (0.28), `idempotent-name` (0.49),
-  `pure-name-is-pure` (0.55),
+- `rules/moonbit/`: fifteen rules ported to MoonBit, every one this tool
+  has that a MoonBit file can carry -- `fn-name-promises` (0.44),
+  `var-name-describes-value` (0.50), `type-name-describes-shape` (0.28),
+  `module-name-describes-contents` (0.55), `idempotent-name` (0.49),
+  `pure-name-is-pure` (0.55), `catch-hides-failure` (0.55),
+  `error-message-matches-condition` (0.76), `test-name-describes-code`
+  (0.70), `tests-cover-failure-paths` (0.68),
   `safe-name-is-safe` (0.39), `comment-describes-declaration` (0.59),
   `comment-describes-block` (0.45), `doc-errors-match-body` (0.50) and
   `test-name-verifies-claim` (0.62) -- each fitted on its own fixtures over

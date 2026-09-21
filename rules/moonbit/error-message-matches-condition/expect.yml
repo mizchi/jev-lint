@@ -1,0 +1,42 @@
+default: clean
+fixtures/orders.mbt:
+  - line: 6
+    label: bad
+    window: 0
+    reason: "the branch checks that the balance covers the amount; the message talks about the amount's sign."
+  - line: 22
+    label: bad
+    window: 0
+    reason: "the branch checks the address; the message says there are no items -- and the very next branch is the one that checks the items."
+  - line: 33
+    label: bad
+    window: 0
+    reason: "a permission check that says the order was not found."
+  - line: 72
+    label: bad
+    window: 0
+    reason: "the branch checks the percent; the message talks about the total."
+  - line: 14
+    label: clean
+    window: 0
+    reason: "hard clean: the same message as the defect above, over the branch that actually checks the amount's sign."
+  - line: 25
+    label: clean
+    window: 0
+    reason: "hard clean: the same message as the defect above, over the branch that checks the items."
+  - line: 41
+    label: clean
+    window: 0
+    reason: "the index is out of range and the message names the index."
+  - line: 49
+    label: clean
+    window: 0
+    reason: "the length check and the message say the same thing."
+  - line: 56
+    label: clean
+    window: 0
+    reason: "the status check and the message say the same thing."
+  - line: 64
+    label: clean
+    window: 0
+    reason: "hard clean: an empty string and a message that says the value is required."
