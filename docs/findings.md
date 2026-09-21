@@ -1652,11 +1652,11 @@ work.
 
 ## 21. Eight rules that read shell scripts, and the subject that had to change
 
-A port of the nineteen checks in
+A port of the twenty checks in
 [luantak/is-malicious](https://github.com/luantak/is-malicious) -- a
 sibling tool that asks a model whether a codebase does something hostile --
-onto shell. Eight of the nineteen, the ones a `.sh` file can actually
-carry. One ast-grep grammar, `Bash`, parses `sh`, `bash` and `zsh`, so
+onto shell. Eight of the twenty in this first tranche, the ones a `.sh`
+file most obviously carries. One ast-grep grammar, `Bash`, parses `sh`, `bash` and `zsh`, so
 `rules/shell/` is one directory for three shells.
 
 **The subject is the finding.** The source project asks its questions of
@@ -1725,6 +1725,31 @@ with the opposite instruction -- the rest of the file is admissible
 evidence about why this step is here -- moved the defect band up ~0.20 AND
 lowered cleanTop from 0.13 to 0.08. On `located`, telling the model to
 ignore the file is telling it to ignore the answer.
+
+**A suite can pass without having been measured, and `eval` will not say
+so.** Four of the eleven agents building this pack hit it independently.
+The API returned HTTP 529 in bursts through the session, and **a request
+that fails is recorded as a null answer and reported as nothing at all**:
+the run prints its subject count, its request count, its cost and a
+precision/recall table computed over whatever came back. One agent got
+`P 1.00 R 0.67` off three answered subjects out of ten. In the whole-run
+case -- `0 request(s)`, `$0.00000`, every value null -- `eval --replay`
+then reports the suite as "all as shipped", because it reproduces a
+baseline of nothing perfectly, with tp, fp and fn all zero.
+
+`check` reports request failures loudly. `runEval` maps the samples into
+the record and never counts how many came back empty; its log line ("N
+subject(s), M request(s)") does not compare M against what was planned,
+which is the one subtraction that would have caught this. The reliable
+check is a grep for `"value": *null` in `baseline.json` -- note the space;
+a grep for `"value":null` matches this file format never, and was the
+first thing this notebook got wrong about it.
+
+Two of the pack's sixteen baselines carry nulls on SOME subjects of some
+passes (19 of 69 entries in one, 10 of 66 in the other) while the rest hold
+real answers. A fit computed over two passes of a subject instead of three
+is not the fit that was claimed, and no number in the output distinguishes
+them. Both were caught before promotion by the grep, not by the tool.
 
 **tree-sitter-bash, for whoever writes the ninth rule.** A background `&`
 is an anonymous token with no named node, so "runs detached" is unreachable

@@ -1,0 +1,148 @@
+id: says-one-thing-does-another
+language: Bash
+kind: noul
+# The claim, not the script. Every other rule in this pack asks what a line does
+# TO the machine; this one asks whether what the script SAYS matches what it
+# does -- the same axis as `comment-describes-declaration` and `fn-name-promises`,
+# which is this tool's oldest and best-measured question. So the subject is the
+# claim itself: a line of output a person reads, a prompt a person answers, a
+# banner a person believes. `state: located` supplies the other half -- the code
+# that either honours the claim or contradicts it two lines down.
+subject: node
+state: located
+# 0.72, fitted 2026-09-21 on the fixtures beside it (41 subjects: 8 defects,
+# 33 cleans of which 12 hard, 3 passes). The highest cutoff in this pack, and
+# the reason is the clean band, not the defects. Every designed legitimate twin
+# fell to the floor: the IDENTICAL sentence "Cleaning temporary files and build
+# caches..." reads 0.13 over `rm -rf .cache/build` against 0.86 for the same
+# words over `~/.ssh/id_*`; "nothing was changed" on an exit path reads 0.08
+# against 0.97 for "nothing is uploaded" above a `curl -d`; a `read -s` for the
+# psql the prompt named reads 0.08 against 0.84 for the one that POSTs what it
+# collects; a heredoc naming Docker, Inc. and linking docker.com reads 0.08
+# against 0.94 for one in the voice of Apple Software Update. What sets the
+# cutoff is finding 1 of the pack report instead -- two ORDINARY, ACCURATE
+# lines that share a file with a defect. `printf 'Freed %s MB'` five lines
+# under the fake cleanup reads 0.53, and "Thanks! Telemetry enabled." -- true,
+# and the honest branch of a sham consent prompt one line from two defects --
+# reads 0.57. Defects start at 0.84 (`setup_wizard.sh:12` and
+# `security_update.sh:18`). Gap 0.27 wide. Not the midpoint (0.70): that top
+# clean is also the least stable answer in the corpus -- 0.10 of spread over
+# three passes, once as high as 0.62 -- while nothing in the defect band moves
+# more than 0.03 and its worst single pass is 0.83. So the room goes above the
+# cleans. 0.72 leaves 0.15 over the highest clean mean and 0.12 under the
+# lowest defect mean, and on single passes 0.10 and 0.11, with no decision
+# flips. It also matters which side the cost lands on: this matcher fires on
+# every user-facing `echo` in a script, so a cutoff 0.02 too low is paid
+# hundreds of times on real code and one 0.02 too high is paid by one laggard
+# defect.
+at: 0.72
+axis: file
+severity: warning
+# Everything addressed to a person, over-matched on purpose: `echo` and
+# `printf` (progress, reassurance, warnings, success), a heredoc printed to the
+# terminal, `read` prompts including `read -s`, a `case` on a yes/no answer,
+# and the desktop dialog toolkits. Nearly all of these are honest in nearly
+# every script, which is the point: the clean band has to be the ordinary
+# progress message, or the cutoff means nothing.
+rule:
+  any:
+    # A line addressed to a person. Not inside a command substitution -- an
+    # `echo` whose output is captured into a variable is plumbing, not a claim
+    # -- and not a bare `echo`, which prints a blank line and says nothing.
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(echo|printf)$" }
+        - not: { regex: "^(echo|printf)$" }
+        - not: { inside: { kind: command_substitution, stopBy: end } }
+        # ...nor redirected into a file. `echo x > "$CONF"` writes config, it
+        # does not address anyone. `>&2` stays: stderr is where a script talks
+        # to the person, and three of the cleans below are exactly that.
+        - not:
+            inside:
+              kind: redirected_statement
+              has: { kind: file_redirect, regex: "^>>?[^&]" }
+    # A prompt a person answers, including the password kind.
+    - kind: command
+      has: { field: name, regex: "^read$" }
+    # A dialog or notification a person reads and clicks. `has: { stopBy: end }`
+    # rather than `field: name` so that a `sudo osascript` wrapper, which
+    # tree-sitter-bash parses as one command named `sudo`, is still found.
+    - kind: command
+      has: { stopBy: end, regex: "^(zenity|whiptail|dialog|kdialog|osascript|notify-send|xmessage)$" }
+    # A heredoc printed to the terminal: a banner, a warning, a usage block.
+    # tree-sitter-bash gives `cat <<EOF ... EOF` a `redirected_statement` AND an
+    # inner `command` named `cat` on the same line, so the wider node takes it.
+    - kind: redirected_statement
+      has: { kind: heredoc_redirect }
+    # The branch that decides whether the prompt above meant anything.
+    - kind: case_statement
+      regex: "[yY](es)?\\)|\\[yY\\]|[nN](o)?\\)|\\[nN\\]"
+ask: >-
+  This line tells the person running the script something that the rest of the
+  file contradicts.
+criteria:
+  "true": >-
+    What the text says is not what this script does, and a reader who believed
+    it would be wrong about something they would act on. Any one of these is
+    enough. It denies an effect the script has -- "nothing is uploaded" in a
+    file that POSTs the bundle, "read-only" or "no changes will be made" beside
+    a write, "nothing was changed" after a change. It describes the work as one
+    thing while the code does another -- "cleaning temporary files" that deletes
+    a user's documents or keys, an advertised feature that is a wrapper around
+    an unrelated action. It speaks as a program or vendor this script is not: a
+    banner, a dialog or a password prompt in the voice of the operating system,
+    the package manager or a named company, where the script is an ordinary
+    script and what it does with the answer is its own. It asks for a decision
+    it does not honour -- a consent or confirmation prompt whose branches both
+    do the same thing, or whose refusal branch says the thing is off while the
+    code below turns it on. It asks for a secret under a pretext. A prompt is
+    read together with the text that sets it up: a `read -s` under a banner, a
+    heading or a message in the lines directly above it inherits that text's
+    claim, and a password prompt that lets the person believe they are
+    authenticating to the system, a service or a vendor -- while the script
+    stores the answer, sends it somewhere, or uses it for something the prompt
+    did not name -- is a pretext even when the prompt's own words are bland.
+    A claim about what has already happened that is false -- announcing success
+    for a step that was skipped or failed.
+  "false": >-
+    The text is an honest description of what the script does. An ordinary
+    progress message, terse or not -- "Installing dependencies...",
+    "Restoring...", "Building the CLI..." -- where that is what the next lines
+    do. A message that describes intent rather than mechanism, "Preparing the
+    workspace" for a `mkdir` and a submodule checkout, where the summary is
+    fair. A success or completion line printed after the thing actually
+    succeeded. A warning that describes a real consequence and overstates
+    nothing, however alarming. A `read -s` for a password the script then uses
+    for exactly the job the prompt named. A confirmation prompt whose answer
+    genuinely decides what happens next. Naming another vendor or product
+    truthfully -- telling the reader that Docker is not installed and where to
+    get it -- is not impersonation. A usage block, a banner with the script's
+    own name, or an error message on a path the script really takes. Vagueness,
+    brevity, marketing tone and a message that says less than it could are not
+    defects here; only a claim the file contradicts is.
+note: >-
+  Only claims this file can be checked against. A message about something the
+  script cannot show -- what a server will do with the data, what the user
+  should do next week, whether the vendor is trustworthy -- is not judgeable
+  here and is not a violation. The rest of the file is the evidence and it is
+  admissible: read the lines after the message, not just the message. Nearly
+  every `echo` in nearly every script is honest, and a rule that flags ordinary
+  progress messages is worth nothing, so the question is never "could this
+  wording mislead someone" but "does the code under it make this sentence
+  false". A file with a defect in it does not make its honest lines
+  dishonest. Judge each line against the code that line is about and nothing
+  else: a true report of a measurement is true whether or not the line above it
+  lied; a branch message that accurately describes what that branch does is
+  accurate even when the prompt that led to the branch was a sham; a progress
+  message that is right about the step it announces is right however the script
+  ends. Answer low for those -- the neighbours' character is not evidence about
+  them. What IS evidence is the setup of the very interaction this line belongs
+  to: the banner a prompt is asked under, the question a branch is answering.
+  That is part of what this line tells the person, and it counts. And a message
+  that is imprecise in the direction of saying less ("Cleaning caches" for
+  something that also removes a lockfile) is not a lie. The deception has to be
+  one a reader would act on.
+explain:
+  impersonation: Pretends to be another app, vendor, or system prompt.
+  fake_consent: Shows a false permission or update dialog.
+  bait_and_switch: Advertised feature is a cover for unrelated hostile actions.

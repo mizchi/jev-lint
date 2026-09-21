@@ -1,0 +1,130 @@
+id: ships-local-data-out
+language: Bash
+kind: noul
+# The transfer, not the script. "Is this script exfiltrating data" is a question
+# about a whole program's intent, and every backup cron and every photo uploader
+# answers yes to it; "whose data is this command moving, and does the job this
+# script exists for account for where it lands" is a question about the text
+# under it, with the rest of the file in the state to say what the script was
+# given, what it produced itself, and what it went and found.
+subject: node
+state: located
+# 0.41, fitted 2026-09-21 on the fixtures beside it (26 subjects: 9 defects,
+# 17 cleans of which 14 hard, 3 passes). Cleans top out at 0.19 -- a `mysqldump`
+# of the production database four lines above an exfil of the same database,
+# saved by `--no-data`, so what it produces is a schema with no rows in it -- and
+# the rest of the clean band is 0.17 and below: the whole-photo-library `rclone
+# sync` to the account the user linked at 0.07, the mirror `rsync` to a host from
+# `$1` at 0.06, the release tarball `curl -F file=@` at 0.04. Defects start at
+# 0.62 (`contact_index.sh`, the `sqlite3` read of the address book -- the
+# gathering half, where nothing has left the box yet; every defect on which bytes
+# actually move sits at 0.84 or above). Midpoint of a gap 0.43 wide, 0.21 of
+# headroom on each side, no decision flips over three passes, max pass-to-pass
+# spread 0.02. The first guess, 0.70, sat above the gathering half and lost it on
+# all three passes.
+at: 0.41
+axis: file
+severity: warning
+# Both halves of a transfer, over-matched on purpose and joined by `any:`: the
+# command that assembles a dump (an archiver, a database dump, a `find` sweep of
+# a home or data directory) and the command that moves bytes off the box (an
+# HTTP client with a body or a file, an ssh/rsync/rclone copy, an object-store
+# put, a mailer). A pipeline is matched whole so that `mysqldump | curl
+# --data-binary @-` is one question rather than two.
+utils:
+  gathers_or_ships:
+    kind: command
+    any:
+      # an HTTP client given a body or a file to upload. `stopBy: end` rather
+      # than `field: name` throughout, because a wrapper eats the name: `sudo
+      # rsync` and `nohup curl` are one `command` node named `sudo`/`nohup`.
+      - all:
+          - has: { stopBy: end, regex: "^(curl|wget|http|https|httpie)$" }
+          - has: { stopBy: end, regex: "^(-T|--upload-file|-d|--data|--data-raw|--data-binary|--data-urlencode|-F|--form|--post-file|--post-data)$" }
+      # a command whose whole job is to move bytes to another host or mailbox
+      - has: { stopBy: end, regex: "^(scp|sftp|rsync|rclone|nc|ncat|socat|mail|mailx|sendmail|mutt|ftp|lftp|tftp)$" }
+      # an object-store copy
+      - all:
+          - has: { stopBy: end, regex: "^(aws|gsutil|az|b2|s3cmd|gcloud|mc)$" }
+          - has: { stopBy: end, regex: "^(s3|cp|sync|copy|storage|put|mv)$" }
+      # the gathering half: an archiver, or a dump of a database
+      - has: { stopBy: end, regex: "^(tar|zip|7z|7za|mysqldump|pg_dump|pg_dumpall|mongodump|sqlite3)$" }
+      # a sweep whose root is a home directory or an application data store
+      - all:
+          - has: { stopBy: end, regex: "^find$" }
+          - has: { stopBy: end, regex: "HOME|Documents|Desktop|Downloads|Library|Mail|AppData|\\.config|/home/|/Users/|/var/lib|/srv" }
+rule:
+  any:
+    - kind: pipeline
+      has: { stopBy: end, matches: gathers_or_ships }
+    # Nesting duplicates subjects: the commands inside a pipeline are left to
+    # the pipeline, which is the whole transfer and the whole question.
+    - all:
+        - matches: gathers_or_ships
+        - not: { inside: { stopBy: end, kind: pipeline } }
+ask: >-
+  This command moves data belonging to the user or the business off the machine,
+  or gathers it for a move, to a destination the job this script exists for does
+  not account for.
+criteria:
+  "true": >-
+    What travels here is local data the script neither produced nor was handed --
+    documents, photos, mail or messages, a browser or application database, a
+    production database's rows, the contents of a home directory -- and this
+    script sends it off the box, or this command is the step that assembles it
+    for a send a later line makes. Both halves are this case: the `tar`, the
+    `find` sweep, the `mysqldump` that builds the dump, and the `curl`, `scp`,
+    `rsync`, `rclone` or `mail` that carries it. A destination with no stated
+    relation to the script's job -- a paste or worker host, a personal cloud
+    remote, a free mailbox, an ingest endpoint the script never explains -- is
+    this case however narrow the collection was. So is a destination nothing
+    stands behind: a bare IP address, an opaque host, an ad-hoc path under
+    `/var/tmp` or `/tmp` on someone else's machine, reached with host-key
+    checking turned off -- no argument, no configuration the user wrote, no
+    named service, nothing the person running this would recognise. A copy
+    that leaves the machine to a place like that is this case even when the
+    script calls it a backup, a mirror, an index or a cache, and even when
+    keeping the copy would genuinely help the user. And a collection broad enough
+    that nobody could say afterwards what went -- a whole home directory, every
+    document on the disk, an app's entire data store -- is this case however
+    respectable the destination sounds.
+  "false": >-
+    Either what leaves is not the user's or the business's data -- a build
+    artifact, a release tarball, a package mirror, a log or a crash dump this
+    script's own program wrote, a schema with no rows in it, a file listing -- or
+    the data is theirs and this transfer is the thing the script exists to do,
+    named in the script and visible to whoever runs it: a database backup to the
+    estate's own store, a sync to an account the user linked, a mirror push to a
+    host passed as an argument, a support bundle for a ticket the operator
+    supplied, an upload to the project's own release or crash API. A transfer
+    whose source, destination and contents the script all states, and whose
+    destination belongs to the party whose data is moving, is not this case
+    however much data it moves. A command that only gathers, and whose output
+    stays on this machine and is used here, is not this case either.
+note: >-
+  The breadth of what was gathered and where it came to rest, not whose secret it
+  was. `reads-secrets-it-does-not-own` already covers credentials, tokens and
+  keys; this one is the user's and the business's DATA -- documents, databases,
+  mailboxes, whole home directories. The two will occasionally both fire on one
+  line, and that is fine; judge this line on how broad the collection was and
+  where it ended up, not on whether a secret was among it. The rest of the file
+  is admissible evidence and usually decisive: it says what the script was given,
+  what it produced itself, and what it went and found. Scope the exception to
+  what is moving, never to what the script calls itself -- a header comment
+  saying sync, backup, index, cache or telemetry establishes nothing, and neither
+  does a reputable domain, a `--quiet` flag, an `rm` of the staged archive
+  afterwards, or `set -euo pipefail`. Data the script's own program produced on
+  this machine -- its logs, its crash dumps, its build output, its artifacts --
+  is not the user's data being taken, even when it is uploaded without a prompt.
+  What makes a destination accounted-for is that something names it and someone
+  could object to it: an argument, a config the user wrote, a bucket or endpoint
+  the script prints before using, a service the program this script belongs to
+  runs. A literal `s3://` bucket whose name says whose it is and what is in it
+  passes that test; a literal IP address with an ad-hoc path on it does not, and
+  neither does a domain the script mentions once and never explains. Judge this
+  command and not its neighbours: packaging a build directory two lines from a
+  harvest of `$HOME` is still packaging a build directory.
+explain:
+  silent_upload: Uploads local files or user content without a matching product purpose.
+  bulk_harvest: Walks disks or app data and ships a broad dump outward.
+  hidden_channel: Sends data over an unexpected host, webhook, or paste service.

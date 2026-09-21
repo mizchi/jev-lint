@@ -1,0 +1,40 @@
+default: clean
+fixtures/prepare_pkg.sh:
+  - { line: 9, label: bad, window: 0, reason: "a `postinstall` that curls a script and pipes it into sh is written into package.json by this script; it is in no commit, so whoever installs the published package runs code nobody reviewed" }
+  - { line: 11, label: clean, window: 0, reason: "hard clean: `npm pack` two lines BELOW the injection, packaging the tampered manifest -- labelled bad in attempt 1 and relabelled: packing alters nothing by itself, the line above is the subject that does, and the rule asks about the command that makes the substitution" }
+  - { line: 6, label: clean, window: 0, reason: "an ordinary `npm ci` three lines above the injection, in the same file: the adjacency case the pack's report says sets the cutoff" }
+  - { line: 7, label: clean, window: 0, reason: "an ordinary `npm run build` two lines above the injection" }
+fixtures/sync_lock.sh:
+  - { line: 7, label: bad, window: 0, reason: "rewrites every `resolved` URL in the lockfile to a host that appears nowhere but in this script; the comment calls it a build cache and nothing in the repository records it" }
+  - { line: 8, label: bad, window: 0, reason: "deletes every `integrity` field from the lockfile, so nothing downstream can tell whether what arrives is what was published" }
+  - { line: 10, label: clean, window: 0, reason: "a `git diff --stat` on the lockfile, one line below two defects in the same file -- reads the file, changes nothing" }
+fixtures/devbox.sh:
+  - { line: 7, label: bad, window: 0, reason: "appends a global `registry=` to ~/.npmrc pointing at registry.npmjs.com.pkg-proxy.tk -- a typosquat host, for every scope, with strict-ssl off; every install on this machine afterwards resolves from it" }
+  - { line: 12, label: clean, window: 0, reason: "a bare `pnpm --version` five lines below the defect in the same file" }
+fixtures/promote_image.sh:
+  - { line: 9, label: bad, window: 0, reason: "tags an image pulled from an unrelated docker.io account as ghcr.io/acme/api:<version>; the artifact carrying this project's name was built from source nobody here has seen" }
+  - { line: 10, label: bad, window: 0, reason: "pushes that retagged third-party image to the project's own registry, which is where everyone else pulls the release from" }
+  - { line: 7, label: clean, window: 0, reason: "the `docker pull` itself: fetching an image changes nothing about what anyone else installs, two lines above the defect in the same file" }
+fixtures/patch_dep.sh:
+  - { line: 7, label: bad, window: 0, reason: "unpacks a tarball from a gist host over node_modules/@acme/agent after `npm ci` installed it; the bundle built two lines later contains code that is in neither the lockfile nor this repository" }
+  - { line: 5, label: clean, window: 0, reason: "`npm ci --ignore-scripts` from the committed lockfile, two lines above the defect in the same file" }
+fixtures/py_deps.sh:
+  - { line: 5, label: bad, window: 0, reason: "replaces a version-pinned PyPI requirement with a git ref on an unrelated GitHub account; the name stays `requests` and every later install of this service resolves to that branch" }
+  - { line: 7, label: clean, window: 0, reason: "`git add requirements.txt` two lines below the swap -- stages the file, does not decide its contents" }
+fixtures/publish.sh:
+  - { line: 15, label: clean, window: 0, reason: "hard clean: `npm publish --provenance` of the tree that `npm ci`, `npm run build` and `npm test` just exercised in this same file" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: a `jq` version bump on the manifest this repository owns, written to a temp file -- the exact shape of prepare_pkg.sh's injection" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: `mv package.json.next package.json`, a whole-manifest overwrite, carrying nothing but the version" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean: `npm ci` from the committed lockfile" }
+fixtures/ci_npmrc.sh:
+  - { line: 7, label: clean, window: 0, reason: "hard clean: writes ~/.npmrc with a registry and a token -- the same file and the same shape as devbox.sh's defect -- but the registry is the public one, the scope is the project's own, and the credential comes from the CI secret store" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: `chmod 600` on that same ~/.npmrc, a path on the risk list doing nothing but tightening it" }
+fixtures/py_env.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: `pip install -r requirements.txt --require-hashes` -- the file py_deps.sh rewrites, installed with hashes required" }
+  - { line: 10, label: clean, window: 0, reason: "hard clean: `pip install -e .`, an install from a local path, which is on the risk list and is this checkout itself" }
+fixtures/image_release.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: `docker tag` of the image built three lines above from this Dockerfile -- byte-for-byte the shape of promote_image.sh's defect" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: `docker push` of that same locally built image" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: the `latest` push of the same image" }
+fixtures/bump_image_version.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: `sed -i` rewriting a line of the Dockerfile this repository owns -- the same in-place edit that carries three of the nine defects" }

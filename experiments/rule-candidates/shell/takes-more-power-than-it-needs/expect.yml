@@ -1,0 +1,46 @@
+default: clean
+fixtures/render_thumbnails.sh:
+  - { line: 6, label: bad, window: 0, reason: "re-execs the whole script as root before doing anything; every path it then touches is a relative ./media and ./thumbs under the invoking user, and convert needs no privilege -- root is taken and never used for anything that needed it" }
+  - { line: 20, label: bad, window: 0, reason: "chowns the media library and its output to root:root, so the non-root service that owns those files can no longer write them; the run leaves the machine changed in a way the job never required" }
+fixtures/provision_ci_host.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: the same `exec sudo \"$0\" \"$@\"` re-exec as the defect above, escalating once with the reason in the two comment lines directly over it -- and the body that follows is apt-get, /opt, /etc and systemctl, all of which need it" }
+  - { line: 16, label: clean, window: 0, reason: "hard clean: `usermod -aG docker runner` is root-equivalent membership, and it is the declared purpose of the host -- a CI box whose runner account exists to run containers; the contested case a lazy rule flags on the group name" }
+fixtures/install_metrics_agent.sh:
+  - { line: 16, label: bad, window: 0, reason: "chmod 4755 leaves the agent setuid root for every user on the box; the unit two lines below starts it as a service, so nothing in this file needs the binary to escalate when a user runs it" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: `install -o root -g root -m 0755` three lines above the defect -- the same file, the same sudo, but the mode makes the binary unwritable rather than the process powerful" }
+  - { line: 14, label: clean, window: 0, reason: "the unit file into /etc/systemd/system at 0644; writing that path is what the root is for" }
+  - { line: 18, label: clean, window: 0, reason: "ordinary construct two lines under the defect: daemon-reload after installing a unit" }
+  - { line: 19, label: clean, window: 0, reason: "ordinary construct three lines under the defect: enabling the unit this script just installed" }
+fixtures/ci_sandbox.sh:
+  - { line: 10, label: bad, window: 0, reason: "--privileged plus --pid=host plus `/` bind-mounted to run a unit test suite; the container is handed the whole machine to do work an ordinary bind mount of the checkout would do" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean: the defect's own shape two lines above -- `docker run --user root`, but root inside an image with only $PWD mounted is container root, and it installs dependencies into the image's own tree" }
+fixtures/install_probe.sh:
+  - { line: 7, label: bad, window: 0, reason: "a downloaded install.sh piped straight into `sudo bash`; root is handed to bytes the script never sees, let alone checks" }
+  - { line: 9, label: bad, window: 0, reason: "a latency probe needs cap_net_raw; cap_sys_admin plus cap_dac_override is root in all but name, granted permanently on a file" }
+  - { line: 11, label: clean, window: 0, reason: "`sudo tee /etc/probe.toml` two lines under a defect: writing a config under /etc is exactly what the privilege is for" }
+fixtures/publish_site.sh:
+  - { line: 10, label: bad, window: 0, reason: "adds the invoking account to sudo and adm while publishing a static site; nothing was asked, nothing in the file needs it, and the membership outlives the run" }
+  - { line: 12, label: clean, window: 0, reason: "ordinary construct two lines under the defect: reloading the proxy that serves the directory this script just wrote" }
+fixtures/deploy_worker.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: `sudo -n true` is a probe that decides whether to ask rather than an escalation -- it takes no power and exits if it cannot get it" }
+  - { line: 13, label: clean, window: 0, reason: "installs the env file into /etc owned by the queue user; the root is for the path, and the file is not left owned by root" }
+  - { line: 14, label: clean, window: 0, reason: "hard clean: `sudo systemctl restart` of the very unit this script exists to roll -- the case a lazy rule flags because it sees sudo" }
+  - { line: 15, label: clean, window: 0, reason: "a status read; it inspects rather than takes" }
+fixtures/install_gateway.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: the defect's shape in install_probe.sh -- setcap on a binary -- but cap_net_bind_service is the narrowest capability there is, and it exists so the gateway does NOT have to run as root" }
+  - { line: 10, label: clean, window: 0, reason: "hard clean: `sudo -u gateway` drops to the service account to validate the config; sudo here moves power down, not up" }
+  - { line: 7, label: clean, window: 0, reason: "install -o root -m 0755 of a binary the repository built, into /usr/local/bin" }
+  - { line: 11, label: clean, window: 0, reason: "restart of the unit this script installs" }
+fixtures/entrypoint_api.sh:
+  - { line: 13, label: clean, window: 0, reason: "hard clean: setpriv drops to app:app before exec'ing the payload -- the entrypoint ends with less power than it started" }
+  - { line: 10, label: clean, window: 0, reason: "hard clean: `su - app -c` runs the migration as the service account rather than as the container's root" }
+fixtures/backup_db.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: `sudo su - postgres` looks like a double escalation and is a descent -- the dump runs as the database's own unprivileged role" }
+  - { line: 8, label: clean, window: 0, reason: "creates the backup directory owned by postgres, not root; the privilege is spent making the target less privileged" }
+fixtures/build_release.sh:
+  - { line: 13, label: bad, window: 0, reason: "sudo on a tar of a mktemp -d the operator owns into ./dist in the checkout: nothing in the step needs root, and the artifact it leaves behind is root-owned, so the next non-root build of the same tree fails. The softest defect in the corpus -- one unnecessary sudo inside an otherwise honest build" }
+fixtures/fix_node_prefix.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: `sudo chown -R root:root`, the exact shape of render_thumbnails.sh:20, but the target is /usr/local/lib/node_modules -- a system path that is SUPPOSED to be root-owned, and restoring it is the whole stated job" }
+  - { line: 10, label: clean, window: 0, reason: "the second half of the same repair, removing group and other write from the same system path" }
+fixtures/build_image.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: `docker run --privileged`, the same flag as the ci_sandbox.sh defect, on a --rm container whose recipe needs losetup and mkfs on real block devices; the power is the reason the container exists and it dies with the run" }

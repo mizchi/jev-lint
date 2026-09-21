@@ -146,7 +146,9 @@ export function formatPretty(
     out.push(
       c.yellow(
         `${result.undeclared.join(", ")}: no parser declared, so those rules did not run. ` +
-          "ast-grep has no grammar for them until `languages:` in the config names the compiled library.",
+          "ast-grep has no grammar for them until `languages:` in the config names the compiled library. " +
+          "How to build and declare one: docs/reference.md#a-language-ast-grep-does-not-have-built-in " +
+          "(https://github.com/mizchi/jev-lint/blob/main/docs/reference.md#a-language-ast-grep-does-not-have-built-in).",
       ),
     );
   }

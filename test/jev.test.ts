@@ -132,6 +132,26 @@ test("jev: the pacer charges the estimate, refills at its rate, and makes a requ
   assert.equal(pacer.delay(75_000, t0 + 500), 1000);
 });
 
+test("jev: the pacer treats a backwards clock as no elapsed time, not as a debt", () => {
+  // `at` comes from `Date.now()` on every call, so an NTP step or a laptop
+  // waking from suspend can hand `refill` a `now` that is earlier than the
+  // last one. Unclamped, the elapsed term goes negative and SUBTRACTS from
+  // the mirror: at the shipped 200,000 tokens/s a one-second step back takes
+  // 200,000 tokens out of a bucket the server never touched, and the client
+  // waits for a limit that is not being imposed -- silently, since no 429 is
+  // involved and `rateLimited` stays zero. Reported from jev-test-filter,
+  // which hit it by mixing `take()` against the wall clock with frozen-clock
+  // `delay(n, t)` calls.
+  const pacer = new Pacer(1000, 1000, 1_000_000);
+  assert.equal(pacer.available(999_000), 1000, "a second backwards is not a second's worth of debt");
+  // And the clock is still believed: `at` moves to the earlier instant, so a
+  // second that passes from THERE refills from there. Refusing to move `at`
+  // back would leave it in the future after a permanent step and stall the
+  // bucket until the clock caught up.
+  pacer.settle(0, 1000);
+  assert.equal(pacer.available(999_500), 500, "half a second from the new instant is half the rate");
+});
+
 await testAsync("jev: a 429 that never clears is given up on, with the server's message", async () => {
   const jev = new Jev({ apiKey: "k", retries: 0, fetch: always429, rateLimitWaitMs: 1, rateLimitRetries: 3 });
   let calls = 0;

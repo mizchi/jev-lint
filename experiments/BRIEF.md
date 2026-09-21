@@ -82,10 +82,16 @@ function, so give it the distance to the statement you labelled.
    read the verdict. `rewrite` means go back to subject/state/criteria, not
    to the thesaurus. Up to 3 attempts at the sentence per rule; record each
    attempt's gap in the report.
-5. `eval <dir> --repeat 3 --no-config` -> precision, recall and flips at the
-   rule's `at:`, the fitted cutoff beside them. Write the fitted `at:` into
-   rule.yml, remove `# uncalibrated`, and `eval <dir> --repeat 3 --accept
-   --no-config` to take the baseline.
+5. `eval <dir> --repeat 3 --no-config --cache none` -> precision, recall and
+   flips at the rule's `at:`, the fitted cutoff beside them. Write the fitted
+   `at:` into rule.yml, remove `# uncalibrated`, and `eval <dir> --repeat 3
+   --accept --no-config --cache none` to take the baseline.
+
+   `--cache none` on the `--accept` run too, and then look inside
+   `baseline.json`: an accept that reads a cache can write a baseline whose
+   `value` fields are all null, at no cost and in no time, and the next
+   `--replay` reports "all as shipped" over it with tp, fp and fn all zero. A
+   suite that passes without spending anything has not been measured.
 
 ## REPORT.md format
 

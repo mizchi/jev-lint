@@ -1,0 +1,111 @@
+id: phones-home
+language: Bash
+kind: noul
+# The construct, not the script. "Does this project collect telemetry" is a
+# question about a product; "is the traffic this command sends about the run
+# rather than about the work" is a question about the text under it, with the
+# rest of the file in the state to say what the run's work actually was.
+subject: node
+state: located
+# 0.55, fitted 2026-09-21 on the fixtures beside it (29 subjects: 6 reportable,
+# 23 cleans of which 14 hard, 3 passes). Cleans top out at 0.14 -- the metrics
+# shipper pushing this host's load and disk to a Prometheus gateway, which is
+# every surface signal of telemetry and is the one script whose job that traffic
+# IS -- and below it at 0.11 sit the two cases built to be mistaken for a report:
+# the chat webhook announcing the deploy to the team that ran it, and a POST of
+# version, sha256 and `$(whoami)@$(hostname -s)` that registers the artifact
+# rather than the run. Reportable cases start at 0.95 (the cron heartbeat, and
+# the install-error trap) and the other four are 0.97-0.98. Midpoint of a gap
+# 0.81 wide, 0.41 of headroom below and 0.40 above, no decision flips over three
+# passes, max pass-to-pass spread 0.02.
+# The band is bimodal rather than graded: this rule's question has an answer in
+# the text, and where the model is unsure it is unsure at 0.15, not at 0.5.
+at: 0.55
+axis: file
+# `severity: info`, and this is the only rule in the shell pack that reports a
+# FACT rather than a defect. Documented, anonymous, opt-out-able, entirely
+# well-intentioned telemetry answers yes exactly as loudly as an undisclosed
+# beacon does -- the finding says "this script tells someone that it ran", not
+# "this script is doing something wrong". Whether a given collector is
+# acceptable is a policy question about the operator, the product and the data,
+# and no amount of the surrounding script settles it; the rule's job is to put
+# the outbound report in front of a reader who can settle it. Raising this to
+# `warning` would make the model start judging the telemetry instead of finding
+# it, which is a different and much worse-posed question.
+severity: info
+# Every place a shell can talk to a host, over-matched on purpose: a `curl` or
+# `wget` of any shape (the tarball download, the artifact upload, the deploy
+# API call and the beacon are all in), the same tools behind a wrapper that
+# eats the command name, and every `trap` -- because a `trap ... ERR` that
+# posts on failure is the one telemetry shape with no network tool at the head
+# of the line. What the model decides is which direction the interesting part
+# of the request is travelling and what it is about.
+#
+# One tree-sitter-bash fact carries the trap branch: a trap body is a
+# `raw_string`, which contains no command node, so the `curl` inside it is not
+# also matched by the first branch and the line is reported once.
+rule:
+  any:
+    - kind: command
+      has: { field: name, regex: "^(curl|wget|http|https|httpie|fetch|aria2c)$" }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(sudo|nohup|setsid|timeout|env|nice|stdbuf)$" }
+        - has: { field: argument, regex: "^(curl|wget|http|httpie|fetch|aria2c)$" }
+    - kind: command
+      has: { field: name, regex: "^trap$" }
+ask: >-
+  This command reports the run itself to a collector -- that it happened, on
+  what machine, how long it took, or whether it failed.
+criteria:
+  "true": >-
+    What this sends is ABOUT the run rather than the work: a usage or
+    product-analytics event, a heartbeat that a scheduled job finished, a
+    duration, an exit status, a crash report, a diagnostic dump, an update or
+    feature-flag ping -- or a body assembled out of the things that identify a
+    run rather than carry its output: `uname`, `$HOSTNAME`, `$USER`, a machine
+    id, a tool version, a start time. The recipient is a collector: an
+    analytics or error-reporting vendor, a monitoring service, or the
+    maintainer's own ingest endpoint. It is this case whatever the intent --
+    documented, anonymous, opt-out-able, first-party and plainly benign
+    telemetry is still telemetry, and so is a one-line ping with nothing in it
+    but a key.
+  "false": >-
+    Either this command reports nothing about the run, or what it sends IS the
+    work: downloading the thing being installed, fetching config, fixtures or
+    credentials the script then uses, uploading the artifact, backup or report
+    that is this script's output, calling the API this script exists to drive
+    (a deploy, a release, a job submission, a search query, a bulk index
+    write), or reading a health or status endpoint instead of posting to one. A
+    request body that carries a version, a checksum or a builder's hostname is
+    not telemetry when those describe the payload being published rather than
+    the run that published it. A `trap` that only cleans up, unsets or logs
+    locally is not this case.
+note: >-
+  A fact, not an accusation. Report the traffic and leave the judgement to the
+  reader: this rule does not ask whether the telemetry is disclosed,
+  proportionate or acceptable, and a comment offering an opt-out, an anonymous
+  id or a first-party hostname does not make the answer no. The line that
+  decides is direction and subject. The traffic that IS the job is not
+  telemetry however much of it there is or however much it looks like a
+  beacon -- an installer downloading what it installs, a deploy script calling
+  the deploy API, a backup shipping the backup, an indexer POSTing documents,
+  a publisher registering the artifact it just uploaded. Telemetry is traffic
+  about the run: that it happened, where, how long it took, whether it failed.
+  A heartbeat to a monitoring service saying a cron job succeeded is this case
+  even though the operator chose the service and the whole payload is one query
+  string; a `curl` fetching a tarball is not, whatever is in the tarball.
+  Reading `/healthz` asks a machine how it is and is not this case; posting to
+  an ingest path says how this run went and is. A webhook the operator pointed
+  at their own chat channel delivers the script's result to the person who ran
+  it in a line a human reads -- that is the script's output reaching its
+  operator, not a report to a collector. An automated event posted to a
+  monitoring or paging service's ingest endpoint is the other thing, however the
+  operator feels about it: `{"event_action":"trigger","source":"$(hostname)"}`
+  says that this run failed on this box, which is the definition above.
+  `|| true`, `>/dev/null`, `-m 5` and `set -euo pipefail` establish nothing
+  either way.
+explain:
+  usage_analytics: Sends usage or product-analytics events off-box.
+  crash_or_diagnostics: Sends crash reports or diagnostic dumps to a collector.
+  vendor_sdk: Embeds a third-party analytics, error, or feature-flag SDK.

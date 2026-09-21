@@ -1,0 +1,892 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T07:19:32.304Z",
+  "model": "jev-1.13.0",
+  "suite": "shell/takes-more-power-than-it-needs",
+  "rules": [
+    {
+      "id": "takes-more-power-than-it-needs",
+      "draft": "d9c2ae3a94c8",
+      "at": 0.54
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/fix_node_prefix.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/fix_node_prefix.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_probe.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_probe.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_probe.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/build_release.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/provision_ci_host.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/provision_ci_host.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/build_image.sh",
+        "line": 10,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/render_thumbnails.sh",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/render_thumbnails.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/ci_sandbox.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/ci_sandbox.sh",
+        "line": 10,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/publish_site.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/publish_site.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/backup_db.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/backup_db.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/entrypoint_api.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/entrypoint_api.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/backup_db.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/backup_db.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/build_release.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/provision_ci_host.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/provision_ci_host.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/ci_sandbox.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/ci_sandbox.sh",
+        "line": 10,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/render_thumbnails.sh",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/render_thumbnails.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_probe.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_probe.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_probe.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/publish_site.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/publish_site.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/entrypoint_api.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/entrypoint_api.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/fix_node_prefix.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/fix_node_prefix.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/build_image.sh",
+        "line": 10,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/backup_db.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/backup_db.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/build_image.sh",
+        "line": 10,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/deploy_worker.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/fix_node_prefix.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/fix_node_prefix.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/build_release.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/entrypoint_api.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/entrypoint_api.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/provision_ci_host.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/provision_ci_host.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_gateway.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_metrics_agent.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/ci_sandbox.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/ci_sandbox.sh",
+        "line": 10,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/publish_site.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/publish_site.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_probe.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_probe.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/install_probe.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/render_thumbnails.sh",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "takes-more-power-than-it-needs",
+        "file": "experiments/rule-candidates/shell/takes-more-power-than-it-needs/fixtures/render_thumbnails.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 39,
+    "inputTokens": 132837,
+    "usd": 0.005579154000000001,
+    "ms": 4929
+  }
+}

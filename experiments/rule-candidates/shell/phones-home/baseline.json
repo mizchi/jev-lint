@@ -1,0 +1,811 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T07:22:48.646Z",
+  "model": "jev-1.13.0",
+  "suite": "shell/phones-home",
+  "rules": [
+    {
+      "id": "phones-home",
+      "draft": "79cda9cecbc2",
+      "at": 0.55
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/backup_nightly.sh",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/backup_nightly.sh",
+        "line": 17,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/backup_nightly.sh",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/cron_wrapper.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/cron_wrapper.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 12,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 10,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 24,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/provision_host.sh",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/publish_artifact.sh",
+        "line": 12,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/publish_artifact.sh",
+        "line": 15,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/push_node_metrics.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/push_node_metrics.sh",
+        "line": 21,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/push_node_metrics.sh",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/run_tests.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/run_tests.sh",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/backup_nightly.sh",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/backup_nightly.sh",
+        "line": 17,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/backup_nightly.sh",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/cron_wrapper.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/cron_wrapper.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 10,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 24,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 12,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/provision_host.sh",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/publish_artifact.sh",
+        "line": 12,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/publish_artifact.sh",
+        "line": 15,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/push_node_metrics.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/push_node_metrics.sh",
+        "line": 21,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/push_node_metrics.sh",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/run_tests.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/run_tests.sh",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/backup_nightly.sh",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/backup_nightly.sh",
+        "line": 17,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/backup_nightly.sh",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 10,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/deploy_service.sh",
+        "line": 24,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/cron_wrapper.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/cron_wrapper.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 12,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/etl_nightly.sh",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/index_documents.sh",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/provision_host.sh",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/install_agent.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/publish_artifact.sh",
+        "line": 12,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/publish_artifact.sh",
+        "line": 15,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/push_node_metrics.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/push_node_metrics.sh",
+        "line": 21,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/push_node_metrics.sh",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/run_tests.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "phones-home",
+        "file": "experiments/rule-candidates/shell/phones-home/fixtures/run_tests.sh",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 30,
+    "inputTokens": 97632,
+    "usd": 0.004100544,
+    "ms": 5090
+  }
+}

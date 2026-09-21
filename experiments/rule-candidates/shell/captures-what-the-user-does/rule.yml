@@ -1,0 +1,112 @@
+id: captures-what-the-user-does
+language: Bash
+kind: noul
+# The command, not the script. "Is this script spyware" is a question about a
+# whole program's intent, and every screen recorder answers yes to it; "did the
+# user ask for this capture, and can the user still see what it took" is a
+# question about the text under this line, with the rest of the file in the
+# state to say what the script advertises and where the bytes go afterwards.
+subject: node
+state: located
+# 0.50, fitted 2026-09-21 on the fixtures beside it (22 subjects: 7 defects,
+# 15 cleans of which 11 hard, 3 passes). Cleans top out at 0.31 -- the two-second
+# loopback `arecord` five lines above the fifteen-minute one that uploads -- with
+# the clipboard daemon's own poll loop just under it at 0.24-0.26 and everything
+# else at 0.12 or below, including `xinput test` as the whole job of a keycode
+# helper (0.09) and ffmpeg on the screen AND the mic for ninety minutes (0.12).
+# Defects start at 0.68 (`sound_doctor.sh`, the microphone piped into a POST,
+# which reads as the support-sample step it announces until you count the 900
+# seconds); the rest are 0.81 and up. Midpoint of a gap 0.37 wide, 0.19 of
+# headroom on each side, no decision flips over three passes, max pass-to-pass
+# spread 0.03. The first guess, 0.70, sat ON the lowest defect ([0.70 0.72 0.69]
+# on the first corpus) and flipped it once in three.
+at: 0.50
+axis: file
+severity: warning
+# Every shape a shell script has for reading the user rather than the machine,
+# over-matched on purpose: the clipboard, the screen, a terminal session, the
+# input devices, a microphone/camera/location device, the wire, and the shell's
+# record of what was typed. `xinput list` and `ffmpeg -i in.mp4` are in the net
+# along with `xinput test-xi2` and `ffmpeg -f avfoundation`; what the model
+# decides is whether the user asked for this and where what it took ends up.
+utils:
+  captures_the_user:
+    kind: command
+    any:
+      # A wrapper eats the command name -- `sudo tcpdump`, `nohup xinput`,
+      # `timeout arecord` are one command node named `sudo`/`nohup`/`timeout` --
+      # so this goes through the word list with stopBy: end, not `field: name`.
+      - has:
+          stopBy: end
+          regex: "^(pbpaste|xclip|xsel|wl-paste|screencapture|scrot|grim|maim|spectacle|import|script|ttyrec|asciinema|xinput|evtest|libinput|logkeys|arecord|parecord|rec|imagesnap|CoreLocationCLI|whereami|tcpdump|tshark|dumpcap)$"
+      # ffmpeg is a transcoder nine times in ten; it is in this net only when
+      # the input it is given is a device or a display.
+      - all:
+          - has: { stopBy: end, regex: "^(ffmpeg|ffplay|gst-launch-1\\.0)$" }
+          - has: { stopBy: end, regex: "avfoundation|x11grab|gdigrab|dshow|v4l2|alsa|pulse|screen-capture|kmsgrab" }
+      # The shell's own record of what the user typed, and the browser's.
+      - has:
+          stopBy: end
+          regex: "bash_history|zsh_history|sh_history|\\.histfile|HISTFILE|python_history|node_repl_history|psql_history|mysql_history|places\\.sqlite|History\\b|Cookies\\b"
+rule:
+  any:
+    # A capture that feeds something else is one question, not two: `arecord | curl`
+    # is the whole defect and the `arecord` alone is not.
+    - kind: pipeline
+      has: { stopBy: end, matches: captures_the_user }
+    - all:
+        - matches: captures_the_user
+        - not: { inside: { stopBy: end, kind: pipeline } }
+ask: >-
+  This command captures the user -- what they type, copy, see, say or where they
+  are -- beyond anything the script tells them it does, or puts what it captured
+  somewhere they cannot see it.
+criteria:
+  "true": >-
+    What this command reads is the user rather than the machine -- the clipboard,
+    the screen or a window, a terminal session, input or key events, a microphone,
+    a camera, the location, traffic on a live interface, or the shell's record of
+    what was typed -- and one of three things is wrong with it. It is hidden: it
+    runs on a timer, in a background loop, from a function the user never invoked,
+    or while the script is doing something else it announced. It is broader than
+    the feature: a script whose stated job is one screenshot takes them every five
+    minutes, a two-second level check records fifteen minutes, a device list turns
+    into an event stream. Or it leaves: what was captured is posted, uploaded,
+    piped to another host, mailed, or staged into a directory something else in
+    this file sends, whatever the destination is called. Any one of the three is
+    this case, and a capture that is both undisclosed and sent is squarely it.
+  "false": >-
+    Either the capture is the thing the user asked for and it stays where they can
+    see it -- a screenshot the script prompted them to frame, written to the Desktop
+    and named in the output; a clipboard manager's read of the clipboard, which is
+    what a clipboard manager is; a `script` transcript of the build in the build
+    directory; a recorder, an accessibility tool or a meeting recorder doing the one
+    thing its name and its usage line say it does; a packet capture bounded to a
+    count, an interface and a port for a reproduction the reader is handed -- or
+    nothing here captures the user at all: a device enumeration, a transcode of a
+    file that already existed, a count or a ranking printed to the terminal. A local
+    file the user is told about and can open, delete or refuse to send is not the
+    defect, however sensitive what is in it.
+note: >-
+  Where it comes to rest decides as much as what it took. A screenshot on the
+  Desktop and a screenshot in `~/Library/Caches/.staging` are the same command and
+  not the same case; follow the path this line writes to and see what else in the
+  file touches it -- a `curl --data-binary @` or an `rsync` on that file, anywhere
+  in the script or in a cron line it installs, is where the capture goes. The rest
+  of the file is evidence and should be read: the usage line, the prompt before the
+  capture, the flag that reached this branch, the timer that calls it. Judge the
+  feature against what the script tells the user, not against what it calls itself
+  -- a header that says "diagnostics", "telemetry", "sync", "productivity" or
+  "support agent" states nothing about scope, while a usage line that offers one
+  screenshot does. Duration and rate are part of scope: a loop with a `sleep` in it
+  captures forever. Reading a shell history file is reading what the user typed; a
+  ranking of it printed to their own terminal is not, and five thousand lines of it
+  in a POST body is. The same command in two branches can split -- an interactive
+  capture the user invoked is clean in a file whose other branch is not, and a
+  neighbouring defect does not convict this line. `set -euo pipefail`, a `chmod 700`
+  on the store, an `rm` of the staged file after it is sent, a reputable-looking
+  hostname and a comment promising nothing leaves establish nothing.
+explain:
+  keylog: Records keystrokes or input events covertly.
+  clipboard_or_screen: Reads clipboard, screenshots, or the display without a matching feature.
+  mic_cam_or_location: Taps microphone, camera, or location without a matching feature.

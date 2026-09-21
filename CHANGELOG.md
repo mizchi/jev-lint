@@ -77,6 +77,27 @@ change are in [docs/findings.md](docs/findings.md).
   match the declaration exactly, `expandoChar` or no patterns, fields may
   not exist -- are in `docs/reference.md`.
 
+### Fixed
+
+- The notice for a language whose parser nobody declared now says where to
+  read about declaring one, and `docs/reference.md` is in the published
+  package so an installed user can. The behaviour it describes was already
+  right and is covered by tests: the `moonbit` rules load from the package
+  like any other (`rules/**/rule.yml` ships; the parser is a platform
+  library and does not), a repository with `.mbt` files and no `languages:`
+  has those rules dropped and the language named, and a repository with no
+  `.mbt` file at all gets no notice — the rules are simply not scanned.
+- `Pacer` drained its bucket when the clock went backwards. `refill`
+  subtracted the negative elapsed time, so an NTP step or a laptop waking
+  from suspend took a second's worth of tokens — 200,000 at the shipped
+  rate — out of a bucket the server never touched, and the client then
+  waited for a limit that was not being imposed: no 429, `rateLimited`
+  still zero, the run just slower for no visible reason. Elapsed time is
+  now clamped at zero; `at` still moves, because leaving it in the future
+  after a permanent step would stall the bucket for longer than the bug
+  did. Reported from jev-test-filter, which hit it by mixing `take()`
+  against the wall clock with frozen-clock `delay(n, t)` calls.
+
 ## 0.5.0 — 2026-09-21
 
 ### Breaking

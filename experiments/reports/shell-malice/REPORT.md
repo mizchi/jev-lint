@@ -1,6 +1,6 @@
 # The shell pack: what a script does that its reader cannot see
 
-A port of the nineteen checks in [luantak/is-malicious](https://github.com/luantak/is-malicious)
+A port of the twenty checks in [luantak/is-malicious](https://github.com/luantak/is-malicious)
 onto shell scripts. That project asks its questions of whole files in any
 language; this pack asks eight of them of one construct at a time, in `sh`,
 `bash` and `zsh`, with the rest of the script in the state.
@@ -133,13 +133,20 @@ anyone has.
 
 ## What the pack does not cover
 
-Eleven of the nineteen source checks are not ported: `data_exfiltration`,
-`suspicious_ci`, `telemetry`, `surveillance`, `supply_chain`,
-`resource_abuse`, `lateral_movement`, `anti_removal`,
-`covert_fingerprinting`, `deception`, `permission_abuse`. Several have
-obvious shell shapes -- a miner, an `ssh` spray, a `curl` of every
-`~/Library` -- and were left for a second tranche rather than diluted into
-this one.
+Twelve of the twenty source checks are not in this first tranche:
+`data_exfiltration`, `hidden_network`, `permission_abuse`, `deception`,
+`telemetry`, `surveillance`, `supply_chain`, `resource_abuse`,
+`lateral_movement`, `anti_removal`, `covert_fingerprinting`,
+`suspicious_ci`. Several have obvious shell shapes -- a miner, an `ssh`
+spray, a `curl` of every `~/Library` -- and were left for a second tranche
+rather than diluted into this one.
+
+`suspicious_ci` is the one with no plausible port. It asks whether a build
+step does something unrelated to building, and the answer lives in where
+the file sits -- `.github/workflows/`, a `Dockerfile` stage, a `postinstall`
+hook -- which a `subject: node` rule does not carry. The rules that would
+have caught its cases catch them anyway: a CI step that curls a secret out
+is `reads-secrets-it-does-not-own` wherever it sits.
 
 Per-rule blind spots are in each `notes/` file; the ones that recur:
 a redirect destination behind a variable (`cat > "$CRED_DIR/token"`) is

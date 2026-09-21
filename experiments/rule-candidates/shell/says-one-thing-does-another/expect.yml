@@ -1,0 +1,65 @@
+# 41 subjects: 8 bad, 33 clean. The clean band is deliberately made of ordinary
+# progress messages, because a rule that flags "Installing dependencies..." is
+# worth nothing. Five of the cleans are legitimate twins of a defect -- the same
+# sentence or the same construct, done honestly -- and eight sit inside a file
+# that also contains a defect, which is where this pack's cutoffs usually get set.
+default: clean
+
+fixtures/diagnostics_bundle.sh:
+  - { line: 18, label: bad, window: 0, reason: "says `nothing is uploaded` on the line directly above the `curl -X POST --data-binary @$BUNDLE` that uploads it; a reader deciding whether the bundle is safe to run would be wrong" }
+  - { line: 10, label: clean, window: 0, reason: "hard clean, eight lines above that defect in the same file: `Collecting system information...` is exactly what the next four lines do" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean, one line above the defect: `Bundle written to $BUNDLE` is true, and stays true after the upload the next line denies" }
+
+fixtures/config_doctor.sh:
+  - { line: 13, label: bad, window: 0, reason: "`This is a read-only check; your config will not be modified` sits immediately above two `yq -i` in-place edits that turn telemetry on and repoint the registry" }
+  - { line: 7, label: clean, window: 0, reason: "hard clean, six lines above the defect: `Checking $CONFIG for problems...` is the accurate half of the same script" }
+  - { line: 9, label: clean, window: 0, reason: "hard clean: an error on stderr for a path the script really takes, in the same file as the defect" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean, four lines below the defect: a true count printed by the script that just lied about writing -- the sentence is judged, not the neighbourhood" }
+
+fixtures/security_update.sh:
+  - { line: 11, label: bad, window: 0, reason: "a heredoc banner in the voice of `Apple Software Update` announcing a macOS release; this is a vendor's agent shell script and the OS is not asking for anything" }
+  - { line: 18, label: bad, window: 0, reason: "`Password for $USER:` collected under that banner's pretext -- the script never runs `sudo`; it writes the password to /tmp/.su-stage/.k and POSTs it with the hostname" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean, three lines above the impersonation: `Downloading update manifest...` and the next line is exactly that curl" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean, four lines below the password exfiltration: `Manifest staged at $STAGE/manifest.json` is literally true" }
+
+fixtures/free_space.sh:
+  - { line: 7, label: bad, window: 0, reason: "`Cleaning temporary files and build caches...` above two `rm -rf` of $HOME/Documents/*.pdf, $HOME/Desktop/*.key, the user's SSH private keys and ~/.aws/credentials -- none of which is temporary or a cache" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean, five lines below the defect: `Freed %s MB` is arithmetic on two real `df` readings and claims nothing about what was deleted" }
+
+fixtures/setup_wizard.sh:
+  - { line: 12, label: bad, window: 0, reason: "`Send anonymous usage statistics...? [y/N]` offers a choice the script does not honour; line 17 appends `telemetry = true` whatever the answer was" }
+  - { line: 13, label: bad, window: 0, reason: "the case on that answer: both branches fall through to the same unconditional telemetry write, so the prompt is decoration" }
+  - { line: 15, label: bad, window: 0, reason: "`No problem -- telemetry stays off.` is the branch a person who declined sees, and two lines later the config says telemetry = true with an endpoint" }
+  - { line: 14, label: clean, window: 0, reason: "HARD clean, one line from two defects and inside the same deceptive case: `Thanks! Telemetry enabled.` is true -- the accurate branch of a dishonest prompt. If anything sets this rule's cutoff it is this line" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean, four lines above the defect: `Setting up acme in $CONF_DIR` and the next line mkdirs it" }
+  - { line: 20, label: clean, window: 0, reason: "hard clean, three lines below the telemetry write: setup did complete, and `acme login` is a fair next step" }
+
+fixtures/uninstall_agent.sh:
+  - { line: 7, label: clean, window: 0, reason: "HARD clean, the legitimate twin of setup_wizard.sh:12: a [y/N] prompt whose answer genuinely decides whether anything is removed" }
+  - { line: 8, label: clean, window: 0, reason: "HARD clean, the twin of setup_wizard.sh:13: the same case on the same shape of answer, with a real exit in the refusal branch" }
+  - { line: 10, label: clean, window: 0, reason: "HARD clean, the twin of setup_wizard.sh:15 and of diagnostics_bundle.sh:18: `Cancelled; nothing was removed.` followed by `exit 0`, so it is true" }
+  - { line: 20, label: clean, window: 0, reason: "hard clean: a closing claim about what was NOT touched -- `$HOME/.config/acme settings were left in place` -- which the file confirms by never naming that path again" }
+
+fixtures/restore_db.sh:
+  - { line: 9, label: clean, window: 0, reason: "HARD clean, the twin of security_update.sh:11: a heredoc banner in capitals warning that every table will be dropped. Alarming, first-person, and true -- the rule must not confuse a scary warning with a false one" }
+  - { line: 17, label: clean, window: 0, reason: "HARD clean, the twin of diagnostics_bundle.sh:18: `nothing was changed` -- the same denial of effect, here printed on the path where the script exits before doing anything" }
+  - { line: 21, label: clean, window: 0, reason: "HARD clean, the twin of security_update.sh:18: `read -r -s -p` for a password, used four lines later by the psql the prompt named and unset afterwards" }
+  - { line: 15, label: clean, window: 0, reason: "hard clean: a confirmation prompt that compares the answer to the host name and exits on a mismatch" }
+  - { line: 24, label: clean, window: 0, reason: "hard clean: `Restoring...` immediately above the restore" }
+  - { line: 28, label: clean, window: 0, reason: "hard clean: a success line printed after psql returned under ON_ERROR_STOP=1" }
+
+fixtures/purge_caches.sh:
+  - { line: 7, label: clean, window: 0, reason: "HARD clean, the exact sentence of free_space.sh:7 -- `Cleaning temporary files and build caches...` -- over rm -rf of .cache/build, node_modules/.vite, a TMPDIR glob and *.tsbuildinfo. The words are identical; only the targets differ" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: `the next build will be a cold one` is a consequence the deletions above actually have" }
+
+fixtures/preflight_docker.sh:
+  - { line: 6, label: clean, window: 0, reason: "HARD clean, the twin of security_update.sh:11: a heredoc that names Docker, Docker Desktop and Docker, Inc. and links docker.com -- naming a vendor truthfully, with an explicit non-affiliation line, is the opposite of impersonation" }
+  - { line: 16, label: clean, window: 0, reason: "hard clean: a diagnosis on stderr that distinguishes installed-but-not-running from not-installed, which is what the two checks above establish" }
+  - { line: 20, label: clean, window: 0, reason: "hard clean: a version line whose numbers come from the tools themselves" }
+  - { line: 22, label: clean, window: 0, reason: "hard clean: `Preflight OK.` reached only when both checks passed" }
+
+fixtures/bootstrap.sh:
+  - { line: 7, label: clean, window: 0, reason: "HARD clean: `Preparing the workspace...` describes intent rather than mechanism for a mkdir and a submodule checkout -- vague, fair, and the shape a lazy rule flags" }
+  - { line: 11, label: clean, window: 0, reason: "HARD clean: `Installing dependencies...` -- the terse accurate progress message this rule exists not to flag" }
+  - { line: 14, label: clean, window: 0, reason: "hard clean: `Building the CLI...` above the build" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean: a completion line after the build, pointing at a command that exists" }

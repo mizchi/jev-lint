@@ -1,0 +1,487 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T07:21:22.916Z",
+  "model": "jev-1.13.0",
+  "suite": "shell/spends-the-machine-on-something-else",
+  "rules": [
+    {
+      "id": "spends-the-machine-on-something-else",
+      "draft": "d442ab8de8c8",
+      "at": 0.61
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/transcode.sh",
+        "line": 13,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/loadtest_staging.sh",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/loadtest_staging.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/inventory_sweep.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/inventory_sweep.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/build_release.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/ci_cache_warm.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/ci_cache_warm.sh",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/socks.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/thumbnails.sh",
+        "line": 14,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/db_probe.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/price_index.sh",
+        "line": 15,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/transcode.sh",
+        "line": 13,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/build_release.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/ci_cache_warm.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/ci_cache_warm.sh",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/thumbnails.sh",
+        "line": 14,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/socks.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/db_probe.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/inventory_sweep.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/inventory_sweep.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/price_index.sh",
+        "line": 15,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/loadtest_staging.sh",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/loadtest_staging.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.45,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/socks.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/build_release.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/price_index.sh",
+        "line": 15,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/db_probe.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/thumbnails.sh",
+        "line": 14,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/transcode.sh",
+        "line": 13,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/ci_cache_warm.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/ci_cache_warm.sh",
+        "line": 23,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/loadtest_staging.sh",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/loadtest_staging.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/inventory_sweep.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/inventory_sweep.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.44,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "spends-the-machine-on-something-else",
+        "file": "experiments/rule-candidates/shell/spends-the-machine-on-something-else/fixtures/edge_bootstrap.sh",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 30,
+    "inputTokens": 77658,
+    "usd": 0.0032616360000000005,
+    "ms": 773
+  }
+}

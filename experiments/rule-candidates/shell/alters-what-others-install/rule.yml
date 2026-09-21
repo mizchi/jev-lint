@@ -1,0 +1,124 @@
+id: alters-what-others-install
+language: Bash
+kind: noul
+# The construct, not the script. Every release script in the world touches
+# package metadata -- that is what a release script is -- so "is this script
+# tampering with the supply chain" reads as yes on all of them. "Does what
+# THIS command changes make someone else's later install differ from what is
+# in this repository" is a question about the text under it, with the rest of
+# the file in the state to say what the repository publishes and from where.
+subject: node
+state: located
+# 0.48, fitted 2026-09-21 on the fixtures beside it (39 subjects: 8 defects,
+# 31 cleans of which 12 hard, 3 passes). Cleans top out at 0.37 -- an `npm pack`
+# two lines BELOW the manifest injection that is the defect, which is the pack's
+# usual story: the highest clean is an ordinary construct beside a bad one, and
+# every designed twin (`docker push` of an image built here, `npm publish
+# --provenance` after the tests it also runs, a CI `.npmrc` for the project's own
+# scope, a `sed -i` on the repository's own Dockerfile, `pip install -r
+# --require-hashes`) fell to 0.21 and under. Defects start at 0.57
+# (`py_deps.sh`, a version-pinned requirement rewritten to a git branch on a
+# look-alike account -- the only defect whose new source is still a name a reader
+# might accept). Midpoint of a gap 0.20 wide -- 0.11 of headroom below and 0.09
+# above at the extremes of three passes, 0.12 and 0.11 on their means -- with no
+# decision flips over those passes and a max spread of 0.05. The first guess, 0.70, sat
+# inside the defect band and lost that requirement swap on all three passes.
+at: 0.48
+axis: file
+severity: warning
+# Three places a shell script reaches the thing other people will install,
+# over-matched on purpose: a package manager, registry client or image tool
+# invoked anywhere (`npm ci` and `npm publish` are both in), and any command,
+# redirect or pipeline that so much as names a manifest, a lockfile, a
+# registry config, `node_modules/` or `vendor/`. What the model decides is
+# whether the change here is one a reader of this repository would get too.
+# The `not inside` guards keep the outermost statement the subject, so
+# `curl ... | tar -C node_modules` is one finding rather than two.
+rule:
+  any:
+    - kind: pipeline
+      all:
+        # A redirect binds to the whole pipeline in this grammar, so
+        # `pip freeze | sort > out` is redirected_statement(pipeline) and
+        # matches twice unless the inner pipeline yields to it.
+        - not: { inside: { stopBy: end, any: [ { kind: pipeline }, { kind: redirected_statement } ] } }
+        - any:
+            - has: { stopBy: end, regex: "^(npm|yarn|pnpm|pip|pip3|poetry|cargo|twine|docker|podman)$" }
+            - has: { stopBy: end, regex: "(\\.npmrc|\\.yarnrc|pip\\.conf|\\.pypirc|cargo/config|docker/config\\.json|package\\.json|package-lock\\.json|yarn\\.lock|pnpm-lock\\.yaml|requirements\\.txt|Cargo\\.toml|go\\.mod|Gemfile|Dockerfile|node_modules/|vendor/)" }
+    - kind: redirected_statement
+      all:
+        - not: { inside: { stopBy: end, any: [ { kind: pipeline }, { kind: redirected_statement } ] } }
+        - any:
+            - has: { stopBy: end, regex: "^(npm|yarn|pnpm|pip|pip3|poetry|cargo|twine|docker|podman)$" }
+            - has: { stopBy: end, regex: "(\\.npmrc|\\.yarnrc|pip\\.conf|\\.pypirc|cargo/config|docker/config\\.json|package\\.json|package-lock\\.json|yarn\\.lock|pnpm-lock\\.yaml|requirements\\.txt|Cargo\\.toml|go\\.mod|Gemfile|Dockerfile|node_modules/|vendor/)" }
+    - kind: command
+      all:
+        - not: { inside: { stopBy: end, any: [ { kind: pipeline }, { kind: redirected_statement } ] } }
+        - any:
+            - has: { stopBy: end, regex: "^(npm|yarn|pnpm|pip|pip3|poetry|cargo|twine|docker|podman)$" }
+            - has: { stopBy: end, regex: "(\\.npmrc|\\.yarnrc|pip\\.conf|\\.pypirc|cargo/config|docker/config\\.json|package\\.json|package-lock\\.json|yarn\\.lock|pnpm-lock\\.yaml|requirements\\.txt|Cargo\\.toml|go\\.mod|Gemfile|Dockerfile|node_modules/|vendor/)" }
+            - all:
+                - has: { stopBy: end, regex: "^git$" }
+                - has: { stopBy: end, regex: "set-url" }
+ask: >-
+  What this command changes about how packages are resolved, built or published
+  makes a later install or build deliver code that this repository does not
+  record -- whoever runs it.
+criteria:
+  "true": >-
+    This command points a dependency, a lockfile, an installer, a package
+    client's configuration or a published artifact at something other than what
+    the repository records. A registry, index or credential file written so
+    that every later install on the machine resolves from a host the
+    repository does not name, a resolved URL rewritten the same way, an
+    integrity or hash field deleted, a requirement replaced with a git ref, a
+    URL or a path, a `preinstall`/`postinstall`/`setup` hook written into a
+    manifest by this script rather than committed to it, a file downloaded or
+    written under `node_modules/` or `vendor/` after the install that put them
+    there, an image tagged or pushed under this project's name that was built
+    somewhere other than this checkout, or a `git remote set-url` that moves
+    where the source is fetched from -- all of these are this case, however
+    ordinary the surrounding release script looks and whatever the comment
+    above the line calls the destination.
+  "false": >-
+    Either the command changes nothing about what anyone else will get -- it
+    installs from the committed lockfile, reads a manifest, prints a version,
+    runs a build or a test -- or the change is one the repository itself
+    records: a version bump in the manifest being released, a `sed` on a file
+    this repository owns, a publish of what was just built and tested here,
+    hashes required rather than removed, an editable install of this checkout,
+    a registry configured for this project's own scope with a credential the
+    environment supplies, or an image pushed that the lines above built from
+    this source. Ordinary package management is not this case.
+note: >-
+  The victim is the next install, wherever it happens -- this workstation's, a
+  teammate's, a CI runner's, or a stranger's who installs what this project
+  publishes -- so a registry swapped on the machine in front of you counts
+  exactly as much as one swapped in a published manifest. Nothing about how
+  careful the script is with its own host counts either way. Only a command
+  that MAKES the substitution is this case: fetching, reading, listing or
+  staging -- a `docker pull`, a `pip download`, a `git diff` or `git add` of a
+  lockfile -- changes nothing anybody installs, even when a later line misuses
+  what it brought in; judge that later line instead. Judge the TARGET, not the
+  script: writing a registry, index or credential file is not itself the case
+  -- what decides it is WHICH source it names and for whose packages. The
+  public registry, or one the repository's own committed configuration already
+  records, set for this project's scope with a credential the environment
+  supplies, is ordinary setup however global the file it is written to. A file
+  the repository owns -- its `Dockerfile`, its manifest's version field, its own
+  source -- is the false case however it is edited, and a file it does not own
+  -- anything under `node_modules/` or `vendor/`, a lockfile's `resolved` URLs
+  and `integrity` fields -- is this case even when the edit is small and the
+  script explains it. A registry the repository records, for its own scope,
+  is a documented mirror; a host that appears nowhere but inside this script is
+  not one, whether the script calls it a cache, a mirror or a proxy. Removing
+  a hash is always this case; adding or requiring one never is. Publishing is
+  not the defect -- a release script that did not publish would be broken --
+  the defect is a difference between what was reviewed and what goes out, so
+  look at where the bytes being tagged, packed or pushed came from. `set -euo
+  pipefail`, a token that comes from CI, a `--access public` flag and a comment
+  naming the platform team establish nothing.
+explain:
+  dependency_swap: Replaces a package name, URL, or integrity hash with an unexpected source.
+  install_hook: A preinstall, postinstall, or setup hook pulls or runs extra unreviewed code.
+  artifact_inject: Published or vendored artifacts do not match the reviewed source.

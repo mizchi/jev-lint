@@ -155,7 +155,18 @@ export class Pacer {
   }
 
   private refill(now: number): void {
-    this.level = Math.min(this.burst, this.level + ((now - this.at) / 1000) * this.rate);
+    // A clock that goes backwards -- an NTP step, a laptop waking from suspend
+    // -- must not DRAIN the mirror. Unclamped, a one-second backwards jump
+    // takes a second's worth of refill out of the bucket (200,000 tokens at
+    // the shipped rate), and the client then waits for a limit the server is
+    // not imposing: no 429 is recorded, `rateLimited` stays zero, and the run
+    // is slower for no reason a reader can see. Treat it as no time passed.
+    //
+    // `at` still moves unconditionally. Refusing to move it backwards would
+    // leave it in the future after a permanent step, and the bucket would then
+    // refuse to refill until the clock caught up -- a longer stall than this.
+    const elapsed = Math.max(0, now - this.at);
+    this.level = Math.min(this.burst, this.level + (elapsed / 1000) * this.rate);
     this.at = now;
   }
 

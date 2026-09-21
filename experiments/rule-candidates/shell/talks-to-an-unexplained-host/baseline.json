@@ -1,0 +1,649 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T07:18:03.081Z",
+  "model": "jev-1.13.0",
+  "suite": "shell/talks-to-an-unexplained-host",
+  "rules": [
+    {
+      "id": "talks-to-an-unexplained-host",
+      "draft": "5d2d644515c9",
+      "at": 0.59
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/nfs_mount.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/nfs_mount.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/backup_rotate.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/backup_rotate.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/edge_deploy.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/edge_deploy.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/edge_deploy.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/dns_health.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/dns_health.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/ci_cache_warm.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/ci_cache_warm.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/sentry_release.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/egress_check.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/egress_check.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/release_notify.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/release_notify.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/logclean.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/logclean.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/logclean.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/ntp_step.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/postinstall.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/postinstall.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/postinstall.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/release_notify.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/release_notify.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/ci_cache_warm.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/ci_cache_warm.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/postinstall.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/postinstall.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/postinstall.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/logclean.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/logclean.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/logclean.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/backup_rotate.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/backup_rotate.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/egress_check.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/egress_check.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/dns_health.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/dns_health.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/edge_deploy.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/edge_deploy.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/edge_deploy.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/sentry_release.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/ntp_step.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/nfs_mount.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/nfs_mount.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/sentry_release.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/backup_rotate.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/backup_rotate.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/ci_cache_warm.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/ci_cache_warm.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/release_notify.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/release_notify.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/egress_check.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/egress_check.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/logclean.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/logclean.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/logclean.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/dns_health.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/dns_health.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/nfs_mount.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/nfs_mount.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/edge_deploy.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/edge_deploy.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/edge_deploy.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/ntp_step.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/postinstall.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/postinstall.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "talks-to-an-unexplained-host",
+        "file": "experiments/rule-candidates/shell/talks-to-an-unexplained-host/fixtures/postinstall.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 25,
+    "inputTokens": 56110,
+    "usd": 0.0023566200000000002,
+    "ms": 12355
+  }
+}

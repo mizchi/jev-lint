@@ -1,0 +1,622 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T07:20:57.792Z",
+  "model": "jev-1.13.0",
+  "suite": "shell/captures-what-the-user-does",
+  "rules": [
+    {
+      "id": "captures-what-the-user-does",
+      "draft": "279179775221",
+      "at": 0.5
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/support_agent.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/support_agent.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/support_agent.sh",
+        "line": 21,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/devstats.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/clipd.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/clipd.sh",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/whichkey.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/whichkey.sh",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/hist_top.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/build_session.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/rec_standup.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/debug_registry.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/lowlat.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/lowlat.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/onboard.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/onboard.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/voice_note.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/focustime.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/sound_doctor.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/sound_doctor.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/capture_bug.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/capture_bug.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/support_agent.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/support_agent.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/support_agent.sh",
+        "line": 21,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/voice_note.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/build_session.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/capture_bug.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/capture_bug.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/sound_doctor.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/sound_doctor.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/hist_top.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/lowlat.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/lowlat.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/devstats.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/onboard.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/onboard.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/focustime.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/debug_registry.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/rec_standup.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/clipd.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/clipd.sh",
+        "line": 25,
+        "endLine": 25,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/whichkey.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/whichkey.sh",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/debug_registry.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/rec_standup.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/onboard.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/onboard.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/lowlat.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/lowlat.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/support_agent.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/support_agent.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/support_agent.sh",
+        "line": 21,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/voice_note.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/capture_bug.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/capture_bug.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/clipd.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/clipd.sh",
+        "line": 25,
+        "endLine": 25,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/build_session.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": null,
+        "value": null,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/sound_doctor.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/sound_doctor.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/devstats.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/hist_top.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/whichkey.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/whichkey.sh",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "captures-what-the-user-does",
+        "file": "experiments/rule-candidates/shell/captures-what-the-user-does/fixtures/focustime.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 35,
+    "inputTokens": 72923,
+    "usd": 0.003062766,
+    "ms": 54053
+  }
+}

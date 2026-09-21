@@ -1,0 +1,35 @@
+default: clean
+fixtures/postinstall.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: api.github.com, asked for the latest tag of the exact tool this script exists to install -- the destination IS the product, and the script's next three lines use what it returns" }
+  - { line: 14, label: clean, window: 0, reason: "hard clean, and adjacent: the release CDN of that same product, six lines above the defect, in the file the state carries. A rule that reads the file's atmosphere rather than this line's destination flags it" }
+  - { line: 20, label: bad, window: 0, reason: "a POST of the whole process environment to a bare IP on :8443 that appears nowhere else in the file. Installing gh needs github.com and nothing else; the comment calls it telemetry, which is an assertion, not a service the project documents" }
+fixtures/backup_rotate.sh:
+  - { line: 12, label: clean, window: 0, reason: "hard clean, and adjacent: rsync to $BACKUP_HOST, the offsite backup host the header names and the variable names, four lines above the exfil" }
+  - { line: 16, label: bad, window: 0, reason: "DNS tunnelling: a tar of /etc/ssl/private is base64'd, cut into 48-char labels and each one resolved under stat-collect.link. The data is the hostname; nothing in a snapshot-and-prune script explains that zone" }
+fixtures/ci_cache_warm.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: $CACHE_ENDPOINT, a URL the workflow injects and that never appears in the file. Absent is not hidden -- a CI secret is supposed to be absent -- and the name plus the .tar.zst it fetches say what it is" }
+  - { line: 18, label: bad, window: 0, reason: "the destination is base64 in the source (http://45.12.130.77/ci/b) and the payload is $HOME/.npmrc. The script already has a cache endpoint; this is a second one the reader cannot see, carrying a registry token" }
+fixtures/logclean.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: a literal https:// URL assigned to LOG_API -- the logging API the header says this script reports rotations to, used for exactly that on line 17" }
+  - { line: 15, label: bad, window: 0, reason: "a hand-written HTTP GET carrying the hostname and uid, written into /dev/tcp/91.219.236.18/80. A log rotator has no reason to beacon, and the bare IP appears once, in a redirect, to receive identity" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean, and adjacent: the documented POST to $LOG_API, two lines below the beacon. Same verb, same direction, same file -- only the destination differs" }
+fixtures/nfs_mount.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: a bare RFC1918 literal, the shape the matcher is most eager about, assigned to FILER_HOST -- a name that says what it is, with the header explaining why the filer has no DNS record" }
+  - { line: 18, label: clean, window: 0, reason: "hard clean: ping at that same bare IP, as a reachability gate before the mount on line 23 that is the script's entire job" }
+fixtures/dns_health.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: a bare IP assigned to CLUSTER_RESOLVER -- the kube-dns service address, used as the resolver the very next loop queries" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: `dig +short` -- the same tool and the same flag as the exfil defect in backup_rotate.sh, here resolving an FQDN passed in as $1 and comparing the answer to empty" }
+fixtures/ntp_step.sh:
+  - { line: 14, label: clean, window: 0, reason: "hard clean: a public host belonging to nobody in this project (2.debian.pool.ntp.org), explained entirely by the job -- a clock-stepping script needs a pool, and the next line steps to it" }
+fixtures/release_notify.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: api.github.com read with $GITHUB_TOKEN to fetch the release body being announced -- an ordinary API call to the product's own service" }
+  - { line: 14, label: clean, window: 0, reason: "hard clean: the webhook URL is $SLACK_WEBHOOK_URL, a CI secret, so the destination is invisible in the file and the payload is the release note. Invisible-by-environment is the mirror of the encoded URL on ci_cache_warm.sh:18" }
+fixtures/egress_check.sh:
+  - { line: 7, label: clean, window: 0, reason: "hard clean: a bare public IP literal (1.1.1.1) belonging to nobody in this project, pinged as a route check -- explained by the job and by what the script does with the result on the next line" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: a third-party echo service (ifconfig.co) contacted once, in a script that installs nothing and deploys nothing. The only thing explaining it is the job the header describes -- which is exactly the kind of explanation this rule accepts" }
+fixtures/sentry_release.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: a literal, machine-generated, unrecognisable host (o447951.ingest.us.sentry.io) receiving a POST with a bearer token -- surface-identical to a beacon. It is the error tracker the header names, and the release marker is the script's whole purpose" }
+fixtures/edge_deploy.sh:
+  - { line: 12, label: clean, window: 0, reason: "hard clean: an s3:// URL, matched by the address-literal branch rather than by a tool name -- the edge bucket this script exists to publish to" }
+  - { line: 14, label: clean, window: 0, reason: "hard clean, and adjacent: the purge call at $CDN_HOST, two lines above the defect and one character different from it" }
+  - { line: 16, label: bad, window: 0, reason: "uploads the built .env.production to cdn-acme-app.com -- a lookalike of this file's own cdn.acme-app.com, differing by one hyphen, appearing once, never assigned to a variable, errors swallowed. The file documents one CDN and this is not it" }

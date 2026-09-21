@@ -1,0 +1,37 @@
+default: clean
+fixtures/onboard.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean, and adjacent: `script -q` records the brew bundle session into ~/Library/Logs -- a terminal recording, in a file whose other capture is a clipboard exfil seven lines below; what it records is the script's own output, and it is the log the last echo points the user at" }
+  - { line: 18, label: bad, window: 0, reason: "polls the pasteboard every two seconds from a backgrounded, disowned function the onboarding never mentions, into a dotfile under ~/.cache, which the EXIT trap posts to a telemetry host; the user copied passwords into that clipboard for the VPN profile this same script set up" }
+fixtures/lowlat.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean, and adjacent: `xinput list --name-only` is the same binary as the keylogger seven lines down, writing a device inventory the tuner legitimately needs -- enumerating input devices is not reading input" }
+  - { line: 16, label: bad, window: 0, reason: "`xinput test-xi2 --root` is a raw event stream for every device including the keyboard, nohup'd and disowned into a hidden file, which the crontab line installed two lines later rsyncs to a remote host every half hour; nothing about latency tuning needs the events themselves" }
+fixtures/devstats.sh:
+  - { line: 16, label: bad, window: 0, reason: "five thousand lines of ~/.zsh_history into the POST body of a productivity dashboard -- the literal record of everything the user typed at a shell, including the one-off `curl -H \"Authorization: ...\"`, leaving the machine on a timer nobody watches" }
+fixtures/support_agent.sh:
+  - { line: 14, label: clean, window: 0, reason: "hard clean, and adjacent: the advertised `snap` subcommand -- an interactive screencapture the user invoked, written to the Desktop under a name the script prints back, six lines above the timer that does the same thing covertly; the same command in the same file, and only one of the two is the defect" }
+  - { line: 20, label: bad, window: 0, reason: "`screencapture -x` every five minutes from a disowned background agent: -x suppresses the shutter sound, the frames land in a dotted .staging cache, and the tar four lines down uploads them; the usage line offers one screenshot on request, not the screen every five minutes forever" }
+  - { line: 21, label: bad, window: 0, reason: "CoreLocationCLI appends the machine's coordinates to the same staged bundle on the same timer; a support helper has no stated feature that needs where the user is, and nothing prompts or tells them" }
+fixtures/sound_doctor.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean, and adjacent: a two-second arecord the user was prompted for, played straight back and never referenced again -- the microphone tapped exactly as far as the stated loopback test needs, five lines above the tap that is not" }
+  - { line: 14, label: bad, window: 0, reason: "fifteen minutes of microphone piped straight into a POST after announcing 'a short sample'; duration is scope, the user is told nothing about it, and the audio never touches a file they could listen to or refuse to send" }
+fixtures/clipd.sh:
+  - { line: 18, label: clean, window: 0, reason: "hard clean: the same clipboard-poll-in-a-loop shape as the onboard.sh defect -- a one-second `while sleep`, reading the X clipboard into a store -- except the script IS the clipboard history daemon the user installed, the store is 700 and local, and --purge empties it" }
+  - { line: 25, label: clean, window: 0, reason: "hard clean: the PRIMARY selection too, which is the broader read; still the documented feature of a clipboard manager, still nothing that leaves" }
+fixtures/capture_bug.sh:
+  - { line: 12, label: clean, window: 0, reason: "hard clean: the user is asked to frame the region, the png lands in a named Desktop folder, and the script tells them to look through it before attaching -- capture the user asked for, staying where they can see it" }
+  - { line: 16, label: clean, window: 0, reason: "hard clean: `pbpaste` -- the exact command of the onboard.sh defect -- after a prompt telling the user to copy the error first, once, into a file in their own bug folder" }
+fixtures/build_session.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: `script` records a terminal session, which is the surveillance shape; the session is a non-interactive `make release` and the transcript is gzipped next to the artifact it explains" }
+fixtures/debug_registry.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: tcpdump is a wiretap, and this one is bounded on every axis -- loopback only, 200 packets, one port -- written to a pcap in the working directory that the script hands the reader with the command to open it" }
+fixtures/voice_note.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: a ten-minute microphone recording, which is the shape of the sound_doctor defect, in the script whose entire job is recording a voice memo the user started and can stop" }
+fixtures/rec_standup.sh:
+  - { line: 13, label: clean, window: 0, reason: "hard clean: ffmpeg on avfoundation captures the screen AND the mic for ninety minutes -- the broadest capture in the corpus -- as the advertised job of a meeting recorder, after a prompt to tell the room, into ~/Movies, with the upload left to the human" }
+fixtures/hist_top.sh:
+  - { line: 14, label: clean, window: 0, reason: "hard clean: reads ~/.zsh_history, the devstats defect's own source, and turns it into a frequency table on the user's own terminal; the script writes nothing and the last echo says so" }
+fixtures/focustime.sh:
+  - { line: 12, label: bad, window: 0, reason: "a screenshot every sixty seconds from a backgrounded ticker, -x for silence, into a dotted .frames directory the pomodoro timer's own header never mentions -- the stated feature is a countdown and a tab-separated session log; nothing here uploads anything, and the capture is still not one the user asked for or can find" }
+fixtures/whichkey.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: `xinput list --short` printed to stderr so the user can pick their keyboard -- enumeration, in the file where the enumeration is the usage message" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean, the hardest in the corpus: `xinput test` on a keyboard -- the lowlat defect's exact binary and subcommand, a live key event stream -- as the entire advertised job of a keycode helper the user invoked with a device id, formatted to their own terminal, never written down" }

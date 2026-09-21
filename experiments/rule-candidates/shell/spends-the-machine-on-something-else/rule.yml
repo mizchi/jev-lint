@@ -1,0 +1,156 @@
+id: spends-the-machine-on-something-else
+language: Bash
+kind: noul
+# The construct, not the script. "Is this script abusing the host" is a
+# question about a whole program's intent; "who gets the cycles, the bandwidth
+# and the IP address this line spends" is a question about the text under it,
+# with the rest of the file in the state to say where the work goes.
+subject: node
+state: located
+# 0.61, fitted 2026-09-21 on the fixtures beside it (17 subjects: 5 defects,
+# 12 cleans of which 9 designed hard and 5 sitting inside a defect-bearing file,
+# 3 passes). Cleans top out at 0.44 -- the `curl` that downloads the peer agent,
+# two lines above the `chmod` and fourteen above the launch that makes this box
+# somebody's exit node; that one is provenance, which is `runs-downloaded-code`'s
+# defect and not this rule's. Below it the band collapses: the `chmod` on the
+# same binary is 0.22, the `apt-get` that installs `microsocks` 0.14, the `nmap`
+# ping sweep of our own /24 seven lines above a masscan 0.11, and every clean
+# built to be hard -- `make -j"$(nproc)"`, `ffmpeg -preset veryslow`, `wrk -c200`
+# at our staging, `nmap` at one host and one port, `ssh -D` on loopback,
+# `cpulimit` holding a backfill to a quarter core -- sits at 0.03-0.08. Defects
+# start at 0.79 (the two halves of the residential-proxy enrolment) and run to
+# 0.98. Midpoint of a gap 0.35 wide, 0.17 of headroom below and 0.18 above, no
+# decision flips over three passes, max pass-to-pass spread 0.08.
+at: 0.61
+axis: file
+severity: warning
+# Six places a shell spends the machine, over-matched on purpose: the tools
+# that can be either the job or the abuse (`nmap` the health probe and `nmap`
+# the sweep, `wrk` against staging and `wrk` against a stranger, `ffmpeg` the
+# renderer and `ffmpeg` the farm), a throttle wrapper, a pool or wallet literal,
+# anything that asks the machine how many cores it has, an `ssh` that carries
+# other traffic, and a `while` loop wrapped around a network call. What the
+# model decides is who the work is for.
+#
+# Three tree-sitter-bash facts shape this. `nice -n 19 "$DIR/warmup"` and
+# `nohup /opt/peer/frpc` are one `command` node named `nice`/`nohup`, so a
+# `field: name` regex never sees the tool -- `has: { stopBy: end, regex: ... }`
+# survives the wrapper, and the `(^|/)` prefix survives `/opt/peer/frpc` and
+# `./xmrig` while still missing `xmrig.tar.gz`. `nproc` inside `make -j"$(nproc)"`
+# is itself a `command` that satisfies the same `has:`, so `coreCount` stands
+# down when the core count IS the command, or the one line reports twice. Same
+# for the `while` branch, which stands down when it already contains a match.
+utils:
+  spendTool:
+    kind: command
+    has:
+      stopBy: end
+      regex: "(^|/)(xmrig|xmrigDaemon|ethminer|cpuminer|cpuminer-multi|minerd|t-rex|nbminer|lolminer|phoenixminer|teamredminer|xmr-stak|cgminer|bfgminer|nheqminer|nmap|masscan|zmap|zgrab|hping3|ab|wrk|wrk2|siege|hey|vegeta|slowhttptest|tinyproxy|3proxy|microsocks|danted|sockd|frpc|ngrok|stress-ng|ffmpeg|blender)$"
+  throttleWrapper:
+    kind: command
+    has: { field: name, regex: "^(nice|cpulimit|taskset|ionice|chrt|systemd-run)$" }
+  poolLiteral:
+    kind: command
+    regex: "(stratum\\+(tcp|ssl)://|--donate-level|--coin[ =]|--pool[ =])"
+  coreCount:
+    kind: command
+    all:
+      - has: { stopBy: end, regex: "^(nproc|hw\\.ncpu|hw\\.physicalcpu|_NPROCESSORS_ONLN)$" }
+      - not: { has: { field: name, regex: "^(nproc|sysctl|getconf)$" } }
+  socksTunnel:
+    kind: command
+    all:
+      - has: { stopBy: end, regex: "^(ssh|autossh)$" }
+      - regex: "\\s-[DR]\\b"
+  networkLoop:
+    kind: while_statement
+    has:
+      stopBy: end
+      kind: command
+      has: { field: name, regex: "^(curl|wget|nc|ncat|socat|ab|hey|wrk|siege|vegeta|python|python3|node)$" }
+rule:
+  any:
+    - matches: spendTool
+    - matches: throttleWrapper
+    - matches: poolLiteral
+    - matches: coreCount
+    - matches: socksTunnel
+    - all:
+        - matches: networkLoop
+        - not:
+            has:
+              stopBy: end
+              any:
+                - matches: spendTool
+                - matches: throttleWrapper
+                - matches: poolLiteral
+                - matches: coreCount
+                - matches: socksTunnel
+ask: >-
+  This construct spends the machine's CPU, bandwidth or network address on work
+  the script is not for, or spends a third party's servers on work they never
+  agreed to.
+criteria:
+  "true": >-
+    Two ways, and either one is enough. THIS MACHINE IS SPENT ON SOMETHING ELSE:
+    the cycles, the link or the host's address go somewhere other than this
+    script's own job. A miner is this case -- a pool URL, a wallet literal, a
+    donate level, a binary the script fetched and then runs quietly in the
+    background. So is the host being turned into a relay: a SOCKS or exit
+    process on a public interface, an agent that registers this box with a
+    gateway so somebody else's traffic leaves from its IP, a botnet worker. What
+    makes it this case is that the product of the work never comes back here --
+    it goes to an address, a pool, a vendor, or a stranger's servers -- while
+    the machine pays for it. SOMEBODY ELSE'S MACHINE IS SPENT: the traffic this
+    construct generates is aimed at hosts, ranges or services this project does
+    not run, at a volume or in a manner they never agreed to. Portscanning
+    somebody's address space, flooding an endpoint, or hammering a site's API
+    from many parallel workers is this case EVEN WHEN what comes back is used
+    here and the dashboard that reads it is real -- the cost has been moved onto
+    a stranger. Read the rate: an unbounded loop with no sleep and no backoff,
+    workers spawned by the dozen, a forged user-agent, a rotated or disguised
+    identity are a script taking more of somebody's service than it was offered,
+    and knowing it. Being nice'd, backgrounded or bolted onto a real installer
+    does not change who pays.
+  "false": >-
+    Heavy is not the defect. A build that saturates every core, an encoder at
+    the slowest preset, a load test at two hundred connections and a port scan
+    are all this case when the work is the job the script exists to do and its
+    product comes back here: the file the script was handed, the artifact it
+    writes, the host it deploys, monitors or load-tests, a tunnel the operator
+    opened for their own use. Asking the machine how many cores it has in order
+    to use them for the build is how a build script is written. A throttle that
+    keeps a job SMALL is evidence for this side, not against it. Reaching a
+    third party is not by itself the second case either: one request, a paged
+    crawl, an API this project has an account with, a probe of a single host and
+    a poll at a human rate are ordinary, and the far end is built for them. And
+    a construct that spends nothing -- a probe, a single request, a wrapper
+    around a local tool -- is this case whatever else the file does.
+note: >-
+  Two bills, and only one of them arrives here. The first is this machine's:
+  the question is where the cycles and the packets GO, not how many there are.
+  `make -j"$(nproc)"`, `ffmpeg -preset veryslow` and `wrk -c200` are the same
+  commands the defect uses; follow the output to tell them apart. Work whose
+  result something here consumes -- a file passed as an argument, an artifact
+  written under the build directory, a report the script prints, a host named
+  in this script as the project's own -- is the job, however expensive it is.
+  Work whose result leaves for a wallet, a pool, a vendor gateway or a
+  collector this script has no other business with is this case, however small
+  it is. The second bill arrives somewhere else, and "follow the output" will
+  not find it: a scraper that feeds a real dashboard here is still spending a
+  stranger's servers, and the useful result is not a defence. Ask instead who
+  the traffic lands on and at what rate. A scan or a load profile aimed at
+  hosts this project runs is testing; the identical command aimed at a range,
+  a site or an API that belongs to someone else is aimed at people who did not
+  ask. A script that disguises where its requests come from has already
+  answered the question of whether the far end agreed. The rest of the file is
+  admissible evidence about who the work is for -- the variable that names the
+  target, the config written three lines up, the domain the binary came from
+  all say it. A header comment, a plausible tool name, `nice`, and a `&`
+  establish nothing. A channel that takes commands belongs to
+  `takes-remote-commands`; this rule is about the host being spent, even when
+  nobody is steering it.
+explain:
+  miner: Runs a cryptominer or stratum client.
+  open_proxy: Turns the host into a relay, botnet worker, or residential proxy.
+  abuse_scan: Uses the host to scan, flood, or otherwise abuse third parties.

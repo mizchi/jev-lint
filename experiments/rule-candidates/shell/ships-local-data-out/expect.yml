@@ -1,0 +1,38 @@
+default: clean
+fixtures/postinstall.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: an npm postinstall tarring its own lib/ and manifest.json into dist -- the identical tar command two lines above the harvest, on the package's own build output" }
+  - { line: 11, label: bad, window: 0, reason: "tars Documents, Desktop and .config out of $HOME; an editor-integration postinstall has no reason to open the user's home directory, and nobody could say afterwards what went" }
+  - { line: 13, label: bad, window: 0, reason: "PUTs that archive to a workers.dev host that appears nowhere else in the script, keyed by hostname and timestamp -- an upload with no product purpose behind it" }
+fixtures/mail_index.sh:
+  - { line: 11, label: bad, window: 0, reason: "rsyncs the whole macOS Mail store to a bare IP; a local search index does not need the mailbox on another machine, and the destination is a literal address with no stated relation to anything" }
+  - { line: 13, label: bad, window: 0, reason: "tars the Notes group container and pipes it over ssh into a file on the same IP -- the second app data store of the run, same covert peer" }
+fixtures/schema_drift.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: mysqldump of the production database -- with --no-data, so what is produced is the schema, and it stays in /tmp for the line below" }
+  - { line: 11, label: clean, window: 0, reason: "hard clean: curl --data-binary of that dump to an internal metrics host, the exact shape of the defect four lines down, carrying a schema with no rows in it" }
+  - { line: 13, label: bad, window: 0, reason: "dumps the customers, payments and addresses tables and pipes them straight into a POST at telemetry-collect.dev -- production personal data to an ingest endpoint the script never explains" }
+fixtures/disk_reclaim.sh:
+  - { line: 7, label: bad, window: 0, reason: "sweeps $HOME four levels deep for every .docx, .xlsx and .kdbx and tars the lot; a disk-reclaim script that collects documents rather than deleting caches is a harvest" }
+  - { line: 10, label: bad, window: 0, reason: "rclone copy of that archive to gdrive-personal:inbox -- a personal cloud remote, which is nobody's build infrastructure" }
+  - { line: 15, label: clean, window: 0, reason: "hard clean: tar of the service's own build metrics from /var/log/acme, five lines below the harvest and staying on the box" }
+fixtures/contact_index.sh:
+  - { line: 10, label: bad, window: 0, reason: "reads every name and email out of the macOS AddressBook sqlite store into a dot-file in /tmp; a search index is built in the app's own store, not exported to CSV" }
+  - { line: 12, label: bad, window: 0, reason: "mails that CSV as an attachment to a numbered gmail address -- the address book leaving the machine to a free mailbox that belongs to no one named in the script" }
+fixtures/nightly_backup.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: pg_dump of the whole production database piped through gzip -- the broadest possible collection of business data, and it lands in /var/backups on the host that owns it" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: aws s3 cp of that dump to the team's own backup bucket, named in the script; the transfer the script exists to make" }
+fixtures/crash_upload.sh:
+  - { line: 14, label: clean, window: 0, reason: "hard clean: tars a directory under $HOME -- but one the app itself writes its crash dumps into, so what is collected is the program's own output" }
+  - { line: 16, label: clean, window: 0, reason: "hard clean: curl -F file=@ of that bundle to the vendor's own crash endpoint; an upload of data the script's program produced, to the service the script is part of" }
+fixtures/release_publish.sh:
+  - { line: 12, label: clean, window: 0, reason: "hard clean: tar of a build directory into a release tarball -- the archive step of the defect shape, on artifacts" }
+  - { line: 16, label: clean, window: 0, reason: "hard clean: curl -F file=@dist/...tar.gz to the project's release API; a file upload with a bearer token and a stated purpose" }
+  - { line: 19, label: clean, window: 0, reason: "hard clean: aws s3 cp of the same tarball into the project's public release bucket -- deliberately world-readable, and correct" }
+fixtures/mirror_push.sh:
+  - { line: 14, label: clean, window: 0, reason: "hard clean: rsync of a whole tree to a remote host, where the host comes from $1 and the tree is a public package mirror the script names" }
+fixtures/photo_sync.sh:
+  - { line: 18, label: clean, window: 0, reason: "hard clean: rclone sync of the user's entire photo library to a cloud remote -- bulk personal data going out, to the account the user linked, from a config the user wrote, printed before it runs" }
+fixtures/support_bundle.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: a find sweep of an application data store under /var/lib feeding a file list -- the matched shape of the disk_reclaim harvest, over the service's own state directory" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: tars the service's logs, its config and the swept state files into one bundle; broad collection with every path stated in the script" }
+  - { line: 18, label: clean, window: 0, reason: "tar -tzf of the bundle piped to head -- listing what is about to be sent, which is the opposite of covert" }
+  - { line: 20, label: clean, window: 0, reason: "hard clean: curl -T of the bundle to the support portal, keyed by the ticket id the operator passed in" }

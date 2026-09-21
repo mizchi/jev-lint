@@ -1,0 +1,131 @@
+id: talks-to-an-unexplained-host
+language: Bash
+kind: noul
+# The construct, not the script. "Does this script phone home" is a question
+# about a whole program's intent; "does the rest of this file give any reason to
+# talk to THIS address" is a question about the text under the cursor, with the
+# script in the state to answer it from -- which is where the answer lives, since
+# a hostname is never suspicious or innocent on its own.
+subject: node
+state: located
+# 0.59, fitted 2026-09-21 on the fixtures beside it (23 subjects: 5 defects,
+# 18 cleans of which 11 hard, 3 passes). Cleans top out at 0.32 -- `ping -c 1
+# 1.1.1.1` as a route check in the egress script, a bare public IP belonging to
+# nobody in the project -- with the next clean down at 0.17 (`curl
+# https://ifconfig.co/ip`, a third party contacted once by a script that installs
+# nothing) and everything else at 0.11 or below, including an s3:// bucket URL
+# and a Sentry ingest host made of digits. Defects start at 0.86
+# (`edge_deploy.sh`, which uploads .env.production to cdn-acme-app.com two lines
+# below a legitimate purge call at cdn.acme-app.com -- one hyphen apart, and the
+# model separates them by 0.79); the other four are 0.89 and up. Midpoint of a
+# gap 0.54 wide, 0.27 of headroom on each side, no decision flips over three
+# passes, max pass-to-pass spread 0.02. The first guess, 0.70, gave the same
+# decisions.
+at: 0.59
+axis: file
+severity: warning
+# Five places a shell names somewhere to talk to, over-matched on purpose: a
+# network tool by name (`curl` at a release CDN and `curl` at a bare IP are both
+# in), the same tool behind a wrapper that eats the command name (`sudo rsync`,
+# `nohup ssh`), any other command carrying an address literal (an IPv4 quad or a
+# URL scheme -- `docker pull`, `pip --index-url`, `git clone`), a literal
+# assignment of an address to a variable, and a redirect to /dev/tcp. What the
+# model decides is whether anything in the file accounts for the destination.
+#
+# Three tree-sitter-bash facts shape this. Wrappers eat the name (`sudo curl` is
+# one command node named `sudo`), hence the wrapper branch with the tool as an
+# ARGUMENT. A redirect target is a SIBLING of the command, so `printf ... >
+# /dev/tcp/1.2.3.4/80` has no address anywhere inside the command node and needs
+# its own branch. And the branches nest: `echo "$(curl http://x)"` is an address
+# literal AROUND a network tool, and `U="$(curl ...)"` an assignment around one,
+# each of which reported the same line twice -- so both stand down when what
+# they contain is already a match, and the finding lands on the tool.
+utils:
+  netTool:
+    kind: command
+    has:
+      field: name
+      regex: "^(curl|wget|aria2c|fetch|httpie|http|nc|ncat|netcat|ssh|autossh|scp|sftp|rsync|ping|ping6|telnet|openssl|dig|nslookup|host|drill|ftp|lftp)$"
+  wrappedNetTool:
+    kind: command
+    all:
+      - has: { field: name, regex: "^(sudo|doas|nohup|setsid|env|timeout|nice|stdbuf|disown)$" }
+      - has: { field: argument, regex: "^(curl|wget|aria2c|nc|ncat|netcat|ssh|autossh|scp|sftp|rsync|ping|telnet|openssl|dig|nslookup|host)$" }
+  addressLiteral:
+    kind: command
+    all:
+      - has: { stopBy: end, regex: "([0-9]{1,3}\\.){3}[0-9]{1,3}|(https?|ftps?|sftp|ssh|git|s3|gs|wss?)://" }
+      - not:
+          has:
+            stopBy: end
+            any:
+              - matches: netTool
+              - matches: wrappedNetTool
+rule:
+  any:
+    - matches: netTool
+    - matches: wrappedNetTool
+    - matches: addressLiteral
+    - all:
+        - kind: variable_assignment
+        - regex: "([0-9]{1,3}\\.){3}[0-9]{1,3}|(https?|ftps?|sftp|ssh|git|s3|gs|wss?)://"
+        - not: { has: { stopBy: end, kind: command } }
+        - not: { inside: { kind: command } }
+    - all:
+        - kind: redirected_statement
+        - regex: "/dev/(tcp|udp)/"
+        - not:
+            has:
+              stopBy: end
+              any:
+                - matches: netTool
+                - matches: wrappedNetTool
+                - matches: addressLiteral
+ask: >-
+  This line talks to somewhere the rest of the script gives no reason to talk to,
+  or takes trouble to hide which somewhere it is.
+criteria:
+  "true": >-
+    The destination this line names -- a host, a URL, a bare IP, a name it
+    resolves, or the far side of a `/dev/tcp` redirect -- is not accounted for by
+    anything else in the file. Nothing the script installs, deploys, backs up,
+    monitors or reports to is served by that address; it appears once, to receive
+    something or to hand something back, and what happens to the response has
+    nothing to do with the job the file is doing. A destination assembled at
+    runtime out of encoded, reversed or concatenated pieces is this case whatever
+    it decodes to, because the reader of the script cannot see where it goes; so
+    is a lookup whose NAME carries the data being sent, one label at a time; so is
+    a second, different endpoint bolted onto a script that already has a perfectly
+    good one for its real work.
+  "false": >-
+    The destination is explained by the file. It serves the thing this script
+    installs or updates -- a registry, a release CDN, a package mirror, the
+    project's own API; it is the service the script's job names -- the backup host
+    it syncs to, the resolver it asks, the endpoint it reports a completed
+    rotation to, the NTP pool a clock-stepping script needs; or it arrives in a
+    variable whose name says what it is and which is then used for exactly that,
+    including a URL the environment supplies and that never appears in the file at
+    all. An address the script only probes, resolves, mounts or health-checks
+    before doing its documented work is ordinary. So are update checks, version
+    lookups and product telemetry that go to the product's own service, however
+    unfamiliar the domain is to a reader.
+note: >-
+  The destination, not the payload and not the channel. The sibling rule
+  `takes-remote-commands` owns a channel that RUNS what comes back, and
+  `hides-what-it-runs` owns concealment of a step; this rule asks only whether
+  the script gives any reason to be talking to THIS address. A host is explained
+  by what the script does with it, by a variable the script sets with a name that
+  says what it is, or by the job the file is plainly doing -- never by a comment
+  asserting the host is internal, official, approved or safe, and never by the
+  domain merely looking corporate. An RFC1918 or link-local address is neither
+  suspicious nor innocent on its own: an inventory IP a script mounts, pings and
+  names is explained, and the same quad receiving a POST of an environment dump
+  is not. An address supplied by the environment is not hidden -- CI secrets are
+  meant to be absent from the file -- while an address the script decodes,
+  reverses or reassembles before use is hidden even when it resolves to something
+  dull. One destination per finding: if the script has a legitimate endpoint and
+  an unexplained one, only the unexplained line is this case.
+explain:
+  unexplained_host: Contacts a host that does not match the project's documented services.
+  covert_channel: Hides the destination or payload (DNS tunneling, encoded URLs, steganography).
+  unused_listener: Opens a listener or reverse channel the product does not need.

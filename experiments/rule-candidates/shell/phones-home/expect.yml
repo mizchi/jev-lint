@@ -1,0 +1,40 @@
+default: clean
+fixtures/backup_nightly.sh:
+  - { line: 13, label: clean, window: 0, reason: "hard clean: the backup itself being shipped to the object store -- a request body of several hundred megabytes that is the whole point of the run, eleven lines above a reportable ping in the same file" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean: the checksum of that upload, carrying a hostname-shaped filename; it describes the payload, not the run" }
+  - { line: 24, label: bad, window: 0, reason: "a heartbeat to hc-ping.com saying the nightly job finished, with the run id and the host in the query string: nothing about it is the backup, it is the report that the backup happened" }
+fixtures/cron_wrapper.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: fetches the job's own config over HTTP and sources it -- inbound, and it is what the run needs to do its work" }
+  - { line: 19, label: bad, window: 0, reason: "a wget whose entire purpose is the query string: job name, exit code, elapsed seconds and hostname posted to a beacon endpoint after every scheduled run" }
+fixtures/deploy_service.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: a POST with a JSON body to an external vendor -- and it is the deploy, the API this script exists to drive" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean: polls the release's state; the run is asking the service a question, not telling it one" }
+  - { line: 22, label: clean, window: 0, reason: "hard clean: reads /healthz on the deployed service -- the health-check direction is inbound, which is the opposite of reporting to a collector" }
+  - { line: 24, label: clean, window: 0, reason: "hard clean, and the arguable one: a webhook the operator configured against their own team's channel, posting a human-readable line about this deploy. It is about the run, which is why it is hard, but the recipient is the operator themselves and the payload is the script's output rather than an event a collector aggregates" }
+fixtures/etl_nightly.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: trap EXIT that removes the staging dir" }
+  - { line: 10, label: bad, window: 0, reason: "a trap on ERR that posts an automated event -- summary, host, severity -- to a paging vendor's ingest endpoint when the run fails. I first labelled this clean, arguing it was the operator's own on-call rather than a collector; that is wrong on this rule's axis, which is that traffic saying the run failed on this machine is telemetry whoever receives it. The human-readable chat line in deploy_service.sh:24 is the clean side of that boundary and sits two lines of argument away" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: pulls yesterday's orders with a query string -- inbound, and it is the extract half of the job" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean: --data-binary of the transformed rows into the warehouse; the load half of the job" }
+fixtures/push_node_metrics.sh:
+  - { line: 9, label: clean, window: 0, reason: "trap EXIT that removes the body file" }
+  - { line: 21, label: clean, window: 0, reason: "hard clean, contested: pushes load, memory and disk for this host to a Prometheus gateway. It reads as telemetry by every surface signal -- machine identity, numbers about a box, a collector -- but this script IS the metrics shipper; the traffic is the product's own feature, not a report about this run of it" }
+  - { line: 24, label: clean, window: 0, reason: "hard clean: an update check that sends nothing about the caller -- a bare GET of latest.txt, where `?current=$VERSION&os=$(uname)` on the same URL would have been reportable" }
+fixtures/index_documents.sh:
+  - { line: 7, label: clean, window: 0, reason: "hard clean: a trap that only removes a temp file -- same construct as the reportable trap in install_agent.sh, nothing leaves the box" }
+  - { line: 9, label: clean, window: 0, reason: "hard clean: a GET with a query string at a cluster-health endpoint; the script is waiting on the cluster, not telling anyone how it went" }
+  - { line: 14, label: clean, window: 0, reason: "hard clean: --data-binary of a bulk ndjson body -- the largest request in the corpus and the work itself" }
+  - { line: 18, label: clean, window: 0, reason: "hard clean: a POSTed search query; a request body that is the product feature, not a report about the run" }
+fixtures/install_agent.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: trap EXIT that removes the temp dir, sitting one line above a reportable trap of the same kind in the same file" }
+  - { line: 9, label: bad, window: 0, reason: "a trap on ERR that posts the failing line number, uname and the version to an install-errors collector: a crash report, and the only telemetry shape with no network tool at the head of the line" }
+  - { line: 11, label: clean, window: 0, reason: "hard clean: downloads the agent tarball -- the thing being installed, two lines below a reportable construct" }
+  - { line: 12, label: clean, window: 0, reason: "downloads the checksum file for it" }
+fixtures/provision_host.sh:
+  - { line: 17, label: bad, window: 0, reason: "a usage event to a third-party analytics vendor with a machine id, the provider, the CLI version and uname -- documented in the header, anonymous, and opt-out-able, which is exactly the case that must still answer yes" }
+fixtures/publish_artifact.sh:
+  - { line: 12, label: clean, window: 0, reason: "hard clean: uploads the tarball to the artifact store -- the script's output" }
+  - { line: 15, label: clean, window: 0, reason: "hard clean, built to look like telemetry: --data-urlencode of version, sha256 and $(whoami)@$(hostname -s) to a POST endpoint. Every field on the telemetry risk list is here, and all three describe the artifact being registered rather than the run that built it" }
+fixtures/run_tests.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: downloads the test fixtures the suite needs, six lines above a reportable POST in the same file" }
+  - { line: 17, label: bad, window: 0, reason: "posts suite name, duration, exit status, runner hostname and branch to an internal insights endpoint after the suite finishes: the canonical run-report, first-party host and all" }
