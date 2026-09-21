@@ -2190,11 +2190,40 @@ Add `hookShim` to the import from `../config.ts`.
 Run: `npm test config && npm test commands`
 Expected: PASS.
 
-- [ ] **Step 6: Typecheck, run everything, commit**
+- [ ] **Step 6: Update the hooks document**
+
+`docs/use-hooks.md` describes the hooks as they are installed today --
+one script written into git's hooks directory -- and every path, every
+command and the "Install" section become wrong with this task. Rewrite
+those parts against what `init` now does. Two things in it are about
+behaviour this task does not change and must survive: the `--staged`
+caveats, and the section on exit 3 blocking a commit.
+
+That last one is the thing to settle here rather than document again. A
+failed request is exit 3, git fails a hook on any non-zero exit, and the
+body ends in `exec` -- so being offline stops the commit. Now that the
+body is a tracked file this task is rewriting anyway, make it let 3
+through:
+
+```sh
+npx -y jev-lint review --staged --fail-on error
+status=$?
+# 3 is "the requests failed", which is not a verdict about this commit.
+# Blocking on it means being unable to commit while offline, which is how
+# a hook gets deleted.
+[ "$status" -eq 3 ] || exit "$status"
+```
+
+and the same for the `commits --staged` call after it and for pre-push.
+Add a test that a body exiting 3 does not fail the hook. Then say in
+`docs/use-hooks.md` that it no longer blocks, and delete the hand-written
+workaround that document currently carries.
+
+- [ ] **Step 7: Typecheck, run everything, commit**
 
 ```bash
 npm run typecheck && npm test
-git add src/config.ts src/cli/cmd-init.ts test/config.test.ts test/commands.test.ts
+git add src/config.ts src/cli/cmd-init.ts test/config.test.ts test/commands.test.ts docs/use-hooks.md
 git commit -m "init: the hook in the repository, a shim in .git/hooks
 
 A hook nobody can see is a hook nobody reviews. The body now goes to
@@ -2538,6 +2567,10 @@ produces no subject, and what `commits --staged` does.
 
 In `README.md` and `README-ja.md`, add `jev-lint commits --staged` to the
 command list and one sentence on the rule beside the commit-message one.
+
+In `docs/use-hooks.md`, add `commits --staged` to what the pre-commit hook
+runs and one line on what it costs. Task 11 rewrote the install sections;
+this is the rule arriving in them.
 
 - [ ] **Step 3: Write the changelog entry**
 
