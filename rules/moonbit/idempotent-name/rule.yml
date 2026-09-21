@@ -1,0 +1,76 @@
+id: idempotent-name
+language: moonbit
+kind: noul
+subject: node
+# `located`, as every other language's copy of this rule: the whole file is
+# what lets the model see that the array a `register_*` pushes onto is a
+# module-level `Array`, and that the store a sibling `register_*` writes to is
+# a `Map` keyed by the thing being registered.
+state: located
+# 0.49, fitted 2026-09-21 on the fixtures beside it (26 subjects: 9 defects,
+# 17 cleans of which 14 are hard, 3 passes). Cleans top out at 0.28
+# (`setup_retry_budget`, which writes `defaults.retries = attempts + 1` two
+# functions above a real increment) then 0.17 (`setup_stages`, which pushes in
+# a loop onto a local array it then assigns). Defects start at 0.71
+# (`install_plugin`, which checks existence and then aborts on it) and the rest
+# answer 0.80-0.96. Midpoint of the gap: 0.21 of headroom on the clean side,
+# 0.22 on the defect side, no decision flips, max pass-to-pass spread 0.07.
+# The guess before the fit was 0.5 and nothing moved. Python's copy of this
+# rule sits at 0.68 and TypeScript's at 0.40.
+at: 0.49
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: warning
+# MoonBit's grammar declares no fields, so the name is matched by kind.
+# `init` is deliberately NOT in the alternation: in MoonBit `init` names the
+# once-per-program start-up path, so `init_*` claims to run once rather than
+# to be safe to repeat, and matching it would add subjects the sentence is
+# false of by construction. `fixtures/registry.mbt` keeps an `init_registry`
+# that pushes unconditionally; `--show-subjects` confirms it is not picked.
+rule:
+  all:
+    - kind: function_definition
+    - has:
+        kind: function_identifier
+        stopBy: end
+        pattern: $NAME
+        regex: ^(ensure|upsert|setup|install|register)(_|$)
+# The same sentence as python/idempotent-name and typescript/idempotent-name,
+# by copy: the loader warns if the copies drift.
+ask: This function's name ($NAME) says a repeated call is harmless, but calling
+  it a second time with the same arguments leaves a different result from
+  calling it once.
+criteria:
+  # Both branches describe what is visible in the function's own text. The
+  # whole rule turns on one pair of MoonBit calls: `Array::push` accumulates
+  # and `Map::set` overwrites, so the first needs a guard and the second does
+  # not.
+  "true": >-
+    The body performs its effect without finding out whether it is already in
+    place, and repeating the effect accumulates or fails: it pushes onto an
+    array or appends to a stored list of entries, handlers or records, creates
+    an entry, file or directory that would then exist twice, increments a
+    counter or accumulates into a field that the first call already set, or
+    aborts or raises on the second call because the thing it would create is
+    already there -- with no membership or existence check, no write by key
+    that a repeat would simply overwrite, and no flag or early return that
+    makes the second call a no-op. One such step is enough, even when the other
+    steps of the body are safe to repeat.
+  "false": >-
+    A second call finds the effect already in place and leaves the state as the
+    first call left it: the body checks membership or existence before acting
+    and returns early or returns what it found, writes by key so that a repeat
+    overwrites the same entry, assigns fields rather than appending, updates
+    the matching entry in place when it finds one and inserts only when it does
+    not, guards its work behind a flag it sets, delegates the effect to a
+    helper whose own name says it is repeat-safe, or has no effect at all
+    beyond its return value.
+note: Judge what this body does, reading the bodies of the helpers it calls
+  when those are defined in the same file. A helper defined elsewhere, or one
+  whose own name says it is repeat-safe (ensure_*, upsert_*, set, put), is
+  assumed to be repeat-safe. Printing on each
+  call, or returning a freshly built value each call, is not a different
+  result. A function whose name says ensure but only computes a value from its
+  arguments has nothing to repeat and is not a violation. That the function is
+  declared to raise is not itself the defect; the defect is that the second
+  call takes a failing or duplicating branch where the first call succeeded.

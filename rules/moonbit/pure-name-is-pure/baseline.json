@@ -1,0 +1,838 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:11:05.903Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/pure-name-is-pure",
+  "rules": [
+    {
+      "id": "pure-name-is-pure",
+      "draft": "abe81cc4265d",
+      "at": 0.55
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 27,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 36,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 42,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 54,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 65,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 78,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 89,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 96,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 101,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 108,
+        "endLine": 111,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 114,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 133,
+        "endLine": 142,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 151,
+        "endLine": 155,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 172,
+        "endLine": 178,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 22,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 31,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 36,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 43,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 50,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 55,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 60,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 70,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 86,
+        "endLine": 96,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 99,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 108,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 127,
+        "endLine": 139,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 142,
+        "endLine": 146,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 149,
+        "endLine": 152,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 155,
+        "endLine": 162,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 22,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 31,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 36,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 43,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 50,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 55,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 60,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 70,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 86,
+        "endLine": 96,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 99,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 108,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 127,
+        "endLine": 139,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 142,
+        "endLine": 146,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 149,
+        "endLine": 152,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 155,
+        "endLine": 162,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 27,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 36,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 42,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 54,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 65,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 78,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 89,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 96,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 101,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 108,
+        "endLine": 111,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 114,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 133,
+        "endLine": 142,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 151,
+        "endLine": 155,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 172,
+        "endLine": 178,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 27,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 36,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 42,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 54,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 65,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 78,
+        "endLine": 86,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 89,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 96,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 101,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 108,
+        "endLine": 111,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 114,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 133,
+        "endLine": 142,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 151,
+        "endLine": 155,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/catalog.mbt",
+        "line": 172,
+        "endLine": 178,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 22,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 31,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 36,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 43,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 50,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 55,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 60,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 70,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 86,
+        "endLine": 96,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 99,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 108,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 127,
+        "endLine": 139,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 142,
+        "endLine": 146,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 149,
+        "endLine": 152,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "pure-name-is-pure",
+        "file": "rules/moonbit/pure-name-is-pure/fixtures/invoice.mbt",
+        "line": 155,
+        "endLine": 162,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 103929,
+    "usd": 0.004365018,
+    "ms": 964
+  }
+}

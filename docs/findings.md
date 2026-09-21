@@ -1439,3 +1439,22 @@ failure contract twice: the doc says it and the signature says `raise`,
 so the model can read the disagreement without inferring anything. The
 matcher captures the whole `///` run rather than its last line, since
 `stopBy: not comment` walks it, which is better than the Rust copy gets.
+
+Three of the guarantee family followed, written in a session of their own
+and verified here: every fixture parses, every label sits on a subject
+its rule produces, and every baseline replays at its shipped cutoff.
+
+| rule | at | subjects | defects | cleans top at | defects start at |
+| --- | --- | --- | --- | --- | --- |
+| `idempotent-name` | 0.49 | 26 | 9 | 0.28 | 0.71 |
+| `pure-name-is-pure` | 0.55 | 30 | 11 | 0.21 | 0.86 |
+| `safe-name-is-safe` | 0.39 | 15 | 5 | 0.18 | 0.58 |
+
+`idempotent-name` leaves `init` out of its alternation on purpose: in
+MoonBit `init` names the once-per-program start-up path, so `init_*`
+claims to run once rather than to be safe to repeat, and matching it
+would add subjects the sentence is false of by construction.
+
+Eight rules, 387 subjects across their fixtures, and the whole set
+replays with no parser on hand -- which is the point of shipping a rule
+for a grammar the reader compiles.

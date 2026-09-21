@@ -178,7 +178,7 @@ the end of the run. Nothing to select.
 | `.rs` | `rust/` — 8, first tier | the same for functions, comments, tests, bindings; `# Errors` / `# Panics` against the body |
 | `.py` | `python/` — 12 | ports of the TypeScript rules; `Raises:` against the body |
 | `.go` | `go/` — 9 | ports, plus `must-name-panics`: does `MustX` panic on the failure its name promises |
-| `.mbt` | `moonbit/` — 5 | ports of the naming, comment and test rules. MoonBit is not a grammar ast-grep has built in: [declare the parser](docs/reference.md#a-language-ast-grep-does-not-have-built-in) and these run; without it they are skipped and the run says so |
+| `.mbt` | `moonbit/` — 8 | ports of the naming, guarantee, comment and test rules. MoonBit is not a grammar ast-grep has built in: [declare the parser](docs/reference.md#a-language-ast-grep-does-not-have-built-in) and these run; without it they are skipped and the run says so |
 | `package.json` | `json/` — 1 | does a script's name describe the command it runs |
 | `.sql` (an sqlc catalog) | `text/` — 1 | does `-- name: GetUserByEmail` describe the SQL under it |
 | `.md` `.mdx` | `markdown/` — 11 | is this document slop, filler, vague, padded (JevSlop's eight signals, scored 0–4); does a section end by previewing the next, open with an agenda, abandon a question it raised |

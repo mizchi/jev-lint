@@ -1,0 +1,107 @@
+default: clean
+fixtures/registry.mbt:
+  - line: 64
+    label: bad
+    window: 0
+    reason: "`register_hook` pushes onto a module-level `Array[Hook]` with no membership check, so registering the same event twice leaves the handler installed twice."
+  - line: 69
+    label: clean
+    window: 0
+    reason: "hard clean: `register_plugin` has no check either, but it writes `plugins.set(name, ...)` on a `Map` keyed by the name -- the second call overwrites the same key, which is exactly idempotent. The twin of `register_hook`, and the pair the rule exists to tell apart."
+  - line: 74
+    label: bad
+    window: 0
+    reason: "`register_tag` ends in `tags.set(tag, current)`, which reads as the idempotent keyed write, but the value it sets is the previous array with `name` pushed onto it: the key is overwritten and the list under it grows by one every call. The inverse of `register_plugin`."
+  - line: 84
+    label: bad
+    window: 0
+    reason: "`register_run` also ends in a `Map::set`, but keys it by `runs.length()`, which the previous call changed: the same argument twice lands under two different keys. A keyed write is only idempotent when the key is a function of the arguments."
+  - line: 90
+    label: clean
+    window: 0
+    reason: "hard clean: `upsert_hook` pushes onto the same array `register_hook` does, but only after scanning for an existing entry for the event and replacing it in place -- an array-backed upsert done correctly."
+  - line: 101
+    label: bad
+    window: 0
+    reason: "`install_plugin` does check existence, and then `abort`s on it: the first call installs and the second kills the process. The failure mode rather than the duplication one; a body that checks is not automatically a repeat-safe body."
+  - line: 109
+    label: clean
+    window: 0
+    reason: "hard clean: `install_theme` also `abort`s, but on an invalid argument rather than on the thing already being there; called twice with the same valid arguments it takes the same keyed write both times."
+  - line: 117
+    label: clean
+    window: 0
+    reason: "hard clean: `install_dependencies` performs an effect inside a loop, which reads as accumulation, but each iteration goes through `ensure_plugin_slot`, which guards its own push."
+  - line: 124
+    label: clean
+    window: 0
+    reason: "hard clean: `ensure_plugin_slot` pushes onto the same kind of array `register_hook` does, guarded by `load_order.contains(name)` with an early return -- the canonical correct shape."
+  - line: 132
+    label: clean
+    window: 0
+    reason: "hard clean: `setup_defaults` writes three fields by assignment; a second call with the same arguments writes the same three values."
+  - line: 139
+    label: clean
+    window: 0
+    reason: "hard clean: `setup_stages` pushes in a loop, but onto a local array it then assigns to `defaults.stages`; the push accumulates within one call and never across calls."
+  - line: 148
+    label: clean
+    window: 0
+    reason: "hard clean: `setup_retry_budget` writes `defaults.retries = attempts + 1`, a value computed from the argument rather than from the field's own previous value -- one character of difference from the increment in `setup_metrics` below it."
+  - line: 154
+    label: bad
+    window: 0
+    reason: "`setup_metrics` assigns one field (safe) and increments another, `metrics.boots = metrics.boots + 1`, so the second call leaves 2 where the first left 1. One unsafe step is enough."
+  - line: 160
+    label: clean
+    window: 0
+    reason: "`ensure_version` computes a string from its argument and stores nothing: there is nothing for a second call to leave differently."
+fixtures/workspace.mbt:
+  - line: 51
+    label: clean
+    window: 0
+    reason: "hard clean: `ensure_file` performs no check at all, which reads as the defect, but `files.set(path, ...)` is a keyed write -- twice with the same arguments leaves one entry with the same body."
+  - line: 56
+    label: clean
+    window: 0
+    reason: "hard clean: `ensure_dir` pushes onto an array, guarded by `dirs.contains(path)` with an early return."
+  - line: 64
+    label: clean
+    window: 0
+    reason: "`ensure_cache_dir` performs no effect of its own; it delegates twice to `ensure_dir`, whose own name says it is repeat-safe."
+  - line: 70
+    label: clean
+    window: 0
+    reason: "hard clean: `ensure_counter` touches a counter, as `setup_metrics` does, but it initialises it to 0 behind a `contains` guard instead of adding to it."
+  - line: 78
+    label: clean
+    window: 0
+    reason: "hard clean: `upsert_setting` genuinely upserts -- it mutates the entry it finds and inserts only when it finds none."
+  - line: 86
+    label: bad
+    window: 0
+    reason: "`upsert_profile` never looks the profile up: it pushes a new record onto `profiles` every call, so the same name ends up in the array twice. The `ensure_dir` call beside it is safe and does not redeem the push."
+  - line: 93
+    label: bad
+    window: 0
+    reason: "`setup_lockfile` raises `AlreadyLocked` when the lock file it would write is already there, so the second call fails where the first succeeded. The defect is the branch, not the fact that the function is declared to raise."
+  - line: 102
+    label: bad
+    window: 0
+    reason: "`setup_workspace` guards its first two directories through `ensure_dir` and then pushes the third onto `dirs` directly, bypassing the guard: two safe steps and one that duplicates."
+  - line: 109
+    label: bad
+    window: 0
+    reason: "`setup_audit` has a one-line body that reads as a delegation, but `record_dir` is a private helper in this same file whose name promises nothing and whose body is an unguarded `dirs.push`. The whole point of the `located` arm is that this is visible."
+  - line: 114
+    label: clean
+    window: 0
+    reason: "hard clean: `install_bundle` is the twin of `setup_audit` -- the same one-line delegation to a private same-file helper, except that `store_entry` writes by key."
+  - line: 119
+    label: clean
+    window: 0
+    reason: "hard clean: `ensure_schema` pushes twice onto an array, but behind a `schema.ready` flag that the same call sets, so the second call returns before reaching the pushes."
+  - line: 129
+    label: clean
+    window: 0
+    reason: "hard clean: `install_runtime` looks the entry up first and returns the existing one, creating only when there is none -- check-then-create, with the second call returning what the first made."

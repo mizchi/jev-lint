@@ -1,0 +1,63 @@
+default: clean
+fixtures/config.mbt:
+  - line: 46
+    label: clean
+    window: 0
+    reason: "`try_port` is the canonical shape: the raising `parse_int` is wrapped in try/catch and both the missing key and the bad value come back as `None`."
+  - line: 59
+    label: bad
+    window: 0
+    reason: "`port_or_default` is handed a fallback, returns it when the key is missing, and then aborts the process when the value will not parse -- the exact case the name says the fallback is for."
+  - line: 72
+    label: clean
+    window: 0
+    reason: "hard clean: the same body as `port_or_default` with the abort replaced by the fallback thunk; the two differ only in the catch arm, which is the whole question."
+  - line: 85
+    label: bad
+    window: 0
+    reason: "`safe_host` calls `.unwrap()` on the option `lookup` returns, with nothing establishing the key is present, so a config without a host panics instead of falling back to the localhost it already knows about."
+  - line: 95
+    label: clean
+    window: 0
+    reason: "`host_or_default` matches the option and returns the caller's default for both the missing key and the empty string."
+  - line: 103
+    label: clean
+    window: 0
+    reason: "hard clean: `safe_retries` calls `.unwrap()`, but the `is None` return sits immediately above it, so the option is proved filled; the parse is then caught. A reader who greps for `unwrap` flags this and is wrong."
+  - line: 117
+    label: clean
+    window: 0
+    reason: "`try_config` only composes functions that already report failure as a value and returns `None` itself."
+fixtures/queue.mbt:
+  - line: 22
+    label: clean
+    window: 0
+    reason: "hard clean: `try_claim` declares `raise QueueError` in its signature, so the missing job is in the function's type and moonc forces every caller to handle it. The failure is reported, not escaping -- this is the case a literal port of the other languages' rule would wrongly flag."
+  - line: 32
+    label: clean
+    window: 0
+    reason: "`try_dequeue` checks the length before indexing and returns `None` on the empty queue."
+  - line: 42
+    label: clean
+    window: 0
+    reason: "hard clean: `next_or_default` indexes at 0, but only after the length check that routes the empty case to the caller's fallback."
+  - line: 51
+    label: bad
+    window: 0
+    reason: "`oldest_or_default` scans from index 1, so on an empty array the loop never runs and `jobs[best]` indexes position 0 of nothing; the fallback it was given is reached only for a job that is not due yet, never for the empty case."
+  - line: 67
+    label: bad
+    window: 0
+    reason: "`try_drain` only removes the head job when its attempts are within budget, and otherwise loops on the same head forever -- the queue never shrinks and the function never returns."
+  - line: 81
+    label: clean
+    window: 0
+    reason: "`try_cancel` indexes inside a bounded range and answers `false` when the id is not there."
+  - line: 92
+    label: bad
+    window: 0
+    reason: "`safe_rate` divides by `attempted`, which is zero for a queue that is empty and has completed nothing -- the state a fresh queue is in."
+  - line: 98
+    label: clean
+    window: 0
+    reason: "hard clean: the same division as `safe_rate` with the zero denominator checked first and answered with the caller's fallback."

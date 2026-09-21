@@ -1,0 +1,433 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:11:46.799Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/safe-name-is-safe",
+  "rules": [
+    {
+      "id": "safe-name-is-safe",
+      "draft": "2eb86a50bb80",
+      "at": 0.39
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 46,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 59,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 72,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 85,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 95,
+        "endLine": 100,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 103,
+        "endLine": 114,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 117,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 22,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 32,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 42,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 51,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 67,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 81,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 92,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 98,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 46,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 59,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 72,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 85,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 95,
+        "endLine": 100,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 103,
+        "endLine": 114,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 117,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 22,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 32,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 42,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 51,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 67,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 81,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 92,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 98,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 22,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 32,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 42,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 51,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 67,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 81,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 92,
+        "endLine": 95,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/queue.mbt",
+        "line": 98,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 46,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 59,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 72,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 85,
+        "endLine": 92,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 95,
+        "endLine": 100,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 103,
+        "endLine": 114,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "safe-name-is-safe",
+        "file": "rules/moonbit/safe-name-is-safe/fixtures/config.mbt",
+        "line": 117,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 42867,
+    "usd": 0.0018004140000000002,
+    "ms": 732
+  }
+}

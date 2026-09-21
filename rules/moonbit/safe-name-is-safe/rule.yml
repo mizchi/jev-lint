@@ -1,0 +1,94 @@
+id: safe-name-is-safe
+language: moonbit
+kind: noul
+subject: node
+# `located`, as the other MoonBit rules in this directory: the file is what
+# lets the model see that `lookup` returns an option before judging an
+# `.unwrap()` on it, and that `parse_int` is the raising call a `try` is
+# wrapping.
+state: located
+# 0.39, fitted 2026-09-21 on the fixtures beside it (15 subjects: 5 defects,
+# 10 cleans of which 5 hard, 3 passes). Cleans top out at 0.18 (`try_config`,
+# which only composes functions that already report failure as a value) and
+# then drop to 0.07 and below; defects start at 0.58 (`oldest_or_default`,
+# which indexes an array the loop above it never bounded) and 0.69
+# (`try_drain`, whose `while` only makes progress inside a branch), the rest
+# 0.84-0.93. Midpoint of the gap, 0.20 of headroom on each side, no decision
+# flips over three independent 3-pass runs, max spread 0.13
+# (`oldest_or_default`, whose worst single pass was 0.49 -- still 0.10 clear).
+# The guess before the fit was 0.50, which would also have been clean: the gap
+# is wide enough that the cutoff was never the difficult number here. The
+# wording of the loop clause was; see
+# experiments/reports/moonbit-safe-name-is-safe/REPORT.md.
+at: 0.39
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: warning
+# MoonBit's grammar declares no fields, so the name is matched by kind rather
+# than by `field: name`. `_or_none` is in the alternation for parity with the
+# other languages' copies, but MoonBit has no null: a function that reports
+# absence returns `T?` and is normally named `try_*`, so the idioms that
+# actually occur are `^try_`, `^safe_`, `_or_default` and `_or_else` (the
+# names `Option::or_default` / `Option::or_else` in core set that spelling).
+rule:
+  all:
+    - kind: function_definition
+    - has:
+        kind: function_identifier
+        stopBy: end
+        pattern: $NAME
+        regex: ^(safe|try)(_|$)|_or_(default|none|else)$
+# NOT the sentence the TypeScript and Python copies use, and the loader's
+# drift warning on this id is expected. In those languages the question is
+# whether a failure escapes as a throw or a rejection. In MoonBit a `raise` is
+# part of the function's type: a function that can raise says so in its
+# signature and `moonc` forces every caller to handle it, so "a failure
+# escapes as a raise" is the compiler's answer and a rule that asked it would
+# be either always false or a duplicate of the type checker. What MoonBit
+# leaves out of the type -- `abort`, `panic()`, `.unwrap()`, an out-of-range
+# index, a division by zero, a loop that cannot terminate -- is what is left
+# for a rule to ask about, so the sentence asks about that instead.
+ask: >-
+  This function's name ($NAME) says that failure is absorbed and handed back to
+  the caller as a value, but its body has a path that ends the program or never
+  returns instead.
+criteria:
+  # Both branches describe what is visible in the text the subject carries. An
+  # exception phrased in terms of something the subject cannot show -- "unless
+  # the caller is expected to have checked" -- makes every answer land
+  # mid-scale, which looks like a threshold problem and is not one.
+  "true": >-
+    There is an input for which the body reaches something that kills the
+    process or hangs instead of producing the value the name promises: it calls
+    `abort` or `panic()` on a case the name says it absorbs, it calls
+    `.unwrap()` (or an `unwrap_or_error`-style escape) on an option or result
+    the body has not already established is filled, it indexes an array, string
+    or buffer at a position nothing in the body has bounded -- a container
+    parameter the caller may pass empty, an index computed before the length is
+    known -- it divides or takes the remainder by a quantity that can be zero,
+    or it runs a `for`/`while`/`loop` whose exit condition some input never
+    makes true, so the call never comes back at all. The fallback the signature
+    offers -- the default parameter, the `None`, the `false` -- often exists and
+    is returned for some other case, while the case named here still reaches the
+    abort, the index or the loop.
+  "false": >-
+    Every failing case the name is about is handed back as a value the caller
+    can act on: `None`, the default the caller passed, `false`, an error
+    constructor, or a `Result`. A `raise` in the signature is the function
+    keeping its promise, not breaking it -- the failure is in the type and the
+    compiler makes every caller handle it, which is failure reported rather
+    than failure escaping. An `.unwrap()`, an index or a division that the body
+    has just guarded -- an `is None`, an `is_empty`, a length comparison, a zero
+    check sitting immediately above it -- is safe, and so is a body that cannot
+    fail at all.
+note: >-
+  Only what MoonBit's type system cannot state counts here. A declared `raise`,
+  a returned `T?` and a returned `Result` are all the failure being reported, so
+  none of them is a violation; `abort`, `panic()`, `.unwrap()`, an unchecked
+  index, a division by a quantity that can be zero and a loop with no exit are
+  the failures the signature is silent about. A loop has no exit when the step
+  that would make its condition false -- consuming the item, advancing the
+  index, decrementing the budget -- sits inside a branch that the same input
+  keeps skipping. Logging or printing before returning the fallback is fine.
+  Judge the failure the name and the parameters are about -- a missing key, a
+  value that will not parse, an empty container, a zero denominator.

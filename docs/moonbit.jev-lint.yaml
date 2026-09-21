@@ -17,6 +17,9 @@ languages:
     expandoChar: _
 rules:
   fn-name-promises: on
+  idempotent-name: on
+  pure-name-is-pure: on
+  safe-name-is-safe: on
   comment-describes-declaration: on
   comment-describes-block: on
   doc-errors-match-body: on

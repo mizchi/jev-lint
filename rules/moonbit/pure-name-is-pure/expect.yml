@@ -1,0 +1,123 @@
+default: clean
+fixtures/invoice.mbt:
+  - line: 36
+    label: bad
+    window: 0
+    reason: "`compute_totals` assigns `invoice.total`, a `mut` field of the struct it was handed: the caller's invoice is different after the call."
+  - line: 43
+    label: bad
+    window: 0
+    reason: "`calculate_due` prints a line to stdout on its way to returning a number."
+  - line: 86
+    label: bad
+    window: 0
+    reason: "`derive_discount_notes` pushes into `notes`, an Array that came in as a parameter; the return value is only half of what the call does."
+  - line: 127
+    label: bad
+    window: 0
+    reason: "`parse_item` pushes the row it could not read into the top-level `rejected_rows`; the effect is only on the failure paths, which is enough."
+  - line: 155
+    label: bad
+    window: 0
+    reason: "hard bad: `parse_next_field` removes the token it returns from the Array it was handed, so the caller's tokens are shorter afterwards -- a consuming cursor, which is idiomatic and still a write to a parameter."
+  - line: 22
+    label: clean
+    window: 0
+    reason: "hard clean: `compute_subtotal` reassigns a `mut` local in a loop, which is the accumulator, not outside state."
+  - line: 60
+    label: clean
+    window: 0
+    reason: "hard clean: `format_summary` creates an Array, pushes to it repeatedly and joins it; the pushes build the return value."
+  - line: 70
+    label: clean
+    window: 0
+    reason: "hard clean: `derive_item_labels` has the same push-in-a-loop shape as `derive_discount_notes` two functions below it, over an Array it created itself."
+  - line: 99
+    label: clean
+    window: 0
+    reason: "hard clean: `to_receipt` reads a struct with a `mut` field and concatenates; a conversion that only reads is a computation."
+  - line: 108
+    label: clean
+    window: 0
+    reason: "hard clean: `parse_amount` reports failure by returning `None` rather than by writing anything."
+  - line: 142
+    label: clean
+    window: 0
+    reason: "hard clean: `derive_sorted_items` calls `sort_by`, a mutating method, on a `copy()` it made of the invoice's items; the invoice's own Array is untouched."
+  - line: 149
+    label: clean
+    window: 0
+    reason: "hard clean: `compute_rebilled` looks like it sets `total`, but `{ ..invoice, total: ... }` constructs a new Invoice; the one it was handed is unchanged."
+  - line: 31
+    label: clean
+    window: 0
+    reason: "`calculate_tax` is arithmetic over its two parameters."
+  - line: 50
+    label: clean
+    window: 0
+    reason: "`format_money` interpolates its one parameter."
+  - line: 55
+    label: clean
+    window: 0
+    reason: "`format_item_line` interpolates the item it was handed and calls a formatter that does the same."
+  - line: 81
+    label: clean
+    window: 0
+    reason: "`derive_order_key` reads two fields of the invoice and interpolates them."
+fixtures/catalog.mbt:
+  - line: 42
+    label: bad
+    window: 0
+    reason: "`calculate_shelf_score` writes the score it just computed into the top-level `score_cache`, which changes what later calls observe."
+  - line: 54
+    label: bad
+    window: 0
+    reason: "`compute_restock_plan` clears and refills the top-level `restock_queue`; the Int it returns is a by-product of rewriting a store."
+  - line: 89
+    label: bad
+    window: 0
+    reason: "`to_search_entry` sets the entry into the `index` Map it was handed; a conversion that also registers is not a conversion."
+  - line: 101
+    label: bad
+    window: 0
+    reason: "`format_catalog_page` assigns `catalog.rendered`, caching its own output into the struct it was given."
+  - line: 108
+    label: bad
+    window: 0
+    reason: "`Catalog::compute_revision` assigns `self.revision`: the same defect through a method receiver rather than a parameter."
+  - line: 151
+    label: bad
+    window: 0
+    reason: "hard bad: `format_debug_row` has no effect in its own text -- it calls `trace_row`, defined above it, which prints. The effect is one hop away and still the body's."
+  - line: 27
+    label: clean
+    window: 0
+    reason: "hard clean: `compute_index` calls `set` in a loop on a Map it created on its first line and returns; the container is the result."
+  - line: 65
+    label: clean
+    window: 0
+    reason: "hard clean: `derive_slug` writes into a StringBuilder it constructed itself."
+  - line: 78
+    label: clean
+    window: 0
+    reason: "hard clean: `to_stock_report` is handed a struct with two `mut` fields and reads both of them without assigning to either."
+  - line: 114
+    label: clean
+    window: 0
+    reason: "hard clean: `parse_catalog` builds a local Array and a fresh Catalog, and substitutes a default for a field it could not read rather than recording the failure anywhere."
+  - line: 133
+    label: clean
+    window: 0
+    reason: "hard clean: `compute_known_score_total` reads the top-level `score_cache` and writes nothing to it; taking a value out of a store that outlives the call is reading."
+  - line: 172
+    label: clean
+    window: 0
+    reason: "hard clean: `format_weight_band` asks `bands()` for the table, which fills itself in on the first call; the helper's bookkeeping is not this body's effect, and this body only reads what it got. The typescript copy of this rule shipped a revision that called this I/O and was wrong on all six of its findings."
+  - line: 36
+    label: clean
+    window: 0
+    reason: "`compute_rank` is arithmetic over one product's fields."
+  - line: 96
+    label: clean
+    window: 0
+    reason: "`Product::to_json` reads `self` and returns a String; reading the receiver in a conversion is reading."

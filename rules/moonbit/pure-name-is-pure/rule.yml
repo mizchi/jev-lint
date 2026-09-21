@@ -1,0 +1,98 @@
+# pure-name-is-pure, ported to MoonBit from rules/python/pure-name-is-pure
+# (snake_case, so the name regex carries over) and
+# rules/typescript/pure-name-is-pure (the fuller criteria). The criteria are
+# rewritten rather than copied: MoonBit's effects are a closed, visible set --
+# assignment to a `mut` field, a mutating method on an Array/Map/Ref, a
+# top-level binding, `println` -- and none of them is caught by the type
+# system, which is what leaves work for a rule in a language this strict.
+id: pure-name-is-pure
+language: moonbit
+kind: noul
+subject: node
+# `located`, where python and typescript both use `local`. A MoonBit module is
+# a flat sheet of free functions, and the fact that decides most subjects --
+# whether `score_cache` is a top-level store or a local accumulator -- is on a
+# line the subject's own text does not contain.
+state: located
+# 0.55, fitted 2026-09-21 on the fixtures beside it (30 subjects: 11 defects,
+# 19 cleans of which 12 are hard twins, 3 passes). The clean band is 0.02-0.07
+# apart from one member: `format_weight_band`, which asks a helper for a table
+# the helper fills in on its first call, answers 0.21-0.22. Defects start at
+# 0.86-0.90 (`parse_next_field`, a cursor that removes from the Array it was
+# handed) and everything else answers 0.90-0.98. Midpoint of the gap is 0.54;
+# 0.55 rounds it onto the false-positive side, and is also what this rule's
+# typescript copy ships. 0.32 of headroom each way, no decision flips, max
+# pass-to-pass spread 0.04.
+at: 0.55
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: info
+rule:
+  all:
+    - kind: function_definition
+    # MoonBit's grammar declares no fields, so the name is matched by kind.
+    # `function_identifier` holds the whole `Type::method` for a method
+    # definition, so the qualifier has to be optional in the regex: without it
+    # every `Catalog::compute_*` and `Product::to_*` is invisible, and those
+    # are where MoonBit puts the mutation of a receiver.
+    - has:
+        kind: function_identifier
+        stopBy: end
+        pattern: $NAME
+        regex: ^([A-Za-z][A-Za-z0-9_]*::)?(compute|calculate|derive|format|to|parse)(_|$)
+ask: >-
+  This function's name ($NAME) presents it as a computation of a result from its
+  inputs, but its body changes state outside itself or performs I/O.
+criteria:
+  # Both branches describe what is in the function's own text. An exception
+  # phrased in terms of something the subject cannot show -- "unless the caller
+  # relies on it" -- makes every answer land mid-scale, which looks like a
+  # threshold problem and is not one.
+  "true": >-
+    The body writes to something that already existed when the call began or
+    that outlives the call, or it performs I/O. In MoonBit that means: it
+    assigns to a `mut` field of a struct it was handed, of `self`, or of
+    anything reached through a parameter; it calls `push`, `set`, `clear`,
+    `remove`, `swap` or another mutating method on an `Array`, `Map`, `Set`,
+    `Ref` or `StringBuilder` that arrived as a parameter or is a top-level
+    binding; it assigns through a top-level `let mut` or a `Ref`; it stores
+    what this call computed into a cache or memo table a later call will read;
+    it calls `println` or otherwise writes to stdout, a file, a socket, a
+    database or a log; or it reads the clock, the environment or a random
+    source. One such write or read on any path is enough: an effect that
+    happens only in a fallback or error branch still makes the body impure.
+    An effect one hop away is still this body's: calling a function defined in
+    this file that prints, or that writes this body's result into a store, is
+    doing it.
+  "false": >-
+    The body derives its result from its parameters and from top-level values
+    it only reads, and returns it. Building the result imperatively is not an
+    effect: an `Array`, `Map`, `StringBuilder` or `mut` local that this body
+    creates itself, fills in a loop and returns is how the result is computed,
+    however heavily it is written to. Reading a struct that has `mut` fields,
+    or an `Array` or `Map` that was handed in, without assigning or pushing to
+    it, is reading. Obtaining something the body needs is not an effect
+    either: a helper that hands back a table, a parser, a formatter or a
+    client, and fills it in on the first call, is doing its own bookkeeping,
+    not this body's -- what counts is what this body then does with what it
+    was handed, and reading it is reading. Converting a value to a `String`, a
+    `Json` or another representation, concatenating or interpolating text, and
+    returning `None` or an error value instead of a result, are all
+    computations.
+note: >-
+  MoonBit's top-level `let` binds the name, not the contents: `let queue :
+  Array[String] = []` beside the functions is a store that anything in the file
+  can push to, and pushing to it is an effect even though nothing was
+  reassigned. Its mirror is the case to get right, because MoonBit code builds
+  results imperatively as a matter of course: a fresh `Array`, `Map` or
+  `StringBuilder` created inside the body and returned is the result, and
+  filling it is the computation. What separates the two is where the container
+  came from, not how much it is written to. A `mut` field is a defect only when
+  the body assigns to it; a parameter's mutability is an invitation the body is
+  free to decline. The line through a helper is what gets written: a helper
+  that hands this body a value is a dependency, a helper that puts this body's
+  own result somewhere, or prints it, is this body's effect. Do not judge
+  whether the function can fail -- `raise` is part
+  of a MoonBit function's type and the compiler already checks it -- and do not
+  count `abort`, `panic` or `unwrap` here: they end the program rather than
+  change what a later call observes.

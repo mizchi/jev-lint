@@ -10,8 +10,9 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added
 
-- `rules/moonbit/`: five rules ported to MoonBit -- `fn-name-promises`
-  (0.44), `comment-describes-declaration` (0.59),
+- `rules/moonbit/`: eight rules ported to MoonBit -- `fn-name-promises`
+  (0.44), `idempotent-name` (0.49), `pure-name-is-pure` (0.55),
+  `safe-name-is-safe` (0.39), `comment-describes-declaration` (0.59),
   `comment-describes-block` (0.45), `doc-errors-match-body` (0.50) and
   `test-name-verifies-claim` (0.62) -- each fitted on its own fixtures over
   three passes. Precision 1.00 on every one; recall 1.00 on every one but

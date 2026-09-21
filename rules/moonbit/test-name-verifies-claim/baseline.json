@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-21T03:48:56.545Z",
+  "recorded": "2026-09-21T04:07:40.566Z",
   "model": "jev-1.13.0",
   "suite": "moonbit/test-name-verifies-claim",
   "rules": [
@@ -19,7 +19,7 @@
         "line": 7,
         "endLine": 9,
         "kind": "noul",
-        "value": 0.53,
+        "value": 0.47,
         "confidence": null
       },
       {
@@ -28,7 +28,7 @@
         "line": 12,
         "endLine": 14,
         "kind": "noul",
-        "value": 0.86,
+        "value": 0.85,
         "confidence": null
       },
       {
@@ -37,7 +37,7 @@
         "line": 17,
         "endLine": 20,
         "kind": "noul",
-        "value": 0.91,
+        "value": 0.92,
         "confidence": null
       },
       {
@@ -46,90 +46,7 @@
         "line": 23,
         "endLine": 26,
         "kind": "noul",
-        "value": 0.31,
-        "confidence": null
-      },
-      {
-        "rule": "test-name-verifies-claim",
-        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
-        "line": 29,
-        "endLine": 31,
-        "kind": "noul",
-        "value": 0.29,
-        "confidence": null
-      },
-      {
-        "rule": "test-name-verifies-claim",
-        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
-        "line": 34,
-        "endLine": 37,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "test-name-verifies-claim",
-        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
-        "line": 40,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "test-name-verifies-claim",
-        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
-        "line": 48,
-        "endLine": 50,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "test-name-verifies-claim",
-        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
-        "line": 53,
-        "endLine": 56,
-        "kind": "noul",
-        "value": 0.91,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "test-name-verifies-claim",
-        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
-        "line": 7,
-        "endLine": 9,
-        "kind": "noul",
-        "value": 0.5,
-        "confidence": null
-      },
-      {
-        "rule": "test-name-verifies-claim",
-        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
-        "line": 12,
-        "endLine": 14,
-        "kind": "noul",
-        "value": 0.87,
-        "confidence": null
-      },
-      {
-        "rule": "test-name-verifies-claim",
-        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
-        "line": 17,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.91,
-        "confidence": null
-      },
-      {
-        "rule": "test-name-verifies-claim",
-        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
-        "line": 23,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.31,
+        "value": 0.28,
         "confidence": null
       },
       {
@@ -147,7 +64,90 @@
         "line": 34,
         "endLine": 37,
         "kind": "noul",
-        "value": 0.11,
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 48,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 53,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.49,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 34,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.1,
         "confidence": null
       },
       {
@@ -185,7 +185,7 @@
         "line": 7,
         "endLine": 9,
         "kind": "noul",
-        "value": 0.45,
+        "value": 0.48,
         "confidence": null
       },
       {
@@ -194,7 +194,7 @@
         "line": 12,
         "endLine": 14,
         "kind": "noul",
-        "value": 0.88,
+        "value": 0.84,
         "confidence": null
       },
       {
@@ -221,7 +221,7 @@
         "line": 29,
         "endLine": 31,
         "kind": "noul",
-        "value": 0.27,
+        "value": 0.26,
         "confidence": null
       },
       {
@@ -239,7 +239,7 @@
         "line": 40,
         "endLine": 45,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.07,
         "confidence": null
       },
       {
@@ -257,7 +257,7 @@
         "line": 53,
         "endLine": 56,
         "kind": "noul",
-        "value": 0.91,
+        "value": 0.92,
         "confidence": null
       }
     ]
@@ -266,6 +266,6 @@
     "calls": 3,
     "inputTokens": 15792,
     "usd": 0.0006632640000000001,
-    "ms": 313
+    "ms": 255
   }
 }
