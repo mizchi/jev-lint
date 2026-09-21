@@ -67,6 +67,14 @@ pub fn ensure_cache_dir(root : String) -> Unit {
 }
 
 ///|
+pub fn ensure_tmp_dir(root : String) -> Unit {
+  if dirs.contains(root + "/staged") {
+    return
+  }
+  dirs.push(root + "/tmp")
+}
+
+///|
 pub fn ensure_counter(name : String) -> Unit {
   if counters.contains(name) {
     return

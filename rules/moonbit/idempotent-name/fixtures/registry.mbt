@@ -71,6 +71,14 @@ pub fn register_plugin(name : String, version : String) -> Unit {
 }
 
 ///|
+pub fn register_boot(name : String) -> Unit {
+  if not(plugins.contains(name)) {
+    metrics.boots = metrics.boots + 1
+  }
+  plugins.set(name, { name, version: "unknown" })
+}
+
+///|
 pub fn register_tag(tag : String, name : String) -> Unit {
   let current = match tags.get(tag) {
     Some(existing) => existing
@@ -78,6 +86,14 @@ pub fn register_tag(tag : String, name : String) -> Unit {
   }
   current.push(name)
   tags.set(tag, current)
+}
+
+///|
+pub fn ensure_metric_slot(name : String, run : (String) -> Unit) -> Unit {
+  if load_order.contains(name) {
+    return
+  }
+  hooks.push({ event: name, run })
 }
 
 ///|
@@ -98,6 +114,14 @@ pub fn upsert_hook(event : String, run : (String) -> Unit) -> Unit {
 }
 
 ///|
+pub fn install_index(name : String) -> Unit {
+  if tags.contains(name) {
+    return
+  }
+  tags.set(name, [])
+}
+
+///|
 pub fn install_plugin(name : String, version : String) -> Unit {
   if plugins.contains(name) {
     abort("plugin already installed: " + name)
@@ -109,6 +133,14 @@ pub fn install_plugin(name : String, version : String) -> Unit {
 pub fn install_theme(name : String, body : String) -> Unit {
   if name == "" {
     abort("a theme needs a name")
+  }
+  themes.set(name, body)
+}
+
+///|
+pub fn upsert_theme(name : String, body : String) -> Unit {
+  if name == "" {
+    return
   }
   themes.set(name, body)
 }
@@ -154,6 +186,14 @@ pub fn setup_retry_budget(attempts : Int) -> Unit {
 pub fn setup_metrics() -> Unit {
   metrics.boots = metrics.boots + 1
   metrics.plugins_seen = plugins.length()
+}
+
+///|
+pub fn register_login(name : String) -> Unit {
+  if name != "" {
+    metrics.boots = metrics.boots + 1
+  }
+  plugins.set(name, { name, version: "unknown" })
 }
 
 ///|

@@ -6,19 +6,46 @@ subject: node
 # `bare` -- the uses of the binding are what show the mismatch, and they
 # are in the file.
 state: located
-# 0.5, kept after the fit 2026-09-21 on the fixtures beside it (18
-# subjects: 6 defects, 12 cleans of which 5 are hard twins of a defect in
-# the same file, 3 passes). Cleans top at 0.24, defects start at 0.82; the
-# midpoint is 0.53 and 0.5 -- what rust and typescript take -- sits inside
-# the same gap, so the copies agree. 0.26 of headroom on the clean side.
+# 0.62, refit 2026-09-22 chasing the boundary on the fixtures beside it (27
+# subjects: 9 defects, 18 cleans, 3 passes) after six boundary candidates were
+# added, three aimed at each side. Two of three quiet-defect attempts stayed
+# quiet exactly as calibration.md's caveat predicts: `distinct_tags`, which
+# only rejects a duplicate immediately following itself (0.09-0.13), and
+# `deduped_names`, whose `seen` array is read via `.contains` but never
+# written to (0.08-0.09) -- both are a shape claim about what comes back
+# rather than a numeric claim, and the model reads the shape of the check,
+# not whether it does anything. The third, `sorted_by_time` (a single
+# adjacent-swap pass under a name that claims full order; `[2,4,1,3]` by
+# `ms` comes back `[2,1,3,4]`, still unsorted), landed at 0.37-0.44 -- closer,
+# but still a miss at any cutoff this fit can defend, because `fully_sorted`,
+# its correct twin (the same shape, `n` passes instead of one), answered
+# 0.49-0.55: a real defect and a real clean sit inverted, 0.40 under 0.52,
+# and no single cutoff gets both right. Catching `sorted_by_time` costs a
+# false flag on `fully_sorted`, and a linter that flags correct code on
+# sight is the worse trade, so the cutoff sits above 0.52, not at the
+# tool-fitted 0.40 that buys the catch at that price. Above 0.52 the next
+# gap is real: `unique_ids` (`deduped_names`'s correct twin, checking its
+# own growing result) tops the rest of the clean band at 0.20, and the
+# cheapest defect this fit still catches, `slowest`, starts at 0.72-0.74.
+# 0.62 is the midpoint of 0.52-0.73, not the whole corpus's midpoint: 0.11
+# of headroom against `fully_sorted`, 0.10 against `slowest`. Rust sits at
+# 0.5 and this no longer matches it -- the MoonBit corpus now carries an
+# overlap the other two languages' corpora have not been made to show.
 #
-# One label moved during the fit, and the argument is the reason, not the
-# answer: `names` bound to `rows.length()` was labelled a defect and
-# answered 0.22-0.25. The rust copy's own corpus has that shape (`lines`
-# bound to a count) as its HIGHEST clean, so the family already reads a
-# plural name over a count of those things as acceptable. The label was
-# out of step with the family, not the model with the label.
-at: 0.5
+# Residue, left as labelled misses rather than relabelled: `distinct_tags`
+# (0.09-0.13), `deduped_names` (0.08-0.09) and `sorted_by_time` (0.37-0.44)
+# all score under 0.62 and are bad. The rule does not find any of the
+# three, and the corpus keeps them as defects this rule misses rather than
+# quietly dropping them.
+#
+# Prior fit (2026-09-21, superseded): 0.5 on 18 subjects, cleans topping at
+# 0.24 against defects starting at 0.82. One label moved during that fit:
+# `names` bound to `rows.length()` was labelled a defect and answered
+# 0.22-0.25; the rust copy's own corpus has that shape (`lines` bound to a
+# count) as its HIGHEST clean, so the family already reads a plural name
+# over a count of those things as acceptable, and the label was out of step
+# with the family, not the model with the label.
+at: 0.62
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

@@ -9,53 +9,69 @@ fixtures/registry.mbt:
     window: 0
     reason: "hard clean: `register_plugin` has no check either, but it writes `plugins.set(name, ...)` on a `Map` keyed by the name -- the second call overwrites the same key, which is exactly idempotent. The twin of `register_hook`, and the pair the rule exists to tell apart."
   - line: 74
+    label: clean
+    window: 0
+    reason: "boundary clean: `register_boot` increments `metrics.boots` -- the same effect `setup_metrics` below performs unconditionally -- but does it behind `not(plugins.contains(name))`, keyed on the same field the keyed write below it also uses; a second call with the same name finds the membership check already true and skips the increment. The correct twin of `ensure_metric_slot` and `register_login`, both added the same day: the guard exists AND checks the collection the effect actually depends on. Answered 0.54, 0.71, 0.56 across the accepted three passes -- decided correctly on the mean (0.60) but not settled, since the 0.71 pass alone crosses the fitted 0.67; see the `at:` comment."
+  - line: 82
     label: bad
     window: 0
     reason: "`register_tag` ends in `tags.set(tag, current)`, which reads as the idempotent keyed write, but the value it sets is the previous array with `name` pushed onto it: the key is overwritten and the list under it grows by one every call. The inverse of `register_plugin`."
-  - line: 84
+  - line: 92
+    label: bad
+    window: 0
+    reason: "boundary defect: `ensure_metric_slot` has a guard -- `if load_order.contains(name) { return }` -- so it reads as the canonical shape `ensure_plugin_slot` uses below. But the effect is `hooks.push(...)`, and nothing in this function or reachable from it ever adds `name` to `load_order`: the checked collection and the affected collection are different arrays, so the guard never gates this function's own push and every call accumulates. The guard is present; the boundary it checks is shifted onto the wrong collection."
+  - line: 100
     label: bad
     window: 0
     reason: "`register_run` also ends in a `Map::set`, but keys it by `runs.length()`, which the previous call changed: the same argument twice lands under two different keys. A keyed write is only idempotent when the key is a function of the arguments."
-  - line: 90
+  - line: 106
     label: clean
     window: 0
     reason: "hard clean: `upsert_hook` pushes onto the same array `register_hook` does, but only after scanning for an existing entry for the event and replacing it in place -- an array-backed upsert done correctly."
-  - line: 101
-    label: bad
-    window: 0
-    reason: "`install_plugin` does check existence, and then `abort`s on it: the first call installs and the second kills the process. The failure mode rather than the duplication one; a body that checks is not automatically a repeat-safe body."
-  - line: 109
-    label: clean
-    window: 0
-    reason: "hard clean: `install_theme` also `abort`s, but on an invalid argument rather than on the thing already being there; called twice with the same valid arguments it takes the same keyed write both times."
   - line: 117
     label: clean
     window: 0
+    reason: "hard clean: `install_index` guards a keyed write on the same map it writes -- `if tags.contains(name) { return }` then `tags.set(name, [])` -- the canonical correct shape on `tags`, the map `register_tag` above corrupts by a different mistake."
+  - line: 125
+    label: bad
+    window: 0
+    reason: "`install_plugin` does check existence, and then `abort`s on it: the first call installs and the second kills the process. The failure mode rather than the duplication one; a body that checks is not automatically a repeat-safe body."
+  - line: 133
+    label: clean
+    window: 0
+    reason: "hard clean: `install_theme` also `abort`s, but on an invalid argument rather than on the thing already being there; called twice with the same valid arguments it takes the same keyed write both times."
+  - line: 141
+    label: clean
+    window: 0
+    reason: "boundary clean: `upsert_theme` is the same body as `install_theme` above with the abort replaced by a plain early return on the same invalid-input condition; the guard still checks an input property, not membership, and the effect below it is still an unconditional keyed write, so it stays idempotent regardless of what the guard is checking."
+  - line: 149
+    label: clean
+    window: 0
     reason: "hard clean: `install_dependencies` performs an effect inside a loop, which reads as accumulation, but each iteration goes through `ensure_plugin_slot`, which guards its own push."
-  - line: 124
+  - line: 156
     label: clean
     window: 0
     reason: "hard clean: `ensure_plugin_slot` pushes onto the same kind of array `register_hook` does, guarded by `load_order.contains(name)` with an early return -- the canonical correct shape."
-  - line: 132
+  - line: 164
     label: clean
     window: 0
     reason: "hard clean: `setup_defaults` writes three fields by assignment; a second call with the same arguments writes the same three values."
-  - line: 139
+  - line: 171
     label: clean
     window: 0
     reason: "hard clean: `setup_stages` pushes in a loop, but onto a local array it then assigns to `defaults.stages`; the push accumulates within one call and never across calls."
-  - line: 148
+  - line: 180
     label: clean
     window: 0
     reason: "hard clean: `setup_retry_budget` writes `defaults.retries = attempts + 1`, a value computed from the argument rather than from the field's own previous value -- one character of difference from the increment in `setup_metrics` below it."
-  - line: 154
+  - line: 186
     label: bad
     window: 0
     reason: "`setup_metrics` assigns one field (safe) and increments another, `metrics.boots = metrics.boots + 1`, so the second call leaves 2 where the first left 1. One unsafe step is enough."
-  - line: 160
-    label: clean
+  - line: 192
+    label: bad
     window: 0
-    reason: "`ensure_version` computes a string from its argument and stores nothing: there is nothing for a second call to leave differently."
+    reason: "boundary defect: `register_login` wraps the same unconditional increment `setup_metrics` above performs in `if name != \"\" { ... }`. The condition reads as a guard, so the shape looks like `register_boot`'s, but it tests the argument's validity, not whether this name was seen before -- a repeat call with the same non-empty name takes the increment branch again every time. The inverse of `upsert_theme`, where an input-validity guard was harmless because the effect beneath it was already idempotent; here the effect beneath it is not."
 fixtures/workspace.mbt:
   - line: 51
     label: clean
@@ -68,40 +84,44 @@ fixtures/workspace.mbt:
   - line: 64
     label: clean
     window: 0
-    reason: "`ensure_cache_dir` performs no effect of its own; it delegates twice to `ensure_dir`, whose own name says it is repeat-safe."
+    reason: "hard clean: `ensure_cache_dir` performs no effect of its own; it delegates twice to `ensure_dir`, whose own name says it is repeat-safe."
   - line: 70
-    label: clean
+    label: bad
     window: 0
-    reason: "hard clean: `ensure_counter` touches a counter, as `setup_metrics` does, but it initialises it to 0 behind a `contains` guard instead of adding to it."
+    reason: "boundary defect: `ensure_tmp_dir` has a guard -- `if dirs.contains(root + \"/staged\") { return }` -- that reads exactly like the guard on `ensure_dir` two functions above it. But the pushed path is `root + \"/tmp\"`, not `root + \"/staged\"`: the guard checks a key this function never writes and the write checks a key the guard never reads, so the push is unconditional in practice and every call adds another `/tmp` entry. The `/staged`-vs-`/tmp` split is the whole defect; nothing else in the body is wrong."
   - line: 78
     label: clean
     window: 0
-    reason: "hard clean: `upsert_setting` genuinely upserts -- it mutates the entry it finds and inserts only when it finds none."
+    reason: "hard clean: `ensure_counter` touches a counter, as `setup_metrics` does, but it initialises it to 0 behind a `contains` guard instead of adding to it."
   - line: 86
+    label: clean
+    window: 0
+    reason: "hard clean: `upsert_setting` genuinely upserts -- it mutates the entry it finds and inserts only when it finds none."
+  - line: 94
     label: bad
     window: 0
     reason: "`upsert_profile` never looks the profile up: it pushes a new record onto `profiles` every call, so the same name ends up in the array twice. The `ensure_dir` call beside it is safe and does not redeem the push."
-  - line: 93
+  - line: 101
     label: bad
     window: 0
     reason: "`setup_lockfile` raises `AlreadyLocked` when the lock file it would write is already there, so the second call fails where the first succeeded. The defect is the branch, not the fact that the function is declared to raise."
-  - line: 102
+  - line: 110
     label: bad
     window: 0
     reason: "`setup_workspace` guards its first two directories through `ensure_dir` and then pushes the third onto `dirs` directly, bypassing the guard: two safe steps and one that duplicates."
-  - line: 109
+  - line: 117
     label: bad
     window: 0
     reason: "`setup_audit` has a one-line body that reads as a delegation, but `record_dir` is a private helper in this same file whose name promises nothing and whose body is an unguarded `dirs.push`. The whole point of the `located` arm is that this is visible."
-  - line: 114
+  - line: 122
     label: clean
     window: 0
     reason: "hard clean: `install_bundle` is the twin of `setup_audit` -- the same one-line delegation to a private same-file helper, except that `store_entry` writes by key."
-  - line: 119
+  - line: 127
     label: clean
     window: 0
     reason: "hard clean: `ensure_schema` pushes twice onto an array, but behind a `schema.ready` flag that the same call sets, so the second call returns before reaching the pushes."
-  - line: 129
+  - line: 137
     label: clean
     window: 0
     reason: "hard clean: `install_runtime` looks the entry up first and returns the existing one, creating only when there is none -- check-then-create, with the second call returning what the first made."

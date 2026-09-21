@@ -9,6 +9,17 @@ pub(all) struct Row {
 let default_timeout_ms : Int = 30
 
 ///|
+pub fn shortest(rows : Array[Row]) -> Row {
+  let mut shortest = rows[0]
+  for row in rows {
+    if row.name.length() < shortest.name.length() {
+      shortest = row
+    }
+  }
+  shortest
+}
+
+///|
 pub fn summarise(rows : Array[Row]) -> String {
   let names = rows.length()
   let mut total_bytes = 0
@@ -30,6 +41,22 @@ pub fn summarise(rows : Array[Row]) -> String {
 }
 
 ///|
+pub fn sorted_by_time(rows : Array[Row]) -> Array[Row] {
+  let sorted_by_time = []
+  for row in rows {
+    sorted_by_time.push(row)
+  }
+  for i in 0..<(sorted_by_time.length() - 1) {
+    if sorted_by_time[i].ms > sorted_by_time[i + 1].ms {
+      let tmp = sorted_by_time[i]
+      sorted_by_time[i] = sorted_by_time[i + 1]
+      sorted_by_time[i + 1] = tmp
+    }
+  }
+  sorted_by_time
+}
+
+///|
 pub fn widest(rows : Array[Row]) -> Row {
   let mut widest = rows[0]
   for row in rows {
@@ -41,10 +68,39 @@ pub fn widest(rows : Array[Row]) -> Row {
 }
 
 ///|
+pub fn unique_ids(rows : Array[Row]) -> Array[String] {
+  let unique_ids = []
+  for row in rows {
+    if not(unique_ids.contains(row.name)) {
+      unique_ids.push(row.name)
+    }
+  }
+  unique_ids
+}
+
+///|
 pub fn header(rows : Array[Row]) -> String {
   let columns = ["name", "bytes", "ms"]
   let separator = "  "
   columns.join(separator)
+}
+
+///|
+pub fn fully_sorted(rows : Array[Row]) -> Array[Row] {
+  let fully_sorted = []
+  for row in rows {
+    fully_sorted.push(row)
+  }
+  for i in 0..<fully_sorted.length() {
+    for j in 0..<(fully_sorted.length() - 1 - i) {
+      if fully_sorted[j].ms > fully_sorted[j + 1].ms {
+        let tmp = fully_sorted[j]
+        fully_sorted[j] = fully_sorted[j + 1]
+        fully_sorted[j + 1] = tmp
+      }
+    }
+  }
+  fully_sorted
 }
 
 ///|

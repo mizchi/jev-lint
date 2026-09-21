@@ -3,43 +3,35 @@ fixtures/report.mbt:
   - line: 13
     label: clean
     window: 0
+    reason: "boundary clean: `shortest` is `widest`'s mirror -- a `let mut` seeded with the first row and replaced whenever a later row beats it on the comparison the name promises (here `<` on name length instead of `>`). Correct min-tracking, added the same day as `sorted_by_time` to see whether the family holds on a second comparison direction."
+  - line: 24
+    label: clean
+    window: 0
     reason: "hard clean: a plural name bound to the count of those things. Labelled bad at first and answered 0.22-0.25 across three passes; the rust copy's own corpus has the same shape (`lines` bound to a count) as its highest CLEAN, so the convention was the label's, not the model's."
-  - line: 18
+  - line: 29
     label: bad
     window: 0
     reason: "`slowest` is the first row; the loop beneath it compares and discards, so nothing ever makes it the slowest."
-  - line: 24
+  - line: 35
     label: bad
     window: 0
     reason: "`is_empty` reads as a boolean and holds a length."
-  - line: 52
+  - line: 45
+    label: bad
+    window: 0
+    reason: "boundary defect: `sorted_by_time` runs exactly one adjacent-swap pass over the array and returns it under a name that claims full order. One pass is not enough: `[2, 4, 1, 3]` by `ms` becomes `[2, 1, 3, 4]` after a single pass (only the 4-vs-1 and 4-vs-3 inversions are ever compared), which is still unsorted at the front. The claim is about the shape of what comes back, not a count, which is the shape calibration.md's caveat says stays quiet -- added to test that."
+  - line: 72
+    label: clean
+    window: 0
+    reason: "boundary clean: `unique_ids` is `deduped_names`'s correct twin -- it checks membership against the same array it pushes into, so no position of a repeat escapes it. Added the same day as `deduped_names` to see whether the model tells a self-referential guard from a guard against an unrelated, never-populated array."
+  - line: 90
+    label: clean
+    window: 0
+    reason: "boundary clean: `fully_sorted` is `sorted_by_time`'s correct twin -- the standard nested-loop bubble sort, `n` passes instead of one, which does terminate fully ordered by `ms`."
+  - line: 108
     label: bad
     window: 0
     reason: "`seconds` is bound to a value the file names in milliseconds."
-  - line: 9
-    label: clean
-    window: 0
-    reason: "hard clean: a unit in the name, and the value is in that unit."
-  - line: 14
-    label: clean
-    window: 0
-    reason: "the sum of the rows' bytes."
-  - line: 25
-    label: clean
-    window: 0
-    reason: "hard clean: `lines` starts empty and the loop fills it with one string per row."
-  - line: 34
-    label: clean
-    window: 0
-    reason: "hard clean: the same shape as the `slowest` defect above, except this loop assigns, so the name comes true."
-  - line: 45
-    label: clean
-    window: 0
-    reason: "the column names."
-  - line: 46
-    label: clean
-    window: 0
-    reason: "hard clean: terse, and exactly what it is."
 fixtures/parse.mbt:
   - line: 3
     label: bad
@@ -58,18 +50,30 @@ fixtures/parse.mbt:
     window: 0
     reason: "starts empty and is filled with the lines."
   - line: 16
-    label: clean
+    label: bad
     window: 0
-    reason: "hard clean: the same initializer as the `path` defect above, under the name it deserves."
-  - line: 17
-    label: clean
-    window: 0
-    reason: "the first line, which is the header."
-  - line: 23
+    reason: "boundary defect: `distinct_tags` only compares each tag with the single entry immediately before it in the result, so it removes a run of consecutive repeats but not a repeat that recurs after something else came between -- `[\"a\", \"b\", \"a\"]` comes back unchanged, still holding two `\"a\"`s under a name that promises none. The false part is what comes back (a shape claim), not a count, deliberately in the family `deduped_names`/`unique_ids` test from the numeric-claim side."
+  - line: 28
     label: clean
     window: 0
     reason: "the lines."
-  - line: 24
+  - line: 29
     label: clean
     window: 0
-    reason: "hard clean: the same index expression as the `first_line` defect above, under a name that says last."
+    reason: "the first line, which is the header."
+  - line: 35
+    label: clean
+    window: 0
+    reason: "`seen` starts empty and is used only for `.contains` checks; the name describes its intended role (a set of items already encountered), which is what the criteria calls clean regardless of whether the surrounding function ends up using it correctly -- that failure belongs to `deduped_names` below, not to this binding."
+  - line: 36
+    label: bad
+    window: 0
+    reason: "boundary defect: `deduped_names` claims duplicates were removed, but `seen` (above) is read via `.contains` and never written to -- nothing is ever pushed onto it -- so the check always passes and every name, duplicate or not, reaches the result. The bug is invisible to a skim: the shape (`seen` guarding a push) is the same shape `unique_ids` uses correctly."
+  - line: 47
+    label: clean
+    window: 0
+    reason: "hard clean: the same initializer as the `path` defect above, under the name it deserves."
+  - line: 48
+    label: clean
+    window: 0
+    reason: "the same index expression as the `first_line` defect above, under a name that says last."

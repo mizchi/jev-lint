@@ -1,13 +1,13 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-21T04:28:26.804Z",
+  "recorded": "2026-09-21T17:10:43.018Z",
   "model": "jev-1.13.0",
   "suite": "moonbit/idempotent-name",
   "rules": [
     {
       "id": "idempotent-name",
       "draft": "4cf6d551d14f",
-      "at": 0.49
+      "at": 0.67
     }
   ],
   "cutoffs": {},
@@ -19,7 +19,7 @@
         "line": 51,
         "endLine": 53,
         "kind": "noul",
-        "value": 0.07,
+        "value": 0.08,
         "confidence": null
       },
       {
@@ -37,7 +37,7 @@
         "line": 64,
         "endLine": 67,
         "kind": "noul",
-        "value": 0.07,
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -46,7 +46,7 @@
         "line": 70,
         "endLine": 75,
         "kind": "noul",
-        "value": 0.04,
+        "value": 0.89,
         "confidence": null
       },
       {
@@ -55,14 +55,313 @@
         "line": 78,
         "endLine": 83,
         "kind": "noul",
-        "value": 0.05,
+        "value": 0.04,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
         "line": 86,
-        "endLine": 90,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 94,
+        "endLine": 98,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 101,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 110,
+        "endLine": 114,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 117,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 122,
+        "endLine": 124,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 127,
+        "endLine": 134,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 137,
+        "endLine": 147,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 64,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 69,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 74,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 82,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 92,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 100,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 106,
+        "endLine": 114,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 117,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 125,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 133,
+        "endLine": 138,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 141,
+        "endLine": 146,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 149,
+        "endLine": 153,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 156,
+        "endLine": 161,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 164,
+        "endLine": 168,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 171,
+        "endLine": 177,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 180,
+        "endLine": 183,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 186,
+        "endLine": 189,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 192,
+        "endLine": 197,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 200,
+        "endLine": 206,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 51,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 56,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 64,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 70,
+        "endLine": 75,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 78,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 86,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 94,
+        "endLine": 98,
         "kind": "noul",
         "value": 0.93,
         "confidence": null
@@ -70,8 +369,8 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 93,
-        "endLine": 99,
+        "line": 101,
+        "endLine": 107,
         "kind": "noul",
         "value": 0.8,
         "confidence": null
@@ -79,8 +378,8 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 102,
-        "endLine": 106,
+        "line": 110,
+        "endLine": 114,
         "kind": "noul",
         "value": 0.91,
         "confidence": null
@@ -88,253 +387,17 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 109,
-        "endLine": 111,
-        "kind": "noul",
-        "value": 0.9,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 114,
-        "endLine": 116,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 119,
-        "endLine": 126,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 129,
-        "endLine": 139,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 64,
-        "endLine": 66,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 69,
-        "endLine": 71,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 74,
-        "endLine": 81,
-        "kind": "noul",
-        "value": 0.93,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 84,
-        "endLine": 87,
-        "kind": "noul",
-        "value": 0.75,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 90,
-        "endLine": 98,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 101,
-        "endLine": 106,
-        "kind": "noul",
-        "value": 0.78,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 109,
-        "endLine": 114,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
         "line": 117,
-        "endLine": 121,
+        "endLine": 119,
         "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 124,
-        "endLine": 129,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 132,
-        "endLine": 136,
-        "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 139,
-        "endLine": 145,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 148,
-        "endLine": 151,
-        "kind": "noul",
-        "value": 0.2,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 154,
-        "endLine": 157,
-        "kind": "noul",
-        "value": 0.9,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 160,
-        "endLine": 166,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 51,
-        "endLine": 53,
-        "kind": "noul",
-        "value": 0.07,
+        "value": 0.91,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 56,
-        "endLine": 61,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 64,
-        "endLine": 67,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 70,
-        "endLine": 75,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 78,
-        "endLine": 83,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 86,
-        "endLine": 90,
-        "kind": "noul",
-        "value": 0.92,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 93,
-        "endLine": 99,
-        "kind": "noul",
-        "value": 0.83,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 102,
-        "endLine": 106,
-        "kind": "noul",
-        "value": 0.9,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 109,
-        "endLine": 111,
-        "kind": "noul",
-        "value": 0.9,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 114,
-        "endLine": 116,
+        "line": 122,
+        "endLine": 124,
         "kind": "noul",
         "value": 0.1,
         "confidence": null
@@ -342,19 +405,19 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 119,
-        "endLine": 126,
+        "line": 127,
+        "endLine": 134,
         "kind": "noul",
-        "value": 0.05,
+        "value": 0.04,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 129,
-        "endLine": 139,
+        "line": 137,
+        "endLine": 147,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.07,
         "confidence": null
       },
       {
@@ -379,7 +442,16 @@
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
         "line": 74,
-        "endLine": 81,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 82,
+        "endLine": 89,
         "kind": "noul",
         "value": 0.94,
         "confidence": null
@@ -387,44 +459,53 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 84,
-        "endLine": 87,
+        "line": 92,
+        "endLine": 97,
         "kind": "noul",
-        "value": 0.84,
+        "value": 0.85,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 90,
-        "endLine": 98,
+        "line": 100,
+        "endLine": 103,
         "kind": "noul",
-        "value": 0.09,
+        "value": 0.76,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 101,
-        "endLine": 106,
-        "kind": "noul",
-        "value": 0.72,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 109,
+        "line": 106,
         "endLine": 114,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.09,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
         "line": 117,
-        "endLine": 121,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 125,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 133,
+        "endLine": 138,
         "kind": "noul",
         "value": 0.09,
         "confidence": null
@@ -432,8 +513,8 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 124,
-        "endLine": 129,
+        "line": 141,
+        "endLine": 146,
         "kind": "noul",
         "value": 0.05,
         "confidence": null
@@ -441,8 +522,26 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 132,
-        "endLine": 136,
+        "line": 149,
+        "endLine": 153,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 156,
+        "endLine": 161,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 164,
+        "endLine": 168,
         "kind": "noul",
         "value": 0.1,
         "confidence": null
@@ -450,26 +549,26 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 139,
-        "endLine": 145,
+        "line": 171,
+        "endLine": 177,
         "kind": "noul",
-        "value": 0.15,
+        "value": 0.18,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 148,
-        "endLine": 151,
+        "line": 180,
+        "endLine": 183,
         "kind": "noul",
-        "value": 0.3,
+        "value": 0.33,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 154,
-        "endLine": 157,
+        "line": 186,
+        "endLine": 189,
         "kind": "noul",
         "value": 0.9,
         "confidence": null
@@ -477,8 +576,17 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 160,
-        "endLine": 166,
+        "line": 192,
+        "endLine": 197,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 200,
+        "endLine": 206,
         "kind": "noul",
         "value": 0.04,
         "confidence": null
@@ -518,7 +626,7 @@
         "line": 70,
         "endLine": 75,
         "kind": "noul",
-        "value": 0.04,
+        "value": 0.88,
         "confidence": null
       },
       {
@@ -527,14 +635,23 @@
         "line": 78,
         "endLine": 83,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.04,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
         "line": 86,
-        "endLine": 90,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
+        "line": 94,
+        "endLine": 98,
         "kind": "noul",
         "value": 0.93,
         "confidence": null
@@ -542,8 +659,8 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 93,
-        "endLine": 99,
+        "line": 101,
+        "endLine": 107,
         "kind": "noul",
         "value": 0.79,
         "confidence": null
@@ -551,46 +668,46 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 102,
-        "endLine": 106,
+        "line": 110,
+        "endLine": 114,
         "kind": "noul",
-        "value": 0.9,
+        "value": 0.92,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 109,
-        "endLine": 111,
+        "line": 117,
+        "endLine": 119,
         "kind": "noul",
-        "value": 0.91,
+        "value": 0.92,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 114,
-        "endLine": 116,
+        "line": 122,
+        "endLine": 124,
         "kind": "noul",
-        "value": 0.1,
+        "value": 0.09,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 119,
-        "endLine": 126,
+        "line": 127,
+        "endLine": 134,
         "kind": "noul",
-        "value": 0.04,
+        "value": 0.05,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/workspace.mbt",
-        "line": 129,
-        "endLine": 139,
+        "line": 137,
+        "endLine": 147,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.07,
         "confidence": null
       },
       {
@@ -608,14 +725,23 @@
         "line": 69,
         "endLine": 71,
         "kind": "noul",
-        "value": 0.07,
+        "value": 0.08,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
         "line": 74,
-        "endLine": 81,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 82,
+        "endLine": 89,
         "kind": "noul",
         "value": 0.94,
         "confidence": null
@@ -623,34 +749,25 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 84,
-        "endLine": 87,
+        "line": 92,
+        "endLine": 97,
         "kind": "noul",
-        "value": 0.73,
+        "value": 0.85,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 90,
-        "endLine": 98,
+        "line": 100,
+        "endLine": 103,
         "kind": "noul",
-        "value": 0.1,
+        "value": 0.79,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 101,
-        "endLine": 106,
-        "kind": "noul",
-        "value": 0.71,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 109,
+        "line": 106,
         "endLine": 114,
         "kind": "noul",
         "value": 0.08,
@@ -660,7 +777,61 @@
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
         "line": 117,
-        "endLine": 121,
+        "endLine": 122,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 125,
+        "endLine": 130,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 133,
+        "endLine": 138,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 141,
+        "endLine": 146,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 149,
+        "endLine": 153,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 156,
+        "endLine": 161,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "idempotent-name",
+        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
+        "line": 164,
+        "endLine": 168,
         "kind": "noul",
         "value": 0.11,
         "confidence": null
@@ -668,53 +839,44 @@
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 124,
-        "endLine": 129,
+        "line": 171,
+        "endLine": 177,
         "kind": "noul",
-        "value": 0.04,
+        "value": 0.17,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 132,
-        "endLine": 136,
+        "line": 180,
+        "endLine": 183,
         "kind": "noul",
-        "value": 0.11,
+        "value": 0.31,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 139,
-        "endLine": 145,
+        "line": 186,
+        "endLine": 189,
         "kind": "noul",
-        "value": 0.15,
+        "value": 0.92,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 148,
-        "endLine": 151,
+        "line": 192,
+        "endLine": 197,
         "kind": "noul",
-        "value": 0.26,
+        "value": 0.87,
         "confidence": null
       },
       {
         "rule": "idempotent-name",
         "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 154,
-        "endLine": 157,
-        "kind": "noul",
-        "value": 0.9,
-        "confidence": null
-      },
-      {
-        "rule": "idempotent-name",
-        "file": "rules/moonbit/idempotent-name/fixtures/registry.mbt",
-        "line": 160,
-        "endLine": 166,
+        "line": 200,
+        "endLine": 206,
         "kind": "noul",
         "value": 0.04,
         "confidence": null
@@ -723,8 +885,8 @@
   ],
   "spent": {
     "calls": 6,
-    "inputTokens": 60417,
-    "usd": 0.0025375140000000003,
-    "ms": 405
+    "inputTokens": 73695,
+    "usd": 0.00309519,
+    "ms": 894
   }
 }

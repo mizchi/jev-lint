@@ -7,17 +7,52 @@ subject: node
 # module-level `Array`, and that the store a sibling `register_*` writes to is
 # a `Map` keyed by the thing being registered.
 state: located
-# 0.49, fitted 2026-09-21 on the fixtures beside it (26 subjects: 9 defects,
-# 17 cleans of which 14 are hard, 3 passes). Cleans top out at 0.28
-# (`setup_retry_budget`, which writes `defaults.retries = attempts + 1` two
-# functions above a real increment) then 0.17 (`setup_stages`, which pushes in
-# a loop onto a local array it then assigns). Defects start at 0.71
-# (`install_plugin`, which checks existence and then aborts on it) and the rest
-# answer 0.80-0.96. Midpoint of the gap: 0.21 of headroom on the clean side,
-# 0.22 on the defect side, no decision flips, max pass-to-pass spread 0.07.
-# The guess before the fit was 0.5 and nothing moved. Python's copy of this
-# rule sits at 0.68 and TypeScript's at 0.40.
-at: 0.49
+# 0.67, refit 2026-09-22 chasing the boundary on the fixtures beside it (32
+# subjects: 12 defects, 20 cleans, 3 passes) after six boundary candidates:
+# three functions with a guard that checks the wrong thing (still a guard,
+# still reads safe, but keyed to a collection the effect never touches) and
+# their three correct twins. Two of the three shifted-guard defects stayed
+# loud regardless -- `ensure_metric_slot` (guards `load_order`, pushes onto
+# `hooks`) at 0.84-0.88 and `ensure_tmp_dir` (guards `root + "/staged"`,
+# pushes `root + "/tmp"`) at 0.85-0.88 -- the mismatched collection is
+# visible enough that a shifted guard reads as no guard. The third pair is
+# the boundary this fit turned on: `register_login`, whose `if name != ""`
+# reads as a guard but tests input validity, not repetition, and its
+# unconditional `metrics.boots + 1` beneath it lands at 0.87-0.89, correctly
+# caught; but `register_boot`, its correct twin -- the same counter,
+# guarded by `not(plugins.contains(name))` before the increment, with an
+# unconditional keyed `plugins.set` beneath it that stays idempotent either
+# way -- answered 0.54, 0.71, 0.56 across the accepted three passes, mean
+# 0.60, one pass over the old 0.49 and one over 0.67 both. A rule this size
+# combining a guarded counter with an unconditional keyed write in one
+# function is exactly where the model's confidence in "a guard exists" stops
+# discriminating what the guard is checking. The whole-file arm also moved
+# cases nobody touched: `install_plugin`, the previous cheapest catch, went
+# from 0.71-0.74 to 0.75-0.79 once six more functions shared its file.
+#
+# 0.67 is the midpoint of 0.60 (`register_boot`'s mean, the new loudest
+# clean) and 0.78 (the new cheapest real catch, tied between `register_run`'s
+# length-keyed write at 0.78-0.79 and `install_plugin`'s check-then-abort at
+# 0.75-0.79) -- not the corpus's overall midpoint, which the old cutoff
+# already was. 0.07 of headroom against `register_boot`'s mean, 0.11 against
+# the cheapest catch's mean: down from 0.21/0.22, and this is the boundary
+# narrowing, not measurement noise -- even taking each case's worst pass
+# against the other (`register_boot` at 0.71, `install_plugin` at 0.75),
+# they do not invert.
+#
+# `register_boot` is decided correctly on the mean (0.60 < 0.67) but is not
+# settled: one of its three passes (0.71) crosses this cutoff on its own,
+# so an un-retried run can flag it. That wobble, not a flipped decision, is
+# the residue kept here rather than papered over: the shape "one guarded
+# field beside one unconditional keyed write" is close enough to its own
+# unsafe twin (`register_login`) that a future corpus addition in that
+# shape should expect to move this cutoff again, not read 0.67 as settled.
+#
+# Prior fit (2026-09-21, superseded): 0.49 on 26 subjects, cleans topping at
+# 0.28 (`setup_retry_budget`) against defects starting at 0.71
+# (`install_plugin`). Python's copy of this rule sits at 0.68 and
+# TypeScript's at 0.40.
+at: 0.67
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning
