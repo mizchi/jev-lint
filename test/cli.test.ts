@@ -104,6 +104,25 @@ test("cli: `run <id>` selects one shipped rule and scans the config's paths; a c
   const asCommits = selectForRun("run", commits, { files: ["src"] }, ["commit-message-describes-diff", "main..HEAD"], log);
   assert.equal(asCommits!.command, "commits");
   assert.equal(asCommits!.rangeArg, "main..HEAD", "the positional after the id is the range");
+  // A change rule reads the same range a commit rule does. Counting only
+  // `subject: commit` sent it down the file path instead, where `main..HEAD`
+  // was taken as a directory that matches nothing, so the run planned
+  // nothing and said nothing: `0 subject(s), 0 request(s) planned`.
+  const dir = mkdtempSync(join(tmpdir(), "jev-select-"));
+  try {
+    const file = join(dir, "change.yml");
+    writeFileSync(
+      file,
+      ["- id: diff-follows-instructions", "  language: Git", "  subject: change", "  kind: noul", "  at: 0.5",
+       "  ask: This change breaks an instruction.", "  criteria: { 'true': y, 'false': n }", ""].join("\n"),
+    );
+    const change = parseArgs(["diff-follows-instructions", "main..HEAD", "--quiet", "-R", file], { color: false });
+    const asChange = selectForRun("run", change, {}, ["diff-follows-instructions", "main..HEAD"], log);
+    assert.equal(asChange!.command, "commits", "a change rule's subjects come from git, not from a path");
+    assert.equal(asChange!.rangeArg, "main..HEAD");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
   const none = selectForRun("run", parseArgs(["no-such-rule", "-R", shipped], { color: false }), {}, ["no-such-rule"], log);
   assert.equal(none, null);
   assert.match(said.at(-1)!, /no-such-rule/);

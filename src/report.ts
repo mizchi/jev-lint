@@ -164,6 +164,19 @@ export function formatPretty(
       ),
     );
   }
+  // The reason a change rule asked about nothing, stated -- not left for a
+  // reader to infer from its absence from `silent` below, and not called a
+  // matcher that missed: a change rule has none.
+  if (result.commits && result.commits.noInstructionDoc > 0) {
+    const changeRuleIds = (result.rules ?? []).filter((r) => r.subject === "change").map((r) => ruleKey(r));
+    if (changeRuleIds.length > 0) {
+      out.push(
+        c.dim(
+          `${result.commits.noInstructionDoc} commit(s) have no AGENTS.md or CLAUDE.md, so ${changeRuleIds.join(", ")} ${changeRuleIds.length === 1 ? "was" : "were"} not asked about them`,
+        ),
+      );
+    }
+  }
   const silent = silentRules(result);
   if (silent.length > 0) {
     out.push(
@@ -287,11 +300,24 @@ export function silentRules(result: Partial<ReportInput>): string[] {
   if (result.commits && result.commits.total === 0) return [];
   const fired = new Set((result.subjects ?? []).map((s) => ruleKey(s.rule)));
   const idle = new Set(idleLanguages(result).map((l) => l.language));
+  // A change rule has no matcher, so it cannot be a matcher that missed.
+  // When `noInstructionDoc` accounts for every non-merge commit in the
+  // range, that is the whole reason it produced nothing -- there was no
+  // AGENTS.md or CLAUDE.md anywhere in the range to judge a diff against,
+  // which `formatPretty` says in its own line. A change rule that still
+  // found nothing despite SOME commit having a document is a different
+  // story and stays reported below, the same as any other silent rule.
+  const nonMergeCommits = result.commits ? result.commits.total - result.commits.skippedMerges : 0;
+  const noStandardAnywhere =
+    Boolean(result.commits) && nonMergeCommits > 0 && (result.commits?.noInstructionDoc ?? 0) >= nonMergeCommits;
   // In commits mode only commit rules can fire, and in file mode only the
   // others can; a rule of the other kind is not silent, it is off duty. So
   // is every rule of a language the run saw no file of.
   const onDuty = (result.rules ?? []).filter(
-    (r) => isGitSubject(r.subject) === Boolean(result.commits) && !(r.languageDir && idle.has(r.languageDir)),
+    (r) =>
+      isGitSubject(r.subject) === Boolean(result.commits) &&
+      !(r.languageDir && idle.has(r.languageDir)) &&
+      !(noStandardAnywhere && r.subject === "change"),
   );
   return onDuty.map((r) => ruleKey(r)).filter((id) => !fired.has(id));
 }

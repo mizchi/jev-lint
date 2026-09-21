@@ -132,11 +132,15 @@ export function commitDiff(sha: string, cwd: string = process.cwd(), budget: num
 }
 
 /**
- * One subject per non-merge commit per commit rule.
+ * One subject per non-merge commit per commit rule, and one per non-merge
+ * commit per change rule whose tree has a non-empty diff and an
+ * instruction document.
  *
- * The message is the subject text, so identical messages over identical
- * diffs share a verdict; the diff rides along as `commit` for the state.
- * `file` is the sha and `line` is 1, which is what a finding reports.
+ * A commit rule's message is the subject text, so identical messages over
+ * identical diffs share a verdict; the diff rides along as `commit` for the
+ * state. A change rule's subject text is the stat instead (see
+ * `changeSubject`). `file` is the sha and `line` is 1 for both, which is
+ * what a finding reports.
  */
 export function commitSubjects(
   rules: Rule[],

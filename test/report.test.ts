@@ -149,16 +149,76 @@ test("report: severity error is honoured when a rule has earned it", () => {
   assert.match(formatGithub({ ...g, rules: [rule] }), /^::error /);
 });
 
-test("report: a git rule off duty is not a matcher that missed", () => {
+test("report: a git rule off duty in file mode is not a matcher that missed", () => {
   // `N rule(s) matched nothing` is the one place a dead matcher is visible,
   // which only holds if nothing else lands in that list. A `subject: commit`
   // rule was already excluded from a file-mode run; `subject: change` was
   // added beside it and inherited none of that, so an idle change rule was
-  // reported as having matched nothing when it simply had no commits to
-  // look at.
+  // reported as having matched nothing when it simply had no files to look
+  // at (there is no such thing as a file for a git subject).
   const change = scoreRule({ id: "r-change", language: "Git", subject: "change", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
   const commit = scoreRule({ id: "r-commit", language: "Git", subject: "commit", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
   const empty = { rules: [change, commit], subjects: [], all: [], findings: [], review: [], stats: { subjects: 0, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } };
   assert.deepEqual(silentRules(empty), [], "neither is on duty in a file-mode run: `commits` is absent");
-  assert.deepEqual(silentRules({ ...empty, commits: { range: "HEAD", total: 1, skippedMerges: 0 } }).sort(), ["r-change", "r-commit"], "both are, in commits mode, and both found nothing");
+});
+
+test("report: a change rule over an empty range found no commits, which is a fact about the range and about neither rule", () => {
+  const change = scoreRule({ id: "r-change", language: "Git", subject: "change", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
+  const commit = scoreRule({ id: "r-commit", language: "Git", subject: "commit", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
+  const empty = { rules: [change, commit], subjects: [], all: [], findings: [], review: [], stats: { subjects: 0, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } };
+  assert.deepEqual(
+    silentRules({ ...empty, commits: { range: "HEAD", total: 0, skippedMerges: 0, noInstructionDoc: 0 } }),
+    [],
+    "commits.total === 0 already short-circuits before either rule is even considered",
+  );
+});
+
+test("report: a change rule with real commits but no AGENTS.md or CLAUDE.md anywhere in them is off duty, not silent -- unlike a commit rule with the same zero subjects", () => {
+  // Distinct from the empty-range case above: here `commits.total` is 1, not
+  // 0, and `noInstructionDoc` accounts for the whole of it. Before this
+  // test the two reasons for a change rule finding nothing -- no commits at
+  // all, and commits but no standard to judge them against -- were
+  // indistinguishable downstream: both read as "the change rule matched
+  // nothing", which is a sentence a change rule cannot earn (it has no
+  // matcher). The commit rule here has no such excuse: nothing about
+  // `noInstructionDoc` explains why it found nothing, so it is still
+  // reported.
+  const change = scoreRule({ id: "r-change", language: "Git", subject: "change", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
+  const commit = scoreRule({ id: "r-commit", language: "Git", subject: "commit", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
+  const empty = { rules: [change, commit], subjects: [], all: [], findings: [], review: [], stats: { subjects: 0, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } };
+  assert.deepEqual(
+    silentRules({ ...empty, commits: { range: "HEAD", total: 1, skippedMerges: 0, noInstructionDoc: 1 } }).sort(),
+    ["r-commit"],
+    "the change rule is fully accounted for; the commit rule is not and stays reported",
+  );
+});
+
+test("report: a change rule that found nothing despite some commit having an instruction document is still silent", () => {
+  // The exclusion above is conditional on `noInstructionDoc` covering EVERY
+  // non-merge commit, not on the rule simply having zero subjects. Two of
+  // three commits here had a document and the rule still produced nothing,
+  // which is not something `noInstructionDoc` explains -- that is a real
+  // silent rule, the same as any other.
+  const change = scoreRule({ id: "r-change", language: "Git", subject: "change", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
+  const empty = { rules: [change], subjects: [], all: [], findings: [], review: [], stats: { subjects: 0, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } };
+  assert.deepEqual(
+    silentRules({ ...empty, commits: { range: "HEAD", total: 3, skippedMerges: 0, noInstructionDoc: 1 } }),
+    ["r-change"],
+  );
+});
+
+test("report: a run explains why a change rule asked about nothing, rather than call it a matcher that missed", () => {
+  const change = scoreRule({ id: "diff-follows-instructions", language: "Git", subject: "change", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
+  const result = {
+    rules: [change],
+    subjects: [],
+    all: [],
+    findings: [],
+    review: [],
+    stats: { subjects: 0, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} },
+    commits: { range: "HEAD", total: 1, skippedMerges: 0, noInstructionDoc: 1 },
+  };
+  const pretty = formatPretty(result, { color: false });
+  assert.match(pretty, /1 commit\(s\) have no AGENTS\.md or CLAUDE\.md, so diff-follows-instructions was not asked about them/);
+  assert.ok(!/matched nothing/.test(pretty), "the reason is stated in its own line; the rule is not also reported as a matcher that missed");
 });
