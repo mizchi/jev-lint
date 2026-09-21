@@ -16,7 +16,6 @@
  *   here".** A rule with `at: null` has no cutoff of its own and takes the
  *   default; a subject with no `id` has not been assigned to a batch yet.
  */
-import type { Instructions } from "./instructions.ts";
 
 // ---------------------------------------------------------------- vocabulary
 
@@ -77,6 +76,23 @@ export const SHIPPED_CUSTOM_LANGUAGES: Record<string, Omit<CustomLanguage, "libr
 
 /** The one language that is not a grammar. */
 export const COMMIT_LANGUAGE: Language = "Git";
+export interface InstructionDoc {
+  /**
+   * Where this document's text actually came from: one of
+   * `INSTRUCTION_FILES`, or, when a root-level file was a symlink, the
+   * path it resolved to -- which is not always one of those names. A
+   * finding reports against this, not against the link's own name.
+   */
+  file: string;
+  text: string;
+}
+
+export interface Instructions {
+  docs: InstructionDoc[];
+  /** True when the budget cut a document short; the state has to say so. */
+  truncated: boolean;
+}
+
 /** The other: a `subject: block` rule's, whose subjects are blocks of a text file split at a header line. */
 export const TEXT_LANGUAGE: Language = "Text";
 
@@ -765,7 +781,7 @@ export interface RunResult extends GateResult {
   ignored?: IgnoreStats;
   unpaired?: UnpairedStats;
   /** Present in commits mode: how many commits the range held, and how many merges were skipped. */
-  commits?: { total: number; skippedMerges: number; range: string };
+  commits?: { total: number; skippedMerges: number; range: string; noInstructionDoc: number };
   /** How many times everything was asked; above 1 with `--retry`. */
   retry?: number;
   /**
