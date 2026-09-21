@@ -1,0 +1,121 @@
+id: hides-what-it-runs
+language: Bash
+kind: noul
+# The construct, not the script. "Is this script malicious" is a question about
+# a whole program's intent; "does this step exist so that someone reading the
+# file, or looking at the machine afterwards, cannot tell what happened" is a
+# question about the text under it, with the rest of the file in the state to
+# answer it from.
+subject: node
+state: located
+# 0.30, fitted 2026-09-21 on the fixtures beside it (19 subjects: 8 defects,
+# 11 cleans of which 9 hard, 3 passes). Cleans top out at 0.11 -- and the two
+# highest are the ones that matter, a `command -v cc >/dev/null 2>&1` probe two
+# lines above the dropper's container check and an indirect `"$GZIP_BIN"` five
+# lines from the hex-spelled `curl` in the same hostile file, so `located` does
+# not smear the file's character onto an honest construct. Defects start at 0.52
+# (`nightly_maintenance.sh:12`, the migration silenced under `|| true` whose
+# success the next line writes to the report anyway -- the only defect here that
+# is not obviously hostile, and the model argues with it). Gap 0.41 wide; 0.30
+# leaves 0.19 above the highest clean and 0.19 under the lowest defect's worst
+# single pass (0.49), with no decision flips over three passes. Not the midpoint
+# (0.315): the clean band is tight -- 0.02 of spread at most -- while the
+# laggard defect wobbles 0.08, so the room belongs under the defects.
+at: 0.30
+axis: file
+severity: warning
+# Nine shapes a shell script uses to stop being readable, over-matched on
+# purpose: a decoder, a history wipe, a command name that is not a literal,
+# `${IFS}` or a hex-spelled word, a path under /dev/shm or a dot-name in /tmp,
+# a redirect to /dev/null, and a probe for a container, a VM or a tracer. Every
+# one of them has a common honest use, which is the point -- the matcher finds
+# the shape and the sentence decides why it is there. A clean case the matcher
+# cannot see is not a clean case, it is an invisible one.
+rule:
+  any:
+    - kind: command
+      has: { field: name, regex: "^(base64|xxd|uudecode|openssl|history)$" }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(printf|echo|set|tr)$" }
+        - regex: "\\\\x[0-9a-fA-F]{2}|\\+o history|\\+H(\\s|$)"
+    - kind: command
+      all:
+        - has:
+            field: name
+            has:
+              stopBy: end
+              any: [ { kind: simple_expansion }, { kind: expansion }, { kind: command_substitution } ]
+        # tree-sitter-bash wraps a redirected command in a `redirected_statement`,
+        # so `"$BIN" x >/dev/null` matches this branch and the redirect branch
+        # both and reports one line twice. The redirect branch is the wider
+        # subject, so it keeps the line.
+        - not: { inside: { kind: redirected_statement, regex: "/dev/null" } }
+    - kind: command
+      regex: "\\$\\{?IFS\\}?|/dev/shm|/tmp/\\.[A-Za-z0-9]"
+    - kind: redirected_statement
+      regex: "/dev/null"
+    - kind: variable_assignment
+      regex: "^HIST"
+    - kind: unset_command
+      regex: "HIST"
+    - kind: test_command
+      regex: "dockerenv|/proc/1/cgroup|detect-virt|strace|ltrace|\\$\\{?CI\\}?(\\W|$)"
+    - kind: command
+      has: { field: name, regex: "^(systemd-detect-virt|strace|ltrace)$" }
+ask: >-
+  This step is here so that what the script does leaves no readable trace --
+  not in the file for whoever reads it, not on the machine or in the log for
+  whoever looks afterwards -- rather than to do ordinary work.
+criteria:
+  "true": >-
+    The step takes the behaviour out of the text, and any one of these is
+    enough. The name of the command being run is assembled at runtime -- from a
+    variable the file never sets in view, an expansion, `${IFS}`, hex escapes --
+    so the line does not say what executes. A payload is decoded out of base64,
+    hex or a substitution cipher and what comes out is code, a command or a URL
+    rather than data the script goes on to name. The shell's history is cleared
+    or pointed at `/dev/null`, so the session leaves no record. A file is put
+    where a reader would not look: a dot-name, a path under `/dev/shm` or
+    `/tmp` the script never mentions again. A probe for a container, a VM, a CI
+    environment or a tracer decides whether the real work happens at all, so the
+    script behaves one way when it is watched and another when it is not. A
+    step's output and its failure both go to `/dev/null` and are swallowed, and
+    the script then carries on -- or writes to its own log or report that the
+    thing happened -- as though it had worked, so nothing anywhere records that
+    it did not. The step need not be the hostile act itself; being the reason
+    nobody can see the hostile act is enough.
+  "false": >-
+    The construct is doing its ordinary job and the script stays readable. A
+    `>/dev/null 2>&1` whose point is a probe's exit status, or which silences
+    chatter from a step whose failure still stops the script or is handled on
+    the next line. `base64` or `xxd` moving data the script names into or out
+    of a request body, a file or a tool it then calls, where what comes out is
+    used as data. Hex escapes that are terminal colours or a byte format
+    string. A command run through a variable this file sets from a literal, a
+    positional argument or an environment override with a visible default. A
+    `/dev/shm` or temp path chosen for a reason the file gives -- speed, a
+    secret that must not reach disk -- and cleaned up in view. A check for a
+    container, CI or a platform that picks a config, a path or a flag, with
+    both branches doing the work. Someone who knows shell can read the line and
+    say what runs.
+note: >-
+  Concealment, not danger. A script that does something drastic in plain sight
+  is not this case; a harmless step taken in a way that leaves no trace is.
+  The rest of the file is evidence about why this step is here, and it is
+  admissible: what the header comment claims, what the decoded bytes turn into
+  two lines down, whether the path is ever named again, whether the branch that
+  the probe guards is the only branch that does anything. Use it. But every
+  shape this matcher finds is common and usually innocent -- shell redirects to
+  `/dev/null`, base64s binaries and branches on the environment all day, and a
+  rule that flags every `2>/dev/null` is worth nothing -- so ask what a reader
+  loses, not what the shape could be used for. `set -e` above a silenced
+  command means its failure still stops the script, so the silence costs the
+  reader the output and nothing else; a `|| true` beside it means nothing
+  will ever record the failure, and if the next lines announce the step as done
+  the silence is not sloppiness, it is the whole point. A variable holding a
+  command name hides nothing when the file sets it where you can see.
+explain:
+  string_hide: Hides URLs, commands, or payloads behind encoding meant to evade review.
+  anti_analysis: Detects debuggers, VMs, or scanners in order to change or hide behavior.
+  misleading_names: Uses decoy names or comments that contradict what the code does.

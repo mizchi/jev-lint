@@ -1,0 +1,25 @@
+default: clean
+fixtures/provision_worker.sh:
+  - { line: 28, label: bad, window: 0, reason: "appends a cron entry filed as `ntp-sync` into /etc/cron.d that curls a script off a CDN into sh every five minutes; nothing else in this file is about time or about that host" }
+  - { line: 26, label: clean, window: 0, reason: "hard clean: enables the unit this file wrote four lines above, whose ExecStart is the binary it installed -- the persistence the script exists for" }
+  - { line: 25, label: clean, window: 0, reason: "hard clean: daemon-reload leaves nothing behind, in a file that does plant something two lines later" }
+  - { line: 31, label: clean, window: 0, reason: "is-active is a query, in the same contaminated file" }
+fixtures/prepare_mac_runner.sh:
+  - { line: 24, label: bad, window: 0, reason: "loads a login agent labelled com.apple.diagnostics.reporter whose ProgramArguments is a `while :;` loop curling a relay into bash; a CI prep script that leaves a respawning implant under an Apple name" }
+fixtures/devsetup.sh:
+  - { line: 10, label: bad, window: 0, reason: "the third of four appends to .bashrc launches a detached /usr/lib/sysmond on every login and re-launches it if it is gone; the other three are PATH and an alias" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean: identical syntax to the defect three lines below -- an append to .bashrc that exports a variable the file named at the top" }
+  - { line: 9, label: clean, window: 0, reason: "hard clean: the same append, adding the directory it just mkdir'd to PATH" }
+  - { line: 11, label: clean, window: 0, reason: "hard clean: the same append, an alias for the tool this script configures" }
+fixtures/install_cli.sh:
+  - { line: 32, label: bad, window: 0, reason: "enables a user timer called dbus-broker-refresh, written by this file, whose ExecStart pipes a telemetry URL into sh every 30 minutes; shipctl is the advertised program and none of it is shipctl" }
+  - { line: 31, label: clean, window: 0, reason: "hard clean: `systemctl --user daemon-reload` outlives nothing, sitting one line above the defect in the same file" }
+fixtures/backup_cron.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: installs a nightly crontab entry through a `| crontab -` pipe -- the shape of the defect -- but the entry runs this very script with --run and appends to the log path named at the top" }
+fixtures/dotfiles_install.sh:
+  - { line: 19, label: clean, window: 0, reason: "hard clean: a block appended to ~/.zshrc, which is the file's whole stated job, fenced between greppable begin/end markers and guarded against a second write" }
+fixtures/deploy_staging.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: `nohup ... &` on the release build, output to a named log the script tails, waited on by pid -- nothing survives the script" }
+fixtures/bootstrap_host.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: enables docker, a unit not named after this script, but one of the packages it installed two lines above for the platform to run on" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: the same for chrony -- a baseline daemon a host-bootstrap script is expected to turn on" }

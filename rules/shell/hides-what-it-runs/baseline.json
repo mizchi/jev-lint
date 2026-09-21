@@ -1,0 +1,541 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T06:47:44.128Z",
+  "model": "jev-1.13.0",
+  "suite": "shell/hides-what-it-runs",
+  "rules": [
+    {
+      "id": "hides-what-it-runs",
+      "draft": "9e6d4aa73371",
+      "at": 0.3
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/run_tests.sh",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/upload_crashdump.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/upload_crashdump.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/preflight.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/preflight.sh",
+        "line": 23,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/nightly_maintenance.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/nightly_maintenance.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/deploy.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/deploy.sh",
+        "line": 11,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/rotate_signing_key.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.61,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/preflight.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/preflight.sh",
+        "line": 23,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/deploy.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/deploy.sh",
+        "line": 11,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/run_tests.sh",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/upload_crashdump.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/upload_crashdump.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/rotate_signing_key.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/nightly_maintenance.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/nightly_maintenance.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.52,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/nightly_maintenance.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/nightly_maintenance.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/run_tests.sh",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/preflight.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/preflight.sh",
+        "line": 23,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/rotate_signing_key.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/upload_crashdump.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/upload_crashdump.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/deploy.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/deploy.sh",
+        "line": 11,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/runner_prepare.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "hides-what-it-runs",
+        "file": "experiments/rule-candidates/shell/hides-what-it-runs/fixtures/telemetry_agent.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 24,
+    "inputTokens": 67131,
+    "usd": 0.002819502,
+    "ms": 799
+  }
+}

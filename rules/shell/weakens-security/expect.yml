@@ -1,0 +1,34 @@
+default: clean
+fixtures/provision_agent.sh:
+  - { line: 9, label: bad, window: 0, reason: "curl -k against a vendor's public CDN on a production worker; TLS off for the one fetch whose bytes become a root-owned binary, and the file gives no reason" }
+  - { line: 19, label: clean, window: 0, reason: "hard clean: the same -k, against 127.0.0.1:9100 on the agent this script just installed, whose self-signed certificate the line above names" }
+fixtures/ci_image.sh:
+  - { line: 10, label: bad, window: 0, reason: "npm config set strict-ssl false --global: written into the image, so every npm install by every later job inherits it, with no mirror or proxy anywhere in the file" }
+  - { line: 13, label: bad, window: 0, reason: "--trusted-host on pypi.org and files.pythonhosted.org -- the real public index -- which is TLS validation dropped against the internet, not a pin to an internal mirror" }
+fixtures/db_connectivity_fix.sh:
+  - { line: 7, label: bad, window: 0, reason: "iptables -F on the host itself, not in a namespace: the primary's whole packet filter removed to get one replica connecting" }
+  - { line: 8, label: bad, window: 0, reason: "firewalld stopped and disabled, so the host comes back with no firewall after reboot; the CIDR the script names is exactly what a rule would have allowed" }
+  - { line: 10, label: bad, window: 0, reason: "setenforce 0 followed by editing /etc/selinux/config -- SELinux off now and off permanently, instead of a port label" }
+fixtures/run_worker.sh:
+  - { line: 7, label: bad, window: 0, reason: "systemctl mask unattended-upgrades: security updates stopped on the encoder box, unrelated to anything the worker needs" }
+  - { line: 9, label: bad, window: 0, reason: "--privileged plus seccomp=unconfined on a long-running production container with --restart unless-stopped; the isolation boundary is gone for the life of the host" }
+  - { line: 16, label: clean, window: 0, reason: "hard clean, adjacent: curl -k at 127.0.0.1:8099 for the container the two defects above just started, three lines under one of them -- the located-state contamination test" }
+fixtures/tls_listener_smoke.sh:
+  - { line: 15, label: clean, window: 0, reason: "hard clean: curl -sk polling https://localhost:8443 for the container started on 127.0.0.1 with the certificate openssl made six lines earlier" }
+  - { line: 19, label: clean, window: 0, reason: "hard clean: the same request once the listener is up; the certificate it will not verify is the one in $CERT_DIR, which the trap deletes" }
+  - { line: 21, label: clean, window: 0, reason: "hard clean: NODE_TLS_REJECT_UNAUTHORIZED=0 as a prefix on one command against the same loopback listener -- not exported, not written anywhere" }
+fixtures/vm_image_smoke.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: StrictHostKeyChecking=no against a VM this script launched three lines up, whose IP it read back from multipass and whose key it has never seen" }
+  - { line: 14, label: clean, window: 0, reason: "hard clean: the second ssh to the same throwaway VM, deleted --purge by the trap" }
+fixtures/spool_permissions_fixture.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: chmod 777 on two directories inside a tmpfs this script mounted on a mktemp -d and unmounts on exit -- the test needs two other users to write there" }
+fixtures/netns_rules_test.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: iptables -F inside a network namespace the script created two lines earlier and deletes in the trap; the flush is the fixture's reset, and the next line sets the policy to DROP" }
+fixtures/importer_e2e.sh:
+  - { line: 15, label: clean, window: 0, reason: "hard clean: curl -sfk waiting on 127.0.0.1:$PORT for the fixture registry this script backgrounded with the certificate it generated" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean: git -c http.sslVerify=false, scoped to this one clone from that same localhost registry -- not git config, so nothing survives the command" }
+fixtures/staging_seed.sh:
+  - { line: 16, label: bad, window: 0, reason: "curl -k against a shared staging host on a public name; the openssl req four lines up made a CLIENT certificate, so nothing in the file establishes the server's identity, and the host outlives the run" }
+  - { line: 19, label: bad, window: 0, reason: "the same -k on the health check; the mktemp/trap bounds the workspace, not the connection" }
+fixtures/build_disk_image.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: --privileged on a --rm container this command creates and destroys, because partitioning a loop-mounted image needs it; the same flag that run_worker.sh gives a restarting production service" }

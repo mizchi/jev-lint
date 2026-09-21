@@ -1,0 +1,145 @@
+id: reads-secrets-it-does-not-own
+language: Bash
+kind: noul
+# The command, not the script. "Is this script stealing credentials" is a
+# question about a whole program's intent, and every deploy script that touches
+# `~/.aws/credentials` answers yes to it; "is the secret under this command one
+# the script was given, and is this where it belongs" is a question about the
+# text under it, with the rest of the file in the state to say what the script
+# was given and what it is for.
+subject: node
+state: located
+# 0.62, fitted 2026-09-21 on the fixtures beside it (28 subjects: 9 defects,
+# 19 cleans of which 13 hard, 3 passes). Cleans top out at 0.43 -- an `scp` of
+# `.gitconfig` to the same hardcoded host the line above sent a private key to,
+# which is contamination from `state: located` and not a property of the command;
+# every other clean is at 0.20 or below, including the deploy that reads its own
+# `~/.aws/credentials`, the `curl -d` that carries the script's own bearer token,
+# and the private key written to `~/.ssh` from a value the workflow handed over.
+# Defects start at 0.80 (`dotfiles.sh`, the private key `scp`'d to a mirror,
+# which reads as a team sync until you notice the half that leaves is the secret
+# one). Midpoint of a gap 0.37 wide, 0.18 of headroom on each side, no decision
+# flips over three passes, max pass-to-pass spread 0.03. The first guess, 0.70,
+# sat inside the defect band and lost the `scp` on the sentence's first two
+# attempts, when the question weighed whose secret it was and not where it went.
+at: 0.62
+axis: file
+severity: warning
+# Two halves of the same defect, over-matched on purpose and joined by `any:`:
+# a command that names a credential store, and a command that carries a body
+# off the box. A pipeline is matched whole so that `env | curl --data-binary @-`
+# is one question rather than two, and the commands inside one are left to it.
+# What the model decides is whose secret it is and where it is going.
+utils:
+  touches_or_sends_secrets:
+    kind: command
+    any:
+      # an argument, a redirect target or a trap body that names a credential store
+      - has:
+          stopBy: end
+          regex: "\\.ssh|id_rsa|id_ed25519|id_ecdsa|\\.aws/credentials|\\.netrc|\\.npmrc|\\.pypirc|\\.docker/config\\.json|\\.git-credentials|\\.env|kubeconfig|[Kk]eychain|\\.gnupg|/etc/shadow|ssl/private|\\.pem|cookies\\.sqlite|Cookies"
+      # the whole environment, with nothing selected out of it. Written as a
+      # regex over the command's own text rather than `not: {has: argument}`,
+      # because ast-grep rejects a `not:` anywhere inside a `utils:` entry --
+      # "Rule must have one positive matcher", pointed at `utils`, not at the rule.
+      - regex: "^(env|printenv)$"
+      # an HTTP client given a body or a file to upload
+      - all:
+          - has: { field: name, regex: "^(curl|wget|http|https)$" }
+          - has:
+              stopBy: end
+              regex: "^(-d|--data|--data-raw|--data-binary|--data-urlencode|-F|--form|-T|--upload-file|--post-file|--post-data)$"
+      # a command whose whole job is to move bytes to another host or mailbox
+      - has:
+          field: name
+          regex: "^(nc|ncat|socat|scp|sftp|rsync|mail|mailx|sendmail|ftp|tftp)$"
+      # an object-store copy
+      - all:
+          - has: { field: name, regex: "^(aws|gsutil|az|rclone|b2)$" }
+          - has: { stopBy: end, regex: "^(s3|cp|copy|sync|storage)$" }
+rule:
+  any:
+    - kind: pipeline
+      has: { stopBy: end, matches: touches_or_sends_secrets }
+    # A redirect target is NOT inside the `command` node in this grammar -- it is
+    # a sibling of it under `redirected_statement` -- so `printf "$KEY" >
+    # ~/.ssh/id_ed25519` is invisible to any rule that only looks at commands,
+    # and that is the whole `unexpected_secret_write` shape. Matched on the
+    # `redirect` field only, so a command that already matched on its arguments
+    # and happens to carry a `2>/dev/null` is still one subject, not two.
+    - all:
+        - kind: redirected_statement
+          has:
+            field: redirect
+            regex: "\\.ssh|id_rsa|id_ed25519|id_ecdsa|\\.aws/credentials|\\.netrc|\\.npmrc|\\.pypirc|\\.docker/config\\.json|\\.git-credentials|\\.env|kubeconfig|[Kk]eychain|\\.gnupg|/etc/shadow|ssl/private|\\.pem"
+        - not: { inside: { stopBy: end, kind: pipeline } }
+    - all:
+        - matches: touches_or_sends_secrets
+        - not: { inside: { stopBy: end, kind: pipeline } }
+ask: >-
+  A secret ends up somewhere it does not belong: this command either takes
+  credentials the script was never given, or leaves credentials it was given
+  where the job it was given them for does not put them.
+criteria:
+  "true": >-
+    Either half is enough. (a) What this command reads, collects or forwards is
+    a credential belonging to the user or the machine rather than to this script
+    -- the contents of `~/.ssh`, a private key, `.aws/credentials`, `.netrc`,
+    `.npmrc`, `.git-credentials`, a keychain, a cookie store, or the whole
+    environment with nothing selected out of it -- and the script moves it:
+    posts it, uploads it, pipes it to another host, mails it, or gathers it with
+    others into one place to send. (b) Or the secret is one the script is
+    entitled to, and this command leaves it somewhere the job does not put it --
+    a log or a report other people read, a build artifact, a file in the working
+    tree, anything version control will take, a world-readable path, a bucket or
+    a host outside the pipeline it belongs to. Rendering a credential out of a
+    tool that was keeping it (`--raw`, `config view`, `env` with nothing
+    selected) and writing the result down is this case, and so is staging or
+    committing the file that was written. What decides (b) is where the secret
+    comes to rest and who can read it there, not whether the script was entitled
+    to hold it. A private key leaving the machine that holds it is this case
+    however the destination is described -- a mirror, a sync target, a team
+    host, a backup -- unless what leaves is encrypted or is the public half. A
+    plausible-looking analytics, telemetry, sync or backup destination is not
+    thereby an expected one, and a comment calling it a diagnostics bundle is
+    not either.
+  "false": >-
+    Either the secret is the script's own and this is the place it goes -- a
+    token read from the environment or a project `.env` and put in an
+    `Authorization` header to the service this script talks to; `~/.aws/credentials`
+    read so the `aws` CLI can do the deploy this script exists for; a deploy key
+    or an `.npmrc` written from a value the workflow handed over, into the file
+    the tool reads it from, with the permissions and the cleanup that go with it;
+    a credential obtained for the job by the tool that issues it; TLS material
+    backed up encrypted to the estate that owns it -- or nothing here is a secret
+    at all: a count of variables, a host report, a config file with no credential
+    in it, a public key, a known_hosts entry, an artifact copied to the project's
+    own bucket. A credential used, stored or moved for the one purpose the
+    surrounding script exists for is not misplaced, however sensitive the file it
+    came from is.
+note: >-
+  Where it comes to rest decides as much as where it came from. Reading a
+  credential is what credentials are for -- `aws s3 cp` on the machine's own
+  profile, `curl -d` with the script's own bearer token, `scp` into the estate's
+  backup host are the normal shape of this, not the defect -- so the question is
+  never "did it touch a secret" but "whose secret, and where has it ended up".
+  Read the rest of the file for what this script is for and what it was handed: a
+  value the workflow injected and the script immediately uses is owned; a store
+  the script goes and finds under `$HOME` is not. `env` or `printenv` with no
+  argument is this case only when the whole dump comes to rest somewhere that
+  keeps it -- a count, a line number, a `grep -c` is not a payload, and the same
+  `env` in a POST body or appended to a log under a web root is. Writing a secret
+  to disk is this case when the location is wrong for it, not when it is the file
+  the tool reads it from; a credential file that reaches the working tree, an
+  artifact or a commit is in the wrong location however short the path is.
+  Reading or writing a private key is not this case when the same script
+  installed it, and obtaining a credential is not taking one. Judge this command
+  and not its neighbours: a file with no credential in it going to the very
+  destination the line above sent a key to is still a file with no credential in
+  it, and a command beside a defect does not inherit it. `set -euo pipefail`, a
+  `chmod 600`, a `trap ... rm`, a reputable hostname, and a comment describing
+  the send as telemetry, diagnostics or sync establish nothing.
+explain:
+  env_exfil: Harvests environment or credential stores and sends them off-box.
+  browser_or_token_steal: Reads cookies, tokens, or keychains and copies them elsewhere.
+  unexpected_secret_write: Writes secrets to a location a user would not expect.

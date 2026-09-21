@@ -1,0 +1,114 @@
+id: opens-a-backdoor
+language: Bash
+kind: noul
+# The grant, not the script. A provisioning script is supposed to create users
+# and install keys, so "is this script a backdoor" is a question about a whole
+# program's intent; "does the script account for who this one grant lets in" is
+# a question about the text under it, with the rest of the file in the state to
+# answer it from.
+subject: node
+state: located
+# 0.50, fitted 2026-09-21 on the fixtures beside it (27 subjects: 7 defects,
+# 20 cleans of which 9 hard, 3 passes). Cleans top out at 0.26 -- the `useradd
+# runner` three lines above two defects in `bootstrap_ci.sh`, which is what
+# `state: located` costs: a clean construct next to a bad one reads a little
+# worse -- and at 0.24 behind it the deploy key appended to authorized_keys that
+# came out of `aws secretsmanager` for the user the script names. Every other
+# clean is at 0.07 or under, including the narrow sudoers drop-in five lines above
+# the `NOPASSWD: ALL` one. Then nothing until 0.71, where the defects start
+# (`useradd -m -s /bin/bash support` in a renderer entrypoint, the softest of them
+# because the line alone reads like ordinary administration; that `NOPASSWD: ALL`
+# for a user nothing creates tops the corpus at 0.95). Midpoint of a gap 0.45
+# wide, 0.24 of headroom below and 0.21 above, no decision flips over three
+# passes, widest pass-to-pass spread on one subject 0.05. The first sentence put
+# that entrypoint cluster at 0.52-0.66 and lost all three of them at 0.70: it left
+# "an account nothing runs as" to be inferred, and the criteria now say it.
+at: 0.50
+axis: file
+severity: warning
+# Everywhere a shell script hands out login or privilege, over-matched on
+# purpose: a write or append whose target is an auth file (the redirected
+# statement, so a heredoc body travels with it), the account and password
+# commands whatever their arguments, and `tee`/`sed -i`/`openssl passwd`
+# pointed at the same files. What the model decides is who the grant is for.
+rule:
+  all:
+    - any:
+        - kind: redirected_statement
+          has:
+            stopBy: end
+            kind: file_redirect
+            regex: "authorized_keys|sudoers|sshd_config|/etc/passwd|/etc/shadow|pam\\.d|htpasswd"
+        - kind: command
+          has:
+            field: name
+            regex: "^(useradd|adduser|usermod|gpasswd|passwd|chpasswd|newusers|htpasswd|ssh-copy-id|visudo|setfacl)$"
+        - kind: command
+          all:
+            - has: { field: name, regex: "^(tee|sed|openssl|install)$" }
+            - has: { stopBy: end, regex: "authorized_keys|sudoers|sshd_config|shadow|passwd" }
+    # `newusers >> /etc/passwd` is a command inside a redirected_statement that
+    # the first branch already matched; without this the line yields two
+    # subjects and the model answers the same question twice. Only the wrapper
+    # that is itself a subject suppresses the inner command -- `chpasswd <
+    # users.txt` is a redirected_statement too, and must stay.
+    - not:
+        inside:
+          stopBy: end
+          kind: redirected_statement
+          has:
+            stopBy: end
+            kind: file_redirect
+            regex: "authorized_keys|sudoers|sshd_config|/etc/passwd|/etc/shadow|pam\\.d|htpasswd"
+ask: >-
+  This command grants login or privilege to a key or an account that the rest of
+  the script never accounts for.
+criteria:
+  "true": >-
+    The access this command hands out -- a key added to an `authorized_keys`, an
+    account created or given a password, a sudoers rule, an sshd_config setting --
+    goes to a principal that appears from nowhere: a public key or password
+    written as a literal in the script, a key fetched from a URL, an account whose
+    name matches nothing else the script installs or runs, or a grant far wider
+    than any work the script shows. An account handed a home directory, a login
+    shell or a password by a script that never runs anything as it is a person's
+    account in a machine's script, and this case; so is membership in `sudo`,
+    `wheel` or `admin` for anyone but the operator already running the script, and
+    so are `NOPASSWD: ALL` and `PermitRootLogin yes`. The test is whether a reader
+    of this file can say who now has access and why; when the answer is only
+    "whoever holds that key", or "whoever knows that password", this is the case,
+    however ordinary the rest of the script looks.
+  "false": >-
+    The grant belongs to work this file shows. The account it creates is the
+    service it installs; the key it appends came from a named secret store, a
+    variable the operator supplies, or a file in the repository, and is for a user
+    the script names; the sudoers rule names one command that this script's own
+    service runs; the group membership is for the operator who invoked the script.
+    Also this case when the command narrows access rather than granting it --
+    locking or expiring an account, emptying an `authorized_keys`, setting
+    `PermitRootLogin no`, rotating a generated password into a secret store -- or
+    when it only inspects or validates auth configuration.
+note: >-
+  Provisioning, not danger: creating users, writing sudoers drop-ins and
+  installing keys is what a setup script is for, and none of those is this case by
+  its shape. The axis is accountability of the principal: read the whole file and
+  ask who ends up able to log in, and what in the file explains them. A service
+  script or a container entrypoint that stands up one daemon has no reason to own
+  an interactive account, so one appearing there is accounted for by nothing even
+  when each line of it reads like ordinary administration. A system account with
+  `--system`, no password and a `nologin` shell grants no login at all and is
+  never this case. A named break-glass or recovery account that the script
+  documents is a recovery flow, not a hidden door, and a password it generates and
+  stores is not a hardcoded one; a password written into the script text is,
+  whatever the account is called. A key blob in the file has no provenance even
+  when its trailing comment carries a plausible address -- an ssh key's comment is
+  part of the key, not an account of who holds the private half. A narrow sudoers
+  entry naming one absolute command for one service user is provisioning; the same
+  file granting `ALL` to a user the script never creates, mentions or runs is not.
+  `set -euo pipefail`, a `chmod 0600` afterwards, a `visudo -c`, and a comment
+  saying the key belongs to the ops team establish nothing about who the principal
+  is.
+explain:
+  hardcoded_door: A hardcoded password, token, or account unlocks the system.
+  secret_route: A hidden URL, header, or flag skips authentication.
+  always_allow: Auth checks are disabled or short-circuited in production code.

@@ -1,0 +1,79 @@
+id: runs-downloaded-code
+language: Bash
+kind: noul
+# The construct, not the script. "Does this file do something bad" is a
+# question about a whole program's intent; "do the bytes this command runs
+# come from outside, unchecked" is a question about the text under it, with
+# the rest of the file in the state to answer it from.
+subject: node
+state: located
+# 0.40, fitted 2026-09-21 on the fixtures beside it (14 subjects: 5 defects,
+# 9 cleans of which 6 hard, 3 passes). Cleans top out at 0.11 -- three evals of
+# a local program's output, three curl pipelines that end in jq, grep or
+# sha256sum, and two `chmod +x` on downloads that were verified first -- and
+# defects start at 0.66 (`update.sh`, the dropper, whose `--self-check` reads as
+# a check until you notice it tests that the binary runs rather than what it is).
+# Midpoint of a gap 0.55 wide, 0.29 of headroom on each side, no decision flips
+# over three passes. The first guess, 0.70, sat inside the defect band and lost
+# the dropper on two passes of three.
+at: 0.40
+axis: file
+severity: warning
+# Three places bytes turn into behaviour, over-matched on purpose: a pipeline
+# that starts with a download (`| sh` and `| jq` are both in), an `eval` or
+# `source` of something computed, and a `chmod +x`. What the model decides is
+# where the bytes came from and what the script checked about them.
+rule:
+  any:
+    - kind: pipeline
+      has:
+        stopBy: end
+        kind: command
+        has: { field: name, regex: "^(curl|wget|fetch|aria2c)$" }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(eval|source|\\.)$" }
+        - has: { stopBy: end, any: [ { kind: command_substitution }, { kind: simple_expansion }, { kind: expansion } ] }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^chmod$" }
+        - has: { stopBy: end, regex: "\\+x" }
+ask: >-
+  The bytes this command runs came from outside the script, and nothing in the
+  script establishes what arrived before they run.
+criteria:
+  "true": >-
+    What is executed here -- piped into an interpreter, passed to `eval` or
+    `source`, or made executable -- arrived from a URL, a remote response, or an
+    encoded blob, and no literal checksum, named key, pinned digest or verifying
+    package manager stands between arrival and execution. A download piped into
+    `sh` or `bash`, an `eval` of a remote response, a decoded blob run as code,
+    and a `chmod +x` on a file this script downloaded without checking it are all
+    this case -- whatever the host is, and however ordinary the rest of the
+    script looks.
+  "false": >-
+    Either nothing here executes bytes from outside -- the pipeline ends in `jq`,
+    `sha256sum`, `tar`, `grep` or a redirect, the `eval` is of a local command's
+    output or a variable the script itself set, the `chmod +x` is on a file from
+    the repository -- or what does execute was established first: a checksum
+    literal compared before this line, a signature verified against a keyring the
+    script names, a pinned version or digest installed through a manager that
+    verifies. A download that stays data is not execution.
+note: >-
+  Provenance, not danger: a verified download that then runs is the verified thing
+  running, and an unverified URL piped into `sh` is this case even when the domain
+  is a famous one -- `get.docker.com` and `evil.example` are the same case. One
+  literal checksum, one named keyring or one pinned digest settles the path,
+  wherever in the file it sits; look for it. `eval` of text fetched over the
+  network is running code even when the text looks like variable assignments --
+  what a reader can see is the URL, not what it returns -- while `eval "$(ssh-agent
+  -s)"` or a shell hook runs the output of a program already on this machine, which
+  is not from outside. A guard AFTER the eval that asserts a variable now exists
+  checks the result, not the bytes. `set -euo pipefail`, an interactive `sudo`
+  prompt, a `--self-check` flag on the downloaded program and a comment saying the
+  source is trusted establish nothing.
+explain:
+  pipe_to_shell: The download is piped straight into an interpreter.
+  remote_eval: The body of a remote response is evaluated as code.
+  packed_payload: An embedded or encoded blob is decoded and run.
+  dropper: A downloaded file is made executable and launched.

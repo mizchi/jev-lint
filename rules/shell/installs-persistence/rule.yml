@@ -1,0 +1,104 @@
+id: installs-persistence
+language: Bash
+kind: noul
+# The construct, not the script. Almost every ops script installs something
+# that outlives it -- that is what an installer is for -- so "is this script
+# planting persistence" is a question about intent that reads as yes on every
+# deploy script. "Does the thing THIS command leaves behind belong to the
+# program this file installs" is a question about the text under it, with the
+# rest of the file in the state to say what the file is for.
+subject: node
+state: located
+# 0.50, fitted 2026-09-21 on the fixtures beside it (16 subjects: 4 defects,
+# 12 cleans of which 10 hard, 3 passes). Cleans top out at 0.22 -- a
+# `systemctl --user daemon-reload` sitting one line above the timer that is the
+# defect, which is the highest any clean construct got and is entirely file
+# contamination -- and the rest of the cleans sit at 0.10 and under, including
+# the three `>>` appends that are the defect's own siblings in `.bashrc` and the
+# `| crontab -` that schedules the script the reader is holding. Defects start
+# at 0.80 (`devsetup.sh`, the login hook among the PATH lines -- the only defect
+# whose payload is one clause inside a quoted string). Midpoint of a gap 0.58
+# wide, 0.28 of headroom below and 0.30 above, no decision flips over three
+# passes, max spread 0.06. The first guess, 0.70, gave the same four findings;
+# it was moved down because 0.70 leaves only 0.10 under the weakest defect.
+at: 0.50
+axis: file
+severity: warning
+# Four places a shell script leaves something behind, over-matched on purpose:
+# a scheduler or service manager invoked anywhere in a pipeline, the same
+# invoked on its own, a redirected statement that appends (`>>`) or writes into
+# a directory read at boot or at login, and a command that merely names one of
+# those directories. The `not inside` guards keep the outermost statement the
+# subject, so `( crontab -l | grep ) | crontab -` is one finding, not two.
+# Background `&` has no node in this grammar -- it is an anonymous token on the
+# statement -- so detachment is reached through `nohup`/`setsid`/`disown`.
+rule:
+  any:
+    - kind: pipeline
+      all:
+        - not: { inside: { stopBy: end, kind: pipeline } }
+        - has:
+            stopBy: end
+            kind: command
+            has: { field: name, regex: "^(crontab|systemctl|launchctl|systemd-run|update-rc\\.d|chkconfig|schtasks|nohup|setsid|disown|at)$" }
+    - kind: redirected_statement
+      all:
+        - not: { inside: { stopBy: end, kind: pipeline } }
+        - any:
+            - has: { stopBy: end, kind: file_redirect, regex: "^>>" }
+            - has: { stopBy: end, kind: file_redirect, regex: "(/etc/cron|systemd/system|systemd/user|LaunchAgents|LaunchDaemons|/etc/init\\.d|/etc/profile\\.d|/etc/rc\\.local|autostart)" }
+            - has:
+                stopBy: end
+                kind: command
+                has: { field: name, regex: "^(crontab|systemctl|launchctl|systemd-run|update-rc\\.d|chkconfig|schtasks|nohup|setsid|disown|at)$" }
+    - kind: command
+      all:
+        - not: { inside: { stopBy: end, any: [ { kind: pipeline }, { kind: redirected_statement } ] } }
+        - any:
+            - has: { field: name, regex: "^(crontab|systemctl|launchctl|systemd-run|update-rc\\.d|chkconfig|schtasks|nohup|setsid|disown|at)$" }
+            - has: { stopBy: end, regex: "(/etc/cron|systemd/system|systemd/user|LaunchAgents|LaunchDaemons|/etc/init\\.d|/etc/profile\\.d|/etc/rc\\.local|autostart)" }
+ask: >-
+  What this command leaves on the machine keeps running or gets run again after
+  the script has exited, and it belongs to something other than the program this
+  script exists to install.
+criteria:
+  "true": >-
+    This command registers, enables, appends or detaches something that outlives
+    this process -- a crontab or `/etc/cron.d` entry, a systemd unit or timer, a
+    launchd agent, an init or `rc.local` hook, a line in a shell rc or
+    `profile.d` file, a `nohup`/`setsid` process -- and what it leaves behind is
+    not the thing the rest of this file is about: it runs a different program, it
+    fetches and executes something over the network, it relaunches itself, or it
+    is filed under a name borrowed from the system (`ntp-sync`, `dbus-`,
+    `com.apple.*`) while the body does something else. A payload in a unit file,
+    a plist or a cron line that the entry's own name does not describe is this
+    case, and so is an entry whose name matches the script while its body does
+    not.
+  "false": >-
+    Either nothing here outlives the script -- `systemctl restart`, `is-active`,
+    `status`, `crontab -l`, a `>>` onto a log file, a `nohup` the script itself
+    waits on -- or what does outlive it is the script's own declared job: the
+    unit, timer or cron entry runs the binary this file just installed or this
+    script itself, under a name that says so, with its output going somewhere
+    named; a provisioning script enabling the packages it just installed as
+    dependencies; a setup script appending a labelled, greppable block of PATH
+    and shell-init lines to a dotfile it names at the top. Persistence a reader
+    of this file would predict from its first three lines is this case.
+note: >-
+  Persistence is not the defect -- an installer that did not install anything
+  would be broken. The defect is a mismatch between what the file is for and
+  what it leaves behind, or a name chosen so the reader will not look. Read the
+  heredoc, the plist body and the cron line, not the path they are written to:
+  `/etc/systemd/system/queue-worker.service` whose `ExecStart` is the binary two
+  lines above is the clean case, and `~/.config/systemd/user/dbus-broker-refresh`
+  whose `ExecStart` curls a URL is this case even though the directory is the
+  user's own. Judge each append separately: four `>>` lines onto the same
+  `.bashrc` are four subjects, and three of them being obvious PATH exports says
+  nothing about the fourth. `sudo`, `set -euo pipefail`, a `Description=` field
+  and a comment calling the agent a monitor establish nothing. An enable of a
+  package the script installed for the service to use (docker, chrony) is the
+  script's own job even though the unit is not named after the script.
+explain:
+  startup_hook: Adds a hidden login item, cron, systemd unit, or Run key.
+  watchdog: Respawns itself after the user quits.
+  implant: Installs a long-lived agent unrelated to the advertised program.

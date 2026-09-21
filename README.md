@@ -165,7 +165,7 @@ npx -y jev-lint check src              # ask it
 ```
 
 Nothing to install for that. Node 20+. `check` loads every shipped rule —
-65 of them, under `rules/<language>/<id>/` — and the files you point it
+98 of them, under `rules/<language>/<id>/` — and the files you point it
 at decide which run: a `.ts` file meets the TypeScript rules, a `.md` file
 the Markdown ones, and a language no file belongs to is listed as idle at
 the end of the run. Nothing to select.
@@ -181,11 +181,12 @@ the end of the run. Nothing to select.
 | `.mbt` | `moonbit/` — 20 | every rule of this tool that a MoonBit file can carry: the naming rules, the guarantees, the comments, the failure contract, the log lines, the tests and their snapshots. MoonBit is not a grammar ast-grep has built in: [declare the parser](docs/reference.md#a-language-ast-grep-does-not-have-built-in) and these run; without it they are skipped and the run says so |
 | `package.json` | `json/` — 1 | does a script's name describe the command it runs |
 | `.sql` (an sqlc catalog) | `text/` — 1 | does `-- name: GetUserByEmail` describe the SQL under it |
+| `.sh` `.bash` `.zsh` | `shell/` — 8 | does this script do something its reader cannot see: run code it downloaded without checking it, read secrets it was not given, leave something behind that outlives it, delete past its own scope, turn a defence off, open a way in, take orders from elsewhere, hide what it runs |
 | `.md` `.mdx` | `markdown/` — 11 | is this document slop, filler, vague, padded (JevSlop's eight signals, scored 0–4); does a section end by previewing the next, open with an agenda, abandon a question it raised |
 | commits — `jev-lint commits` | `git/` — 1 | does this commit's message describe its diff |
 
 Every rule is one question about a claim the code makes about itself, and
-[RULES.md](RULES.md) lists all 65 with the question, the cutoff, and how
+[RULES.md](RULES.md) lists all 98 with the question, the cutoff, and how
 each scores on its own fixtures. The two first-tier languages carry the
 release bar: every rule under `typescript/` and `rust/` has fixtures,
 expectations and an accepted baseline. The rest are calibrated to the same
@@ -391,18 +392,19 @@ The full list, with every rule's cutoff, state, fixtures and its precision
 and recall at the shipped cutoff, is [RULES.md](RULES.md), generated from
 `rules/` by `npm run rules:md` and checked by the test suite.
 
-65 rules ship in `rules/`, one directory per language and one per rule
+98 rules ship in `rules/`, one directory per language and one per rule
 under it, each with the cases that prove it, used when the project has no
 `rules/` directory of its own. Two languages are first tier — `typescript`
-(21 rules, admitting TypeScript, Tsx, JavaScript and Jsx) and `rust` (8) —
+(23 rules, admitting TypeScript, Tsx, JavaScript and Jsx) and `rust` (9) —
 and every rule under them carries fixtures, expectations and an accepted
-baseline. `python` (12) and `go` (9) are second tier: ported from the
-TypeScript rules with the same sentence, calibrated to the same bar, not
-yet promised. `javascript` (1) and `json` (1) hold what only fits there,
-`git` (1) holds the commit-message rule, `text` (1) the sqlc query rule, and
-`markdown` (11) the writing rules: eight quality signals ported from
-JevSlop and three checks from the cognitive-rhythm writing norm (see Prior
-art). The same id under several
+baseline. `python` (14), `go` (9) and `moonbit` (20) are second tier: ported
+from the TypeScript rules with the same sentence, calibrated to the same
+bar, not yet promised. `shell` (8) is the one pack that asks a different
+question — see below. `javascript` (1) and `json` (1) hold what only fits
+there, `git` (1) holds the commit-message rule, `text` (1) the sqlc query
+rule, and `markdown` (11) the writing rules: eight quality signals ported
+from JevSlop and three checks from the cognitive-rhythm writing norm (see
+Prior art). The same id under several
 languages is one rule in several languages, and the loader warns if the
 copies of its sentence drift. Grouped here by what they ask, naming the
 TypeScript rule; the table in `docs/reference.md` says which languages
@@ -477,19 +479,41 @@ the question carries the test's address: `suite \`cart\` > suite
 | `query-name-describes-sql` | does an sqlc query's `-- name:` describe the SQL under it? The first rule over a file no grammar parses: `subject: block` splits the file at each header |
 | `must-name-panics` (Go only) | does a `Must*` function panic on the failure its name promises to panic on, rather than return it? |
 
+**Shell** — what a script does that its reader cannot see (`shell/`, ported
+from [is-malicious](https://github.com/luantak/is-malicious))
+
+| rule | asks |
+| --- | --- |
+| `runs-downloaded-code` | do the bytes this command runs come from outside, with nothing establishing what arrived? (`curl \| sh`; a `chmod +x` on a download nothing checksummed) |
+| `reads-secrets-it-does-not-own` | does this take credentials it was never given, or leave ones it was given where the job does not put them? |
+| `installs-persistence` | does what this leaves on the machine outlive the script AND belong to something other than the program the script installs? |
+| `destroys-beyond-its-scope` | does this delete, overwrite or format past what the script itself made? (`rm -rf "$PREFIX/"` where `$PREFIX` can be empty) |
+| `weakens-security` | is a defence turned off with no bound the script itself established? (`curl -k` at a real host, not at the localhost it just issued a certificate for) |
+| `opens-a-backdoor` | does this grant access to a key or account that appears from nowhere? |
+| `takes-remote-commands` | does this hand the machine's shell to somebody else, or keep taking instructions from one? |
+| `hides-what-it-runs` | does this take a step whose only effect is that a reader cannot tell what happened? |
+
+These eight are the one pack not about a claim the code makes. A script is
+the artefact that gets executed without being read, and its dangerous
+constructs are one line long with a legitimate twin — the checksum three
+lines up, the `mktemp -d` that owns the directory being deleted, the
+self-signed certificate this script just issued for the localhost it is
+about to `curl -k`. Grep finds the line; what the rest of the file
+establishes about it is the question.
+
 Deliberately not asked anywhere: style, redundancy, whether something should
 exist. One axis only — is the claim false.
 
-On their own evals, 56 of the 65 rules reach precision and recall 1.00 at
-their shipped cutoffs; the nine that do not each miss one labelled defect
+On their own evals, 87 of the 98 rules reach precision and recall 1.00 at
+their shipped cutoffs; the eleven that do not each miss one labelled defect
 the rule cannot see, and the rule file says which. The evals are small —
-467 labelled defects across the 65, one to thirty-one per rule — and they
+644 labelled defects across the 98, one to thirty-one per rule — and they
 are marker-free: an earlier version carried `// DEFECT: named seconds, holds
 milliseconds` above each defect, inside the file the model was shown, and
 the fits it produced were better than the rules. `jev-lint eval --replay`
 re-derives every number with no request. The full table, with what the
 packs found on this repository's own code and on an unseen one, is in
-[docs/reference.md](docs/reference.md#the-shipped-packs). Twenty-one more
+[docs/reference.md](docs/reference.md#the-shipped-packs). Nineteen more
 rules were built and measured the same way and are not shipped; they live
 in `experiments/rule-candidates/<lang>/` under the same layout, each with
 the report that says why.

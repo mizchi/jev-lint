@@ -1649,3 +1649,107 @@ one sentence over the same declarations written twice has done that
 (rust/moonbit traits, moonbit/typescript names). It is the cheapest
 evidence available that the sentence, and not the corpus, is doing the
 work.
+
+## 21. Eight rules that read shell scripts, and the subject that had to change
+
+A port of the nineteen checks in
+[luantak/is-malicious](https://github.com/luantak/is-malicious) -- a
+sibling tool that asks a model whether a codebase does something hostile --
+onto shell. Eight of the nineteen, the ones a `.sh` file can actually
+carry. One ast-grep grammar, `Bash`, parses `sh`, `bash` and `zsh`, so
+`rules/shell/` is one directory for three shells.
+
+**The subject is the finding.** The source project asks its questions of
+whole files, and porting that shape directly does not work. With `subject:
+file` and the sentence asking whether the script fetches and runs code, the
+gap over 11 scripts was **0.08** -- and the way it failed says why. A
+hardened installer that downloads a binary, checks it against a literal
+SHA-256 and installs it answered **0.77**; a CI helper that base64-decodes
+a blob from a paste service and evals it answered **0.46**. Asked about a
+whole script the model answers a question about atmosphere: this file
+downloads things and runs them, and that is what the bad ones do.
+
+The same corpus, the same evidence, one construct at a time (`subject:
+node`, `state: located`): gap **0.55**, precision and recall 1.00. The
+checksum becomes something the model goes looking for, because the question
+is now about the bytes THIS line runs. Every rule in the pack is built that
+way.
+
+| rule | at | subjects | defects | cleans top | defects from |
+| --- | --- | --- | --- | --- | --- |
+| `hides-what-it-runs` | 0.30 | 19 | 8 | 0.11 | 0.52 |
+| `runs-downloaded-code` | 0.40 | 14 | 5 | 0.11 | 0.66 |
+| `installs-persistence` | 0.50 | 16 | 4 | 0.22 | 0.80 |
+| `opens-a-backdoor` | 0.50 | 27 | 7 | 0.26 | 0.71 |
+| `takes-remote-commands` | 0.50 | 17 | 6 | 0.23 | 0.79 |
+| `reads-secrets-it-does-not-own` | 0.62 | 28 | 9 | 0.43 | 0.80 |
+| `destroys-beyond-its-scope` | 0.66 | 26 | 7 | 0.47 | 0.85 |
+| `weakens-security` | 0.66 | 22 | 10 | 0.53 | 0.78 |
+
+All eight: precision and recall 1.00, zero decision flips over three
+passes.
+
+**What sets the cutoff is not the hard clean you designed.** Five of the
+eight report the same thing independently: the highest-scoring clean
+subject is not the carefully constructed legitimate twin, it is an
+ORDINARY construct sitting a few lines from a defect in the same file. A
+`systemctl --user daemon-reload` above a malicious timer, a `useradd` three
+lines above two backdoors, a bare `mkfifo` four lines above a reverse
+shell. With `state: located` a clean construct beside a bad one reads about
+0.10-0.20 worse than the same construct in a clean file, and every
+designed-hard clean fell below it. A corpus without such a case overstates
+its headroom.
+
+It is sentence-dependent, though, and two rules measured the other
+direction: `weakens-security` planted two clean constructs inside
+defect-bearing files and got 0.12 and 0.11 -- the BOTTOM of its clean band
+-- and `destroys-beyond-its-scope`'s cleanTop is a genuinely contested
+construct (`docker image prune -af` on a shared runner) rather than an
+adjacent one. Where contamination shows up, it is a signal that the
+sentence is asking about the file's intent rather than the construct's.
+
+**A `note:` clause scoped to the script leaks.** `destroys-beyond-its-scope`
+wrote an exception for garbage collectors: bounded when they sweep "the
+rebuildable scratch of a host dedicated to the work this script does".
+Every fixture's header comment claims to be exactly that, and two unrelated
+device-wiping defects fell 0.17. Rewritten as a property of the TARGET --
+what a tool re-creates from a recorded source -- it did its one job and
+left the defects alone. Scope an exception by the thing being acted on,
+never by what the script says it is.
+
+**And a `note:` clause can suppress the evidence.** `hides-what-it-runs`
+began with "do not convict a construct because the file around it is
+hostile", a reasonable-sounding guard against exactly the contamination
+above. It held six of eight defects between 0.22 and 0.44. Replacing it
+with the opposite instruction -- the rest of the file is admissible
+evidence about why this step is here -- moved the defect band up ~0.20 AND
+lowered cleanTop from 0.13 to 0.08. On `located`, telling the model to
+ignore the file is telling it to ignore the answer.
+
+**tree-sitter-bash, for whoever writes the ninth rule.** A background `&`
+is an anonymous token with no named node, so "runs detached" is unreachable
+structurally -- go through `nohup`/`setsid`/`disown` as command names. So
+is `>>`: use `kind: file_redirect` with `regex: "^>>"`, which correctly
+misses `>&2`. A `trap` body is a `raw_string` containing no command node.
+`unset HISTFILE` is an `unset_command`, not a `command`. A redirect target
+is a sibling of the command, not inside it, which is the entire "writes a
+secret somewhere unexpected" surface. Wrappers eat the name: `sudo rm -rf`,
+`nohup ssh -R` and `ip netns exec ns iptables -F` are one `command` node
+named `sudo`, `nohup` and `ip`, so a `field: name` regex finds nothing --
+`has: { stopBy: end, regex: "^word$" }` survives them. And nesting
+duplicates subjects in four different ways (`pipeline`,
+`redirected_statement`, `variable_assignment` inside a `command`,
+`while_statement`), so every branch that can nest needs its own guard,
+scoped narrowly: a blanket `not: { inside: pipeline }` deletes the reverse
+shell, which lives in one.
+
+**On real code.** 40 shell scripts from this machine's own repositories,
+4,237 lines, all eight rules: 207 subjects matched, five findings, all from
+`runs-downloaded-code` -- four `install.sh` that `chmod +x` a release
+binary with no checksum, and one `source` of a file the script downloaded
+earlier (0.54-0.55, against fixture defects at 0.66-0.97). Head clearance
+over the top clean answer: +0.42 persistence, +0.32 destroys, +0.25
+secrets, +0.24 downloaded code, +0.15 hides. Three rules
+(`opens-a-backdoor`, `takes-remote-commands`, `weakens-security`) matched
+nothing at all in 40 ordinary dev scripts, which is the honest state of
+their evidence on real code: none.

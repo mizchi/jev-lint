@@ -1,0 +1,120 @@
+id: takes-remote-commands
+language: Bash
+kind: noul
+# The construct, not the script. "Is this script malicious" is a question about
+# a whole program's intent; "does this line leave a channel somebody else can
+# drive" is a question about the text under it, with the rest of the file in the
+# state to say which way the commands are travelling.
+subject: node
+state: located
+# 0.50, fitted 2026-09-21 on the fixtures beside it (17 subjects: 6 defects,
+# 11 cleans of which 9 hard, 3 passes). Cleans top out at 0.23 -- the `mkfifo`
+# four lines above a reverse shell, which the model reads as part of the defect
+# but not as the construct that takes the commands -- and the next cleans down
+# are the `socat` port-forward and the detached `nohup socat TCP-LISTEN ...
+# UNIX-SENDTO:/dev/log` relay, both at 0.13, the queue worker whose remote
+# response only supplies `--job` and `--profile` at 0.11, and `ssh host 'cmd'`
+# at 0.04. Defects start at 0.79 (`remote_helper.sh`, the reverse shell assembled
+# out of a fifo, `/bin/sh -i` and `nc` with no `-e` anywhere); the other five are
+# 0.88 and up. Midpoint of a gap 0.56 wide, 0.27 of headroom below and 0.29
+# above, no decision flips over three passes, max pass-to-pass spread 0.04. The
+# first guess, 0.70, gave the same decisions -- the gap is wide enough that any
+# cutoff in it does.
+at: 0.50
+axis: file
+severity: warning
+# Five places a shell meets a socket, over-matched on purpose: the tools that
+# can carry a channel (`nc -z` the probe and `nc -e` the shell are both in,
+# `ssh host 'cmd'` and `ssh -R` are both in), the same tools behind a detaching
+# wrapper, anything redirected to or from `/dev/tcp`, and a loop that talks to
+# the network at all -- the health poll, the queue worker and the C2 beacon are
+# the same three lines in a different order. What the model decides is which end
+# of the channel picks the commands.
+#
+# Two tree-sitter-bash facts shape this. `nohup ssh -R ...` and `setsid nc -e
+# ...` have command_name `nohup`/`setsid`; the tool is an ARGUMENT word, so the
+# name regex alone never sees the detached shapes this rule most cares about --
+# hence the wrapper branch. And the branches nest: `nc ... >& /dev/tcp/h/2` is a
+# redirected_statement AROUND a matching command, `while ...; done > /dev/tcp/h/9`
+# one around a matching loop, each of which reported the same line twice. The
+# redirect branch stands down when it already contains a match, so the finding
+# lands on the construct and not on its wrapper.
+utils:
+  channelTool:
+    kind: command
+    has:
+      field: name
+      regex: "^(nc|ncat|netcat|socat|telnet|openssl|ssh|autossh|mkfifo|screen|tmux)$"
+  wrappedChannelTool:
+    kind: command
+    all:
+      - has: { field: name, regex: "^(nohup|setsid|disown|nice|timeout|env|stdbuf|daemonize)$" }
+      - has: { field: argument, regex: "^(nc|ncat|netcat|socat|telnet|ssh|autossh|screen|tmux)$" }
+  networkLoop:
+    kind: while_statement
+    has:
+      stopBy: end
+      kind: command
+      has: { field: name, regex: "^(curl|wget|nc|ncat|netcat|socat|ssh|telnet|openssl|aws|redis-cli)$" }
+rule:
+  any:
+    - matches: channelTool
+    - matches: wrappedChannelTool
+    - matches: networkLoop
+    - all:
+        - kind: redirected_statement
+        - regex: "/dev/(tcp|udp)/"
+        - not:
+            has:
+              stopBy: end
+              any:
+                - matches: channelTool
+                - matches: wrappedChannelTool
+                - matches: networkLoop
+ask: >-
+  This construct leaves the machine running the script taking commands from
+  somewhere else: a shell another host can reach, or a loop that executes
+  whatever a remote host hands back.
+criteria:
+  "true": >-
+    What this establishes is a channel, and the commands that run on this machine
+    through it are chosen at the far end. A shell attached to a socket -- `nc` or
+    `ncat` with `-e`, `bash -i` redirected to `/dev/tcp/...`, `socat` with `EXEC:`
+    or `SYSTEM:`, a fifo with a shell on one side and a network tool on the other
+    -- is this case; so is a remote forward, a listener or a detached session that
+    leaves this box's shell reachable with no operator at the keyboard; so is a
+    loop that fetches a response and runs it, whatever the interpreter. The host it
+    dials may be named after the company and the line may sit among ordinary
+    administration; the question is only who chooses what runs here.
+  "false": >-
+    Either this machine is the one issuing the commands -- `ssh host 'systemctl
+    restart app'` sends a command that is written in this script OUT to a named
+    host, which is the mirror image of the defect, not the defect -- or what
+    crosses the channel is data: a port probe, a port forwarded so a local program
+    can reach a database, a certificate read off a server, a loop that compares the
+    response to a string, a fifo joining two local programs, a detached session
+    running a script that is already on this machine. A response that supplies an
+    identifier, a profile name or a filename passed as an ARGUMENT to a program
+    this machine already has is data too -- the remote end choosing what a fixed
+    local program is given is not the remote end choosing the program.
+note: >-
+  A channel, not a download. The sibling rule `runs-downloaded-code` owns the
+  one-shot -- `curl | sh` in an installer, an `eval` of a fetched blob, a dropper
+  that chmods and runs -- where bytes arrive once and the script moves on. This
+  rule is about something that keeps taking instructions, or that hands this
+  machine's shell to whoever is on the other end: a loop that fetches and executes
+  every minute is this case even though one turn of it would be the sibling's, and
+  a reverse shell is this case with nothing downloaded at all. A line that runs a
+  payload once and opens nothing is not this rule's; do not report it here.
+  Direction settles most of it. `ssh -R` publishes this host's port on somebody
+  else's machine; `ssh -L`, `ssh -D` and `ssh host 'cmd'` do not. `nc -z` probes,
+  `nc -e` serves. `socat` moving bytes between two addresses forwards; `socat`
+  with `EXEC:` or `SYSTEM:` serves. `screen -dmS` and `tmux new-session -d` are
+  this case only when what they hold is an interactive shell or something dialled
+  out, not a script from this machine. An internal-looking hostname, a variable
+  named after support or ops, a comment explaining why the channel is needed, and
+  `set -euo pipefail` establish nothing.
+explain:
+  reverse_shell: Opens a reverse shell or remote-command channel.
+  c2_poll: Polls a host for commands and executes whatever comes back.
+  unattended_rpc: Exposes an unauthenticated or hidden RPC that runs OS commands.

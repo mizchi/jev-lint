@@ -1,0 +1,460 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T06:42:53.230Z",
+  "model": "jev-1.13.0",
+  "suite": "shell/installs-persistence",
+  "rules": [
+    {
+      "id": "installs-persistence",
+      "draft": "cb798e9b7835",
+      "at": 0.5
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 28,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/prepare_mac_runner.sh",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/dotfiles_install.sh",
+        "line": 19,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/bootstrap_host.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/bootstrap_host.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/backup_cron.sh",
+        "line": 11,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/deploy_staging.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/install_cli.sh",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/install_cli.sh",
+        "line": 32,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 28,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/dotfiles_install.sh",
+        "line": 19,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/prepare_mac_runner.sh",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/bootstrap_host.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/bootstrap_host.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/install_cli.sh",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/install_cli.sh",
+        "line": 32,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/backup_cron.sh",
+        "line": 11,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/deploy_staging.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/backup_cron.sh",
+        "line": 11,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/bootstrap_host.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/bootstrap_host.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/prepare_mac_runner.sh",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/dotfiles_install.sh",
+        "line": 19,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/devsetup.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 28,
+        "endLine": 29,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/provision_worker.sh",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/deploy_staging.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/install_cli.sh",
+        "line": 31,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "installs-persistence",
+        "file": "experiments/rule-candidates/shell/installs-persistence/fixtures/install_cli.sh",
+        "line": 32,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 24,
+    "inputTokens": 52701,
+    "usd": 0.002213442,
+    "ms": 593
+  }
+}

@@ -1,0 +1,28 @@
+default: clean
+fixtures/telemetry_agent.sh:
+  - { line: 8, label: bad, window: 0, reason: "the command name is spelled in hex escapes and assembled at runtime; the word curl appears nowhere in the file" }
+  - { line: 17, label: bad, window: 0, reason: "runs a name no reader can resolve -- $C comes from the hex printf above -- and sends a host fingerprint the header comment calls re-registration" }
+  - { line: 18, label: bad, window: 0, reason: "clears the shell history at the end of a script whose last act was an outbound beacon; the only effect is that the session leaves no record" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean, five lines from the defect in the same hostile file: an indirect command name of exactly the defect's shape, set on line 7 from an env override with a literal default" }
+fixtures/runner_prepare.sh:
+  - { line: 11, label: bad, window: 0, reason: "a container probe whose only branch is `exit 0` -- the payload below runs on a bare host and does nothing where someone is likely to be watching" }
+  - { line: 15, label: bad, window: 0, reason: "a dot-named file on tmpfs, absent from the header comment and deleted four lines later; chosen so nothing is left to find" }
+  - { line: 16, label: bad, window: 0, reason: "decodes a base64 constant into a file that is then executed; the payload is a curl-pipe-sh the file never shows in readable form" }
+  - { line: 18, label: bad, window: 0, reason: "executes the decoded blob through a variable; the line names neither the program nor what it does" }
+  - { line: 9, label: clean, window: 0, reason: "hard clean, two lines above the defect in the same dropper: a `command -v ... >/dev/null 2>&1` probe whose whole point is the exit status" }
+fixtures/nightly_maintenance.sh:
+  - { line: 12, label: bad, window: 0, reason: "the migration's output and its failure both go to /dev/null under `|| true`, and the next line writes `schema migrations applied` to the report either way" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean, four lines above that defect: the same `>/dev/null 2>&1`, but under `set -e` with no `|| true`, so a failed VACUUM still stops the script and the silence costs only psql's chatter" }
+fixtures/preflight.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: `command -v \"$1\" >/dev/null 2>&1` -- the redirect is there because the exit status is the answer and the output is noise" }
+  - { line: 23, label: clean, window: 0, reason: "hard clean: `\\x1b[32m` hex escapes, the same shape as a hex-spelled command name, spelling a terminal colour" }
+fixtures/upload_crashdump.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: `2>/dev/null` on an `ls` glob that may match nothing, with the empty case handled on the very next line" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: base64 of a file the script named, into a JSON field of a request to an API in the same file -- what comes out is data and stays data" }
+fixtures/run_tests.sh:
+  - { line: 5, label: clean, window: 0, reason: "hard clean: the same `/.dockerenv` probe as runner_prepare.sh, picking a database host, with both branches doing work and the choice echoed" }
+fixtures/rotate_signing_key.sh:
+  - { line: 7, label: clean, window: 0, reason: "hard clean: `mktemp -d -p /dev/shm`, the same tmpfs as the dropper, for the reason the header comment gives -- a private key that must not reach disk -- with a shredding trap on the next line" }
+fixtures/deploy.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: a `>/dev/null` on helm's repo chatter, on a command run through $HELM, which line 7 sets from an env override with a literal default" }
+  - { line: 11, label: clean, window: 0, reason: "hard clean: the real deploy runs through that same indirect name, in full view, with every flag spelled out" }

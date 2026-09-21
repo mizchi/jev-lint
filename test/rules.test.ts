@@ -676,3 +676,14 @@ test("rules: every field `normalizeRule` validates refuses a bad value by name",
   // under test and not a typo shared by every row.
   assert.equal(normalizeRule(good).error, undefined);
 });
+
+test("rules: `shell` is a language directory, and its rules read sh, bash and zsh", () => {
+  // One grammar, three shells: ast-grep's `Bash` parses sh and zsh too, and
+  // the dir is named for what a reader is looking for -- a script -- not for
+  // the one of the three the grammar happens to be named after.
+  assert.deepEqual(languageDirGrammars("shell"), ["Bash"]);
+  assert.deepEqual(languageDirGrammars("bash"), ["Bash"], "the grammar's own name still works");
+  const { rule, error } = normalizeRule({ id: "a", language: "Bash", rule: { kind: "program" }, ask: "a." });
+  assert.equal(error, undefined);
+  assert.deepEqual(rule!.languages, ["Bash"]);
+});

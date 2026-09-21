@@ -10,6 +10,20 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added
 
+- **`rules/shell/`: eight rules that read shell scripts**, a port of
+  [luantak/is-malicious](https://github.com/luantak/is-malicious) onto
+  `sh`, `bash` and `zsh` (one ast-grep grammar, `Bash`, parses all three).
+  `runs-downloaded-code` (0.40), `hides-what-it-runs` (0.30),
+  `installs-persistence` (0.50), `opens-a-backdoor` (0.50),
+  `takes-remote-commands` (0.50), `reads-secrets-it-does-not-own` (0.62),
+  `destroys-beyond-its-scope` (0.66), `weakens-security` (0.66). All eight
+  reach precision and recall 1.00 on their own fixtures with no decision
+  flips over three passes; 159 labelled subjects, 56 of them defects.
+  These are the one pack not about a claim the code makes: a script is the
+  artefact that gets executed without being read, and each of its dangerous
+  constructs has a legitimate twin one line away.
+  `experiments/reports/shell-malice/` has the measurements, including the
+  subject shape that did NOT work.
 - `divergent:`, a new rule field: why this language's copy of an id says
   something else. The loader's drift warning asked for a comment and could
   not read one, so the three MoonBit rules whose sentences cannot be the

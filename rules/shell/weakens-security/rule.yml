@@ -1,0 +1,105 @@
+id: weakens-security
+language: Bash
+kind: noul
+# The command, not the script. "Is this script hostile" is a question about a
+# program's intent and answers itself with the file's tone; "is this defence
+# off for a reason this file shows" is a question about the words under the
+# cursor, with the rest of the script in the state to find the reason in.
+subject: node
+state: located
+# 0.66, fitted 2026-09-21 on the fixtures beside it (22 subjects: 10 defects,
+# 12 cleans of which 10 hard, 3 passes). Cleans top out at 0.53 -- `--privileged`
+# on a `--rm` container the command creates and destroys to partition a loop
+# image -- and below it a long tail at 0.05-0.19: `curl -k` at a listener the
+# script started on loopback with a certificate it generated, `iptables -F` in a
+# namespace it added, `chmod 777` inside a tmpfs it mounted,
+# `StrictHostKeyChecking=no` at a VM it launched. Defects start at 0.78
+# (`staging_seed.sh`, whose `-k` reaches a shared staging host while an
+# `openssl req -x509` four lines up makes a client certificate that establishes
+# nothing about the server). Midpoint of a gap 0.25 wide, 0.13 of headroom below
+# and 0.12 above, no decision flips over three passes and no subject moving more
+# than 0.04. The first guess, 0.70, also scored 1.00/1.00, but it sits 0.08 under
+# the lowest defect and the eval fits 0.66 from the corpus, so take the fit.
+# `located` does not bleed here: the clean loopback health check three lines under
+# `run_worker.sh`'s privileged container answers 0.12, and the clean at the foot of
+# `provision_agent.sh` 0.11, both in files whose other subjects are defects.
+at: 0.66
+axis: file
+severity: warning
+# Four places a shell script can take a guard off, over-matched on purpose:
+# a flag that names the check it skips, a setting written as `key=value`,
+# a protection service stopped or a filter flushed, and a world-writable mode.
+# Matching is by token, not by command name, so `ip netns exec ns iptables -F`
+# and a bare `iptables -F` both arrive. What the model decides is what the
+# defence was protecting and whether the script bounded it.
+rule:
+  any:
+    - kind: command
+      has:
+        stopBy: end
+        regex: "^(--insecure|--no-check-certificate|--no-verify|--no-verify-peer|--skip-verify|--insecure-skip-tls-verify|--no-signature|--skip-signature|--trusted-host|--allow-unauthenticated|--allow-untrusted|--force-yes|--nogpgcheck|--no-gpg-checks|--disable-gpg-check|--no-sandbox|--disable-web-security|--privileged|--disable-security|--no-verify-ssl)$"
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(curl|wget)$" }
+        - has: { stopBy: end, regex: "^-[A-Za-z]*k[A-Za-z]*$" }
+    - kind: command
+      has:
+        stopBy: end
+        regex: "(sslVerify=[Ff]alse|StrictHostKeyChecking=no|UserKnownHostsFile=/dev/null|^strict-ssl$|NODE_TLS_REJECT_UNAUTHORIZED=0|PYTHONHTTPSVERIFY=0|GIT_SSL_NO_VERIFY=|^CURL_CA_BUNDLE=$|^REQUESTS_CA_BUNDLE=$|seccomp=unconfined|apparmor[:=]unconfined|insecure_skip_verify|verify=[Ff]alse)"
+    - kind: variable_assignment
+      all:
+        - regex: "^(NODE_TLS_REJECT_UNAUTHORIZED=0|PYTHONHTTPSVERIFY=0|GIT_SSL_NO_VERIFY=.+|CURL_CA_BUNDLE=|REQUESTS_CA_BUNDLE=)$"
+        - not: { inside: { kind: command } }
+    - kind: command
+      all:
+        - has: { stopBy: end, regex: "^(systemctl|service|rc-service|chkconfig|setenforce|aa-complain|aa-disable|ufw|iptables|ip6tables|nft|spctl|csrutil|defender|clamscan|freshclam)$" }
+        - has: { stopBy: end, regex: "^(stop|disable|mask|-F|--flush|flush|0|permissive|off|--add-exclusion|--disable)$" }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(chmod|setfacl)$" }
+        - has: { stopBy: end, regex: "^(777|0777|666|0666|a\\+rwx|o\\+w)$" }
+ask: >-
+  This command takes a security check or a host defence off, and nothing in the
+  script confines it to something the script itself put there.
+criteria:
+  "true": >-
+    Certificate or signature verification, a sandbox or isolation boundary, a
+    packet filter, SELinux or AppArmor, antivirus, or automatic updates is
+    switched off, skipped or gutted here -- and what it was guarding is a real
+    one: a public or shared endpoint, a package feed the internet serves, a
+    machine that outlives this run, or the host's own configuration. No reason
+    for it appears anywhere in the file. Relaxations that persist after the
+    script exits are this case even when a reason is offered, because the next
+    program to run on that host inherits them: a global `npm config set
+    strict-ssl false`, an edited `/etc/selinux/config`, a stopped, disabled or
+    masked firewall, antivirus or updater, a container given `--privileged` or
+    an unconfined seccomp profile for a service that keeps running.
+  "false": >-
+    The script shows what the relaxation is bounded to, and the bound is
+    something this same script created and can throw away: the address is
+    `localhost`, `127.0.0.1`, or one the script just read back from a container,
+    namespace or VM it launched; the certificate it declines to verify is one
+    the script generated a few lines up; the flushed rules, the loosened mode or
+    the disabled isolation apply inside a namespace, a temporary mount or a
+    directory this script made and removes on exit. One command, one disposable
+    target, and the file says which. A documented insecure-development flag or
+    an administrator policy the script names is also this case.
+note: >-
+  Scope and lifetime, not danger: `curl -k` is the defect against a vendor's CDN
+  and clean against a listener this script started on loopback two lines earlier,
+  and the flag is identical in both. Read outward from the command for the bound
+  -- a `mktemp -d` that is trapped for removal, an `openssl req -x509` that made
+  the certificate, an `ip netns add`, a `docker run` bound to `127.0.0.1`, a
+  `mount -t tmpfs` -- and if one is there, the answer is false however alarming
+  the token is. A private or internal-looking hostname is not a bound: `10.0.0.5`
+  and `internal.corp` are real machines that outlive the run. Neither is a
+  variable name, a `set -euo pipefail`, a `--force` somewhere else, or a comment
+  asserting the source is trusted; a comment that states the mechanism -- which
+  certificate, whose machine -- is evidence, a comment that states a conclusion
+  is not. Turning a protection off for the length of one command weighs less than
+  writing the same relaxation into a config file or a unit, and a permanent one
+  is this rule's case even where a single call would not have been.
+explain:
+  tls_or_signature: Skips certificate, TLS, or code-signature verification.
+  sandbox_off: Disables a sandbox, CSP, or isolation boundary.
+  defense_tamper: Stops, excludes, or reconfigures antivirus, firewall, or updates to hide activity.

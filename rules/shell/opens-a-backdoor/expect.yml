@@ -1,0 +1,38 @@
+default: clean
+fixtures/provision_worker.sh:
+  - { line: 12, label: bad, window: 0, reason: "appends a literal ed25519 key to root's authorized_keys; the key blob belongs to no one this script names, creates or runs as, and it is root login" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean: the same file's useradd is --system, nologin, no password, for the batchq service the last line enables" }
+fixtures/entrypoint.sh:
+  - { line: 14, label: bad, window: 0, reason: "creates an interactive `support` account in a container entrypoint; nothing in the file runs as support or mentions it again" }
+  - { line: 15, label: bad, window: 0, reason: "a password for that account written as a literal in the script text" }
+  - { line: 16, label: bad, window: 0, reason: "and puts it in sudo -- a grant far wider than any work this renderer entrypoint shows" }
+  - { line: 9, label: clean, window: 0, reason: "hard clean: the same file's adduser is --system, nologin, for the renderer the exec line runs as" }
+fixtures/install_backup_agent.sh:
+  - { line: 15, label: bad, window: 0, reason: "a sudoers drop-in granting NOPASSWD: ALL to `maint`, a user this script never creates, runs as or mentions anywhere else" }
+  - { line: 10, label: clean, window: 0, reason: "hard clean: the same shape three lines earlier -- a sudoers drop-in, one absolute command, for the backup account this script creates" }
+  - { line: 7, label: clean, window: 0, reason: "hard clean: --system nologin account for the agent installed two lines above" }
+fixtures/bootstrap_ci.sh:
+  - { line: 11, label: bad, window: 0, reason: "appends a key fetched from a paste URL to the runner's authorized_keys; whoever controls that gist decides who logs in" }
+  - { line: 14, label: bad, window: 0, reason: "sed -i turns PermitRootLogin on in a script whose stated job is joining a CI pool" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean: the runner account this same script then runs the agent as -- a login shell, but the principal is accounted for" }
+fixtures/create_service_account.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: --system nologin account for the exporter the last line enables" }
+  - { line: 14, label: clean, window: 0, reason: "hard clean: a sudoers drop-in, the defect's shape -- one absolute command with its arguments, for the service user above it" }
+  - { line: 17, label: clean, window: 0, reason: "visudo -c only validates the file it was handed" }
+fixtures/install_deploy_key.sh:
+  - { line: 14, label: clean, window: 0, reason: "hard clean: an append to authorized_keys, but the key came from a named secret store, it is for the user the script names, and `restrict,command=` pins what it may do" }
+fixtures/dev_setup.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: usermod -aG, the defect's shape, for the operator who invoked sudo -- a principal that is already at the keyboard" }
+  - { line: 11, label: clean, window: 0, reason: "setfacl for that same operator on the checkout directory" }
+  - { line: 12, label: clean, window: 0, reason: "the default-ACL half of the same grant" }
+fixtures/rotate_breakglass.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: chpasswd, the defect's shape, but the password is generated four lines above and pushed to vault -- a documented recovery account, not a hidden one" }
+  - { line: 12, label: clean, window: 0, reason: "passwd -e forces a change at first use; it narrows the grant" }
+fixtures/harden_sshd.sh:
+  - { line: 7, label: clean, window: 0, reason: "hard clean: sed -i on sshd_config, the defect's shape, setting PermitRootLogin no" }
+  - { line: 8, label: clean, window: 0, reason: "same, turning password authentication off" }
+  - { line: 9, label: clean, window: 0, reason: "same, forbidding empty passwords" }
+fixtures/offboard_contractor.sh:
+  - { line: 8, label: clean, window: 0, reason: "passwd locks the account instead of opening it" }
+  - { line: 9, label: clean, window: 0, reason: "usermod expires it" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: a redirect onto authorized_keys that empties it" }

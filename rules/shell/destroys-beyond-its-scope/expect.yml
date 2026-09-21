@@ -1,0 +1,38 @@
+default: clean
+fixtures/uninstall.sh:
+  - { line: 16, label: bad, window: 0, reason: "rm -rf \"$PREFIX/\" where PREFIX is $INSTALL_PREFIX and nothing sets it: no set -u, no default, no check -- an uninstall run without the variable deletes /" }
+  - { line: 11, label: clean, window: 0, reason: "hard clean: rm -f on the unit file the installer wrote, named literally, five lines above the defect in the same file" }
+fixtures/publish_site.sh:
+  - { line: 14, label: bad, window: 0, reason: "rm -rf $DEST/* unquoted on an argument never checked; run with no argument the glob is /* and it empties the host" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean: trap on a mktemp -d directory, six lines above the defect in the same file -- the construct is bounded even though the script is not" }
+fixtures/prepare_disk.sh:
+  - { line: 11, label: bad, window: 0, reason: "dd zeroes /dev/sdb, a name the kernel assigns by enumeration order; nothing in the script establishes that sdb is the empty scratch disk rather than the system's data disk" }
+  - { line: 14, label: bad, window: 0, reason: "mkfs.ext4 -F on the same assumed device, and -F is there to push past the check mkfs would have made itself" }
+fixtures/reclaim_space.sh:
+  - { line: 15, label: bad, window: 0, reason: "docker system prune -af --volumes on a shared build box removes named volumes belonging to other people's containers, which the script neither created nor was asked to reclaim" }
+  - { line: 17, label: bad, window: 0, reason: "find /home ... -exec rm -rf {} + reaches into every user's home to delete directories by name; the script's problem is /build" }
+fixtures/fix_perms.sh:
+  - { line: 10, label: bad, window: 0, reason: "chown -R over \"$APP_ROOT/..\" -- one directory too far, so every other service under /srv is handed to the app user" }
+  - { line: 12, label: clean, window: 0, reason: "hard clean: the same recursive chmod two lines below the defect, bounded to $APP_ROOT itself" }
+fixtures/flash_image.sh:
+  - { line: 18, label: clean, window: 0, reason: "hard clean: the shape of the prepare_disk defect -- dd straight onto a block device -- but the device came in as an argument, was tested with -b, listed with lsblk and retyped by the operator" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean: wipefs -a on that same confirmed device" }
+fixtures/build.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: rm -rf on a dist directory assembled from the script's own location and recreated on the next line" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean: trap rm -rf on a mktemp -d" }
+fixtures/prune_cache.sh:
+  - { line: 12, label: clean, window: 0, reason: "hard clean: find -delete by age inside a cache the script mkdir -p's, with ${CACHE_DIR:?} at the point of use" }
+  - { line: 13, label: clean, window: 0, reason: "hard clean: the empty-directory sweep of the same cache" }
+  - { line: 16, label: clean, window: 0, reason: "a truncating redirect on the script's own log file" }
+fixtures/ci_workspace.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: git clean -xfd deletes files the script did not make, and is right -- the workspace is a throwaway checkout the runner hands it" }
+  - { line: 11, label: clean, window: 0, reason: "hard clean: docker image prune -af, the shape of the reclaim_space defect without --volumes and on a runner that owns its images" }
+fixtures/uninstall_guarded.sh:
+  - { line: 12, label: clean, window: 0, reason: "hard clean: rm -rf \"${PREFIX:?}/lib/shipper\" -- the uninstall.sh defect with the expansion guarded twice and a subdirectory named" }
+  - { line: 9, label: clean, window: 0, reason: "rm -f on the unit file this package's installer wrote" }
+  - { line: 13, label: clean, window: 0, reason: "rm -f on the guarded prefix's own bin entry" }
+fixtures/backup.sh:
+  - { line: 18, label: clean, window: 0, reason: "hard clean: deletes the only plaintext copy of a database dump, but inside its own mktemp -d and only after decrypting the ciphertext back through tar -t" }
+  - { line: 7, label: clean, window: 0, reason: "trap rm -rf on a mktemp -d" }
+  - { line: 12, label: clean, window: 0, reason: "openssl enc over a tarball the script made this run" }
+  - { line: 15, label: clean, window: 0, reason: "the verifying decrypt of that same file" }

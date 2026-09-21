@@ -1,0 +1,26 @@
+default: clean
+fixtures/bootstrap.sh:
+  - { line: 11, label: bad, window: 0, reason: "a download piped straight into bash; the URL is a variable and nothing checks what comes back" }
+  - { line: 14, label: bad, window: 0, reason: "the same shape into sh, with arguments passed to the downloaded script" }
+fixtures/ci_helper.sh:
+  - { line: 10, label: bad, window: 0, reason: "evals a base64 blob fetched from a paste service -- a packed payload with no provenance" }
+fixtures/entrypoint.sh:
+  - { line: 7, label: bad, window: 0, reason: "evals the body of a remote HTTP response; the `:?` guards below check the result, not the bytes" }
+fixtures/update.sh:
+  - { line: 11, label: bad, window: 0, reason: "chmod +x on a binary this script just downloaded with no checksum; --self-check tests that it runs, not what it is" }
+fixtures/install.sh:
+  - { line: 16, label: clean, window: 0, reason: "hard clean: the same chmod +x on a downloaded binary, three lines after sha256sum -c against a literal in the script" }
+fixtures/deploy_artifact.sh:
+  - { line: 19, label: clean, window: 0, reason: "hard clean: chmod +x on a downloaded artifact whose signature was verified against a named keyring" }
+fixtures/devenv.sh:
+  - { line: 4, label: clean, window: 0, reason: "hard clean: eval of a local program's output -- the syntax of the defect with nothing from outside" }
+  - { line: 7, label: clean, window: 0, reason: "hard clean: a shell hook, same shape" }
+  - { line: 8, label: clean, window: 0, reason: "hard clean: a shell hook, same shape" }
+fixtures/fetch_fixtures.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: a curl pipeline that ends in jq -- downloaded bytes stay data" }
+fixtures/package_install.sh:
+  - { line: 17, label: clean, window: 0, reason: "a curl pipeline that only prints a version" }
+fixtures/release.sh:
+  - { line: 15, label: clean, window: 0, reason: "a curl pipeline that reads a field out of an API response" }
+fixtures/backup.sh:
+  - { line: 15, label: clean, window: 0, reason: "a curl pipeline whose response is grepped, not run" }

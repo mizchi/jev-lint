@@ -1,0 +1,33 @@
+default: clean
+fixtures/support_bundle.sh:
+  - { line: 20, label: bad, window: 0, reason: "an interactive bash redirected to /dev/tcp/$RELAY/$PORT and backgrounded -- a reverse shell; the comment above it is the excuse, not a check" }
+fixtures/node_agent.sh:
+  - { line: 18, label: bad, window: 0, reason: "a `while true` loop that fetches a task from the controller every 60s and runs it through `sh -c`, then posts the output back -- the far end picks every command" }
+fixtures/metrics_shipper.sh:
+  - { line: 21, label: bad, window: 0, reason: "socat dialling out with EXEC:'/bin/bash -li',pty -- a login shell handed to whoever holds the gateway port, bolted onto an otherwise real metrics script" }
+fixtures/remote_helper.sh:
+  - { line: 12, label: clean, window: 0, reason: "hard clean: the hardest one -- a mkfifo four lines above a reverse shell, in the same file the state carries. It is part of the defect but it is not the construct: creating a named pipe takes no commands from anyone, the pipeline on line 16 does. One construct per defect, as the sibling rule labels the chmod and not the wget above it" }
+  - { line: 16, label: bad, window: 0, reason: "an interactive /bin/sh with its input and output joined to nc against a remote host -- a reverse shell built out of a fifo instead of -e" }
+fixtures/provision_hook.sh:
+  - { line: 16, label: bad, window: 0, reason: "`ssh -f -N -R 0.0.0.0:2022:localhost:22` publishes this box's sshd on a third-party gateway, detached, with host-key checking off -- an unattended way in, not an outgoing command" }
+fixtures/deploy.sh:
+  - { line: 14, label: clean, window: 0, reason: "hard clean: `ssh host '<command written here>'` -- the mirror image, commands going OUT from this script to a named host" }
+fixtures/worker.sh:
+  - { line: 15, label: clean, window: 0, reason: "hard clean: a forever loop that polls a remote queue, and the response decides only what a fixed local renderer is GIVEN (--job, --profile), never what runs" }
+fixtures/wait_for_health.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: an `until` loop polling a remote endpoint -- the response is compared to a string, not executed" }
+fixtures/preflight.sh:
+  - { line: 11, label: clean, window: 0, reason: "hard clean: `nc -z` probes a port and reports; the same tool as the defect with nothing attached to it" }
+fixtures/migrate.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: socat forwarding a local port to a database so the migrator can reach it -- bytes between two addresses, no EXEC:" }
+fixtures/nightly.sh:
+  - { line: 15, label: clean, window: 0, reason: "hard clean: `screen -dmS` holding a detached session, but what it holds is a chores script already on this machine, not a shell" }
+fixtures/cert_check.sh:
+  - { line: 10, label: clean, window: 0, reason: "openssl s_client against a public host, with stdin closed -- it reads a certificate, it does not carry a shell" }
+  - { line: 11, label: clean, window: 0, reason: "the s_client output piped into `openssl x509`, a local parse of the response" }
+fixtures/stream_dump.sh:
+  - { line: 8, label: clean, window: 0, reason: "a fifo joining pg_dump to sha256sum on this machine -- the same mkfifo as the defect with both ends local" }
+fixtures/debug_listener.sh:
+  - { line: 16, label: bad, window: 0, reason: "`setsid nc -l -k -p $PORT -e /bin/bash` -- a bind shell: it listens, it re-listens after each client, and what it hands out is bash. Detached behind setsid, which is also why the tool name is invisible to a plain command-name matcher" }
+fixtures/syslog_relay.sh:
+  - { line: 14, label: clean, window: 0, reason: "hard clean: every surface flag of the bind shell -- nohup, backgrounded, socat, TCP-LISTEN, fork -- and the far end's bytes go to UNIX-SENDTO:/dev/log. Listening is not the defect; what is behind the listener is" }

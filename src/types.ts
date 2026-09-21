@@ -90,6 +90,9 @@ export const LANGUAGE_DIRS: Record<string, readonly Language[]> = {
   typescript: ["TypeScript", "Tsx", "JavaScript", "Jsx"],
   javascript: ["JavaScript", "Jsx"],
   rust: ["Rust"],
+  // Three shells, one grammar: ast-grep's `Bash` parses sh and zsh as well,
+  // and a reader looking for the rules that read scripts looks for `shell`.
+  shell: ["Bash"],
   git: ["Git"],
   text: ["Text"],
   markdown: ["Text"],

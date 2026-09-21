@@ -1,0 +1,784 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T06:48:19.331Z",
+  "model": "jev-1.13.0",
+  "suite": "shell/reads-secrets-it-does-not-own",
+  "rules": [
+    {
+      "id": "reads-secrets-it-does-not-own",
+      "draft": "732228b9b9b9",
+      "at": 0.62
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/k8s_bootstrap.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/k8s_bootstrap.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/k8s_bootstrap.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_env_check.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_env_check.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/backup_certs.sh",
+        "line": 10,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/backup_certs.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/cache_warm.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/cache_warm.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/cache_warm.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/npm_publish.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/npm_publish.sh",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/deploy.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/deploy.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/dotfiles.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/dotfiles.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.43,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/notify_api.sh",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/notify_api.sh",
+        "line": 16,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_report.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_report.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/cache_warm.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/cache_warm.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/cache_warm.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/notify_api.sh",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/notify_api.sh",
+        "line": 16,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_env_check.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_env_check.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/dotfiles.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/dotfiles.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.43,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/deploy.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/deploy.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/backup_certs.sh",
+        "line": 10,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/backup_certs.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_report.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_report.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/npm_publish.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/npm_publish.sh",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/k8s_bootstrap.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/k8s_bootstrap.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/k8s_bootstrap.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/cache_warm.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/cache_warm.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/cache_warm.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_env_check.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_env_check.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/dotfiles.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/dotfiles.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.43,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/notify_api.sh",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/notify_api.sh",
+        "line": 16,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/deploy.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/deploy.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/npm_publish.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/npm_publish.sh",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/k8s_bootstrap.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/k8s_bootstrap.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/k8s_bootstrap.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_report.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/ci_report.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/backup_certs.sh",
+        "line": 10,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/backup_certs.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/postinstall.sh",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "reads-secrets-it-does-not-own",
+        "file": "experiments/rule-candidates/shell/reads-secrets-it-does-not-own/fixtures/provision_key.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 33,
+    "inputTokens": 114567,
+    "usd": 0.004811814,
+    "ms": 1146
+  }
+}

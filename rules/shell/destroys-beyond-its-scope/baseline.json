@@ -1,0 +1,730 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T06:48:34.001Z",
+  "model": "jev-1.13.0",
+  "suite": "shell/destroys-beyond-its-scope",
+  "rules": [
+    {
+      "id": "destroys-beyond-its-scope",
+      "draft": "2bf2c10dd23c",
+      "at": 0.66
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/flash_image.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/flash_image.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/publish_site.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/publish_site.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prepare_disk.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prepare_disk.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/fix_perms.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/fix_perms.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall_guarded.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall_guarded.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall_guarded.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/ci_workspace.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/ci_workspace.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.47,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/reclaim_space.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/reclaim_space.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prune_cache.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prune_cache.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prune_cache.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/build.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/build.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 12,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 15,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prune_cache.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prune_cache.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prune_cache.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/build.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/build.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/ci_workspace.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/ci_workspace.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.44,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/fix_perms.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/fix_perms.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/publish_site.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/publish_site.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/flash_image.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/flash_image.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall_guarded.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall_guarded.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall_guarded.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/reclaim_space.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/reclaim_space.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prepare_disk.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prepare_disk.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 12,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 15,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall_guarded.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall_guarded.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall_guarded.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/flash_image.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/flash_image.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prepare_disk.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prepare_disk.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prune_cache.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prune_cache.sh",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/prune_cache.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/reclaim_space.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/reclaim_space.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/publish_site.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/publish_site.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/ci_workspace.sh",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/ci_workspace.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.44,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/fix_perms.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/fix_perms.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 12,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 15,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/backup.sh",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/build.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/build.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "destroys-beyond-its-scope",
+        "file": "experiments/rule-candidates/shell/destroys-beyond-its-scope/fixtures/uninstall.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 33,
+    "inputTokens": 88851,
+    "usd": 0.003731742,
+    "ms": 1010
+  }
+}

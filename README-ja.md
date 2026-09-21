@@ -104,23 +104,24 @@ npx -y jev-lint check src --dry-run    # 何を聞くかと価格。リクエス
 npx -y jev-lint check src              # 聞く
 ```
 
-これにインストールは要らない。Node 20+。`check` は同梱ルール全部 (`rules/<language>/<id>/` の下の 65 個) を読み込み、どれが走るかは渡したファイルが決める。`.ts` には TypeScript のルールが、`.md` には Markdown のルールが当たり、ファイルの無い言語は実行の最後に idle として列挙される。選ぶものはない。
+これにインストールは要らない。Node 20+。`check` は同梱ルール全部 (`rules/<language>/<id>/` の下の 98 個) を読み込み、どれが走るかは渡したファイルが決める。`.ts` には TypeScript のルールが、`.md` には Markdown のルールが当たり、ファイルの無い言語は実行の最後に idle として列挙される。選ぶものはない。
 
 ### 何が同梱され、何に当たるか
 
 | 渡すもの | 走るもの | 聞くこと (例) |
 | --- | --- | --- |
 | `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 ルール、first tier | 関数は名前どおりのことをしているか、その上のコメントはまだ真実か、主張が壊れていてもこのテストは通るか、`catch` は失敗を隠していないか |
-| `.rs` | `rust/` — 8、first tier | 関数、コメント、テスト、束縛について同じこと。`# Errors` / `# Panics` と本体の突き合わせ |
+| `.rs` | `rust/` — 9、first tier | 関数、コメント、テスト、束縛について同じこと。`# Errors` / `# Panics` と本体の突き合わせ、trait 名とそのメソッドの一致 |
 | `.py` | `python/` — 14 | TypeScript ルールの移植。`Raises:` と本体の突き合わせ、class 単位の 2 本 |
 | `.go` | `go/` — 9 | 移植に加えて `must-name-panics`: `MustX` は名前が約束する失敗で panic するか |
 | `.mbt` | `moonbit/` — 20 | MoonBit のファイルが持ちうるルールは全部: 命名、保証、コメント、失敗契約、ログ、テストとスナップショット。MoonBit は ast-grep 組み込みの文法ではないので、[parser を宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば動く。宣言が無ければ skip され、その旨が出る |
 | `package.json` | `json/` — 1 | script の名前は実行するコマンドを表しているか |
 | `.sql` (sqlc のカタログ) | `text/` — 1 | `-- name: GetUserByEmail` はその下の SQL を表しているか |
+| `.sh` `.bash` `.zsh` | `shell/` — 8 | このスクリプトは、読み手に見えないことをしていないか: 検証せずに落としたコードを実行する、渡されていない秘密を読む、自分より長生きするものを置いていく、自分の領分を越えて消す、防御を切る、入口を開ける、外から命令を受け取る、何を実行したか分からなくする |
 | `.md` `.mdx` | `markdown/` — 11 | この文書は slop か、filler か、曖昧か、水増しか (JevSlop の八つのシグナル、0–4 で採点)。節は次の予告で終わっていないか、議題の宣言で始まっていないか、立てた問いを放置していないか |
 | コミット — `jev-lint commits` | `git/` — 1 | コミットメッセージは diff を説明しているか |
 
-どのルールも「コードが自分について立てた主張」への一つの問いで、[RULES.md](RULES.md) に 65 個全部が、問い、cutoff、自身の fixture での成績付きで並んでいる。first tier の二言語がリリースの基準を担う。`typescript/` と `rust/` の下のルールは全部 fixture、期待値、受理済み baseline を持つ。残りは同じ基準で calibrate してあるが、まだ約束はしていない。
+どのルールも「コードが自分について立てた主張」への一つの問いで、[RULES.md](RULES.md) に 98 個全部が、問い、cutoff、自身の fixture での成績付きで並んでいる。first tier の二言語がリリースの基準を担う。`typescript/` と `rust/` の下のルールは全部 fixture、期待値、受理済み baseline を持つ。残りは同じ基準で calibrate してあるが、まだ約束はしていない。
 
 ```bash
 npx -y jev-lint check src                    # コードのルール。そこにある言語の分だけ
@@ -250,7 +251,7 @@ subject 1,000 件あたり 3.9 セント。同じツリーへの `--dry-run` の
 
 全ルールの cutoff、state、fixture、同梱 cutoff での precision と recall を並べた一覧が [RULES.md](RULES.md)。`npm run rules:md` が `rules/` から生成し、テストスイートが検査する。
 
-`rules/` に 65 ルールが同梱されている。言語ごとに一ディレクトリ、その下にルールごとに一ディレクトリ、それぞれに証拠となるケース付き。プロジェクト自身の `rules/` が無いときに使われる。二言語が first tier。`typescript` (21 ルール。TypeScript、Tsx、JavaScript、Jsx を受け入れる) と `rust` (8) で、その下の全ルールが fixture、期待値、受理済み baseline を持つ。`python` (12) と `go` (9) は second tier。TypeScript ルールから同じ一文で移植し、同じ基準で calibrate してあるが、まだ約束はしていない。`javascript` (1) と `json` (1) はそこにしか収まらないもの、`git` (1) はコミットメッセージのルール、`text` (1) は sqlc クエリのルール、`markdown` (11) は文章のルール: JevSlop から移植した八つの品質シグナルと、認知リズムの文章規範からの三つの検査 (Prior art 参照)。複数言語の下にある同じ id は一つのルールの複数言語版で、その一文のコピーがずれていればローダーが警告する。以下は問いの内容で分類し、TypeScript のルール名で挙げる。各ルールがどの言語にあるかは `docs/reference.md` の表に:
+`rules/` に 98 ルールが同梱されている。言語ごとに一ディレクトリ、その下にルールごとに一ディレクトリ、それぞれに証拠となるケース付き。プロジェクト自身の `rules/` が無いときに使われる。二言語が first tier。`typescript` (23 ルール。TypeScript、Tsx、JavaScript、Jsx を受け入れる) と `rust` (9) で、その下の全ルールが fixture、期待値、受理済み baseline を持つ。`python` (14)、`go` (9)、`moonbit` (20) は second tier。TypeScript ルールから同じ一文で移植し、同じ基準で calibrate してあるが、まだ約束はしていない。`shell` (8) だけは別の問いを聞くパックで、後述する。`javascript` (1) と `json` (1) はそこにしか収まらないもの、`git` (1) はコミットメッセージのルール、`text` (1) は sqlc クエリのルール、`markdown` (11) は文章のルール: JevSlop から移植した八つの品質シグナルと、認知リズムの文章規範からの三つの検査 (Prior art 参照)。複数言語の下にある同じ id は一つのルールの複数言語版で、その一文のコピーがずれていればローダーが警告する。以下は問いの内容で分類し、TypeScript のルール名で挙げる。各ルールがどの言語にあるかは `docs/reference.md` の表に:
 
 **命名** — コードは自称どおりのことをしているか?
 
@@ -314,9 +315,24 @@ subject 1,000 件あたり 3.9 セント。同じツリーへの `--dry-run` の
 | `query-name-describes-sql` | sqlc クエリの `-- name:` はその下の SQL を表しているか? どの文法も解析しないファイルへの最初のルール。`subject: block` がヘッダごとにファイルを分割する |
 | `must-name-panics` (Go のみ) | `Must*` 関数は、名前が約束する失敗で、返すのではなく panic するか? |
 
+**シェル** — スクリプトが、読み手に見えないところでしていること (`shell/`。[is-malicious](https://github.com/luantak/is-malicious) からの移植)
+
+| ルール | 聞くこと |
+| --- | --- |
+| `runs-downloaded-code` | このコマンドが実行するバイト列は外から来ていて、何が届いたかを確かめるものが何も無いか? (`curl \| sh`、checksum 照合のないダウンロードへの `chmod +x`) |
+| `reads-secrets-it-does-not-own` | 渡されていない資格情報を取っていないか、渡されたものを仕事の置き場所でないところに残していないか? |
+| `installs-persistence` | これが機械に残すものはスクリプトより長生きし、かつスクリプトが入れるはずのプログラム以外のものか? |
+| `destroys-beyond-its-scope` | スクリプト自身が作ったものの外まで、消し・上書きし・フォーマットしていないか? (`$PREFIX` が空になりうる `rm -rf "$PREFIX/"`) |
+| `weakens-security` | スクリプト自身が用意した境界のないまま防御を切っていないか? (直前に自分で証明書を発行した localhost ではなく、実在ホストへの `curl -k`) |
+| `opens-a-backdoor` | どこから来たか分からない鍵やアカウントにアクセスを与えていないか? |
+| `takes-remote-commands` | この機械のシェルを誰かに渡す、あるいは外から命令を受け取り続けていないか? |
+| `hides-what-it-runs` | 「読み手に何が起きたか分からなくする」以外に効果のない手順を踏んでいないか? |
+
+この八つだけは「コードが立てた主張」の話ではない。シェルスクリプトは、読まれずに実行される唯一の成果物で、危険な構文は一行で、しかもどれにも正当な双子がいる — 三行上の checksum、削除対象を作った `mktemp -d`、これから `curl -k` する localhost 用に直前で発行した自己署名証明書。行は grep で見つかる。問いは、ファイルの残りがその行について何を立証しているかの方。
+
 どこでも意図的に聞かないこと: スタイル、冗長さ、それが存在すべきか。軸は一つだけ。主張は偽か。
 
-自身の eval では、65 ルール中 56 が同梱 cutoff で precision と recall 1.00 に達する。届かない九つはそれぞれ、ルールには見えないラベル付き欠陥を一つ見逃し、どれかはルールファイルに書いてある。eval は小さい。65 ルールで 467 のラベル付き欠陥、ルールあたり一から三十一。そしてマーカーは無い。以前の版は各欠陥の上、モデルに見せるファイルの中に `// DEFECT: named seconds, holds milliseconds` を置いていて、それが生む当てはめはルールより良かった。`jev-lint eval --replay` はリクエストなしで全数値を再導出する。パックがこのリポジトリ自身のコードと未見のコードで見つけたものを含む完全な表は [docs/reference.md](docs/reference.md#the-shipped-packs) に。同じ方法で作って測り、出荷しなかったルールがさらに 21 個あり、`experiments/rule-candidates/<lang>/` に同じレイアウトで、理由を書いた報告と一緒に置いてある。
+自身の eval では、98 ルール中 87 が同梱 cutoff で precision と recall 1.00 に達する。届かない十一はそれぞれ、ルールには見えないラベル付き欠陥を一つ見逃し、どれかはルールファイルに書いてある。eval は小さい。98 ルールで 644 のラベル付き欠陥、ルールあたり一から三十一。そしてマーカーは無い。以前の版は各欠陥の上、モデルに見せるファイルの中に `// DEFECT: named seconds, holds milliseconds` を置いていて、それが生む当てはめはルールより良かった。`jev-lint eval --replay` はリクエストなしで全数値を再導出する。パックがこのリポジトリ自身のコードと未見のコードで見つけたものを含む完全な表は [docs/reference.md](docs/reference.md#the-shipped-packs) に。同じ方法で作って測り、出荷しなかったルールがさらに 19 個あり、`experiments/rule-candidates/<lang>/` に同じレイアウトで、理由を書いた報告と一緒に置いてある。
 
 ## ルールを足す
 

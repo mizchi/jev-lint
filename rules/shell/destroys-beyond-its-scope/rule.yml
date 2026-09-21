@@ -1,0 +1,110 @@
+id: destroys-beyond-its-scope
+language: Bash
+kind: noul
+# The command, not the script. "Is this script destructive" is answered `yes`
+# by every uninstaller and every build; "can what this line destroys reach past
+# what the script made" is a question about the text under it, with the rest of
+# the file in the state to find where the target came from.
+subject: node
+state: located
+# 0.66, fitted 2026-09-21 on the fixtures beside it (26 subjects: 7 defects,
+# 19 cleans of which 12 hard, 3 passes). Cleans top out at 0.47 -- `docker image
+# prune -af --filter until=720h` on a runner the script resets between jobs,
+# the one clean the model keeps arguing with, because the images are not the
+# workspace it was told to reset; then a long way down to the guarded cache
+# sweeps at 0.27, the operator-confirmed `dd` onto a USB disk at 0.17 and the
+# `rm -rf "${PREFIX:?}/lib/shipper"` uninstall at 0.20. Defects start at 0.85
+# (`prepare_disk.sh`, whose `dd` and `mkfs.ext4 -F` go at a `/dev/sdb` nothing
+# in the file identifies). Midpoint of a gap 0.35 wide: 0.19 of headroom under
+# the lowest defect, 0.16 over the worst pass of the highest clean, no decision
+# flips over three passes, max pass-to-pass spread 0.05. The first guess, 0.70,
+# also sat in the gap and gave the same answers.
+at: 0.66
+axis: file
+severity: warning
+# The destructive surface, over-matched on purpose: anything that removes,
+# overwrites, reformats, re-owns or encrypts, plus the deferred form inside a
+# `trap` and the redirect that truncates a file or writes over a device. Every
+# clean cleanup in the corpus is in here too -- that is the point. What the
+# model decides is where the target came from and how far it reaches.
+rule:
+  any:
+    - kind: command
+      has: { stopBy: end, regex: "^(rm|shred|wipefs|truncate|dd|mkfs\\.[a-z0-9]+)$" }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(find|fd)$" }
+        - has: { stopBy: end, regex: "^(-delete|-exec|-execdir|-ok)$" }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(chown|chgrp|chmod)$" }
+        - has: { stopBy: end, regex: "^-[a-zA-Z]*R" }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(git|docker|podman|kubectl)$" }
+        - has: { stopBy: end, regex: "^(clean|prune)$" }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^(openssl|gpg|age)$" }
+        - has: { stopBy: end, regex: "^(enc|--encrypt|-c)$" }
+    - kind: command
+      all:
+        - has: { field: name, regex: "^trap$" }
+        - has: { stopBy: end, regex: "\\b(rm|shred|dd|mkfs|truncate|wipefs)\\b" }
+    - kind: redirected_statement
+      any:
+        - has: { field: body, regex: "^(:|true)$" }
+        - has: { stopBy: end, regex: "/dev/(sd|nvme|hd|disk|vd)" }
+ask: >-
+  What this command deletes, overwrites or encrypts can reach past what the
+  script itself made or was handed to destroy.
+criteria:
+  "true": >-
+    The target is not pinned to this script's own scope. Either its path is
+    built from an expansion that can be empty or unset where this line runs, so
+    it collapses to the root or to whatever the working directory happens to be
+    -- `rm -rf "$PREFIX/"` where `PREFIX` is read from the environment and the
+    script never requires it, `rm -rf $DEST/*` where `DEST` is an unchecked
+    argument -- or the target is named plainly but is somewhere this script
+    neither created nor was given: another user's home, a parent reached with
+    `..`, a block device identified only by the name the kernel happened to
+    assign it, persistent state belonging to work this script is not
+    responsible for. Nobody has to mean harm. An unguarded expansion that
+    becomes `/` and a recursive path one directory too far are both this case.
+  "false": >-
+    What is destroyed is inside what this script owns or was explicitly handed:
+    a `mktemp -d` directory cleaned in its own trap, an output directory the
+    script removes and then rebuilds, a cache under a path the script creates, a
+    file the installer wrote and the uninstaller names literally, a device the
+    operator passed on the command line and confirmed, a throwaway CI checkout.
+    A path whose expansion cannot be empty at this line -- `${VAR:?}`, a literal
+    assignment in this file, an argument checked before use -- is bounded even
+    when what it names is large. Being destructive is not the case: `rm -rf`,
+    `dd`, `mkfs` and a recursive `chown` are this script's job when the target
+    is its own.
+note: >-
+  Scope, not danger: the same `rm -rf` is clean on the directory this script
+  made and a defect on one it was handed without looking. Read the file for
+  where the target came from -- an assignment in this file, a `${VAR:?}` at the
+  point of use, a `test -d` or `[ -n "$VAR" ]` before the line, an argument the
+  script validated, an answer the operator typed. `set -e` establishes nothing
+  about a path; `set -u` only helps when the variable is not also given an empty
+  default; a comment, an `echo` of the path or the fact that an operator is
+  *expected* to export it establishes nothing at all -- if the script would run
+  this line with the expansion empty, it can. `..` inside a recursive path is
+  this case even when the script's own directory sits under it. A garbage
+  collector that takes only what a tool re-creates from a recorded source --
+  container images and layers, a package cache, untracked files in a throwaway
+  checkout -- is bounded even though the script did not make them, and is this
+  case when the same sweep also takes persistent state, such as named volumes or
+  a database. Nothing about a host being dedicated to this work extends that to
+  a raw device: `dd`, `wipefs` and `mkfs` destroy a whole disk, nothing
+  re-creates it, and `/dev/sdb` is a name the kernel assigns by enumeration
+  order -- so which disk it is has to be established in the file, by an argument
+  the operator passed, a label or UUID looked up, or a confirmation typed back.
+  Judge this command alone: a file often holds a well-bounded trap three lines
+  above an unbounded delete, and each is its own answer.
+explain:
+  wipe: Deletes or formats user data or disks without a matching reset feature.
+  ransom: Encrypts files and demands or implies payment to restore them.
+  corrupt: Silently corrupts data, configs, or firmware so the system fails.

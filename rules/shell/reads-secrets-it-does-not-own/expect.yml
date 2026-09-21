@@ -1,0 +1,39 @@
+default: clean
+fixtures/postinstall.sh:
+  - { line: 8, label: bad, window: 0, reason: "copies the whole of ~/.ssh into a bundle the script is about to upload; the package has no business in the user's key directory" }
+  - { line: 9, label: bad, window: 0, reason: "the user's AWS credentials, collected for the same bundle -- not credentials this script was given, ones it went and found" }
+  - { line: 10, label: bad, window: 0, reason: "the npm auth token and the git credential store, same collection; three stores in one directory is the harvest" }
+  - { line: 14, label: bad, window: 0, reason: "uploads the collected archive to a third-party endpoint; calling it a diagnostics bundle does not make the destination expected" }
+fixtures/ci_report.sh:
+  - { line: 13, label: bad, window: 0, reason: "the entire environment, unfiltered, as the POST body -- on a CI runner that is every injected secret, sent to a host that is not the pipeline's" }
+  - { line: 15, label: clean, window: 0, reason: "hard clean: the identical curl --data-binary upload to the identical host, two lines later, carrying uname/df/nproc output -- the shape of the defect with no secret in it" }
+fixtures/dotfiles.sh:
+  - { line: 14, label: bad, window: 0, reason: "scp's the user's private ed25519 key to a hardcoded IP; a dotfile sync needs the public half at most, and this key was not issued to the script" }
+  - { line: 16, label: clean, window: 0, reason: "hard clean: the same scp, same host, one line later -- .gitconfig is not a secret, so the sink is not the defect" }
+fixtures/cache_warm.sh:
+  - { line: 11, label: bad, window: 0, reason: "dumps every AWS_* variable, secret key included, into a log under /var/www/html where anyone who can reach the box can read it" }
+  - { line: 14, label: clean, window: 0, reason: "hard clean: aws s3 cp on the machine's own profile, in the script the profile exists for" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean: the same aws s3 cp in a loop, pulling cache objects -- an exfil-shaped sink used for the job at hand" }
+fixtures/k8s_bootstrap.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: `aws eks update-kubeconfig` writes a kubeconfig, which is how a runner gets one; obtaining a credential for the job is not taking one" }
+  - { line: 13, label: bad, window: 0, reason: "`kubectl config view --raw` renders the live cluster credential and redirects it into the working tree; --raw is the flag that keeps the secret in" }
+  - { line: 15, label: bad, window: 0, reason: "stages that rendered kubeconfig for the commit two lines down -- a production cluster credential into version control, which is not where the deploy needs it" }
+fixtures/deploy.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean: reads ~/.aws/credentials only to check it exists before the deploy the script is for" }
+  - { line: 17, label: clean, window: 0, reason: "hard clean: aws s3 cp of the build output to the project's own bucket, on the profile exported five lines above" }
+fixtures/notify_api.sh:
+  - { line: 6, label: clean, window: 0, reason: "hard clean: sources the project's own .env -- the defect reads a credential file, and so does this" }
+  - { line: 16, label: clean, window: 0, reason: "hard clean: curl -d with a bearer token in the header, to the API named by the same .env; a token used against its own service" }
+fixtures/backup_certs.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: tars /etc/ssl/private -- the machine's private keys -- but into a gpg archive for the estate that owns them" }
+  - { line: 15, label: clean, window: 0, reason: "hard clean: scp of that archive off the box, the same sink as the dotfiles defect, to the org's own vault and encrypted" }
+fixtures/ci_env_check.sh:
+  - { line: 7, label: clean, window: 0, reason: "hard clean: two `env` pipelines with no argument -- the matched shape of the ci_report defect -- producing a line count and a grep -c, not a payload" }
+fixtures/npm_publish.sh:
+  - { line: 8, label: clean, window: 0, reason: "a trap that deletes the token file on exit" }
+  - { line: 11, label: clean, window: 0, reason: "hard clean: writes NPM_TOKEN into ~/.npmrc, which is a secret written to disk -- and is the file npm reads it from, under umask 077, removed on exit" }
+fixtures/provision_key.sh:
+  - { line: 7, label: clean, window: 0, reason: "creates ~/.ssh with 700" }
+  - { line: 9, label: clean, window: 0, reason: "hard clean: writes a private key to ~/.ssh/id_ed25519 -- a secret written to disk by redirect, from a value the workflow handed the script" }
+  - { line: 10, label: clean, window: 0, reason: "chmod 600 on the key it just installed" }
+  - { line: 12, label: clean, window: 0, reason: "appends a host key to known_hosts" }
