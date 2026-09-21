@@ -38,6 +38,7 @@ const files = [
   "run",
   "text",
   "commits",
+  "instructions",
   "evals",
   "retry",
   "config",
