@@ -1,8 +1,9 @@
 import { strict as assert } from "node:assert";
+import { planBatches } from "../src/batch.ts";
 import { enclosingSymbol, moduleIdentity } from "../src/scan.ts";
 import { buildState, resolveSubject, renderOutline, capturedMetavariables, widenCommentCapture, OUTLINE_TEXT_LIMIT } from "../src/state.ts";
 import type { AstGrepMatch, StateArm } from "../src/types.ts";
-import { scoreRule, subjectOf, sampleEntry } from "./builders.ts";
+import { changeRule, scoreRule, subjectOf, sampleEntry } from "./builders.ts";
 import { test } from "./harness.ts";
 
 const matchAt = (start: number, end: number, over: Partial<AstGrepMatch> = {}): AstGrepMatch => ({
@@ -326,4 +327,32 @@ test("state: reserved captures are hidden and long ones truncated", () => {
   assert.equal(c.NAME, "loadUser");
   assert.ok(c.BIG.length <= 601);
   assert.equal(c.ARGS, "a, b");
+});
+
+test("state: a change subject's state carries the instructions and the diff", () => {
+  const rule = changeRule();
+  const subject = subjectOf({
+    rule, file: "abc", text: " cart.ts | 2 +-\n 1 file changed",
+    nodeKind: "change", arm: "bare", language: "Git",
+    commit: { files: ["cart.ts"], stat: " 1 file changed", diff: "diff --git a/cart.ts", truncated: false },
+    instructions: { docs: [{ file: "AGENTS.md", text: "- Never use `any`.\n" }], truncated: false },
+  });
+  const [batch] = planBatches([subject]);
+  assert.deepEqual(batch!.state.instructions, [{ file: "AGENTS.md", text: "- Never use `any`.\n" }]);
+  assert.equal(batch!.state.diff, "diff --git a/cart.ts");
+  assert.equal(batch!.state.message, undefined, "a change rule is not handed a message to be distracted by");
+  assert.match(String(batch!.state.reviewing), /instructions/);
+  assert.equal(batch!.state.note_on_instructions, undefined);
+});
+
+test("state: a cut instruction document says so, so a rule that is still there is not read as gone", () => {
+  const rule = changeRule();
+  const subject = subjectOf({
+    rule, file: "abc", text: " 1 file changed",
+    nodeKind: "change", arm: "bare", language: "Git",
+    commit: { files: ["a.ts"], stat: " 1 file changed", diff: "d", truncated: false },
+    instructions: { docs: [{ file: "AGENTS.md", text: "- One.\n" }], truncated: true },
+  });
+  const [batch] = planBatches([subject]);
+  assert.match(String(batch!.state.note_on_instructions), /cut/);
 });

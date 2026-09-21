@@ -137,6 +137,35 @@ test("commits: a change rule gets the diff and the instructions; a commit rule g
   }
 });
 
+test("commits: a change finding is titled by the stat's summary, never quoted as a commit message", () => {
+  // `gate.ts` used to build every commit-shaped finding's title from
+  // `subject.text.split("\n")[0]`, which is the FIRST line of a commit
+  // message but the FIRST line of a change subject's `text` (the stat) is
+  // a per-file line like " cart.ts | 1 +", not a summary -- and reporting
+  // it under `commit.subject`, quoted, would print it as though someone
+  // had written it as a commit message.
+  const dir = tempRepo([
+    { message: "Set the rules", files: { "AGENTS.md": "- Never use `any`.\n" } },
+    { message: "Add cart", files: { "cart.ts": "export const cart: any = {}\n" } },
+  ]);
+  try {
+    const { subjects } = commitSubjects([changeRule()], "HEAD", dir);
+    const change = subjects.find((s) => s.commit!.diff.includes("cart.ts"))!;
+    const f = decide(change, { value: 0.9, confidence: null, kind: "noul" });
+    assert.equal(f.commit, undefined, "a change finding is not reported as a commit");
+    assert.match(f.change!.summary, /1 file changed/, "titled by the stat's summary line");
+    assert.ok(!/cart\.ts \|/.test(f.change!.summary), "not the per-file stat line, which is not a summary");
+    const pretty = formatPretty(
+      { findings: [f], all: [f], review: [], stats: { subjects: 1, reported: 1, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } },
+      { color: false },
+    );
+    assert.match(pretty, /1 file changed/);
+    assert.ok(!pretty.includes('"'), "not quoted as though it were a message someone wrote");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("commits: a commit with no instruction document produces no change subject", () => {
   const dir = tempRepo([{ message: "Add cart", files: { "cart.ts": "a\n" } }]);
   try {

@@ -110,10 +110,13 @@ export function buildExplainQuestion(rule: Rule, subject: Subject, id: string): 
 
 /** What every question about a subject carries: where it is and what it is. */
 function subjectFields(rule: Rule, subject: Subject, id: string): Record<string, unknown> {
-  // A commit: the message is the thing judged, named as such. No lines, no
-  // node kind, no loose-matcher caveat -- nothing matched it.
+  // A commit or a change: nothing matched it, so no lines and no node kind.
+  // Which of the two decides what the model is handed as the thing judged:
+  // a commit rule judges the message, a change rule judges the change, and
+  // handing a change rule a message invites it to judge that instead.
   if (subject.commit) {
-    const shared: Record<string, unknown> = { subject: id, message: subject.text };
+    const shared: Record<string, unknown> =
+      rule.subject === "change" ? { subject: id, change: subject.text } : { subject: id, message: subject.text };
     if (subject.captured && Object.keys(subject.captured).length > 0) shared.matcher_captured = subject.captured;
     return shared;
   }

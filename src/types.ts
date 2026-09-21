@@ -570,7 +570,10 @@ export interface StatePayload {
   files?: string[];
   stat?: string;
   diff?: string;
+  /** A change subject's state: the project's own instruction documents, in place of a message. */
+  instructions?: Array<{ file: string; text: string }>;
   note_on_diff?: string;
+  note_on_instructions?: string;
   note_on_independence?: string;
   note_on_enclosing_code?: string;
   note_on_related_tests?: string;
@@ -640,6 +643,13 @@ export interface Finding {
   explanation?: { choice: string; confidence: number };
   /** Present on a commit finding: the commit's subject line, for the report. */
   commit?: { subject: string };
+  /**
+   * Present on a change finding: the stat's summary line, for the report.
+   * A change subject's `text` is the stat, not a message -- reporting it
+   * under `commit.subject`, quoted as if someone wrote it, would claim a
+   * commit message that does not exist.
+   */
+  change?: { summary: string };
   /** Present when the block was cut to fit: the verdict is about its first `judged` of `of` characters. */
   cut?: { judged: number; of: number };
 }

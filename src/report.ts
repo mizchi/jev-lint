@@ -64,8 +64,11 @@ export function formatPretty(
 
   for (const [file, list] of [...byFile.entries()].sort()) {
     // A commit is named by its short sha and subject line, not by a path.
+    // A change has no message to quote -- it is named by the sha and the
+    // stat's own summary line instead.
     const commit = list[0]?.commit;
-    out.push(c.bold(commit ? `${shortRef(file)}  "${commit.subject}"` : file));
+    const change = list[0]?.change;
+    out.push(c.bold(commit ? `${shortRef(file)}  "${commit.subject}"` : change ? `${shortRef(file)}  ${change.summary}` : file));
     for (const f of list.sort((a, b) => a.line - b.line)) {
       const loc = `${f.line}`.padStart(5);
       const tag = (f.messageId ? TAG[f.messageId]?.(c) : null) ?? String(f.messageId);
@@ -125,7 +128,11 @@ export function formatPretty(
     );
     for (const f of review) {
       const num = f.kind === "score" ? `${f.value!.toFixed(2)}/${f.scale ?? 3}` : f.value!.toFixed(2);
-      const where = f.commit ? `${shortRef(f.file)}  "${f.commit.subject}"` : `${f.file}:${f.line}`;
+      const where = f.commit
+        ? `${shortRef(f.file)}  "${f.commit.subject}"`
+        : f.change
+          ? `${shortRef(f.file)}  ${f.change.summary}`
+          : `${f.file}:${f.line}`;
       out.push(c.dim(`  ${where}  ${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  ${f.message ?? f.ask}`));
     }
     out.push("");
@@ -336,6 +343,7 @@ export function formatJson(result: ReportInput): string {
     passes: f.passes ?? null,
     message: f.message ?? f.ask,
     commit: f.commit ?? null,
+    change: f.change ?? null,
     cut: f.cut ?? null,
   });
   return JSON.stringify(
@@ -385,7 +393,11 @@ export function formatGithub(result: ReportInput): string {
     const title = `${f.rule}${f.messageId === "unsure" ? " (unsure)" : ""}`;
     const num = f.kind === "score" ? `${f.value!.toFixed(2)}/${f.scale ?? 3}` : f.value!.toFixed(2);
     const why = f.explanation ? `; why: ${f.explanation.choice}` : "";
-    const where = f.commit ? `commit ${shortRef(f.file)} "${f.commit.subject}": ` : "";
+    const where = f.commit
+      ? `commit ${shortRef(f.file)} "${f.commit.subject}": `
+      : f.change
+        ? `change ${shortRef(f.file)} (${f.change.summary}): `
+        : "";
     const cut = f.cut ? `; judged on the first ${f.cut.judged} of ${f.cut.of} characters` : "";
     const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}${cut}]`;
     out.push(

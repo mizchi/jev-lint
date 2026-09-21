@@ -3,7 +3,7 @@ import { decide, describe as describeFinding } from "../src/gate.ts";
 import { buildQuestion, buildExplainQuestion, questionId, readAnswer, readChoice } from "../src/questions.ts";
 import { SCORE_LEVELS } from "../src/rules.ts";
 import { explain } from "../src/schedule.ts";
-import { scoreRule, noulRule, subjectOf } from "./builders.ts";
+import { changeRule, scoreRule, noulRule, subjectOf } from "./builders.ts";
 import { test } from "./harness.ts";
 
 test("questions: a noul question nests its criteria and carries no threshold", () => {
@@ -113,4 +113,21 @@ test("questions: unusable answers read back as null rather than as zero", () => 
     readAnswer({ q0000: { type: "noul", noul: 0.9, confidence: 0.3 } }, "q0000", "noul")!.confidence,
     null,
   );
+});
+
+test("questions: a change subject is asked about the change, never about a message", () => {
+  const rule = changeRule();
+  const subject = subjectOf({
+    rule, file: "abc",
+    text: " cart.ts | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+    nodeKind: "change", arm: "bare", language: "Git",
+    captured: { SUBJECT: "1 file changed, 1 insertion(+), 1 deletion(-)" },
+    commit: { files: ["cart.ts"], stat: "s", diff: "d", truncated: false },
+    instructions: { docs: [{ file: "AGENTS.md", text: "- x\n" }], truncated: false },
+  });
+  const q = buildQuestion(rule, subject, "s1");
+  assert.equal(q.instructions.message, undefined);
+  assert.match(String(q.instructions.change), /1 file changed/);
+  assert.deepEqual(q.instructions.matcher_captured, { SUBJECT: "1 file changed, 1 insertion(+), 1 deletion(-)" });
+  assert.equal(q.instructions.lines, undefined, "nothing matched it, so there is no line range");
 });
