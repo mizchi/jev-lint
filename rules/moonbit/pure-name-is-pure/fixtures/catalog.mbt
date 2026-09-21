@@ -75,6 +75,50 @@ pub fn derive_slug(name : String) -> String {
 }
 
 ///|
+/// Clamps a raw count the importer read from the batch manifest into a
+/// sane bound, or falls back to the default when it is not set at all.
+fn read_env_int(value : Int, fallback : Int, low : Int, high : Int) -> Int {
+  if value == 0 {
+    fallback
+  } else if value < low {
+    low
+  } else if value > high {
+    high
+  } else {
+    value
+  }
+}
+
+///|
+fn read_env_string(value : String, fallback : String) -> String {
+  if value.length() == 0 {
+    fallback
+  } else {
+    value
+  }
+}
+
+///|
+pub(all) struct ImportLimits {
+  max_batch : Int
+  queue : String
+  timeout_sec : Int
+}
+
+///|
+pub fn parse_import_limits(
+  raw_max_batch : Int,
+  raw_queue : String,
+  raw_timeout_sec : Int
+) -> ImportLimits {
+  {
+    max_batch: read_env_int(raw_max_batch, 4, 1, 64),
+    queue: read_env_string(raw_queue, "default"),
+    timeout_sec: read_env_int(raw_timeout_sec, 30, 1, 3600),
+  }
+}
+
+///|
 pub fn to_stock_report(catalog : Catalog) -> String {
   let mut low = 0
   for product in catalog.products {

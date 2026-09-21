@@ -4,6 +4,11 @@ fixtures/backoff.rs:
     label: clean
     window: 1000000
     reason: "named `backoff` and every public item is about backoff. The Rust half of the hard-clean class described at the top of corpus/ts/session.ts. Names here are defensible rather than obvious: a predicate that needs an inference, a mutation that announces itself, a parse that can fail, a `get` that computes. The corpus had none of these and a cutoff fitted without them sat too close to the boundary."
+fixtures/utils.rs:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "`utils` describes nothing: a clamp and a string repeat have no more in common than that someone had nowhere else to put them. Ported from moonbit's util.mbt, the quietest labelled defect in that sibling corpus (0.63 against a 0.55 cutoff) -- unlike helpers.rs, where every item shares one nameable concern (currency) and the mismatch is loud, `clamp` and `repeat` are each individually a plausible thing for a generic-utility module to hold, so the placeholder name is harder to convict on sight."
 fixtures/budget.rs:
   - line: 1
     label: clean
@@ -14,6 +19,11 @@ fixtures/helpers.rs:
     label: bad
     window: 1000000
     reason: every public item here is about formatting and parsing currency, and the module is called `helpers`.
+fixtures/cart.rs:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "named for the cart it holds: a line-item total and how to add to it. Ported from moonbit's cart.mbt, the loudest labelled clean in that sibling corpus (0.22 against a 0.55 cutoff) -- the module's own type is called `Line`, not `Cart`, so the name doesn't repeat verbatim anywhere in the file, only the concern the items serve does."
 fixtures/retry.rs:
   - line: 1
     label: clean

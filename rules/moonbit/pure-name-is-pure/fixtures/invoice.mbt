@@ -83,6 +83,39 @@ pub fn derive_order_key(invoice : Invoice) -> String {
 }
 
 ///|
+/// Flags for the billing job: mostly argv, with a fallback for the token so
+/// an operator does not have to pass it by hand on every run.
+pub(all) struct BillingOptions {
+  invoice_dir : String
+  api_token : String
+  currency : String
+  dry_run : Bool
+}
+
+///|
+pub fn parse_billing_options(argv : Array[String]) -> BillingOptions {
+  let mut invoice_dir = "."
+  let mut api_token = match @sys.getenv("BILLING_API_TOKEN") {
+    Some(v) => v
+    None => ""
+  }
+  let mut currency = "JPY"
+  let mut dry_run = false
+  let mut i = 0
+  while i < argv.length() {
+    match argv[i] {
+      "--dir" => { invoice_dir = argv[i + 1]; i = i + 1 }
+      "--token" => { api_token = argv[i + 1]; i = i + 1 }
+      "--currency" => { currency = argv[i + 1]; i = i + 1 }
+      "--dry-run" => dry_run = true
+      _ => ()
+    }
+    i = i + 1
+  }
+  { invoice_dir, api_token, currency, dry_run }
+}
+
+///|
 pub fn derive_discount_notes(items : Array[Item], notes : Array[String]) -> Int {
   let mut saved = 0
   for item in items {

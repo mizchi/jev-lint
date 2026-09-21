@@ -1,136 +1,190 @@
 {
- "schema": "jev-lint-eval-1",
- "recorded": "2026-09-19T17:13:10.216Z",
- "model": "jev-1.13.0",
- "suite": "rust/module-name-describes-contents",
- "rules": [
-  {
-   "id": "module-name-describes-contents",
-   "draft": "6f59fdaefc20",
-   "at": 0.55
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T16:09:48.088Z",
+  "model": "jev-1.13.0",
+  "suite": "rust/module-name-describes-contents",
+  "rules": [
+    {
+      "id": "module-name-describes-contents",
+      "draft": "6f59fdaefc20",
+      "at": 0.55
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/retry.rs",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/backoff.rs",
+        "line": 1,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/budget.rs",
+        "line": 1,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/helpers.rs",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/utils.rs",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/cart.rs",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/utils.rs",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/cart.rs",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/backoff.rs",
+        "line": 1,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/budget.rs",
+        "line": 1,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/helpers.rs",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/retry.rs",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/utils.rs",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/cart.rs",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/backoff.rs",
+        "line": 1,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/retry.rs",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/budget.rs",
+        "line": 1,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-name-describes-contents",
+        "file": "rules/rust/module-name-describes-contents/fixtures/helpers.rs",
+        "line": 1,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 18,
+    "inputTokens": 20697,
+    "usd": 0.0008692740000000001,
+    "ms": 2571
   }
- ],
- "cutoffs": {},
- "passes": [
-  [
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/backoff.rs",
-    "line": 1,
-    "endLine": 49,
-    "kind": "noul",
-    "value": 0.1,
-    "confidence": null
-   },
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/helpers.rs",
-    "line": 1,
-    "endLine": 23,
-    "kind": "noul",
-    "value": 0.84,
-    "confidence": null
-   },
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/budget.rs",
-    "line": 1,
-    "endLine": 66,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/retry.rs",
-    "line": 1,
-    "endLine": 27,
-    "kind": "noul",
-    "value": 0.1,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/backoff.rs",
-    "line": 1,
-    "endLine": 49,
-    "kind": "noul",
-    "value": 0.09,
-    "confidence": null
-   },
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/budget.rs",
-    "line": 1,
-    "endLine": 66,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/helpers.rs",
-    "line": 1,
-    "endLine": 23,
-    "kind": "noul",
-    "value": 0.86,
-    "confidence": null
-   },
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/retry.rs",
-    "line": 1,
-    "endLine": 27,
-    "kind": "noul",
-    "value": 0.08,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/backoff.rs",
-    "line": 1,
-    "endLine": 49,
-    "kind": "noul",
-    "value": 0.1,
-    "confidence": null
-   },
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/budget.rs",
-    "line": 1,
-    "endLine": 66,
-    "kind": "noul",
-    "value": 0.08,
-    "confidence": null
-   },
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/helpers.rs",
-    "line": 1,
-    "endLine": 23,
-    "kind": "noul",
-    "value": 0.85,
-    "confidence": null
-   },
-   {
-    "rule": "module-name-describes-contents",
-    "file": "rules/rust/module-name-describes-contents/fixtures/retry.rs",
-    "line": 1,
-    "endLine": 27,
-    "kind": "noul",
-    "value": 0.1,
-    "confidence": null
-   }
-  ]
- ],
- "spent": {
-  "calls": 30,
-  "inputTokens": 38223,
-  "usd": 0.0016053660000000002,
-  "ms": 7172
- }
 }

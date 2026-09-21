@@ -14,15 +14,39 @@ subject: node
 # whether `score_cache` is a top-level store or a local accumulator -- is on a
 # line the subject's own text does not contain.
 state: located
-# 0.55, fitted 2026-09-21 on the fixtures beside it (30 subjects: 11 defects,
-# 19 cleans of which 12 are hard twins, 3 passes). The clean band is 0.02-0.07
-# apart from one member: `format_weight_band`, which asks a helper for a table
-# the helper fills in on its first call, answers 0.21-0.22. Defects start at
-# 0.86-0.90 (`parse_next_field`, a cursor that removes from the Array it was
-# handed) and everything else answers 0.90-0.98. Midpoint of the gap is 0.54;
-# 0.55 rounds it onto the false-positive side, and is also what this rule's
-# typescript copy ships. 0.32 of headroom each way, no decision flips, max
-# pass-to-pass spread 0.04.
+# 0.55, refit 2026-09-22 (32 subjects: 12 defects, 20 cleans, 3 passes; up
+# from 30/11/19). The clean band is 0.02-0.07 apart from one member,
+# unmoved by the port: `format_weight_band`, which asks a helper for a
+# table the helper fills in on its first call, answers 0.24. Defects start
+# at 0.87-0.90 (`parse_next_field`, a cursor that removes from the Array it
+# was handed) and everything else answers 0.90-0.98. Midpoint of the gap is
+# 0.55.
+#
+# Two cases were ported in from typescript's tighter corpus, the pair that
+# sits nearest its own cutoff there (parseCliOptions at 0.55-0.56,
+# parseWorkerLimits at 0.23-0.28): `parse_billing_options`, which reads
+# `@sys.getenv(..)` as an unconditional default before an argv loop that can
+# override it, and `parse_import_limits`, whose helpers are named
+# `read_env_*` but only ever touch the parameter they were handed. Neither
+# ported near this rule's own boundary: `parse_billing_options` answers
+# 0.89 (as confident as the rest of the loud defects) and
+# `parse_import_limits` answers 0.04 (as confident as the rest of the
+# trivially pure band). The margins are unchanged within run noise (FN
+# 0.32, FP 0.31, against 0.34/0.34 before the port).
+#
+# Read together with typescript's `state: local`, this is a finding about
+# `state: located` rather than a fixture to keep chasing: this rule shows
+# the model the WHOLE file per subject (the file-axis note above explains
+# why MoonBit needs that), so the two things that kept typescript's judge
+# hedging -- not being sure whether `readEnvInt`/`readEnvString` truly
+# never touch the environment, and not being sure the env read survives to
+# the return -- are resolved on sight here: the helper bodies and the
+# override branch are both already in view. The ambiguity typescript's
+# cutoff sits on is partly a property of what `local` withholds, not of
+# the situation alone, and porting the case without the narrower state
+# that produced its uncertainty does not reproduce the uncertainty. Both
+# fixtures are kept: they are correctly labelled, correctly decided, and
+# the first cases in this corpus to exercise an environment read at all.
 at: 0.55
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file

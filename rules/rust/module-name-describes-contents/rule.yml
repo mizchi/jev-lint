@@ -3,6 +3,22 @@ language: Rust
 kind: noul
 subject: file
 state: graph
+# 0.55, kept after the fit 2026-09-22, having ported the two boundary
+# fixtures from moonbit's tighter sibling corpus (6 files: 2 defects, 4
+# cleans, 3 passes; up from 1 defect, 3 cleans). Cleans top at 0.19
+# (`cart.rs`, a line-item total and an add -- ported from moonbit's
+# cart.mbt, whose own struct is called `Line`, not `Cart`, so the name
+# never repeats verbatim). Defects are `helpers.rs`, whose every export is
+# about currency (0.83), and `utils.rs`, a clamp beside a string repeat
+# (0.81) -- ported from moonbit's util.mbt, the same
+# placeholder-name-over-a-grab-bag situation that answers only 0.61-0.66 in
+# moonbit's own corpus. Rust's judge is markedly less forgiving of it here
+# than moonbit's is of the identical situation: `utils` reads as a
+# confident violation rather than a boundary case, which is a finding
+# about the language, not a fixture to soften. Midpoint of the gap is
+# 0.50; 0.55 keeps the copies in step with moonbit and typescript and
+# clears both margins (FN 0.26, FP 0.36 -- both smaller than before the
+# port, FN 0.30 and FP 0.45).
 at: 0.55
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
