@@ -23,3 +23,27 @@ fixtures/deploy_staging.sh:
 fixtures/bootstrap_host.sh:
   - { line: 11, label: clean, window: 0, reason: "hard clean: enables docker, a unit not named after this script, but one of the packages it installed two lines above for the platform to run on" }
   - { line: 12, label: clean, window: 0, reason: "hard clean: the same for chrony -- a baseline daemon a host-bootstrap script is expected to turn on" }
+fixtures/user_agent_install.sh:
+  - { line: 25, label: clean, window: 0, reason: "hard clean: a per-user systemd unit in $HOME/.config/systemd/user, named for and running the binary this file just installed -- the boundary example: user-directory persistence from an installer whose whole job is installing" }
+  - { line: 24, label: clean, window: 0, reason: "hard clean: daemon-reload, same file" }
+fixtures/renamed_unit.sh:
+  - { line: 10, label: bad, window: 0, reason: "the unit body correctly runs statsrelay, the program this file installs, but the file is written under /etc/systemd/system/dbus-com.example.helper.service -- a name borrowed from the system bus rather than the program's own; the ask's own borrowed-name clause names this shape even though the payload is not a second program" }
+  - { line: 26, label: bad, window: 0, reason: "enables that same borrowed-name unit -- the activation half of the line-10 defect" }
+  - { line: 25, label: clean, window: 0, reason: "daemon-reload, same file" }
+fixtures/telemetry_ping_unit.sh:
+  - { line: 9, label: clean, window: 0, reason: "hard clean but the loudest: ExecStart curls a versioned beacon URL and discards the response (`>/dev/null 2>&1 || true`) before it execs syncgate, the binary this file just installed, under syncgate's own name -- nothing fetched is ever run, so what outlives the script is still the script's declared job" }
+  - { line: 24, label: clean, window: 0, reason: "enables the syncgate unit named above" }
+  - { line: 23, label: clean, window: 0, reason: "daemon-reload, same file" }
+fixtures/deferred_start.sh:
+  - { line: 10, label: clean, window: 0, reason: "hard clean: `at now + 2 minutes` defers a single run of warmcache, the binary this file just installed, once -- a delayed start of the script's own job, not a recurring artifact for something else" }
+fixtures/wrapper_indirection.sh:
+  - { line: 34, label: clean, window: 0, reason: "hard clean: enables ledgerd.service, whose ExecStart is a wrapper this file wrote two lines above; the wrapper only sets env and execs the ledgerd binary this file installed -- indirection through the installer's own wrapper is still the declared job" }
+  - { line: 33, label: clean, window: 0, reason: "daemon-reload, same file" }
+  - { line: 18, label: clean, window: 0, reason: "writes the wrapper script itself -- env plus an exec of the binary installed above, nothing else" }
+fixtures/scope_mismatch_timer.sh:
+  - { line: 23, label: bad, window: 0, reason: "writes apphealth-cleanup.timer -- consistently named, clearly declared, but its own unit (below) does not belong to apphealth" }
+  - { line: 32, label: bad, window: 0, reason: "the cleanup unit's body: `find /var/log -delete; journalctl --vacuum-time=3d` -- a system-wide log-deletion job bundled into the apphealth installer, not the monitoring agent apphealth.service two units above; naming is consistent so this is quiet, but what it leaves behind belongs to general housekeeping, not to apphealth" }
+  - { line: 43, label: bad, window: 0, reason: "enables the mismatched-scope cleanup timer -- the activation half of the line-32 defect" }
+  - { line: 9, label: clean, window: 0, reason: "hard clean: apphealth.service, the file's correctly declared main job" }
+  - { line: 42, label: clean, window: 0, reason: "enables apphealth.service -- the correct unit, same file that also plants the mismatched cleanup timer" }
+  - { line: 41, label: clean, window: 0, reason: "daemon-reload, same file" }

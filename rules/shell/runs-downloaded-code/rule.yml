@@ -7,15 +7,31 @@ kind: noul
 # the rest of the file in the state to answer it from.
 subject: node
 state: located
-# 0.40, fitted 2026-09-21 on the fixtures beside it (14 subjects: 5 defects,
-# 9 cleans of which 6 hard, 3 passes). Cleans top out at 0.11 -- three evals of
-# a local program's output, three curl pipelines that end in jq, grep or
-# sha256sum, and two `chmod +x` on downloads that were verified first -- and
-# defects start at 0.66 (`update.sh`, the dropper, whose `--self-check` reads as
-# a check until you notice it tests that the binary runs rather than what it is).
-# Midpoint of a gap 0.55 wide, 0.29 of headroom on each side, no decision flips
-# over three passes. The first guess, 0.70, sat inside the defect band and lost
-# the dropper on two passes of three.
+# 0.40, refit 2026-09-22 on the fixtures beside it (18 subjects: 7 defects, 11
+# cleans of which 8 hard, 3 passes) after aiming four new fixtures at the
+# provenance boundary: a `.sha256` file downloaded from the same host as the
+# binary it grades (verify_from_source.sh), a `--version | grep` gate in
+# place of an integrity check (version_check_dropper.sh), a checksum pinned
+# through a repository-tracked file instead of an inline literal
+# (checksums_file_verify.sh), and a curl pipeline whose target is `gpg
+# --dearmor` -- a public key, never executed -- ahead of an apt install
+# pinned to an exact version (apt_pinned_version.sh).
+#
+# Two of the four landed as designed: version_check_dropper.sh answers 0.75,
+# beside update.sh's 0.67, both comfortably caught; checksums_file_verify.sh
+# and apt_pinned_version.sh answer 0.12 and 0.08, beside the rest of the
+# clean band, unremarkable. The third is the finding: verify_from_source.sh
+# -- a real check with no independent provenance behind it -- answers 0.13,
+# inside the clean band and nowhere near update.sh's 0.67, let alone its own
+# defect class. No cutoff catches it without also flagging install.sh (0.08)
+# and deploy_artifact.sh (0.10), both real verification. It is kept, labelled
+# and accepted as a miss (R 0.86 against this corpus) rather than moved:
+# `sha256sum -c` against a file this script itself just fetched reads as a
+# check to the model regardless of who controls what it is graded against,
+# and today's `ask`/`criteria` have no clause for that -- the residue this
+# rule ships with. Cleans otherwise top out at 0.12, defects otherwise start
+# at 0.67: unchanged from the previous fit, so `at: 0.40` stands, 0.27 of
+# headroom below the defect floor and 0.28 above the clean ceiling.
 at: 0.40
 axis: file
 severity: warning

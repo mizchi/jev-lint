@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-21T06:34:40.161Z",
+  "recorded": "2026-09-21T17:29:42.500Z",
   "model": "jev-1.13.0",
   "suite": "shell/runs-downloaded-code",
   "rules": [
@@ -15,88 +15,7 @@
     [
       {
         "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/bootstrap.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/bootstrap.sh",
-        "line": 14,
-        "endLine": 14,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/release.sh",
-        "line": 15,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/entrypoint.sh",
-        "line": 7,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/install.sh",
-        "line": 16,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/update.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.71,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/backup.sh",
-        "line": 15,
-        "endLine": 15,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/ci_helper.sh",
-        "line": 10,
-        "endLine": 10,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/fetch_fixtures.sh",
-        "line": 11,
-        "endLine": 13,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/deploy_artifact.sh",
+        "file": "rules/shell/runs-downloaded-code/fixtures/deploy_artifact.sh",
         "line": 19,
         "endLine": 19,
         "kind": "noul",
@@ -105,63 +24,7 @@
       },
       {
         "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/devenv.sh",
-        "line": 4,
-        "endLine": 4,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/devenv.sh",
-        "line": 7,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/devenv.sh",
-        "line": 8,
-        "endLine": 8,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/package_install.sh",
-        "line": 17,
-        "endLine": 17,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/install.sh",
-        "line": 16,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/entrypoint.sh",
-        "line": 7,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/fetch_fixtures.sh",
+        "file": "rules/shell/runs-downloaded-code/fixtures/fetch_fixtures.sh",
         "line": 11,
         "endLine": 13,
         "kind": "noul",
@@ -170,153 +33,34 @@
       },
       {
         "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/release.sh",
-        "line": 15,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/ci_helper.sh",
-        "line": 10,
-        "endLine": 10,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/bootstrap.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/bootstrap.sh",
-        "line": 14,
-        "endLine": 14,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/update.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.71,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/backup.sh",
+        "file": "rules/shell/runs-downloaded-code/fixtures/verify_from_source.sh",
         "line": 15,
         "endLine": 15,
         "kind": "noul",
-        "value": 0.04,
+        "value": 0.15,
         "confidence": null
       },
       {
         "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/deploy_artifact.sh",
-        "line": 19,
-        "endLine": 19,
+        "file": "rules/shell/runs-downloaded-code/fixtures/apt_pinned_version.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/checksums_file_verify.sh",
+        "line": 14,
+        "endLine": 14,
         "kind": "noul",
         "value": 0.11,
         "confidence": null
       },
       {
         "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/package_install.sh",
-        "line": 17,
-        "endLine": 17,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/devenv.sh",
-        "line": 4,
-        "endLine": 4,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/devenv.sh",
-        "line": 7,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/devenv.sh",
-        "line": 8,
-        "endLine": 8,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/ci_helper.sh",
-        "line": 10,
-        "endLine": 10,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/bootstrap.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/bootstrap.sh",
-        "line": 14,
-        "endLine": 14,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/entrypoint.sh",
-        "line": 7,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/package_install.sh",
-        "line": 17,
-        "endLine": 17,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/install.sh",
+        "file": "rules/shell/runs-downloaded-code/fixtures/install.sh",
         "line": 16,
         "endLine": 16,
         "kind": "noul",
@@ -325,82 +69,446 @@
       },
       {
         "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/release.sh",
-        "line": 15,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/devenv.sh",
-        "line": 4,
-        "endLine": 4,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/devenv.sh",
-        "line": 7,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/devenv.sh",
-        "line": 8,
-        "endLine": 8,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/deploy_artifact.sh",
-        "line": 19,
-        "endLine": 19,
-        "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/fetch_fixtures.sh",
-        "line": 11,
-        "endLine": 13,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/backup.sh",
-        "line": 15,
-        "endLine": 15,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "runs-downloaded-code",
-        "file": "experiments/rule-candidates/shell/runs-downloaded-code/fixtures/update.sh",
+        "file": "rules/shell/runs-downloaded-code/fixtures/update.sh",
         "line": 11,
         "endLine": 11,
         "kind": "noul",
         "value": 0.66,
         "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/version_check_dropper.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.73,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/devenv.sh",
+        "line": 4,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/devenv.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/devenv.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/backup.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/entrypoint.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/package_install.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/bootstrap.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/bootstrap.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/release.sh",
+        "line": 15,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/ci_helper.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/ci_helper.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/verify_from_source.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/package_install.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/release.sh",
+        "line": 15,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/fetch_fixtures.sh",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/devenv.sh",
+        "line": 4,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/devenv.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/devenv.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/backup.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/entrypoint.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/checksums_file_verify.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/install.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/deploy_artifact.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/bootstrap.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/bootstrap.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/version_check_dropper.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/apt_pinned_version.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/update.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/backup.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/fetch_fixtures.sh",
+        "line": 11,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/checksums_file_verify.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/devenv.sh",
+        "line": 4,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/devenv.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/devenv.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/deploy_artifact.sh",
+        "line": 19,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/release.sh",
+        "line": 15,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/update.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.68,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/ci_helper.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/apt_pinned_version.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/install.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/version_check_dropper.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/package_install.sh",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/entrypoint.sh",
+        "line": 7,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/verify_from_source.sh",
+        "line": 15,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/bootstrap.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "runs-downloaded-code",
+        "file": "rules/shell/runs-downloaded-code/fixtures/bootstrap.sh",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
       }
     ]
   ],
   "spent": {
-    "calls": 33,
-    "inputTokens": 44781,
-    "usd": 0.0018808020000000002,
-    "ms": 954
+    "calls": 45,
+    "inputTokens": 58671,
+    "usd": 0.002464182,
+    "ms": 1103
   }
 }

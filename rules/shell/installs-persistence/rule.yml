@@ -9,19 +9,38 @@ kind: noul
 # rest of the file in the state to say what the file is for.
 subject: node
 state: located
-# 0.50, fitted 2026-09-21 on the fixtures beside it (16 subjects: 4 defects,
-# 12 cleans of which 10 hard, 3 passes). Cleans top out at 0.22 -- a
-# `systemctl --user daemon-reload` sitting one line above the timer that is the
-# defect, which is the highest any clean construct got and is entirely file
-# contamination -- and the rest of the cleans sit at 0.10 and under, including
-# the three `>>` appends that are the defect's own siblings in `.bashrc` and the
-# `| crontab -` that schedules the script the reader is holding. Defects start
-# at 0.80 (`devsetup.sh`, the login hook among the PATH lines -- the only defect
-# whose payload is one clause inside a quoted string). Midpoint of a gap 0.58
-# wide, 0.28 of headroom below and 0.30 above, no decision flips over three
-# passes, max spread 0.06. The first guess, 0.70, gave the same four findings;
-# it was moved down because 0.70 leaves only 0.10 under the weakest defect.
-at: 0.50
+# 0.60, refit 2026-09-22 on the fixtures beside it (34 subjects: 9 defects, 25
+# cleans, 3 passes) after aiming six new fixtures at the boundary the shell
+# pack promises: a user-directory systemd unit from an installer whose whole
+# job is installing (user_agent_install.sh, clean, 0.04 -- confidently, no
+# tension), a wrapper-script indirection (wrapper_indirection.sh, clean,
+# 0.04), a deferred one-shot `at` start of the installed binary
+# (deferred_start.sh, clean, 0.07), a unit whose body correctly runs the
+# installed program but is filed under a borrowed system name
+# (renamed_unit.sh, bad, 0.41-0.46 -- the borrowed-name clause in `ask` fires
+# even with a correct payload, but quietly), a persistent timer consistently
+# named for the program that actually does unrelated system-wide housekeeping
+# (scope_mismatch_timer.sh, bad, 0.27-0.36 across its three subjects -- quiet
+# because nothing about the naming is a tell), and a unit whose ExecStart
+# pings a telemetry beacon and discards the response before exec'ing the
+# installed binary under its own name (telemetry_ping_unit.sh, clean, 0.45-
+# 0.51 -- the loudest clean by far, and at the old cutoff of 0.50 it flipped
+# pass/flag across passes).
+#
+# That last one inverts the corpus: the loudest labelled clean (0.48 mean)
+# sits ABOVE three of the five new labelled defects (0.27-0.46 mean) -- no
+# cutoff gets both sides right, so this rule keeps both, documents it here,
+# and is graded on precision over the borrowed-name and scope-mismatch
+# defects rather than on catching them. 0.60 sits 0.12 above the telemetry
+# clean's mean (headroom that was 0.03 at the old 0.50, where it flipped) and
+# 0.23 below the old defect floor (`devsetup.sh`, 0.83), with zero flips over
+# three passes at this value. The five quiet defects are accepted misses
+# (P 1.00, R 0.44) rather than false positives on real code: raising the
+# cutoff to reach them would have to clear 0.48 -- the telemetry clean --
+# first. The original four defects and the original hard cleans are
+# unaffected (same as before: defects at 0.83-0.97, cleans at 0.17 and
+# under).
+at: 0.60
 axis: file
 severity: warning
 # Four places a shell script leaves something behind, over-matched on purpose:

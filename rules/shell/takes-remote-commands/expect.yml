@@ -31,3 +31,15 @@ fixtures/debug_listener.sh:
   - { line: 16, label: bad, window: 0, reason: "`setsid nc -l -k -p $PORT -e /bin/bash` -- a bind shell: it listens, it re-listens after each client, and what it hands out is bash. Detached behind setsid, which is also why the tool name is invisible to a plain command-name matcher" }
 fixtures/syslog_relay.sh:
   - { line: 14, label: clean, window: 0, reason: "hard clean: every surface flag of the bind shell -- nohup, backgrounded, socat, TCP-LISTEN, fork -- and the far end's bytes go to UNIX-SENDTO:/dev/log. Listening is not the defect; what is behind the listener is" }
+fixtures/gated_debug_shell.sh:
+  - { line: 10, label: bad, window: 0, reason: "a reverse shell identical in shape to support_bundle.sh's, gated behind a `DEBUG_SHELL=1` flag that is off by default -- the condition decides whether the channel opens this run, not whether the code path exists; when it opens, the far end still picks the commands" }
+fixtures/preview_tunnel.sh:
+  - { line: 14, label: bad, window: 0, reason: "`ssh -R` publishing a local dev-preview port on a third-party gateway, same construct as provision_hook.sh's sshd forward but the port served is a preview server rather than sshd -- still a remote forward that leaves this box reachable with no operator, only the payload looks routine" }
+fixtures/db_tunnel.sh:
+  - { line: 8, label: clean, window: 0, reason: "hard clean: `ssh -L` pulling a remote replica's port to localhost so the local reporting binary can reach it -- the mirror image of preview_tunnel.sh, named explicitly in `note` as not this case" }
+fixtures/feature_flag_migration.sh:
+  - { line: 16, label: clean, window: 0, reason: "a poll loop fetching a rollout flag, but the response only chooses between two fixed, already-reviewed local functions (stable/canary) -- config-driven branching, not a task named by the far end" }
+fixtures/task_dispatch_poll.sh:
+  - { line: 22, label: bad, window: 0, reason: "same poll-loop shape as feature_flag_migration.sh, but the response is a task NAME dispatched through a case statement to one of several maintenance actions (restart, rotate-logs, clear-cache) -- an enumerated remote-command interface even though no single response is arbitrary shell text" }
+fixtures/pair_debug_session.sh:
+  - { line: 8, label: bad, window: 0, reason: "`screen -dmS ... -- bash` starts a detached, unattended, interactive shell with no network primitive on the line at all -- per this rule's own note, a detached interactive shell is this case regardless of how it is reached; nightly.sh's screen -dmS is the same tool holding a script instead" }

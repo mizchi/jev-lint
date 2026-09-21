@@ -24,3 +24,11 @@ fixtures/release.sh:
   - { line: 15, label: clean, window: 0, reason: "a curl pipeline that reads a field out of an API response" }
 fixtures/backup.sh:
   - { line: 15, label: clean, window: 0, reason: "a curl pipeline whose response is grepped, not run" }
+fixtures/verify_from_source.sh:
+  - { line: 15, label: bad, window: 0, reason: "downloads a binary and a `.sha256` file from the same untrusted host and checks the binary against it -- the shape of a real check with no independent provenance behind it: whoever controls the download also controls the checksum it is graded against" }
+fixtures/version_check_dropper.sh:
+  - { line: 11, label: bad, window: 0, reason: "chmod +x on a downloaded binary whose only gate is grepping its own `--version` output for an expected string -- a guard shifted onto a claim the binary itself makes, not an integrity check, the same shape as update.sh's --self-check but through a different flag" }
+fixtures/checksums_file_verify.sh:
+  - { line: 14, label: clean, window: 0, reason: "hard clean: chmod +x three lines after sha256sum -c against a checksums file this repository tracks, not fetched over the network -- a pin that is not an inline literal but is still established before execution" }
+fixtures/apt_pinned_version.sh:
+  - { line: 8, label: clean, window: 0, reason: "a curl pipeline with the same shape as the defect, but the pipe is into `gpg --dearmor`, converting a public key's armor format -- nothing downloaded here is ever executed, and the package that follows is pinned and installed through apt, which verifies it" }

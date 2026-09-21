@@ -1,13 +1,13 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-21T06:47:11.206Z",
+  "recorded": "2026-09-21T17:32:16.655Z",
   "model": "jev-1.13.0",
   "suite": "shell/takes-remote-commands",
   "rules": [
     {
       "id": "takes-remote-commands",
       "draft": "d564d94bd357",
-      "at": 0.5
+      "at": 0.33
     }
   ],
   "cutoffs": {},
@@ -15,142 +15,7 @@
     [
       {
         "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/support_bundle.sh",
-        "line": 20,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/syslog_relay.sh",
-        "line": 14,
-        "endLine": 15,
-        "kind": "noul",
-        "value": 0.12,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/preflight.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.02,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/debug_listener.sh",
-        "line": 16,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/node_agent.sh",
-        "line": 18,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/stream_dump.sh",
-        "line": 8,
-        "endLine": 8,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/provision_hook.sh",
-        "line": 16,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.89,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/cert_check.sh",
-        "line": 10,
-        "endLine": 10,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/cert_check.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.02,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/remote_helper.sh",
-        "line": 12,
-        "endLine": 12,
-        "kind": "noul",
-        "value": 0.27,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/remote_helper.sh",
-        "line": 16,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.8,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/worker.sh",
-        "line": 15,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/nightly.sh",
-        "line": 15,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/wait_for_health.sh",
-        "line": 8,
-        "endLine": 14,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/migrate.sh",
-        "line": 8,
-        "endLine": 8,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/metrics_shipper.sh",
+        "file": "rules/shell/takes-remote-commands/fixtures/metrics_shipper.sh",
         "line": 21,
         "endLine": 21,
         "kind": "noul",
@@ -159,299 +24,7 @@
       },
       {
         "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/deploy.sh",
-        "line": 14,
-        "endLine": 15,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/remote_helper.sh",
-        "line": 12,
-        "endLine": 12,
-        "kind": "noul",
-        "value": 0.25,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/remote_helper.sh",
-        "line": 16,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.81,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/provision_hook.sh",
-        "line": 16,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.89,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/cert_check.sh",
-        "line": 10,
-        "endLine": 10,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/cert_check.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.02,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/syslog_relay.sh",
-        "line": 14,
-        "endLine": 15,
-        "kind": "noul",
-        "value": 0.12,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/deploy.sh",
-        "line": 14,
-        "endLine": 15,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/debug_listener.sh",
-        "line": 16,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/nightly.sh",
-        "line": 15,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/worker.sh",
-        "line": 15,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/wait_for_health.sh",
-        "line": 8,
-        "endLine": 14,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/metrics_shipper.sh",
-        "line": 21,
-        "endLine": 21,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/migrate.sh",
-        "line": 8,
-        "endLine": 8,
-        "kind": "noul",
-        "value": 0.13,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/preflight.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.02,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/stream_dump.sh",
-        "line": 8,
-        "endLine": 8,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/support_bundle.sh",
-        "line": 20,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/node_agent.sh",
-        "line": 18,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/debug_listener.sh",
-        "line": 16,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/cert_check.sh",
-        "line": 10,
-        "endLine": 10,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/cert_check.sh",
-        "line": 11,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.02,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/metrics_shipper.sh",
-        "line": 21,
-        "endLine": 21,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/remote_helper.sh",
-        "line": 12,
-        "endLine": 12,
-        "kind": "noul",
-        "value": 0.23,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/remote_helper.sh",
-        "line": 16,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.81,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/migrate.sh",
-        "line": 8,
-        "endLine": 8,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/stream_dump.sh",
-        "line": 8,
-        "endLine": 8,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/nightly.sh",
-        "line": 15,
-        "endLine": 16,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/wait_for_health.sh",
-        "line": 8,
-        "endLine": 14,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/worker.sh",
-        "line": 15,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/syslog_relay.sh",
-        "line": 14,
-        "endLine": 15,
-        "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/support_bundle.sh",
-        "line": 20,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/deploy.sh",
-        "line": 14,
-        "endLine": 15,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/provision_hook.sh",
+        "file": "rules/shell/takes-remote-commands/fixtures/provision_hook.sh",
         "line": 16,
         "endLine": 18,
         "kind": "noul",
@@ -460,7 +33,106 @@
       },
       {
         "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/preflight.sh",
+        "file": "rules/shell/takes-remote-commands/fixtures/gated_debug_shell.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/remote_helper.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/remote_helper.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/syslog_relay.sh",
+        "line": 14,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/feature_flag_migration.sh",
+        "line": 16,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/wait_for_health.sh",
+        "line": 8,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/deploy.sh",
+        "line": 14,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/migrate.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/preview_tunnel.sh",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/task_dispatch_poll.sh",
+        "line": 22,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/pair_debug_session.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.51,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/preflight.sh",
         "line": 11,
         "endLine": 11,
         "kind": "noul",
@@ -469,19 +141,509 @@
       },
       {
         "rule": "takes-remote-commands",
-        "file": "experiments/rule-candidates/shell/takes-remote-commands/fixtures/node_agent.sh",
+        "file": "rules/shell/takes-remote-commands/fixtures/stream_dump.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/db_tunnel.sh",
+        "line": 8,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/nightly.sh",
+        "line": 15,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/cert_check.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/cert_check.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/worker.sh",
+        "line": 15,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/debug_listener.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/node_agent.sh",
         "line": 18,
         "endLine": 26,
         "kind": "noul",
         "value": 0.97,
         "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/support_bundle.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/cert_check.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/cert_check.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/debug_listener.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/metrics_shipper.sh",
+        "line": 21,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/db_tunnel.sh",
+        "line": 8,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/pair_debug_session.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/feature_flag_migration.sh",
+        "line": 16,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/node_agent.sh",
+        "line": 18,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/nightly.sh",
+        "line": 15,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/gated_debug_shell.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/deploy.sh",
+        "line": 14,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/preview_tunnel.sh",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/migrate.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/support_bundle.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/remote_helper.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/remote_helper.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/provision_hook.sh",
+        "line": 16,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/stream_dump.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/wait_for_health.sh",
+        "line": 8,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/task_dispatch_poll.sh",
+        "line": 22,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/worker.sh",
+        "line": 15,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/syslog_relay.sh",
+        "line": 14,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/preflight.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/feature_flag_migration.sh",
+        "line": 16,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/nightly.sh",
+        "line": 15,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/node_agent.sh",
+        "line": 18,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/db_tunnel.sh",
+        "line": 8,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/debug_listener.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/cert_check.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/cert_check.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/metrics_shipper.sh",
+        "line": 21,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/deploy.sh",
+        "line": 14,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/migrate.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/gated_debug_shell.sh",
+        "line": 10,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/preflight.sh",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/pair_debug_session.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.52,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/remote_helper.sh",
+        "line": 12,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/remote_helper.sh",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/preview_tunnel.sh",
+        "line": 14,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.42,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/stream_dump.sh",
+        "line": 8,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/wait_for_health.sh",
+        "line": 8,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/syslog_relay.sh",
+        "line": 14,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/task_dispatch_poll.sh",
+        "line": 22,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/provision_hook.sh",
+        "line": 16,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/support_bundle.sh",
+        "line": 20,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "takes-remote-commands",
+        "file": "rules/shell/takes-remote-commands/fixtures/worker.sh",
+        "line": 15,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
       }
     ]
   ],
   "spent": {
-    "calls": 45,
-    "inputTokens": 69417,
-    "usd": 0.0029155140000000006,
-    "ms": 1091
+    "calls": 63,
+    "inputTokens": 94155,
+    "usd": 0.0039545100000000005,
+    "ms": 1084
   }
 }
