@@ -23,14 +23,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The suite runs from source under `--experimental-strip-types`,
-        # which arrived in Node 22.6. That is a floor on developing this
-        # package, not on using it -- what is published is compiled, and
-        # the `dist` job below holds `engines` to its word separately.
+        # The two lines still supported as of this file's last edit: 20 went
+        # end of life in April 2026 and 25 in June. 22 is also where
+        # `--experimental-strip-types` arrived, which the suite needs to run
+        # from source at all, so the floor here and the floor in `engines`
+        # happen to coincide -- they are not the same constraint, and the
+        # `dist` job is what holds `engines` to its word.
         node: [22, 24]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -54,18 +56,18 @@ jobs:
       - run: npm run build
       - run: npm run eval:replay
 
-  # `engines` says node >=20. Nothing checked that, and the suite cannot:
-  # it needs 22.6 to run at all. What a user of this package actually runs
-  # is the compiled tree, so that is what is held to the claim here -- the
-  # rules load, a plan can be made, and a baseline replays, on the oldest
-  # version the package says it supports.
+  # `engines` says node >=22, and the suite cannot check it: the suite runs
+  # from source under --experimental-strip-types, so it never exercises the
+  # compiled tree that a user of this package actually runs. That is what is
+  # held to the claim here -- the rules load, a plan can be made, and a
+  # baseline replays -- on the oldest version the package says it supports.
   dist:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run test:dist
@@ -87,13 +89,13 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           # Nothing here pushes, and a checked-out token is one more thing
           # for the reviewed code to find.
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
           cache: npm

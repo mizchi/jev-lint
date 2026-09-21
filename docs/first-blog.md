@@ -38,7 +38,7 @@ https://github.com/mizchi/jev-lint
 
 node.js で作りましたが、ast-grep に対応してる言語なら全部対応。`npx -y jev-lint` もしくは `npm install jev-lint` で入れてください。
 
-依存は Node 20+ と TYPESAFE_API_KEY だけです。ast-grep は npm 依存として一緒に入ります。
+依存は Node 22+ と TYPESAFE_API_KEY だけです。ast-grep は npm 依存として一緒に入ります。
 プリセットのルールは現時点で 6 pack 23 ルール。ラベル付き corpus に対して閾値を fit してあり、23 のうち 17 は corpus 上で precision / recall 1.0 ですが、corpus は小さいので、自分のコードでは再フィットする前提です。ここから増やしていきます。
 
 ## 拡張できることの例

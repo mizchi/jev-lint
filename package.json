@@ -23,7 +23,7 @@
   "homepage": "https://github.com/mizchi/jev-lint#readme",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "bin": {
     "jev-lint": "dist/cli.js"

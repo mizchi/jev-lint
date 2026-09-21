@@ -110,7 +110,7 @@ npx -y jev-lint check src --dry-run    # 何を聞くかと価格。リクエス
 npx -y jev-lint check src              # 聞く
 ```
 
-これにインストールは要らない。Node 20+。`check` は同梱ルール全部 (`rules/<language>/<id>/` の下の 98 個) を読み込み、どれが走るかは渡したファイルが決める。`.ts` には TypeScript のルールが、`.md` には Markdown のルールが当たり、ファイルの無い言語は実行の最後に idle として列挙される。選ぶものはない。
+これにインストールは要らない。Node 22+。`check` は同梱ルール全部 (`rules/<language>/<id>/` の下の 98 個) を読み込み、どれが走るかは渡したファイルが決める。`.ts` には TypeScript のルールが、`.md` には Markdown のルールが当たり、ファイルの無い言語は実行の最後に idle として列挙される。選ぶものはない。
 
 ### 何が同梱され、何に当たるか
 

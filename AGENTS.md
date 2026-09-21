@@ -65,8 +65,9 @@ not a sentiment. Vague entries are worse than absent ones.
 
 ## Code
 
-- Node 20 or later, ESM (`"type": "module"`). Tests run from source under
-  `--experimental-strip-types`; there is no build step to run them.
+- Node 22 or later, ESM (`"type": "module"`). 20 went end of life in April
+  2026, and 22 is also where `--experimental-strip-types` arrived, which is
+  what lets the suite run from source with no build step.
 - Two runtime dependencies, `yaml` and `@ast-grep/cli`, and adding a third
   is a decision, not a detail: `src/` runs from source in CI and in the git
   hooks, so anything installed here executes in the same process that holds
