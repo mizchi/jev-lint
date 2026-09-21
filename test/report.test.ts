@@ -159,6 +159,6 @@ test("report: a git rule off duty is not a matcher that missed", () => {
   const change = scoreRule({ id: "r-change", language: "Git", subject: "change", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
   const commit = scoreRule({ id: "r-commit", language: "Git", subject: "commit", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
   const empty = { rules: [change, commit], subjects: [], all: [], findings: [], review: [], stats: { subjects: 0, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } };
-  assert.deepEqual(silentRules({ ...empty, commits: null }), [], "neither is on duty in a file-mode run");
+  assert.deepEqual(silentRules(empty), [], "neither is on duty in a file-mode run: `commits` is absent");
   assert.deepEqual(silentRules({ ...empty, commits: { range: "HEAD", total: 1, skippedMerges: 0 } }).sort(), ["r-change", "r-commit"], "both are, in commits mode, and both found nothing");
 });
