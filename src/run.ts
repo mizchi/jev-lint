@@ -22,8 +22,9 @@ import { buildExplainQuestion, questionId, readAnswer, readChoice } from "./ques
 import { planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { schedule, planMixed, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
 import { Cache, verdictKey, contextKey } from "./cache.ts";
-import { gate } from "./gate.ts";
+import { gate, collect } from "./gate.ts";
 import { touchesChange } from "./diff.ts";
+import { splitDirectives, type Directive } from "./directives.ts";
 import { ruleTextHash, cutoffFor, extensionsOf, undeclared as undeclaredLanguages } from "./rules.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
 import { excerptBudget, pairTests, type RelatedTest } from "./paired.ts";
@@ -569,8 +570,15 @@ export async function run({
 
   if (persistTo) cache.save({ model: jev.servedModel ?? jev.model });
 
-  const gated = gate(results, { cutoffs, unsureBelow, loose });
+  let gated = gate(results, { cutoffs, unsureBelow, loose });
   if (explain && !refused) await explainFindings(gated.findings, batches, jev, errors);
+  if (!refused && gated.findings.length > 0) {
+    await attributeFindings(gated.findings, batches, jev, errors, cutoffs);
+    // Re-derived rather than patched by hand: the attribution pass can
+    // retract a finding, and `collect` is what turns the findings array back
+    // into the lists and the counts a report reads (see gate.ts).
+    gated = collect(gated.all, { cutoffs, unsureBelow, loose });
+  }
   // Attached by identity rather than by position: `gate` happens to map 1:1
   // over its input, and relying on that is the same coupling that once
   // attributed every answer to the wrong subject.
@@ -704,6 +712,149 @@ async function explainFindings(
       });
     }
   });
+}
+
+const TASK_ATTRIBUTE =
+  "Decide whether the change in the state breaks the one instruction quoted below -- the instruction is the project's own, and whether it is a good one is not the question.";
+
+const STATEMENT_ATTRIBUTE = "This change does what this instruction forbids, or leaves out what it requires.";
+
+const ALSO_ATTRIBUTE =
+  "An instruction about how the work was done rather than what the change contains -- develop test-first, ask when unclear, read the skill before starting -- is not something a diff can show: answer false. An instruction whose terms the change cannot be held against (\"keep it readable\", \"separate concerns\") is the same case, and so is one a formatter, linter or type checker already enforces. A change that does not touch what this instruction is about is false, not unknown.";
+
+/**
+ * One directive's question: the same true/false shape `diff-follows-instructions`
+ * itself asks (see `rules/git/diff-follows-instructions/rule.yml`), narrowed
+ * from "the instructions" to the one directive quoted here. Built by hand
+ * rather than through `buildQuestion`, which shapes a rule's own sentence --
+ * this sentence is fixed and about a `Directive`, not a `Rule`.
+ */
+function buildDirectiveQuestion(directive: Directive, id: string): Question {
+  return {
+    type: "noul",
+    instructions: {
+      task: TASK_ATTRIBUTE,
+      statement: STATEMENT_ATTRIBUTE,
+      also: ALSO_ATTRIBUTE,
+      subject: id,
+      instruction: `${directive.file}:${directive.line}`,
+      breadcrumb: directive.breadcrumb,
+      body: directive.body,
+    },
+    criteria: {
+      true: "The change contains something this instruction names and rules out -- a dependency, an API, a construct, a path, a pattern; or it edits a file this instruction calls generated or owned elsewhere; or it is a change of a kind this instruction says requires something alongside it -- a test, a changelog entry, a type declaration, a migration -- and that thing is absent from the diff.",
+      false: "The change keeps this instruction, or does not touch what it is about. A change that edits the instruction documents themselves is not in breach of this one for doing so.",
+    },
+  };
+}
+
+/**
+ * The attribution pass: for every reported `subject: change` finding, which
+ * of the instruction documents' own directives it is about.
+ *
+ * The verdict pass answers "this change breaks an instruction" over the
+ * whole document, which is cheap and names nothing a reader can act on. This
+ * pass splits the same documents the verdict was already asked against
+ * (`splitDirectives`) into directives, asks one true/false question per
+ * directive -- all in a single `askSplitting` against the batch's own state,
+ * so the diff and the documents are not sent twice -- and attaches every
+ * directive at or over the rule's own cutoff to the finding as `violates`,
+ * strongest first.
+ *
+ * A finding left with no directive over the cutoff is retracted: `messageId`
+ * becomes `"review"` and `reported` becomes `false`. A cheap whole-document
+ * gate that cannot name which instruction it means is not one worth turning
+ * an exit code over, so recall spent in the first pass buys precision here.
+ *
+ * A failed request leaves every finding of that batch exactly as the verdict
+ * pass left it -- attributed to nothing and not retracted. A question that
+ * could not be asked is not evidence the verdict was wrong.
+ *
+ * Question ids are `${subject.id}-a${i}`: a subject's own id is unique
+ * within its batch (`makeBatch` numbers it), and no subject id is ever
+ * anything but `q` followed by digits, so a suffix on it can never collide
+ * with another subject's id -- including a second `subject: change` rule
+ * sharing this batch over the same commit.
+ */
+async function attributeFindings(
+  findings: Finding[],
+  batches: Batch[],
+  jev: AskClient,
+  errors: RunError[],
+  cutoffs: Record<string, number>,
+): Promise<void> {
+  const byIdentity = new Map<string, Finding>();
+  for (const f of findings) byIdentity.set(findingIdentity(f), f);
+
+  interface Asked {
+    subject: Subject;
+    finding: Finding;
+    directives: Directive[];
+  }
+  const jobs: Array<{ batch: Batch; asked: Asked[] }> = [];
+  for (const batch of batches) {
+    const asked: Asked[] = [];
+    for (const s of batch.subjects) {
+      if (s.rule.subject !== "change" || !s.instructions) continue;
+      const f = byIdentity.get(identify(s));
+      if (!f) continue;
+      asked.push({ subject: s, finding: f, directives: splitDirectives(s.instructions.docs) });
+    }
+    if (asked.length > 0) jobs.push({ batch, asked });
+  }
+  if (jobs.length === 0) return;
+
+  await mapLimit(jobs, DEFAULT_CONCURRENCY, async ({ batch, asked }) => {
+    const questions: Record<string, Question> = {};
+    for (const { subject, directives } of asked) {
+      directives.forEach((directive, i) => {
+        questions[`${subject.id}-a${i}`] = buildDirectiveQuestion(directive, `${subject.id}-a${i}`);
+      });
+    }
+    // No directives in the documents at all: nothing to attribute to and
+    // nothing to ask. Retracted the same way as a directive that never
+    // cleared the cutoff would leave it -- see the loop below -- without
+    // spending a request that would come back with no answers either way.
+    if (Object.keys(questions).length === 0) {
+      for (const { finding } of asked) {
+        finding.messageId = "review";
+        finding.reported = false;
+      }
+      return;
+    }
+    try {
+      const res = await jev.askSplitting(batch.state, questions);
+      for (const { subject, finding, directives } of asked) {
+        const at = cutoffFor(subject.rule, cutoffs);
+        const violates: NonNullable<Finding["violates"]> = [];
+        directives.forEach((directive, i) => {
+          const answer = readAnswer(res.answers, `${subject.id}-a${i}`, "noul");
+          if (answer && answer.value >= at) {
+            violates.push({ file: directive.file, line: directive.line, breadcrumb: directive.breadcrumb, body: directive.body, value: answer.value });
+          }
+        });
+        if (violates.length > 0) {
+          violates.sort((a, b) => b.value - a.value);
+          finding.violates = violates;
+        } else {
+          finding.messageId = "review";
+          finding.reported = false;
+        }
+      }
+    } catch (err: unknown) {
+      errors.push({
+        file: batch.file,
+        subjects: asked.length,
+        error: `attribute: ${String((err as Error)?.message ?? err)}`,
+      });
+      // Fail open: nothing about these findings changes. See the doc comment.
+    }
+  });
+}
+
+/** Same identity as `identify`, for a `Finding` rather than a `Subject`. */
+function findingIdentity(f: Finding): string {
+  return `${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
 }
 
 /** One subject's verdict, plus how it behaved across `--retry` passes. */

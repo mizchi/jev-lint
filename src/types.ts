@@ -668,6 +668,12 @@ export interface Finding {
   change?: { summary: string };
   /** Present when the block was cut to fit: the verdict is about its first `judged` of `of` characters. */
   cut?: { judged: number; of: number };
+  /**
+   * Present on a `subject: change` finding: the instructions the attribution
+   * pass could point at, with the answer each one got. A finding with none
+   * is retracted rather than printed, so this is never empty.
+   */
+  violates?: Array<{ file: string; line: number; breadcrumb: string; body: string; value: number }>;
 }
 
 export interface GateStats {

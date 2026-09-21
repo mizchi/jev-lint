@@ -17,7 +17,7 @@ import { explain } from "../src/schedule.ts";
 import { splitBlocks, textSubjects, MAX_BLOCK_CHARS } from "../src/text.ts";
 import { LANGUAGE_DIRS } from "../src/types.ts";
 import type { Rule } from "../src/types.ts";
-import { scoreRule, noulRule, tempRepo, commitRule } from "./builders.ts";
+import { scoreRule, noulRule, tempRepo, commitRule, changeRule } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
 
 const blockRule = (over: Record<string, unknown> = {}): Rule =>
@@ -522,6 +522,165 @@ await testAsync("end to end: overlapping grammars produce one subject per node",
     assert.equal(duplicateGrammars, 2, "the duplicates should be counted, not merely dropped");
     // Two distinct nodes must survive; dedupe must key on the range, not the file.
     assert.equal(new Set(subjects.map((s) => s.line)).size, 2);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// The attribution pass over a `subject: change` finding: the fixture repo
+// below is shared across the next four tests. One commit, one AGENTS.md with
+// two top-level bullets (two directives, `splitDirectives` puts the first at
+// line 3), a `package.json` that adds the dependency the first bullet
+// forbids. A directive question is told apart from the verdict question by
+// `"instruction" in q.instructions`, which only the per-directive question
+// (built in `attributeFindings`) carries.
+const AGENTS_MD = "# Rules\n\n- Never add a dependency on left-pad.\n- Keep the changelog updated.\n";
+const changeFixture = () =>
+  tempRepo([
+    {
+      message: "Add left-pad dependency",
+      files: { "AGENTS.md": AGENTS_MD, "package.json": '{"dependencies":{"left-pad":"^1.0.0"}}\n' },
+    },
+  ]);
+const isDirectiveQuestion = (q: { instructions: Record<string, unknown> }) => "instruction" in q.instructions;
+
+await testAsync("run: a change finding names the one instruction that clears the cutoff", async () => {
+  const { run } = await import("../src/run.ts");
+  const dir = changeFixture();
+  try {
+    const rule = changeRule();
+    const seen: Array<Record<string, { instructions: Record<string, unknown> }>> = [];
+    const client = {
+      model: "fake",
+      servedModel: null,
+      spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
+      askSplitting: async (_state: unknown, questions: Record<string, { instructions: Record<string, unknown> }>) => {
+        seen.push(questions);
+        const answers: Record<string, unknown> = {};
+        for (const [id, q] of Object.entries(questions)) {
+          answers[id] = {
+            type: "noul",
+            // The verdict question always answers high; of the two
+            // directives only the one about the dependency does.
+            noul: isDirectiveQuestion(q) ? (String(q.instructions.body).includes("left-pad") ? 0.9 : 0.1) : 0.9,
+          };
+        }
+        return { answers, usage: { input_tokens: 1 } };
+      },
+    };
+    const result = await run({ rules: [rule], paths: [], commits: { range: "HEAD" }, cwd: dir, cachePath: null, client });
+    assert.equal(result.findings.length, 1);
+    const [finding] = result.findings;
+    assert.equal(finding!.violates?.length, 1);
+    assert.equal(finding!.violates![0]!.file, "AGENTS.md");
+    assert.equal(finding!.violates![0]!.line, 3);
+    assert.match(finding!.violates![0]!.body, /left-pad/);
+    // One attribution round, one question per directive -- beside the
+    // verdict round, not instead of it.
+    const attributionRounds = seen.filter((qs) => Object.values(qs).some(isDirectiveQuestion));
+    assert.equal(attributionRounds.length, 1);
+    assert.equal(Object.keys(attributionRounds[0]!).length, 2, "one noul question per directive");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("run: a change finding no directive accounts for is retracted, not printed", async () => {
+  const { run } = await import("../src/run.ts");
+  const dir = changeFixture();
+  try {
+    const rule = changeRule();
+    const client = {
+      model: "fake",
+      servedModel: null,
+      spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
+      askSplitting: async (_state: unknown, questions: Record<string, { instructions: Record<string, unknown> }>) => {
+        const answers: Record<string, unknown> = {};
+        // Every directive answers low, however high the verdict itself was.
+        for (const [id, q] of Object.entries(questions)) {
+          answers[id] = { type: "noul", noul: isDirectiveQuestion(q) ? 0.1 : 0.9 };
+        }
+        return { answers, usage: { input_tokens: 1 } };
+      },
+    };
+    const result = await run({ rules: [rule], paths: [], commits: { range: "HEAD" }, cwd: dir, cachePath: null, client });
+    assert.deepEqual(result.findings, []);
+    assert.equal(result.stats.reported, 0);
+    // The same run, `--loose`: the retracted finding is listed for a reader,
+    // never counted -- see gate.ts's `review` band.
+    const loose = await run({ rules: [rule], paths: [], commits: { range: "HEAD" }, cwd: dir, cachePath: null, client, loose: Infinity });
+    assert.equal(loose.review.length, 1);
+    assert.equal(loose.review[0]!.messageId, "review");
+    assert.equal(loose.review[0]!.violates, undefined);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("run: a failed attribution request leaves the finding exactly as the verdict pass left it", async () => {
+  const { run } = await import("../src/run.ts");
+  const dir = changeFixture();
+  try {
+    const rule = changeRule();
+    const client = {
+      model: "fake",
+      servedModel: null,
+      spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
+      askSplitting: async (_state: unknown, questions: Record<string, { instructions: Record<string, unknown> }>) => {
+        const first = Object.values(questions)[0]!;
+        if (isDirectiveQuestion(first)) throw new Error("attribution boom");
+        const answers: Record<string, unknown> = {};
+        for (const id of Object.keys(questions)) answers[id] = { type: "noul", noul: 0.9 };
+        return { answers, usage: { input_tokens: 1 } };
+      },
+    };
+    const result = await run({ rules: [rule], paths: [], commits: { range: "HEAD" }, cwd: dir, cachePath: null, client });
+    assert.equal(result.findings.length, 1, "the verdict finding survives a follow-up that could not be asked");
+    assert.equal(result.findings[0]!.violates, undefined);
+    assert.equal(result.findings[0]!.reported, true);
+    assert.ok(result.errors?.some((e) => /^attribute:/.test(e.error)), "the failure is reported, naming the pass it came from");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("run: two change rules over one commit share a batch but never a question id", async () => {
+  // `planBatches` groups by (arm, file, rule.subject), not by rule id, so
+  // two `subject: change` rules over the same commit land in one batch and
+  // one verdict request. Their directive questions must not collide either:
+  // this is what a subject id's own uniqueness within its batch buys when a
+  // directive's id is built by suffixing it.
+  const { run } = await import("../src/run.ts");
+  const dir = changeFixture();
+  try {
+    const ruleA = changeRule({ id: "diff-follows-instructions" });
+    const ruleB = changeRule({ id: "diff-follows-instructions-2" });
+    const seenIds = new Set<string>();
+    let collided = false;
+    const client = {
+      model: "fake",
+      servedModel: null,
+      spent: { calls: 0, inputTokens: 0, usd: 0, ms: 0 },
+      askSplitting: async (_state: unknown, questions: Record<string, { instructions: Record<string, unknown> }>) => {
+        const answers: Record<string, unknown> = {};
+        for (const [id, q] of Object.entries(questions)) {
+          if (seenIds.has(id)) collided = true;
+          seenIds.add(id);
+          answers[id] = {
+            type: "noul",
+            noul: isDirectiveQuestion(q) ? (String(q.instructions.body).includes("left-pad") ? 0.9 : 0.1) : 0.9,
+          };
+        }
+        return { answers, usage: { input_tokens: 1 } };
+      },
+    };
+    const result = await run({ rules: [ruleA, ruleB], paths: [], commits: { range: "HEAD" }, cwd: dir, cachePath: null, client });
+    assert.equal(collided, false, "a question id must never repeat, even across two change rules sharing a commit's batch");
+    assert.equal(result.findings.length, 2);
+    for (const f of result.findings) {
+      assert.equal(f.violates?.length, 1);
+      assert.match(f.violates![0]!.body, /left-pad/);
+    }
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
