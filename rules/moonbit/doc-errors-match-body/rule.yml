@@ -12,13 +12,43 @@ subject: node
 # `located`: the doc sits outside the matched node, and a helper the body
 # delegates its failure to is in the file.
 state: located
-# 0.50, fitted 2026-09-21 on the fixtures beside it (11 subjects: 4
-# defects, 7 cleans of which 5 hard, 3 passes). Cleans top at 0.15
-# (`host_of`, whose raise sits in a match arm rather than behind a guard),
-# defects start at 0.85. The gap is the widest of the MoonBit rules, which
-# is what happens when the contract is written in two places -- the doc and
-# the `raise` in the signature -- and the model can read both. Midpoint;
-# rust takes 0.54 and every defect here answers over that too.
+# 0.50, refit 2026-09-22 on the boundary hunt (18 subjects: 9 defects, 9
+# cleans, up from 11/4/7; 3 passes). Cleans top at 0.16 (`port_or`, the
+# `never fails` claim over two branches that return the same value -- a
+# design smell, not a contract break). Defects that land where they were
+# aimed: `clamp_score` at 0.63, a two-clause doc where the raise clause
+# (negative -> ParseError) is true and a second clause -- "returns 1 when
+# the value is exactly zero" -- is false, since the body falls through to
+# 0. It was drafted as a scope test (is a Returns-when-C fallback value a
+# failure clause here?) and relabelled bad on rereading the corpus's own
+# `value_of`/`paired_total` precedent, not because the model disagreed with
+# "clean". Everything else that was aimed at the boundary missed it in the
+# loud direction: `validate_percentage` (0.78, a `>= 100` guard against a
+# `> 100` doc), `apply_discount` (0.84, `<= 0` against `negative`),
+# `format_row` (0.87, indexes an unchecked second array) all answer as
+# confidently as the original corpus's defects, and `retries_for_service`
+# (0.13) / `second_highest` (0.10) as confidently as its cleans -- the
+# model resolves a one-hop delegation or a precise numeric guard on sight
+# once the callee is in view, which is what `located` is for.
+#
+# Residue: `paired_total` (0.23, below cutoff) is a real miss, not
+# relabelled. Its doc says "None when the list is empty"; the body's guard
+# is `length() < 2`, so a one-element list also returns None, and an empty
+# list actually returns `Some(0)` -- the doc's own named case is wrong too.
+# The model reads the two conditions ("empty" vs "fewer than two") as close
+# enough to be the same shape of guard and does not weigh the boundary
+# shift; the same failure mode as `clamp_score` succeeding suggests the
+# model catches a false VALUE clause more readily than a false CONDITION
+# clause on an otherwise correctly-shaped guard. A cutoff of ~0.18 would
+# catch it but leaves 0.013 of headroom over `port_or` -- the coin-flip gap
+# calibration.md warns against -- so 0.50 stays and this rule ships knowing
+# it misses this shape.
+#
+# FN-margin 0.13 (`clamp_score` at 0.63, excluding the residue), tightened
+# from 0.34. FP-margin 0.34 (`port_or` at 0.16), essentially unchanged --
+# every clean aimed at the boundary landed quiet instead. Midpoint of the
+# original 11-case corpus was 0.50 already and nothing here moves it; rust
+# takes 0.54 and every non-residue defect here still answers over that too.
 at: 0.50
 axis: file
 severity: warning

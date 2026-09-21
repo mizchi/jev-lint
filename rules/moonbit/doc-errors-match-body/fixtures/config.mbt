@@ -12,6 +12,18 @@ pub fn port_of(line : String) -> Int raise {
 }
 
 ///|
+/// The second-highest value in the list.
+/// Panics when the list has fewer than two entries.
+pub fn second_highest(values : Array[Int]) -> Int {
+  if values.length() < 2 {
+    abort("need at least two values")
+  }
+  let sorted = values.copy()
+  sorted.sort()
+  sorted[sorted.length() - 2]
+}
+
+///|
 /// Returns the value for the key.
 /// Returns None when the key is absent.
 pub fn value_of(lines : Array[String], key : String) -> String? {
@@ -45,6 +57,16 @@ pub fn first(lines : Array[String]) -> String? {
 }
 
 ///|
+/// The discounted price.
+/// Raises ParseError when the discount percent is negative.
+pub fn apply_discount(price : Int, percent : Int) -> Int raise {
+  if percent <= 0 {
+    raise ParseError("bad discount")
+  }
+  price - price * percent / 100
+}
+
+///|
 /// Reads the timeout.
 /// Raises ParseError when the value is not a number.
 pub fn timeout_of(line : String) -> Int raise {
@@ -61,6 +83,43 @@ pub fn count_keys(lines : Array[String]) -> Int {
     }
   }
   n
+}
+
+///|
+fn require_entry(table : Map[String, String], key : String) -> String raise {
+  match table.get(key) {
+    Some(v) => v
+    None => raise ParseError(key)
+  }
+}
+
+///|
+/// Looks up the retry count for the service.
+/// Raises ParseError when the service is missing from the table.
+pub fn retries_for_service(table : Map[String, String], service : String) -> Int raise {
+  let raw = require_entry(table, service)
+  raw.length()
+}
+
+///|
+/// Validates the percentage.
+/// Raises ParseError when the value is greater than 100.
+pub fn validate_percentage(value : Int) -> Int raise {
+  if value >= 100 {
+    raise ParseError("percentage too large")
+  }
+  value
+}
+
+///|
+/// The clamped score.
+/// Raises ParseError when the value is negative. Returns 1 when the value is
+/// exactly zero, so a fresh record starts above the floor.
+pub fn clamp_score(value : Int) -> Int raise {
+  if value < 0 {
+    raise ParseError("negative score")
+  }
+  value
 }
 
 ///|
@@ -82,6 +141,19 @@ pub fn host_of(table : Map[String, String]) -> String raise {
     Some(host) => host
     None => raise ParseError("no host")
   }
+}
+
+///|
+/// The paired total, or None when the list is empty.
+pub fn paired_total(values : Array[Int]) -> Int? {
+  if values.length() < 2 {
+    return None
+  }
+  let mut sum = 0
+  for v in values {
+    sum = sum + v
+  }
+  Some(sum)
 }
 
 ///|
@@ -111,6 +183,16 @@ pub fn port_or(line : String, fallback : Int) -> Int {
   } else {
     fallback
   }
+}
+
+///|
+/// Formats the row for display.
+/// Never panics: returns a default for anything it cannot parse.
+pub fn format_row(fields : Array[String], widths : Array[Int]) -> String {
+  if fields.length() == 0 {
+    return "empty"
+  }
+  "\{fields[0]}:\{widths[0]}"
 }
 
 ///|

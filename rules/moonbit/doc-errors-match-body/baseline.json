@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-21T04:28:25.821Z",
+  "recorded": "2026-09-21T16:31:16.194Z",
   "model": "jev-1.13.0",
   "suite": "moonbit/doc-errors-match-body",
   "rules": [
@@ -19,7 +19,7 @@
         "line": 7,
         "endLine": 12,
         "kind": "noul",
-        "value": 0.95,
+        "value": 0.94,
         "confidence": null
       },
       {
@@ -28,23 +28,32 @@
         "line": 17,
         "endLine": 24,
         "kind": "noul",
-        "value": 0.93,
+        "value": 0.11,
         "confidence": null
       },
       {
         "rule": "doc-errors-match-body",
         "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
         "line": 29,
-        "endLine": 35,
+        "endLine": 36,
         "kind": "noul",
-        "value": 0.83,
+        "value": 0.92,
         "confidence": null
       },
       {
         "rule": "doc-errors-match-body",
         "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 39,
-        "endLine": 45,
+        "line": 41,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 51,
+        "endLine": 57,
         "kind": "noul",
         "value": 0.09,
         "confidence": null
@@ -52,8 +61,17 @@
       {
         "rule": "doc-errors-match-body",
         "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 50,
-        "endLine": 52,
+        "line": 62,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 72,
+        "endLine": 74,
         "kind": "noul",
         "value": 0.06,
         "confidence": null
@@ -61,246 +79,8 @@
       {
         "rule": "doc-errors-match-body",
         "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 69,
-        "endLine": 75,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 80,
-        "endLine": 85,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 90,
-        "endLine": 96,
-        "kind": "noul",
-        "value": 0.84,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 101,
-        "endLine": 103,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 108,
-        "endLine": 114,
-        "kind": "noul",
-        "value": 0.15,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 119,
-        "endLine": 124,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 7,
-        "endLine": 12,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 17,
-        "endLine": 24,
-        "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 29,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.85,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 39,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 50,
-        "endLine": 52,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 69,
-        "endLine": 75,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 80,
-        "endLine": 85,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 90,
-        "endLine": 96,
-        "kind": "noul",
-        "value": 0.86,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 101,
-        "endLine": 103,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 108,
-        "endLine": 114,
-        "kind": "noul",
-        "value": 0.18,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 119,
-        "endLine": 124,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 7,
-        "endLine": 12,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 17,
-        "endLine": 24,
-        "kind": "noul",
-        "value": 0.93,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 29,
-        "endLine": 35,
-        "kind": "noul",
-        "value": 0.85,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 39,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 50,
-        "endLine": 52,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 69,
-        "endLine": 75,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 80,
-        "endLine": 85,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 90,
-        "endLine": 96,
-        "kind": "noul",
-        "value": 0.85,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 101,
-        "endLine": 103,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "doc-errors-match-body",
-        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 108,
-        "endLine": 114,
+        "line": 99,
+        "endLine": 102,
         "kind": "noul",
         "value": 0.12,
         "confidence": null
@@ -308,8 +88,417 @@
       {
         "rule": "doc-errors-match-body",
         "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
-        "line": 119,
-        "endLine": 124,
+        "line": 107,
+        "endLine": 112,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 118,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 128,
+        "endLine": 134,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 139,
+        "endLine": 144,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 148,
+        "endLine": 157,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 162,
+        "endLine": 168,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 173,
+        "endLine": 175,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 180,
+        "endLine": 186,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 191,
+        "endLine": 196,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 201,
+        "endLine": 206,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 7,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 17,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 29,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 41,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 51,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 62,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 72,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 99,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 107,
+        "endLine": 112,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 118,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 128,
+        "endLine": 134,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 139,
+        "endLine": 144,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 148,
+        "endLine": 157,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 162,
+        "endLine": 168,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 173,
+        "endLine": 175,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 180,
+        "endLine": 186,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 191,
+        "endLine": 196,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 201,
+        "endLine": 206,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 7,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 17,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 29,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 41,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 51,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 62,
+        "endLine": 67,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 72,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 99,
+        "endLine": 102,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 107,
+        "endLine": 112,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 118,
+        "endLine": 123,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 128,
+        "endLine": 134,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 139,
+        "endLine": 144,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 148,
+        "endLine": 157,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 162,
+        "endLine": 168,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 173,
+        "endLine": 175,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 180,
+        "endLine": 186,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 191,
+        "endLine": 196,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "doc-errors-match-body",
+        "file": "rules/moonbit/doc-errors-match-body/fixtures/config.mbt",
+        "line": 201,
+        "endLine": 206,
         "kind": "noul",
         "value": 0.05,
         "confidence": null
@@ -318,8 +507,8 @@
   ],
   "spent": {
     "calls": 3,
-    "inputTokens": 38826,
-    "usd": 0.001630692,
-    "ms": 292
+    "inputTokens": 63519,
+    "usd": 0.0026677980000000003,
+    "ms": 955
   }
 }

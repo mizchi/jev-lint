@@ -33,6 +33,21 @@ pub fn calculate_tax(subtotal : Int, rate_percent : Int) -> Int {
 }
 
 ///|
+/// A scratch running total, boxed so a helper can add to it in a loop.
+pub(all) struct Accumulator {
+  mut total : Int
+}
+
+///|
+pub fn calculate_shipping_weight(items : Array[Item]) -> Int {
+  let box : Accumulator = { total: 0 }
+  for item in items {
+    box.total = box.total + item.qty * 2
+  }
+  box.total
+}
+
+///|
 pub fn compute_totals(invoice : Invoice, rate_percent : Int) -> Int {
   let subtotal = compute_subtotal(invoice.items)
   invoice.total = subtotal + calculate_tax(subtotal, rate_percent)
@@ -67,6 +82,32 @@ pub fn format_summary(invoice : Invoice) -> String {
 }
 
 ///|
+/// A scratch tally, boxed so a helper can fold into it in a loop.
+pub(all) struct Tally {
+  mut total : Int
+  mut count : Int
+}
+
+///|
+fn bump(t : Tally, amount : Int) -> Unit {
+  t.total = t.total + amount
+  t.count = t.count + 1
+}
+
+///|
+pub fn calculate_average_price(items : Array[Item]) -> Int {
+  let t : Tally = { total: 0, count: 0 }
+  for item in items {
+    bump(t, item.unit_price)
+  }
+  if t.count == 0 {
+    0
+  } else {
+    t.total / t.count
+  }
+}
+
+///|
 pub fn derive_item_labels(items : Array[Item]) -> Array[String] {
   let labels = []
   for item in items {
@@ -75,6 +116,18 @@ pub fn derive_item_labels(items : Array[Item]) -> Array[String] {
     }
   }
   labels
+}
+
+///|
+pub fn derive_price_index(existing : Map[String, Int], items : Array[Item]) -> Map[String, Int] {
+  let index = Map([])
+  for item in items {
+    match existing.get(item.sku) {
+      Some(v) => index.set(item.sku, v)
+      None => index.set(item.sku, item.unit_price)
+    }
+  }
+  index
 }
 
 ///|
@@ -135,6 +188,17 @@ pub fn to_receipt(invoice : Invoice) -> String {
     text = text + format_item_line(item) + "\n"
   }
   text + "paid \{format_money(invoice.total)}"
+}
+
+///|
+pub fn calculate_running_max_price(items : Array[Item]) -> Int {
+  let peak = Ref::new(0)
+  for item in items {
+    if item.unit_price > peak.val {
+      peak.val = item.unit_price
+    }
+  }
+  peak.val
 }
 
 ///|

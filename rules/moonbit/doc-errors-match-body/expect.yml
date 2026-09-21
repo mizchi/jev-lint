@@ -5,42 +5,70 @@ fixtures/config.mbt:
     window: 0
     reason: "the doc raises when the line has no `=`; the body returns 0 for that line and raises only when the number will not parse."
   - line: 17
-    label: bad
+    label: clean
     window: 0
-    reason: "the doc says None when the key is absent; the body aborts."
+    reason: "boundary clean: the doc's condition (`fewer than two entries`) is exactly the body's guard (`length() < 2`); confirming it means reading the guard as a length comparison, not matching a keyword."
   - line: 29
     label: bad
     window: 0
-    reason: "the doc says it never fails and skips what it cannot read; the body calls a raising helper on every line and is itself `raise`."
-  - line: 90
+    reason: "the doc says None when the key is absent; the body aborts."
+  - line: 41
     label: bad
     window: 0
-    reason: "the doc names a failure for three missing values; the body reads one thing and raises whatever its helper raises."
-  - line: 119
-    label: clean
-    window: 0
-    reason: "aborts on the empty line, as the doc says."
-  - line: 39
+    reason: "the doc says it never fails and skips what it cannot read; the body calls a raising helper on every line and is itself `raise`."
+  - line: 51
     label: clean
     window: 0
     reason: "hard clean: the contract is in a Returns clause and in the `String?` type, not under a Raises heading, and the body honours it."
-  - line: 50
+  - line: 62
+    label: bad
+    window: 0
+    reason: "boundary bad: the doc says the failure condition is `negative`; the body's guard is `percent <= 0`, which also raises at exactly zero -- a condition the doc does not name."
+  - line: 72
     label: clean
     window: 0
     reason: "the one failure named is the one the body produces."
-  - line: 69
+  - line: 99
+    label: clean
+    window: 0
+    reason: "boundary clean: the doc's failure is honoured one hop away, through `require_entry` (undocumented itself, but its raise fires on exactly the condition the doc names -- the service missing from the table); the body's own `raw.length()` has no failure of its own to omit."
+  - line: 107
+    label: bad
+    window: 0
+    reason: "boundary bad: the doc's condition is `greater than 100`; the body's guard is `value >= 100`, so 100 itself also raises, a value the doc says is valid. Same shift as `paired_total`'s, in the other direction."
+  - line: 118
+    label: bad
+    window: 0
+    reason: "one true clause, one false: the raise clause (negative -> ParseError) is honoured exactly, so a shallow read of the raise sentence passes; the second sentence's fallback claim -- returns 1 at exactly zero -- is not, since the body falls through to `value` (0) for zero. A Returns-when-C clause is exactly what this corpus already treats as in scope (`value_of`, `paired_total`), so this is a real defect, not a scope question -- drafted as a scope test and relabelled on rereading the rule's own precedent, not because a model disagreed."
+  - line: 128
     label: clean
     window: 0
     reason: "hard clean: `never fails` over a body with two returns and no failure at all."
-  - line: 80
+  - line: 139
     label: clean
     window: 0
     reason: "hard clean: the failure is raised inside a match arm rather than by an explicit guard, and it is the one the doc names."
-  - line: 101
+  - line: 148
+    label: bad
+    window: 0
+    reason: "boundary bad: the doc says None only when the list is empty; the body's guard is `length() < 2`, so a one-element list also returns None -- a condition the doc does not name. An empty list itself returns `Some(0)`, not None, so the doc's own stated case is also wrong."
+  - line: 162
+    label: bad
+    window: 0
+    reason: "the doc names a failure for three missing values; the body reads one thing and raises whatever its helper raises."
+  - line: 173
     label: clean
     window: 0
     reason: "hard clean: `Never raises` over a body that cannot."
-  - line: 108
+  - line: 180
     label: clean
     window: 0
     reason: "hard clean: the doc's failure clause is true -- nothing fails -- even though both branches return the same thing, which is a different rule's business."
+  - line: 191
+    label: bad
+    window: 0
+    reason: "boundary bad: `never panics` over a body that guards `fields` before indexing it, but indexes `widths[0]` with no length check on `widths` at all -- the present guard on one array reads as safety for both."
+  - line: 201
+    label: clean
+    window: 0
+    reason: "aborts on the empty line, as the doc says."

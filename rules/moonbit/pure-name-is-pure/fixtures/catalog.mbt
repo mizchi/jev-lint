@@ -75,6 +75,25 @@ pub fn derive_slug(name : String) -> String {
 }
 
 ///|
+/// A per-call scratch table so a repeated lookup on the same product does not
+/// redo the string work, without touching the process-wide `score_cache`.
+pub(all) struct PriceMemo {
+  cache : Map[String, String]
+}
+
+///|
+pub fn to_price_tag(product : Product, memo : PriceMemo) -> String {
+  match memo.cache.get(product.id) {
+    Some(tag) => tag
+    None => {
+      let tag = "\{product.id}:\{product.name}"
+      memo.cache.set(product.id, tag)
+      tag
+    }
+  }
+}
+
+///|
 /// Clamps a raw count the importer read from the batch manifest into a
 /// sane bound, or falls back to the default when it is not set at all.
 fn read_env_int(value : Int, fallback : Int, low : Int, high : Int) -> Int {
@@ -116,6 +135,37 @@ pub fn parse_import_limits(
     queue: read_env_string(raw_queue, "default"),
     timeout_sec: read_env_int(raw_timeout_sec, 30, 1, 3600),
   }
+}
+
+///|
+pub fn Catalog::ensure_revision(self : Catalog) -> Int {
+  if self.revision == 0 {
+    self.revision = 1
+  }
+  self.revision
+}
+
+///|
+pub fn to_summary_label(catalog : Catalog) -> String {
+  let rev = catalog.ensure_revision()
+  "catalog rev \{rev}"
+}
+
+///|
+fn touch_revision(catalog : Catalog) -> Unit {
+  catalog.revision = catalog.revision + 1
+}
+
+///|
+fn refresh_and_report(catalog : Catalog) -> Int {
+  touch_revision(catalog)
+  catalog.revision
+}
+
+///|
+pub fn to_revision_label(catalog : Catalog) -> String {
+  let rev = refresh_and_report(catalog)
+  "rev-\{rev}"
 }
 
 ///|

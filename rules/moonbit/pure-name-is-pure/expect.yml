@@ -1,74 +1,98 @@
 default: clean
 fixtures/invoice.mbt:
-  - line: 36
-    label: bad
-    window: 0
-    reason: "`compute_totals` assigns `invoice.total`, a `mut` field of the struct it was handed: the caller's invoice is different after the call."
-  - line: 43
-    label: bad
-    window: 0
-    reason: "`calculate_due` prints a line to stdout on its way to returning a number."
-  - line: 119
-    label: bad
-    window: 0
-    reason: "`derive_discount_notes` pushes into `notes`, an Array that came in as a parameter; the return value is only half of what the call does."
-  - line: 160
-    label: bad
-    window: 0
-    reason: "`parse_item` pushes the row it could not read into the top-level `rejected_rows`; the effect is only on the failure paths, which is enough."
-  - line: 188
-    label: bad
-    window: 0
-    reason: "hard bad: `parse_next_field` removes the token it returns from the Array it was handed, so the caller's tokens are shorter afterwards -- a consuming cursor, which is idiomatic and still a write to a parameter."
   - line: 22
     label: clean
     window: 0
     reason: "hard clean: `compute_subtotal` reassigns a `mut` local in a loop, which is the accumulator, not outside state."
-  - line: 60
-    label: clean
-    window: 0
-    reason: "hard clean: `format_summary` creates an Array, pushes to it repeatedly and joins it; the pushes build the return value."
-  - line: 96
-    label: bad
-    window: 0
-    reason: "quietest labelled defect in this corpus (0.55 against the 0.55 cutoff in typescript's sibling, which this is ported from). `parse_billing_options` reads `@sys.getenv(\"BILLING_API_TOKEN\")` unconditionally as `api_token`'s initial value before the argv loop runs; the common path over `argv` is otherwise pure, and the read is easy to miss because it sits inside what looks like an ordinary default assignment, exactly the typescript `parseCliOptions` shape (process.env.CLUSTER_API_TOKEN as a default token). The typescript copy answered 0.55-0.56, essentially on its own cutoff; this is the boundary case moonbit's corpus had none of before porting."
-  - line: 70
-    label: clean
-    window: 0
-    reason: "hard clean: `derive_item_labels` has the same push-in-a-loop shape as `derive_discount_notes` two functions below it, over an Array it created itself."
-  - line: 132
-    label: clean
-    window: 0
-    reason: "hard clean: `to_receipt` reads a struct with a `mut` field and concatenates; a conversion that only reads is a computation."
-  - line: 141
-    label: clean
-    window: 0
-    reason: "hard clean: `parse_amount` reports failure by returning `None` rather than by writing anything."
-  - line: 175
-    label: clean
-    window: 0
-    reason: "hard clean: `derive_sorted_items` calls `sort_by`, a mutating method, on a `copy()` it made of the invoice's items; the invoice's own Array is untouched."
-  - line: 182
-    label: clean
-    window: 0
-    reason: "hard clean: `compute_rebilled` looks like it sets `total`, but `{ ..invoice, total: ... }` constructs a new Invoice; the one it was handed is unchanged."
   - line: 31
     label: clean
     window: 0
     reason: "`calculate_tax` is arithmetic over its two parameters."
-  - line: 50
+  - line: 42
+    label: clean
+    window: 0
+    reason: "boundary clean: `calculate_shipping_weight` assigns `box.total`, a `mut` field of a struct this body built for itself two lines earlier and discards after reading it once -- a boxed `mut` local. Drafted as a boundary-bad test of the true-criteria's literal `mut field of a struct` wording, which does not name an explicit carve-out for one the body just built; relabelled clean on rereading the false-criteria's own stated principle ('what separates the two is where the container came from, not how much it is written to') and the note's example, which is exactly this shape with an Array. The box never reaches a parameter, `self` or a top-level binding, so nothing outlives the call."
+  - line: 51
+    label: bad
+    window: 0
+    reason: "`compute_totals` assigns `invoice.total`, a `mut` field of the struct it was handed: the caller's invoice is different after the call."
+  - line: 58
+    label: bad
+    window: 0
+    reason: "`calculate_due` prints a line to stdout on its way to returning a number."
+  - line: 65
     label: clean
     window: 0
     reason: "`format_money` interpolates its one parameter."
-  - line: 55
+  - line: 70
     label: clean
     window: 0
     reason: "`format_item_line` interpolates the item it was handed and calls a formatter that does the same."
-  - line: 81
+  - line: 75
+    label: clean
+    window: 0
+    reason: "hard clean: `format_summary` creates an Array, pushes to it repeatedly and joins it; the pushes build the return value."
+  - line: 98
+    label: clean
+    window: 0
+    reason: "boundary clean, same reasoning as line 42 one indirection further: `calculate_average_price` folds into a scratch `Tally` struct through `bump`, a one-hop helper that assigns the struct's own `mut` fields, but `t` is built by this call and never escapes it -- `bump`'s write lands on this body's own scratch object, not on something reached through a parameter or shared beyond the call, so the 'effect one hop away is still this body's' clause has nothing that outlives the call to attach to."
+  - line: 111
+    label: clean
+    window: 0
+    reason: "hard clean: `derive_item_labels` has the same push-in-a-loop shape as `derive_discount_notes` two functions below it, over an Array it created itself."
+  - line: 122
+    label: clean
+    window: 0
+    reason: "boundary clean (round 2): `derive_price_index` calls `.get()` on `existing`, a Map parameter, and `.set()` on `index`, a Map it created two lines above -- reading and writing sit side by side on two different Maps with the same shape of name, testing whether the write on the local one gets misattributed to the parameter one it sits beside."
+  - line: 134
     label: clean
     window: 0
     reason: "`derive_order_key` reads two fields of the invoice and interpolates them."
+  - line: 149
+    label: bad
+    window: 0
+    reason: "quietest labelled defect in this corpus (0.55 against the 0.55 cutoff in typescript's sibling, which this is ported from). `parse_billing_options` reads `@sys.getenv(\"BILLING_API_TOKEN\")` unconditionally as `api_token`'s initial value before the argv loop runs; the common path over `argv` is otherwise pure, and the read is easy to miss because it sits inside what looks like an ordinary default assignment, exactly the typescript `parseCliOptions` shape (process.env.CLUSTER_API_TOKEN as a default token). The typescript copy answered 0.55-0.56, essentially on its own cutoff; this is the boundary case moonbit's corpus had none of before porting."
+  - line: 172
+    label: bad
+    window: 0
+    reason: "`derive_discount_notes` pushes into `notes`, an Array that came in as a parameter; the return value is only half of what the call does."
+  - line: 185
+    label: clean
+    window: 0
+    reason: "hard clean: `to_receipt` reads a struct with a `mut` field and concatenates; a conversion that only reads is a computation."
+  - line: 194
+    label: clean
+    window: 0
+    reason: "boundary clean: `calculate_running_max_price` boxes its accumulator in a `Ref` it creates itself two lines earlier rather than a bare `mut` local; the true-criteria names `Ref` among the risky types without qualifying that with 'if it arrived as a parameter or is a top-level binding' the way the false-criteria's mut-local exemption does, so a `Ref` born and dying inside this call reads, on the letter of the true-criteria alone, like the parameter case it is not."
+  - line: 205
+    label: clean
+    window: 0
+    reason: "hard clean: `parse_amount` reports failure by returning `None` rather than by writing anything."
+  - line: 224
+    label: bad
+    window: 0
+    reason: "`parse_item` pushes the row it could not read into the top-level `rejected_rows`; the effect is only on the failure paths, which is enough."
+  - line: 239
+    label: clean
+    window: 0
+    reason: "hard clean: `derive_sorted_items` calls `sort_by`, a mutating method, on a `copy()` it made of the invoice's items; the invoice's own Array is untouched."
+  - line: 246
+    label: clean
+    window: 0
+    reason: "hard clean: `compute_rebilled` looks like it sets `total`, but `{ ..invoice, total: ... }` constructs a new Invoice; the one it was handed is unchanged."
+  - line: 252
+    label: bad
+    window: 0
+    reason: "hard bad: `parse_next_field` removes the token it returns from the Array it was handed, so the caller's tokens are shorter afterwards -- a consuming cursor, which is idiomatic and still a write to a parameter."
 fixtures/catalog.mbt:
+  - line: 27
+    label: clean
+    window: 0
+    reason: "hard clean: `compute_index` calls `set` in a loop on a Map it created on its first line and returns; the container is the result."
+  - line: 36
+    label: clean
+    window: 0
+    reason: "`compute_rank` is arithmetic over one product's fields."
   - line: 42
     label: bad
     window: 0
@@ -77,55 +101,59 @@ fixtures/catalog.mbt:
     label: bad
     window: 0
     reason: "`compute_restock_plan` clears and refills the top-level `restock_queue`; the Int it returns is a by-product of rewriting a store."
-  - line: 109
-    label: clean
-    window: 0
-    reason: "loudest labelled clean in this corpus, ported from typescript's `parseWorkerLimits` (0.26 against a 0.55 cutoff there). `parse_import_limits` calls `read_env_int`/`read_env_string`, whose names say env, but each receives its value from a `raw_*` parameter -- nothing is read from the environment, a clock or a random source. The name is a false cue the same way the typescript helpers' names were; the body only reads what it was handed and returns a computed struct."
-  - line: 133
-    label: bad
-    window: 0
-    reason: "`to_search_entry` sets the entry into the `index` Map it was handed; a conversion that also registers is not a conversion."
-  - line: 145
-    label: bad
-    window: 0
-    reason: "`format_catalog_page` assigns `catalog.rendered`, caching its own output into the struct it was given."
-  - line: 152
-    label: bad
-    window: 0
-    reason: "`Catalog::compute_revision` assigns `self.revision`: the same defect through a method receiver rather than a parameter."
-  - line: 195
-    label: bad
-    window: 0
-    reason: "hard bad: `format_debug_row` has no effect in its own text -- it calls `trace_row`, defined above it, which prints. The effect is one hop away and still the body's."
-  - line: 27
-    label: clean
-    window: 0
-    reason: "hard clean: `compute_index` calls `set` in a loop on a Map it created on its first line and returns; the container is the result."
   - line: 65
     label: clean
     window: 0
     reason: "hard clean: `derive_slug` writes into a StringBuilder it constructed itself."
-  - line: 122
+  - line: 85
+    label: bad
+    window: 0
+    reason: "boundary bad: `to_price_tag` calls `.set()` on `memo.cache`, a Map field of a struct handed in as a parameter -- the true-criteria's parameter case in full -- but the doc comment above the struct and the `memo`/`cache` naming borrow the vocabulary of `bands()`'s first-call-fills-it-in idiom (a labelled clean two screens below). The difference is who owns the store: `bands()` fills a table this file already holds; this body fills a table its *caller* handed it, so the write outlives this one call in the caller's hands, not just in the file's."
+  - line: 128
     label: clean
     window: 0
-    reason: "hard clean: `to_stock_report` is handed a struct with two `mut` fields and reads both of them without assigning to either."
-  - line: 158
+    reason: "loudest labelled clean in this corpus, ported from typescript's `parseWorkerLimits` (0.26 against a 0.55 cutoff there). `parse_import_limits` calls `read_env_int`/`read_env_string`, whose names say env, but each receives its value from a `raw_*` parameter -- nothing is read from the environment, a clock or a random source. The name is a false cue the same way the typescript helpers' names were; the body only reads what it was handed and returns a computed struct."
+  - line: 149
+    label: bad
+    window: 0
+    reason: "boundary bad: `to_summary_label` calls `catalog.ensure_revision()`, whose receiver IS `catalog` -- the parameter this body itself was handed, not a file-wide store the way `bands()`'s `weight_bands` is. Drafted to test whether the 'hands back a value, fills itself in' exemption extends from a shared module cache to a method call on the caller's own struct; relabelled bad on rereading the true-criteria's 'anything reached through a parameter' plus 'an effect one hop away is still this body's' -- `ensure_revision` mutates the very Catalog `to_summary_label` received, which is the compute_totals/to_search_entry shape one hop further out, not the bands() shape."
+  - line: 166
+    label: bad
+    window: 0
+    reason: "boundary bad (round 2, two hops): `to_revision_label` calls `refresh_and_report`, which calls `touch_revision`, which assigns `catalog.revision` -- the same parameter-mutation as line 149's, one call further removed. Tests whether the 'effect one hop away' reading holds transitively when the whole chain is in view under `located`."
+  - line: 172
     label: clean
     window: 0
-    reason: "hard clean: `parse_catalog` builds a local Array and a fresh Catalog, and substitutes a default for a field it could not read rather than recording the failure anywhere."
-  - line: 177
-    label: clean
+    reason: "hard clean: `to_stock_report` reads a struct with a `mut` field and concatenates; a conversion that only reads is a computation."
+  - line: 183
+    label: bad
     window: 0
-    reason: "hard clean: `compute_known_score_total` reads the top-level `score_cache` and writes nothing to it; taking a value out of a store that outlives the call is reading."
-  - line: 216
-    label: clean
-    window: 0
-    reason: "hard clean: `format_weight_band` asks `bands()` for the table, which fills itself in on the first call; the helper's bookkeeping is not this body's effect, and this body only reads what it got. The typescript copy of this rule shipped a revision that called this I/O and was wrong on all six of its findings."
-  - line: 36
-    label: clean
-    window: 0
-    reason: "`compute_rank` is arithmetic over one product's fields."
-  - line: 140
+    reason: "`to_search_entry` sets the entry into the `index` Map it was handed; a conversion that also registers is not a conversion."
+  - line: 190
     label: clean
     window: 0
     reason: "`Product::to_json` reads `self` and returns a String; reading the receiver in a conversion is reading."
+  - line: 195
+    label: bad
+    window: 0
+    reason: "`format_catalog_page` assigns `catalog.rendered`, caching its own output into the struct it was given."
+  - line: 202
+    label: bad
+    window: 0
+    reason: "`Catalog::compute_revision` assigns `self.revision`: the same defect through a method receiver rather than a parameter."
+  - line: 208
+    label: clean
+    window: 0
+    reason: "hard clean: `parse_catalog` builds a local Array and a fresh Catalog, and substitutes a default for a field it could not read rather than recording the failure anywhere."
+  - line: 227
+    label: clean
+    window: 0
+    reason: "hard clean: `compute_known_score_total` reads the top-level `score_cache` and writes nothing to it; taking a value out of a store that outlives the call is reading."
+  - line: 245
+    label: bad
+    window: 0
+    reason: "hard bad: `format_debug_row` has no effect in its own text -- it calls `trace_row`, defined above it, which prints. The effect is one hop away and still the body's."
+  - line: 266
+    label: clean
+    window: 0
+    reason: "hard clean: `format_weight_band` asks `bands()` for the table, which fills itself in on the first call; the helper's bookkeeping is not this body's effect, and this body only reads what it got. The typescript copy of this rule shipped a revision that called this I/O and was wrong on all six of its findings."

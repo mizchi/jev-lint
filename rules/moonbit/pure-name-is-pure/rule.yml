@@ -47,6 +47,48 @@ state: located
 # that produced its uncertainty does not reproduce the uncertainty. Both
 # fixtures are kept: they are correctly labelled, correctly decided, and
 # the first cases in this corpus to exercise an environment read at all.
+#
+# Boundary hunt, 2026-09-22 (39 subjects: 15 defects, 24 cleans, up from
+# 12/20; 3 passes; margins did not move). Two full rounds targeted the
+# cutoff directly and both confirm rather than narrow it. Round 1's four
+# candidates were all the "is a container this body built itself still
+# exempt when it isn't an Array/Map/StringBuilder" question: a `mut` field
+# of a locally-built struct filled directly (`calculate_shipping_weight`,
+# 0.06) or through a one-hop helper (`calculate_average_price`, 0.07), and
+# a `Ref::new` accumulator born and discarded inside the call
+# (`calculate_running_max_price`, 0.11) all answer as confidently clean as
+# the rest of the trivial band -- drafted as boundary-bad tests of the
+# true-criteria's literal wording, relabelled clean on rereading the
+# false-criteria's own principle ("where it came from, not how much it is
+# written to"), which the model evidently applies to a struct exactly as it
+# does to the named containers. `to_price_tag` (0.93), reusing `bands()`'s
+# fill-on-first-call vocabulary over a Map field the body received as a
+# parameter rather than owns, does not borrow the exemption -- answers as
+# loud as the rest of the parameter-write band. One candidate did cross
+# the line the other way and was relabelled to match: `to_summary_label`
+# (0.87) calls a method that mutates the very Catalog this body was handed,
+# dressed in `bands()`'s "hands back a value, fills itself in" phrasing;
+# drafted as boundary-clean, it is a parameter write one hop out and belongs
+# with `compute_totals`, not `format_weight_band`. Round 2 pushed the same
+# two questions further and both moves failed to move the score: a second
+# hop on the delegation chain (`to_revision_label`, three functions,
+# `catalog.revision` reassigned by the innermost) answers 0.94, louder than
+# the one-hop version, not quieter; a Map parameter read via `.get()` beside
+# a same-shaped local Map written via `.set()` two lines apart
+# (`derive_price_index`) answers 0.07, as confidently clean as an accumulator
+# with nothing beside it to confuse.
+#
+# FN-margin 0.32 (`to_summary_label` at 0.87), FP-margin 0.30
+# (`format_weight_band` at 0.25) -- unchanged from 0.32/0.31 within run
+# noise, despite nine boundary-aimed candidates across two rounds finding
+# real, correctly-labelled cases on both sides. The pattern across all of
+# them: MoonBit's effect vocabulary is closed and the whole file is in
+# view under `located`, so once a candidate resolves which store a write
+# lands on -- the caller's, a scratch object that dies with the call, or a
+# shared file-level cache -- the answer is confident either way; nothing
+# tried left the model genuinely unsure. This rule's boundary did not move
+# under a real search for it; the corpus is wider and better-argued at both
+# ends, not narrower in the middle.
 at: 0.55
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
