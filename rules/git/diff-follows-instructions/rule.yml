@@ -1,0 +1,72 @@
+# Diffs against the instructions the repository wrote for itself.
+#
+# `AGENTS.md` and `CLAUDE.md` are where a repository writes down what a
+# change is supposed to do, and nothing checks them -- no compiler, no
+# linter, no type checker reads either one. This rule holds a diff against
+# them.
+#
+# `subject: change` has no matcher: `jev-lint commits <range>` builds one
+# subject per non-merge commit -- the diff's stat is the subject text --
+# and `jev-lint commits --staged` builds one from the index, before a
+# commit or a message exists. The change is the subject; the diff, the
+# stat, the file list, and the repository's own instruction documents (as
+# they stood in that change's own tree) are the state a fixture supplies to
+# answer it. A fixture is a directory `fixtures/<case>/{message, before/,
+# after/}`; `jev-lint eval`'s `patchRepo` makes each one a single commit --
+# `after` over `before`, with that message -- on its own orphan branch of a
+# throwaway repository, so cases stay independent and each case's own
+# `AGENTS.md` is the policy it is judged under. A case with no `message`
+# file is silently dropped from the suite (`patchRepo` selects by its
+# presence), even though a change rule never reads the message itself --
+# every case still needs one, and an honest one, so a lying message is not
+# mistaken for this rule's own defect.
+#
+# The half that decides whether this rule is usable is `criteria.false`.
+# Most of what an AGENTS.md says is not a claim a diff can be held against
+# -- how to develop, when to ask, what to read before starting, "keep it
+# readable". Judged against a diff, every one of those lands mid-scale:
+# nothing in the diff confirms or denies "ask when unclear", so a rule that
+# tries scores it a shaky answer either way and no cutoff separates a real
+# breach from that noise. Naming those instructions false -- the procedural
+# ones, the ones a formatter or linter already enforces, the ones the diff
+# does not touch, and edits to the instruction documents themselves -- is
+# what keeps the true side to cases with actual evidence in the diff: a
+# forbidden dependency added, a generated file hand-edited, a required test
+# left out, an instruction broken by the very commit that writes it.
+
+id: diff-follows-instructions
+language: Git
+subject: change
+kind: noul
+# uncalibrated -- fitted in the eval step, with the run it came from.
+at: 0.7
+ask: >-
+  This change does something the project's own written instructions forbid,
+  or leaves out something they require of a change like this one.
+criteria:
+  "true": >-
+    The change contains something the instructions name and rule out -- a
+    dependency, an API, a construct, a path, a pattern; or it edits a file
+    the instructions call generated or owned elsewhere; or it is a change of
+    a kind the instructions say requires something alongside it -- a test, a
+    changelog entry, a type declaration, a migration -- and that thing is
+    absent from the diff.
+  "false": >-
+    The change keeps the instructions, or does not touch what any of them is
+    about. An instruction about how the work was done rather than what the
+    change contains -- develop test-first, ask when unclear, read the skill
+    before starting -- is not something a diff can show, and a change is not
+    in breach of it here. An instruction whose terms the change cannot be
+    held against ("keep it readable", "separate concerns") is the same case.
+    So is an instruction a formatter, linter or type checker already
+    enforces. A change that edits the instruction documents themselves is
+    not in breach for doing so.
+note: >-
+  The instructions are the standard and the diff is the evidence. Whether an
+  instruction is a good one is not the question; whether this change keeps it
+  is. Wanting an instruction to have been followed is not evidence that it
+  was broken: if the diff does not show the breach, the answer is false.
+  `instructions` holds the documents as they were in this change's own tree,
+  so an instruction added by this very change applies to it. `diff` may be
+  cut to fit; `stat` and `files` are always complete, so a change visible in
+  `stat` but absent from `diff` did happen.

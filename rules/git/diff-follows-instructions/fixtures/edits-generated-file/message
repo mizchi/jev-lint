@@ -1,0 +1,3 @@
+Add email to the User schema
+
+The invite flow needs to know where to send the invite.

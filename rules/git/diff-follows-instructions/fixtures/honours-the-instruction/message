@@ -1,0 +1,4 @@
+Add coupon codes to the cart
+
+SAVE10 takes ten percent off the total; test/cart.test.ts covers both
+branches.

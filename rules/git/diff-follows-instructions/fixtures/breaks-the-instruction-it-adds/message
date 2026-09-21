@@ -1,0 +1,4 @@
+Add a cart summary, and ban `any` in the style guide
+
+summarize() gives the total and item count together. While here, AGENTS.md
+now says no `any` -- a couple have slipped through review lately.
