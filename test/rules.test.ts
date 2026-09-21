@@ -638,7 +638,7 @@ test("rules: `divergent` must say why, not just that", () => {
     writeFileSync(join(root, "typescript/a/rule.yml"), "id: a\nlanguage: TypeScript\nrule: { kind: x }\nask: one\ndivergent: true\n");
     const { errors } = loadRules([root]);
     assert.equal(errors.length, 1, errors.join("\n"));
-    assert.match(errors[0]!, /divergent/);
+    assert.match(errors[0]!, /`divergent` must say why/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
