@@ -2,9 +2,9 @@
  * `jev-lint init`: a starter config, or a git hook.
  */
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { CONFIG_NAMES, initialConfig, initialHook, initialPushHook } from "../config.ts";
+import { CONFIG_NAMES, hookShim, initialConfig, initialHook, initialPushHook } from "../config.ts";
 import { API_KEY_VARS, fromEnv } from "../jev.ts";
 import { loadRules, shippedRulesPath } from "../rules.ts";
 import type { Options, Log } from "./args.ts";
@@ -57,56 +57,114 @@ export function cmdInit(opts: Options, out: Log, log: Log): number {
 }
 
 /**
- * `init --pre-commit`: write the hook into the repository's hooks directory.
+ * `init --pre-commit` / `init --pre-push`: write the hook's body into the
+ * repository and a shim into git's own hooks directory.
  *
- * Asked of git rather than assumed to be `.git/hooks`, because a worktree's
- * hooks live in the main repository and `core.hooksPath` can move them
- * anywhere. An existing hook is never overwritten without `--force`: it is
- * probably husky's or a task runner's, and the right move there is one line
- * added to it, which is printed.
+ * Both paths are asked of git rather than assumed (`.git/hooks` for the
+ * shim, the working tree's root for the body), because a worktree's hooks
+ * live in the main repository and `core.hooksPath` can move them anywhere.
+ *
+ * The body and the shim are overwritten independently, not as one
+ * all-or-nothing write, because the most common case this command has to
+ * handle is a fresh clone of a repository that already commits its body:
+ * `.jev-lint/hooks/<name>` arrived with the clone, `<git hooks dir>/<name>`
+ * did not, and refusing to act just because the body is "already there"
+ * would leave the one thing `init` is for -- installing the shim -- undone.
+ * So: the **body** is written when it is missing, or with `--force`; the
+ * **shim** is written when it is missing, or with `--force`. When neither
+ * can be written -- both already there, no `--force` -- that is the one
+ * refusal. An existing shim that is not written is reported two different
+ * ways depending on what it holds: one already exactly ours needs nothing
+ * said beyond that; anything else is presumed to be husky's or a task
+ * runner's, and the right move there is one line added to it, which is
+ * printed rather than silently overwritten.
  */
 export function cmdInitHook(opts: Options, out: Log, log: Log, which: "pre-commit" | "pre-push"): number {
   let hooksDir: string;
+  let root: string;
   try {
     // git's own "not a git repository" is caught and reworded below.
     hooksDir = execFileSync("git", ["rev-parse", "--git-path", "hooks"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+    root = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
   } catch {
     log(`not inside a git repository, so there is nowhere to put a ${which} hook`);
     return 2;
   }
-  const target = join(hooksDir, which);
-  const line =
-    which === "pre-commit"
-      ? "npx -y jev-lint review --staged --fail-on error"
-      : "npx -y jev-lint commits '@{upstream}..HEAD' --fail-on error";
-  if (existsSync(target) && !opts.force) {
-    log(`${target} already exists; pass --force to overwrite it, or add this line to it:`);
-    log(`  ${line}`);
+  const bodyDir = join(root, ".jev-lint", "hooks");
+  const body = join(bodyDir, which);
+  const shimPath = join(hooksDir, which);
+  const relBody = `.jev-lint/hooks/${which}`;
+
+  const bodyExists = existsSync(body);
+  const shimExists = existsSync(shimPath);
+  // Only for the message below: an existing shim that already matches ours
+  // exactly is not "someone else's hook" to warn about, just nothing left
+  // to do -- distinct from *whether* to write it, which stays plain
+  // exists-or-not so re-running with nothing changed still refuses.
+  const shimIsOurs = shimExists && (() => {
+    try {
+      return readFileSync(shimPath, "utf8") === hookShim();
+    } catch {
+      return false;
+    }
+  })();
+  const writeBody = !bodyExists || opts.force;
+  const writeShim = !shimExists || opts.force;
+
+  if (!writeBody && !writeShim) {
+    log(`${body} already exists; pass --force to overwrite it`);
     return 2;
   }
+
   try {
-    mkdirSync(hooksDir, { recursive: true });
-    writeFileSync(target, which === "pre-commit" ? initialHook() : initialPushHook(), { mode: 0o755 });
+    if (writeBody) {
+      mkdirSync(bodyDir, { recursive: true });
+      writeFileSync(body, which === "pre-commit" ? initialHook() : initialPushHook(), { mode: 0o755 });
+    }
+    if (writeShim) {
+      mkdirSync(hooksDir, { recursive: true });
+      writeFileSync(shimPath, hookShim(), { mode: 0o755 });
+    }
   } catch (err: unknown) {
-    log(`could not write ${target}: ${String(err).slice(0, 160)}`);
+    log(`could not write ${writeBody ? body : shimPath}: ${String(err).slice(0, 160)}`);
     return 2;
   }
+
   if (opts.format === "json") {
-    out(JSON.stringify({ wrote: target, hook: which }, null, 2));
+    out(JSON.stringify({ wrote: writeBody ? body : null, shim: writeShim ? shimPath : null, hook: which }, null, 2));
     return 0;
   }
-  out(`wrote ${target}`);
+  if (writeBody) {
+    out(`wrote ${body}`);
+  } else {
+    out(`${body} already exists; left as is (pass --force to overwrite it)`);
+  }
+  if (writeShim) {
+    out(writeBody ? `and ${shimPath}, which finds and runs it` : `wrote ${shimPath}, which finds and runs it`);
+  } else if (shimIsOurs) {
+    out(`${shimPath} already points at it`);
+  } else {
+    out(`${shimPath} already exists and was left alone; add this line to it:`);
+    out(`  "$(git rev-parse --show-toplevel)"/${relBody}`);
+  }
+  out("");
+  out("The hook itself is tracked in the repository, so it is reviewed like");
+  out("any other file; git's own copy is a shim that finds it and exits 0");
+  out("silently when it is not there -- a clone that has the shim before it");
+  out("has the body can still commit.");
   out("");
   if (which === "pre-commit") {
-    out("It reviews the staged diff on every commit, prints what it finds, and");
-    out("blocks only on a rule with `severity: error` -- no shipped rule has it.");
-    out("With no API key in the environment it steps aside. Skip it once with");
-    out("`git commit --no-verify`; remove it by deleting the file.");
+    out("It reviews the staged diff and judges it against AGENTS.md / CLAUDE.md");
+    out("on every commit, prints what it finds, and blocks only on a rule with");
+    out("`severity: error` -- no shipped rule has it. With no API key in the");
+    out("environment, or a request that fails outright, it steps aside. Skip it");
+    out("once with `git commit --no-verify`; remove it by deleting the body.");
   } else {
     out("It judges the commits not yet on the upstream -- does each message");
     out("describe its diff -- prints what it finds, and blocks only on a rule");
-    out("with `severity: error`. With no API key, or no upstream yet, it steps");
-    out("aside. Skip it once with `git push --no-verify`; remove it by deleting the file.");
+    out("with `severity: error`. With no API key, no upstream yet, or a");
+    out("request that fails outright, it steps aside. Skip it once with");
+    out("`git push --no-verify`; remove it by deleting the body.");
   }
   return 0;
 }
