@@ -6,6 +6,20 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/findings.md](docs/findings.md).
 
+## 0.6.1 — 2026-09-21
+
+### Fixed
+
+- **A missing parser was invisible in `--dry-run`, and the report said the
+  opposite of the truth.** Found by installing 0.6.0 from the registry and
+  running it over a directory with one `.mbt` file in it: the plan said `no
+  files for moonbit (20)` — the file was right there — and said nothing
+  about a parser, because the notice was only ever printed by a real run's
+  report. A language whose parser nobody declared produces no subjects,
+  which is what the idle line counts, so the two lines contradicted each
+  other. `--dry-run` now carries the notice, and neither output calls an
+  undeclared language fileless.
+
 ## 0.6.0 — 2026-09-21
 
 65 rules to 98: `shell` is a new language directory, `moonbit` is a new

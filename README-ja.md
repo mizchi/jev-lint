@@ -24,31 +24,29 @@ config はバージョン管理に入るものであり、キーはそうでは�
 ```
 examples/cart.test.ts
      17  flag       This test would still pass if the behaviour its name claims were broken.
-         test-name-verifies-claim  0.91  cutoff 0.62  arm bare
+         test-name-verifies-claim  0.90  cutoff 0.62  arm bare
 
 examples/cart.ts
      16  flag       The failure contract stated in the documentation on this function -- what it says the function throws, raises, rejects with, panics on, or returns in place of a result when something goes wrong, and under what condition -- is contradicted by the body.
          doc-errors-match-body  0.94  cutoff 0.56  arm located
      16  flag       The comment above this code claims something that is not true of the code.
-         comment-describes-declaration  0.91  cutoff 0.56  arm located
+         comment-describes-declaration  0.89  cutoff 0.56  arm located
      16  flag       This function ($NAME) has a failure path of its own that none of the related tests reaches.
-         tests-cover-failure-paths  0.92  cutoff 0.68  arm paired
-     16  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.56  cutoff 0.55  arm located
+         tests-cover-failure-paths  0.93  cutoff 0.68  arm paired
      22  flag       The body of this function does something materially different from what its name promises.
          fn-name-promises  0.73  cutoff 0.55  arm located
      30  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.78  cutoff 0.55  arm located
+         fn-name-promises  0.71  cutoff 0.55  arm located
 
-no files for go (9 rules), javascript (1 rule), json (1 rule), markdown (11 rules), python (12 rules), rust (8 rules), text (1 rule)
-7 rule(s) matched nothing: typescript/catch-hides-failure, typescript/comment-describes-block, typescript/idempotent-name, typescript/log-level-matches-event, typescript/log-message-matches-event, typescript/pure-name-is-pure, typescript/safe-name-is-safe
+no files for go (9 rules), javascript (1 rule), json (1 rule), markdown (11 rules), moonbit (20 rules), python (14 rules), rust (9 rules), shell (8 rules), text (1 rule)
+9 rule(s) matched nothing: typescript/catch-hides-failure, typescript/class-shape-shows-its-role, typescript/comment-describes-block, typescript/idempotent-name, typescript/log-level-matches-event, typescript/log-message-matches-event, typescript/method-name-promises, typescript/pure-name-is-pure, typescript/safe-name-is-safe
   A matcher that misses is invisible everywhere else -- check these before trusting a clean run.
 
-7 finding(s), 37 subject(s), 0 cached
-7 request(s), 28,613 input tokens, $0.00120, 745 ms (4549 ms of requests)
+6 finding(s), 37 subject(s), 0 cached
+7 request(s), 28,542 input tokens, $0.00120, 1791 ms (5678 ms of requests)
 ```
 
-finding 一件は、ルールの一文をコードの一箇所に当てたもので、モデルの同意の強さ (0.91) がルール同梱の cutoff (0.62) を超えたときに出る。`arm` はモデルに何を見せたか (`bare`: テスト単体、`located`: ファイルごと、`paired`: それを叩くテストと一緒に)。16 行目はコメントの嘘で、四つのルールが四方向から見ている。コメント、その失敗契約、名前、そして throw に届かないテスト。clean なものは一つも flag されていない。この実行は 0.1 セント。
+finding 一件は、ルールの一文をコードの一箇所に当てたもので、モデルの同意の強さ (0.90) がルール同梱の cutoff (0.62) を超えたときに出る。`arm` はモデルに何を見せたか (`bare`: テスト単体、`located`: ファイルごと、`paired`: それを叩くテストと一緒に)。16 行目はコメントの嘘で、三つのルールが三方向から見ている。コメント、その失敗契約、そして throw に届かないテスト。clean なものは一つも flag されていない。この実行は 0.1 セント。
 
 ## 何を見るか
 

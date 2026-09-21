@@ -10,6 +10,7 @@ exclude: [test/fixtures]
 # not in `files`), and are listed so that turning one off is a diff.
 rules:
   catch-hides-failure: on
+  class-shape-shows-its-role: on
   comment-describes-block: on
   comment-describes-declaration: on
   commit-message-describes-diff: on
@@ -32,6 +33,7 @@ rules:
   installs-persistence: on
   log-level-matches-event: on
   log-message-matches-event: on
+  method-name-promises: on
   module-name-describes-contents: on
   module-naming-consistent: on
   must-name-panics: on
@@ -50,6 +52,7 @@ rules:
   test-name-describes-code: on
   test-name-verifies-claim: on
   tests-cover-failure-paths: on
+  trait-name-describes-methods: on
   type-name-describes-shape: on
   var-name-describes-value: on
   weakens-security: on

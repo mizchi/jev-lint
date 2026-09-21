@@ -18,6 +18,32 @@ test("report: a language with no files is one idle line, not a list of dead matc
   assert.match(pretty, /1 rule\(s\) matched nothing: typescript\/b/);
 });
 
+test("report: a language whose parser nobody declared is not reported as having no files", () => {
+  // Found on the published package: a directory with an `a.mbt` in it and no
+  // `languages:` printed `no files for moonbit (20)`. The files were right
+  // there. They produced no subjects because the rules were dropped before
+  // the scan, which is what `idleLanguages` counts, and the true sentence is
+  // the notice underneath. Two lines that contradict each other teach a
+  // reader to believe neither.
+  const ts = { ...scoreRule({ id: "a" }), languageDir: "typescript" };
+  const mbt = { ...scoreRule({ id: "a", language: "moonbit", rule: { kind: "x" } }), languageDir: "moonbit" };
+  const result = {
+    rules: [ts, mbt],
+    subjects: [subjectOf({ rule: ts })],
+    undeclared: ["moonbit"],
+    findings: [],
+    all: [],
+    review: [],
+    stats: { subjects: 1, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} },
+  };
+  const pretty = formatPretty(result, { color: false });
+  assert.ok(!/no files for/.test(pretty), `moonbit is the only idle language and must not be called fileless:\n${pretty}`);
+  assert.match(pretty, /moonbit: no parser declared/);
+  assert.match(pretty, /docs\/reference\.md#a-language-ast-grep-does-not-have-built-in/);
+  // And it is still off duty rather than a matcher that missed.
+  assert.deepEqual(silentRules(result), []);
+});
+
 test("report: a finding that did not reproduce in every pass says so", () => {
   // The whole point of --retry. A finding the mean reports but only some passes
   // did is the case the calibration discipline says to route to a person, so it

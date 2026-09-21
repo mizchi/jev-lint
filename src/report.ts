@@ -136,7 +136,11 @@ export function formatPretty(
     if (missing.length) out.push("");
   }
 
-  const idle = idleLanguages(result);
+  // A language whose parser nobody declared has no subjects either, but it
+  // is not idle -- its files are right there and could not be read. Saying
+  // "no files for moonbit" beside a directory of `.mbt` is a false sentence,
+  // and the notice below is the true one.
+  const idle = idleLanguages(result).filter((l) => !(result.undeclared ?? []).includes(l.language));
   if (idle.length > 0 && !result.commits) {
     out.push(
       c.dim(`no files for ${idle.map((l) => `${l.language} (${l.rules} rule${l.rules === 1 ? "" : "s"})`).join(", ")}`),

@@ -79,8 +79,20 @@ export function printDryRun(result: RunResult, rules: Rule[], opts: Options, out
   if (result.retry && result.retry > 1) {
     out(`--retry ${result.retry}: every request above would be made ${result.retry} times`);
   }
-  const idle = idleLanguages(result);
+  // `--dry-run` is the first command the README hands a reader, so it is
+  // where a missing parser has to be said -- it was only ever said by a real
+  // run's report, which meant the plan claimed "no files for moonbit" over a
+  // directory of `.mbt` and never explained why they were not in the plan.
+  const undeclared = result.undeclared ?? [];
+  const idle = idleLanguages(result).filter((l) => !undeclared.includes(l.language));
   if (idle.length && !result.commits) out(`no files for ${idle.map((l) => `${l.language} (${l.rules})`).join(", ")}`);
+  if (undeclared.length) {
+    out(
+      `${undeclared.join(", ")}: no parser declared, so those rules are not in this plan. ` +
+        "ast-grep has no grammar for them until `languages:` in the config names the compiled library. " +
+        "How to build and declare one: https://github.com/mizchi/jev-lint/blob/main/docs/reference.md#a-language-ast-grep-does-not-have-built-in",
+    );
+  }
   const silent = silentRules(result);
   if (silent.length) out(`${silent.length} rule(s) matched nothing: ${silent.join(", ")}`);
   return 0;

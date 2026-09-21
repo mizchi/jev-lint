@@ -37,37 +37,35 @@ baselines, and CI can lint from a committed cache with no key at all.
 ```
 examples/cart.test.ts
      17  flag       This test would still pass if the behaviour its name claims were broken.
-         test-name-verifies-claim  0.91  cutoff 0.62  arm bare
+         test-name-verifies-claim  0.90  cutoff 0.62  arm bare
 
 examples/cart.ts
      16  flag       The failure contract stated in the documentation on this function -- what it says the function throws, raises, rejects with, panics on, or returns in place of a result when something goes wrong, and under what condition -- is contradicted by the body.
          doc-errors-match-body  0.94  cutoff 0.56  arm located
      16  flag       The comment above this code claims something that is not true of the code.
-         comment-describes-declaration  0.91  cutoff 0.56  arm located
+         comment-describes-declaration  0.89  cutoff 0.56  arm located
      16  flag       This function ($NAME) has a failure path of its own that none of the related tests reaches.
-         tests-cover-failure-paths  0.92  cutoff 0.68  arm paired
-     16  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.56  cutoff 0.55  arm located
+         tests-cover-failure-paths  0.93  cutoff 0.68  arm paired
      22  flag       The body of this function does something materially different from what its name promises.
          fn-name-promises  0.73  cutoff 0.55  arm located
      30  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.78  cutoff 0.55  arm located
+         fn-name-promises  0.71  cutoff 0.55  arm located
 
-no files for go (9 rules), javascript (1 rule), json (1 rule), markdown (11 rules), python (12 rules), rust (8 rules), text (1 rule)
-7 rule(s) matched nothing: typescript/catch-hides-failure, typescript/comment-describes-block, typescript/idempotent-name, typescript/log-level-matches-event, typescript/log-message-matches-event, typescript/pure-name-is-pure, typescript/safe-name-is-safe
+no files for go (9 rules), javascript (1 rule), json (1 rule), markdown (11 rules), moonbit (20 rules), python (14 rules), rust (9 rules), shell (8 rules), text (1 rule)
+9 rule(s) matched nothing: typescript/catch-hides-failure, typescript/class-shape-shows-its-role, typescript/comment-describes-block, typescript/idempotent-name, typescript/log-level-matches-event, typescript/log-message-matches-event, typescript/method-name-promises, typescript/pure-name-is-pure, typescript/safe-name-is-safe
   A matcher that misses is invisible everywhere else -- check these before trusting a clean run.
 
-7 finding(s), 37 subject(s), 0 cached
-7 request(s), 28,613 input tokens, $0.00120, 745 ms (4549 ms of requests)
+6 finding(s), 37 subject(s), 0 cached
+7 request(s), 28,542 input tokens, $0.00120, 1791 ms (5678 ms of requests)
 ```
 
 Each finding is one rule's sentence, held against one piece of code, with
-the model's agreement (0.91) over the cutoff the rule ships with (0.62) and
+the model's agreement (0.90) over the cutoff the rule ships with (0.62) and
 what it was shown (`bare`: the test alone; `located`: with its file;
 `paired`: with the tests that exercise it). Line 16 is the comment lie,
-seen by four rules from four sides — the comment, its failure contract,
-the name, and the tests that never reach the throw. Nothing clean was
-flagged. The run cost a tenth of a cent.
+seen by three rules from three sides — the comment, its failure contract,
+and the tests that never reach the throw. Nothing clean was flagged. The
+run cost a tenth of a cent.
 
 ## What it reviews
 
