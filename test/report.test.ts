@@ -148,3 +148,17 @@ test("report: severity error is honoured when a rule has earned it", () => {
   ]);
   assert.match(formatGithub({ ...g, rules: [rule] }), /^::error /);
 });
+
+test("report: a git rule off duty is not a matcher that missed", () => {
+  // `N rule(s) matched nothing` is the one place a dead matcher is visible,
+  // which only holds if nothing else lands in that list. A `subject: commit`
+  // rule was already excluded from a file-mode run; `subject: change` was
+  // added beside it and inherited none of that, so an idle change rule was
+  // reported as having matched nothing when it simply had no commits to
+  // look at.
+  const change = scoreRule({ id: "r-change", language: "Git", subject: "change", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
+  const commit = scoreRule({ id: "r-commit", language: "Git", subject: "commit", kind: "noul", ask: "a", criteria: { true: "y", false: "n" }, rule: undefined });
+  const empty = { rules: [change, commit], subjects: [], all: [], findings: [], review: [], stats: { subjects: 0, reported: 0, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } };
+  assert.deepEqual(silentRules({ ...empty, commits: null }), [], "neither is on duty in a file-mode run");
+  assert.deepEqual(silentRules({ ...empty, commits: { range: "HEAD", total: 1, skippedMerges: 0 } }).sort(), ["r-change", "r-commit"], "both are, in commits mode, and both found nothing");
+});

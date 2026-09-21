@@ -15,6 +15,7 @@
  */
 import { describe } from "./gate.ts";
 import { renamedRuleHint } from "./ignore.ts";
+import { isGitSubject } from "./types.ts";
 import type { Finding, ReportInput } from "./types.ts";
 import type { GapRow, StabilityReport } from "./calibrate.ts";
 
@@ -283,7 +284,7 @@ export function silentRules(result: Partial<ReportInput>): string[] {
   // others can; a rule of the other kind is not silent, it is off duty. So
   // is every rule of a language the run saw no file of.
   const onDuty = (result.rules ?? []).filter(
-    (r) => (r.subject === "commit") === Boolean(result.commits) && !(r.languageDir && idle.has(r.languageDir)),
+    (r) => isGitSubject(r.subject) === Boolean(result.commits) && !(r.languageDir && idle.has(r.languageDir)),
   );
   return onDuty.map((r) => ruleKey(r)).filter((id) => !fired.has(id));
 }
@@ -298,7 +299,7 @@ export function idleLanguages(result: Partial<ReportInput>): Array<{ language: s
   const fired = new Set((result.subjects ?? []).map((s) => s.rule.languageDir));
   const byDir = new Map<string, number>();
   for (const r of result.rules ?? []) {
-    if (!r.languageDir || r.subject === "commit") continue;
+    if (!r.languageDir || isGitSubject(r.subject)) continue;
     byDir.set(r.languageDir, (byDir.get(r.languageDir) ?? 0) + 1);
   }
   return [...byDir.entries()]
