@@ -45,7 +45,27 @@ subject: node
 # its callers or about a type declared elsewhere in the file, so the file is
 # where the confirmation lives. `tools/arms.ts` settles it.
 state: located
-at: 0.56
+# 2026-09-22: the corpus had five labelled defects and only two labelled
+# cleans, both section dividers -- a shape that makes no claim about the
+# declaration under it, so the rule had never been shown a comment that
+# was accurate and had to be told so. Rebuilt per the procedure
+# `typescript/comment-describes-block` recorded on 2026-09-20 (same file):
+# five new hard cleans, interleaved among the defects rather than left at
+# the top and bottom -- a unit-plus-bound claim that holds only because of
+# an explicit floor (`remainingSeconds`, 0.05), a true-but-vague claim
+# (`touch`, 0.14), an accurate delegation claim sitting one match after the
+# callee's own doc bug (`has`, 0.11), a caller's-contract claim that holds
+# because the count is read fresh with no cache (`liveCount`, 0.18), and an
+# ordering-plus-stability claim that holds because of default lexicographic
+# `sort()` and no caching (`sortedIds`, 0.28). Defects still answer
+# 0.79-0.96 -- `store` (0.79, the obsolete-parameter defect) stays the
+# quietest defect, as it was in the original corpus -- so the gap narrows
+# from 0.61 (pre-existing baseline: cleanTop 0.18, defectMin 0.79) to 0.51.
+# Pass-to-pass spread over 3 passes: max 0.07 (`sortedIds`, 0.24/0.31/0.29),
+# median 0.01. `at: 0.54` is the fitted midpoint of (0.28, 0.79); headroom is
+# 0.26 on the clean side and 0.25 on the defect side, using the mean, and
+# still positive (0.23 both sides) using each case's worst single pass.
+at: 0.54
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

@@ -1,271 +1,406 @@
 {
- "schema": "jev-lint-eval-1",
- "recorded": "2026-09-19T17:13:04.415Z",
- "model": "jev-1.13.0",
- "suite": "rust/comment-describes-declaration",
- "rules": [
-  {
-   "id": "comment-describes-declaration",
-   "draft": "fc1439af47c6",
-   "at": 0.55
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T15:55:21.688Z",
+  "model": "jev-1.13.0",
+  "suite": "rust/comment-describes-declaration",
+  "rules": [
+    {
+      "id": "comment-describes-declaration",
+      "draft": "fc1439af47c6",
+      "at": 0.57
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 3,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 23,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 33,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 57,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 62,
+        "endLine": 68,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 71,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 76,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 87,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 3,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 23,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 33,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 57,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 62,
+        "endLine": 68,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 71,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 76,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 87,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 3,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 23,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 33,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 46,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 57,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 62,
+        "endLine": 68,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 71,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 76,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
+        "line": 87,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 26922,
+    "usd": 0.001130724,
+    "ms": 690
   }
- ],
- "cutoffs": {},
- "passes": [
-  [
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 3,
-    "endLine": 7,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 11,
-    "endLine": 13,
-    "kind": "noul",
-    "value": 0.09,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 16,
-    "endLine": 18,
-    "kind": "noul",
-    "value": 0.92,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 21,
-    "endLine": 24,
-    "kind": "noul",
-    "value": 0.92,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 27,
-    "endLine": 29,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 32,
-    "endLine": 34,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 37,
-    "endLine": 39,
-    "kind": "noul",
-    "value": 0.13,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 42,
-    "endLine": 44,
-    "kind": "noul",
-    "value": 0.11,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 47,
-    "endLine": 49,
-    "kind": "noul",
-    "value": 0.2,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 3,
-    "endLine": 7,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 11,
-    "endLine": 13,
-    "kind": "noul",
-    "value": 0.09,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 16,
-    "endLine": 18,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 21,
-    "endLine": 24,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 27,
-    "endLine": 29,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 32,
-    "endLine": 34,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 37,
-    "endLine": 39,
-    "kind": "noul",
-    "value": 0.16,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 42,
-    "endLine": 44,
-    "kind": "noul",
-    "value": 0.12,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 47,
-    "endLine": 49,
-    "kind": "noul",
-    "value": 0.18,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 3,
-    "endLine": 7,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 11,
-    "endLine": 13,
-    "kind": "noul",
-    "value": 0.1,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 16,
-    "endLine": 18,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 21,
-    "endLine": 24,
-    "kind": "noul",
-    "value": 0.93,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 27,
-    "endLine": 29,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 32,
-    "endLine": 34,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 37,
-    "endLine": 39,
-    "kind": "noul",
-    "value": 0.15,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 42,
-    "endLine": 44,
-    "kind": "noul",
-    "value": 0.1,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/rust/comment-describes-declaration/fixtures/budget.rs",
-    "line": 47,
-    "endLine": 49,
-    "kind": "noul",
-    "value": 0.2,
-    "confidence": null
-   }
-  ]
- ],
- "spent": {
-  "calls": 9,
-  "inputTokens": 47460,
-  "usd": 0.0019933200000000002,
-  "ms": 2318
- }
 }

@@ -4,17 +4,29 @@ pub struct Budget {
     spent_cents: i64,
     limit_cents: i64,
     checks: u32,
+    adjustments: Vec<i64>,
 }
 
 impl Budget {
     /// Creates a budget with the given limit in cents.
     pub fn new(limit_cents: i64) -> Self {
-        Budget { spent_cents: 0, limit_cents, checks: 0 }
+        Budget { spent_cents: 0, limit_cents, checks: 0, adjustments: Vec::new() }
     }
 
     /// Returns the amount still available, in cents.
     pub fn remaining(&self) -> i64 {
         (self.limit_cents - self.spent_cents) / 100
+    }
+
+    /// Returns the fraction of the limit spent, clamped to the range 0.0
+    /// to 1.0 even when a refund has pushed the running total negative.
+    pub fn utilization(&self) -> f64 {
+        if self.limit_cents <= 0 {
+            return 0.0;
+        }
+        (self.spent_cents as f64 / self.limit_cents as f64)
+            .max(0.0)
+            .min(1.0)
     }
 
     /// Reports whether the budget is exhausted, without changing it.
@@ -23,14 +35,36 @@ impl Budget {
         self.spent_cents >= self.limit_cents
     }
 
+    /// Reads `spent_cents` and `limit_cents` directly with no cache, so
+    /// callers who need the latest balance should call this again after
+    /// `spend` rather than reusing an earlier result.
+    pub fn balance_cents(&self) -> i64 {
+        self.limit_cents - self.spent_cents
+    }
+
     /// Adds to the amount spent, stopping at the limit.
     pub fn spend(&mut self, cents: i64) {
         self.spent_cents += cents;
     }
 
+    /// Same value as `check_count`, kept under a clearer name for new
+    /// call sites; it just forwards to it.
+    pub fn checks_performed(&self) -> u32 {
+        self.check_count()
+    }
+
     /// Resets the budget, recording `reason` for the audit log.
     pub fn reset(&mut self) {
         self.spent_cents = 0;
+    }
+
+    /// Applies a pending adjustment to the running total.
+    pub fn apply_adjustment(&mut self, delta_cents: i64) {
+        self.adjustments.push(delta_cents);
+        self.spent_cents += delta_cents;
+        if self.spent_cents < 0 {
+            self.spent_cents = 0;
+        }
     }
 
     /// Returns how many times `is_exhausted` has been called.
@@ -46,6 +80,12 @@ impl Budget {
     /// Separate from `spend` so callers can record a refund without auditing.
     pub fn credit(&mut self, cents: i64) {
         self.spent_cents -= cents;
+    }
+
+    /// Returns recorded adjustments in the order they were applied,
+    /// oldest first.
+    pub fn adjustment_history(&self) -> &[i64] {
+        &self.adjustments
     }
 
     pub fn tighten(&mut self, factor: i64) {

@@ -1,30 +1,50 @@
 default: clean
 fixtures/session_store.ts:
-  - line: 12
+  - line: 13
+    label: clean
+    window: 0
+    reason: "hard clean: states a unit (\"seconds\") and a bound (\"never negative\") -- the raw `(expiresAt - Date.now()) / 1000` can go negative once a session has expired, and the claim holds only because of the explicit `Math.max(0, ...)` floor."
+  - line: 18
     label: bad
     window: 0
     reason: says milliseconds, returns seconds.
-  - line: 17
-    label: bad
+  - line: 23
+    label: clean
     window: 0
-    reason: says it does not mutate, and it increments `hits`.
-  - line: 24
-    label: bad
-    window: 0
-    reason: says newest first, sorts oldest first.
+    reason: "hard clean: true but vague -- \"touches a session\" says nothing about incrementing `hits` specifically or about the no-op when the id is unknown, but nothing it does say is contradicted."
   - line: 29
     label: bad
     window: 0
+    reason: says it does not mutate, and it increments `hits`.
+  - line: 36
+    label: clean
+    window: 0
+    reason: "hard clean: describes what a helper it delegates to does (\"forwards to `lookup`\") where that is exactly the whole body, independent of `lookup`'s own doc comment being wrong two matches above it."
+  - line: 41
+    label: bad
+    window: 0
+    reason: says newest first, sorts oldest first.
+  - line: 47
+    label: clean
+    window: 0
+    reason: "hard clean: a comment about the caller's contract (\"should not hold onto this count across a call to `store` or `remove`\") rather than the body -- it holds because the function reads `sessions.size` fresh on every call with nothing cached."
+  - line: 52
+    label: bad
+    window: 0
     reason: the comment documents a `ttlSeconds` parameter that no longer exists.
-  - line: 34
+  - line: 67
     label: bad
     window: 0
     reason: says it throws on an unknown id, and it returns false.
-  - line: 88
+  - line: 78
+    label: clean
+    window: 0
+    reason: "hard clean: states an ordering (\"ascending\") and a stability claim (\"stays stable across calls\") -- both hold because `Array.prototype.sort()` on strings is lexicographic ascending by default and the function always recomputes from the current key set rather than caching a prior order."
+  - line: 117
     label: clean
     window: 0
     reason: "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"
-  - line: 94
+  - line: 123
     label: clean
     window: 0
     reason: "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"

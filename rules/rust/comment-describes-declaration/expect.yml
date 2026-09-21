@@ -1,18 +1,58 @@
 default: clean
 fixtures/budget.rs:
-  - line: 16
+  - line: 3
+    label: clean
+    window: 0
+    reason: "file-level heading (\"// Corpus file.\") directly above the struct; it names the file, not a claim about `Budget`. implicit clean, labelled 2026-09-22."
+  - line: 12
+    label: clean
+    window: 0
+    reason: "`new` sets every field exactly as the comment says. implicit clean, labelled 2026-09-22."
+  - line: 17
     label: bad
     window: 0
     reason: says cents, returns whole units. / Returns the amount still available, in cents.
-  - line: 21
+  - line: 23
+    label: clean
+    window: 0
+    reason: "hard clean: states a bound (\"0.0 to 1.0\") that would look wrong from the arithmetic alone -- `spent_cents` can go negative via `credit`, so the naive ratio can go negative, or on a shrunk `limit_cents` go over 1.0 -- and holds only because of the `.max(0.0).min(1.0)` clamp plus the `limit_cents <= 0` guard."
+  - line: 33
     label: bad
     window: 0
     reason: the comment claims it leaves the budget untouched and it increments `checks` -- which makes it a false comment AND a predicate name on a mutating function. Both rules are right about it; flagged by fn-name-promises at 0.82 while this marker named only the comment rule. / Reports whether the budget is exhausted, without changing it.
-  - line: 27
+  - line: 41
+    label: clean
+    window: 0
+    reason: "hard clean: a comment about the caller's contract (\"call this again after `spend` rather than reusing an earlier result\") rather than the body -- it holds because the type keeps no cache and every read is a direct field subtraction."
+  - line: 46
     label: bad
     window: 0
     reason: says it saturates at the limit, and it does not clamp at all. / Adds to the amount spent, stopping at the limit.
-  - line: 32
+  - line: 52
+    label: clean
+    window: 0
+    reason: "hard clean: describes what a helper it delegates to does (\"forwards to `check_count`\") where that is exactly the whole body."
+  - line: 57
     label: bad
     window: 0
     reason: documents a `reason` parameter the function no longer takes. / Resets the budget, recording `reason` for the audit log.
+  - line: 62
+    label: clean
+    window: 0
+    reason: "hard clean: true but vague -- \"applies a pending adjustment\" says nothing about the negative-total clamp or that the delta is recorded into `adjustments`, but nothing it does say is contradicted."
+  - line: 71
+    label: clean
+    window: 0
+    reason: "returns exactly the counter the comment names. implicit clean, labelled 2026-09-22."
+  - line: 76
+    label: clean
+    window: 0
+    reason: "returns exactly the field the comment names. implicit clean, labelled 2026-09-22."
+  - line: 81
+    label: clean
+    window: 0
+    reason: "comment is about the caller's reason for this method existing (\"so callers can record a refund without auditing\") rather than the body, and it holds -- `credit` really is separate from `spend` and calls nothing audit-related. implicit clean, labelled 2026-09-22."
+  - line: 87
+    label: clean
+    window: 0
+    reason: "hard clean: states an ordering (\"oldest first\") -- `adjustments` is only ever appended to via `Vec::push` in `apply_adjustment`, so returning the slice in storage order really is insertion order."

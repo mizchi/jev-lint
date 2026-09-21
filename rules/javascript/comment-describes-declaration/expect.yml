@@ -1,10 +1,38 @@
 default: clean
 fixtures/legacy_cart.js:
-  - line: 4
+  - line: 5
+    label: clean
+    window: 0
+    reason: "hard clean: states an ordering (\"cheapest first\") plus a tie-break rule (\"ties keep their original order\") -- both hold because of the explicit `a.index - b.index` tie-break after mapping in the original index."
+  - line: 13
     label: bad
     window: 0
     reason: says it returns cents, returns whole units.
-  - line: 9
+  - line: 19
+    label: clean
+    window: 0
+    reason: "hard clean: a comment about the caller's contract (\"call this again after `emptyCart` rather than reusing an earlier count\") rather than the body -- it holds because the function reads `cart.items.length` fresh on every call with nothing cached."
+  - line: 24
     label: bad
     window: 0
     reason: claims it leaves the input alone, and it sorts in place.
+  - line: 29
+    label: clean
+    window: 0
+    reason: "hard clean: true but vague -- \"applies a discount\" says nothing about it being percent-based or about returning new item objects instead of mutating them, but nothing it does say is contradicted."
+  - line: 37
+    label: clean
+    window: 0
+    reason: "counts exactly what the comment names. implicit clean."
+  - line: 42
+    label: clean
+    window: 0
+    reason: "hard clean: describes what a helper it delegates to does (\"forwards to `cartTotal` and rounds the result\") where that is exactly the whole body, independent of whether `cartTotal`'s own doc comment is accurate."
+  - line: 47
+    label: clean
+    window: 0
+    reason: "empties exactly what the comment names. implicit clean."
+  - line: 53
+    label: clean
+    window: 0
+    reason: "hard clean: states a bound (\"0 and 100 inclusive\") that would look wrong from the arithmetic alone -- `Math.round` on a ratio near 1 could in principle overshoot -- and holds only because of the explicit `Math.min(100, ...)` clamp and the `items.length === 0` guard against dividing by zero."

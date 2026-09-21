@@ -5,7 +5,26 @@ languages:
 kind: noul
 subject: node
 state: located
-at: 0.57
+# 2026-09-22: `legacy_cart.js` had two labelled defects and two unlabelled
+# `default: clean` cleans that made no checkable claim ("Returns the number
+# of items whose price is above zero", "Empties the cart") -- true, but not
+# hard: a claim nobody could have gotten wrong is not a negative class.
+# Rebuilt per the procedure `typescript/comment-describes-block` recorded on
+# 2026-09-20: five new hard cleans, interleaved among the defects rather than
+# appended after them -- an ordering-plus-tie-break claim that holds only
+# because of the explicit index tie-break (`cheapestFirst`, 0.28), a caller's-
+# contract claim that holds because the count is read fresh with no cache
+# (`itemCount`, 0.07), a true-but-vague claim (`applyDiscount`, 0.13), an
+# accurate delegation claim independent of the callee's own doc bug
+# (`roundedTotal`, 0.20), and a bound claim that holds only because of an
+# explicit clamp and a zero-length guard (`paidShare`, 0.07). Defects still
+# answer 0.94-0.96; the new cleans top out at 0.28 (`cheapestFirst`), so the
+# gap narrows from 0.72 (pre-existing baseline: cleanTop 0.19, defectMin
+# 0.91) to 0.66. Pass-to-pass spread over 3 passes: max 0.13 (`cheapestFirst`,
+# 0.21/0.28/0.34), median 0.01 -- even at its high pass `cheapestFirst` stays
+# 0.27 under the cutoff. `at: 0.61` is the fitted midpoint of (0.28, 0.94);
+# headroom is 0.33 on both sides.
+at: 0.61
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

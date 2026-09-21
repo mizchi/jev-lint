@@ -3,7 +3,27 @@ language: Rust
 kind: noul
 subject: node
 state: located
-at: 0.55
+# 2026-09-22: the corpus had four labelled defects and zero labelled cleans --
+# five subjects fell through `default: clean` unreasoned, and the widest of
+# them (0.19) sat 0.74 below the narrowest defect (0.93), a gap wide enough
+# that any cutoff in it was untested rather than fitted. Rebuilt per the
+# procedure `typescript/comment-describes-block` recorded on 2026-09-20:
+# `budget.rs` now carries five new hard cleans -- a bound stated correctly
+# under a clamp a naive read would miss (`utilization`, 0.15), a caller's-
+# contract claim that holds because the type keeps no cache (`balance_cents`,
+# 0.13), an accurate delegation claim (`checks_performed`, 0.07), a true-but-
+# vague claim (`apply_adjustment`, 0.22), and an ordering claim that holds
+# only because the backing `Vec` is append-only (`adjustment_history`, 0.17)
+# -- interleaved among the defects rather than appended, and the five
+# previously-unreasoned cleans are now labelled with why each is clean.
+# Defects still answer 0.92-0.95; the new cleans top out at 0.22
+# (`apply_adjustment`), so the gap narrows to 0.70 -- the four `criteria:
+# "false"` shapes read as more clean, not less, so this is the corpus doing
+# its job rather than the rule getting worse. Pass-to-pass spread over 3
+# passes: max 0.04, median 0.01 -- no case wobbles near a boundary. `at: 0.57`
+# is the fitted midpoint of (0.22, 0.92); headroom is 0.35 on both sides,
+# wide enough that the midpoint is not a coin flip here (see calibration.md).
+at: 0.57
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

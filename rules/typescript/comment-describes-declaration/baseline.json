@@ -1,352 +1,487 @@
 {
- "schema": "jev-lint-eval-1",
- "recorded": "2026-09-19T17:13:04.415Z",
- "model": "jev-1.13.0",
- "suite": "typescript/comment-describes-declaration",
- "rules": [
-  {
-   "id": "comment-describes-declaration",
-   "draft": "8e0e32a4415a",
-   "at": 0.56
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T15:55:29.842Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/comment-describes-declaration",
+  "rules": [
+    {
+      "id": "comment-describes-declaration",
+      "draft": "8e0e32a4415a",
+      "at": 0.54
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 3,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 47,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 57,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 67,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 72,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 78,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 83,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 88,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 117,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 123,
+        "endLine": 129,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 3,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 47,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 57,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 67,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 72,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 78,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 83,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 88,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 117,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 123,
+        "endLine": 129,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 3,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 18,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 29,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 47,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 57,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 67,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 72,
+        "endLine": 74,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 78,
+        "endLine": 80,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 83,
+        "endLine": 85,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 88,
+        "endLine": 93,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 117,
+        "endLine": 119,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
+        "line": 123,
+        "endLine": 129,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 31308,
+    "usd": 0.0013149360000000003,
+    "ms": 746
   }
- ],
- "cutoffs": {},
- "passes": [
-  [
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 3,
-    "endLine": 7,
-    "kind": "noul",
-    "value": 0.09,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 12,
-    "endLine": 14,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 17,
-    "endLine": 21,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 24,
-    "endLine": 26,
-    "kind": "noul",
-    "value": 0.88,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 29,
-    "endLine": 31,
-    "kind": "noul",
-    "value": 0.79,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 34,
-    "endLine": 36,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 39,
-    "endLine": 46,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 49,
-    "endLine": 51,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 54,
-    "endLine": 56,
-    "kind": "noul",
-    "value": 0.19,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 59,
-    "endLine": 64,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 88,
-    "endLine": 90,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 94,
-    "endLine": 100,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 3,
-    "endLine": 7,
-    "kind": "noul",
-    "value": 0.11,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 12,
-    "endLine": 14,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 17,
-    "endLine": 21,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 24,
-    "endLine": 26,
-    "kind": "noul",
-    "value": 0.84,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 29,
-    "endLine": 31,
-    "kind": "noul",
-    "value": 0.79,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 34,
-    "endLine": 36,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 39,
-    "endLine": 46,
-    "kind": "noul",
-    "value": 0.06,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 49,
-    "endLine": 51,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 54,
-    "endLine": 56,
-    "kind": "noul",
-    "value": 0.19,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 59,
-    "endLine": 64,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 88,
-    "endLine": 90,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 94,
-    "endLine": 100,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   }
-  ],
-  [
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 3,
-    "endLine": 7,
-    "kind": "noul",
-    "value": 0.09,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 12,
-    "endLine": 14,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 17,
-    "endLine": 21,
-    "kind": "noul",
-    "value": 0.94,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 24,
-    "endLine": 26,
-    "kind": "noul",
-    "value": 0.89,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 29,
-    "endLine": 31,
-    "kind": "noul",
-    "value": 0.8,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 34,
-    "endLine": 36,
-    "kind": "noul",
-    "value": 0.95,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 39,
-    "endLine": 46,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 49,
-    "endLine": 51,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 54,
-    "endLine": 56,
-    "kind": "noul",
-    "value": 0.17,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 59,
-    "endLine": 64,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 88,
-    "endLine": 90,
-    "kind": "noul",
-    "value": 0.05,
-    "confidence": null
-   },
-   {
-    "rule": "comment-describes-declaration",
-    "file": "rules/typescript/comment-describes-declaration/fixtures/session_store.ts",
-    "line": 94,
-    "endLine": 100,
-    "kind": "noul",
-    "value": 0.07,
-    "confidence": null
-   }
-  ]
- ],
- "spent": {
-  "calls": 9,
-  "inputTokens": 47460,
-  "usd": 0.0019933200000000002,
-  "ms": 2318
- }
 }
