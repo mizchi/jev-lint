@@ -590,3 +590,56 @@ test("rules: a language the package ships rules for loads without a parser, and 
   assert.deepEqual(undeclared([mbt, ts], { moonbit: { libraryPath: "/opt/m.so", extensions: ["mbt"] } }), []);
   assert.deepEqual(undeclared([ts], {}), []);
 });
+
+test("rules: `divergent` declares a deliberate difference, and silences the drift warning for that id", () => {
+  const root = mkdtempSync(join(tmpdir(), "jev-divergent-"));
+  try {
+    const write = (rel: string, text: string) => {
+      mkdirSync(join(root, rel, ".."), { recursive: true });
+      writeFileSync(join(root, rel), text);
+    };
+    write("typescript/a/rule.yml", "id: a\nlanguage: TypeScript\nrule: { kind: x }\nask: one\n");
+    write(
+      "rust/a/rule.yml",
+      "id: a\nlanguage: Rust\nrule: { kind: y }\nask: two\ndivergent: Rust puts failure in the type, so the sentence is about panic, not throw\n",
+    );
+    const { rules, errors, warnings } = loadRules([root]);
+    assert.equal(rules.length, 2);
+    assert.deepEqual(errors, []);
+    assert.deepEqual(warnings, []);
+    assert.equal(rules.find((r) => r.languageDir === "rust")!.divergent?.startsWith("Rust puts"), true);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rules: `divergent` on sentences that do not differ is a warning of its own", () => {
+  const root = mkdtempSync(join(tmpdir(), "jev-divergent-dead-"));
+  try {
+    const write = (rel: string, text: string) => {
+      mkdirSync(join(root, rel, ".."), { recursive: true });
+      writeFileSync(join(root, rel), text);
+    };
+    write("typescript/a/rule.yml", "id: a\nlanguage: TypeScript\nrule: { kind: x }\nask: same\n");
+    write("rust/a/rule.yml", "id: a\nlanguage: Rust\nrule: { kind: y }\nask: same\ndivergent: it is not\n");
+    const { errors, warnings } = loadRules([root]);
+    assert.deepEqual(errors, []);
+    assert.equal(warnings.length, 1, warnings.join("\n"));
+    assert.match(warnings[0]!, /divergent/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rules: `divergent` must say why, not just that", () => {
+  const root = mkdtempSync(join(tmpdir(), "jev-divergent-empty-"));
+  try {
+    mkdirSync(join(root, "typescript/a"), { recursive: true });
+    writeFileSync(join(root, "typescript/a/rule.yml"), "id: a\nlanguage: TypeScript\nrule: { kind: x }\nask: one\ndivergent: true\n");
+    const { errors } = loadRules([root]);
+    assert.equal(errors.length, 1, errors.join("\n"));
+    assert.match(errors[0]!, /divergent/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

@@ -148,7 +148,8 @@ with your exceptions. Two things to know before editing:
   `at` or `severity` invalidates nothing. Recalibration is free by design.
 - **A rule in two languages is two files with one id** (`rules/typescript/<id>`,
   `rules/rust/<id>`). The sentence is a copy; the loader warns when the copies
-  drift, so edit both.
+  drift, so edit both, or declare in `divergent:` why one of them has to say
+  something else.
 
 Dropping a language variant is a deletion, not a `languages:` edit: the Rust
 rule names Rust node kinds, and ast-grep rejects a kind absent from the target

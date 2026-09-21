@@ -242,6 +242,17 @@ export interface RuleBase {
   docs: string | null;
   tags: string[];
   /**
+   * Why this language's copy of the id deliberately says something else.
+   *
+   * The sentence is a copy per language, and the loader warns when the
+   * copies drift. A language whose failures are shaped differently --
+   * MoonBit, where `raise` is in the type and the escape is `abort` --
+   * cannot carry the same sentence, so it declares the reason here and the
+   * warning stands down. Never read by the model: it is a note to whoever
+   * edits the other copy next.
+   */
+  divergent: string | null;
+  /**
    * Labels for a follow-up `choice`, asked of this rule's findings only when
    * the run is given `--explain`: which of these best names why the verdict
    * holds. Never part of the verdict question, so never part of the draft.

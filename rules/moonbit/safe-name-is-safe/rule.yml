@@ -38,16 +38,18 @@ rule:
         stopBy: end
         pattern: $NAME
         regex: ^(safe|try)(_|$)|_or_(default|none|else)$
-# NOT the sentence the TypeScript and Python copies use, and the loader's
-# drift warning on this id is expected. In those languages the question is
-# whether a failure escapes as a throw or a rejection. In MoonBit a `raise` is
-# part of the function's type: a function that can raise says so in its
-# signature and `moonc` forces every caller to handle it, so "a failure
-# escapes as a raise" is the compiler's answer and a rule that asked it would
-# be either always false or a duplicate of the type checker. What MoonBit
-# leaves out of the type -- `abort`, `panic()`, `.unwrap()`, an out-of-range
-# index, a division by zero, a loop that cannot terminate -- is what is left
-# for a rule to ask about, so the sentence asks about that instead.
+# NOT the sentence the TypeScript and Python copies use; `divergent` below is
+# where that is declared, and a rule that asked their question here would be
+# either always false or a duplicate of the type checker.
+divergent: >-
+  MoonBit states failure in the type: a declared `raise`, a `T?` and a
+  `Result` are the failure being reported, and the compiler makes every
+  caller handle it. The shared sentence -- a failure escaping as a throw or a
+  rejection -- therefore points at nothing a `.mbt` file can do. What escapes
+  in MoonBit is what the signature is silent about: `abort`, `panic()`,
+  `.unwrap()` on an unestablished option, an unbounded index, a division by a
+  quantity that can be zero, a loop whose exit some input never reaches. The
+  question is the same question; the failures it names had to be MoonBit's.
 ask: >-
   This function's name ($NAME) says that failure is absorbed and handed back to
   the caller as a value, but its body has a path that ends the program or never

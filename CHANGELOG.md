@@ -10,6 +10,13 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added
 
+- `divergent:`, a new rule field: why this language's copy of an id says
+  something else. The loader's drift warning asked for a comment and could
+  not read one, so the three MoonBit rules whose sentences cannot be the
+  shared copy -- `safe-name-is-safe`, `pure-name-is-pure`,
+  `idempotent-name` -- warned on every run. They now declare the reason,
+  and a `divergent:` on a copy that says the same thing as its siblings is
+  a warning in its own right.
 - `method-name-promises`, a new rule in TypeScript (0.50) and Python
   (0.47): does a method's body do what its name promises ON ITS CLASS?
   Both halves reach the model by name (`$CLASS.$NAME`), so

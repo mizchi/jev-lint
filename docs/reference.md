@@ -426,7 +426,12 @@ rules/rust/fn-name-promises/rule.yml          rule: { kind: function_item, ... }
 ```
 
 The sentence is a copy, and copies drift; `jev-lint rules` warns when the
-two copies of an id differ in `ask`, `criteria`, `note` or `explain`. A
+two copies of an id differ in `ask`, `criteria`, `note` or `explain`. A copy
+that must say something else -- MoonBit's, where `raise` is part of a
+function's type and the escape a rule can ask about is `abort` -- declares
+why in `divergent:`, which stands the warning down for that id; a
+`divergent:` on a copy that turns out to say the same thing is a warning of
+its own. A
 language directory admits only its own grammars (`typescript` admits the
 ECMAScript four), so a Rust kind cannot land in the TypeScript file. The
 identity of a rule is `(language, id)`: findings, `jev-lint-ignore` and

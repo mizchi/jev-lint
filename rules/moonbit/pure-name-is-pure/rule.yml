@@ -40,6 +40,16 @@ rule:
         stopBy: end
         pattern: $NAME
         regex: ^([A-Za-z][A-Za-z0-9_]*::)?(compute|calculate|derive|format|to|parse)(_|$)
+divergent: >-
+  Two MoonBit facts the shared sentence cannot carry. Its top-level `let`
+  binds the name and not the contents, so `let queue : Array[String] = []`
+  beside the functions is a store anything in the file can push to, and
+  pushing to it is an effect although nothing was reassigned. And MoonBit
+  code builds results imperatively as a matter of course, so the mirror case
+  -- a fresh `Array`, `Map` or `StringBuilder` created in the body, filled in
+  a loop and returned -- has to be spelled out or every such body reads as a
+  write. The shared copy's `this`, promises and dynamic imports name nothing
+  in a `.mbt` file.
 ask: >-
   This function's name ($NAME) presents it as a computation of a result from its
   inputs, but its body changes state outside itself or performs I/O.

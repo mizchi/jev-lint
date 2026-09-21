@@ -40,6 +40,15 @@ rule:
 ask: This function's name ($NAME) says a repeated call is harmless, but calling
   it a second time with the same arguments leaves a different result from
   calling it once.
+divergent: >-
+  The question is the shared one, word for word; the criteria and the note
+  are MoonBit's. The whole rule turns on one pair of its calls --
+  `Array::push` accumulates where `Map::set` overwrites -- so the first needs
+  a guard and the second does not, and that pair is what the criteria name in
+  place of the shared copy's listeners, indexes, tables and `CREATE IF NOT
+  EXISTS`, which no `.mbt` file has. The note adds that a declared `raise` is
+  not itself the defect, since in MoonBit it is in the type of half the
+  bodies this rule reads.
 criteria:
   # Both branches describe what is visible in the function's own text. The
   # whole rule turns on one pair of MoonBit calls: `Array::push` accumulates

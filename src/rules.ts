@@ -334,10 +334,22 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     }
   }
 
+  // A deliberate difference from the other languages' copy of this id, with
+  // the reason: `divergent: true` says only that it is, which is what the
+  // loader can already see.
+  let divergent: string | null = null;
+  if (raw.divergent !== undefined && raw.divergent !== null) {
+    if (typeof raw.divergent !== "string" || raw.divergent.trim() === "") {
+      return { error: `${id}: \`divergent\` must say why this language's sentence differs` };
+    }
+    divergent = raw.divergent.trim();
+  }
+
   const known = new Set([
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
     "note", "kind", "criteria", "at", "subject", "state", "axis", "severity",
     "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions", "levels",
+    "divergent",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
   if (unknown.length > 0) {
@@ -356,6 +368,7 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     axis,
     severity,
     unsureBelow,
+    divergent,
     message: typeof raw.message === "string" ? raw.message : null,
     docs: typeof raw.docs === "string" ? raw.docs : null,
     tags: Array.isArray(raw.tags) ? raw.tags.filter((t: unknown) => typeof t === "string") : [],
@@ -885,7 +898,10 @@ export function loadRules(
  *
  * Compared on what the model reads -- ask, criteria, note, explain -- and
  * not on the matcher, cutoff or state, which are the parts a language is
- * expected to have its own of.
+ * expected to have its own of. A copy that must say something else says why
+ * in `divergent`, which stands the warning down for that pair; a
+ * `divergent` on a copy that says the same thing is its own warning, since
+ * the reason it gives is no longer about anything.
  */
 function driftWarnings(rules: Rule[]): string[] {
   const byId = new Map<string, Rule[]>();
@@ -902,10 +918,18 @@ function driftWarnings(rules: Rule[]): string[] {
       const differ = (["ask", "criteria", "note", "explain"] as const).filter(
         (k) => canonical(first[k]) !== canonical(other[k]),
       );
+      const declared = [first, other].filter((r) => r.divergent);
       if (differ.length > 0) {
+        if (declared.length > 0) continue;
         out.push(
-          `${id}: drift between ${first.languageDir} and ${other.languageDir} in ${differ.join(", ")} -- the same rule in two languages should ask the same question, or say in a comment why not`,
+          `${id}: drift between ${first.languageDir} and ${other.languageDir} in ${differ.join(", ")} -- the same rule in two languages should ask the same question, or declare \`divergent: <why not>\``,
         );
+      } else {
+        for (const r of declared) {
+          out.push(
+            `${id}: ${r.languageDir} declares \`divergent\` but its sentence is ${r === first ? other.languageDir : first.languageDir}'s word for word -- drop the field, or make the difference it describes`,
+          );
+        }
       }
     }
   }

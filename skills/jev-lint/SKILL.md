@@ -209,7 +209,9 @@ Two grammars, one rule: Rust and TypeScript spell the same idea with
 different node kinds, so the rule lives twice, `rules/typescript/<id>/` and
 `rules/rust/<id>/`, same id, each with its own matcher, state, cutoff and
 fixtures. The sentence is a copy; the loader warns when the copies drift,
-so edit both or say in a comment why they differ.
+so edit both -- or, when a language's failures are shaped differently and
+the sentence cannot be the same one, declare the reason in `divergent:`
+and the warning stands down.
 
 ## Judging the output
 
