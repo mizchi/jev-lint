@@ -378,6 +378,22 @@ export async function planEval(suite: EvalSuite, repeat = 1, languages: CustomLa
   return { subjects: r.subjects.length, requests: r.batches.length * Math.max(1, repeat), tokens: tokens * Math.max(1, repeat) };
 }
 
+/**
+ * Subject-answers a run never got, counted across every pass.
+ *
+ * A batch whose request fails yields one null answer per subject -- fail
+ * open, so the gate records `missing` rather than a clean bill of health --
+ * and so does an answer the reader cannot use. `scoreEval` then works over
+ * whatever came back, which is the right thing for it to do and says nothing
+ * about the rest: precision, recall and flips off three answered subjects of
+ * ten look exactly like precision, recall and flips off ten. In the whole-run
+ * case a baseline of nothing replays as "all as shipped" with tp, fp and fn
+ * all zero. Everything that reports or accepts a record asks this first.
+ */
+export function unanswered(passes: EvalAnswer[][]): number {
+  return passes.reduce((n, pass) => n + pass.filter((a) => a.value === null).length, 0);
+}
+
 /** Ask the suite's rule about its cases, `repeat` times, and record it. */
 export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Promise<EvalRecord> {
   const repeat = Math.max(1, opts.repeat ?? 1);
@@ -409,6 +425,15 @@ export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Prom
   const spent = { calls: r.spent.calls, inputTokens: r.spent.inputTokens, usd: r.spent.usd, ms: r.spent.wallMs ?? r.spent.ms };
   const model: string | null = r.servedModel ?? null;
   opts.log?.(`${suite.name}: ${repeat} pass(es), ${r.stats.subjects} subject(s), ${r.spent.calls} request(s), $${r.spent.usd.toFixed(5)}, ${spent.ms} ms`);
+  const empty = unanswered(passes);
+  if (empty > 0) {
+    const asked = passes.reduce((n, pass) => n + pass.length, 0);
+    const why = (r.errors ?? []).length > 0 ? `${(r.errors ?? []).length} request(s) failed: ${r.errors![0]!.error.slice(0, 120)}` : "no request reported an error, so the answers came back unreadable";
+    opts.log?.(
+      `${suite.name}: ${empty} of ${asked} subject-answer(s) came back empty -- ${why}. ` +
+        "Everything below is measured over the rest; re-run before trusting it.",
+    );
+  }
   const record: EvalRecord = {
     schema: "jev-lint-eval-1",
     recorded: new Date().toISOString(),

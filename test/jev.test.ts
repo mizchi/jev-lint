@@ -117,11 +117,16 @@ test("jev: the pacer charges the estimate, refills at its rate, and makes a requ
   assert.equal(pacer.delay(250_000, t0), 0, "within the burst: no wait");
   assert.equal(pacer.delay(300_000, t0), 0);
   assert.equal(pacer.delay(2_000_000, t0), 0, "a request larger than the burst goes when the bucket is full, not never");
-  // Charge 250k: 50k left; 100k more is 500 ms away at 100k/s.
+  // Charge 250k: 50k left; 100k more is 500 ms away at 100k/s. The three
+  // instants below must go FORWARDS. This test used to read the clock back
+  // from t0+500 to t0+250 and expect 250 ms, which only worked because
+  // `refill` subtracted the negative elapsed time -- it was asserting the
+  // backwards-clock bug, not the refill rate. Half the wait is now measured
+  // by asking half way there.
   pacer.settle(0, 250_000);
   assert.equal(pacer.delay(100_000, t0), 500);
+  assert.equal(pacer.delay(100_000, t0 + 250), 250, "half the refill, half the wait");
   assert.equal(pacer.delay(100_000, t0 + 500), 0);
-  assert.equal(pacer.delay(100_000, t0 + 250), 250);
   // The server counted more than the estimate: the difference is charged.
   pacer.settle(1_000, 21_000);
   assert.equal(pacer.delay(100_000, t0 + 500), 200);

@@ -6,7 +6,15 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/findings.md](docs/findings.md).
 
-## Unreleased
+## 0.6.0 — 2026-09-21
+
+65 rules to 98: `shell` is a new language directory, `moonbit` is a new
+language directory, and the naming pack grew a class-level pair. Nothing
+about the config or the CLI changed, and nothing starts running by itself
+— a 0.5 config lists the rules it wants and keeps running exactly those,
+so the 33 new ones are off until they are listed. `jev-lint rules` names
+them all and `jev-lint init --force` rewrites the list with every shipped
+id on.
 
 ### Added
 
@@ -79,6 +87,18 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Fixed
 
+- **`eval` reported a suite as measured when it was not.** A batch whose
+  request fails yields a null answer per subject — fail open, which is
+  right — and `runEval` then wrote those nulls into the record and said
+  nothing. `scoreEval` computes precision and recall over whatever came
+  back, so a run that answered three of ten subjects printed the same kind
+  of table as one that answered ten, and in the whole-run case (`0
+  request(s)`, `$0.00000`, every value null) `eval --replay` reported the
+  suite as "all as shipped" with tp, fp and fn all zero. Building the
+  shell pack, four agents hit this independently through a stretch of HTTP
+  529s. Now: a run that came back with holes says how many and why,
+  `--accept` refuses to write a baseline with holes in it, and a replay
+  over a baseline that already has some says so every time it reads one.
 - The notice for a language whose parser nobody declared now says where to
   read about declaring one, and `docs/reference.md` is in the published
   package so an installed user can. The behaviour it describes was already

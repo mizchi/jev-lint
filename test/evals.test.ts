@@ -2,7 +2,7 @@ import { strict as assert } from "node:assert";
 import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync, existsSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
-import { discoverEvals, scoreEval, compareEvals, relocateLabels, relocateRecord, runEval, readEvalRecord, draftsChanged, loadSuite } from "../src/evals.ts";
+import { discoverEvals, scoreEval, compareEvals, relocateLabels, relocateRecord, runEval, readEvalRecord, draftsChanged, loadSuite, unanswered } from "../src/evals.ts";
 import { loadRules } from "../src/rules.ts";
 import { noulRule, answer } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
@@ -234,4 +234,26 @@ await testAsync("evals: a suite whose expect file does not parse reports it, and
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("evals: a subject a pass never answered is counted, because nothing else counts it", () => {
+  // A batch whose request fails yields a null answer per subject -- fail
+  // open, so the gate records `missing` rather than a clean bill of health.
+  // `scoreEval` then computes precision and recall over whatever came back,
+  // and NOTHING in the summary line distinguishes a suite that answered ten
+  // subjects from one that answered three and lost seven to HTTP 529. One
+  // agent calibrating the shell pack read `P 1.00 R 0.67` off three of ten;
+  // in the whole-run case a baseline of nothing replays as "all as shipped"
+  // with tp, fp and fn all zero. This is the number that makes that visible.
+  const full = [
+    [answer("a", 1, 0.9), answer("a", 2, 0.1)],
+    [answer("a", 1, 0.88), answer("a", 2, 0.12)],
+  ];
+  assert.equal(unanswered(full), 0);
+  const holed = [
+    [answer("a", 1, 0.9), { ...answer("a", 2, 0), value: null }],
+    [{ ...answer("a", 1, 0), value: null }, { ...answer("a", 2, 0), value: null }],
+  ];
+  assert.equal(unanswered(holed), 3, "counted per pass, not per subject");
+  assert.equal(unanswered([]), 0, "a record with no passes has nothing missing, and no answers either");
 });

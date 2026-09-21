@@ -4,7 +4,7 @@
  */
 import { writeFileSync } from "node:fs";
 import { relative } from "node:path";
-import { compareEvals, discoverEvals, draftsChanged, loadSuite, planEval, readEvalRecord, recordedAts, runEval, scoreEval } from "../evals.ts";
+import { compareEvals, discoverEvals, draftsChanged, loadSuite, planEval, readEvalRecord, recordedAts, runEval, scoreEval, unanswered } from "../evals.ts";
 import type { CaseScore, EvalDiff, EvalRecord, EvalScore, EvalSuite } from "../evals.ts";
 import { USD_PER_MTOK, type AskClient } from "../jev.ts";
 import { ruleSources } from "../rules.ts";
@@ -100,6 +100,11 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
       // question that changed under the baseline.
       const accepted = scoreEval(baselineRecord.passes, labels, rules, opts.at, recordedAts(baselineRecord));
       diff = compareEvals(accepted, score, { draftChanged: draftsChanged(baselineRecord, rules).length > 0 });
+      // A baseline taken before this check existed can have holes in it, and
+      // a replay reproduces a hole perfectly. Said on every run that reads
+      // one, because the comparison it anchors is that much weaker.
+      const holes = unanswered(baselineRecord.passes);
+      if (holes > 0) log(`${suite.name}: this baseline has ${holes} unanswered subject-answer(s) in it -- what it anchors is measured over the rest`);
     }
 
     const wrong = score.cases.filter((c) => c.label !== "unlabeled" && !c.right);
@@ -114,6 +119,17 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
     }
 
     if (opts.accept && !opts.replay) {
+      // A baseline is the contract, and a contract with holes in it is worse
+      // than none: the holes are invisible afterwards. `--replay` reproduces
+      // a null perfectly and reports the suite as shipped, so a run that lost
+      // subjects to a failed request would be accepted once and believed
+      // forever. Re-running costs a cent; this cost an afternoon.
+      const empty = unanswered(record.passes);
+      if (empty > 0) {
+        log(`${suite.name}: not accepting a baseline with ${empty} unanswered subject-answer(s); run it again`);
+        failed += 1;
+        continue;
+      }
       writeFileSync(suite.baseline, `${JSON.stringify(record, null, 2)}\n`);
       if (!opts.quiet) log(`${suite.name}: baseline accepted (${record.passes.length} pass(es), ${record.recorded})`);
     }
