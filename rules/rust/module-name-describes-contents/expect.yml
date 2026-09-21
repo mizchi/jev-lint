@@ -19,13 +19,53 @@ fixtures/helpers.rs:
     label: bad
     window: 1000000
     reason: every public item here is about formatting and parsing currency, and the module is called `helpers`.
+fixtures/queue.rs:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "named `queue` and holds a priority queue plus `depth`/`uptime`, which report the queue's own size and age -- a queue reporting on itself, not an unrelated concern smuggled in."
 fixtures/cart.rs:
   - line: 1
     label: clean
     window: 1000000
     reason: "named for the cart it holds: a line-item total and how to add to it. Ported from moonbit's cart.mbt, the loudest labelled clean in that sibling corpus (0.22 against a 0.55 cutoff) -- the module's own type is called `Line`, not `Cart`, so the name doesn't repeat verbatim anywhere in the file, only the concern the items serve does."
+fixtures/session.rs:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named `session` and does hold session lifecycle (create/refresh/invalidate), but half its public surface -- `hash_password`, `verify_password` -- is password hashing, a distinct concern that belongs to an `auth` or `password` module, not to session management. Aimed at the boundary: unlike helpers.rs, the on-topic half is real and dominant-looking at a glance."
 fixtures/retry.rs:
   - line: 1
     label: clean
     window: 1000000
     reason: the module is called `retry` and every public item is about retrying.
+fixtures/catalog.rs:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "`catalog` is broad rather than narrow, but `Category`, `Product`, lookup by category and discount pricing are one cohesive commerce concern a shopper would expect under that name -- broad and cohesive, not broad and scattered."
+fixtures/metrics.rs:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named `metrics` and mostly holds `Counter`/`Gauge`, but `retry_delay` computes a backoff schedule -- observability and a retry policy are unrelated concerns sharing one file. Aimed quiet: it is a single stray export among several on-topic ones, the shape that stayed hard to convict in the sibling moonbit/typescript corpora."
+fixtures/inventory.rs:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named `inventory` and mostly holds stock adjustment/reservation, but `format_price` is currency formatting -- unrelated to tracking stock levels, and, like metrics.rs, a single off-topic export rather than a wholesale mismatch."
+fixtures/notifications.rs:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "named `notifications` and `render_template` renders the message body the send functions dispatch -- composing the notification's content is part of the notifications concern, not an unrelated utility that happens to sit here."
+fixtures/orders.rs:
+  - line: 1
+    label: clean
+    window: 1000000
+    reason: "named `orders` and holds order creation, cancellation, an event log and history lookup -- several distinct-sounding items (`Order`, `OrderEvent`, history) that are all one order-lifecycle concern, not a name that is narrower than what it holds."
+fixtures/billing.rs:
+  - line: 1
+    label: bad
+    window: 1000000
+    reason: "named `billing` and does hold invoice creation/payment/void, but `EmailAddress` and `send_email` are notification delivery, not billing -- two of five public items off-topic rather than one, aimed between session.rs's half-and-half split and metrics.rs/inventory.rs's single stray export."

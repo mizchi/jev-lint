@@ -18,6 +18,12 @@ FROM users
 WHERE tenant_id = $1
 ORDER BY created_at DESC;
 
+-- name: ListVerifiedActiveUsers :many
+SELECT id, email, display_name
+FROM users
+WHERE tenant_id = $1 AND deleted_at IS NULL
+ORDER BY created_at DESC;
+
 -- name: ListUsers :many
 SELECT id, email, display_name
 FROM users
@@ -26,6 +32,9 @@ ORDER BY created_at DESC;
 
 -- name: CountUsers :one
 SELECT COUNT(*) FROM users WHERE tenant_id = $1 AND deleted_at IS NULL;
+
+-- name: TouchUserLastSeen :exec
+UPDATE users SET last_seen_at = NOW() WHERE tenant_id = $1 AND id = $2;
 
 -- name: DeleteUser :exec
 UPDATE users SET deleted_at = NOW()

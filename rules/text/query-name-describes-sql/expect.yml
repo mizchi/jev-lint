@@ -3,16 +3,22 @@ fixtures/users.sql:
   - { line: 3, label: bad, window: 0, reason: "`ByEmail` promises a filter on email; the SQL filters on id" }
   - { line: 9, label: clean, window: 0, reason: "hard clean: terse `GetUser` over a by-id lookup, with the file's tenant scope" }
   - { line: 15, label: bad, window: 0, reason: "`Active` promises a status filter; the SQL has none (its sibling ListUsers has deleted_at IS NULL, this one does not even have that)" }
-  - { line: 21, label: clean, window: 0, reason: "hard clean: the deleted_at scope is not something `ListUsers` had to say" }
-  - { line: 27, label: clean, window: 0, reason: "hard clean: a count with the standard scope" }
-  - { line: 30, label: clean, window: 0, reason: "hard clean: `DeleteUser` over a soft delete -- the file's reads exclude deleted_at IS NULL, so setting deleted_at is what delete means here" }
-  - { line: 34, label: clean, window: 0, reason: "hard clean: `Upsert` is the conventional verb for INSERT ... ON CONFLICT DO UPDATE" }
+  - { line: 21, label: bad, window: 0, reason: "`ListVerifiedActiveUsers`: `Active` is true (deleted_at IS NULL, the file's own convention for it, identical to ListUsers below), but `Verified` is unsupported -- no email_verified or similar filter anywhere in the query. A compound name with one true half and one false half, aimed at the boundary rather than the wholesale absence in ListActiveUsers above." }
+  - { line: 27, label: clean, window: 0, reason: "hard clean: the deleted_at scope is not something `ListUsers` had to say" }
+  - { line: 33, label: clean, window: 0, reason: "hard clean: a count with the standard scope" }
+  - { line: 36, label: clean, window: 0, reason: "`TouchUserLastSeen` extends the file's own `Touch` convention (see orders.sql's TouchOrder) to a different timestamp column; the name says which column, the verb is the established one for bumping a timestamp." }
+  - { line: 39, label: clean, window: 0, reason: "hard clean: `DeleteUser` over a soft delete -- the file's reads exclude deleted_at IS NULL, so setting deleted_at is what delete means here" }
+  - { line: 43, label: clean, window: 0, reason: "hard clean: `Upsert` is the conventional verb for INSERT ... ON CONFLICT DO UPDATE" }
 fixtures/orders.sql:
   - { line: 3, label: bad, window: 0, reason: "`Latest` promises the most recent; ORDER BY placed_at ASC LIMIT 1 returns the oldest" }
   - { line: 10, label: clean, window: 0, reason: "clean: the DESC LIMIT 1 the name promises" }
-  - { line: 17, label: clean, window: 0, reason: "hard clean: the join to fill display_name is more than the name says, and nothing it says is false" }
-  - { line: 24, label: bad, window: 0, reason: "`Count` promises a number and the tag :many promises rows; the SQL returns the rows and no count -- name and tag disagree with the SQL and with each other" }
-  - { line: 29, label: bad, window: 0, reason: "`Get` promises a read; the SQL deletes the row (RETURNING does not make a DELETE a read)" }
-  - { line: 32, label: clean, window: 0, reason: "hard clean: `Touch` is the conventional name for bumping updated_at" }
-  - { line: 35, label: bad, window: 0, reason: "`Invoices` names an entity the SQL does not touch; it reads orders" }
-  - { line: 41, label: clean, window: 0, reason: "hard clean: a sum over paid orders, named as a sum" }
+  - { line: 17, label: clean, window: 0, reason: "`GetOrderTotal` names one column; the query also returns `status` alongside it. A name that says less than the SQL is clean as long as what it says is true -- aimed at the boundary where a narrow single-value-sounding name meets a two-column row." }
+  - { line: 22, label: clean, window: 0, reason: "hard clean: the join to fill display_name is more than the name says, and nothing it says is false" }
+  - { line: 29, label: bad, window: 0, reason: "`GetUserAndOrders` :one, LIMIT 1: the tag and the LIMIT agree with each other (one row), only the plural `Orders` in the name overclaims against a query that returns exactly one order per call. Aimed at the quietest possible shape: no tag/SQL disagreement anywhere, only an English plural against a singular result." }
+  - { line: 36, label: bad, window: 0, reason: "`ListOrderNotes` :many caps its own result to one row with LIMIT 1 -- the tag and the plural name both promise a set, the SQL promises at most one. Quieter cousin of the GetLatestOrder/GetNewestOrder shape, aimed at the boundary where a cap contradicts a plural tag rather than an ordering." }
+  - { line: 43, label: bad, window: 0, reason: "`Count` promises a number and the tag :many promises rows; the SQL returns the rows and no count -- name and tag disagree with the SQL and with each other" }
+  - { line: 48, label: clean, window: 0, reason: "`CountActiveOrders` :one over `WHERE status = 'pending'`: pending orders are the ones still open, a defensible reading of `Active` as a business term -- unlike ListActiveUsers above, `Active` here is not describing a filter the SQL lacks, it is naming a filter the SQL has under a different word for the same idea." }
+  - { line: 53, label: bad, window: 0, reason: "`Get` promises a read; the SQL deletes the row (RETURNING does not make a DELETE a read)" }
+  - { line: 59, label: bad, window: 0, reason: "`GetOrderStatus` :one promises a read; the SQL is an UPDATE that changes the status before returning it. Quieter cousin of GetOrder's DELETE above -- the verb clash is the same shape, softer because the row still exists afterward." }
+  - { line: 62, label: bad, window: 0, reason: "`Invoices` names an entity the SQL does not touch; it reads orders" }
+  - { line: 68, label: clean, window: 0, reason: "hard clean: a sum over paid orders, named as a sum" }

@@ -19,14 +19,54 @@ split: "^-- name: (?<NAME>\\w+) :(?<KIND>\\w+)"
 extensions: [sql]
 kind: noul
 state: located
-# 0.61, fitted 2026-09-20 on the fixtures (16 queries: 6 defects, 9 cleans of
-# which 5 hard, 3 passes). Defects answer 0.91-0.96 (ByEmail over id, Latest
-# over ASC, Count :many returning rows, Get that deletes, Invoices over
-# orders, Active without a filter). Cleans top at 0.30 (`DeleteUser` as a
-# soft delete -- 0.68 while an identical `SoftDeleteUser` sat beside it in
-# the corpus, which made the convention argument the corpus's own fault;
-# with the twin gone and the note saying what delete means where reads
-# exclude deleted_at, 0.30), then 0.27 (a sum named as a sum). Midpoint.
+# 0.61, refit 2026-09-22 on a grown corpus (22 queries: 10 defects, 12
+# cleans, 3 passes; up from 6/9). The wholesale mismatches from the first
+# fit still answer loud and stayed put: ByEmail over id, Latest over ASC,
+# Count :many returning rows, Get that deletes, Invoices over orders,
+# Active with no filter at all (0.89-0.95). This round went after the
+# shape those don't test: a tag that agrees with the SQL and a name that
+# is wrong only in a word choice, not a clause.
+#
+# Two of those attempts landed on the wrong side and are kept as residue,
+# not smoothed away:
+#
+# - `GetUserAndOrders` :one (orders.sql) -- the tag and the LIMIT 1 agree
+#   (one row, every call), only the plural `Orders` overclaims against a
+#   query that returns exactly one order. Scores 0.45-0.56, mean 0.50,
+#   the quietest defect this rule has ever produced and currently a miss
+#   at any workable cutoff. Verb/entity/cardinality-tag mismatches read as
+#   confidently false; a plural noun against a singular result does not,
+#   even though the claim is just as wrong. Compare `ListOrderNotes`
+#   (0.85-0.87), the same LIMIT-vs-tag shape but with the tag itself
+#   wrong (:many over one row) rather than just the noun -- that one is
+#   caught, loud, which isolates what actually goes quiet: not the
+#   cardinality mismatch, the grammar of the name.
+# - `CountActiveOrders` :one over `WHERE status = 'pending'` (orders.sql)
+#   -- built to test whether a business-term substitution reads as
+#   `Active` the way `deleted_at IS NULL` reads as `Active` for users.sql
+#   two queries above it -- but nothing in this file ever establishes
+#   `pending` as the orders table's notion of active, the way `ListUsers`
+#   establishes `deleted_at IS NULL` for users.sql. It does not read as
+#   clean: 0.83-0.84, a confident false positive. Kept clean here because
+#   the substitution is still a defensible reading of "active" for an
+#   order, not because the model agrees; if this shape recurs, the fix is
+#   to teach the note that a business-term substitution needs the same
+#   in-file precedent a standard scope gets, not to chase the cutoff.
+#
+# `GetOrderTotal` :one, naming one column while returning two (0.45-0.49,
+# clean, correct) is the nearest a clean case has come to the cutoff
+# without crossing it -- margin 0.12-0.16 across passes, the real
+# FP-margin now, tighter than the 0.30-topping cleans below it (0.05-0.17)
+# by a wide gap. Cleans otherwise top at CountActiveOrders itself (see
+# above) if counted, or at 0.17 (CountUsers, ListUsers) if not.
+#
+# 0.61 is kept rather than moved: the region both residues sit in (0.45-
+# 0.56 for the miss, 0.83-0.84 for the false positive) is nowhere near a
+# single narrow gap a cutoff could straddle, and GetUserAndOrders itself
+# flips decision within its own 3 passes (0.45/0.56/0.50) around any
+# cutoff near 0.50 -- exactly the coin-flip a midpoint fit is supposed to
+# avoid. Midpoint of the *reliable* bands (loud defects 0.85+, safe
+# cleans up to 0.17) is unchanged from the original fit.
 at: 0.61
 ask: >-
   This query's name ($NAME) misdescribes the SQL under it.

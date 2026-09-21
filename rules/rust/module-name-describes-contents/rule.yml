@@ -3,22 +3,45 @@ language: Rust
 kind: noul
 subject: file
 state: graph
-# 0.55, kept after the fit 2026-09-22, having ported the two boundary
-# fixtures from moonbit's tighter sibling corpus (6 files: 2 defects, 4
-# cleans, 3 passes; up from 1 defect, 3 cleans). Cleans top at 0.19
-# (`cart.rs`, a line-item total and an add -- ported from moonbit's
-# cart.mbt, whose own struct is called `Line`, not `Cart`, so the name
-# never repeats verbatim). Defects are `helpers.rs`, whose every export is
-# about currency (0.83), and `utils.rs`, a clamp beside a string repeat
-# (0.81) -- ported from moonbit's util.mbt, the same
-# placeholder-name-over-a-grab-bag situation that answers only 0.61-0.66 in
-# moonbit's own corpus. Rust's judge is markedly less forgiving of it here
-# than moonbit's is of the identical situation: `utils` reads as a
-# confident violation rather than a boundary case, which is a finding
-# about the language, not a fixture to soften. Midpoint of the gap is
-# 0.50; 0.55 keeps the copies in step with moonbit and typescript and
-# clears both margins (FN 0.26, FP 0.36 -- both smaller than before the
-# port, FN 0.30 and FP 0.45).
+# 0.55, kept after growing the corpus 2026-09-22 from 2 defects/4 cleans to
+# 6 defects/8 cleans (14 files, 3 passes), no longer thin. The graph arm
+# only ever sees imports and a symbol table -- no bodies -- so every new
+# case had to put its ambiguity in which symbols a module exports, not in
+# what they do.
+#
+# Loud defects still separate cleanly: helpers.rs 0.82-0.84 and utils.rs
+# 0.80-0.82 (grab-bags with no dominant concern -- see below), then
+# session.rs 0.60-0.67 and billing.rs 0.59-0.63, where a clear majority of
+# the surface is on-topic (session lifecycle; invoicing) but a second,
+# unrelated concern rides along on two-fifths to half of the public items
+# (password hashing; notification delivery). billing.rs is the quietest
+# defect the rule still catches -- margin 0.06 over the cutoff, but a
+# stable decision across all 3 passes (0.59/0.61/0.63, never crosses back).
+#
+# Two defects the rule misses at any workable cutoff: metrics.rs (Counter
+# and Gauge plus one stray retry_delay, 0.16-0.19) and inventory.rs (stock
+# tracking plus one stray format_price, 0.30-0.36). A single off-topic
+# export riding along on several on-topic ones reads to the model as
+# within-cohesion -- the same leniency the rule's own note grants a module
+# for holding several related items, just extended to cover one unrelated
+# one too. No cutoff rescues these without also catching catalog.rs
+# (0.16-0.21, clean: Category/Product/discount pricing, one cohesive
+# commerce concern despite three distinct-sounding items) and cart.rs
+# (0.16-0.19, clean), which sit in the same band -- metrics.rs's own mean
+# (0.17) and cart.rs's (0.18) interleave. This is a demonstrated blind spot
+# of the graph arm, not a threshold to chase: the rule currently cannot
+# tell "one stray export" from "one more facet of a cohesive module."
+#
+# Cleans top at catalog.rs (0.18 mean, edging out cart.rs); orders.rs, a
+# broad-but-cohesive order-lifecycle module built specifically to tempt
+# over-triggering (Order, OrderEvent, history, several distinct-sounding
+# items), stayed at 0.07. FP headroom (loudest clean to cutoff) is 0.37;
+# FN headroom among caught defects (cutoff to quietest catch) is 0.06 --
+# the asymmetry is real and points at what to test next, not at moving
+# 0.55: nothing below ~0.17 would reach metrics.rs, and a cutoff that low
+# sits inside the clean band (cart.rs, catalog.rs) and would wreck
+# precision (still 1.00 here, including against three fixtures built
+# adversarially to be clean-but-tempting) without fixing the blind spot.
 at: 0.55
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
