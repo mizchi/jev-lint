@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync, realpathSync, existsSync } from "node:fs";
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync, realpathSync, existsSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadRules } from "../src/rules.ts";
@@ -138,8 +138,11 @@ await testAsync("cli: the targets of `commits` come from the positional, --base,
   const said: string[] = [];
   const log = (s: string) => void said.push(s);
   const out = (s: string) => void said.push(s);
-  const commitRules = loadRules([join(realpathSync("."), "rules", "git")]).rules;
-  assert.equal(commitRules.length, 1);
+  // By subject, not by "whatever is in rules/git": that directory held one
+  // rule until `diff-follows-instructions` joined it, and a test that
+  // encodes the count breaks on the next one too.
+  const commitRules = loadRules([join(realpathSync("."), "rules", "git")]).rules.filter((r) => r.subject === "commit");
+  assert.equal(commitRules.length, 1, "one shipped rule judges a commit message");
   const withBase = parseArgs(["--base", "main"], { color: false });
   withBase.paths = ["src"]; // as the config would fill it
   const t1 = await resolveTargets("commits", commitRules, withBase, undefined, out, log);
@@ -161,7 +164,9 @@ await testAsync("cli: `commits --staged` names no range and needs a change rule,
   const said: string[] = [];
   const log = (s: string) => void said.push(s);
   const out = (s: string) => void said.push(s);
-  const commitRules = loadRules([join(realpathSync("."), "rules", "git")]).rules;
+  // Commit rules only: this test is about `--staged` refusing a rule set
+  // that has no change rule in it, and rules/git now ships one.
+  const commitRules = loadRules([join(realpathSync("."), "rules", "git")]).rules.filter((r) => r.subject === "commit");
   const dir = mkdtempSync(join(tmpdir(), "jev-staged-targets-"));
   try {
     const file = join(dir, "change.yml");
@@ -320,12 +325,17 @@ await testAsync("cli: init --pre-commit writes the hook where git keeps hooks, o
     process.chdir(join(dir, "repo"));
     const opts = parseArgs([], { color: false });
     assert.equal(cmdInitHook(opts, out, log, "pre-commit"), 0);
-    const hook = join(dir, "repo", ".git", "hooks", "pre-commit");
-    assert.ok(existsSync(hook));
-    assert.equal(cmdInitHook(opts, out, log, "pre-commit"), 2, "an existing hook is not overwritten");
-    assert.match(said.at(-1)!, /review --staged/, "the one line to add to it is printed");
+    // The body is tracked in the repository and git's copy is a shim that
+    // finds it; both have to arrive, since either alone does nothing.
+    const body = join(dir, "repo", ".jev-lint", "hooks", "pre-commit");
+    const shim = join(dir, "repo", ".git", "hooks", "pre-commit");
+    assert.ok(existsSync(body), "the hook itself, where it can be reviewed");
+    assert.ok(existsSync(shim), "and the shim that runs it");
+    assert.match(readFileSync(shim, "utf8"), /\.jev-lint\/hooks/, "the shim holds no policy of its own");
+    assert.equal(cmdInitHook(opts, out, log, "pre-commit"), 2, "an existing body is not overwritten");
+    assert.match(said.at(-1)!, /--force/, "and the way to overwrite it is printed");
     assert.equal(cmdInitHook(parseArgs(["--force"], { color: false }), out, log, "pre-push"), 0);
-    assert.ok(existsSync(join(dir, "repo", ".git", "hooks", "pre-push")));
+    assert.ok(existsSync(join(dir, "repo", ".jev-lint", "hooks", "pre-push")));
     // Outside a repository there is nowhere to put it. HOME and the tmpdir
     // are not repositories; GIT_CEILING_DIRECTORIES keeps the search from
     // finding one above the temp directory anyway.
