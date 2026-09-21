@@ -661,7 +661,7 @@ export interface Directive {
 }
 
 const HEADING = /^(#{1,6})\s+(.*)$/;
-const TOP_BULLET = /^\s{0,3}(?:[-*+]|\d+[.)])\s+\S/;
+const TOP_BULLET = /^(?:[-*+]|\d+[.)])\s+\S/;
 const INDENTED = /^\s+\S/;
 const FENCE = /^\s{0,3}(```|~~~)/;
 
@@ -742,10 +742,20 @@ export function splitDirectives(docs: InstructionDoc[]): Directive[] {
 }
 ```
 
+`TOP_BULLET` is anchored at column 0 on purpose, and this is the one place
+the obvious reading is wrong. CommonMark lets a top-level list item carry
+up to three leading spaces, and writing that here (`/^\s{0,3}.../`) makes a
+two-space-indented **nested** bullet match as a top-level one -- so it
+closes its parent and opens its own directive, which is the opposite of
+folding children in. The first test above fails against it, producing four
+directives where it expects two. The cost of column 0 is the other
+direction: a genuinely top-level bullet someone wrote with a leading space
+folds into whatever came before it. Say so in the comment.
+
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `npm test directives`
-Expected: PASS, 8 tests.
+Expected: PASS, 8 tests, plus whatever the probes below add.
 
 - [ ] **Step 5: Typecheck and commit**
 
