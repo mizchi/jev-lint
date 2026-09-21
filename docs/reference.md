@@ -542,7 +542,7 @@ baselines — is [RULES.md](../RULES.md), written by `tools/rules-md.ts`
 (`npm run rules:md`; `npm run rules:md:check` fails when it is stale, and
 so does `npm test`). What follows is the prose.
 
-65 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
+99 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
 grouped here by what they ask. Which languages each exists in:
 
 | rule | typescript | rust | python | go | other |
@@ -779,15 +779,18 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 On a one-language repository every other language's rules are idle, and
 the report says so in one line rather than listing them as silent.
 
-Of the 65, **56 reach precision 1.00 and recall 1.00 at their shipped cutoffs
+Of the 99, **79 reach precision 1.00 and recall 1.00 at their shipped cutoffs
 on their own fixtures** (`rules/*/*/baseline.json`, three passes each,
 decisions on the mean; `jev-lint eval --replay` re-derives every number below
 with no request). Read that with the positive counts beside them: per rule,
-31, 17, 13, 12, 12, 11, 10, 10, 10, 10, 9, 9, 6, 6, 6, 5, 5, 5, 4, 4, 2, 2, 1
-labelled defects — 200 in all, against 113 before the improvement round of
-2026-09-20, in which six agents each took one or two rules, added hard cases
-drawn from real code, and rewrote criteria until the rule separated or the
-reason it could not was named. The two `module-name-describes-contents`
+one to thirty-seven labelled defects — 707 in all, against 113 before the
+improvement round of 2026-09-20 and 644 before the boundary round of
+2026-09-22. The first added hard cases drawn from real code; the second aimed
+them at each rule's cutoff rather than a comfortable distance from it, which
+is why the count above fell from 87 of 98 as it rose. `jev-lint eval` now
+refuses a suite whose fixtures are all far enough from the boundary that they
+could not see the rule drift — see [RULES.md](../RULES.md) for the current
+per-rule numbers, which this page does not repeat. The two `module-name-describes-contents`
 rules still have one defect each and ship at `severity: info`;
 `javascript/comment-describes-declaration` has two.
 
@@ -1109,8 +1112,9 @@ the batching axis invalidates the verdicts that depended on them.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **The cutoffs are fitted to small evals.** 320 labelled fixtures, 467
-  labelled defects across 65 rules, one to thirty-one per rule. Expect to refit; see
+- **The cutoffs are fitted to small evals.** 497 labelled fixtures, 707
+  labelled defects and 1,135 labelled cleans across 99 rules, one to
+  thirty-seven defects per rule. Expect to refit; see
   [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.

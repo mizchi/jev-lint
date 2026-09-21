@@ -91,7 +91,7 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
   nothing else.
 
 - **The corpora were aimed at the cutoffs, and the scores went down.** 644
-  labelled defects became 700, and 87 of 98 rules at precision and recall 1.00
+  labelled defects became 707, and 87 of 98 rules at precision and recall 1.00
   became 79 of 99. That is the point rather than a regression: the new cases
   sit next to each rule's decision boundary instead of a comfortable distance
   from it, so a rule that scored 1.00 on cases it was never going to miss now
@@ -118,6 +118,25 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
     hold an **inverted pair** — a labelled defect below a labelled clean — so
     no cutoff gets both right. Both keep precision and take the miss, because
     a linter that flags correct code on sight is the worse trade.
+
+  Two rules turned out to have been cut too high rather than merely
+  untested. `markdown/document-is-slop` and `markdown/document-is-vague`
+  took their cutoffs (2.0 and 2.2) from their rubric's own semantic
+  boundary, with no case anywhere near it to check that against. Six
+  documents written for the middle of each scale found three real misses —
+  a half-grounded listicle at 1.69, and a document alternating mechanism
+  with vague benefit at 1.62 in English and 1.83 in Japanese — putting
+  recall at 0.90 and 0.78 where both had reported 1.00. Refitted to 1.1 and
+  1.4.
+
+- **A cutoff is fitted on each case's observed range, not on its mean.**
+  `separable` used to mean *the means do not overlap*, which is weaker than
+  every reader takes it for: two cases whose means differ by 0.01 and which
+  each wobble by 0.10 got a midpoint between them and a clean bill. It now
+  means the ranges do not overlap, and the case where the means separate but
+  the ranges do not says so in its own words rather than reporting a fit.
+  Ten shipped cutoffs moved by between 0.01 and 0.11 as a result; none of
+  them changed a decision on its own fixtures.
 
 ### Fixed
 
