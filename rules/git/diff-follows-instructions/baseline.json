@@ -1,0 +1,244 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T14:54:44.413Z",
+  "model": "jev-1.13.0",
+  "suite": "git/diff-follows-instructions",
+  "rules": [
+    {
+      "id": "diff-follows-instructions",
+      "draft": "4bea78e91af8",
+      "at": 0.65
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/missing-required-test",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/edits-generated-file",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/forbidden-dependency",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/linter-territory",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/breaks-the-instruction-it-adds",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/procedural-only",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/edits-the-document",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/honours-the-instruction",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/edits-generated-file",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/linter-territory",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/honours-the-instruction",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/breaks-the-instruction-it-adds",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/procedural-only",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/missing-required-test",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/forbidden-dependency",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/edits-the-document",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/honours-the-instruction",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/missing-required-test",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/breaks-the-instruction-it-adds",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/linter-territory",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/forbidden-dependency",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/procedural-only",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.51,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/edits-generated-file",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "diff-follows-instructions",
+        "file": "rules/git/diff-follows-instructions/fixtures/edits-the-document",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 28,
+    "inputTokens": 33194,
+    "usd": 0.0013941480000000002,
+    "ms": 884
+  }
+}

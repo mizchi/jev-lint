@@ -476,36 +476,95 @@ export function applyConfig(
 }
 
 /**
- * The pre-commit hook `jev-lint init --pre-commit` installs.
+ * What goes in git's own hooks directory: nothing but a pointer.
  *
- * Three decisions in it. It reviews `--staged`, so it judges what the commit
- * will contain and not the working tree. It blocks only on `error`, because
- * a probabilistic reviewer that refuses commits over a `warning` is one that
- * gets uninstalled -- everything else is printed and the commit goes through.
- * And with no key in the environment it exits 0 with a note, because a hook
- * that fails every commit on a machine without the key is worse than none.
+ * The hook itself lives in the repository, at `.jev-lint/hooks/<name>`,
+ * where it is tracked and reads like any other file in a diff. This is the
+ * only thing `init` ever writes outside the repository, and it stays four
+ * lines on purpose: a fresh clone has this shim before it has the body (git
+ * does not clone its own hooks directory), and a missing or
+ * non-executable body must not fail a commit -- so it exits 0 silently
+ * rather than erroring, which is also what protects a clone that deleted
+ * `.jev-lint/hooks/` on purpose.
+ */
+export function hookShim(): string {
+  return `#!/bin/sh
+# jev-lint hook shim, written by \`jev-lint init\`. The hook itself is
+# \`.jev-lint/hooks/<name>\` in the repository, where it can be reviewed.
+root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+hook="$root/.jev-lint/hooks/$(basename "$0")"
+[ -x "$hook" ] || exit 0
+exec "$hook" "$@"
+`;
+}
+
+/**
+ * The pre-commit hook body `jev-lint init --pre-commit` writes to
+ * `.jev-lint/hooks/pre-commit`.
+ *
+ * Two questions about what is staged, both `--staged` so both judge what
+ * the commit will contain and not the working tree: does the code
+ * contradict what it says about itself (`review`), and does the change
+ * break an instruction the repository wrote for itself in AGENTS.md or
+ * CLAUDE.md (`commits --staged`, the one this hook could not ask before a
+ * `change` subject existed). Both block only on `error`, because a
+ * probabilistic reviewer that refuses commits over a `warning` is one that
+ * gets uninstalled -- everything else is printed and the commit goes
+ * through. With no key in the environment it exits 0 with a note, because a
+ * hook that fails every commit on a machine without the key is worse than
+ * none. And a request that fails outright is exit 3 from `jev-lint` -- not a
+ * verdict about the commit, just a broken run -- so it is let through rather
+ * than treated as a blocking exit code the way git treats every other
+ * non-zero status; the alternative is a hook that fails every commit while
+ * the service is down or a key has expired, which is how a hook gets
+ * deleted rather than fixed. `[ "$status" -eq 3 ] || exit "$status"` reads
+ * right for one trailing call, but is wrong for the first of two: on a
+ * clean 0 it would `exit 0` immediately and the second call would never
+ * run. `if [ "$status" -ne 0 ] && [ "$status" -ne 3 ]; then exit "$status";
+ * fi` says what is actually meant -- only a real 1 or 2 stops the
+ * script -- and reads the same for the last call too, so both use it.
  */
 export function initialHook(): string {
   return `#!/bin/sh
 # jev-lint pre-commit hook, written by \`jev-lint init --pre-commit\`.
 #
-# Reviews only the staged diff, prints every finding, and blocks the commit
-# only on a rule with \`severity: error\`. Skip it once with
+# Two questions about what is staged: does the code contradict what it says
+# about itself, and does the change break an instruction the repository
+# wrote for itself in AGENTS.md or CLAUDE.md. Prints every finding, blocks
+# the commit only on a rule with \`severity: error\`. Skip it once with
 # \`git commit --no-verify\`. A partially staged file is judged as it is on
 # disk, since the matcher reads files, not the index.
 if [ -z "$TYPESAFE_API_KEY" ] && [ -z "$TYPESAFEAI_API_KEY" ]; then
   echo "jev-lint: no API key in the environment, skipping the review" >&2
   exit 0
 fi
-exec npx -y jev-lint review --staged --fail-on error
+npx -y jev-lint review --staged --fail-on error
+status=$?
+# 3 is "the requests failed", which is not a verdict about this commit --
+# fall through to the next check exactly as a clean 0 does. Blocking on it
+# means being unable to commit while offline, which is how a hook gets
+# deleted; only a real 1 or 2 stops the commit here.
+if [ "$status" -ne 0 ] && [ "$status" -ne 3 ]; then
+  exit "$status"
+fi
+
+npx -y jev-lint commits --staged --fail-on error
+status=$?
+if [ "$status" -ne 0 ] && [ "$status" -ne 3 ]; then
+  exit "$status"
+fi
 `;
 }
 
 /**
- * The pre-push hook: the commits about to leave, judged by their messages.
+ * The pre-push hook body: the commits about to leave, judged by their
+ * messages.
  *
  * A branch with no upstream has nothing to diff against yet, so the hook
- * steps aside there rather than block the first push of every branch.
+ * steps aside there rather than block the first push of every branch. The
+ * exit-3 passthrough is the same call as in `initialHook`, and for the same
+ * reason: a failed request is not a verdict, and blocking the push on one
+ * is how a hook gets deleted rather than fixed.
  */
 export function initialPushHook(): string {
   return `#!/bin/sh
@@ -522,6 +581,13 @@ if ! git rev-parse --abbrev-ref '@{upstream}' >/dev/null 2>&1; then
   echo "jev-lint: no upstream for this branch yet, skipping the commit review" >&2
   exit 0
 fi
-exec npx -y jev-lint commits '@{upstream}..HEAD' --fail-on error
+npx -y jev-lint commits '@{upstream}..HEAD' --fail-on error
+status=$?
+# 3 is "the requests failed", which is not a verdict about this push.
+# Blocking on it means being unable to push while offline, which is how
+# a hook gets deleted; only a real 1 or 2 stops the push here.
+if [ "$status" -ne 0 ] && [ "$status" -ne 3 ]; then
+  exit "$status"
+fi
 `;
 }

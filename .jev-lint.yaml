@@ -32,6 +32,7 @@ rules:
   comment-describes-declaration: on
   commit-message-describes-diff: on
   describe-names-subject: on
+  diff-follows-instructions: on
   destroys-beyond-its-scope: on
   doc-errors-match-body: on
   document-abandons-a-question: on

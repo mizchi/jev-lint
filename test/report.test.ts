@@ -1,9 +1,39 @@
 import { strict as assert } from "node:assert";
 import { decide, gate } from "../src/gate.ts";
 import { formatGithub, formatJson, formatPretty, silentRules, idleLanguages } from "../src/report.ts";
-import type { Rule, Subject } from "../src/types.ts";
+import type { Finding, Rule, Subject } from "../src/types.ts";
 import { scoreRule, noulRule, subjectOf, answer } from "./builders.ts";
 import { test } from "./harness.ts";
+
+/**
+ * A reported `subject: change` finding, the way `attributeFindings` in
+ * `src/run.ts` actually leaves one: `decide` for the verdict, `violates`
+ * bolted on after, the same order the real pass writes them in (it sets
+ * `finding.violates` once the request comes back, never through `decide`
+ * itself).
+ */
+function changeFinding(violates: NonNullable<Finding["violates"]>): Finding {
+  const rule = noulRule({
+    id: "diff-follows-instructions",
+    language: "Git",
+    subject: "change",
+    ask: "the diff breaks an instruction the documents give",
+    criteria: { true: "it does", false: "it does not" },
+    rule: undefined,
+  });
+  const subject = subjectOf({
+    rule,
+    file: "deadbeef00deadbeef00deadbeef00deadbeef0",
+    line: 1,
+    endLine: 1,
+    text: "cart.ts | 4 ++--",
+    commit: { files: ["cart.ts"], stat: "cart.ts | 4 ++--", diff: "diff --git a/cart.ts b/cart.ts", truncated: false },
+    captured: { SUBJECT: "cart.ts | 4 ++--" },
+  });
+  const finding = decide(subject, { value: 0.9, confidence: null, kind: "noul" });
+  finding.violates = violates;
+  return finding;
+}
 
 test("report: a language with no files is one idle line, not a list of dead matchers", () => {
   const ts = { ...scoreRule({ id: "a" }), languageDir: "typescript" };
@@ -221,4 +251,68 @@ test("report: a run explains why a change rule asked about nothing, rather than 
   const pretty = formatPretty(result, { color: false });
   assert.match(pretty, /1 commit\(s\) have no AGENTS\.md or CLAUDE\.md, so diff-follows-instructions was not asked about them/);
   assert.ok(!/matched nothing/.test(pretty), "the reason is stated in its own line; the rule is not also reported as a matcher that missed");
+});
+
+test("report: a change finding attributed to one directive prints where it is, its answer and enough of it to recognise", () => {
+  const finding = changeFinding([
+    {
+      file: "AGENTS.md",
+      line: 42,
+      breadcrumb: "Contributing to jev-lint > Rules",
+      body: "- A rule ships with a cutoff that was fitted, and the `at:` carries a\n  comment naming the run it came from.",
+      value: 0.82,
+    },
+  ]);
+  const pretty = formatPretty(
+    { findings: [finding], all: [finding], review: [], stats: gate([]).stats } as never,
+    { color: false },
+  );
+  assert.match(pretty, /AGENTS\.md:42/);
+  assert.match(pretty, /0\.82/);
+  assert.match(pretty, /Contributing to jev-lint > Rules/);
+  // The wrapped source line joins into one -- a citation is one line in a
+  // report where every line after it hangs at a fixed indent.
+  assert.match(pretty, /A rule ships with a cutoff that was fitted, and the `at:` carries a comment naming the run it came from\./);
+});
+
+test("report: more than one attributed directive prints all of them, strongest first", () => {
+  const finding = changeFinding([
+    { file: "AGENTS.md", line: 42, breadcrumb: "Contributing to jev-lint > Rules", body: "- A rule ships with a cutoff that was fitted.", value: 0.91 },
+    { file: "AGENTS.md", line: 29, breadcrumb: "Contributing to jev-lint > Secrets", body: "- The API key lives in the environment.", value: 0.7 },
+  ]);
+  const pretty = formatPretty(
+    { findings: [finding], all: [finding], review: [], stats: gate([]).stats } as never,
+    { color: false },
+  );
+  assert.match(pretty, /AGENTS\.md:42 \(0\.91\)/);
+  assert.match(pretty, /AGENTS\.md:29 \(0\.70\)/);
+  const first = pretty.indexOf("AGENTS.md:42");
+  const second = pretty.indexOf("AGENTS.md:29");
+  assert.ok(first >= 0 && second > first, "the stronger directive (already sorted by attributeFindings) prints first");
+});
+
+test("report: an ordinary finding with no violates is unchanged", () => {
+  const rule = scoreRule({ at: 2 });
+  const g = gate([{ subject: subjectOf({ rule }), answer: { value: 2.9, confidence: 0.9, kind: "score" } }]);
+  const pretty = formatPretty({ ...g, rules: [rule] } as never, { color: false });
+  assert.ok(!/cites /.test(pretty), "no violates on the finding means no citation line");
+  assert.ok(!/AGENTS\.md/.test(pretty));
+});
+
+test("report: the github annotation carries the citation", () => {
+  const finding = changeFinding([
+    { file: "AGENTS.md", line: 42, breadcrumb: "Contributing to jev-lint > Rules", body: "- A rule ships with a cutoff that was fitted.", value: 0.82 },
+  ]);
+  const text = formatGithub({ findings: [finding], review: [], stats: gate([]).stats } as never);
+  assert.match(text, /cites AGENTS\.md:42 \(0\.82\)/);
+  assert.match(text, /A rule ships with a cutoff that was fitted\./);
+});
+
+test("report: formatJson reports violates verbatim, not a rendering", () => {
+  const violates: NonNullable<Finding["violates"]> = [
+    { file: "AGENTS.md", line: 42, breadcrumb: "Contributing to jev-lint > Rules", body: "- A rule ships with a cutoff that was fitted.", value: 0.82 },
+  ];
+  const finding = changeFinding(violates);
+  const parsed = JSON.parse(formatJson({ findings: [finding], review: [], stats: gate([]).stats } as never));
+  assert.deepEqual(parsed.findings[0].violates, violates);
 });

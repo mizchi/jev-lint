@@ -122,13 +122,10 @@ export function commitDiff(sha: string, cwd: string = process.cwd(), budget: num
       ? [...statLines.slice(0, MAX_STAT_LINES - 1), `… ${statLines.length - MAX_STAT_LINES} more files not listed`, statLines[statLines.length - 1]!].join("\n")
       : statLines.join("\n");
   const full = git(["show", "--format=", "--no-ext-diff", "--no-color", sha], cwd);
-  if (full.length <= budget) return { sha, files, stat, diff: full.trimEnd(), truncated: false };
   // Cut at the last hunk or file boundary under the budget, so the model
-  // never sees half a hunk and reads the missing half as unchanged.
-  const head = full.slice(0, budget);
-  const at = Math.max(head.lastIndexOf("\ndiff --git "), head.lastIndexOf("\n@@ "));
-  const diff = (at > 0 ? head.slice(0, at) : head).trimEnd();
-  return { sha, files, stat, diff, truncated: true };
+  // never sees half a hunk and reads the missing half as unchanged -- shared
+  // with `rangeDiff` and `stagedDiff` as `cutDiff`, below.
+  return cutDiff(sha, files, stat, full, budget);
 }
 
 /**
@@ -285,6 +282,55 @@ export function squashSubjects(rules: Rule[], range: string, message: string, cw
   return { subjects, commits: commits.length, skippedMerges: 0, noInstructionDoc: 0 };
 }
 
+/**
+ * What is staged, as one change.
+ *
+ * The pre-commit hook's subject: there is no commit and no message yet, so
+ * only `subject: change` rules produce anything -- a commit rule asks about
+ * a message that does not exist. `stagedDiff` is `git diff --cached` for
+ * the change and `readInstructions(null, cwd)` is `git show :<file>` for
+ * the instructions, both from the index, so a staged edit to `AGENTS.md`
+ * is judged as part of the change it arrives with rather than leaving the
+ * old document to judge the new code.
+ *
+ * Nothing staged is no subjects, not one subject over an empty change: a
+ * commit that exists always gets judged, even an empty one (see
+ * `commitSubjects`), but there is no commit here to be empty. No
+ * instruction document is likewise no subjects, counted in
+ * `noInstructionDoc` for the same reason `commitSubjects` counts it --
+ * consistent with it rather than a second, differently-shaped answer to
+ * the same question.
+ */
+export function stagedSubjects(rules: Rule[], cwd: string = process.cwd()): CommitSubjects {
+  const changeRules = rules.filter((r) => r.subject === "change");
+  if (changeRules.length === 0) return { subjects: [], commits: 0, skippedMerges: 0, noInstructionDoc: 0 };
+  const diff = stagedDiff(cwd);
+  if (diff.stat.trim() === "") return { subjects: [], commits: 0, skippedMerges: 0, noInstructionDoc: 0 };
+  const instructions = readInstructions(null, cwd);
+  if (instructions.docs.length === 0) return { subjects: [], commits: 1, skippedMerges: 0, noInstructionDoc: 1 };
+  return {
+    subjects: changeRules.map((rule) => changeSubject(rule, "staged", diff, instructions)),
+    commits: 1,
+    skippedMerges: 0,
+    noInstructionDoc: 0,
+  };
+}
+
+/**
+ * The tail `commitDiff`, `rangeDiff` and `stagedDiff` all share once each
+ * has its own `files`, `stat` and `full` diff: cut the patch at the last
+ * hunk or file boundary under budget, so the model never sees half a hunk.
+ * What differs between the three is only the git incantation that produces
+ * those three strings -- `git show <sha>`, `git diff <spec>`, `git diff
+ * --cached` -- not what happens to them afterward.
+ */
+function cutDiff(sha: string, files: string[], stat: string, full: string, budget: number): CommitDiff {
+  if (full.length <= budget) return { sha, files, stat, diff: full.trimEnd(), truncated: false };
+  const head = full.slice(0, budget);
+  const at = Math.max(head.lastIndexOf("\ndiff --git "), head.lastIndexOf("\n@@ "));
+  return { sha, files, stat, diff: (at > 0 ? head.slice(0, at) : head).trimEnd(), truncated: true };
+}
+
 /** `commitDiff` for a range: the same caps, from `git diff` instead of `git show`. */
 function rangeDiff(spec: string, cwd: string, budget: number = MAX_DIFF_CHARS): CommitDiff {
   const allFiles = git(["diff", "--name-only", "--no-ext-diff", "--no-color", spec], cwd)
@@ -299,10 +345,28 @@ function rangeDiff(spec: string, cwd: string, budget: number = MAX_DIFF_CHARS): 
       ? [...statLines.slice(0, MAX_STAT_LINES - 1), `… ${statLines.length - MAX_STAT_LINES} more files not listed`, statLines[statLines.length - 1]!].join("\n")
       : statLines.join("\n");
   const full = git(["diff", "--no-ext-diff", "--no-color", spec], cwd);
-  if (full.length <= budget) return { sha: spec, files, stat, diff: full.trimEnd(), truncated: false };
-  const head = full.slice(0, budget);
-  const at = Math.max(head.lastIndexOf("\ndiff --git "), head.lastIndexOf("\n@@ "));
-  return { sha: spec, files, stat, diff: (at > 0 ? head.slice(0, at) : head).trimEnd(), truncated: true };
+  return cutDiff(spec, files, stat, full, budget);
+}
+
+/**
+ * `commitDiff` for the index: the same caps, from `git diff --cached` in
+ * place of `git show <sha>`, and `sha: "staged"` since there is no commit
+ * yet for a finding to name.
+ */
+function stagedDiff(cwd: string, budget: number = MAX_DIFF_CHARS): CommitDiff {
+  const allFiles = git(["diff", "--cached", "--name-only", "--no-ext-diff", "--no-color"], cwd)
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l !== "");
+  const files =
+    allFiles.length > MAX_FILES ? [...allFiles.slice(0, MAX_FILES), `… and ${allFiles.length - MAX_FILES} more files`] : allFiles;
+  const statLines = git(["diff", "--cached", "--stat=100", "--no-ext-diff", "--no-color"], cwd).trim().split("\n");
+  const stat =
+    statLines.length > MAX_STAT_LINES
+      ? [...statLines.slice(0, MAX_STAT_LINES - 1), `… ${statLines.length - MAX_STAT_LINES} more files not listed`, statLines[statLines.length - 1]!].join("\n")
+      : statLines.join("\n");
+  const full = git(["diff", "--cached", "--no-ext-diff", "--no-color"], cwd);
+  return cutDiff("staged", files, stat, full, budget);
 }
 
 /** Is this the range git means when nothing was given: what is not yet pushed? */

@@ -1,0 +1,21 @@
+default: clean
+
+# bad: the diff breaks or leaves out something AGENTS.md requires
+fixtures/forbidden-dependency:
+  - { line: 1, label: bad, window: 0, reason: "AGENTS.md says `dependencies` stays empty and everything runtime lives in the standard library; the diff adds `chalk` to `dependencies` and imports it in src/report.ts" }
+fixtures/edits-generated-file:
+  - { line: 1, label: bad, window: 0, reason: "AGENTS.md says src/schema.generated.ts is written by `npm run codegen` and never edited by hand; the diff hand-edits it to add an `email` field, with no codegen run in the commit" }
+fixtures/missing-required-test:
+  - { line: 1, label: bad, window: 0, reason: "AGENTS.md requires a test in test/ in the same commit that exports a function; the diff exports `applyCoupon` from src/cart.ts and test/cart.test.ts is untouched" }
+fixtures/breaks-the-instruction-it-adds:
+  - { line: 1, label: bad, window: 0, reason: "the same diff adds \"Never use `any`\" to AGENTS.md and adds `const cart: any = {}` to src/cart.ts; the instruction the commit writes is broken by the commit that writes it" }
+
+# hard clean: a lazy rule would flag these
+fixtures/honours-the-instruction:
+  - { line: 1, label: clean, window: 0, reason: "the same AGENTS.md test requirement as missing-required-test, but here the diff exports `applyCoupon` and adds test/cart.test.ts cases for it in the same commit" }
+fixtures/procedural-only:
+  - { line: 1, label: clean, window: 0, reason: "AGENTS.md is only procedural (test-first, ask when unclear, read the skill first); the diff is an ordinary bug fix with nothing in it that shows compliance or breach of those, so the answer must be false rather than mid-scale" }
+fixtures/linter-territory:
+  - { line: 1, label: clean, window: 0, reason: "AGENTS.md's style rules (indentation, quotes, semicolons) are the kind a formatter or linter already enforces, which criteria.false stands aside from regardless of the diff; the added farewell() also happens to follow them" }
+fixtures/edits-the-document:
+  - { line: 1, label: clean, window: 0, reason: "the diff only rewords AGENTS.md's own dependencies section; criteria.false says editing the instruction documents themselves is not a breach for doing so" }

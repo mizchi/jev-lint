@@ -222,6 +222,86 @@ await testAsync("commands: review judges only what the diff touched, and commits
   }
 });
 
+await testAsync("commands: commits --dry-run names the rule and the documents a change subject is judged against", async () => {
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-commands-dryrun-commits-")));
+  const git = (args: string[]) => execFileSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", ...args], { cwd: dir, stdio: "pipe" }).toString();
+  const here = process.cwd();
+  try {
+    mkdirSync(join(dir, "src"));
+    writeFileSync(join(dir, "src", "a.ts"), "export function honest(): number {\n  return 1;\n}\n");
+    git(["init", "-q", "-b", "main"]);
+    git(["add", "."]);
+    git(["commit", "-q", "-m", "Init"]);
+    // The second commit is the one under judgment: a change subject needs
+    // an instruction document in the tree it is built from.
+    writeFileSync(join(dir, "AGENTS.md"), "# Agents\n\nAlways write tests first.\n");
+    writeFileSync(
+      join(dir, "src", "a.ts"),
+      "export function honest(): number {\n  return 1;\n}\n\nexport function liar(): number {\n  return 2;\n}\n",
+    );
+    git(["add", "."]);
+    git(["commit", "-q", "-m", "Add AGENTS.md and liar"]);
+    process.chdir(dir);
+    try {
+      // Both a commit rule and a change rule, the shipped pair under
+      // rules/git, loaded together -- the exact configuration a plan has
+      // to stay readable under, since it puts two subjects on one ref.
+      const commitRules = join(realpathSync(here), "rules", "git");
+      const dry = await cli(
+        ["commits", "HEAD~1..HEAD", "--no-config", "--cache", "none", "-R", commitRules, "--no-color", "--dry-run"],
+        fakeClient(() => 0.2),
+      );
+      assert.equal(dry.code, 0, dry.out + dry.log);
+      assert.equal(dry.client.spent.calls, 0, "a dry run asks nothing");
+      assert.match(dry.out, /AGENTS\.md/, "the plan names the document a change subject is judged against");
+      assert.match(dry.out, /commit-message-describes-diff/, "the commit rule's line names it");
+      assert.match(dry.out, /diff-follows-instructions/, "the change rule's line names it");
+    } finally {
+      process.chdir(here);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("commands: commits --dry-run claims no change subject for a commit with no instruction document", async () => {
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-commands-dryrun-nodoc-")));
+  const git = (args: string[]) => execFileSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", ...args], { cwd: dir, stdio: "pipe" }).toString();
+  const here = process.cwd();
+  try {
+    mkdirSync(join(dir, "src"));
+    writeFileSync(join(dir, "src", "a.ts"), "export function honest(): number {\n  return 1;\n}\n");
+    git(["init", "-q", "-b", "main"]);
+    git(["add", "."]);
+    git(["commit", "-q", "-m", "Init"]);
+    // No AGENTS.md or CLAUDE.md anywhere in this tree: a change rule has
+    // no standard to judge the diff against, so this commit gets no
+    // change subject.
+    writeFileSync(
+      join(dir, "src", "a.ts"),
+      "export function honest(): number {\n  return 1;\n}\n\nexport function liar(): number {\n  return 2;\n}\n",
+    );
+    git(["add", "."]);
+    git(["commit", "-q", "-m", "Add liar, no docs"]);
+    process.chdir(dir);
+    try {
+      const commitRules = join(realpathSync(here), "rules", "git");
+      const dry = await cli(
+        ["commits", "HEAD~1..HEAD", "--no-config", "--cache", "none", "-R", commitRules, "--no-color", "--dry-run"],
+        fakeClient(() => 0.2),
+      );
+      assert.equal(dry.code, 0, dry.out + dry.log);
+      assert.equal(dry.client.spent.calls, 0);
+      assert.doesNotMatch(dry.out, /diff-follows-instructions/, "no change subject was built, so its rule names no line");
+      assert.match(dry.out, /1 commit\(s\) with no AGENTS\.md\/CLAUDE\.md skipped/, "the plan says why, with the real count -- not an invented one");
+    } finally {
+      process.chdir(here);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 await testAsync("commands: eval and calibrate say what they cannot read, and exit 2 where noChange can run", async () => {
   const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-commands-refuse-")));
   try {

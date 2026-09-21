@@ -44,7 +44,9 @@ export async function cmdCheck(
     model: opts.model,
     languages: opts.languages,
     client,
-    commits: commitsRange ? { range: commitsRange, ...(opts.squash ? { squash: opts.message! } : {}) } : null,
+    commits: commitsRange
+      ? { range: commitsRange, ...(opts.squash ? { squash: opts.message! } : {}), ...(opts.staged ? { staged: true } : {}) }
+      : null,
   });
 
 

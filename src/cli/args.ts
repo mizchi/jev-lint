@@ -100,6 +100,8 @@ usage:
   jev-lint commits --squash [range] --message-file <path|->
                                    judge the whole range as one change against
                                    that message: a PR description, a changelog entry
+  jev-lint commits --staged        judge what is staged against AGENTS.md / CLAUDE.md,
+                                   as a pre-commit hook does -- no range, no message yet
   jev-lint gaps [paths...]         per-rule separation report (read this first)
   jev-lint calibrate [paths...]    repeat runs, and fit cutoffs if labels exist
   jev-lint rules                   list loaded rules and validation errors
@@ -141,7 +143,9 @@ options:
       --at <rule=n>        override one cutoff (repeatable); rust/<rule>=n for one language
       --unsure-below <n>   confidence under which a finding is worded as a question
       --base <ref>         review against a merge base (e.g. --base main)
-      --staged             review only staged changes, as a pre-commit hook does
+      --staged             review: only staged changes; commits: the index, as
+                           one change, in place of a range -- both as a pre-commit
+                           hook would run them
       --fail-on <severity> exit 1 only for findings at or above hint | info |
                            warning | error (default: any finding)
       --format <fmt>       pretty | json | github

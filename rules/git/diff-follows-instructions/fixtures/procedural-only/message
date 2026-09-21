@@ -1,0 +1,4 @@
+Fix clampScore to floor negative scores at zero
+
+A malformed request could send a negative delta; clampScore let it through
+unclamped instead of flooring it like the upper bound already does.

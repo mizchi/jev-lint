@@ -1,5 +1,5 @@
 import { strict as assert } from "node:assert";
-import { decide, gate, describe as describeFinding, blocks, looseFloor } from "../src/gate.ts";
+import { collect, decide, gate, describe as describeFinding, blocks, looseFloor } from "../src/gate.ts";
 import { formatPretty } from "../src/report.ts";
 import { cutoffFor } from "../src/rules.ts";
 import type { Finding } from "../src/types.ts";
@@ -145,6 +145,19 @@ test("gate: findings rank by distance past their own cutoff, not by raw value", 
     { subject: subjectOf({ rule: loose }), answer: { value: 0.9, confidence: null, kind: "noul" } },
   ]);
   assert.equal(g.findings[0].rule, "loose", "0.9/0.2 outranks 2.2/2.0");
+});
+
+test("gate: collect re-derives the lists and the counts from findings that changed", () => {
+  const subject = subjectOf();
+  const gated = gate([{ subject, answer: { kind: "score", value: 3, confidence: 0.9 } }], { cutoffs: { r: 2 } });
+  assert.equal(gated.stats.reported, 1);
+  // Retract it the way the attribution pass does, then re-collect.
+  gated.all[0]!.messageId = "review";
+  gated.all[0]!.reported = false;
+  const again = collect(gated.all, { cutoffs: { r: 2 }, loose: 5 });
+  assert.equal(again.stats.reported, 0, "the count follows the finding");
+  assert.equal(again.findings.length, 0);
+  assert.equal(again.review.length, 1, "and it is in the band a reader sees");
 });
 
 test("gate: --fail-on decides which findings turn the exit code, and none is a valid answer", () => {

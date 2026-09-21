@@ -1,0 +1,3 @@
+Clarify the no-runtime-dependencies rule in AGENTS.md
+
+The old wording read like a suggestion; state it as a hard requirement.
