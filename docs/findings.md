@@ -1550,8 +1550,18 @@ the content does not carry. Five such cases answer 0.68-0.88 against a
 clean band topping at 0.43, and typescript's 0.67 sits 0.01 under the
 weakest defect, so this copy takes the midpoint.
 
-Eighteen rules. What does not port: `describe-names-subject` and
-`test-mocks-subject` (MoonBit writes neither), `must-name-panics` (Go's
-`Must*` convention), and `log-message-matches-event`, which would take
-the same matcher as the level rule and has not been given fixtures of its
-own yet.
+`log-message-matches-event` followed at 0.62 on the same matcher with the
+message captured instead of the level, and its fixture had to put the
+twins in DIFFERENT functions. `cache hit` written on both arms of one
+match -- the defect and its clean twin -- answered 0.32-0.44 for the
+defect: on `local` the model is shown the enclosing function and the same
+matched line twice, and cannot tell which arm it is being asked about.
+That is the limitation `error-message-matches-condition` solves by
+matching the guard rather than the failure; where the call itself is the
+subject there is nothing to widen the match to, so the corpus carries the
+pair across two functions instead.
+
+Nineteen rules. What does not port: `describe-names-subject` and
+`test-mocks-subject`, which MoonBit writes neither of, and
+`must-name-panics`, which is Go's `Must*` convention. Nothing else of
+this tool applies to a MoonBit file.

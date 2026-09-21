@@ -1,0 +1,352 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:54:42.358Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/log-message-matches-event",
+  "rules": [
+    {
+      "id": "log-message-matches-event",
+      "draft": "0ccb4f83c14d",
+      "at": 0.62
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 44,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 65,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 72,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 79,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 82,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.45,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 97,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 103,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 113,
+        "endLine": 113,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 44,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 65,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 72,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 79,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 82,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 97,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 103,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 113,
+        "endLine": 113,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 44,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 65,
+        "endLine": 65,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 72,
+        "endLine": 72,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 79,
+        "endLine": 79,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 82,
+        "endLine": 82,
+        "kind": "noul",
+        "value": 0.47,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 97,
+        "endLine": 97,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 103,
+        "endLine": 103,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-message-matches-event",
+        "file": "rules/moonbit/log-message-matches-event/fixtures/cache.mbt",
+        "line": 113,
+        "endLine": 113,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 26649,
+    "usd": 0.001119258,
+    "ms": 720
+  }
+}

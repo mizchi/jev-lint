@@ -1,0 +1,91 @@
+id: log-message-matches-event
+language: moonbit
+kind: noul
+subject: node
+# `local`: the branch the call sits on is the event, and that is in the
+# enclosing function.
+state: local
+# 0.62, kept after the fit 2026-09-21 on the fixtures beside it (12
+# subjects: 5 defects, 7 cleans of which 4 hard, 3 passes). Cleans top at
+# 0.41, defects start at 0.86; the midpoint is 0.64 and typescript's 0.62
+# sits in the same gap.
+#
+# The fixture had to put the twins in DIFFERENT functions. `cache hit`
+# written on both arms of one match -- the defect and its clean twin --
+# answered 0.32-0.44 for the defect: on `local` the model is shown the
+# enclosing function and the same matched line twice, and cannot tell
+# which arm it is being asked about. The same limitation
+# error-message-matches-condition solves by matching the guard; here the
+# call is the subject, so the corpus carries the pair across two
+# functions, which is how the typescript copy's own example reads.
+at: 0.62
+axis: file
+severity: warning
+# The same two shapes log-level-matches-event matches -- a package call
+# (`@log.info("...")`) and a method on a logger value -- with the message
+# captured instead of the level. Only a literal message is judged: a
+# variable or a built string says nothing this rule can read. In MoonBit
+# most messages carry a value, and a message with one is a
+# `string_interpolation` rather than a `string_literal`.
+rule:
+  any:
+    - all:
+        - kind: apply_expression
+        - has:
+            kind: qualified_identifier
+            all:
+              - has: { kind: package_identifier, regex: "(?i)log" }
+              - has:
+                  kind: dot_lowercase_identifier
+                  regex: "^\\.(trace|debug|verbose|info|warn|warning|error|fatal)$"
+        - has:
+            any:
+              - kind: string_literal
+              - kind: string_interpolation
+            stopBy: end
+            pattern: $MESSAGE
+    - all:
+        - kind: dot_apply_expression
+        - has:
+            kind: qualified_identifier
+            has: { kind: lowercase_identifier, regex: "(?i)log" }
+        - has:
+            kind: dot_identifier
+            regex: "^\\.(trace|debug|verbose|info|warn|warning|error|fatal)$"
+        - has:
+            any:
+              - kind: string_literal
+              - kind: string_interpolation
+            stopBy: end
+            pattern: $MESSAGE
+# The same sentence as typescript/log-message-matches-event, by copy.
+ask: >-
+  The message of this log call (MESSAGE) misdescribes the event at the point
+  in the code where the call sits.
+criteria:
+  "true": >-
+    What the message says happened is not what the code path shows at that
+    point: it reports an outcome as done before the operation that produces it
+    runs, or on the branch where that operation failed or was skipped; it names
+    an action -- a retry, a deletion, a cache hit, a capture, a send -- that the
+    path does not perform, or performs a different one of; it reports a number
+    as the count of what was deleted, sent, written or fetched when the value
+    it interpolates is the count of what was selected, requested or attempted
+    and the operation's own result count is available and may differ; it
+    interpolates a value that is not what the message calls it; or it names a
+    kind of thing -- an order where a subscription is cancelled, a user where a
+    session is deleted -- other than the one the surrounding code acts on.
+  "false": >-
+    The message is true of the point where it sits: an intent phrased before
+    the operation ("saving user", "syncing"), a completion phrased after it, a
+    failure or a fallback on the branch that fails or falls back, a message in
+    a finally that holds on both branches, a templated message whose
+    interpolated values are what it calls them, or a terse message ("done",
+    "ok") on the path it describes. A message that is vague, generic, names the
+    intent rather than the mechanism, or could say more is not wrong. Whether
+    the level fits is not the question.
+note: >-
+  Judge the message text against the code path the call sits on -- what ran
+  before it, what branch it is in, what the values it interpolates hold -- not
+  against the level. A logger call whose first argument is not a message for a
+  human is not a violation.

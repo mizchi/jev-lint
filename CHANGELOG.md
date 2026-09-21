@@ -10,7 +10,7 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added
 
-- `rules/moonbit/`: eighteen rules ported to MoonBit, every one this tool
+- `rules/moonbit/`: nineteen rules ported to MoonBit, every one this tool
   has that a MoonBit file can carry -- `fn-name-promises` (0.44),
   `var-name-describes-value` (0.50), `type-name-describes-shape` (0.28),
   `module-name-describes-contents` (0.55), `idempotent-name` (0.49),

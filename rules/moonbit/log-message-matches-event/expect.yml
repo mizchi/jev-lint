@@ -1,0 +1,50 @@
+default: clean
+fixtures/cache.mbt:
+  - line: 28
+    label: bad
+    window: 0
+    reason: "`cache hit` on the branch where the key was absent and is being inserted: the message names the opposite of the event."
+  - line: 44
+    label: bad
+    window: 0
+    reason: "the message reports every key asked for as evicted; the loop removed only the ones that were there, and the count it kept is not the number it prints."
+  - line: 79
+    label: bad
+    window: 0
+    reason: "the branch is the one where the cache is UNDER the limit and nothing is trimmed."
+  - line: 97
+    label: bad
+    window: 0
+    reason: "`save` logs that it loaded."
+  - line: 113
+    label: bad
+    window: 0
+    reason: "the loop counts every entry and expires none; the message says both that they were expired and that they were older than `now`."
+  - line: 16
+    label: clean
+    window: 0
+    reason: "hard clean: the same message as the defect above, in the function where the branch really is a hit."
+  - line: 53
+    label: clean
+    window: 0
+    reason: "the count seeded is the count logged."
+  - line: 61
+    label: clean
+    window: 0
+    reason: "hard clean: the key was there, so this is an update."
+  - line: 65
+    label: clean
+    window: 0
+    reason: "hard clean: the key was absent, so this is an insert -- the twin of the line above, in the same function."
+  - line: 72
+    label: clean
+    window: 0
+    reason: "says what the next line does."
+  - line: 82
+    label: clean
+    window: 0
+    reason: "the limit trimmed to is the limit named."
+  - line: 103
+    label: clean
+    window: 0
+    reason: "hard clean: a size reported through a logger value rather than the package."

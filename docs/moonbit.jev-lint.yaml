@@ -24,6 +24,7 @@ rules:
   fn-name-promises: on
   idempotent-name: on
   log-level-matches-event: on
+  log-message-matches-event: on
   module-name-describes-contents: on
   module-naming-consistent: on
   pure-name-is-pure: on
