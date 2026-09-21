@@ -101,6 +101,21 @@ export function formatPretty(
           `         ${c.yellow(`did not reproduce in every pass (spread ${f.passes.spread.toFixed(2)}) -- decide this one by hand`)}`,
         );
       }
+      // The attribution pass's whole point: name which instruction a change
+      // finding is about, not just that some instruction was broken. One
+      // line per directive, at the same 9-space hang as the lines above --
+      // `splitDirectives` run over this repository's own AGENTS.md turned
+      // up bodies of 1-4 lines and up to ~280 characters (a bullet plus any
+      // wrapped continuation or nested qualifier), short enough to read
+      // flattened onto one line rather than reproducing the source
+      // wrapping, which would desync every line after it from the 9-space
+      // hang the rest of this block relies on. A folded-in fenced example
+      // could run much longer, so the flattened line is still capped --
+      // same 160 chars already used for a failed request's error below.
+      for (const v of f.violates ?? []) {
+        const where = v.breadcrumb ? `${v.breadcrumb}: ` : "";
+        out.push(`         ${c.dim(`cites ${v.file}:${v.line} (${v.value.toFixed(2)})  ${where}${flattenDirective(v.body)}`)}`);
+      }
     }
     out.push("");
   }
@@ -350,6 +365,20 @@ function ruleKey(r: { id: string; languageDir?: string | null }): string {
   return r.languageDir ? `${r.languageDir}/${r.id}` : r.id;
 }
 
+/**
+ * A directive's `body` for a one-line citation: internal newlines (a wrapped
+ * continuation, a nested bullet, a folded-in fenced example) collapsed to
+ * single spaces, and capped at 160 characters -- the same length a failed
+ * request's error is cut to below -- so a large example folded into one
+ * directive cannot take over a line-oriented report or a CI annotation.
+ * `formatJson` does not call this: a programmatic consumer gets `violates`
+ * verbatim.
+ */
+function flattenDirective(body: string): string {
+  const flat = body.replace(/\s+/g, " ").trim();
+  return flat.length > 160 ? `${flat.slice(0, 160)}…` : flat;
+}
+
 export function formatJson(result: ReportInput): string {
   const row = (f: Finding) => ({
     rule: f.rule,
@@ -371,6 +400,10 @@ export function formatJson(result: ReportInput): string {
     commit: f.commit ?? null,
     change: f.change ?? null,
     cut: f.cut ?? null,
+    // Verbatim, not the flattened one-liner the pretty and github formats
+    // build for themselves: a programmatic consumer gets the whole thing,
+    // breadcrumb and body apart, exactly as the attribution pass wrote it.
+    violates: f.violates ?? null,
   });
   return JSON.stringify(
     {
@@ -425,7 +458,14 @@ export function formatGithub(result: ReportInput): string {
         ? `change ${shortRef(f.file)} (${f.change.summary}): `
         : "";
     const cut = f.cut ? `; judged on the first ${f.cut.judged} of ${f.cut.of} characters` : "";
-    const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}${cut}]`;
+    // A CI reader has only this line -- no per-file grouping, no sub-lines
+    // underneath it -- so the attribution pass's citation has to survive
+    // into the annotation itself or it is lost the same way `why` and `cut`
+    // would be if left out here.
+    const cites = f.violates?.length
+      ? `; cites ${f.violates.map((v) => `${v.file}:${v.line} (${v.value.toFixed(2)}) ${flattenDirective(v.body)}`).join(" | ")}`
+      : "";
+    const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}${cut}${cites}]`;
     out.push(
       `::${level} file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(title)}::${escape(body)}`,
     );
