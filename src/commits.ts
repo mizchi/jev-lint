@@ -20,6 +20,8 @@ import { execFileSync } from "node:child_process";
 import { cpSync, existsSync, mkdtempSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { readInstructions } from "./instructions.ts";
+import type { Instructions } from "./instructions.ts";
 import type { Rule, Subject } from "./types.ts";
 
 export interface Commit {
@@ -137,6 +139,7 @@ export function commitSubjects(
   label: (sha: string) => string = (sha) => sha,
 ): CommitSubjects {
   const commitRules = rules.filter((r) => r.subject === "commit");
+  const changeRules = rules.filter((r) => r.subject === "change");
   const commits = listCommits(range, cwd);
   const subjects: Subject[] = [];
   let skippedMerges = 0;
@@ -145,7 +148,7 @@ export function commitSubjects(
       skippedMerges += 1;
       continue;
     }
-    if (commitRules.length === 0) continue;
+    if (commitRules.length === 0 && changeRules.length === 0) continue;
     const diff = commitDiff(c.sha, cwd);
     for (const rule of commitRules) {
       subjects.push({
@@ -163,8 +166,47 @@ export function commitSubjects(
         commit: diff,
       });
     }
+    // A change subject needs a standard to be judged against. With no
+    // instruction document in the tree there is none, and no subject: the
+    // question would have nothing behind it, which is not a clean verdict.
+    if (changeRules.length > 0) {
+      const instructions = readInstructions(c.sha, cwd);
+      if (instructions.docs.length > 0) {
+        for (const rule of changeRules) {
+          subjects.push(changeSubject(rule, label(c.sha), diff, instructions));
+        }
+      }
+    }
   }
   return { subjects, commits: commits.length, skippedMerges };
+}
+
+/**
+ * One change subject: the stat is the subject, the diff and the
+ * instructions are the state.
+ *
+ * The subject text is the stat rather than the message, because a change
+ * rule is not about the message and there may not be one -- `--staged`
+ * runs before a message exists. `SUBJECT` is the stat's summary line, which
+ * is what a rule refers to when it needs the size of the change.
+ */
+function changeSubject(rule: Rule, file: string, diff: CommitDiff, instructions: Instructions): Subject {
+  const summary = diff.stat.trim().split("\n").pop() ?? "";
+  return {
+    rule,
+    file,
+    language: "Git",
+    arm: "bare",
+    text: diff.stat,
+    line: 1,
+    endLine: 1,
+    nodeKind: "change",
+    enclosing: null,
+    promoted: false,
+    captured: { SUBJECT: summary.trim() },
+    commit: diff,
+    instructions,
+  };
 }
 
 /**
@@ -175,6 +217,10 @@ export function commitSubjects(
  * is the subject.
  */
 export function squashSubjects(rules: Rule[], range: string, message: string, cwd: string = process.cwd()): CommitSubjects {
+  // `commit` only, deliberately: a squash is a range judged against a
+  // message someone wrote for it, which is a commit rule's question. A
+  // change rule is per-change and needs no message -- `commits <range>`
+  // already covers it, one change subject per commit in the range.
   const commitRules = rules.filter((r) => r.subject === "commit");
   const spec = range.includes("..") ? range : `${range}..HEAD`;
   const commits = listCommits(spec, cwd).filter((c) => c.parents.length <= 1);
@@ -283,7 +329,7 @@ export function patchRepo(fixtures: string): { cwd: string; label: (sha: string)
 
 /** The subjects a commit suite's fixtures produce, named by their case directories. */
 export function commitFixtureSubjects(rules: Rule[], fixtures: string): Subject[] {
-  if (!rules.some((r) => r.subject === "commit")) return [];
+  if (!rules.some((r) => r.subject === "commit" || r.subject === "change")) return [];
   const repo = patchRepo(fixtures);
   return commitSubjects(rules, repo.range, repo.cwd, repo.label).subjects;
 }

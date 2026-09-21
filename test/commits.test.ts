@@ -7,7 +7,7 @@ import { planBatches } from "../src/batch.ts";
 import { listCommits, commitDiff, commitSubjects, squashSubjects, defaultRange, MAX_DIFF_CHARS } from "../src/commits.ts";
 import { decide } from "../src/gate.ts";
 import { formatPretty } from "../src/report.ts";
-import { scoreRule, tempRepo, commitRule } from "./builders.ts";
+import { scoreRule, tempRepo, commitRule, changeRule } from "./builders.ts";
 import { test } from "./harness.ts";
 
 test("commits: a diff over the budget keeps the stat and the first hunks and says so", () => {
@@ -109,6 +109,39 @@ test("commits: without an upstream there is no default range", () => {
     execFileSync("git", ["init", "-q", "-b", "main"], { cwd: dir });
     execFileSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "root"], { cwd: dir });
     assert.equal(defaultRange(dir), null);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: a change rule gets the diff and the instructions; a commit rule gets neither instruction", () => {
+  const dir = tempRepo([
+    { message: "Set the rules", files: { "AGENTS.md": "- Never use `any`.\n" } },
+    { message: "Add cart", files: { "cart.ts": "export const cart: any = {}\n" } },
+  ]);
+  try {
+    const { subjects } = commitSubjects([commitRule(), changeRule()], "HEAD", dir);
+    assert.equal(subjects.length, 4, "two commits x two rules");
+    const change = subjects.find((s) => s.rule.subject === "change" && s.commit!.diff.includes("cart.ts"))!;
+    assert.equal(change.nodeKind, "change");
+    assert.equal(change.language, "Git");
+    assert.equal(change.line, 1);
+    assert.match(change.text, /1 file changed/, "the subject is the change: the stat");
+    assert.ok(!/Add cart/.test(change.text), "not the message; a change rule is not about the message");
+    assert.deepEqual(change.instructions!.docs.map((d) => d.file), ["AGENTS.md"]);
+    assert.match(change.instructions!.docs[0]!.text, /Never use/);
+    const message = subjects.find((s) => s.rule.subject === "commit" && s.text.startsWith("Add cart"))!;
+    assert.equal(message.instructions, undefined, "a commit rule is judged on the message, not on the instructions");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: a commit with no instruction document produces no change subject", () => {
+  const dir = tempRepo([{ message: "Add cart", files: { "cart.ts": "a\n" } }]);
+  try {
+    const { subjects } = commitSubjects([commitRule(), changeRule()], "HEAD", dir);
+    assert.deepEqual(subjects.map((s) => s.rule.subject), ["commit"], "no standard, so no question: not a clean verdict");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

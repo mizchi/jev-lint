@@ -363,7 +363,7 @@ export function loadSuite(suite: EvalSuite, languages: CustomLanguages = {}): { 
 export async function planEval(suite: EvalSuite, repeat = 1, languages: CustomLanguages = {}): Promise<{ subjects: number; requests: number; tokens: number }> {
   const { rules, errors } = loadSuite(suite, languages);
   if (errors.length) throw new Error(errors.join("\n"));
-  const commitSuite = rules.some((rule) => rule.subject === "commit") ? patchRepo(suite.fixtures) : null;
+  const commitSuite = rules.some((rule) => rule.subject === "commit" || rule.subject === "change") ? patchRepo(suite.fixtures) : null;
   const r = await run({
     rules,
     paths: [suite.fixtures],
@@ -405,7 +405,7 @@ export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Prom
   // A commit suite's fixtures are cases: each made a commit of a throwaway
   // repository, judged as commits, and named by their case directories so
   // the expectations key on `fixtures/<case>` at line 1.
-  const commitSuite = rules.some((rule) => rule.subject === "commit") ? patchRepo(suite.fixtures) : null;
+  const commitSuite = rules.some((rule) => rule.subject === "commit" || rule.subject === "change") ? patchRepo(suite.fixtures) : null;
   const r = await run({
     rules,
     paths: [suite.fixtures],

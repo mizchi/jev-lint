@@ -16,6 +16,7 @@
  *   here".** A rule with `at: null` has no cutoff of its own and takes the
  *   default; a subject with no `id` has not been assigned to a batch yet.
  */
+import type { Instructions } from "./instructions.ts";
 
 // ---------------------------------------------------------------- vocabulary
 
@@ -482,6 +483,12 @@ export interface Subject extends ResolvedSubject {
    * `file` is then the sha, `text` the message, `line` 1.
    */
   commit?: { files: string[]; stat: string; diff: string; truncated: boolean };
+  /**
+   * Present on a `subject: change` subject: the instruction documents the
+   * diff is judged against, read from the same tree as the diff. A change
+   * subject is never built without them.
+   */
+  instructions?: Instructions;
   /** Assigned when the subject is placed in a batch; meaningful only there. */
   id?: string;
   /** The content-addressed cache key. Assigned by the runner. */

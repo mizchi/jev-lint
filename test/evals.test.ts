@@ -4,7 +4,8 @@ import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { discoverEvals, scoreEval, compareEvals, relocateLabels, relocateRecord, runEval, readEvalRecord, draftsChanged, loadSuite, unanswered } from "../src/evals.ts";
 import { loadRules } from "../src/rules.ts";
-import { noulRule, answer } from "./builders.ts";
+import { commitFixtureSubjects } from "../src/commits.ts";
+import { noulRule, answer, changeRule } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
 
 const evalRule = (id: string, at: number) => noulRule({ id, at });
@@ -256,4 +257,25 @@ test("evals: a subject a pass never answered is counted, because nothing else co
   ];
   assert.equal(unanswered(holed), 3, "counted per pass, not per subject");
   assert.equal(unanswered([]), 0, "a record with no passes has nothing missing, and no answers either");
+});
+
+test("evals: a change rule's fixtures become commits, each judged by its own AGENTS.md", () => {
+  const suite = mkdtempSync(join(tmpdir(), "jev-change-suite-"));
+  try {
+    const one = join(suite, "fixtures", "forbidden");
+    mkdirSync(join(one, "before"), { recursive: true });
+    mkdirSync(join(one, "after"), { recursive: true });
+    writeFileSync(join(one, "message"), "Colour the output\n");
+    writeFileSync(join(one, "before", "AGENTS.md"), "- No runtime dependencies.\n");
+    writeFileSync(join(one, "after", "AGENTS.md"), "- No runtime dependencies.\n");
+    writeFileSync(join(one, "before", "package.json"), '{ "dependencies": {} }\n');
+    writeFileSync(join(one, "after", "package.json"), '{ "dependencies": { "chalk": "^5" } }\n');
+    const subjects = commitFixtureSubjects([changeRule()], join(suite, "fixtures"));
+    assert.equal(subjects.length, 1);
+    assert.match(subjects[0]!.file, /forbidden$/, "named by its case directory, which is what expect.yml keys on");
+    assert.match(subjects[0]!.instructions!.docs[0]!.text, /No runtime dependencies/);
+    assert.match(subjects[0]!.commit!.diff, /chalk/);
+  } finally {
+    rmSync(suite, { recursive: true, force: true });
+  }
 });

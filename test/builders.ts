@@ -153,6 +153,18 @@ export const commitRule = (over: Record<string, unknown> = {}): Rule =>
     ...over,
   }).rule!;
 
+export const changeRule = (over: Record<string, unknown> = {}): Rule =>
+  normalizeRule({
+    id: "diff-follows-instructions",
+    language: "Git",
+    subject: "change",
+    kind: "noul",
+    ask: "This change breaks one of the project's own written instructions.",
+    criteria: { true: "y", false: "n" },
+    at: 0.5,
+    ...over,
+  }).rule!;
+
 export const answer = (rule: string, line: number, value: number) => ({
   rule, file: "rules/a/evals/cases/x.ts", line, endLine: line, kind: "noul" as const, value, confidence: null,
 });
