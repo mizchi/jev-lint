@@ -1108,8 +1108,9 @@ Four things decide whether it works, each measured on MoonBit:
   `has: { field: name, ... }` matches nothing there; `has: { kind:
   function_identifier, stopBy: end, pattern: $NAME }` is the way to
   capture a name.
-- **Rules for it may ship.** `rules/moonbit/` is in the package: three
-  ports (naming, comments, tests), fitted on their own fixtures. They load
+- **Rules for it may ship.** `rules/moonbit/` is in the package: five
+  ports (naming, the two comment rules, the failure contract, tests),
+  fitted on their own fixtures. They load
   anywhere -- `rules`, `eval --replay` and RULES.md read rules without
   scanning -- and a run with no `languages:` naming the parser drops them
   and says which language it dropped, rather than reporting a language's

@@ -1,0 +1,59 @@
+default: clean
+fixtures/backoff.mbt:
+  - line: 6
+    label: bad
+    window: 0
+    reason: "the comment says the delay doubles; the lines beneath add the base each time."
+  - line: 12
+    label: bad
+    window: 0
+    reason: "the comment caps at one minute; the code writes 30,000 milliseconds."
+  - line: 21
+    label: bad
+    window: 0
+    reason: "the comment says a tenth; the code takes a quarter."
+  - line: 33
+    label: clean
+    window: 0
+    reason: "hard clean: the comment names the conversion and the line beneath divides by 1000."
+  - line: 29
+    label: clean
+    window: 0
+    reason: "sums every delay, as it says."
+  - line: 39
+    label: clean
+    window: 0
+    reason: "hard clean: the comment states the limit as a number and the code compares against it."
+  - line: 45
+    label: clean
+    window: 0
+    reason: "hard clean: a comment stating what the single line beneath returns, in words rather than in the number."
+  - line: 51
+    label: clean
+    window: 0
+    reason: "the comment states the effect the branch achieves, and the branch achieves it."
+  - line: 62
+    label: clean
+    window: 0
+    reason: "hard clean: the comment says what this code is NOT, and gives a reason outside the code -- no claim the lines beneath can contradict."
+fixtures/queue.mbt:
+  - line: 5
+    label: bad
+    window: 0
+    reason: "the comment says from the front, oldest first; the loop walks from the end."
+  - line: 17
+    label: bad
+    window: 0
+    reason: "the comment says descending; `sort()` is ascending."
+  - line: 24
+    label: bad
+    window: 0
+    reason: "the comment says three times; the loop runs twice."
+  - line: 36
+    label: clean
+    window: 0
+    reason: "hard clean: the same backwards walk as the defect above, under a comment that says backwards and says why."
+  - line: 49
+    label: clean
+    window: 0
+    reason: "keeps the first of each value, as it says."

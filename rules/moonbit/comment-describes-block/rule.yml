@@ -1,0 +1,98 @@
+id: comment-describes-block
+language: moonbit
+kind: noul
+subject: enclosing
+# `bare`: `subject: enclosing` promotes every match to the function or the
+# `test "..." { }` it sits in, so the model already sees the body. As in
+# rust, where the same reasoning holds.
+state: bare
+# 0.45, kept after the fit 2026-09-21 on the fixtures beside it (14
+# subjects: 6 defects, 8 cleans, 3 passes). Cleans top at 0.21 (a backwards
+# walk under a comment that says backwards and says why), five defects
+# answer 0.45 and over, and ONE is missed: `// Cap the last wait at one
+# minute.` above `out[...] = 30_000`, at 0.25-0.29 across three passes. The
+# model reads the assignment as the cap the comment names and does not do
+# the unit arithmetic that makes 30,000 milliseconds half a minute. The
+# midpoint fit that would catch it, 0.24, leaves 0.03 of headroom a side
+# and would flag the first clean on the next file; 0.45 -- what rust takes
+# -- leaves 0.24 on the clean side and misses that one case.
+at: 0.45
+severity: info
+# A statement, or a block's tail expression, directly after a comment inside
+# a block. ast-grep needs positive kinds, and MoonBit's grammar has no
+# `_statement` node to name -- everything in a block is an expression -- so
+# the kinds are listed. A `///|` doc line above a nested `fn` is a comment
+# too; the sentence decides whether what was caught makes a claim.
+rule:
+  all:
+    - any:
+        - kind: let_expression
+        - kind: let_mut_expression
+        - kind: letrec_expression
+        - kind: assign_expression
+        - kind: if_expression
+        - kind: for_expression
+        - kind: for_in_expression
+        - kind: while_expression
+        - kind: loop_expression
+        - kind: match_expression
+        - kind: guard_expression
+        - kind: guard_let_expression
+        - kind: return_expression
+        - kind: raise_expression
+        - kind: try_expression
+        - kind: apply_expression
+        - kind: dot_apply_expression
+        - kind: dot_dot_apply_expression
+        - kind: method_expression
+        - kind: binary_expression
+        - kind: and_expression
+        - kind: atomic_expression
+        - kind: access_expression
+        - kind: array_expression
+        - kind: map_expression
+        - kind: struct_expression
+        - kind: constructor_expression
+        - kind: block_expression
+        - kind: defer_expression
+        - kind: break_expression
+        - kind: continue_expression
+    - inside:
+        kind: block_expression
+    - follows:
+        kind: comment
+        pattern: $DOC
+# The same sentence as rust/comment-describes-block, by copy.
+ask: >-
+  The comment captured as DOC makes a claim about the code beneath it that the
+  code contradicts.
+criteria:
+  "true": >-
+    The comment says what the code beneath it does, and the code does something
+    else: a count, limit, number of attempts or delay that differs from the
+    code's, or that the comment fixes to a number while the code takes it from a
+    parameter; a direction, order, sign, rounding or unit that is not the one
+    the code uses; a condition the code tests the other way round; or a step the
+    comment says happens here that the code beneath it does not perform.
+  "false": >-
+    Every specific claim in the comment holds for the code beneath it. The code
+    beneath a comment is the run of statements from the comment down to the next
+    comment or the end of the block, not the first statement alone: "two events"
+    above two appends is true. A comment that gives a reason outside the code --
+    a policy, a caller, a server, a past bug -- that says what the whole test or
+    function is for, that describes what other code does, that is vague, or that
+    summarises the code loosely but not wrongly, makes no claim the code can
+    contradict. A comment that states the effect the code beneath it achieves
+    ("so the newest are kept") is a claim about that code, and is judged by what
+    the code does. A comment that sits at the end of a line of code, after that
+    code, belongs to that line, not to the code beneath it. The contradiction
+    has to be visible in the code shown: a comment about setup, a later step, or
+    code that is not shown is not contradicted by a statement that simply does
+    not mention it.
+note: >-
+  The comment under test is the one whose last line is captured as DOC; it may
+  begin several lines above that line, and all of it is the comment. Find that
+  line in the source before judging: if code precedes the comment on its own
+  line, the comment is a trailing remark on that code and makes no claim about
+  the line beneath it. Judge the comment only against the code that follows it.
+  Other comments in the same function are not your concern.

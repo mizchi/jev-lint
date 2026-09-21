@@ -10,10 +10,13 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added
 
-- `rules/moonbit/`: three rules ported to MoonBit -- `fn-name-promises`
-  (0.44), `comment-describes-declaration` (0.59) and
+- `rules/moonbit/`: five rules ported to MoonBit -- `fn-name-promises`
+  (0.44), `comment-describes-declaration` (0.59),
+  `comment-describes-block` (0.45), `doc-errors-match-body` (0.50) and
   `test-name-verifies-claim` (0.62) -- each fitted on its own fixtures over
-  three passes, precision and recall 1.00. They ship in the package and
+  three passes. Precision 1.00 on every one; recall 1.00 on every one but
+  `comment-describes-block`, which misses a unit claim (30,000 milliseconds
+  under "one minute") its rule file records. They ship in the package and
   load anywhere; a run whose config does not name a MoonBit parser drops
   them and names the language. `npm run parsers:moonbit` builds one, and
   `docs/moonbit.jev-lint.yaml` is the config their suites run under.

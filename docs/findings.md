@@ -1415,3 +1415,27 @@ The cutoffs sit where the other languages' do (`typescript` 0.55 / 0.56 /
 0.62), except `fn-name-promises`, whose MoonBit cleans answered lower
 than the TypeScript ones; the fit is the midpoint of its own gap and the
 guess it replaced, 0.55, would have caught every defect here anyway.
+
+Two more followed, the rest of the comment family:
+
+| rule | at | fitted | subjects | recall |
+| --- | --- | --- | --- | --- |
+| `comment-describes-block` | 0.45 | 0.24 | 14 (6 defects) | 0.83 |
+| `doc-errors-match-body` | 0.50 | 0.49 | 11 (4 defects) | 1.00 |
+
+`comment-describes-block` is the one that ships with a miss. `// Cap the
+last wait at one minute.` above `out[...] = 30_000` answered 0.24-0.29
+across three passes: the model reads the assignment as the cap the
+comment names and does not do the arithmetic that makes 30,000
+milliseconds half a minute. The midpoint that would catch it leaves 0.03
+of headroom a side, which the first clean of the next file would cross;
+0.45, what rust takes, leaves 0.24 on the clean side and misses that one
+case. The other five defects -- a direction, an order, a count, a
+doubling and a unit written as a plain number -- answer over it.
+
+`doc-errors-match-body` had the widest gap of the five (cleans to 0.15,
+defects from 0.85), which is what happens when a language writes the
+failure contract twice: the doc says it and the signature says `raise`,
+so the model can read the disagreement without inferring anything. The
+matcher captures the whole `///` run rather than its last line, since
+`stopBy: not comment` walks it, which is better than the Rust copy gets.

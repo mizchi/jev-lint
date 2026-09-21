@@ -18,4 +18,9 @@ languages:
 rules:
   fn-name-promises: on
   comment-describes-declaration: on
+  comment-describes-block: on
+  doc-errors-match-body: on
   test-name-verifies-claim: on
+  pure-name-is-pure: on
+  idempotent-name: on
+  safe-name-is-safe: on
