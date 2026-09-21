@@ -20,8 +20,8 @@ import { execFileSync } from "node:child_process";
 import { cpSync, existsSync, mkdtempSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { readInstructions } from "./instructions.ts";
-import type { Instructions } from "./instructions.ts";
+import { readInstructions, type Instructions } from "./instructions.ts";
+import { isGitSubject } from "./types.ts";
 import type { Rule, Subject } from "./types.ts";
 
 export interface Commit {
@@ -59,6 +59,13 @@ export interface CommitSubjects {
   subjects: Subject[];
   commits: number;
   skippedMerges: number;
+  /**
+   * Non-merge commits a change rule was loaded for but could not be asked
+   * about: their tree held neither `AGENTS.md` nor `CLAUDE.md`, so there was
+   * no standard to judge the diff against. Always 0 when no change rule was
+   * loaded, or from `squashSubjects`, which builds no change subjects at all.
+   */
+  noInstructionDoc: number;
 }
 
 // `--no-ext-diff` on every diff-producing call: a user's `diff.external`
@@ -143,6 +150,7 @@ export function commitSubjects(
   const commits = listCommits(range, cwd);
   const subjects: Subject[] = [];
   let skippedMerges = 0;
+  let noInstructionDoc = 0;
   for (const c of commits) {
     if (c.parents.length > 1) {
       skippedMerges += 1;
@@ -166,19 +174,34 @@ export function commitSubjects(
         commit: diff,
       });
     }
-    // A change subject needs a standard to be judged against. With no
-    // instruction document in the tree there is none, and no subject: the
-    // question would have nothing behind it, which is not a clean verdict.
-    if (changeRules.length > 0) {
+    // A change subject needs two things a commit rule does not: a standard
+    // to judge the diff against, and a diff to judge. An empty commit
+    // (`--allow-empty` -- a CI trigger, a rebase-retained marker) has stat
+    // `""` and nothing else either, so it is skipped here before
+    // `readInstructions` even runs, saving that `git show` for the commit
+    // that could never have produced a subject. This is not symmetrical
+    // with a commit rule: "this message claims X over an empty diff" is a
+    // real finding, so an empty commit still gets a commit subject above --
+    // only the change subject, which has no message to fall back on, has
+    // nothing left to be about.
+    //
+    // With no instruction document in the tree there is likewise no
+    // standard, and no subject -- a question with nothing behind it is not
+    // a clean verdict. Counted rather than silently dropped: a run report
+    // has to be able to say *why* a change rule asked about nothing, rather
+    // than call it a matcher that missed (it has none).
+    if (changeRules.length > 0 && diff.stat.trim() !== "") {
       const instructions = readInstructions(c.sha, cwd);
-      if (instructions.docs.length > 0) {
+      if (instructions.docs.length === 0) {
+        noInstructionDoc += 1;
+      } else {
         for (const rule of changeRules) {
           subjects.push(changeSubject(rule, label(c.sha), diff, instructions));
         }
       }
     }
   }
-  return { subjects, commits: commits.length, skippedMerges };
+  return { subjects, commits: commits.length, skippedMerges, noInstructionDoc };
 }
 
 /**
@@ -189,6 +212,17 @@ export function commitSubjects(
  * rule is not about the message and there may not be one -- `--staged`
  * runs before a message exists. `SUBJECT` is the stat's summary line, which
  * is what a rule refers to when it needs the size of the change.
+ *
+ * Building this costs two more `git show` per commit than a commit rule
+ * alone pays (`readInstructions` reads `AGENTS.md` and `CLAUDE.md` each):
+ * measured at 775ms for a commit rule over 21 commits of this repository's
+ * own history, 1290ms with a change rule loaded beside it. Not cached --
+ * a memo keyed on the sha can never hit (each sha is read once, ever), and
+ * one keyed on the blob needs a `git show` of its own to learn the blob id
+ * before it could even ask whether it has that blob, which is the cost
+ * being avoided. Against real model calls this is noise; if it ever is not,
+ * the fix is one `git cat-file --batch` for every sha in the range instead
+ * of two per sha, not a cache.
  */
 function changeSubject(rule: Rule, file: string, diff: CommitDiff, instructions: Instructions): Subject {
   const summary = diff.stat.trim().split("\n").pop() ?? "";
@@ -219,12 +253,15 @@ function changeSubject(rule: Rule, file: string, diff: CommitDiff, instructions:
 export function squashSubjects(rules: Rule[], range: string, message: string, cwd: string = process.cwd()): CommitSubjects {
   // `commit` only, deliberately: a squash is a range judged against a
   // message someone wrote for it, which is a commit rule's question. A
-  // change rule is per-change and needs no message -- `commits <range>`
-  // already covers it, one change subject per commit in the range.
+  // change rule needs no message and is per-commit, not per-range, so it
+  // has nothing to say here -- one change subject per commit that has an
+  // instruction document belongs to `commitSubjects` instead. (The CLI does
+  // not yet accept a rule set with no commit rule for `commits <range>`
+  // either; that is a separate gap in `src/cli/targets.ts`, not this one.)
   const commitRules = rules.filter((r) => r.subject === "commit");
   const spec = range.includes("..") ? range : `${range}..HEAD`;
   const commits = listCommits(spec, cwd).filter((c) => c.parents.length <= 1);
-  if (commitRules.length === 0 || commits.length === 0) return { subjects: [], commits: commits.length, skippedMerges: 0 };
+  if (commitRules.length === 0 || commits.length === 0) return { subjects: [], commits: commits.length, skippedMerges: 0, noInstructionDoc: 0 };
   const diff = rangeDiff(spec, cwd);
   const text = message.replace(/\s+$/, "");
   const subjects: Subject[] = commitRules.map((rule) => ({
@@ -241,7 +278,7 @@ export function squashSubjects(rules: Rule[], range: string, message: string, cw
     captured: { SUBJECT: text.split("\n")[0] ?? "" },
     commit: diff,
   }));
-  return { subjects, commits: commits.length, skippedMerges: 0 };
+  return { subjects, commits: commits.length, skippedMerges: 0, noInstructionDoc: 0 };
 }
 
 /** `commitDiff` for a range: the same caps, from `git diff` instead of `git show`. */
@@ -327,9 +364,19 @@ export function patchRepo(fixtures: string): { cwd: string; label: (sha: string)
   return { cwd, label: (sha) => byShaPath.get(sha) ?? sha, cases, range };
 }
 
-/** The subjects a commit suite's fixtures produce, named by their case directories. */
+/**
+ * The subjects a commit suite's fixtures produce, named by their case
+ * directories.
+ *
+ * `patchRepo` selects a case by the presence of a `message` file, which a
+ * change rule never reads -- it judges the diff, not a message. A change
+ * fixture written without one (nothing yet forces this; see the `message`
+ * requirement in `patchRepo`) is silently absent from `cases` rather than
+ * an error: fewer cases scored than there are directories, with nothing
+ * that says why.
+ */
 export function commitFixtureSubjects(rules: Rule[], fixtures: string): Subject[] {
-  if (!rules.some((r) => r.subject === "commit" || r.subject === "change")) return [];
+  if (!rules.some((r) => isGitSubject(r.subject))) return [];
   const repo = patchRepo(fixtures);
   return commitSubjects(rules, repo.range, repo.cwd, repo.label).subjects;
 }

@@ -166,11 +166,34 @@ test("commits: a change finding is titled by the stat's summary, never quoted as
   }
 });
 
-test("commits: a commit with no instruction document produces no change subject", () => {
+test("commits: a commit with no instruction document produces no change subject, and is counted rather than silently dropped", () => {
   const dir = tempRepo([{ message: "Add cart", files: { "cart.ts": "a\n" } }]);
   try {
-    const { subjects } = commitSubjects([commitRule(), changeRule()], "HEAD", dir);
+    const { subjects, noInstructionDoc } = commitSubjects([commitRule(), changeRule()], "HEAD", dir);
     assert.deepEqual(subjects.map((s) => s.rule.subject), ["commit"], "no standard, so no question: not a clean verdict");
+    assert.equal(noInstructionDoc, 1, "the reason is not thrown away -- a run has to be able to say why");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: an empty commit gets no change subject either, even with an instruction document in force", () => {
+  // `git commit --allow-empty` is ordinary: a CI trigger, "rebuild", a
+  // rebase-retained marker. Its diff is nothing, so there is nothing for a
+  // change rule to judge -- not symmetrical with a commit rule, which still
+  // has a real message to judge ("this claims X over an empty diff" is a
+  // genuine finding, and the commit subject below still fires).
+  const dir = tempRepo([
+    { message: "Set the rules", files: { "AGENTS.md": "- Never use `any`.\n" } },
+    { message: "Empty on purpose", files: {} },
+  ]);
+  try {
+    const { subjects, noInstructionDoc } = commitSubjects([commitRule(), changeRule()], "HEAD", dir);
+    assert.ok(!subjects.some((s) => s.rule.subject === "change" && s.commit!.stat.trim() === ""), "no change subject has an empty stat");
+    const forEmptyCommit = subjects.filter((s) => s.text.startsWith("Empty on purpose"));
+    assert.equal(forEmptyCommit.length, 1, "only the commit rule gets a subject for the empty commit");
+    assert.equal(forEmptyCommit[0]!.rule.subject, "commit");
+    assert.equal(noInstructionDoc, 0, "there was a standard; the diff was simply empty, which is a different reason");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
