@@ -514,7 +514,7 @@ await testAsync("commands: since 0.5 a config picks its rules by id, .jev-lint/r
  * reasons worth accepting run to a paragraph and that is what the row has to
  * survive.
  */
-function blindSuite(reason: string): string {
+function blindSuiteDir(reason: string): string {
   const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-exempt-")));
   mkdirSync(join(dir, "fixtures"));
   // Seven functions, one per three lines: `keep0..3` honest, `liar0..2` not.
@@ -591,7 +591,7 @@ await testAsync("commands: a declared `inconclusive:` reason is printed under th
     "The middle of this scale is empty because the language and the state arm leave the model nothing to be " +
     "unsure about, not because nobody looked: nine candidates aimed at the cutoff across two rounds each " +
     "landed in one confident band or the other, and the margins did not move.";
-  const dir = blindSuite(reason);
+  const dir = blindSuiteDir(reason);
   try {
     const { code, out } = await cli(["eval", dir, "--replay"]);
     // The exemption is accepted, so the blind corpus does not fail the suite.
