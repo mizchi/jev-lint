@@ -8,9 +8,9 @@
  * that were in force when it was made, and a staged edit to the document
  * is judged as part of the change it arrives with.
  *
- * A repository with neither document produces nothing here, and a change
- * rule then produces no subject at all: a question with no standard behind
- * it is not a clean verdict, it is a question there was no ground to ask.
+ * A repository with neither document produces nothing here: a question
+ * judged against no standard is not a clean verdict, it is a question
+ * there was no ground to ask.
  */
 import { execFileSync } from "node:child_process";
 
@@ -26,14 +26,53 @@ export interface Instructions {
 }
 
 /** Repository root only. Nested `AGENTS.md` is deliberately out of scope. */
-export const INSTRUCTION_FILES = ["AGENTS.md", "CLAUDE.md"];
+export const INSTRUCTION_FILES = ["AGENTS.md", "CLAUDE.md"] as const;
 
 /**
- * Characters across all the documents. The diff's budget is 48,000 and a
- * state holds 32Ki of tokens; half the diff's budget leaves room for both
- * plus the questions at the measured character-to-token ratio.
+ * Characters across all the documents.
+ *
+ * Reasoned against `STATE_BUDGET` (`src/batch.ts`), not the raw
+ * `MAX_STATE_TOKENS` ceiling: a change subject is `arm: "bare"`, and a
+ * one-subject batch cannot be split to recover from an overrun the way a
+ * batch of many subjects can, so there is no step-down here to absorb a
+ * budget picked too generously.
+ *
+ * Measured with this repository's own `estimateTokens`, at the sibling
+ * caps a change's diff state already uses -- `MAX_DIFF_CHARS` 48,000 of
+ * diff, `MAX_STAT_LINES` 120 stat lines, `MAX_FILES` 200 file paths --
+ * plus a commit message and the one-subject wrapper, with real source from
+ * this repository standing in for the diff so the quote-and-brace density
+ * is this codebase's own rather than guessed:
+ *
+ *   STATE_BUDGET            26,214 tokens (MAX_STATE_TOKENS 32,768 / 1.25)
+ *   worst case, no docs     20,264 tokens
+ *   16,000 chars of docs     4,777 tokens  -> total 25,048, margin 1,166
+ *   20,000 chars of docs     5,962 tokens  -> total 26,233, OVER by 19
+ *
+ * 20,000 already overruns the budget outright once a realistic diff is
+ * counted rather than a short one, and the margin shrinks fast enough
+ * above that (18,000 chars left only 565 tokens, about 2%) that "under"
+ * and "comfortably under" are different numbers here. 16,000 is the
+ * largest round one with real headroom: about 1,166 tokens, 4-5% of the
+ * budget, to absorb the parts of a real change -- a longer commit message,
+ * a diff with a heavier quote-and-brace mix than this repository's own --
+ * that this measurement did not carry.
  */
-export const MAX_INSTRUCTION_CHARS = 24_000;
+export const MAX_INSTRUCTION_CHARS = 16_000;
+
+/**
+ * A pointer line runs to at most this many characters.
+ *
+ * A symlinked `CLAUDE.md` reads back as its target path -- `AGENTS.md`, or
+ * `../AGENTS.md` with a directory in front of it -- and a line written by
+ * hand doing the same job is usually "See AGENTS.md" or close to it: both
+ * are a handful of characters. What this bound has to exclude is a
+ * one-line document long enough to carry an instruction of its own --
+ * "Everything in AGENTS.md applies, plus: never commit generated files."
+ * is 68 characters and is a real rule, not a pointer. 48 sits between a
+ * generous pointer and the shortest plausible one-line rule.
+ */
+export const POINTER_LINE_MAX = 48;
 
 function show(ref: string | null, file: string, cwd: string): string | null {
   try {
@@ -44,24 +83,61 @@ function show(ref: string | null, file: string, cwd: string): string | null {
       stdio: ["ignore", "pipe", "pipe"],
     });
   } catch {
-    // Absent from the tree, or not a repository. Both are "no document".
+    // Every way `git show` can fail lands here alike: the file absent from
+    // the tree, `cwd` not a repository, but also a partial clone still
+    // missing this blob, a permissions error, a corrupt object. None of
+    // those are distinguished from "no document", which means a real
+    // failure here is invisible downstream -- the run reports no
+    // instructions, a change rule produces no subject, and the run reads
+    // as clean for a repository that HAS an AGENTS.md and was never
+    // actually looked at. Anyone chasing that should start by running the
+    // `git show` command above by hand, not by reading a stack trace,
+    // because there isn't one.
     return null;
   }
 }
 
 /**
- * Is this document just a pointer at one already read?
+ * A duplicate copy: byte-identical, trimmed, to a document already kept.
  *
- * `CLAUDE.md` is very often a symlink to `AGENTS.md`, which git resolves to
- * identical content, or a single line saying to read the other file. Both
- * double the tokens and say nothing twice.
+ * A hand-copied `CLAUDE.md` (`cp AGENTS.md CLAUDE.md` where a symlink
+ * would have done the job) reads back this way -- the same rules, said
+ * twice, costing tokens for nothing a model doesn't already have. Checked
+ * only against documents already kept, in `INSTRUCTION_FILES` order, so of
+ * two identical documents the first, `AGENTS.md`, is the one that stays.
  */
-function isDuplicate(text: string, already: InstructionDoc[]): boolean {
+function isCopy(text: string, already: InstructionDoc[]): boolean {
   const body = text.trim();
-  if (body === "") return true;
-  if (already.some((d) => d.text.trim() === body)) return true;
-  const lines = body.split("\n").filter((l) => l.trim() !== "");
-  return lines.length === 1 && already.some((d) => lines[0]!.includes(d.file));
+  return already.some((d) => d.text.trim() === body);
+}
+
+/**
+ * A document that is nothing but a reference to another one.
+ *
+ * `CLAUDE.md` is very often a symlink to `AGENTS.md` -- git stores that as
+ * mode 120000 whose blob content is the target path, so it reads back as
+ * the single line `AGENTS.md`, not as a copy of AGENTS.md's text -- or a
+ * line someone wrote by hand saying to go read the other file. Either way
+ * it says nothing twice.
+ *
+ * Checked by name against every entry in `INSTRUCTION_FILES`, not against
+ * documents already read: a repository that had `CLAUDE.md` first and
+ * symlinked `AGENTS.md` at it for portability points the other way from
+ * the usual case, and the first document read has nothing behind it yet to
+ * compare against -- a check that only looked backwards would let that
+ * direction's target-path blob through as if it were a real document.
+ *
+ * `POINTER_LINE_MAX` is what keeps a genuine one-line rule from being read
+ * as a pointer just because it happens to name the other file.
+ */
+function isPointer(file: string, text: string): boolean {
+  const lines = text
+    .trim()
+    .split("\n")
+    .filter((l) => l.trim() !== "");
+  if (lines.length !== 1) return false;
+  const line = lines[0]!;
+  return line.length <= POINTER_LINE_MAX && INSTRUCTION_FILES.some((other) => other !== file && line.includes(other));
 }
 
 /**
@@ -85,18 +161,25 @@ function cut(text: string, limit: number): string {
 }
 
 /**
- * The documents in the tree `ref` names, or in the index when `ref` is null.
+ * The documents in the tree `ref` names, or in the index when `ref` is
+ * null.
  *
  * Order is `INSTRUCTION_FILES`, so `AGENTS.md` is the one kept whole when
- * the budget bites.
+ * `budget` bites. `budget` mirrors `commitDiff`'s and `rangeDiff`'s own
+ * parameter in `src/commits.ts` -- same module pair, same concern -- and
+ * defaults to `MAX_INSTRUCTION_CHARS`.
  */
-export function readInstructions(ref: string | null, cwd: string = process.cwd()): Instructions {
+export function readInstructions(ref: string | null, cwd: string = process.cwd(), budget: number = MAX_INSTRUCTION_CHARS): Instructions {
   const docs: InstructionDoc[] = [];
-  let left = MAX_INSTRUCTION_CHARS;
+  let left = budget;
   let truncated = false;
   for (const file of INSTRUCTION_FILES) {
     const text = show(ref, file, cwd);
-    if (text === null || isDuplicate(text, docs)) continue;
+    // Absent from the tree, or nothing but whitespace in it: an empty
+    // document is not a standard anything is judged against, so it is
+    // treated the same as no document at all rather than as a duplicate.
+    if (text === null || text.trim() === "") continue;
+    if (isPointer(file, text) || isCopy(text, docs)) continue;
     if (left <= 0) {
       truncated = true;
       continue;
