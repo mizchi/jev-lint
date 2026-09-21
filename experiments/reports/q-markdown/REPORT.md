@@ -383,7 +383,7 @@ state: bare
 # opinion piece 0.76; the long config reference answers 0.42, long is not
 # padded. Midpoint; 0.49 above the clean top, 0.46 under the lowest defect.
 # Spread <= 0.16. On unseen documents this repository's README answered
-# 1.35 and docs/findings.md 1.30: 0.15 of headroom on long reference prose.
+# 1.35 and docs/internal/findings.md 1.30: 0.15 of headroom on long reference prose.
 at: 1.5
 severity: info
 ask: >-
@@ -426,7 +426,7 @@ defect (ja-slop 1.96). Midpoint.
 ### Verdict
 
 SHIP, with the narrowest unseen margin in the family: this repository's
-README answers 1.35 and `docs/findings.md` 1.30, 0.15 under the cutoff. Long
+README answers 1.35 and `docs/internal/findings.md` 1.30, 0.15 under the cutoff. Long
 reference prose is read as "a moderate amount could go", and a README longer
 than this one may cross.
 
@@ -783,17 +783,17 @@ evidence should put them, and the unseen results below say the same.
 
 ## Unseen documents
 
-`check README.md docs/findings.md docs/deepdive.md experiments/BRIEF.md
+`check README.md docs/internal/findings.md docs/deepdive.md experiments/BRIEF.md
 skills/jev-lint/SKILL.md` with the nine rule files as `-R`, `--no-config
 --cache none --retry 3`, every cutoff overridden to 0 so that every score
-prints (`records/unseen-5-docs.json`). `docs/findings.md` is 78 KB and was
+prints (`records/unseen-5-docs.json`). `docs/internal/findings.md` is 78 KB and was
 cut at 48,000 characters, as the rule says it is. Mean of 3 passes, `*`
 marks a score at or over the fitted cutoff:
 
 | document | filler 1.9 | formulaic 3.0 | generic 2.7 | incoherent 3 | padded 1.5 | slop 2.0 | vague 2.2 | firsthand 3 | repeats 1.8 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `README.md` | 0.31 | 1.40 | 0.32 | 0.19 | 1.35 | 0.06 | 0.02 | 1.79 | 0.66 |
-| `docs/findings.md` | 0.29 | 1.53 | 0.14 | 0.28 | 1.30 | 0.03 | 0.01 | 2.56 | 0.81 |
+| `docs/internal/findings.md` | 0.29 | 1.53 | 0.14 | 0.28 | 1.30 | 0.03 | 0.01 | 2.56 | 0.81 |
 | `docs/deepdive.md` | 0.19 | 1.14 | 0.12 | 0.14 | 1.02 | 0.03 | 0.01 | 2.55 | 0.72 |
 | `experiments/BRIEF.md` | 0.56 | 1.19 | 0.46 | 0.25 | 0.57 | 0.07 | 0.02 | 1.93 | 0.22 |
 | `skills/jev-lint/SKILL.md` | 0.42 | 1.29 | 0.46 | 0.18 | 0.76 | 0.05 | 0.03 | 2.08 | 0.40 |

@@ -3,7 +3,7 @@
 Everything the [README](../README.md) leaves out: every flag, every rule field,
 the calibration procedure in full, the batching axis, and what was measured on
 real code. [deepdive.md](deepdive.md) has the evidence behind the numbers;
-[internal.md](internal.md) is for changing the code.
+[internal.md](internal/architecture.md) is for changing the code.
 
 ## Commands and flags
 
@@ -1187,5 +1187,5 @@ docs/data/      recorded runs, each replayable with no API key
 test/test.ts    the suite, no API key needed
 ```
 
-`docs/internal.md` has the module-by-module map.
+`docs/internal/architecture.md` has the module-by-module map.
 

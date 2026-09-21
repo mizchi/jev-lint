@@ -1,7 +1,7 @@
 # Internals
 
-How the code works, for changing it. [README](../README.md) is how to use it,
-[reference.md](reference.md) is every flag and field, [deepdive.md](deepdive.md)
+How the code works, for changing it. [README](../../README.md) is how to use it,
+[reference.md](../reference.md) is every flag and field, [deepdive.md](../deepdive.md)
 is what is known and why, [findings.md](findings.md) is the notebook.
 
 Read this before editing anything under `src/`. Most of the non-obvious

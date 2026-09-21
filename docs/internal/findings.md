@@ -1175,8 +1175,8 @@ a verdict in this tool.
 
 ## 15. Rules by language, two ports, and commits
 
-Spec and plan: `docs/superpowers/specs/2026-09-20-rules-by-language-design.md`,
-`docs/superpowers/plans/2026-09-20-rules-by-language.md`.
+Spec and plan: `docs/internal/superpowers/specs/2026-09-20-rules-by-language-design.md`,
+`docs/internal/superpowers/plans/2026-09-20-rules-by-language.md`.
 
 ### The layout
 

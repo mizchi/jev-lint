@@ -9,8 +9,8 @@ Four other documents, so you can pick the right one:
 | [README](../README.md) | how to use it |
 | [reference.md](reference.md) | every flag and field, calibration in full, the batching axis, what to expect on real code |
 | this file | what is known, and the evidence for it |
-| [internal.md](internal.md) | how the code works, for changing it |
-| [findings.md](findings.md) | the notebook: how it was learned, in order, including the wrong turns and three retracted claims |
+| [internal.md](internal/architecture.md) | how the code works, for changing it |
+| [findings.md](internal/findings.md) | the notebook: how it was learned, in order, including the wrong turns and three retracted claims |
 
 Where this file and `findings.md` disagree, this file is the live one — that is
 what it is for. Where a number here has a history, the history is there.

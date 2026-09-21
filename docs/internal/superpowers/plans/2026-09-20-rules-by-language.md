@@ -8,7 +8,7 @@
 
 **Tech Stack:** Node 20+ (`--experimental-strip-types`), ast-grep CLI, `yaml`, `node:child_process` for git. Tests: `test/test.ts` (`npm test`), `npm run typecheck`.
 
-Spec: `docs/superpowers/specs/2026-09-20-rules-by-language-design.md`.
+Spec: `docs/internal/superpowers/specs/2026-09-20-rules-by-language-design.md`.
 
 ---
 

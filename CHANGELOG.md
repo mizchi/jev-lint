@@ -4,7 +4,7 @@ Every release, newest first. The numbers — how many rules, how many reach
 precision and recall 1.00 on their own fixtures at the shipped cutoff —
 are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
-change are in [docs/findings.md](docs/findings.md).
+change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ## Unreleased
 
