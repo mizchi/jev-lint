@@ -8,6 +8,86 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ## Unreleased
 
+### Added
+
+- **A diff judged against the `AGENTS.md` the repository wrote for itself.**
+  `AGENTS.md` and `CLAUDE.md` say what a change is supposed to do and nothing
+  checked them: a diff that adds the dependency the file forbids, edits the
+  file it calls generated, or ships without the test it requires passes every
+  linter in the repository, because the claim it breaks is a sentence in a
+  markdown file.
+
+  `git/diff-follows-instructions` is that rule, and `subject: change` is the
+  new subject it needs — a commit rule's subject is the *message*, and at
+  pre-commit time there is not one. A change subject's state carries the
+  diff and the documents as they were in that change's own tree, so a commit
+  is judged by the instructions that were in force when it was made, and a
+  staged edit to `AGENTS.md` travels with the code it governs. A tree holding
+  neither document produces no subject at all, and the run says how many
+  commits that was rather than reporting a rule with no matcher as a matcher
+  that missed.
+
+  Fitted at `at: 0.65`, P 1.00 R 1.00 over eight fixtures, no flips across
+  three passes. The fixtures could not choose the number — their gap is 0.50
+  to 0.93 and any cutoff inside it scores the same — so it came from this
+  package's own last twelve commits, where 0.70 was missing two real breaches
+  of this repository's own `AGENTS.md`. The residue is in the rule's `at:`
+  comment.
+
+  The half that makes it usable is `criteria.false`. An `AGENTS.md` is mostly
+  instructions a diff cannot be held against — develop test-first, ask when
+  unclear, read the skill first — and judging those puts every answer
+  mid-scale where no cutoff separates. Named as false, they stand aside. The
+  fixture that is nothing but such instructions answers 0.50 rather than
+  0.05, and that is the number to watch if the sentence is ever reworded.
+
+- **A finding names the instruction it is about, or is not printed.** After
+  the verdict, a second pass splits the documents into directives — headings
+  become breadcrumbs, a list item folds its children in, mechanically, so
+  that a cutoff fitted against one list still holds against the next — and
+  asks one question per directive against the state the verdict already used.
+  One extra request per flagged change; a clean change pays nothing. A
+  finding no directive accounts for is **retracted** to the `--loose` band
+  rather than reported: the first pass is a cheap gate, and a violation
+  nobody can point at is not one worth turning an exit code over.
+
+- **`jev-lint commits --staged`** — the index as one change, which is what a
+  pre-commit hook asks.
+
+### Changed
+
+- **`init --pre-commit` and `--pre-push` write the hook into the repository**,
+  at `.jev-lint/hooks/<name>`, and leave a shim in git's hooks directory that
+  finds and runs it. A hook nobody can see is a hook nobody reviews. A missing
+  body exits 0 silently, so a clone that has the shim before it has the body
+  can still commit, and `init` on a fresh clone installs the shim without
+  refusing because the body is already there.
+
+- **A failed request no longer blocks a commit or a push.** `review --staged`
+  exits 3 when its requests fail — deliberately, since the run has no verdict
+  — and git fails a hook on any non-zero exit, so being offline or holding an
+  expired key stopped you committing. The shipped bodies let 3 through and
+  nothing else.
+
+### Fixed
+
+- **A commit subject and a change subject over the same commit shared one
+  batch, and one of them lost its state.** Both are `arm: "bare"` with the
+  sha as the file, which was the whole grouping key, so the change rule's
+  question went out against a state carrying a commit message and no
+  instructions. Nothing failed — a model handed no standard answers anyway.
+
+- `jev-lint run <a change rule> main..HEAD` took the range as a directory and
+  planned nothing, silently, because the router counted only
+  `subject: commit`.
+
+- An off-duty git rule was counted in `N rule(s) matched nothing`, which is
+  the one place a matcher that matches nothing is visible.
+
+- An empty commit produced a change subject with an empty diff, costing a
+  request to ask whether nothing breaks the instructions.
+
+
 ## 0.6.1 — 2026-09-21
 
 ### Fixed

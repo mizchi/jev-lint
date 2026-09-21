@@ -71,7 +71,11 @@ rules in all. Roughly:
   take orders from elsewhere, hide what it runs.
 - **Whether a document is worth reading.** Slop, filler, padding, vagueness;
   a section that opens with an agenda or ends by previewing the next.
-- **A commit message against its diff.**
+- **A commit message against its diff**, and **a change against the
+  instructions the repository wrote for itself** -- the `AGENTS.md` or
+  `CLAUDE.md` in its own tree, read as of that change. Only the instructions
+  a diff can be held against: "never edit the generated file" is judged,
+  "develop test-first" is not.
 
 [RULES.md](RULES.md) is all of them, each with its cutoff and its score on
 its own fixtures. What makes them one family is that each holds a claim the
@@ -107,7 +111,8 @@ a committed cache with no key at all.
 | --- | --- |
 | `jev-lint check src` | judge whole files |
 | `jev-lint review --base main` | only the lines a diff touched — where findings concentrate, at a fraction of the cost |
-| `jev-lint commits --base main` | each commit's message against its diff |
+| `jev-lint commits --base main` | each commit's message against its diff, and each change against the `AGENTS.md` the repository wrote for itself |
+| `jev-lint commits --staged` | the same, on what is about to be committed |
 | `jev-lint run fn-name-promises src` | one rule; `--file mine.yml` for one of your own |
 | `jev-lint rules` | every loaded rule: its question, cutoff and file |
 
