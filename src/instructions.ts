@@ -13,8 +13,15 @@
  * there was no ground to ask.
  */
 import { execFileSync } from "node:child_process";
+import { posix } from "node:path";
 
 export interface InstructionDoc {
+  /**
+   * Where this document's text actually came from: one of
+   * `INSTRUCTION_FILES`, or, when a root-level file was a symlink, the
+   * path it resolved to -- which is not always one of those names. A
+   * finding reports against this, not against the link's own name.
+   */
   file: string;
   text: string;
 }
@@ -25,7 +32,13 @@ export interface Instructions {
   truncated: boolean;
 }
 
-/** Repository root only. Nested `AGENTS.md` is deliberately out of scope. */
+/**
+ * Repository root only, for DISCOVERY: these are the only paths looked for
+ * without being told where to look. A root-level file that is a symlink is
+ * different -- the repository is saying where its real document lives,
+ * and that target IS followed (see `resolvePointer`) -- but nothing here
+ * goes hunting for a nested `docs/AGENTS.md` on its own initiative.
+ */
 export const INSTRUCTION_FILES = ["AGENTS.md", "CLAUDE.md"] as const;
 
 /**
@@ -96,8 +109,10 @@ function show(ref: string | null, file: string, cwd: string): string | null {
  * A hand-copied `CLAUDE.md` (`cp AGENTS.md CLAUDE.md` where a symlink
  * would have done the job) reads back this way -- the same rules, said
  * twice, costing tokens for nothing a model doesn't already have. Checked
- * only against documents already kept, in `INSTRUCTION_FILES` order, so of
- * two identical documents the first, `AGENTS.md`, is the one that stays.
+ * only against documents already kept, in the order `readInstructions`
+ * processes `INSTRUCTION_FILES`, so of two identical documents -- however
+ * each one got read, directly or by following a symlink -- the first one
+ * kept is the one that stays.
  */
 function isCopy(text: string, already: InstructionDoc[]): boolean {
   const body = text.trim();
@@ -105,53 +120,68 @@ function isCopy(text: string, already: InstructionDoc[]): boolean {
 }
 
 /**
- * A document that IS a symlink, read back as its target.
+ * The path a symlink-shaped document points at, or null if this document
+ * isn't shaped like one.
  *
  * `CLAUDE.md` is very often a symlink to `AGENTS.md`, at any depth
- * (`docs/AGENTS.md`, `.github/AGENTS.md`, `../AGENTS.md`) and in either
- * direction. Git stores a symlink as mode 120000 whose blob content is
- * nothing but the target path -- no newline, no surrounding prose, no
- * whitespace at all, because a path can't contain any. That is the whole
- * signal: a document that is a single line, that line has no whitespace in
- * it, and it either equals one of `INSTRUCTION_FILES` or ends with `/`
- * followed by one. No real instruction document is a single bare path, so
- * this cannot mistake one for a symlink.
+ * (`docs/AGENTS.md`, `.github/AGENTS.md`) and in either direction. Git
+ * stores a symlink as mode 120000 whose blob content is nothing but the
+ * target path -- no newline, no surrounding prose, no whitespace at all,
+ * because a path can't contain any. That is the whole signal: a document
+ * that is a single line, that line has no whitespace in it, and it either
+ * equals one of `INSTRUCTION_FILES` or ends with `/` followed by one. No
+ * real instruction document is a single bare path, so this cannot mistake
+ * one for a symlink, and it cannot mistake a symlink for anything longer
+ * either: a written pointer like "See AGENTS.md for all conventions" has
+ * whitespace in it and is never treated as one -- it survives as a
+ * document, costing a few tokens for a sentence that tells a model nothing
+ * false.
  *
- * It also cannot mistake a symlink for anything longer: this does not try
- * to catch a written pointer like "See AGENTS.md for all conventions" --
- * that survives as a document, and costs a few tokens for a sentence that
- * tells a model nothing false. Checked by name against every entry in
- * `INSTRUCTION_FILES`, including the document's own name: a symlink can
- * point either way (a repository that had `CLAUDE.md` first and later
- * symlinked `AGENTS.md` at it, for portability, points opposite the usual
- * case), and checking only the other name would miss exactly that
- * direction the same way comparing only against documents already read
- * did before this.
- *
- * Two documents that symlink at each other -- `AGENTS.md` -> `CLAUDE.md`
- * and back -- both get dropped here, leaving `docs: []`, indistinguishable
- * from a repository with neither file. That's fine: a symlink loop has
- * nothing to read either way.
- *
- * What is NOT fine, and is the cost of this being a drop rather than a
- * resolve: a repository that keeps the real document at `docs/AGENTS.md`
- * and symlinks the root at it gets `docs: []`, so no subject and no
- * judging at all. The link is recognised and then nothing follows it,
- * because the target is outside the root-only scope. Dropping beats the
- * alternative that shipped before -- the literal string `docs/AGENTS.md`
- * handed to a model as a standard -- but it is silence where a reader
- * would expect their instructions to be read. Following one hop is a
- * `git show <ref>:<target>` away if that layout turns out to be common.
+ * Checked by name against every entry in `INSTRUCTION_FILES`, including
+ * the document's own name: a symlink can point either way (a repository
+ * that had `CLAUDE.md` first and later symlinked `AGENTS.md` at it, for
+ * portability, points opposite the usual case), and checking only the
+ * other name would miss exactly that direction.
  */
-function isPointer(text: string): boolean {
+function pointerTarget(text: string): string | null {
   const lines = text
     .trim()
     .split("\n")
     .filter((l) => l.trim() !== "");
-  if (lines.length !== 1) return false;
+  if (lines.length !== 1) return null;
   const line = lines[0]!.trim();
-  if (/\s/.test(line)) return false;
-  return INSTRUCTION_FILES.some((name) => line === name || line.endsWith(`/${name}`));
+  if (/\s/.test(line)) return null;
+  return INSTRUCTION_FILES.some((name) => line === name || line.endsWith(`/${name}`)) ? line : null;
+}
+
+/**
+ * Read a symlink-shaped document by following it to what it names, rather
+ * than handing a model the target path as if that path were the document.
+ * Returns null wherever following is not the right thing to do:
+ *
+ *  - the target leaves the repository root (`../`, or absolute): that is
+ *    not this repository pointing at its own document, and `git show
+ *    <ref>:<target>` would not be a repository-relative pathspec even if
+ *    it happened to resolve to something outside the tree. The check is
+ *    made here, where a reader can see it, rather than left to however
+ *    git's error handling reacts to it.
+ *  - the target is absent from this tree, or empty: a dangling symlink is
+ *    the same as no document, not a document whose text is its own path.
+ *  - the target is ITSELF symlink-shaped: one hop, then stop. Two
+ *    documents that symlink at each other (`AGENTS.md` -> `CLAUDE.md` ->
+ *    `AGENTS.md`) would recurse forever without this; instead both
+ *    directions read as no document, the same as a repository with
+ *    neither file.
+ *
+ * The returned document's `file` is the resolved target, not the link's
+ * own name -- a finding reports where its text actually came from.
+ */
+function resolvePointer(ref: string | null, target: string, cwd: string): InstructionDoc | null {
+  const path = posix.normalize(target);
+  if (path === ".." || path.startsWith("../") || path.startsWith("/")) return null;
+  const text = show(ref, path, cwd);
+  if (text === null || text.trim() === "" || pointerTarget(text) !== null) return null;
+  return { file: path, text };
 }
 
 /**
@@ -204,21 +234,36 @@ export function readInstructions(ref: string | null, cwd: string = process.cwd()
   const docs: InstructionDoc[] = [];
   let left = budget;
   let truncated = false;
+
+  // Shared by both the direct read below and a document `resolvePointer`
+  // hands back: dedup, the remainder floor, and the cut all apply the same
+  // way regardless of whether the text came from `INSTRUCTION_FILES`
+  // directly or from following a symlink to get to it.
+  const keep = (file: string, text: string): void => {
+    if (isCopy(text, docs)) return;
+    if (left < MIN_INSTRUCTION_REMAINDER) {
+      truncated = true;
+      return;
+    }
+    const kept = cut(text, left);
+    if (kept.length < text.length) truncated = true;
+    docs.push({ file, text: kept });
+    left -= kept.length;
+  };
+
   for (const file of INSTRUCTION_FILES) {
     const text = show(ref, file, cwd);
     // Absent from the tree, or nothing but whitespace in it: an empty
     // document is not a standard anything is judged against, so it is
     // treated the same as no document at all rather than as a duplicate.
     if (text === null || text.trim() === "") continue;
-    if (isPointer(text) || isCopy(text, docs)) continue;
-    if (left < MIN_INSTRUCTION_REMAINDER) {
-      truncated = true;
+    const target = pointerTarget(text);
+    if (target !== null) {
+      const resolved = resolvePointer(ref, target, cwd);
+      if (resolved !== null) keep(resolved.file, resolved.text);
       continue;
     }
-    const kept = cut(text, left);
-    if (kept.length < text.length) truncated = true;
-    docs.push({ file, text: kept });
-    left -= kept.length;
+    keep(file, text);
   }
   return { docs, truncated };
 }

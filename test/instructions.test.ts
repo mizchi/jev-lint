@@ -65,12 +65,12 @@ test("instructions: a CLAUDE.md byte-identical to AGENTS.md is dropped, not doub
 });
 
 test("instructions: a written pointer, as opposed to a symlink, is kept as a document", () => {
-  // isPointer only catches a document that IS a bare path -- what a
-  // symlink's blob actually is. A sentence a person wrote, even one that
-  // does nothing but point at the other file, has whitespace in it and is
-  // not caught: it costs a few tokens and tells a model nothing false, so
-  // there is no case for the false positives a word-list heuristic would
-  // risk to catch it too.
+  // Only a document that IS a bare path -- what a symlink's blob actually
+  // is -- is treated as a pointer. A sentence a person wrote, even one
+  // that does nothing but point at the other file, has whitespace in it
+  // and is not caught: it costs a few tokens and tells a model nothing
+  // false, so there is no case for the false positives a word-list
+  // heuristic would risk to catch it too.
   const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Never use `any`.\n", "CLAUDE.md": "See AGENTS.md\n" } }]);
   try {
     assert.deepEqual(readInstructions("HEAD", dir).docs.map((d) => d.file), ["AGENTS.md", "CLAUDE.md"]);
@@ -108,15 +108,79 @@ test("instructions: an AGENTS.md symlinked to CLAUDE.md is caught in the other d
   }
 });
 
-test("instructions: a symlink nested in a directory is still caught", () => {
-  // The case a name-only, no-depth check would miss: AGENTS.md -> docs/AGENTS.md
-  // is a real, ordinary layout, and its blob is "docs/AGENTS.md", not "AGENTS.md".
-  const dir = tempRepo([{ message: "Rules", files: { "docs/AGENTS.md": "- Real rule one.\n- Real rule two.\n" } }]);
+test("instructions: a symlink nested in a directory is followed, not dropped", () => {
+  // The layout a name-only, no-depth check would miss: AGENTS.md ->
+  // docs/AGENTS.md is a real, ordinary layout, and its blob is
+  // "docs/AGENTS.md", not "AGENTS.md". Dropping it (the previous fix) beat
+  // handing a model the literal string "docs/AGENTS.md", but it still left
+  // the repository's real document unread; following it is what this test
+  // pins.
+  const real = "- Real rule one.\n- Real rule two.\n";
+  const dir = tempRepo([{ message: "Rules", files: { "docs/AGENTS.md": real } }]);
   try {
     symlinkSync("docs/AGENTS.md", join(dir, "AGENTS.md"));
     commitAll(dir, "symlink AGENTS.md to docs/AGENTS.md");
     const got = readInstructions("HEAD", dir);
-    assert.deepEqual(got.docs, [], "docs/AGENTS.md is not an instruction file name, so the only entry is the pointer, and it is dropped");
+    // `file` is where the text actually came from, not the link's own name.
+    assert.deepEqual(got.docs, [{ file: "docs/AGENTS.md", text: real }]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("instructions: a symlink loop resolves to no document, not infinite recursion", () => {
+  // AGENTS.md -> CLAUDE.md -> AGENTS.md, both links, no real file anywhere.
+  // Each direction's target is itself symlink-shaped, so `resolvePointer`
+  // stops at one hop and both directions read as no document.
+  const dir = tempRepo([{ message: "seed", files: { "seed.txt": "x\n" } }]);
+  try {
+    symlinkSync("CLAUDE.md", join(dir, "AGENTS.md"));
+    symlinkSync("AGENTS.md", join(dir, "CLAUDE.md"));
+    commitAll(dir, "symlink loop");
+    const got = readInstructions("HEAD", dir);
+    assert.deepEqual(got.docs, []);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("instructions: a symlink target that escapes the repository is not followed", () => {
+  // A path starting `../` is dropped outright, without ever calling `git
+  // show` on it -- not resolved, and not left to however git's own
+  // pathspec error handling happens to react to it.
+  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Real rule.\n" } }]);
+  try {
+    symlinkSync("../secret/AGENTS.md", join(dir, "CLAUDE.md"));
+    commitAll(dir, "symlink CLAUDE.md outside the repository");
+    const got = readInstructions("HEAD", dir);
+    assert.deepEqual(got.docs.map((d) => d.file), ["AGENTS.md"], "the escaping link contributes nothing, but does not break the real document");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("instructions: a dangling symlink is dropped, not turned into a document containing its own path", () => {
+  const dir = tempRepo([{ message: "seed", files: { "seed.txt": "x\n" } }]);
+  try {
+    // AGENTS.md points at a docs/AGENTS.md that was never committed.
+    symlinkSync("docs/AGENTS.md", join(dir, "AGENTS.md"));
+    commitAll(dir, "dangling symlink");
+    const got = readInstructions("HEAD", dir);
+    assert.deepEqual(got.docs, []);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("instructions: two symlinks resolving to the same target dedup across the hop", () => {
+  const real = "- Real rule one.\n- Real rule two.\n";
+  const dir = tempRepo([{ message: "Rules", files: { "docs/AGENTS.md": real } }]);
+  try {
+    symlinkSync("docs/AGENTS.md", join(dir, "AGENTS.md"));
+    symlinkSync("docs/AGENTS.md", join(dir, "CLAUDE.md"));
+    commitAll(dir, "both root files symlink at the same real document");
+    const got = readInstructions("HEAD", dir);
+    assert.deepEqual(got.docs, [{ file: "docs/AGENTS.md", text: real }], "resolved once, not twice");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
