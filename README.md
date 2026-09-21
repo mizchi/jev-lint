@@ -2,49 +2,42 @@
 
 [日本語](README-ja.md)
 
-A linter for the things a linter could never check: whether a function does
-what its name says, whether a comment is still true, whether a test verifies
-what it claims.
+This function is wrong, and nothing in your toolchain will say so:
 
-[`examples/cart.ts`](examples/cart.ts) is thirty-eight lines with three lies
-in it: a doc comment that promises `null` above a body that throws, an
-`isEmpty` that returns a string, an `applyDiscount` that also saves the cart.
-[`examples/cart.test.ts`](examples/cart.test.ts) has a test that would pass
-with its claim broken. Nothing a type checker minds.
+```ts
+/** Returns the cart, or null when no cart has this id. */
+export function getCart(id: string): Cart {
+  const cart = carts.get(id);
+  if (!cart) throw new Error(`no cart ${id}`);
+  return cart;
+}
+```
+
+The comment promises `null`. The body throws. The return type is `Cart`, not
+`Cart | null`. It type-checks and it lints clean.
+
+A jev-lint rule is one sentence. An [ast-grep](https://ast-grep.github.io)
+matcher picks which code to look at, and a model is asked that sentence about
+each match -- here, *the comment above this code claims something that is not
+true of the code* -- answering with a probability. **The code being judged is
+sent to an API**, which is what the key pays for; nothing runs locally except
+the matcher.
 
 ```bash
-export TYPESAFE_API_KEY=...            # a key from https://typesafe.ai
+export TYPESAFE_API_KEY=...            # https://typesafe.ai
 npx -y jev-lint check examples
 ```
 
 ```
-examples/cart.test.ts
-     17  flag       This test would still pass if the behaviour its name claims were broken.
-         test-name-verifies-claim  0.90  cutoff 0.62  arm bare
-
 examples/cart.ts
-     16  flag       The failure contract stated in the documentation on this function -- what it says the function throws, raises, rejects with, panics on, or returns in place of a result when something goes wrong, and under what condition -- is contradicted by the body.
-         doc-errors-match-body  0.94  cutoff 0.56  arm located
-     16  flag       The comment above this code claims something that is not true of the code.
-         comment-describes-declaration  0.89  cutoff 0.56  arm located
-     16  flag       This function ($NAME) has a failure path of its own that none of the related tests reaches.
-         tests-cover-failure-paths  0.93  cutoff 0.68  arm paired
-     22  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.73  cutoff 0.55  arm located
-     30  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.71  cutoff 0.55  arm located
-
-6 finding(s), 37 subject(s), 0 cached
-7 request(s), 28,542 input tokens, $0.00120, 1791 ms (5678 ms of requests)
+     16  flag  The comment above this code claims something that is not true of the code.
+         comment-describes-declaration  0.89  cutoff 0.56
+...
 ```
 
-Each finding is one rule's sentence, held against one piece of code, with the
-model's agreement (0.90) over the cutoff the rule ships with (0.62) and what
-it was shown (`bare`: the test alone; `located`: with its file; `paired`:
-with the tests that exercise it). Line 16 is the comment lie, seen by three
-rules from three sides — the comment, its failure contract, and the tests
-that never reach the throw. Nothing clean was flagged. The run cost a tenth
-of a cent.
+0.89 is the model's agreement and 0.56 the cutoff this rule ships with; under
+it, nothing is reported. Six findings over two files, for a tenth of a cent;
+[what a bigger run costs](docs/cost.md) is measured, not extrapolated.
 
 ## What it catches
 
@@ -64,10 +57,10 @@ All of them are visible only to a reader who understands both the contract
 the code declares about itself and the body.
 
 It is **not** for anything a compiler, type checker or ESLint already
-decides. This kind of model is measurably good at code that contradicts
-itself and measurably poor at defects needing knowledge of a specific API,
-such as `.sort()` defaulting to lexicographic order. Keep your existing tools
-for those.
+decides. This kind of model is good at code that contradicts itself and poor
+at defects needing knowledge of a specific API, such as `.sort()` defaulting
+to lexicographic order -- [measured, with the evidence](docs/deepdive.md).
+Keep your existing tools for those.
 
 ## Install
 

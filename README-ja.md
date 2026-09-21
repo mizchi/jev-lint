@@ -2,37 +2,34 @@
 
 [English](README.md)
 
-従来の linter には検査できなかったものを検査する linter。関数は名前どおりのことをしているか、コメントはまだ真実か、テストは名前が主張する振る舞いを本当に検証しているか。
+この関数は間違っている。そして、手元のどのツールもそれを言わない。
 
-[`examples/cart.ts`](examples/cart.ts) は 38 行で、嘘が三つ入っている。`null` を返すと書いた doc コメントの下で throw する本体、文字列を返す `isEmpty`、カートを保存もしてしまう `applyDiscount`。[`examples/cart.test.ts`](examples/cart.test.ts) には、主張する振る舞いが壊れていても通るテストがある。どれも型検査は文句を言わない。
+```ts
+/** Returns the cart, or null when no cart has this id. */
+export function getCart(id: string): Cart {
+  const cart = carts.get(id);
+  if (!cart) throw new Error(`no cart ${id}`);
+  return cart;
+}
+```
+
+コメントは `null` を返すと約束している。本体は throw する。戻り値型は `Cart | null` ですらなく `Cart` だ。型検査も lint も通る。
+
+jev-lint のルールは一文でできている。[ast-grep](https://ast-grep.github.io) のマッチャーがどのコードを見るかを決め、その一文 — ここでは *the comment above this code claims something that is not true of the code* — をモデルに問い、確率が返る。**判定されるコードは API に送られる**。キーはその代金で、手元で動くのはマッチャーだけ。
 
 ```bash
-export TYPESAFE_API_KEY=...            # キーは https://typesafe.ai で取る
+export TYPESAFE_API_KEY=...            # https://typesafe.ai
 npx -y jev-lint check examples
 ```
 
 ```
-examples/cart.test.ts
-     17  flag       This test would still pass if the behaviour its name claims were broken.
-         test-name-verifies-claim  0.90  cutoff 0.62  arm bare
-
 examples/cart.ts
-     16  flag       The failure contract stated in the documentation on this function -- what it says the function throws, raises, rejects with, panics on, or returns in place of a result when something goes wrong, and under what condition -- is contradicted by the body.
-         doc-errors-match-body  0.94  cutoff 0.56  arm located
-     16  flag       The comment above this code claims something that is not true of the code.
-         comment-describes-declaration  0.89  cutoff 0.56  arm located
-     16  flag       This function ($NAME) has a failure path of its own that none of the related tests reaches.
-         tests-cover-failure-paths  0.93  cutoff 0.68  arm paired
-     22  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.73  cutoff 0.55  arm located
-     30  flag       The body of this function does something materially different from what its name promises.
-         fn-name-promises  0.71  cutoff 0.55  arm located
-
-6 finding(s), 37 subject(s), 0 cached
-7 request(s), 28,542 input tokens, $0.00120, 1791 ms (5678 ms of requests)
+     16  flag  The comment above this code claims something that is not true of the code.
+         comment-describes-declaration  0.89  cutoff 0.56
+...
 ```
 
-finding 一件は、ルールの一文をコードの一箇所に当てたもので、モデルの同意の強さ (0.90) がルール同梱の cutoff (0.62) を超えたときに出る。`arm` はモデルに何を見せたか (`bare`: テスト単体、`located`: ファイルごと、`paired`: それを叩くテストと一緒に)。16 行目はコメントの嘘で、三つのルールが三方向から見ている。コメント、その失敗契約、そして throw に届かないテスト。clean なものは一つも flag されていない。この実行は 0.1 セント。
+0.89 はモデルの同意の強さ、0.56 はこのルールが同梱する cutoff で、これを下回ったものは報告されない。2 ファイルで finding 六件、0.1 セント。[もっと大きい実行の費用](docs/cost.md)は外挿ではなく実測してある。
 
 ## 何を捕まえるか
 
@@ -44,7 +41,7 @@ finding 一件は、ルールの一文をコードの一箇所に当てたもの
 
 どれも、コードが自分について宣言している契約と本体の両方を理解した読み手にしか見えない。
 
-コンパイラ、型検査、ESLint が既に決めていることには**使わない**。この種のモデルは自己矛盾したコードには測定可能に強く、`.sort()` の既定が辞書順であるといった特定 API の知識を要する欠陥には測定可能に弱い。そちらは既存のツールに任せる。
+コンパイラ、型検査、ESLint が既に決めていることには**使わない**。この種のモデルは自己矛盾したコードには強く、`.sort()` の既定が辞書順であるといった特定 API の知識を要する欠陥には弱い。[測定と証拠](docs/deepdive.md)。そちらは既存のツールに任せる。
 
 ## 導入
 
