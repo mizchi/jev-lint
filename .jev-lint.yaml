@@ -3,8 +3,22 @@
 
 # test/fixtures holds planted defects for the cookbook test, so it is
 # carved out of test/, which is otherwise the suite.
-files: [src, tools, test, package.json]
-exclude: [test/fixtures]
+#
+# `docs` and `AGENTS.md` are here so the markdown rules have something to
+# read: without them every run printed `no files for markdown (11 rules)`,
+# which is eleven rules carried and never once asked. AGENTS.md is also
+# what `commits` judges a change against, so it is the one file in this
+# repository that has to be true about the others.
+files: [src, tools, test, docs, AGENTS.md, package.json]
+#
+# docs/superpowers holds the plans and specs a workflow writes: working
+# documents, read once while the work is done. The prose pack is calibrated
+# on documents meant to be read -- `section-opens-with-an-agenda` asks a
+# section to open with a stance rather than a list of what it will cover,
+# which is a fair thing to ask of docs/first-blog.md and the wrong thing to
+# ask of a plan, whose whole job is to be a list of what will be covered.
+# Eight of the nine findings on the first pull request were this.
+exclude: [test/fixtures, docs/superpowers]
 
 # Every shipped rule, on. The markdown rules see no file here (docs/ is
 # not in `files`), and are listed so that turning one off is a diff.

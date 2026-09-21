@@ -135,8 +135,8 @@ test("rules: cutoffFor prefers lang/id over id, and both over the rule's own", (
 });
 
 test("rules: a commit rule has no matcher, only the Git grammar, and never reaches ast-grep", () => {
-  // A commit is not an AST node. `subject: commit` is the one subject with
-  // no ast-grep matcher: the runner builds its subjects from git instead.
+  // A commit is not an AST node. `commit` and `change` are the two subjects
+  // with no ast-grep matcher: the runner builds their subjects from git instead.
   const { rule, error } = normalizeRule({
     id: "commit-message-describes-diff",
     language: "Git",
@@ -163,6 +163,63 @@ test("rules: a commit rule has no matcher, only the Git grammar, and never reach
   assert.ok(!emitted.includes("Git"), "Git must not be emitted as a language");
   assert.ok(!emitted.includes("commit-message-describes-diff"));
   assert.deepEqual(ruleLanguages([rule!, ordinary]), ["TypeScript"]);
+});
+
+test("rules: a `subject: change` rule is Git, matcherless and bare, like a commit rule", () => {
+  const { rule, error } = normalizeRule({
+    id: "diff-follows-instructions",
+    language: "Git",
+    subject: "change",
+    kind: "noul",
+    ask: "This change breaks an instruction.",
+    criteria: { true: "y", false: "n" },
+    at: 0.6,
+  });
+  assert.equal(error, undefined, `should load: ${error}`);
+  assert.equal(rule!.subject, "change");
+  assert.equal(rule!.matcher, null);
+  assert.equal(rule!.state, "bare", "a change rule has no file to locate in");
+  // `state: located` is a commit-rule mistake too (line 158 above); a change
+  // rule rejects it the same way, and the message names the subject it was
+  // actually given rather than defaulting to "commit".
+  const stateError = normalizeRule({
+    id: "x",
+    language: "Git",
+    subject: "change",
+    kind: "noul",
+    ask: "a",
+    criteria: { true: "y", false: "n" },
+    state: "located",
+  }).error;
+  assert.match(String(stateError), /bare/);
+  assert.match(String(stateError), /subject: change/, "names the subject it was given, not commit");
+});
+
+test("rules: a `subject: change` rule with a matcher is rejected", () => {
+  const { error } = normalizeRule({
+    id: "x",
+    language: "Git",
+    subject: "change",
+    kind: "noul",
+    rule: { kind: "function_declaration" },
+    ask: "a",
+    criteria: { true: "y", false: "n" },
+  });
+  assert.match(String(error), /takes no matcher/);
+  assert.match(String(error), /subject: change/, "names the subject it was given, not commit");
+});
+
+test("rules: a `subject: change` rule in a real grammar is rejected", () => {
+  const { error } = normalizeRule({
+    id: "x",
+    language: "TypeScript",
+    subject: "change",
+    kind: "noul",
+    ask: "a",
+    criteria: { true: "y", false: "n" },
+  });
+  assert.match(String(error), /is `language: Git`/);
+  assert.match(String(error), /subject: change/, "names the subject it was given, not commit");
 });
 
 test("rules: `run` selects one shipped rule by id, in every language or one, or the rules of a file", () => {

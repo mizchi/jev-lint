@@ -23,7 +23,7 @@
   "homepage": "https://github.com/mizchi/jev-lint#readme",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "bin": {
     "jev-lint": "dist/cli.js"
@@ -72,7 +72,7 @@
     "typecheck": "tsc -p tsconfig.check.json",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "test": "node --experimental-strip-types test/test.ts",
-    "test:dist": "npm run build && node dist/cli.js rules > /dev/null && node dist/cli.js check --dry-run --cache none > /dev/null && node dist/cli.js eval --replay > /dev/null; echo \"built cli ok\"",
+    "test:dist": "npm run build && node dist/cli.js rules > /dev/null && node dist/cli.js check --dry-run --cache none > /dev/null && node dist/cli.js eval --replay > /dev/null && echo \"built cli ok\"",
     "check": "node --experimental-strip-types src/cli.ts check",
     "review": "node --experimental-strip-types src/cli.ts review",
     "rules": "node --experimental-strip-types src/cli.ts rules",

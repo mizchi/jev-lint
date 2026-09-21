@@ -1,0 +1,124 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Everything that decides whether this package is correct, and none of it
+  # asks the model anything. `eval --replay` re-scores every accepted
+  # baseline at the current cutoffs from the answers already recorded, so a
+  # rule whose sentence or cutoff moved fails here without a request being
+  # made.
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # One entry, as a list, so the next line is a one-word diff when 26
+        # arrives. 24 is the floor this package supports; 20 and 25 are
+        # both end of life, and 22 is supported by Node but not by this
+        # package.
+        node: [24]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+
+      # The suite must not need a key, and here there is none. That is the
+      # point: a test that quietly reached the real service would pass on a
+      # developer's machine, where a key is exported, and fail only here.
+      # Asserted rather than assumed, so adding a key to this repository's
+      # secrets later cannot silently weaken this job.
+      - name: no API key is present for the suite
+        run: |
+          if [ -n "$TYPESAFE_API_KEY" ] || [ -n "$TYPESAFEAI_API_KEY" ]; then
+            echo "A key is set for this job. The suite is meant to run without one;" >&2
+            echo "a test that needs the model takes a fake client instead." >&2
+            exit 1
+          fi
+
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run eval:replay
+
+  # `engines` says node >=24, and the suite cannot check it: the suite runs
+  # from source under --experimental-strip-types, so it never exercises the
+  # compiled tree that a user of this package actually runs. That is what is
+  # held to the claim here -- the rules load, a plan can be made, and a
+  # baseline replays -- on the oldest version the package says it supports.
+  #
+  # Same version as the `ci` job today, and still a separate job: what it
+  # runs is the built output, which `npm test` never touches.
+  dist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:dist
+
+  # jev-lint over its own diff.
+  #
+  # `pull_request` -- never `pull_request_target`. On the `pull_request`
+  # event a pull request from a fork gets no repository secrets at all, so
+  # the key below expands to the empty string and the step steps aside.
+  # `pull_request_target` would hand that same key to a workflow triggered
+  # by a stranger's branch, which is the mistake this comment exists to
+  # prevent someone making later while "fixing" the job that never runs.
+  #
+  # The cost of that safety is worth stating: this job therefore runs ONLY
+  # for branches pushed to this repository. It will never review an outside
+  # contributor's pull request, because reviewing one would mean running
+  # their code with the key.
+  review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          # Nothing here pushes, and a checked-out token is one more thing
+          # for the reviewed code to find.
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      # The key is on THIS STEP, not on the job. `npm ci` above runs
+      # whatever lifecycle scripts the branch's lockfile asks for, and it
+      # must not be able to read the key while doing it.
+      - name: review the diff
+        env:
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+        # No key -- a fork, or before the secret is set -- is a skip, not a
+        # failure: a review that could not run is not a review that failed.
+        # `--fail-on error` is what makes the sentence above true: without
+        # it the default is that ANY finding exits 1, and this job failed on
+        # its first run for exactly that reason. No shipped rule carries
+        # `severity: error`, so with it the job annotates and never blocks.
+        run: |
+          if [ -z "$TYPESAFE_API_KEY" ]; then
+            echo "::notice title=jev-lint::no API key available, skipping the review"
+            exit 0
+          fi
+          node --experimental-strip-types src/cli.ts review \
+            --base "origin/${{ github.base_ref }}" --format github --cache none \
+            --fail-on error

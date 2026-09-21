@@ -50,6 +50,7 @@ Knowing which half you are working on is most of the job.
 | know what every field means, `score` vs `noul`, the `state` arms | [references/rule-fields.md](references/rule-fields.md) |
 | fit a cutoff, build a rule's evals, judge whether a rule works | [references/calibration.md](references/calibration.md) |
 | judge commit messages against their diffs | `jev-lint commits`, below |
+| install it as a git hook, and know what blocks a commit | [../../docs/use-hooks.md](../../docs/use-hooks.md) |
 
 ## Running it
 
@@ -83,9 +84,13 @@ Exit codes: `0` clean, `1` findings, `2` configuration error, `3` requests
 failed. Any finding exits 1 unless `--fail-on <severity>` raises the bar;
 `--format github` annotates `warning` unless the rule says `severity:
 error`, and no shipped rule does. The pre-commit hook `init --pre-commit`
-writes uses `--fail-on error`, so it prints everything and blocks nothing
-until a rule has earned `error`; without a key in the environment it steps
-aside. `--staged` reviews what the commit will contain: no untracked files,
+writes uses `--fail-on error`, so no *finding* blocks a commit until a rule
+has earned `error`; without a key in the environment it steps aside. **Exit
+3 does block it**, though: git fails a hook on any non-zero exit, so a
+failed request -- offline, an expired key, a rate-limit storm -- stops the
+commit rather than letting it through unreviewed. Whether that is the right
+trade, and the hook body that lets 3 through, are in
+[../../docs/use-hooks.md](../../docs/use-hooks.md). `--staged` reviews what the commit will contain: no untracked files,
 no unstaged edits, though a partially staged file is judged as it is on disk.
 When paths are configured or given, `review` scans only the changed files
 under them, never the whole tree.

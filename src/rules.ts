@@ -31,6 +31,7 @@ import YAML from "yaml";
 import type { RuleSetting } from "./config.ts";
 import {
   GROUPINGS,
+  isGitSubject,
   KINDS,
   LANGUAGES,
   LANGUAGE_DIRS,
@@ -286,7 +287,7 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     }
   }
 
-  const state = raw.state === undefined ? (source.subject === "commit" || source.subject === "block" ? "bare" : "located") : raw.state;
+  const state = raw.state === undefined ? (isGitSubject(source.subject) || source.subject === "block" ? "bare" : "located") : raw.state;
   if (!STATE_ARMS.includes(state)) {
     return { error: `${id}: \`state\` must be one of ${STATE_ARMS.join(", ")}` };
   }
@@ -386,22 +387,21 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
  * rule with `extensions`, are errors here, not silences.
  */
 function normalizeSource(raw: any, id: string, languages: Language[]): RuleSource | { error: string } {
-  const subject = raw.subject === undefined ? "node" : raw.subject;
+  const subject: SubjectMode = raw.subject === undefined ? "node" : raw.subject;
   if (!SUBJECTS.includes(subject)) {
     return { error: `${id}: \`subject\` must be ${SUBJECTS.join(" or ")}` };
   }
-  // A commit rule has no matcher and only the Git pseudo-grammar; every
-  // other rule has a matcher and never that grammar. Decided before the
-  // matcher is required, so a commit rule is not asked for one.
-  const isCommit = subject === "commit";
+  // `commit` and `change` are both built from git: no matcher, the Git
+  // pseudo-grammar, and `state: bare` because there is no file to locate in.
+  const isGit = isGitSubject(subject);
   const isBlock = subject === "block";
   const hasGit = languages.includes("Git");
   const hasText = languages.includes("Text");
-  if (isCommit && (!hasGit || languages.length !== 1)) {
-    return { error: `${id}: a \`subject: commit\` rule is \`language: Git\` and nothing else (got ${languages.join(", ")})` };
+  if (isGit && (!hasGit || languages.length !== 1)) {
+    return { error: `${id}: a \`subject: ${subject}\` rule is \`language: Git\` and nothing else (got ${languages.join(", ")})` };
   }
-  if (!isCommit && hasGit) {
-    return { error: `${id}: \`Git\` is the grammar of \`subject: commit\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
+  if (!isGit && hasGit) {
+    return { error: `${id}: \`Git\` is the grammar of \`subject: commit\` and \`subject: change\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
   }
   let split: string | null = null;
   let extensions: string[] = [];
@@ -411,12 +411,12 @@ function normalizeSource(raw: any, id: string, languages: Language[]): RuleSourc
   if (!isBlock && hasText) {
     return { error: `${id}: \`Text\` is the grammar of \`subject: block\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
   }
-  if (isCommit) {
+  if (isGit) {
     if (raw.rule !== undefined) {
-      return { error: `${id}: a \`subject: commit\` rule takes no matcher; its subjects are commits, not nodes` };
+      return { error: `${id}: a \`subject: ${subject}\` rule takes no matcher; its subjects are ${subject}s, not nodes` };
     }
     if (raw.state !== undefined && raw.state !== "bare") {
-      return { error: `${id}: a \`subject: commit\` rule is \`state: bare\`; the diff is its state and there is no file to locate in` };
+      return { error: `${id}: a \`subject: ${subject}\` rule is \`state: bare\`; its state is built from git and there is no file to locate in` };
     }
   } else if (isBlock) {
     // A block rule's matcher is its header regex; the files it reads are
@@ -456,7 +456,7 @@ function normalizeSource(raw: any, id: string, languages: Language[]): RuleSourc
     }
   }
 
-  if (isCommit) return { subject: "commit", matcher: null, constraints: null, utils: null, split: null, extensions: null };
+  if (isGit) return { subject, matcher: null, constraints: null, utils: null, split: null, extensions: null };
   if (isBlock) return { subject: "block", matcher: null, constraints: null, utils: null, split, extensions };
   return { subject, matcher: raw.rule, constraints: raw.constraints ?? null, utils: raw.utils ?? null, split: null, extensions: null };
 }
