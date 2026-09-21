@@ -38,8 +38,29 @@ id: diff-follows-instructions
 language: Git
 subject: change
 kind: noul
-# uncalibrated -- fitted in the eval step, with the run it came from.
-at: 0.7
+# 0.65, fitted 2026-09-21 on this rule's evals (8 cases: 4 defects, 4 cleans
+# of which 3 hard, 3 passes, baseline.json). The four defects answer 0.93 to
+# 0.97 -- quietest is missing-required-test, where the breach is a test that
+# is absent rather than a line that is present -- and the cleans run 0.05,
+# 0.06 and 0.12 with one at 0.50: procedural-only, whose AGENTS.md is
+# nothing but instructions a diff cannot be held against. That one sitting
+# at the fence rather than at 0.05 is the cost of `criteria.false` naming
+# that case instead of the model guessing, and it is the number to watch if
+# the sentence is ever reworded. Max pass-to-pass spread 0.04.
+#
+# The fixtures' gap is 0.50 to 0.93 and any cutoff inside it scores the
+# same, so the number comes from unseen code instead: this package's own
+# last 12 commits, judged at --retry 3 (docs/data is not where this lives;
+# the record was read and discarded). Median 0.24, and the top two answered
+# 0.67 -- under a 0.70 cutoff, and both are real breaches of this
+# repository's AGENTS.md. 8f78303 adds a rule carrying `at: 0.7 #
+# uncalibrated`, which AGENTS.md says does not ship that way; 9bb59aa's
+# message describes a README change over a diff that also carried 180 lines
+# of src/directives.ts, which AGENTS.md says a message has to name. 0.70
+# missed both. 0.65 reports both and clears the next answer down (0.59, an
+# honest commit) by 0.06, which is thin and is the residue: the first false
+# positive on unseen code will come from that band, not from the fixtures.
+at: 0.65
 ask: >-
   This change does something the project's own written instructions forbid,
   or leaves out something they require of a change like this one.
