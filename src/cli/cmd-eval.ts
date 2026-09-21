@@ -208,6 +208,27 @@ export function cmdEvalCompare(opts: Options, out: Log, log: Log): number {
   return diff.regressions.length > 0 ? 1 : 0;
 }
 
+/**
+ * Break prose onto lines of at most `width` characters, splitting only at
+ * spaces. A single word longer than `width` -- a path, a URL -- is left
+ * whole on its own line rather than cut, because a broken path is worse to
+ * read than a long one.
+ */
+function wrapTo(text: string, width: number): string[] {
+  const out: string[] = [];
+  let line = "";
+  for (const word of text.split(/\s+/).filter((w) => w !== "")) {
+    if (line === "") line = word;
+    else if (line.length + 1 + word.length <= width) line += ` ${word}`;
+    else {
+      out.push(line);
+      line = word;
+    }
+  }
+  if (line !== "") out.push(line);
+  return out;
+}
+
 export function formatEvalSuite(
   suite: EvalSuite,
   score: EvalScore,
@@ -224,13 +245,20 @@ export function formatEvalSuite(
   lines.push(`  ${"rule".padEnd(36)} ${"at".padEnd(5)} ${"tp".padStart(3)} ${"fp".padStart(3)} ${"fn".padStart(3)}  ${"P".padEnd(5)} ${"R".padEnd(5)} ${"flips".padEnd(5)} ${"cleanTop".padEnd(8)} fitted`);
   const fmt = (n: number | null) => (n === null ? "-" : n.toFixed(2));
   for (const r of score.rules) {
-    // The rule's own `inconclusive:` reason goes on this row, not only in
-    // `diff.reasons` when it fails: an exemption should be read every time
-    // someone looks at the suite, not only the run it broke on.
-    const exemption = r.inconclusiveReason ? `  [inconclusive: ${r.inconclusiveReason}]` : "";
     lines.push(
-      `  ${r.rule.padEnd(36)} ${String(r.at).padEnd(5)} ${String(r.tp).padStart(3)} ${String(r.fp).padStart(3)} ${String(r.fn).padStart(3)}  ${fmt(r.precision).padEnd(5)} ${fmt(r.recall).padEnd(5)} ${String(r.flips).padEnd(5)} ${String(r.cleanTop ?? "-").padEnd(8)} ${r.fitted ?? "-"}  ${r.fitReason}${exemption}`,
+      `  ${r.rule.padEnd(36)} ${String(r.at).padEnd(5)} ${String(r.tp).padStart(3)} ${String(r.fp).padStart(3)} ${String(r.fn).padStart(3)}  ${fmt(r.precision).padEnd(5)} ${fmt(r.recall).padEnd(5)} ${String(r.flips).padEnd(5)} ${String(r.cleanTop ?? "-").padEnd(8)} ${r.fitted ?? "-"}  ${r.fitReason}`,
     );
+    // The rule's own `inconclusive:` reason is printed on every run the suite
+    // is reported, not only in `diff.reasons` when it fails: an exemption
+    // should be read every time someone looks, not only the run it broke on.
+    // It goes under the row rather than after it because a reason worth
+    // accepting runs to a paragraph -- the one on
+    // `moonbit/pure-name-is-pure` is ~700 characters -- and appending that
+    // to a fixed-width row destroys the table for every other rule in the
+    // suite.
+    if (r.inconclusiveReason) {
+      for (const line of wrapTo(`inconclusive: ${r.inconclusiveReason}`, 88)) lines.push(`      ${line}`);
+    }
   }
   const rel = (f: string) => relative(suite.fixtures, f);
   const vals = (c: CaseScore) => `[${c.values.map((v) => v.toFixed(2)).join(" ")}]`;

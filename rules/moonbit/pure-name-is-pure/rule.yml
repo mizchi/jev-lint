@@ -90,6 +90,22 @@ state: located
 # under a real search for it; the corpus is wider and better-argued at both
 # ends, not narrower in the middle.
 at: 0.55
+# Declared after the search above, not in place of it. Nine boundary-aimed
+# candidates over two rounds moved the margins from 0.34/0.34 to 0.32/0.30 --
+# that is run noise, not a narrower corpus.
+inconclusive: >-
+  The middle of this scale is empty because the language and the state arm
+  leave the model nothing to be unsure about, not because nobody looked.
+  MoonBit's effect vocabulary is closed and `state: located` puts the whole
+  file in view, so once a candidate resolves which store a write lands on --
+  the caller's, a scratch object that dies with the call, or a file-level
+  cache -- the answer is confident either way. Nine candidates aimed at the
+  cutoff across two rounds (2026-09-22) each landed in one confident band or
+  the other; two were relabelled on what they turned out to show. The
+  per-candidate scores are in the `at:` comment above. The pair that sits on
+  typescript's own cutoff was ported in and did not carry its uncertainty:
+  under `local` the judge cannot see whether the helpers touch the
+  environment, and that doubt is what put those cases mid-scale there.
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: info

@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { realpathSync } from "node:fs";
 import { main } from "../src/cli/main.ts";
+import { loadRules, ruleTextHash } from "../src/rules.ts";
 import { fakeClient } from "./builders.ts";
 import { testAsync } from "./harness.ts";
 
@@ -498,6 +499,119 @@ await testAsync("commands: since 0.5 a config picks its rules by id, .jev-lint/r
     assert.match(written, /^  document-is-slop: on$/m);
   } finally {
     process.chdir(here);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+/**
+ * A suite whose corpus cannot see its rule drift, carrying the `inconclusive:`
+ * that accepts it. Seven explicitly labelled subjects -- past
+ * `MIN_MARGIN_SUBJECTS`, and explicit because a `default: clean` subject is
+ * left out of the margins -- with defects at 0.95 and cleans at 0.05 against
+ * a cutoff of 0.50: both margins are 0.45 of scale, which is blind, and every
+ * case is steady across the three passes, so nothing is `unstable`. The
+ * declared reason is deliberately longer than a terminal line, because the
+ * reasons worth accepting run to a paragraph and that is what the row has to
+ * survive.
+ */
+function blindSuite(reason: string): string {
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-exempt-")));
+  mkdirSync(join(dir, "fixtures"));
+  // Seven functions, one per three lines: `keep0..3` honest, `liar0..2` not.
+  const names = ["keep0", "keep1", "keep2", "keep3", "liar0", "liar1", "liar2"];
+  writeFileSync(
+    join(dir, "fixtures", "a.ts"),
+    `${names.map((n, i) => [`export function ${n}(): number {`, `  return ${i};`, "}"].join("\n")).join("\n")}\n`,
+  );
+  writeFileSync(
+    join(dir, "rule.yml"),
+    [
+      "id: body-matches-name",
+      "languages: [TypeScript]",
+      "kind: noul",
+      "rule: { kind: function_declaration }",
+      "ask: The body of this function does something other than its name promises.",
+      "criteria:",
+      '  "true": The name promises something the body does not do.',
+      '  "false": The name describes what the body does.',
+      "at: 0.5",
+      `inconclusive: ${JSON.stringify(reason)}`,
+      "",
+    ].join("\n"),
+  );
+  // Every case labelled by hand: the margins ignore whatever `default:` says.
+  writeFileSync(
+    join(dir, "expect.yml"),
+    [
+      "default: clean",
+      "fixtures/a.ts:",
+      ...names.flatMap((n, i) => [
+        `  - line: ${i * 3 + 1}`,
+        `    label: ${n.startsWith("liar") ? "bad" : "clean"}`,
+        "    window: 0",
+        `    reason: "${n} returns ${i}."`,
+      ]),
+      "",
+    ].join("\n"),
+  );
+  const pass = names.map((n, i) => ({
+    rule: "body-matches-name",
+    file: join(dir, "fixtures", "a.ts"),
+    line: i * 3 + 1,
+    endLine: i * 3 + 3,
+    kind: "noul",
+    value: n.startsWith("liar") ? 0.95 : 0.05,
+    confidence: null,
+  }));
+  // The draft is the rule's own text hash: a baseline written with any other
+  // value reads as a question that changed, which is a different failure.
+  const { rules } = loadRules([join(dir, "rule.yml")]);
+  writeFileSync(
+    join(dir, "baseline.json"),
+    `${JSON.stringify(
+      {
+        schema: "jev-lint-eval-1",
+        recorded: "2026-09-22T00:00:00.000Z",
+        model: "jev-1.13.0",
+        suite: "exempt",
+        rules: [{ id: "body-matches-name", draft: ruleTextHash(rules[0]!), at: 0.5 }],
+        cutoffs: {},
+        passes: [pass, pass, pass],
+        spent: null,
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  return dir;
+}
+
+await testAsync("commands: a declared `inconclusive:` reason is printed under the rule's row, wrapped, on every run", async () => {
+  const reason =
+    "The middle of this scale is empty because the language and the state arm leave the model nothing to be " +
+    "unsure about, not because nobody looked: nine candidates aimed at the cutoff across two rounds each " +
+    "landed in one confident band or the other, and the margins did not move.";
+  const dir = blindSuite(reason);
+  try {
+    const { code, out } = await cli(["eval", dir, "--replay"]);
+    // The exemption is accepted, so the blind corpus does not fail the suite.
+    assert.equal(code, 0, out);
+    const lines = out.split("\n");
+    const row = lines.find((l) => /^ {2}body-matches-name\s/.test(l));
+    assert.ok(row, out);
+    // The row keeps its columns: a paragraph appended here would push
+    // `fitted` and `fitReason` off the screen for every rule beside it.
+    assert.equal(row.includes("inconclusive"), false, row);
+    const block = lines.filter((l) => /^ {6}\S/.test(l));
+    const text = block.map((l) => l.trim()).join(" ");
+    assert.ok(text.startsWith("inconclusive: The middle of this scale"), out);
+    // Wrapped over several lines, carrying the whole reason, cut only at
+    // spaces -- a reason the reader has to reassemble is not one they read.
+    assert.ok(block.length > 1, out);
+    assert.ok(text.endsWith("the margins did not move."), out);
+    for (const l of block) assert.ok(l.length <= 96, `${l.length}: ${l}`);
+    for (const word of reason.split(/\s+/)) assert.ok(text.includes(word), word);
+  } finally {
     rmSync(dir, { recursive: true, force: true });
   }
 });
