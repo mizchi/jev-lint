@@ -70,9 +70,19 @@ jobs:
       - run: npm ci
       - run: npm run test:dist
 
-  # jev-lint over its own diff. Separate from `ci` because it is the one
-  # job that spends money and needs a secret, so it must not gate a pull
-  # request from a fork, where secrets are not available.
+  # jev-lint over its own diff.
+  #
+  # `pull_request` -- never `pull_request_target`. On the `pull_request`
+  # event a pull request from a fork gets no repository secrets at all, so
+  # the key below expands to the empty string and the step steps aside.
+  # `pull_request_target` would hand that same key to a workflow triggered
+  # by a stranger's branch, which is the mistake this comment exists to
+  # prevent someone making later while "fixing" the job that never runs.
+  #
+  # The cost of that safety is worth stating: this job therefore runs ONLY
+  # for branches pushed to this repository. It will never review an outside
+  # contributor's pull request, because reviewing one would mean running
+  # their code with the key.
   review:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
@@ -80,12 +90,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Nothing here pushes, and a checked-out token is one more thing
+          # for the reviewed code to find.
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
       - run: npm ci
 
+      # The key is on THIS STEP, not on the job. `npm ci` above runs
+      # whatever lifecycle scripts the branch's lockfile asks for, and it
+      # must not be able to read the key while doing it.
       - name: review the diff
         env:
           TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}

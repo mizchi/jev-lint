@@ -67,5 +67,8 @@ not a sentiment. Vague entries are worse than absent ones.
 
 - Node 20 or later, ESM (`"type": "module"`). Tests run from source under
   `--experimental-strip-types`; there is no build step to run them.
-- No runtime dependencies. The published package installs nothing.
+- Two runtime dependencies, `yaml` and `@ast-grep/cli`, and adding a third
+  is a decision, not a detail: `src/` runs from source in CI and in the git
+  hooks, so anything installed here executes in the same process that holds
+  the API key.
 - `dist/` is built, never committed.
