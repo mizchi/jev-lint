@@ -160,3 +160,33 @@ test("directives: a paragraph followed by a blank line and an indented non-list 
   assert.equal(got.length, 1);
   assert.match(got[0]!.text, /still indented/);
 });
+
+test("directives: a uniformly-indented top-level list is still one directive per bullet", () => {
+  // Regression: the first implementation anchored the bullet marker at
+  // column 0, so an AGENTS.md that writes its top-level bullets a few
+  // spaces in had every sibling read as one bullet's indented child --
+  // three independent rules silently merged into one directive. Each
+  // bullet here is now compared against the indentation of the one that
+  // opened the currently open directive, not against zero, so a sibling
+  // at the same indentation still closes and starts a new directive.
+  const got = splitDirectives(doc(`# Rules
+
+  - First rule, indented two spaces
+  - Second rule, indented two spaces
+  - Third rule, indented two spaces
+`));
+  assert.equal(got.length, 3);
+  assert.match(got[0]!.text, /First rule/);
+  assert.match(got[1]!.text, /Second rule/);
+  assert.match(got[2]!.text, /Third rule/);
+});
+
+test("directives: an indented top-level list still folds each item's own deeper children", () => {
+  const got = splitDirectives(doc(`  - a
+  - b
+    - b's child
+`));
+  assert.equal(got.length, 2);
+  assert.doesNotMatch(got[0]!.text, /b's child/, "a's sibling b does not fold into a");
+  assert.match(got[1]!.text, /b's child/, "b's own child, indented past b, folds into b");
+});

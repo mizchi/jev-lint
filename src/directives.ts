@@ -14,18 +14,20 @@
  *   every directive under it as a breadcrumb, because "keep them apart"
  *   under `## Code design` and under `## Git history` are different
  *   instructions.
- * - A top-level list item -- a marker flush against the left margin, with
- *   no leading whitespace -- is one directive, with everything indented
- *   under it (nested bullets, wrapped continuation lines, an attached
- *   example) folded in. A nested bullet is almost always a qualification
- *   of its parent ("...but not for local variables"), and splitting them
- *   makes the parent too broad and the child unanswerable. The marker must
- *   be at column 0: CommonMark itself tolerates up to three leading spaces
- *   on a list marker before it stops being "the same list", but a directive
- *   here is only ever told apart from its own children by indentation, so
- *   this cannot also allow the top-level marker to be indented -- an
- *   AGENTS.md that writes its top-level bullets a few spaces in would have
- *   every line matched as a fresh directive instead of one with children.
+ * - A list item is one directive, with everything indented strictly deeper
+ *   than its own marker (nested bullets, wrapped continuation lines, an
+ *   attached example) folded in. What counts as "deeper" is relative to
+ *   the bullet that opened the currently open directive, not to column 0:
+ *   a bullet at the same or shallower indentation than that one closes the
+ *   current directive and starts a new one; a bullet indented past it
+ *   folds in. That is what makes a nested bullet -- almost always a
+ *   qualification of its parent ("...but not for local variables"), and
+ *   splitting them would leave the parent too broad and the child
+ *   unanswerable -- fold into its parent regardless of whether the list is
+ *   written flush left or a document-wide list is itself indented under a
+ *   heading or a blockquote marker: an AGENTS.md whose top-level bullets
+ *   all sit two spaces in still gets one directive per bullet, because
+ *   each is compared against the one before it, not against zero.
  * - A paragraph outside a list is one directive.
  * - A fenced code block attaches to whatever came before it, blank lines
  *   inside the fence included: the example is part of the instruction. A
@@ -71,8 +73,12 @@ export interface Directive {
 }
 
 const HEADING = /^(#{1,6})\s+(.*)$/;
-// Anchored at column 0 on purpose -- see the module comment above.
-const TOP_BULLET = /^(?:[-*+]|\d+[.)])\s+\S/;
+// The leading whitespace is captured, not bounded to 0-3: CommonMark's
+// 0-3 is about when a marker stops belonging to an enclosing list, which
+// is not the question here. The question here is answered by comparing
+// this capture against the indentation of whichever bullet is currently
+// open -- see the module comment.
+const BULLET = /^(\s*)(?:[-*+]|\d+[.)])\s+\S/;
 const INDENTED = /^\s+\S/;
 const FENCE = /^\s{0,3}(```|~~~)/;
 
@@ -83,6 +89,11 @@ function splitOne(doc: InstructionDoc): Directive[] {
   // The heading stack, one entry per level, for the breadcrumb.
   const crumbs: string[] = [];
   let open: { line: number; body: string[] } | null = null;
+  // The indentation of the bullet that opened `open`, or null when `open`
+  // was opened by a paragraph or a fence instead of a bullet. A `null`
+  // here means the next bullet line always closes `open` rather than
+  // folding into it -- a bullet is never a child of a paragraph.
+  let openBulletIndent: number | null = null;
   let fence: string | null = null;
 
   const close = () => {
@@ -93,6 +104,7 @@ function splitOne(doc: InstructionDoc): Directive[] {
       out.push({ file: doc.file, line: open.line, text: trail === "" ? body : `${trail}\n${body}` });
     }
     open = null;
+    openBulletIndent = null;
   };
 
   for (let i = 0; i < lines.length; i += 1) {
@@ -141,9 +153,20 @@ function splitOne(doc: InstructionDoc): Directive[] {
       continue;
     }
 
-    if (TOP_BULLET.test(line)) {
+    const bullet = BULLET.exec(line);
+    if (bullet) {
+      const indent = bullet[1]!.length;
+      // Strictly deeper than the bullet that opened the current directive
+      // folds in; at or shallower closes it and starts a fresh one at this
+      // indentation. `openBulletIndent === null` (opened by a paragraph or
+      // a fence) always takes the close-and-open branch.
+      if (open && openBulletIndent !== null && indent > openBulletIndent) {
+        open.body.push(line);
+        continue;
+      }
       close();
       open = { line: i + 1, body: [line] };
+      openBulletIndent = indent;
       continue;
     }
 
