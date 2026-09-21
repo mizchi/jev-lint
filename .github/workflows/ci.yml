@@ -23,13 +23,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The two lines still supported as of this file's last edit: 20 went
-        # end of life in April 2026 and 25 in June. 22 is also where
-        # `--experimental-strip-types` arrived, which the suite needs to run
-        # from source at all, so the floor here and the floor in `engines`
-        # happen to coincide -- they are not the same constraint, and the
-        # `dist` job is what holds `engines` to its word.
-        node: [22, 24]
+        # One entry, as a list, so the next line is a one-word diff when 26
+        # arrives. 24 is the floor this package supports; 20 and 25 are
+        # both end of life, and 22 is supported by Node but not by this
+        # package.
+        node: [24]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -56,18 +54,21 @@ jobs:
       - run: npm run build
       - run: npm run eval:replay
 
-  # `engines` says node >=22, and the suite cannot check it: the suite runs
+  # `engines` says node >=24, and the suite cannot check it: the suite runs
   # from source under --experimental-strip-types, so it never exercises the
   # compiled tree that a user of this package actually runs. That is what is
   # held to the claim here -- the rules load, a plan can be made, and a
   # baseline replays -- on the oldest version the package says it supports.
+  #
+  # Same version as the `ci` job today, and still a separate job: what it
+  # runs is the built output, which `npm test` never touches.
   dist:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run test:dist

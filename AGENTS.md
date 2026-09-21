@@ -65,9 +65,10 @@ not a sentiment. Vague entries are worse than absent ones.
 
 ## Code
 
-- Node 22 or later, ESM (`"type": "module"`). 20 went end of life in April
-  2026, and 22 is also where `--experimental-strip-types` arrived, which is
-  what lets the suite run from source with no build step.
+- Node 24 or later, ESM (`"type": "module"`). This is a floor this package
+  chooses, above what Node still supports: 22 is alive until April 2027.
+  The suite's own floor is lower -- `--experimental-strip-types` arrived in
+  22.6 -- so a test passing says nothing about `engines`.
 - Two runtime dependencies, `yaml` and `@ast-grep/cli`, and adding a third
   is a decision, not a detail: `src/` runs from source in CI and in the git
   hooks, so anything installed here executes in the same process that holds

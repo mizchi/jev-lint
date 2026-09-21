@@ -171,7 +171,7 @@ npx -y jev-lint check src --dry-run    # what it would ask, and the price. No re
 npx -y jev-lint check src              # ask it
 ```
 
-Nothing to install for that. Node 22+. `check` loads every shipped rule —
+Nothing to install for that. Node 24+. `check` loads every shipped rule —
 98 of them, under `rules/<language>/<id>/` — and the files you point it
 at decide which run: a `.ts` file meets the TypeScript rules, a `.md` file
 the Markdown ones, and a language no file belongs to is listed as idle at
