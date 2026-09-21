@@ -227,7 +227,9 @@ Create `test/instructions.test.ts`:
 
 ```ts
 import { strict as assert } from "node:assert";
-import { rmSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { MAX_INSTRUCTION_CHARS, readInstructions } from "../src/instructions.ts";
 import { tempRepo } from "./builders.ts";
 import { test } from "./harness.ts";
@@ -289,9 +291,7 @@ test("instructions: the index is where --staged reads them", () => {
   const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Old rule.\n" } }]);
   try {
     // Stage a change to the document itself: it is part of the change.
-    const { writeFileSync } = require("node:fs") as typeof import("node:fs");
-    const { execFileSync } = require("node:child_process") as typeof import("node:child_process");
-    writeFileSync(`${dir}/AGENTS.md`, "- New rule.\n");
+    writeFileSync(join(dir, "AGENTS.md"), "- New rule.\n");
     execFileSync("git", ["add", "-A"], { cwd: dir, stdio: ["ignore", "pipe", "pipe"] });
     assert.match(readInstructions(null, dir).docs[0]!.text, /New rule/);
   } finally {
