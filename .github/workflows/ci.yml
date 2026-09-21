@@ -1,0 +1,102 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Everything that decides whether this package is correct, and none of it
+  # asks the model anything. `eval --replay` re-scores every accepted
+  # baseline at the current cutoffs from the answers already recorded, so a
+  # rule whose sentence or cutoff moved fails here without a request being
+  # made.
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The suite runs from source under `--experimental-strip-types`,
+        # which arrived in Node 22.6. That is a floor on developing this
+        # package, not on using it -- what is published is compiled, and
+        # the `dist` job below holds `engines` to its word separately.
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+
+      # The suite must not need a key, and here there is none. That is the
+      # point: a test that quietly reached the real service would pass on a
+      # developer's machine, where a key is exported, and fail only here.
+      # Asserted rather than assumed, so adding a key to this repository's
+      # secrets later cannot silently weaken this job.
+      - name: no API key is present for the suite
+        run: |
+          if [ -n "$TYPESAFE_API_KEY" ] || [ -n "$TYPESAFEAI_API_KEY" ]; then
+            echo "A key is set for this job. The suite is meant to run without one;" >&2
+            echo "a test that needs the model takes a fake client instead." >&2
+            exit 1
+          fi
+
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run eval:replay
+
+  # `engines` says node >=20. Nothing checked that, and the suite cannot:
+  # it needs 22.6 to run at all. What a user of this package actually runs
+  # is the compiled tree, so that is what is held to the claim here -- the
+  # rules load, a plan can be made, and a baseline replays, on the oldest
+  # version the package says it supports.
+  dist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test:dist
+
+  # jev-lint over its own diff. Separate from `ci` because it is the one
+  # job that spends money and needs a secret, so it must not gate a pull
+  # request from a fork, where secrets are not available.
+  review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      - name: review the diff
+        env:
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+        # No key -- a fork, or before the secret is set -- is a skip, not a
+        # failure: a review that could not run is not a review that failed.
+        # `--format github` annotates the diff at `warning`, since no shipped
+        # rule carries `severity: error`, so this reports and never blocks.
+        run: |
+          if [ -z "$TYPESAFE_API_KEY" ]; then
+            echo "::notice title=jev-lint::no API key available, skipping the review"
+            exit 0
+          fi
+          node --experimental-strip-types src/cli.ts review \
+            --base "origin/${{ github.base_ref }}" --format github --cache none
