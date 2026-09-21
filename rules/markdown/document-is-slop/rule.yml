@@ -28,9 +28,37 @@ state: bare
 # 3.02 -- the lowest, because its facts are true). Cleans top at 0.34 (the
 # tutorial whose five rounds repeat by design), then 0.09 (the config
 # reference) and 0.08 (the opinion piece with no data). Midpoint is 1.68;
-# 2.0 is the rubric's own "mixed" boundary and leaves 1.0 to the lowest
-# defect and 1.7 to the highest clean. Pass-to-pass spread <= 0.06.
-at: 2.0
+# 2.0 was chosen over the raw midpoint as the rubric's own "mixed"
+# boundary, since nothing in the corpus yet argued for anywhere in
+# particular between 0.34 and 3.02.
+#
+# Boundary hunt, 2026-09-22 (19 documents: 9 defects, 10 cleans incl. 2
+# hard, 3 passes, `eval --repeat 3 --accept`; scored against the old
+# at:2.0, FN-margin was -0.08 and FP-margin 0.39 -- not blind by the
+# threshold, since a negative FN-margin means an outright miss, but R had
+# dropped to 0.90). Six candidates aimed at the empty 0.34-3.02 band,
+# spread across it and across English and Japanese: two "throat-clearing
+# intro over a dense, numbered writeup" documents (CI sharding numbers, a
+# cache-hit-rate table) answered 0.23 (en) and 0.28 (ja) -- the padding is
+# a small fraction of a long document and does not move the score; one
+# "mostly solid, one generic closing paragraph" incident writeup answered
+# 0.44, the new clean top, up from 0.34 -- still nowhere near the
+# boundary. Two short, thin writeups with exactly one ungrounded figure
+# ("about 15%", no baseline, no window) answered 2.68 (en) and 2.60 (ja) --
+# correctly caught as bad, thinness does not need length to register. The
+# one candidate that actually landed mid-band: a 7-item listicle, template
+# intro/conclusion, 3 of 7 items carrying a real number and 4 pure
+# platitude -- answered 1.69 [1.67 1.68 1.73], labelled bad (half the
+# document, by item count and by structure, is exactly the
+# thin/generic/formulaic shape the rubric names) but under the old at:2.0,
+# a real miss (R 0.90). Refit to 1.1: the midpoint of the clean top (0.44)
+# and this quietest labelled defect (1.69) is 1.07; a genuinely mixed,
+# half-grounded listicle is what "mixed" was supposed to catch, and the
+# earlier preference for the rubric's own "2.0" boundary over the raw
+# midpoint was a guess made with no mid-band evidence to test it against --
+# this is that evidence, and it disagrees. Re-accepted at the new cutoff:
+# FN-margin 0.15, FP-margin 0.17, P 1.00, R 1.00, no longer blind.
+at: 1.1
 severity: info
 ask: >-
   Overall, this document reads as low-value: thin, generic, padded, repetitive, formulaic, or superficially polished.

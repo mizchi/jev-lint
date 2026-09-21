@@ -21,3 +21,15 @@ fixtures/tutorial-git-rebase.md:
   - { line: 1, label: clean, window: 0, reason: "hard clean: exact commands, exact expected log lines, a table of which operations change the tree hash" }
 fixtures/opinion-monorepos.md:
   - { line: 1, label: clean, window: 0, reason: "hard clean: no anecdote and no number, but concrete mechanisms (stale pins, two ordered changes with an inconsistent window, subtree checkout) rather than generalities" }
+fixtures/mechanism-mixed.md:
+  - { line: 1, label: bad, window: 0, reason: "boundary hunt 2026-09-22: alternates paragraph by paragraph between a real mechanism (key derivation, TTL-driven expiry, load-balancer routing with no sticky sessions) and pure vague benefit language ('more resilient, more flexible, easier to reason about'); 3 of 5 paragraphs are generic" }
+fixtures/single-number-among-generalities.md:
+  - { line: 1, label: bad, window: 0, reason: "boundary hunt 2026-09-22: a product-launch post that is almost entirely 'faster', 'cleaner', 'countless improvements' with exactly one hard number (2.4s to 1.1s) in six paragraphs -- one figure does not make the rest specific" }
+fixtures/mechanism-thin.md:
+  - { line: 1, label: clean, window: 0, reason: "boundary hunt 2026-09-22: argues from a real mechanism (why an immediate retry re-hits an overloaded endpoint, why jitter specifically prevents synchronized retry bursts, why a dead-letter queue beats retrying forever) with no numbers at all -- same shape as opinion-monorepos.md, thinner argument" }
+fixtures/ja-mechanism-mixed.md:
+  - { line: 1, label: bad, window: 0, reason: "boundary hunt 2026-09-22 (ja): セッションを Redis に移した理由。仕組みの段落（キー導出・TTL・ロードバランサーのルーティング）と、ベネフィットだけの一般論の段落が交互に並ぶ; mechanism-mixed.md のミラー" }
+fixtures/ja-single-number-among-generalities.md:
+  - { line: 1, label: bad, window: 0, reason: "boundary hunt 2026-09-22 (ja): 「もっと速く」「もっと分かりやすく」で埋まったダッシュボード告知に、2.4秒→1.1秒という数字が一つだけ挟まる; single-number-among-generalities.md のミラー" }
+fixtures/ja-mechanism-thin.md:
+  - { line: 1, label: clean, window: 0, reason: "boundary hunt 2026-09-22 (ja): Webhook の即時リトライをやめた理由。数字は一つもないが、なぜ即時リトライが過負荷を再現するか、なぜジッターが同期バーストを防ぐかを具体的に説明している; mechanism-thin.md のミラー" }

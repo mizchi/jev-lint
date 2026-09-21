@@ -28,7 +28,35 @@ state: bare
 # with no anecdote; everything with a number or a command answers 0.00-0.01.
 # Midpoint 2.16, rounded up; 1.1 above the clean top, 1.0 under the lowest
 # defect. Spread <= 0.19.
-at: 2.2
+#
+# Boundary hunt, 2026-09-22 (17 documents: 7 defects, 10 cleans incl. 2
+# hard, 3 passes, `eval --repeat 3 --accept`; scored against the old
+# at:2.2, FN-margin was -0.14 and FP-margin 0.28 -- not blind by the
+# threshold, since a negative FN-margin means an outright miss, but R had
+# dropped to 0.78 on two subjects). Six candidates targeted the empty
+# 1.09-3.22 band, in English and Japanese: a document arguing from a real
+# mechanism (why a session store keyed by ID with a TTL removes the
+# sticky-session dependency) but with no quantity anywhere answered 0.43
+# (en) / 0.38 (ja) -- concrete mechanism reasoning reads as specific with
+# or without a number, same as the existing opinion-monorepos.md clean,
+# and did not move the clean top (still opinion-monorepos at 1.13). A
+# launch post that is almost entirely "faster", "cleaner", "countless
+# improvements" but drops exactly one hard number (2.4s to 1.1s) in six
+# paragraphs answered 2.68 (en) / 2.49 (ja) -- correctly caught: one figure
+# surrounded by five paragraphs of generality does not make the document
+# specific. The two candidates that landed mid-band: a document
+# alternating paragraph by paragraph between real mechanism detail (key
+# derivation, TTL expiry, load-balancer routing) and pure vague benefit
+# language ("more resilient, more flexible, easier to reason about") -- 3
+# of 5 paragraphs generic -- answered 1.62 [1.60 1.62 1.63] (en) and 1.83
+# [1.78 1.82 1.89] (ja), both labelled bad but under the old at:2.2 a miss
+# on both languages (R 0.78). Refit to 1.4: the midpoint of the clean top
+# (1.13) and the quietest labelled defect (1.62) is 1.37; a document that
+# is honestly half mechanism and half marketing copy is exactly what
+# "mixed" describes, and it was scoring under the old cutoff on both
+# languages, not one. Re-accepted at the new cutoff: FN-margin 0.05,
+# FP-margin 0.07, P 1.00, R 1.00, no longer blind.
+at: 1.4
 severity: info
 ask: >-
   This document is vague and generic rather than specific and concrete.

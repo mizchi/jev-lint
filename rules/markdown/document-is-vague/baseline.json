@@ -1,13 +1,13 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-20T13:11:26.596Z",
+  "recorded": "2026-09-21T18:08:57.332Z",
   "model": "jev-1.13.0",
   "suite": "markdown/document-is-vague",
   "rules": [
     {
       "id": "document-is-vague",
       "draft": "dae5aa3b3c08",
-      "at": 2.2
+      "at": 1.4
     }
   ],
   "cutoffs": {},
@@ -15,223 +15,111 @@
     [
       {
         "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/productivity-listicle.md",
-        "line": 1,
-        "endLine": 47,
-        "kind": "score",
-        "value": 3.95,
-        "confidence": 0.96
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/fast-paced-world.md",
-        "line": 1,
-        "endLine": 33,
-        "kind": "score",
-        "value": 3.84,
-        "confidence": 0.87
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/confident-generalities.md",
-        "line": 1,
-        "endLine": 17,
-        "kind": "score",
-        "value": 3.55,
-        "confidence": 0.63
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/product-launch-post.md",
-        "line": 1,
-        "endLine": 45,
-        "kind": "score",
-        "value": 3.23,
-        "confidence": 0.7
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/readme-cli.md",
-        "line": 1,
-        "endLine": 77,
-        "kind": "score",
-        "value": 0,
-        "confidence": 1
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/reference-config.md",
-        "line": 1,
-        "endLine": 83,
-        "kind": "score",
-        "value": 0.01,
-        "confidence": 1
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/ja-slop.md",
-        "line": 1,
-        "endLine": 53,
-        "kind": "score",
-        "value": 3.91,
-        "confidence": 0.92
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/opinion-monorepos.md",
-        "line": 1,
-        "endLine": 17,
-        "kind": "score",
-        "value": 1.05,
-        "confidence": 0.45
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/postmortem.md",
-        "line": 1,
-        "endLine": 44,
-        "kind": "score",
-        "value": 0,
-        "confidence": 1
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/tutorial-git-rebase.md",
-        "line": 1,
-        "endLine": 111,
-        "kind": "score",
-        "value": 0.01,
-        "confidence": 1
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/ja-dense.md",
-        "line": 1,
-        "endLine": 46,
-        "kind": "score",
-        "value": 0,
-        "confidence": 1
-      }
-    ],
-    [
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/product-launch-post.md",
-        "line": 1,
-        "endLine": 45,
-        "kind": "score",
-        "value": 3.18,
-        "confidence": 0.71
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/fast-paced-world.md",
-        "line": 1,
-        "endLine": 33,
-        "kind": "score",
-        "value": 3.85,
-        "confidence": 0.87
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/confident-generalities.md",
-        "line": 1,
-        "endLine": 17,
-        "kind": "score",
-        "value": 3.52,
-        "confidence": 0.6
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/tutorial-git-rebase.md",
-        "line": 1,
-        "endLine": 111,
-        "kind": "score",
-        "value": 0,
-        "confidence": 1
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/reference-config.md",
-        "line": 1,
-        "endLine": 83,
-        "kind": "score",
-        "value": 0.01,
-        "confidence": 0.99
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/readme-cli.md",
-        "line": 1,
-        "endLine": 77,
-        "kind": "score",
-        "value": 0,
-        "confidence": 1
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/opinion-monorepos.md",
-        "line": 1,
-        "endLine": 17,
-        "kind": "score",
-        "value": 1.21,
-        "confidence": 0.39
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/productivity-listicle.md",
-        "line": 1,
-        "endLine": 47,
-        "kind": "score",
-        "value": 3.95,
-        "confidence": 0.96
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/postmortem.md",
-        "line": 1,
-        "endLine": 44,
-        "kind": "score",
-        "value": 0,
-        "confidence": 1
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/ja-slop.md",
-        "line": 1,
-        "endLine": 53,
-        "kind": "score",
-        "value": 3.92,
-        "confidence": 0.94
-      },
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/ja-dense.md",
-        "line": 1,
-        "endLine": 46,
-        "kind": "score",
-        "value": 0,
-        "confidence": 1
-      }
-    ],
-    [
-      {
-        "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/ja-slop.md",
-        "line": 1,
-        "endLine": 53,
-        "kind": "score",
-        "value": 3.92,
-        "confidence": 0.93
-      },
-      {
-        "rule": "document-is-vague",
         "file": "rules/markdown/document-is-vague/fixtures/fast-paced-world.md",
         "line": 1,
         "endLine": 33,
         "kind": "score",
         "value": 3.86,
-        "confidence": 0.88
+        "confidence": 0.89
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-mechanism-thin.md",
+        "line": 1,
+        "endLine": 9,
+        "kind": "score",
+        "value": 0.45,
+        "confidence": 0.62
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 1.11,
+        "confidence": 0.4
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 0,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/mechanism-thin.md",
+        "line": 1,
+        "endLine": 9,
+        "kind": "score",
+        "value": 0.44,
+        "confidence": 0.63
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 3.96,
+        "confidence": 0.97
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-mechanism-mixed.md",
+        "line": 1,
+        "endLine": 11,
+        "kind": "score",
+        "value": 1.89,
+        "confidence": 0.52
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/single-number-among-generalities.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.7,
+        "confidence": 0.68
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/mechanism-mixed.md",
+        "line": 1,
+        "endLine": 11,
+        "kind": "score",
+        "value": 1.62,
+        "confidence": 0.6
       },
       {
         "rule": "document-is-vague",
@@ -244,6 +132,80 @@
       },
       {
         "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-single-number-among-generalities.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.49,
+        "confidence": 0.55
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.5,
+        "confidence": 0.58
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.92,
+        "confidence": 0.93
+      }
+    ],
+    [
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-mechanism-thin.md",
+        "line": 1,
+        "endLine": 9,
+        "kind": "score",
+        "value": 0.35,
+        "confidence": 0.71
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 3.86,
+        "confidence": 0.89
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 1.13,
+        "confidence": 0.41
+      },
+      {
+        "rule": "document-is-vague",
         "file": "rules/markdown/document-is-vague/fixtures/postmortem.md",
         "line": 1,
         "endLine": 44,
@@ -253,12 +215,12 @@
       },
       {
         "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/confident-generalities.md",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-single-number-among-generalities.md",
         "line": 1,
-        "endLine": 17,
+        "endLine": 13,
         "kind": "score",
-        "value": 3.56,
-        "confidence": 0.64
+        "value": 2.52,
+        "confidence": 0.56
       },
       {
         "rule": "document-is-vague",
@@ -266,8 +228,26 @@
         "line": 1,
         "endLine": 83,
         "kind": "score",
-        "value": 0.01,
-        "confidence": 0.99
+        "value": 0,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.25,
+        "confidence": 0.67
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-mechanism-mixed.md",
+        "line": 1,
+        "endLine": 11,
+        "kind": "score",
+        "value": 1.82,
+        "confidence": 0.51
       },
       {
         "rule": "document-is-vague",
@@ -280,12 +260,158 @@
       },
       {
         "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/mechanism-thin.md",
+        "line": 1,
+        "endLine": 9,
+        "kind": "score",
+        "value": 0.39,
+        "confidence": 0.67
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/mechanism-mixed.md",
+        "line": 1,
+        "endLine": 11,
+        "kind": "score",
+        "value": 1.63,
+        "confidence": 0.6
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.46,
+        "confidence": 0.55
+      },
+      {
+        "rule": "document-is-vague",
         "file": "rules/markdown/document-is-vague/fixtures/productivity-listicle.md",
         "line": 1,
         "endLine": 47,
         "kind": "score",
-        "value": 3.95,
+        "value": 3.96,
+        "confidence": 0.97
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.92,
+        "confidence": 0.93
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/single-number-among-generalities.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.66,
+        "confidence": 0.67
+      }
+    ],
+    [
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 3.87,
+        "confidence": 0.89
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/mechanism-thin.md",
+        "line": 1,
+        "endLine": 9,
+        "kind": "score",
+        "value": 0.45,
+        "confidence": 0.63
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 3.96,
         "confidence": 0.96
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/product-launch-post.md",
+        "line": 1,
+        "endLine": 45,
+        "kind": "score",
+        "value": 3.28,
+        "confidence": 0.69
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-mechanism-mixed.md",
+        "line": 1,
+        "endLine": 11,
+        "kind": "score",
+        "value": 1.78,
+        "confidence": 0.52
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 1.14,
+        "confidence": 0.4
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.91,
+        "confidence": 0.93
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-mechanism-thin.md",
+        "line": 1,
+        "endLine": 9,
+        "kind": "score",
+        "value": 0.34,
+        "confidence": 0.72
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/mechanism-mixed.md",
+        "line": 1,
+        "endLine": 11,
+        "kind": "score",
+        "value": 1.6,
+        "confidence": 0.59
       },
       {
         "rule": "document-is-vague",
@@ -298,12 +424,39 @@
       },
       {
         "rule": "document-is-vague",
-        "file": "rules/markdown/document-is-vague/fixtures/opinion-monorepos.md",
+        "file": "rules/markdown/document-is-vague/fixtures/ja-single-number-among-generalities.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.46,
+        "confidence": 0.52
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/reference-config.md",
+        "line": 1,
+        "endLine": 83,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/confident-generalities.md",
         "line": 1,
         "endLine": 17,
         "kind": "score",
-        "value": 1.02,
-        "confidence": 0.46
+        "value": 3.63,
+        "confidence": 0.69
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/single-number-among-generalities.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.68,
+        "confidence": 0.68
       },
       {
         "rule": "document-is-vague",
@@ -311,15 +464,24 @@
         "line": 1,
         "endLine": 111,
         "kind": "score",
-        "value": 0.01,
-        "confidence": 0.99
+        "value": 0,
+        "confidence": 1
+      },
+      {
+        "rule": "document-is-vague",
+        "file": "rules/markdown/document-is-vague/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0,
+        "confidence": 1
       }
     ]
   ],
   "spent": {
-    "calls": 33,
-    "inputTokens": 55269,
-    "usd": 0.0023212980000000003,
-    "ms": 463
+    "calls": 51,
+    "inputTokens": 74967,
+    "usd": 0.0031486140000000005,
+    "ms": 1036
   }
 }

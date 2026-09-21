@@ -1,13 +1,13 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-20T13:11:26.124Z",
+  "recorded": "2026-09-21T18:08:54.825Z",
   "model": "jev-1.13.0",
   "suite": "markdown/document-is-slop",
   "rules": [
     {
       "id": "document-is-slop",
       "draft": "f2641c97aa4d",
-      "at": 2
+      "at": 1.1
     }
   ],
   "cutoffs": {},
@@ -15,75 +15,12 @@
     [
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/ja-slop.md",
+        "file": "rules/markdown/document-is-slop/fixtures/mostly-solid-one-weak-section.md",
         "line": 1,
-        "endLine": 53,
+        "endLine": 21,
         "kind": "score",
-        "value": 3.88,
-        "confidence": 0.9
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/postmortem.md",
-        "line": 1,
-        "endLine": 44,
-        "kind": "score",
-        "value": 0.02,
-        "confidence": 0.99
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/one-idea-five-paragraphs.md",
-        "line": 1,
-        "endLine": 13,
-        "kind": "score",
-        "value": 3.54,
-        "confidence": 0.62
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/what-is-kubernetes.md",
-        "line": 1,
-        "endLine": 55,
-        "kind": "score",
-        "value": 3.03,
-        "confidence": 0.8
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/fast-paced-world.md",
-        "line": 1,
-        "endLine": 33,
-        "kind": "score",
-        "value": 3.94,
-        "confidence": 0.95
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/productivity-listicle.md",
-        "line": 1,
-        "endLine": 47,
-        "kind": "score",
-        "value": 3.98,
-        "confidence": 0.98
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/opinion-monorepos.md",
-        "line": 1,
-        "endLine": 17,
-        "kind": "score",
-        "value": 0.08,
-        "confidence": 0.93
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/confident-generalities.md",
-        "line": 1,
-        "endLine": 17,
-        "kind": "score",
-        "value": 3.44,
-        "confidence": 0.57
+        "value": 0.43,
+        "confidence": 0.64
       },
       {
         "rule": "document-is-slop",
@@ -96,12 +33,21 @@
       },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/ja-dense.md",
+        "file": "rules/markdown/document-is-slop/fixtures/opinion-monorepos.md",
         "line": 1,
-        "endLine": 46,
+        "endLine": 17,
         "kind": "score",
-        "value": 0.01,
-        "confidence": 0.99
+        "value": 0.08,
+        "confidence": 0.93
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.46,
+        "confidence": 0.55
       },
       {
         "rule": "document-is-slop",
@@ -109,8 +55,71 @@
         "line": 1,
         "endLine": 111,
         "kind": "score",
-        "value": 0.35,
-        "confidence": 0.7
+        "value": 0.33,
+        "confidence": 0.73
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.9,
+        "confidence": 0.91
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/throat-clearing-benchmark.md",
+        "line": 1,
+        "endLine": 31,
+        "kind": "score",
+        "value": 0.22,
+        "confidence": 0.82
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 0.06,
+        "confidence": 0.95
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.02,
+        "confidence": 0.98
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-throat-clearing-benchmark.md",
+        "line": 1,
+        "endLine": 30,
+        "kind": "score",
+        "value": 0.28,
+        "confidence": 0.76
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/one-idea-five-paragraphs.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 3.55,
+        "confidence": 0.62
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 0.99
       },
       {
         "rule": "document-is-slop",
@@ -123,41 +132,167 @@
       },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/readme-cli.md",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-padded-short-writeup.md",
         "line": 1,
-        "endLine": 77,
+        "endLine": 13,
         "kind": "score",
-        "value": 0.06,
-        "confidence": 0.95
-      }
-    ],
-    [
+        "value": 2.58,
+        "confidence": 0.6
+      },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/postmortem.md",
+        "file": "rules/markdown/document-is-slop/fixtures/what-is-kubernetes.md",
         "line": 1,
-        "endLine": 44,
+        "endLine": 55,
         "kind": "score",
-        "value": 0.02,
+        "value": 3,
+        "confidence": 0.79
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/productivity-listicle.md",
+        "line": 1,
+        "endLine": 47,
+        "kind": "score",
+        "value": 3.98,
         "confidence": 0.98
       },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/readme-cli.md",
+        "file": "rules/markdown/document-is-slop/fixtures/fast-paced-world.md",
         "line": 1,
-        "endLine": 77,
+        "endLine": 33,
         "kind": "score",
-        "value": 0.05,
-        "confidence": 0.96
+        "value": 3.94,
+        "confidence": 0.95
       },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/padded-short-writeup.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.69,
+        "confidence": 0.67
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/grounded-listicle.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 1.73,
+        "confidence": 0.28
+      }
+    ],
+    [
       {
         "rule": "document-is-slop",
         "file": "rules/markdown/document-is-slop/fixtures/one-idea-five-paragraphs.md",
         "line": 1,
         "endLine": 13,
         "kind": "score",
-        "value": 3.58,
-        "confidence": 0.65
+        "value": 3.57,
+        "confidence": 0.64
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/mostly-solid-one-weak-section.md",
+        "line": 1,
+        "endLine": 21,
+        "kind": "score",
+        "value": 0.46,
+        "confidence": 0.61
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.88,
+        "confidence": 0.9
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-padded-short-writeup.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.59,
+        "confidence": 0.61
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-throat-clearing-benchmark.md",
+        "line": 1,
+        "endLine": 30,
+        "kind": "score",
+        "value": 0.28,
+        "confidence": 0.77
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/opinion-monorepos.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.07,
+        "confidence": 0.94
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/grounded-listicle.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 1.67,
+        "confidence": 0.32
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/fast-paced-world.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 3.94,
+        "confidence": 0.95
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/postmortem.md",
+        "line": 1,
+        "endLine": 44,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/padded-short-writeup.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.69,
+        "confidence": 0.68
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/confident-generalities.md",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 3.45,
+        "confidence": 0.57
       },
       {
         "rule": "document-is-slop",
@@ -170,21 +305,30 @@
       },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/confident-generalities.md",
+        "file": "rules/markdown/document-is-slop/fixtures/tutorial-git-rebase.md",
         "line": 1,
-        "endLine": 17,
+        "endLine": 111,
         "kind": "score",
-        "value": 3.4,
-        "confidence": 0.59
+        "value": 0.33,
+        "confidence": 0.73
       },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/ja-slop.md",
+        "file": "rules/markdown/document-is-slop/fixtures/what-is-kubernetes.md",
         "line": 1,
-        "endLine": 53,
+        "endLine": 55,
         "kind": "score",
-        "value": 3.89,
-        "confidence": 0.91
+        "value": 3,
+        "confidence": 0.79
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 0.06,
+        "confidence": 0.95
       },
       {
         "rule": "document-is-slop",
@@ -192,17 +336,17 @@
         "line": 1,
         "endLine": 83,
         "kind": "score",
-        "value": 0.09,
-        "confidence": 0.93
+        "value": 0.08,
+        "confidence": 0.94
       },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/ja-dense.md",
+        "file": "rules/markdown/document-is-slop/fixtures/throat-clearing-benchmark.md",
         "line": 1,
-        "endLine": 46,
+        "endLine": 31,
         "kind": "score",
-        "value": 0.01,
-        "confidence": 0.99
+        "value": 0.23,
+        "confidence": 0.81
       },
       {
         "rule": "document-is-slop",
@@ -212,45 +356,18 @@
         "kind": "score",
         "value": 3.98,
         "confidence": 0.98
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/opinion-monorepos.md",
-        "line": 1,
-        "endLine": 17,
-        "kind": "score",
-        "value": 0.08,
-        "confidence": 0.93
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/what-is-kubernetes.md",
-        "line": 1,
-        "endLine": 55,
-        "kind": "score",
-        "value": 3.02,
-        "confidence": 0.79
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/tutorial-git-rebase.md",
-        "line": 1,
-        "endLine": 111,
-        "kind": "score",
-        "value": 0.34,
-        "confidence": 0.72
-      },
+      }
+    ],
+    [
       {
         "rule": "document-is-slop",
         "file": "rules/markdown/document-is-slop/fixtures/fast-paced-world.md",
         "line": 1,
         "endLine": 33,
         "kind": "score",
-        "value": 3.94,
-        "confidence": 0.95
-      }
-    ],
-    [
+        "value": 3.96,
+        "confidence": 0.96
+      },
       {
         "rule": "document-is-slop",
         "file": "rules/markdown/document-is-slop/fixtures/confident-generalities.md",
@@ -262,30 +379,12 @@
       },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/ja-dense.md",
-        "line": 1,
-        "endLine": 46,
-        "kind": "score",
-        "value": 0.01,
-        "confidence": 0.99
-      },
-      {
-        "rule": "document-is-slop",
         "file": "rules/markdown/document-is-slop/fixtures/one-idea-five-paragraphs.md",
         "line": 1,
         "endLine": 13,
         "kind": "score",
-        "value": 3.6,
-        "confidence": 0.66
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/fast-paced-world.md",
-        "line": 1,
-        "endLine": 33,
-        "kind": "score",
-        "value": 3.95,
-        "confidence": 0.96
+        "value": 3.56,
+        "confidence": 0.63
       },
       {
         "rule": "document-is-slop",
@@ -298,21 +397,12 @@
       },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/ja-slop.md",
+        "file": "rules/markdown/document-is-slop/fixtures/padded-short-writeup.md",
         "line": 1,
-        "endLine": 53,
+        "endLine": 13,
         "kind": "score",
-        "value": 3.87,
-        "confidence": 0.89
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/postmortem.md",
-        "line": 1,
-        "endLine": 44,
-        "kind": "score",
-        "value": 0.01,
-        "confidence": 0.99
+        "value": 2.66,
+        "confidence": 0.65
       },
       {
         "rule": "document-is-slop",
@@ -320,8 +410,17 @@
         "line": 1,
         "endLine": 83,
         "kind": "score",
-        "value": 0.09,
-        "confidence": 0.92
+        "value": 0.08,
+        "confidence": 0.93
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-padded-short-writeup.md",
+        "line": 1,
+        "endLine": 13,
+        "kind": "score",
+        "value": 2.62,
+        "confidence": 0.63
       },
       {
         "rule": "document-is-slop",
@@ -334,6 +433,42 @@
       },
       {
         "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-throat-clearing-benchmark.md",
+        "line": 1,
+        "endLine": 30,
+        "kind": "score",
+        "value": 0.28,
+        "confidence": 0.76
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/tutorial-git-rebase.md",
+        "line": 1,
+        "endLine": 111,
+        "kind": "score",
+        "value": 0.38,
+        "confidence": 0.69
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-slop.md",
+        "line": 1,
+        "endLine": 53,
+        "kind": "score",
+        "value": 3.88,
+        "confidence": 0.9
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/mostly-solid-one-weak-section.md",
+        "line": 1,
+        "endLine": 21,
+        "kind": "score",
+        "value": 0.42,
+        "confidence": 0.65
+      },
+      {
+        "rule": "document-is-slop",
         "file": "rules/markdown/document-is-slop/fixtures/productivity-listicle.md",
         "line": 1,
         "endLine": 47,
@@ -343,21 +478,12 @@
       },
       {
         "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/readme-cli.md",
+        "file": "rules/markdown/document-is-slop/fixtures/postmortem.md",
         "line": 1,
-        "endLine": 77,
+        "endLine": 44,
         "kind": "score",
-        "value": 0.05,
-        "confidence": 0.96
-      },
-      {
-        "rule": "document-is-slop",
-        "file": "rules/markdown/document-is-slop/fixtures/tutorial-git-rebase.md",
-        "line": 1,
-        "endLine": 111,
-        "kind": "score",
-        "value": 0.32,
-        "confidence": 0.73
+        "value": 0.02,
+        "confidence": 0.99
       },
       {
         "rule": "document-is-slop",
@@ -365,15 +491,51 @@
         "line": 1,
         "endLine": 55,
         "kind": "score",
-        "value": 3.01,
-        "confidence": 0.79
+        "value": 3,
+        "confidence": 0.8
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/readme-cli.md",
+        "line": 1,
+        "endLine": 77,
+        "kind": "score",
+        "value": 0.06,
+        "confidence": 0.95
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/ja-dense.md",
+        "line": 1,
+        "endLine": 46,
+        "kind": "score",
+        "value": 0.01,
+        "confidence": 0.99
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/throat-clearing-benchmark.md",
+        "line": 1,
+        "endLine": 31,
+        "kind": "score",
+        "value": 0.23,
+        "confidence": 0.81
+      },
+      {
+        "rule": "document-is-slop",
+        "file": "rules/markdown/document-is-slop/fixtures/grounded-listicle.md",
+        "line": 1,
+        "endLine": 33,
+        "kind": "score",
+        "value": 1.68,
+        "confidence": 0.31
       }
     ]
   ],
   "spent": {
-    "calls": 39,
-    "inputTokens": 70491,
-    "usd": 0.002960622,
-    "ms": 548
+    "calls": 57,
+    "inputTokens": 94965,
+    "usd": 0.00398853,
+    "ms": 1055
   }
 }

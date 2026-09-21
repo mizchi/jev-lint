@@ -25,3 +25,15 @@ fixtures/tutorial-git-rebase.md:
   - { line: 1, label: clean, window: 0, reason: "hard clean: the five-round repetition is deliberate scaffolding and each round adds an operation and a different tree-hash outcome" }
 fixtures/ja-dense.md:
   - { line: 1, label: clean, window: 0, reason: "hard clean: 費用・p50/p99・req/s の実測値と筆者が実際にやった手順で構成され、一般論の段落がない" }
+fixtures/throat-clearing-benchmark.md:
+  - { line: 1, label: clean, window: 0, reason: "boundary hunt 2026-09-22: two generic throat-clearing paragraphs on why CI speed matters, then a dense, specific writeup -- sharding numbers, a before/after table, a measurement window -- for the rest of the document; the padding is a small fraction of the whole" }
+fixtures/padded-short-writeup.md:
+  - { line: 1, label: bad, window: 0, reason: "boundary hunt 2026-09-22: short onboarding writeup, generic top and bottom, and the middle names one figure ('about 15%') with no baseline, no time window and no sample size -- the number does not rescue a document this thin" }
+fixtures/grounded-listicle.md:
+  - { line: 1, label: bad, window: 0, reason: "boundary hunt 2026-09-22: a 7-item listicle with template intro/conclusion and stock transitions; 3 of 7 items carry a real figure (3 regressions, 2.1->1.3 days, a 340-line PR), the other 4 are pure platitude -- still a listicle in shape and in half its content" }
+fixtures/mostly-solid-one-weak-section.md:
+  - { line: 1, label: clean, window: 0, reason: "boundary hunt 2026-09-22: a dense, specific incident writeup (RSS figures, a heap-diff count, a fix and its result) with one generic closing paragraph about 'the value of debugging skills' -- one thin passage in an otherwise concrete document" }
+fixtures/ja-throat-clearing-benchmark.md:
+  - { line: 1, label: clean, window: 0, reason: "boundary hunt 2026-09-22 (ja): 冒頭2段落は一般論の前置きだが、以降は p50/p99・QPS・ヒット率の実測値と設計判断で埋まっている; throat-clearing-benchmark.md のミラー" }
+fixtures/ja-padded-short-writeup.md:
+  - { line: 1, label: bad, window: 0, reason: "boundary hunt 2026-09-22 (ja): 短いオンボーディング記事。冒頭と末尾は一般論、本文の数字は「約15%向上」のみで基準値も計測期間もない; padded-short-writeup.md のミラー" }
