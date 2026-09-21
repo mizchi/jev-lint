@@ -39,10 +39,28 @@ export function printDryRun(result: RunResult, rules: Rule[], opts: Options, out
   // predicates and not the loader, and that `$NAME` captured a name -- the
   // two things a wrong matcher gets wrong while producing a plausible count.
   if (result.commits) {
-    out(`${result.commits.total} commit(s) in ${result.commits.range}` + (result.commits.skippedMerges ? `, ${result.commits.skippedMerges} merge(s) skipped` : ""));
+    out(
+      `${result.commits.total} commit(s) in ${result.commits.range}` +
+        (result.commits.skippedMerges ? `, ${result.commits.skippedMerges} merge(s) skipped` : "") +
+        (result.commits.noInstructionDoc
+          ? `, ${result.commits.noInstructionDoc} commit(s) with no AGENTS.md/CLAUDE.md skipped for a change subject`
+          : ""),
+    );
+    // A commit rule and a change rule both put a subject on the same
+    // ref -- one quoting the message, one quoting the stat -- so the rule
+    // id has to lead the line or the two are indistinguishable. A change
+    // subject also names the documents it was judged against: `--dry-run`
+    // is the only place that says AGENTS.md is even in the request before
+    // anything is spent on it.
     for (const s of result.subjects) {
       const ref = /^[0-9a-f]{40}$/.test(s.file) ? s.file.slice(0, 8) : s.file;
-      out(`  ${ref}  "${s.captured?.SUBJECT ?? ""}"  ${s.commit?.files.length ?? 0} file(s)${s.commit?.truncated ? "  diff cut to fit" : ""}`);
+      const isChange = s.rule.subject === "change";
+      const against = isChange ? `  vs ${s.instructions!.docs.map((d) => d.file).join(", ")}` : "";
+      const cuts = [s.commit?.truncated ? "diff cut to fit" : null, isChange && s.instructions!.truncated ? "a document cut to fit" : null].filter(Boolean);
+      out(
+        `  ${ref}  ${s.rule.id}  "${s.captured?.SUBJECT ?? ""}"  ${s.commit?.files.length ?? 0} file(s)${against}` +
+          (cuts.length ? `  (${cuts.join(", ")})` : ""),
+      );
     }
   }
   if (opts.showSubjects && !result.commits) {
@@ -121,7 +139,23 @@ export function dryRunDocument(result: RunResult, rules: Rule[], opts: Options):
     commits: result.commits
       ? {
           ...result.commits,
-          subjects: result.subjects.map((s) => ({ sha: s.file, subject: s.captured?.SUBJECT ?? "", files: s.commit?.files.length ?? 0, truncated: s.commit?.truncated ?? false })),
+          // `kind` and `rule` are what the text plan uses the line prefix
+          // for: a commit subject and a change subject can share a `sha`,
+          // and only these two fields say which is which. `instructions`
+          // is null on a commit subject -- it never carries any -- and
+          // otherwise the documents a change subject was judged against.
+          subjects: result.subjects.map((s) => ({
+            sha: s.file,
+            rule: s.rule.id,
+            kind: s.rule.subject,
+            subject: s.captured?.SUBJECT ?? "",
+            files: s.commit?.files.length ?? 0,
+            truncated: s.commit?.truncated ?? false,
+            instructions:
+              s.rule.subject === "change" && s.instructions
+                ? { docs: s.instructions.docs.map((d) => d.file), truncated: s.instructions.truncated }
+                : null,
+          })),
         }
       : null,
     ...(opts.showSubjects && !result.commits
