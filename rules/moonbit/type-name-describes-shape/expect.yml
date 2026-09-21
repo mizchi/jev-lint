@@ -1,0 +1,42 @@
+default: clean
+fixtures/billing.mbt:
+  - line: 9
+    label: bad
+    window: 0
+    reason: "`CustomerId` says an identifier and holds a whole customer: a name, an email and an address."
+  - line: 16
+    label: bad
+    window: 0
+    reason: "`Settings` says configuration and holds diagnostics."
+  - line: 35
+    label: bad
+    window: 0
+    reason: "`Currencies` is plural over a type whose value is ONE currency. Labelled clean at first, on the argument that an enum lists several members; the rule flagged it at 0.41-0.50 and the argument does not hold -- a value of this type is a currency, and the name says a collection."
+  - line: 41
+    label: bad
+    window: 0
+    reason: "`Invoices` is plural over exactly one invoice."
+  - line: 57
+    label: bad
+    window: 0
+    reason: "`Comparable` says an ordering and its one method renders a string."
+  - line: 2
+    label: clean
+    window: 0
+    reason: "an invoice's id, lines and total."
+  - line: 22
+    label: clean
+    window: 0
+    reason: "hard clean: `Money` is an amount and a currency, which is what money is."
+  - line: 28
+    label: clean
+    window: 0
+    reason: "the states an invoice is in."
+  - line: 46
+    label: clean
+    window: 0
+    reason: "hard clean: a plural name over a shape that really does hold several of the thing -- two maps of them -- which is what the `Currencies` and `Invoices` defects above only look like."
+  - line: 52
+    label: clean
+    window: 0
+    reason: "hard clean: a trait named for what its one method produces."

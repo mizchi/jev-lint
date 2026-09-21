@@ -16,14 +16,13 @@ languages:
     extensions: [mbt]
     expandoChar: _
 rules:
+  comment-describes-block: on
+  comment-describes-declaration: on
+  doc-errors-match-body: on
   fn-name-promises: on
   idempotent-name: on
   pure-name-is-pure: on
   safe-name-is-safe: on
-  comment-describes-declaration: on
-  comment-describes-block: on
-  doc-errors-match-body: on
   test-name-verifies-claim: on
-  pure-name-is-pure: on
-  idempotent-name: on
-  safe-name-is-safe: on
+  type-name-describes-shape: on
+  var-name-describes-value: on

@@ -1,0 +1,71 @@
+# --------------------------------------------------------------------------
+# Does a type's name describe the shape it declares?
+# --------------------------------------------------------------------------
+#
+# The typescript copy's reasoning, in a language whose types are declared
+# rather than inferred: `struct`, `enum`, `type` and `trait`. A name is a
+# claim about the members the way a binding's name is a claim about its
+# value, and MoonBit's compiler sees the members and never the name.
+id: type-name-describes-shape
+language: moonbit
+kind: noul
+subject: node
+state: located
+# 0.28, fitted 2026-09-21 on the fixtures beside it (10 subjects: 5
+# defects, 5 cleans of which 4 hard, 3 passes). Cleans top at 0.13
+# (`Totals`, a plural name over two maps of the things), defects start at
+# 0.39-0.45 -- `Currencies`, plural over a type whose value is ONE
+# currency, and the weakest contradiction here. typescript's 0.42 sits
+# inside that one's band and flipped it across passes; the midpoint 0.28
+# clears it by 0.11 and the clean band by 0.15.
+at: 0.28
+axis: file
+severity: warning
+# The declaration forms, each named by the identifier directly under it.
+# `trait_definition` is included: a trait's name claims what its methods
+# do, which is the same claim in another shape. `type_definition` is the
+# newtype (`type Cents Int`). The alias (`typealias Int as Cents`) is NOT
+# matched: its own name is the second identifier inside
+# `type_alias_targets`, and capturing that one rather than the aliased
+# type needs positional matching this rule does not earn.
+rule:
+  any:
+    - all:
+        - kind: struct_definition
+        - has: { kind: identifier, pattern: $NAME }
+    - all:
+        - kind: enum_definition
+        - has: { kind: identifier, pattern: $NAME }
+    - all:
+        - kind: type_definition
+        - has: { kind: identifier, pattern: $NAME }
+    - all:
+        - kind: trait_definition
+        - has: { kind: identifier, pattern: $NAME }
+# The same sentence as typescript/type-name-describes-shape, by copy.
+ask: >-
+  This type's name ($NAME) misdescribes the shape it declares, judged
+  against its members and against how the file builds and uses values of
+  the type.
+criteria:
+  "true": >-
+    The name states a thing, unit, cardinality or role that the members do
+    not match: a singular name for a collection type, or a plural name for a
+    type whose members are one item and whose values the file handles one at
+    a time; a name naming one concept while the members and the code that
+    builds or consumes the type describe another, such as an identifier type
+    whose members are a session, or a settings or configuration type that a
+    function fills with results; a name that says the type is a result,
+    output or product when the type is only a success flag and the product
+    goes elsewhere; a name that says the type is a function, handler or
+    callback when the members are a data record; or a member whose declared
+    type contradicts the unit or kind its own name states, such as a
+    boolean-named member declared as a string or a count declared as a
+    boolean.
+  "false": >-
+    The members are what the name says they are. A name that is generic,
+    abbreviated, terse, or could be more specific is not a mismatch; nor is a
+    conventional name such as Props, Ctx, Row or Options; a branded primitive
+    that carries the name of what it identifies; an alias built from another
+    type by Partial, Pick, Omit or Readonly and named for that type; or a
+    plural name on a map or record keyed by the things it names.

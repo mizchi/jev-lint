@@ -1,0 +1,75 @@
+default: clean
+fixtures/report.mbt:
+  - line: 13
+    label: clean
+    window: 0
+    reason: "hard clean: a plural name bound to the count of those things. Labelled bad at first and answered 0.22-0.25 across three passes; the rust copy's own corpus has the same shape (`lines` bound to a count) as its highest CLEAN, so the convention was the label's, not the model's."
+  - line: 18
+    label: bad
+    window: 0
+    reason: "`slowest` is the first row; the loop beneath it compares and discards, so nothing ever makes it the slowest."
+  - line: 24
+    label: bad
+    window: 0
+    reason: "`is_empty` reads as a boolean and holds a length."
+  - line: 52
+    label: bad
+    window: 0
+    reason: "`seconds` is bound to a value the file names in milliseconds."
+  - line: 9
+    label: clean
+    window: 0
+    reason: "hard clean: a unit in the name, and the value is in that unit."
+  - line: 14
+    label: clean
+    window: 0
+    reason: "the sum of the rows' bytes."
+  - line: 25
+    label: clean
+    window: 0
+    reason: "hard clean: `lines` starts empty and the loop fills it with one string per row."
+  - line: 34
+    label: clean
+    window: 0
+    reason: "hard clean: the same shape as the `slowest` defect above, except this loop assigns, so the name comes true."
+  - line: 45
+    label: clean
+    window: 0
+    reason: "the column names."
+  - line: 46
+    label: clean
+    window: 0
+    reason: "hard clean: terse, and exactly what it is."
+fixtures/parse.mbt:
+  - line: 3
+    label: bad
+    window: 0
+    reason: "`path` holds the source split into lines, and every use of it treats it as lines."
+  - line: 4
+    label: bad
+    window: 0
+    reason: "`first_line` is the LAST element."
+  - line: 5
+    label: bad
+    window: 0
+    reason: "`has_header` reads as a boolean and holds the fields of a line."
+  - line: 6
+    label: clean
+    window: 0
+    reason: "starts empty and is filled with the lines."
+  - line: 16
+    label: clean
+    window: 0
+    reason: "hard clean: the same initializer as the `path` defect above, under the name it deserves."
+  - line: 17
+    label: clean
+    window: 0
+    reason: "the first line, which is the header."
+  - line: 23
+    label: clean
+    window: 0
+    reason: "the lines."
+  - line: 24
+    label: clean
+    window: 0
+    reason: "hard clean: the same index expression as the `first_line` defect above, under a name that says last."

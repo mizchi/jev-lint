@@ -1458,3 +1458,28 @@ would add subjects the sentence is false of by construction.
 Eight rules, 387 subjects across their fixtures, and the whole set
 replays with no parser on hand -- which is the point of shipping a rule
 for a grammar the reader compiles.
+
+The two remaining naming rules followed, and each moved a label:
+
+| rule | at | subjects | defects | cleans top at | defects start at |
+| --- | --- | --- | --- | --- | --- |
+| `var-name-describes-value` | 0.50 | 18 | 6 | 0.24 | 0.82 |
+| `type-name-describes-shape` | 0.28 | 10 | 5 | 0.13 | 0.39 |
+
+`names` bound to `rows.length()` was labelled a defect and answered
+0.22-0.25. The rust copy's corpus has that shape -- `lines` bound to a
+count -- as its highest CLEAN, so the family already reads a plural name
+over a count of those things as acceptable; the label was out of step
+with the family, not the model with the label.
+
+`Currencies`, an enum of two currencies, was labelled clean on the
+argument that an enum lists several members. The rule answered 0.39-0.45
+and the argument does not hold: a value of that type is one currency and
+the name says a collection. Relabelled, with a plural that IS several --
+`Totals`, two maps of them -- added as the clean twin. TypeScript's 0.42
+sits inside `Currencies`'s band and flipped it across passes, which is
+why this copy ships at 0.28: MoonBit's clean band for type names sits
+lower, topping at 0.13.
+
+Ten rules now, and the two that moved a label moved it the same way both
+times -- toward what the rest of the family already says.

@@ -1,0 +1,514 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:18:03.077Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/var-name-describes-value",
+  "rules": [
+    {
+      "id": "var-name-describes-value",
+      "draft": "953cc095f1ff",
+      "at": 0.5
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 3,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 4,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 23,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 46,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 46,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 3,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 4,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 23,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 3,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 4,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 5,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 6,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 17,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 23,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/parse.mbt",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 9,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 14,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 18,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 24,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 25,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 34,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 46,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "var-name-describes-value",
+        "file": "rules/moonbit/var-name-describes-value/fixtures/report.mbt",
+        "line": 52,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 41892,
+    "usd": 0.001759464,
+    "ms": 752
+  }
+}

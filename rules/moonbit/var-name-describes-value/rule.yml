@@ -1,0 +1,78 @@
+id: var-name-describes-value
+language: moonbit
+kind: noul
+subject: node
+# `located`, as in every other language: this rule is not separable on
+# `bare` -- the uses of the binding are what show the mismatch, and they
+# are in the file.
+state: located
+# 0.5, kept after the fit 2026-09-21 on the fixtures beside it (18
+# subjects: 6 defects, 12 cleans of which 5 are hard twins of a defect in
+# the same file, 3 passes). Cleans top at 0.24, defects start at 0.82; the
+# midpoint is 0.53 and 0.5 -- what rust and typescript take -- sits inside
+# the same gap, so the copies agree. 0.26 of headroom on the clean side.
+#
+# One label moved during the fit, and the argument is the reason, not the
+# answer: `names` bound to `rows.length()` was labelled a defect and
+# answered 0.22-0.25. The rust copy's own corpus has that shape (`lines`
+# bound to a count) as its HIGHEST clean, so the family already reads a
+# plural name over a count of those things as acceptable. The label was
+# out of step with the family, not the model with the label.
+at: 0.5
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: warning
+# Three shapes bind a name in MoonBit: `let`, `let mut` inside a body, and
+# a top-level `value_definition`. The grammar declares no fields, so the
+# name is the identifier under the binding; `stopBy: end` would reach into
+# the VALUE and capture an identifier from there, so each alternative names
+# the immediate child instead.
+rule:
+  any:
+    - all:
+        - kind: let_expression
+        - has: { kind: lowercase_identifier, pattern: $NAME }
+    - all:
+        - kind: let_mut_expression
+        - has: { kind: lowercase_identifier, pattern: $NAME }
+    - all:
+        - kind: value_definition
+        - has: { kind: lowercase_identifier, pattern: $NAME }
+# The same sentence as typescript/var-name-describes-value, by copy.
+ask: >-
+  This binding's name misdescribes the value it is bound to.
+criteria:
+  "true": >-
+    The name states a type, unit, shape, quantity or meaning that the
+    initializer does not produce: a plural name bound to a single item or a
+    singular name bound to a collection, a name that reads as a boolean bound to
+    something that is not one, a name naming one unit while the value is in
+    another, a name saying it holds a value while it holds a function or a
+    promise, or a name describing a different thing entirely from what the
+    initializer computes.
+  "false": >-
+    The name is an accurate description of what the initializer produces, even
+    if it is terse or a clearer name could be imagined. Being short or generic
+    is not a mismatch.
+note: >-
+  Compare the name with the initializer and with every use of the binding in
+  this file; a mismatch is one the code shows. It counts when the binding is
+  used as a different kind of thing from what the name says (a boolean name on a
+  value compared with a string, a number or a variant; a path name on contents
+  that are split into lines; a result name on a promise that is pushed or
+  awaited; a unit suffix on a value the code converts from or compares with
+  another unit); when the initializer selects a different element, part or field
+  from the one the name names (the first element under a name meaning the last,
+  the piece before a separator under a name meaning the piece after it, one
+  field of a record under the name of another of its fields); or when the name
+  asserts success or presence and the code then reads the value as a failure or
+  an absence. It does not count when the name is a convention rather than a
+  claim: a plural name on a number, which names the count of those things
+  whether the number is a literal or comes from a call; a short accumulator,
+  index or buffer name; a collection named for its role such as a set of seen
+  items or a list of pending work; a list of test inputs named for the class
+  they belong to and paired with the opposite class; a test binding named for
+  the scenario it exercises, such as the response to the unauthorized request or
+  to the request missing a field, which reads as an adjective and holds the
+  result of that scenario; or a name that gives the value's role or provenance
+  rather than its type.

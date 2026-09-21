@@ -1,0 +1,298 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:21:08.169Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/type-name-describes-shape",
+  "rules": [
+    {
+      "id": "type-name-describes-shape",
+      "draft": "ca74afd3ac93",
+      "at": 0.28
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 2,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 9,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 16,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.43,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 22,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 28,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 35,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 46,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 57,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.61,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 2,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 9,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 16,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.47,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 22,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 28,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 35,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 46,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 57,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 2,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 9,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 16,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.47,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 22,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 28,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 35,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 41,
+        "endLine": 43,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 46,
+        "endLine": 49,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 52,
+        "endLine": 54,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "type-name-describes-shape",
+        "file": "rules/moonbit/type-name-describes-shape/fixtures/billing.mbt",
+        "line": 57,
+        "endLine": 59,
+        "kind": "noul",
+        "value": 0.64,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 18219,
+    "usd": 0.000765198,
+    "ms": 724
+  }
+}
