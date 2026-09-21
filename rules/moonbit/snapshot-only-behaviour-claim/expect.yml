@@ -1,0 +1,50 @@
+default: clean
+fixtures/render_test.mbt:
+  - line: 12
+    label: bad
+    window: 0
+    reason: "the title claims a row is hidden; a recording of the whole output establishes nothing about that row."
+  - line: 17
+    label: bad
+    window: 0
+    reason: "the title claims an ordering; the snapshot records whatever order came out."
+  - line: 34
+    label: clean
+    window: 0
+    reason: "hard clean: the recorded content IS the escaped string, so the claim is pinned by the assertion. Labelled bad at first, on the argument that `moon test --update` would re-record it; the rule answered 0.25-0.29 and the argument does not single this test out -- it applies to every `inspect` equally, including the ones nobody would call weak. MoonBit's snapshot carries the expected output inline, which is the difference from the external snapshot this rule was written against."
+  - line: 2
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims only that it renders, which is what a recording establishes."
+  - line: 7
+    label: clean
+    window: 0
+    reason: "hard clean: the title labels the input rather than claiming a property of the output."
+  - line: 22
+    label: clean
+    window: 0
+    reason: "hard clean: the title claims the total is in the footer and the body asserts it before recording."
+  - line: 29
+    label: clean
+    window: 0
+    reason: "the title says snapshot and takes one."
+  - line: 39
+    label: clean
+    window: 0
+    reason: "hard clean: a variant labelled, not a property claimed."
+  - line: 44
+    label: clean
+    window: 0
+    reason: "no snapshot at all: an exact assertion under a title that names it."
+  - line: 49
+    label: bad
+    window: 0
+    reason: "the title claims a line is omitted; the recording shows what came out and says nothing about what did not."
+  - line: 54
+    label: bad
+    window: 0
+    reason: "the title claims a truncation at forty characters; the recorded content is the untruncated name, and `moon test --update` would keep it passing however the rule changed."
+  - line: 59
+    label: bad
+    window: 0
+    reason: "the title claims an alignment; the recording is a comma-separated pair that shows no columns at all."

@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:49:28.284Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/module-naming-consistent",
+  "rules": [
+    {
+      "id": "module-naming-consistent",
+      "draft": "98ec92ecbe63",
+      "at": 0.6
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/moonbit/module-naming-consistent/fixtures/queue.mbt",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/moonbit/module-naming-consistent/fixtures/store.mbt",
+        "line": 1,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/moonbit/module-naming-consistent/fixtures/cart.mbt",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/moonbit/module-naming-consistent/fixtures/cart.mbt",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/moonbit/module-naming-consistent/fixtures/queue.mbt",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/moonbit/module-naming-consistent/fixtures/store.mbt",
+        "line": 1,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/moonbit/module-naming-consistent/fixtures/cart.mbt",
+        "line": 1,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/moonbit/module-naming-consistent/fixtures/store.mbt",
+        "line": 1,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "module-naming-consistent",
+        "file": "rules/moonbit/module-naming-consistent/fixtures/queue.mbt",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 11373,
+    "usd": 0.000477666,
+    "ms": 600
+  }
+}

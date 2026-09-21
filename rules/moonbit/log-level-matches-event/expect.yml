@@ -1,0 +1,54 @@
+default: clean
+fixtures/worker.mbt:
+  - line: 13
+    label: bad
+    window: 0
+    reason: "the branch gives up and raises; `info` for the line that reports a failure the caller will see."
+  - line: 33
+    label: bad
+    window: 0
+    reason: "`error` for reading a cache on the ordinary path, where nothing has gone wrong."
+  - line: 39
+    label: bad
+    window: 0
+    reason: "`debug` for dropping every record of a tenant: the one line someone reading the log after the fact needs."
+  - line: 66
+    label: bad
+    window: 0
+    reason: "`debug` for a corrupt file that was discarded: data was lost and the level says routine detail."
+  - line: 11
+    label: clean
+    window: 0
+    reason: "the start of a job, at debug."
+  - line: 16
+    label: clean
+    window: 0
+    reason: "an ordinary completion, at info."
+  - line: 22
+    label: clean
+    window: 0
+    reason: "hard clean: `error` on the branch that gives up and raises -- the twin of the `info` defect above, at the level that branch earns."
+  - line: 26
+    label: clean
+    window: 0
+    reason: "hard clean: `warn` for a connection that succeeded after retries -- a degradation, not a failure."
+  - line: 28
+    label: clean
+    window: 0
+    reason: "a successful connection, at debug."
+  - line: 45
+    label: clean
+    window: 0
+    reason: "hard clean: `warn` for a shutdown that drops queued work, which is a degradation and not a failure."
+  - line: 47
+    label: clean
+    window: 0
+    reason: "an ordinary completion, at info."
+  - line: 53
+    label: clean
+    window: 0
+    reason: "hard clean: skipping an empty line is exactly the routine detail `debug` is for."
+  - line: 61
+    label: clean
+    window: 0
+    reason: "a count flushed, at info, through a logger value rather than the package."

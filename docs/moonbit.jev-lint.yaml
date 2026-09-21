@@ -16,13 +16,21 @@ languages:
     extensions: [mbt]
     expandoChar: _
 rules:
+  catch-hides-failure: on
   comment-describes-block: on
   comment-describes-declaration: on
   doc-errors-match-body: on
+  error-message-matches-condition: on
   fn-name-promises: on
   idempotent-name: on
+  log-level-matches-event: on
+  module-name-describes-contents: on
+  module-naming-consistent: on
   pure-name-is-pure: on
   safe-name-is-safe: on
+  snapshot-only-behaviour-claim: on
+  test-name-describes-code: on
   test-name-verifies-claim: on
+  tests-cover-failure-paths: on
   type-name-describes-shape: on
   var-name-describes-value: on

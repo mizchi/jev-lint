@@ -1,0 +1,352 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:49:27.353Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/snapshot-only-behaviour-claim",
+  "rules": [
+    {
+      "id": "snapshot-only-behaviour-claim",
+      "draft": "c00501505b10",
+      "at": 0.55
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 2,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 54,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 59,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 2,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.42,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.71,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 54,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 59,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 2,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.46,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 22,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 34,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 39,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 49,
+        "endLine": 51,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 54,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "snapshot-only-behaviour-claim",
+        "file": "rules/moonbit/snapshot-only-behaviour-claim/fixtures/render_test.mbt",
+        "line": 59,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 20412,
+    "usd": 0.000857304,
+    "ms": 777
+  }
+}

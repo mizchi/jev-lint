@@ -1523,3 +1523,35 @@ against TypeScript's 0.42, `error-message` at 0.76 against 0.65,
 `fn-name-promises` at 0.44 against 0.55, `comment-describes-block` kept
 at rust's 0.45 with its miss. MoonBit's clean bands sit lower for names
 and higher for messages.
+
+Three more, and what was left after them:
+
+| rule | at | subjects | defects |
+| --- | --- | --- | --- |
+| `log-level-matches-event` | 0.60 | 13 | 4 |
+| `module-naming-consistent` | 0.60 | 3 files | 1 |
+| `snapshot-only-behaviour-claim` | 0.55 | 12 | 5 |
+
+MoonBit's standard library logs with `println`, which carries no level,
+so the log rule matches a package call (`@log.warn("...")`, the package
+being any identifier with `log` in it) or a method on a logger value. A
+project that logs without levels has no subject here, and the run says
+the rule matched nothing rather than reporting silence as health.
+
+The snapshot rule is the one the language changed. MoonBit's snapshot is
+`inspect(value, content="...")`, with the expected output inline rather
+than in a file beside the test, so a claim the content SHOWS is pinned by
+the assertion: `content="a&amp;b"` establishes the escaping. Labelled a
+defect at first on the argument that `moon test --update` would re-record
+it -- but that argument does not single the case out, since it applies to
+every `inspect` equally. The defect class narrows to a title claiming
+what the recording cannot show: an absence, an alignment, a truncation
+the content does not carry. Five such cases answer 0.68-0.88 against a
+clean band topping at 0.43, and typescript's 0.67 sits 0.01 under the
+weakest defect, so this copy takes the midpoint.
+
+Eighteen rules. What does not port: `describe-names-subject` and
+`test-mocks-subject` (MoonBit writes neither), `must-name-panics` (Go's
+`Must*` convention), and `log-message-matches-event`, which would take
+the same matcher as the level rule and has not been given fixtures of its
+own yet.

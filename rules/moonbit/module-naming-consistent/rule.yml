@@ -1,0 +1,42 @@
+id: module-naming-consistent
+language: moonbit
+kind: noul
+subject: file
+state: graph
+axis: file
+# 0.6, kept after the fit 2026-09-21 on the fixtures beside it (3 files:
+# 1 defect, 2 cleans, 3 passes). The defect is a store whose three
+# operations each carry two verbs -- get and fetch, put and save, delete
+# and drop -- at 0.84; the cleans are a queue with four verbs for four
+# operations (0.16) and a two-export cart. typescript's 0.6 sits in the
+# gap. The corpus is small because the subject is a whole file: three
+# files is three subjects.
+at: 0.6
+severity: info
+# The file's root: the subject is the module outline, not the source, so
+# the matcher fires once per file.
+rule:
+  kind: structure
+# The same sentence as typescript/module-naming-consistent, by copy.
+ask: This module's public items use different verbs for the same kind of operation.
+criteria:
+  "true": "Two or more public items do the same kind of thing -- the same
+    operation applied to different nouns, with the same shape of signature --
+    yet their names use different verbs for it: synonyms such as get, fetch,
+    load and retrieve for identical lookups; create, make, new and build for
+    identical constructors; set, update, change and modify for identical
+    setters; send beside dispatch for identical deliveries; or a function that
+    returns a boolean answer like its siblings but is named with a command verb
+    (check, verify, validate) where the siblings are named is, has or can. Swap
+    the nouns and the items would be interchangeable; only the verb differs."
+  "false": "Every difference in verb marks a difference in what the item does, and
+    the difference is visible here: a synchronous read from a cache beside an
+    asynchronous fetch over the network, a lookup by id (get) beside a search by
+    criteria (find), a conventional inverse pair such as parse/stringify or
+    encode/decode, or verbs naming distinct operations such as create, cancel
+    and list. A module with one public item, or whose public items each do a
+    different thing, has nothing to be inconsistent about."
+note: Judge the public items against each other. Private helpers, imports and
+  call edges are evidence of what each public item does, not subjects. Different
+  nouns are expected; the question is only whether the verbs disagree about the
+  same operation.

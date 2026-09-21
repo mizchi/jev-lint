@@ -1108,7 +1108,7 @@ Four things decide whether it works, each measured on MoonBit:
   `has: { field: name, ... }` matches nothing there; `has: { kind:
   function_identifier, stopBy: end, pattern: $NAME }` is the way to
   capture a name.
-- **Rules for it may ship.** `rules/moonbit/` is in the package: fifteen
+- **Rules for it may ship.** `rules/moonbit/` is in the package: eighteen
   ports -- every rule of this tool that a MoonBit file can carry -- each
   fitted on its own fixtures. They load
   anywhere -- `rules`, `eval --replay` and RULES.md read rules without

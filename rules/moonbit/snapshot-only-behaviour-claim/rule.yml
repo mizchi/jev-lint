@@ -1,0 +1,48 @@
+id: snapshot-only-behaviour-claim
+language: moonbit
+kind: noul
+subject: node
+state: located
+# 0.55, fitted 2026-09-21 on the fixtures beside it (12 subjects: 5
+# defects, 7 cleans of which 5 hard, 3 passes). Cleans top at 0.43 (a
+# title that labels the INPUT -- "the receipt for a two-line cart"),
+# defects start at 0.68. typescript ships at 0.67, which here sits 0.01
+# under the weakest defect; the midpoint leaves 0.12 a side.
+#
+# MoonBit's snapshot is `inspect(value, content="...")`, with the expected
+# output inline rather than in a file beside the test. That narrows what
+# this rule is about: a claim the recorded content SHOWS is pinned by the
+# assertion -- an escaped `a&amp;b` in the content establishes the
+# escaping -- and the defect is a title claiming what the recording cannot
+# show: an absence, an alignment, a truncation the content does not carry.
+at: 0.55
+axis: file
+severity: warning
+# `test "..." { }`, the same subject the two test rules take. MoonBit's
+# snapshot assertion is `inspect(value, content="...")` -- and
+# `@json.inspect` beside it -- which records whatever the output was; the
+# sentence asks whether the title claims a property a recording cannot
+# isolate.
+rule:
+  all:
+    - kind: test_definition
+    - has: { kind: string_literal, stopBy: end, pattern: $TITLE }
+# The same sentence as typescript/snapshot-only-behaviour-claim, by copy.
+ask: This test's name claims a specific behaviour, but the body only compares a
+  snapshot.
+criteria:
+  "true": The title asserts a property of the output -- an ordering, an element
+    hidden or shown, a particular state or branch rendered under a condition
+    ("renders the empty state when the list is empty"), a format or conversion
+    applied -- and the only assertions are toMatchSnapshot,
+    toMatchInlineSnapshot or toMatchFileSnapshot over a whole rendering, so
+    nothing in the test isolates the named property from everything else in the
+    output.
+  "false": The title claims only that the output matches a snapshot, or that
+    something renders, or it only names the input the snapshot was taken of
+    ("renders the list for three users") without asserting a property of the
+    output; or at least one assertion targets the named behaviour directly; or
+    the inline snapshot is a short literal that is itself the named outcome.
+note: A snapshot beside a targeted assertion is fine. "Renders X for input Y" is
+  a label for the snapshot; "renders X when Y" or "hides/sorts/formats X" is a
+  claim the snapshot does not isolate.

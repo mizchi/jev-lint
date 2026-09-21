@@ -1,0 +1,16 @@
+default: clean
+fixtures/store.mbt:
+  - line: 1
+    label: bad
+    window: 0
+    reason: "three operations, each under two verbs: get and fetch, put and save, delete and drop. A caller has to know which half of the module they are in."
+fixtures/queue.mbt:
+  - line: 1
+    label: clean
+    window: 0
+    reason: "hard clean: push, pop, peek and count -- four different operations, four verbs, none of them two names for one thing."
+fixtures/cart.mbt:
+  - line: 1
+    label: clean
+    window: 0
+    reason: "two exports and a struct, with nothing to be inconsistent about."

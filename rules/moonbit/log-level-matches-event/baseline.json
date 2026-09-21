@@ -1,0 +1,379 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T04:49:27.660Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/log-level-matches-event",
+  "rules": [
+    {
+      "id": "log-level-matches-event",
+      "draft": "47133e99a673",
+      "at": 0.6
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 33,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 66,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 33,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 66,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 11,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 13,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 16,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 22,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 26,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 28,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 33,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 39,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.66,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 45,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 47,
+        "endLine": 47,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 53,
+        "endLine": 53,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 61,
+        "endLine": 61,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "log-level-matches-event",
+        "file": "rules/moonbit/log-level-matches-event/fixtures/worker.mbt",
+        "line": 66,
+        "endLine": 66,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 24741,
+    "usd": 0.001039122,
+    "ms": 291
+  }
+}
