@@ -39,6 +39,7 @@ const files = [
   "text",
   "commits",
   "instructions",
+  "directives",
   "evals",
   "retry",
   "config",
