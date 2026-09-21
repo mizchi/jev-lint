@@ -121,15 +121,13 @@ In `src/types.ts`, in the `RuleSource` union, change the commit arm's `subject` 
     }
 ```
 
-And update `MatcherRule` and `isMatcherRule` below it:
+And `MatcherRule` below it stays as it is:
 
 ```ts
 export type MatcherRule = Rule & { subject: "node" | "enclosing" | "file" };
-
-export function isMatcherRule(rule: Rule): rule is MatcherRule {
-  return rule.subject !== "commit" && rule.subject !== "change" && rule.subject !== "block";
-}
 ```
+
+`isMatcherRule` is rewritten in Step 4, once `isGitSubject` exists.
 
 - [ ] **Step 4: Accept it in the loader**
 
@@ -139,12 +137,24 @@ In `src/rules.ts`, line 289, the default-state expression:
   const state = raw.state === undefined ? (isGitSubject(source.subject) || source.subject === "block" ? "bare" : "located") : raw.state;
 ```
 
-and at the top of the validation block (replacing `const isCommit = subject === "commit";` at line 396):
+and at the top of the validation block (replacing `const isCommit = subject === "commit";` at line 396). Call the helper rather than
+re-deriving the condition: two answers to "which subjects does git build"
+in one file is how the third one gets missed. Aliased-condition narrowing
+makes `subject` a `"commit" | "change"` inside the branch, which is what
+line 459 needs:
 
 ```ts
   // `commit` and `change` are both built from git: no matcher, the Git
   // pseudo-grammar, and `state: bare` because there is no file to locate in.
-  const isGit = subject === "commit" || subject === "change";
+  const isGit = isGitSubject(subject);
+```
+
+For that narrowing to mean anything, `subject` has to be typed. It is read
+off `raw` and is `any`; the `SUBJECTS.includes` check on the next line is
+what makes the annotation honest:
+
+```ts
+  const subject: SubjectMode = raw.subject === undefined ? "node" : raw.subject;
 ```
 
 Replace every use of `isCommit` in that function with `isGit`, and make the four error messages name the subject the rule actually declared so a `change` rule is not told about commits:
@@ -156,10 +166,10 @@ Replace every use of `isCommit` in that function with `isGit`, and make the four
     return { error: `${id}: \`Git\` is the grammar of \`subject: commit\` and \`subject: change\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
 ```
 ```ts
-      return { error: `${id}: a \`subject: ${subject}\` rule takes no matcher; its subjects are ${subject === "commit" ? "commits" : "changes"}, not nodes` };
+      return { error: `${id}: a \`subject: ${subject}\` rule takes no matcher; its subjects are ${subject}s, not nodes` };
 ```
 ```ts
-      return { error: `${id}: a \`subject: ${subject}\` rule is \`state: bare\`; the diff is its state and there is no file to locate in` };
+      return { error: `${id}: a \`subject: ${subject}\` rule is \`state: bare\`; its state is built from git and there is no file to locate in` };
 ```
 
 At line 459, widen the returned source arm:
@@ -170,10 +180,23 @@ At line 459, widen the returned source arm:
 
 Add the helper beside `isMatcherRule` in `src/types.ts`:
 
+A type predicate, like its neighbour `isMatcherRule`, and over
+`SubjectMode` rather than `string`: a `string` parameter accepts
+`"commmit"` and narrows nothing, and this signature is a contract the
+remaining thirteen tasks consume.
+
 ```ts
-/** The two subjects git builds: no matcher, `language: Git`, `state: bare`. */
-export function isGitSubject(subject: string): boolean {
+/** The two subjects git builds; see the union arm for what each judges. */
+export function isGitSubject(subject: SubjectMode): subject is "commit" | "change" {
   return subject === "commit" || subject === "change";
+}
+```
+
+`isMatcherRule` then reuses it and still narrows to `MatcherRule`:
+
+```ts
+export function isMatcherRule(rule: Rule): rule is MatcherRule {
+  return !isGitSubject(rule.subject) && rule.subject !== "block";
 }
 ```
 
@@ -185,6 +208,40 @@ Finally, `src/types.ts:118` enumerates the valid values, which is what
 ```ts
 export const SUBJECTS = ["node", "enclosing", "file", "commit", "change", "block"] as const;
 ```
+
+Finally, pin the messages. The four edits above are the substance of this
+task, and a test that only asserts `/takes no matcher/` passes just as well
+against the old hardcoded "commit" wording. Add to each of the two
+rejection tests an assertion that the message names the subject that was
+declared:
+
+```ts
+  assert.match(String(error), /subject: change/);
+```
+
+and add the third rejection path, which the tests above skip — the commit
+rule's equivalent is at `test/rules.test.ts:158`:
+
+```ts
+test("rules: a `subject: change` rule cannot ask for a state, since there is no file to locate in", () => {
+  const { error } = normalizeRule({
+    id: "x",
+    language: "Git",
+    subject: "change",
+    kind: "noul",
+    state: "located",
+    ask: "a",
+    criteria: { true: "y", false: "n" },
+  });
+  assert.match(String(error), /subject: change/);
+  assert.match(String(error), /state: bare/);
+});
+```
+
+While in that file: the comment above the existing commit-rule test says
+`subject: commit` is "the one subject with no ast-grep matcher". As of this
+task there are two. This repository ships a rule for comments that stopped
+being true; do not leave one in its own test file.
 
 - [ ] **Step 5: Run the tests to verify they pass**
 
