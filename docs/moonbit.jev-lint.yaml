@@ -1,0 +1,21 @@
+# The config for working on the MoonBit rules in this repository, named
+# explicitly: `jev-lint eval rules/moonbit --config docs/moonbit.jev-lint.yaml`.
+# It is not the repository's own config -- two in one directory is an error,
+# and jev-lint's own source has no MoonBit in it.
+#
+# The parser is not in the repository: it is a 1.2 MB platform-specific
+# library. Build it once with
+#
+#   npm run parsers:moonbit
+#
+# which clones moonbitlang/tree-sitter-moonbit and writes
+# .jev-lint/parsers/moonbit.dylib (gitignored).
+languages:
+  moonbit:
+    libraryPath: ../.jev-lint/parsers/moonbit.dylib
+    extensions: [mbt]
+    expandoChar: _
+rules:
+  fn-name-promises: on
+  comment-describes-declaration: on
+  test-name-verifies-claim: on

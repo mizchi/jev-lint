@@ -1,0 +1,38 @@
+default: clean
+fixtures/cart_test.mbt:
+  - line: 12
+    label: bad
+    window: 0
+    reason: "the title says the total is zero; `>= 0` holds whatever the total is."
+  - line: 17
+    label: bad
+    window: 0
+    reason: "the title says the line is dropped; a length over zero holds whether or not it was."
+  - line: 53
+    label: bad
+    window: 0
+    reason: "the title says it reports an empty cart; the body asserts the answer is a non-empty string, which it is for any cart."
+  - line: 7
+    label: clean
+    window: 0
+    reason: "hard clean: a terse assertion, but it is the number the title names."
+  - line: 23
+    label: clean
+    window: 0
+    reason: "the title says the cart is left alone, and the body asserts which lines are still there. It asserted the LENGTH first, and the rule flagged it at 0.90 across three passes: two lines can be two other lines, so a count is not the claim. The rule was right and the fixture was wrong."
+  - line: 29
+    label: clean
+    window: 0
+    reason: "the discounted total is asserted exactly."
+  - line: 34
+    label: clean
+    window: 0
+    reason: "hard clean: the expected value is computed rather than written out, and it is still the claim."
+  - line: 40
+    label: clean
+    window: 0
+    reason: "hard clean: the assertion is a match that fails on the wrong branch rather than an `assert_eq`."
+  - line: 48
+    label: clean
+    window: 0
+    reason: "terse and exact."

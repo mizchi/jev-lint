@@ -35,6 +35,7 @@ import {
   LANGUAGES,
   LANGUAGE_DIRS,
   PROBE_PREFIX,
+  SHIPPED_CUSTOM_LANGUAGES,
   STATE_ARMS,
   SUBJECTS,
   type CustomLanguages,
@@ -180,8 +181,29 @@ export function normalizeLanguage(raw: unknown, custom: CustomLanguages = {}): L
   // A declared language comes back spelled as the declaration spells it:
   // ast-grep matches a rule's `language:` against its sgconfig key exactly,
   // and `MoonBit` against a `moonbit:` key is "cannot parse rule".
-  const declared = Object.keys(custom).find((name) => name.toLowerCase() === t.toLowerCase());
-  return declared ?? null;
+  const names = [...Object.keys(custom), ...Object.keys(SHIPPED_CUSTOM_LANGUAGES)];
+  return names.find((name) => name.toLowerCase() === t.toLowerCase()) ?? null;
+}
+
+/** The file extensions a declared or shipped-for custom language claims. */
+export function extensionsOf(language: string, custom: CustomLanguages): string[] {
+  return custom[language]?.extensions ?? SHIPPED_CUSTOM_LANGUAGES[language]?.extensions ?? [];
+}
+
+/**
+ * The languages among these rules that need a parser nobody declared, in
+ * the order first seen. Their rules cannot be scanned with: ast-grep has
+ * no grammar for them until a config names the library.
+ */
+export function undeclared(rules: Rule[], custom: CustomLanguages): string[] {
+  const out: string[] = [];
+  for (const rule of rules) {
+    for (const l of rule.languages) {
+      if (custom[l] || !SHIPPED_CUSTOM_LANGUAGES[l] || out.includes(l)) continue;
+      out.push(l);
+    }
+  }
+  return out;
 }
 
 /**

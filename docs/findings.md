@@ -1377,3 +1377,41 @@ does not save -- answered 0.79 against a 0.55 cutoff while `total` and
 
 No MoonBit rule ships. A shipped rule needs fixtures, an accepted
 baseline and a fitted cutoff, and the cutoff above is a guess.
+
+## 18. Three rules in MoonBit
+
+Ported from the languages that have them, with fixtures written against
+the real parser and fitted over three passes. 15, 13 and 9 subjects;
+precision and recall 1.00 at each fitted cutoff.
+
+| rule | at | fitted | cleans top at | defects start at |
+| --- | --- | --- | --- | --- |
+| `fn-name-promises` | 0.44 | 0.43 | 0.27 | 0.61 |
+| `comment-describes-declaration` | 0.59 | 0.57 | 0.24 | 0.91 |
+| `test-name-verifies-claim` | 0.62 | 0.68 | 0.49 | 0.86 |
+
+Three things the language changed:
+
+- **Names, not fields.** That grammar declares no fields, so
+  `has: { field: name }` is `has: { kind: function_identifier, stopBy:
+  end, pattern: $NAME }`. A `test "…" { }` is a `test_definition` whose
+  title is a `string_literal`, not a call, so the ECMAScript
+  `jev-test-call` util has nothing to do with it and the matcher is two
+  lines.
+- **A doc comment is several comments.** MoonBit writes `///|` and then
+  `/// …`, and the grammar calls each line a `comment`; `follows` takes
+  the line directly above, so `$DOC` is the block's last line. The state
+  carries the file, so the rest is visible, and the case where the
+  captured comment is the bare `///|` separator is the corpus's hardest
+  clean at 0.27.
+- **The rule was right and the fixture was wrong, once.** `remove_sku
+  leaves a cart without that sku alone`, asserting `kept.length() == 2`,
+  was labelled clean and flagged 0.89-0.90 across three passes. Two lines
+  can be two other lines: a count is not the claim. The fixture now
+  asserts the skus, and the reason in `expect.yml` records that the label
+  moved because the argument stood, not because the model said so.
+
+The cutoffs sit where the other languages' do (`typescript` 0.55 / 0.56 /
+0.62), except `fn-name-promises`, whose MoonBit cleans answered lower
+than the TypeScript ones; the fit is the midpoint of its own gap and the
+guess it replaced, 0.55, would have caught every defect here anyway.

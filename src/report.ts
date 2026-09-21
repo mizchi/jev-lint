@@ -142,6 +142,14 @@ export function formatPretty(
       c.dim(`no files for ${idle.map((l) => `${l.language} (${l.rules} rule${l.rules === 1 ? "" : "s"})`).join(", ")}`),
     );
   }
+  if (result.undeclared?.length) {
+    out.push(
+      c.yellow(
+        `${result.undeclared.join(", ")}: no parser declared, so those rules did not run. ` +
+          "ast-grep has no grammar for them until `languages:` in the config names the compiled library.",
+      ),
+    );
+  }
   const silent = silentRules(result);
   if (silent.length > 0) {
     out.push(

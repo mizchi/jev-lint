@@ -1,0 +1,271 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T03:48:56.545Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/test-name-verifies-claim",
+  "rules": [
+    {
+      "id": "test-name-verifies-claim",
+      "draft": "587b27c4e929",
+      "at": 0.62
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 34,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 48,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 53,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 34,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 48,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 53,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 7,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.45,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 12,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 17,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 23,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 34,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 40,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 48,
+        "endLine": 50,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/moonbit/test-name-verifies-claim/fixtures/cart_test.mbt",
+        "line": 53,
+        "endLine": 56,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 15792,
+    "usd": 0.0006632640000000001,
+    "ms": 313
+  }
+}

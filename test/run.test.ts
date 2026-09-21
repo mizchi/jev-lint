@@ -5,6 +5,8 @@ import { join, sep } from "node:path";
 import { planBatches } from "../src/batch.ts";
 import { commitFixtureSubjects } from "../src/commits.ts";
 import { evalCorpus } from "../src/evals.ts";
+import { undeclared } from "../src/rules.ts";
+import { SHIPPED_CUSTOM_LANGUAGES } from "../src/types.ts";
 import { decide, blocks } from "../src/gate.ts";
 import { JevError } from "../src/jev.ts";
 import { buildQuestion } from "../src/questions.ts";
@@ -102,6 +104,33 @@ await testAsync("run: `exclude` keeps a path under the roots out of the subjects
     const some = await collectSubjects({ rules: [code, block], paths: ["src"], cwd: dir, exclude: ["src/fixtures"] });
     assert.deepEqual(some.subjects.map((s) => s.file), ["src/a.ts"]);
     assert.equal(some.excluded, 2);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("run: a rule for a language nobody declared a parser for is dropped, and the run names the language", async () => {
+  // The shipped `moonbit` rules load anywhere; they can only be SCANNED
+  // where a config names the compiled parser. Handing them to ast-grep
+  // without one fails the whole scan, and dropping them without a word
+  // would report a language's worth of nothing.
+  const { collectSubjects } = await import("../src/run.ts");
+  const dir = mkdtempSync(join(tmpdir(), "jev-undeclared-"));
+  try {
+    writeFileSync(join(dir, "a.ts"), "export function a() {}\n");
+    writeFileSync(join(dir, "a.mbt"), "///|\npub fn a() -> Int {\n  1\n}\n");
+    const mbt = noulRule({ id: "m", language: "moonbit", rule: { kind: "function_definition" } });
+    const ts = noulRule({ id: "t", language: "TypeScript", rule: { kind: "function_declaration" } });
+    const { subjects, undeclared } = await collectSubjects({ rules: [mbt, ts], paths: ["."], cwd: dir });
+    assert.deepEqual(subjects.map((s) => s.rule.id), ["t"]);
+    assert.deepEqual(undeclared, ["moonbit"]);
+    // With no file of that language under the paths there is nothing the
+    // parser would have been used on, and nothing to tell anyone about:
+    // a repository with no MoonBit in it would otherwise carry the notice
+    // on every run for a rule its config selected by a bare id.
+    rmSync(join(dir, "a.mbt"));
+    const noMbt = await collectSubjects({ rules: [mbt, ts], paths: ["."], cwd: dir });
+    assert.deepEqual(noMbt.undeclared, []);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -329,8 +358,18 @@ await testAsync("end to end: every shipped rule finds subjects in its own evals,
   // there is no answer to assert. That the rules separate their classes is
   // what `jev-lint eval` measures, against each rule's evals/baseline.json.
   const { collectSubjects } = await import("../src/run.ts");
-  const { rules } = loadRules(["rules"]);
-  const { paths, labels } = evalCorpus(["rules"]);
+  const { rules: everyRule } = loadRules(["rules"]);
+  // A rule for a grammar ast-grep does not have built in cannot be scanned
+  // here: its parser is a library the reader of this suite compiles, not
+  // something the repository carries. Those rules and their fixtures are
+  // left out, and the set is asserted so the exclusion cannot widen in
+  // silence. What checks them is `jev-lint eval` against their baselines.
+  const needParser = undeclared(everyRule, {});
+  assert.deepEqual(needParser, Object.keys(SHIPPED_CUSTOM_LANGUAGES));
+  const rules = everyRule.filter((r) => !r.languages.some((l) => needParser.includes(l)));
+  const { paths: everyPath, labels: everyLabel } = evalCorpus(["rules"]);
+  const paths = everyPath.filter((p) => !needParser.some((l) => p.includes(`${sep}${l}${sep}`)));
+  const labels = Object.fromEntries(Object.entries(everyLabel).filter(([f]) => !needParser.some((l) => f.includes(`${sep}${l}${sep}`))));
   assert.ok(paths.length >= 15, `expected a cases directory per rule, got ${paths.length}`);
   const { subjects: fromFiles } = await collectSubjects({ rules, paths });
   // A commit suite's fixtures are patches, judged as commits of a throwaway

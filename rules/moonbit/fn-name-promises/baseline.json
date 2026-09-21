@@ -1,0 +1,433 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-21T03:48:56.207Z",
+  "model": "jev-1.13.0",
+  "suite": "moonbit/fn-name-promises",
+  "rules": [
+    {
+      "id": "fn-name-promises",
+      "draft": "87e835b15e96",
+      "at": 0.44
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 18,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 25,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 33,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 44,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 55,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 60,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 10,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 15,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 24,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 33,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.61,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 42,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 47,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 58,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 67,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 18,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 25,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 33,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 44,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 55,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 60,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 10,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 15,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 24,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 33,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 42,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 47,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 58,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 67,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 10,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 15,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 24,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 33,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.58,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 42,
+        "endLine": 44,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 47,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 58,
+        "endLine": 64,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/cart.mbt",
+        "line": 67,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 18,
+        "endLine": 22,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 25,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.27,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 33,
+        "endLine": 41,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 44,
+        "endLine": 52,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 55,
+        "endLine": 57,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/moonbit/fn-name-promises/fixtures/session.mbt",
+        "line": 60,
+        "endLine": 69,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 6,
+    "inputTokens": 27246,
+    "usd": 0.001144332,
+    "ms": 245
+  }
+}

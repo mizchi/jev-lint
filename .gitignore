@@ -5,6 +5,10 @@ node_modules/
 # so it pays the warm pass instead. Whichever you pick, treat it as trusted
 # input -- anything that can edit it can silence a rule.
 .jev-lint/baseline.json
+
+# Built tree-sitter parsers: a megabyte each, and platform-specific.
+# `npm run parsers:moonbit` writes one; docs/moonbit.jev-lint.yaml names it.
+.jev-lint/parsers/
 *.tmp
 .jev-lint-self.json
 dist/

@@ -1,0 +1,59 @@
+id: test-name-verifies-claim
+language: moonbit
+kind: noul
+subject: node
+# `bare`, as the other languages' copies: the subject already holds both
+# things being compared -- the title and the body the matcher captured --
+# and the file adds no evidence.
+state: bare
+# 0.62, kept after the fit 2026-09-21 on the fixtures beside it (9 subjects:
+# 3 defects, 6 cleans, 3 passes). Cleans top at 0.48 (`first_line returns
+# None`, whose assertion is a match that fails on the wrong branch rather
+# than an assert_eq), defects start at 0.86; the midpoint is 0.67 and
+# typescript's 0.62 sits inside the same gap, so the copies agree.
+at: 0.62
+axis: file
+severity: warning
+# `test "name" { ... }`: the string is the claim and the block is the body.
+# A test with no title (`test { ... }`) claims nothing, so the title is
+# required rather than optional.
+rule:
+  all:
+    - kind: test_definition
+    - has: { kind: string_literal, stopBy: end, pattern: $TITLE }
+# The same sentence as typescript/test-name-verifies-claim, by copy.
+ask: >-
+  This test would still pass if the behaviour its name claims were broken.
+# The note is what moved the label-only snapshot cleans ("renders", "matches
+# the snapshot for a three-item order") from 0.50-0.55 to 0.32-0.41 while
+# keeping the snapshot-under-a-claim defects at 0.55-0.76. Two things were
+# tried and measured worse: a criteria rewrite that spelled the snapshot
+# reasoning out in the true branch lifted EVERY snapshot test to 0.59-0.76,
+# label-only ones included; and rephrasing the ask as "the assertions do
+# not establish what the name claims" made "renders the error state when
+# the request fails" read as a label (0.48, a miss) and two exact-order
+# cleans wobble to 0.48-0.49. A longer note naming "with/for/of some state"
+# as input-labelling lifted the Rust label-only cleans to 0.50-0.54.
+note: >-
+  Two things to read for. A snapshot records whatever the output was: under a
+  name that claims a specific property of the output (a row hidden, a footer
+  omitted, a hint shown, a format) it establishes nothing about that property,
+  while under a name that only says renders, or snapshot, or labels the variant
+  rendered, it is the whole claim. And a body whose named operation is never
+  called, or whose named case is never set up, establishes nothing however exact
+  its assertion is.
+criteria:
+  "true": >-
+    The body does not establish what the name claims: it asserts nothing at all,
+    it asserts something that would hold whether or not the named behaviour
+    worked, it checks an incidental property such as a length or a type instead
+    of the named behaviour itself, or it never sets up the case the name is
+    about so the assertion never exercises it.
+  "false": >-
+    The body contains at least one assertion that would fail if the named
+    behaviour were broken. Read the name for what it actually claims: a name
+    that claims only that something renders, or that the output matches a
+    snapshot, or that only labels the input the snapshot was taken of, is
+    established by the snapshot; a name that claims an interaction with a
+    collaborator -- that something was called, once, with these arguments -- is
+    established by an assertion on that call.

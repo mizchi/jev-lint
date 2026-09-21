@@ -10,6 +10,13 @@ change are in [docs/findings.md](docs/findings.md).
 
 ### Added
 
+- `rules/moonbit/`: three rules ported to MoonBit -- `fn-name-promises`
+  (0.44), `comment-describes-declaration` (0.59) and
+  `test-name-verifies-claim` (0.62) -- each fitted on its own fixtures over
+  three passes, precision and recall 1.00. They ship in the package and
+  load anywhere; a run whose config does not name a MoonBit parser drops
+  them and names the language. `npm run parsers:moonbit` builds one, and
+  `docs/moonbit.jev-lint.yaml` is the config their suites run under.
 - `languages:` in the config declares a grammar ast-grep does not have
   built in -- a tree-sitter parser compiled to a dynamic library, as
   ast-grep's own `customLanguages` takes it. A rule may then name it, a

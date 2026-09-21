@@ -24,11 +24,11 @@ import { schedule, planMixed, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./sc
 import { Cache, verdictKey, contextKey } from "./cache.ts";
 import { gate } from "./gate.ts";
 import { touchesChange } from "./diff.ts";
-import { ruleTextHash, cutoffFor } from "./rules.ts";
+import { ruleTextHash, cutoffFor, extensionsOf, undeclared as undeclaredLanguages } from "./rules.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
 import { excerptBudget, pairTests, type RelatedTest } from "./paired.ts";
 import { commitSubjects, squashSubjects } from "./commits.ts";
-import { textSubjects } from "./text.ts";
+import { findTextFiles, textSubjects } from "./text.ts";
 import { FileIndex, isUnder, tryReadFile } from "./files.ts";
 import type {
   CustomLanguages,
@@ -77,6 +77,8 @@ export interface CollectResult {
   stderr: string;
   skippedByDiff: number;
   excluded: number;
+  /** Languages whose rules were dropped for want of a declared parser. */
+  undeclared: string[];
   duplicateGrammars: number;
   ignored: IgnoreStats;
   unpaired: UnpairedStats;
@@ -93,8 +95,18 @@ export async function collectSubjects({
 }: CollectOptions): Promise<CollectResult> {
   const isExcluded = (file: string) => exclude.some((p) => isUnder(file, p));
   let excluded = 0;
-  const { matches, probes, stderr } = await runAstGrep(rules, paths, { cwd, languages });
-  const grammars = ruleLanguages(rules);
+  // A rule for a language ast-grep has no grammar for until a config names
+  // the parser cannot be handed to it: one rule it cannot read fails the
+  // whole scan. Dropped here, and named on the result.
+  // ...and named only where a file of theirs exists: a repository with no
+  // MoonBit in it and a config that selected the rule by its bare id would
+  // otherwise carry the notice on every run.
+  const index = new FileIndex(cwd);
+  const dropped = undeclaredLanguages(rules, languages);
+  const missing = dropped.filter((l) => findTextFiles(paths, extensionsOf(l, languages), cwd, index).length > 0);
+  const scannable = dropped.length === 0 ? rules : rules.filter((r) => !r.languages.some((l) => dropped.includes(l)));
+  const { matches, probes, stderr } = await runAstGrep(scannable, paths, { cwd, languages });
+  const grammars = ruleLanguages(scannable);
   const symbols = buildSymbols(probes, grammars);
   const byId = new Map(rules.map((r) => [r.id, r]));
 
@@ -177,8 +189,6 @@ export async function collectSubjects({
 
   // One walk of the tree for everything that is not ast-grep: block rules
   // and the paired arm both filter it.
-  const index = new FileIndex(cwd);
-
   // Block rules: text files split at a header line, beside what ast-grep
   // found. Read through `readSource` so the `located` state has the file.
   for (const s of textSubjects(rules, paths, cwd, (file) => readSource(file), index)) {
@@ -253,6 +263,7 @@ export async function collectSubjects({
     stderr,
     skippedByDiff,
     excluded,
+    undeclared: missing,
     duplicateGrammars,
     ignored,
     unpaired,
@@ -365,7 +376,7 @@ export async function run({
   const collected = commits
     ? collectCommits(rules, commits.range, cwd, commits.label, commits.squash)
     : await collectSubjects({ rules, paths, arm, diffRanges, exclude, languages, cwd });
-  const { subjects, symbols, sources, tests, stderr, skippedByDiff, excluded, duplicateGrammars, ignored, unpaired } = collected;
+  const { subjects, symbols, sources, tests, stderr, skippedByDiff, excluded, undeclared, duplicateGrammars, ignored, unpaired } = collected;
   const commitStats = commits && "commits" in collected ? (collected as { commits: RunResult["commits"] }).commits : undefined;
 
   const cache = persistTo ? Cache.load(persistTo) : new Cache(null);
@@ -442,6 +453,7 @@ export async function run({
       stderr,
       skippedByDiff,
       excluded,
+      undeclared,
       duplicateGrammars,
       ignored,
       unpaired,
@@ -580,6 +592,7 @@ export async function run({
     stderr,
     skippedByDiff,
     excluded,
+    undeclared,
     duplicateGrammars,
     schedule: plan,
     cachedCount: results.filter((r) => r.cached).length,
@@ -629,6 +642,7 @@ function collectCommits(
     stderr: "",
     skippedByDiff: 0,
     excluded: 0,
+    undeclared: [],
     duplicateGrammars: 0,
     ignored: { subjects: 0, files: [], unknownRules: [] },
     unpaired: { subjects: 0, files: [] },

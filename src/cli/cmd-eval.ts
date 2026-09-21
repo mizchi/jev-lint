@@ -34,7 +34,7 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
   let failed = 0;
   const results: Array<Record<string, unknown>> = [];
   for (const suite of suites) {
-    const { rules, labels, errors } = loadSuite(suite);
+    const { rules, labels, errors } = loadSuite(suite, opts.languages);
     for (const e of errors) log(`${suite.name}: ${e}`);
     if (errors.length > 0 || rules.length === 0) {
       failed += 1;
@@ -60,7 +60,7 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
     if (!record && opts.dryRun) {
       // Plan and price, ask nothing: the same promise `check --dry-run` makes.
       try {
-        const plan = await planEval(suite, opts.repeat);
+        const plan = await planEval(suite, opts.repeat, opts.languages);
         if (opts.format === "json") results.push({ suite: suite.name, dir: suite.dir, plan: { ...plan, usd: (plan.tokens / 1e6) * USD_PER_MTOK, repeat: opts.repeat } });
         else out(`${suite.name}: ${plan.subjects} subject(s), ${plan.requests} request(s) over ${opts.repeat} pass(es), ~${plan.tokens.toLocaleString()} input tokens, ~$${((plan.tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
       } catch (err: unknown) {
@@ -77,6 +77,7 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
           concurrency: opts.concurrency,
           model: opts.model,
           client,
+          languages: opts.languages,
           log: (line) => {
             if (!opts.quiet) log(line);
           },
@@ -150,7 +151,7 @@ export function cmdEvalCompare(opts: Options, out: Log, log: Log): number {
     log(`no suite named ${left.suite} under ${opts.rules.join(", ")}; pass -R <dir> to say where it is`);
     return 2;
   }
-  const { rules, labels, errors } = loadSuite(suite);
+  const { rules, labels, errors } = loadSuite(suite, opts.languages);
   for (const e of errors) log(`${suite.name}: ${e}`);
   if (errors.length > 0) return 2;
   const scoreL = scoreEval(left.passes, labels, rules, {}, recordedAts(left));

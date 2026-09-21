@@ -1,0 +1,54 @@
+id: fn-name-promises
+language: moonbit
+kind: noul
+subject: node
+# `located`, as every other language's copy of this rule: the file is what
+# lets the model see that a `save_*` never writes and that a `count_*`
+# returns what it was handed.
+state: located
+# 0.44, fitted 2026-09-21 on the fixtures beside it (15 subjects: 5 defects,
+# 10 cleans, 3 passes). Cleans top at 0.27 (`ensure_session`, which creates
+# when missing), defects start at 0.61 (`count_lines`, a count that returns
+# the skus). Midpoint, 0.17 of headroom a side. The guess before the fit was
+# 0.55, the value this rule takes in its other languages
+# (typescript 0.55, rust 0.57, python 0.5, go 0.4); every defect answered over
+# it anyway.
+at: 0.44
+# Calibrated on the file axis; pinned so the scheduler cannot move it.
+axis: file
+severity: warning
+# MoonBit's grammar declares no fields, so the name is matched by kind. A
+# `test "..." { }` block is a `test_definition`, not a function, so no
+# exclusion is needed here.
+rule:
+  all:
+    - kind: function_definition
+    - has: { kind: function_identifier, stopBy: end, pattern: $NAME }
+# The same sentence as typescript/fn-name-promises, by copy: the loader warns
+# if the copies drift.
+ask: >-
+  The body of this function does something materially different from what its
+  name promises.
+criteria:
+  # Both branches describe situations visible in the function's own text. An
+  # exception phrased in terms of something the subject cannot show -- "unless
+  # the caller needs it" -- makes every answer land mid-scale, which looks
+  # like a threshold problem and is not one.
+  "true": >-
+    Someone who read only the name and the parameter list would be wrong about
+    what this function does: it returns a different kind of thing than the name
+    suggests (a count that is a list, a predicate that is a number), it changes
+    state when the name says it only reads, checks, looks up or serialises, it
+    can fail or return nothing when the name promises a value, it handles only a
+    narrower case than the name claims, it never performs an effect or
+    repetition the name names (a drain or remove that leaves the container as it
+    was, a retry that tries once), it computes something no reading of the name
+    accounts for, or it does substantial work the name does not mention at all,
+    such as writing what it was asked to read.
+  "false": >-
+    The name and parameter list describe what the body actually does. Someone
+    who read only them would not be surprised by the body, even if a longer or
+    more specific name could be imagined. A terse or conventional name (run,
+    handle, take, len, fmt, toString, a getter) that the body fits is not a
+    violation, and a comment inside the body that is wrong about the body is a
+    wrong comment, not a wrong name.

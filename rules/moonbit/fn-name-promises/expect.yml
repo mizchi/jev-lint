@@ -1,0 +1,59 @@
+default: clean
+fixtures/cart.mbt:
+  - line: 24
+    label: bad
+    window: 0
+    reason: "`count_lines` returns the skus, not a count: a reader of the name is wrong about the kind of thing it gets."
+  - line: 33
+    label: bad
+    window: 0
+    reason: "`is_empty` reads as a predicate and returns a String."
+  - line: 42
+    label: bad
+    window: 0
+    reason: "`save_and_total` totals and never saves: half the name is an effect the body does not perform."
+  - line: 10
+    label: clean
+    window: 0
+    reason: "hard clean: terse `line_total`, multiplies price by qty."
+  - line: 47
+    label: clean
+    window: 0
+    reason: "hard clean: `remove_sku` returns the kept lines rather than mutating, which is what a name can promise in a language of persistent values."
+  - line: 58
+    label: clean
+    window: 0
+    reason: "`first_line` returns an option; a name that promises a value may still say `Line?` in its type."
+  - line: 67
+    label: clean
+    window: 0
+    reason: "`apply_discount` computes the discounted total; nothing is applied to anything stored, and nothing in the name says there is."
+fixtures/session.mbt:
+  - line: 25
+    label: clean
+    window: 0
+    reason: "hard clean: `touch_session` extends the expiry of a session that exists and does nothing for one that does not, which is what touch means."
+  - line: 33
+    label: bad
+    window: 0
+    reason: "`validate_session` writes a new expiry while claiming to check one: a name that says it only reads, over a body that stores."
+  - line: 44
+    label: bad
+    window: 0
+    reason: "`drop_expired` counts the expired sessions and drops none."
+  - line: 13
+    label: clean
+    window: 0
+    reason: "hard clean: a terse getter that gets."
+  - line: 18
+    label: clean
+    window: 0
+    reason: "hard clean: `take_session` reads and removes, which is what take means."
+  - line: 55
+    label: clean
+    window: 0
+    reason: "`session_count` returns the count."
+  - line: 60
+    label: clean
+    window: 0
+    reason: "hard clean: `ensure_session` creates when missing and returns the existing one otherwise -- the body a reader of `ensure` expects."

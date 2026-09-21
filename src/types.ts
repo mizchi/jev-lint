@@ -62,6 +62,18 @@ export interface CustomLanguage {
 /** Declared languages, by the name a rule's `language:` must use. */
 export type CustomLanguages = Record<string, CustomLanguage>;
 
+/**
+ * Languages the package ships rules for that ast-grep does not have built
+ * in: the name, the extensions and the expando are known, the parser is
+ * not. Loading such a rule needs nothing -- `eval --replay`, `rules` and
+ * RULES.md read rules without scanning a line -- and a run that has no
+ * `languages:` naming one drops its rules and says which, rather than
+ * reporting a language's worth of nothing.
+ */
+export const SHIPPED_CUSTOM_LANGUAGES: Record<string, Omit<CustomLanguage, "libraryPath">> = {
+  moonbit: { extensions: ["mbt"], expandoChar: "_" },
+};
+
 /** The one language that is not a grammar. */
 export const COMMIT_LANGUAGE: Language = "Git";
 /** The other: a `subject: block` rule's, whose subjects are blocks of a text file split at a header line. */
@@ -698,6 +710,8 @@ export interface RunResult extends GateResult {
   skippedByDiff?: number;
   /** Subjects under an `exclude` path, never judged. */
   excluded?: number;
+  /** Languages whose rules were dropped for want of a declared parser. */
+  undeclared?: string[];
   duplicateGrammars?: number;
   ignored?: IgnoreStats;
   unpaired?: UnpairedStats;

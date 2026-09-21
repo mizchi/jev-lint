@@ -1108,6 +1108,15 @@ Four things decide whether it works, each measured on MoonBit:
   `has: { field: name, ... }` matches nothing there; `has: { kind:
   function_identifier, stopBy: end, pattern: $NAME }` is the way to
   capture a name.
+- **Rules for it may ship.** `rules/moonbit/` is in the package: three
+  ports (naming, comments, tests), fitted on their own fixtures. They load
+  anywhere -- `rules`, `eval --replay` and RULES.md read rules without
+  scanning -- and a run with no `languages:` naming the parser drops them
+  and says which language it dropped, rather than reporting a language's
+  worth of nothing. In a checkout of this repository,
+  `npm run parsers:moonbit` builds the library and
+  `jev-lint eval rules/moonbit --config docs/moonbit.jev-lint.yaml` runs
+  their suites.
 - **Structure is per grammar.** `subject: enclosing`, the `graph` arm and
   the `paired` arm need to know what a container is. jev-lint ships those
   probes for `moonbit` (moonbitlang/tree-sitter-moonbit: functions,

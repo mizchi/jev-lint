@@ -4,7 +4,8 @@ import { tmpdir } from "node:os";
 import { join, isAbsolute } from "node:path";
 import { decide, describe as describeFinding } from "../src/gate.ts";
 import { buildQuestion } from "../src/questions.ts";
-import { normalizeRule, loadRules, cutoffFor, ruleTextHash, normalizeLanguage, ruleSources, USER_RULES_DIR, applyRuleSettings, languageDirGrammars, shippedRulesPath, selectRules, DEFAULT_SCORE_AT, scaleOf } from "../src/rules.ts";
+import { normalizeRule, loadRules, cutoffFor, ruleTextHash, normalizeLanguage, ruleSources, USER_RULES_DIR, applyRuleSettings, languageDirGrammars, undeclared, shippedRulesPath, selectRules, DEFAULT_SCORE_AT, scaleOf } from "../src/rules.ts";
+import { SHIPPED_CUSTOM_LANGUAGES } from "../src/types.ts";
 import { emitRuleFile, ruleLanguages } from "../src/scan.ts";
 import { explain } from "../src/schedule.ts";
 import { PROBE_PREFIX, LANGUAGE_DIRS, TIER_ONE } from "../src/types.ts";
@@ -36,19 +37,19 @@ test("rules: the sources are the shipped packs and, when it exists, .jev-lint/ru
 });
 
 test("rules: a declared language is one a rule may name, and an undeclared one is still unknown", () => {
-  const moonbit = { moonbit: { libraryPath: "/opt/moonbit.so", extensions: ["mbt"] } };
-  assert.equal(normalizeLanguage("moonbit"), null, "not built in");
-  assert.equal(normalizeLanguage("moonbit", moonbit), "moonbit");
-  assert.equal(normalizeLanguage("MoonBit", moonbit), "moonbit", "named as the declaration spells it: that is what ast-grep matches on");
-  assert.equal(normalizeLanguage("elm", moonbit), null, "declaring one language does not open the door to another");
-  assert.equal(normalizeLanguage("Rust", moonbit), "Rust", "and the built-ins are unaffected");
+  const elm = { elm: { libraryPath: "/opt/elm.so", extensions: ["elm"] } };
+  assert.equal(normalizeLanguage("elm"), null, "not built in, and the package ships no elm rule");
+  assert.equal(normalizeLanguage("elm", elm), "elm");
+  assert.equal(normalizeLanguage("Elm", elm), "elm", "named as the declaration spells it: that is what ast-grep matches on");
+  assert.equal(normalizeLanguage("purescript", elm), null, "declaring one language does not open the door to another");
+  assert.equal(normalizeLanguage("Rust", elm), "Rust", "and the built-ins are unaffected");
   // A rule may name it, and a rule directory may be called it.
-  const { rule, error } = normalizeRule({ id: "m", language: "moonbit", rule: { kind: "function_definition" }, ask: "a." }, "rule", moonbit);
+  const { rule, error } = normalizeRule({ id: "m", language: "elm", rule: { kind: "function_declaration_left" }, ask: "a." }, "rule", elm);
   assert.equal(error, undefined, error ?? "");
-  assert.deepEqual(rule!.languages, ["moonbit"]);
-  assert.match(normalizeRule({ id: "m", language: "moonbit", rule: { kind: "x" }, ask: "a." }).error!, /unknown language/);
-  assert.deepEqual(languageDirGrammars("moonbit", moonbit), ["moonbit"]);
-  assert.equal(languageDirGrammars("moonbit"), null);
+  assert.deepEqual(rule!.languages, ["elm"]);
+  assert.match(normalizeRule({ id: "m", language: "elm", rule: { kind: "x" }, ask: "a." }).error!, /unknown language/);
+  assert.deepEqual(languageDirGrammars("elm", elm), ["elm"]);
+  assert.equal(languageDirGrammars("elm"), null);
 });
 
 test("rules: the config's `rules:` selects and overrides, and names nothing it cannot find", () => {
@@ -173,7 +174,7 @@ test("rules: `run` selects one shipped rule by id, in every language or one, or 
   assert.ok(existsSync(shipped));
   const every = selectRules({ id: "fn-name-promises", shipped, projectRules: [] });
   assert.deepEqual(every.errors, []);
-  assert.deepEqual(every.rules.map((r) => r.languageDir).sort(), ["go", "python", "rust", "typescript"]);
+  assert.deepEqual(every.rules.map((r) => r.languageDir).sort(), ["go", "moonbit", "python", "rust", "typescript"]);
   const one = selectRules({ id: "rust/fn-name-promises", shipped, projectRules: [] });
   assert.deepEqual(one.rules.map((r) => `${r.languageDir}/${r.id}`), ["rust/fn-name-promises"]);
   // Unknown: an error that names the nearest ids, never an empty run.
@@ -570,4 +571,22 @@ test("rules: a rules path that does not exist is a load error, and a directory t
   assert.equal(languageDirGrammars("experimental"), null, "not a language: a rule under it has no language directory");
   assert.deepEqual(languageDirGrammars("rust"), ["Rust"]);
   assert.ok(languageDirGrammars("typescript")!.includes("Tsx"), "the listed family");
+});
+
+test("rules: a language the package ships rules for loads without a parser, and a run without one says which rules it left out", () => {
+  // A rule for a grammar ast-grep does not have built in ships all the same:
+  // `rules/moonbit/` is in the package, and loading it must not depend on
+  // anyone having built a parser -- `eval --replay`, `rules` and RULES.md all
+  // load rules without scanning a line. What needs the parser is the scan, and
+  // a run that has no `languages:` for it drops those rules and says so rather
+  // than reporting a language's worth of nothing.
+  assert.equal(normalizeLanguage("moonbit"), "moonbit", "shipped rules name it, so it is a name");
+  assert.deepEqual(languageDirGrammars("moonbit"), ["moonbit"]);
+  assert.deepEqual(SHIPPED_CUSTOM_LANGUAGES.moonbit!.extensions, ["mbt"]);
+  assert.equal(SHIPPED_CUSTOM_LANGUAGES.moonbit!.expandoChar, "_", "or a pattern with a metavariable matches nothing");
+  const mbt = normalizeRule({ id: "m", language: "moonbit", rule: { kind: "function_definition" }, ask: "a." }).rule!;
+  const ts = normalizeRule({ id: "t", language: "TypeScript", rule: { kind: "function_declaration" }, ask: "a." }).rule!;
+  assert.deepEqual(undeclared([mbt, ts], {}), ["moonbit"]);
+  assert.deepEqual(undeclared([mbt, ts], { moonbit: { libraryPath: "/opt/m.so", extensions: ["mbt"] } }), []);
+  assert.deepEqual(undeclared([ts], {}), []);
 });

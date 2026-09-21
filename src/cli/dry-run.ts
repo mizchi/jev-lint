@@ -128,6 +128,7 @@ export function dryRunDocument(result: RunResult, rules: Rule[], opts: Options):
     ignored: result.ignored ?? null,
     unpaired: result.unpaired ?? null,
     excluded: result.excluded ?? 0,
+    undeclared: result.undeclared ?? [],
     idleLanguages: idleLanguages(result),
     silentRules: silentRules(result),
   };

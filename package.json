@@ -83,7 +83,8 @@
     "grouping": "node --experimental-strip-types tools/grouping.ts --repeat 2",
     "dry": "node --experimental-strip-types src/cli.ts check --dry-run --cache none",
     "ci": "npm run typecheck && npm test && npm run build && npm run eval:replay",
-    "prepack": "npm run clean && npm run build"
+    "prepack": "npm run clean && npm run build",
+    "parsers:moonbit": "node --experimental-strip-types tools/build-parser.ts moonbit"
   },
   "dependencies": {
     "@ast-grep/cli": "^0.45.3",

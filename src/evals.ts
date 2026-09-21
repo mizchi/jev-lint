@@ -34,7 +34,7 @@ import { cutoffFor, languageDirGrammars, loadRules, ruleTextHash } from "./rules
 import { patchRepo } from "./commits.ts";
 import { run } from "./run.ts";
 import { DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
-import type { Label, Labels, Rule } from "./types.ts";
+import type { CustomLanguages, Label, Labels, Rule } from "./types.ts";
 
 export interface EvalSuite {
   /** `lang/id` under the shipped layout, else the directory's name. */
@@ -337,12 +337,14 @@ export interface RunEvalOptions {
   concurrency?: number;
   model?: string | null;
   client?: AskClient | null;
+  /** Grammars ast-grep does not have built in: a suite of such a language cannot be scanned without one. */
+  languages?: CustomLanguages;
   log?: (line: string) => void;
 }
 
 /** Load a suite's rule file and labels. Errors are the caller's to print. */
-export function loadSuite(suite: EvalSuite): { rules: Rule[]; labels: Labels; errors: string[] } {
-  const { rules, errors } = loadRules([suite.ruleFile]);
+export function loadSuite(suite: EvalSuite, languages: CustomLanguages = {}): { rules: Rule[]; labels: Labels; errors: string[] } {
+  const { rules, errors } = loadRules([suite.ruleFile], languages);
   let labels: Labels = { $default: "clean" };
   try {
     labels = readExpect(suite);
@@ -358,8 +360,8 @@ export function loadSuite(suite: EvalSuite): { rules: Rule[]; labels: Labels; er
  * which sent real requests from the one command the calibration procedure
  * says to price first.
  */
-export async function planEval(suite: EvalSuite, repeat = 1): Promise<{ subjects: number; requests: number; tokens: number }> {
-  const { rules, errors } = loadSuite(suite);
+export async function planEval(suite: EvalSuite, repeat = 1, languages: CustomLanguages = {}): Promise<{ subjects: number; requests: number; tokens: number }> {
+  const { rules, errors } = loadSuite(suite, languages);
   if (errors.length) throw new Error(errors.join("\n"));
   const commitSuite = rules.some((rule) => rule.subject === "commit") ? patchRepo(suite.fixtures) : null;
   const r = await run({
@@ -369,6 +371,7 @@ export async function planEval(suite: EvalSuite, repeat = 1): Promise<{ subjects
     cachePath: null,
     force: true,
     dryRun: true,
+    languages,
   });
   const tokens = r.batches.reduce((a, b) => a + b.estimatedTokens, 0);
   // `r.subjects`, not the gate's count: a dry run decides nothing.
@@ -378,7 +381,7 @@ export async function planEval(suite: EvalSuite, repeat = 1): Promise<{ subjects
 /** Ask the suite's rule about its cases, `repeat` times, and record it. */
 export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Promise<EvalRecord> {
   const repeat = Math.max(1, opts.repeat ?? 1);
-  const { rules, errors } = loadSuite(suite);
+  const { rules, errors } = loadSuite(suite, opts.languages ?? {});
   if (errors.length) throw new Error(errors.join("\n"));
   // One run, `repeat` passes: the runner interleaves the passes' requests,
   // so three passes over a suite cost the wall time of one and a bit,
@@ -398,6 +401,7 @@ export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Prom
     concurrency: opts.concurrency ?? DEFAULT_CONCURRENCY,
     model: opts.model ?? null,
     client: opts.client ?? null,
+    languages: opts.languages ?? {},
   });
   const passes: EvalAnswer[][] = (r.samples ?? []).map((pass) =>
     pass.map((s) => ({ rule: s.rule, file: s.file, line: s.line, endLine: s.endLine, kind: s.kind, value: s.value, confidence: s.confidence })),
