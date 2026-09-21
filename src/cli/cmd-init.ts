@@ -108,8 +108,22 @@ export function cmdInitHook(opts: Options, out: Log, log: Log, which: "pre-commi
       return false;
     }
   })();
+  // `--force` is about the body, which is ours and which someone may have
+  // hand-edited. It deliberately does NOT reach the shim: git's hooks
+  // directory is shared, the file there is as likely to be husky's or a task
+  // runner's as ours, and `--force` on a command whose subject is the body
+  // is not consent to replace somebody else's hook. A shim that is ours is
+  // rewritten anyway -- identical bytes, nothing to warn about -- and one
+  // that is neither ours nor absent gets the line to add printed instead.
+  // Taking it over is a deletion the person does themselves.
   const writeBody = !bodyExists || opts.force;
-  const writeShim = !shimExists || opts.force;
+  // The shim is written when it is missing, and otherwise not at all. One
+  // that is already ours needs nothing; one that is not is as likely to be
+  // husky's or a task runner's as anything, and `--force` deliberately does
+  // not reach it -- the flag's subject is the body, this tool's own file,
+  // and someone refreshing that has not consented to losing another tool's
+  // hook. Taking the shim over is a deletion they do themselves.
+  const writeShim = !shimExists;
 
   if (!writeBody && !writeShim) {
     log(`${body} already exists; pass --force to overwrite it`);

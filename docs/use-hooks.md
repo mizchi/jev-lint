@@ -32,13 +32,17 @@ current directory, so a worktree's hooks land in the main repository and
 `core.hooksPath` is honoured.
 
 The **hook** -- `.jev-lint/hooks/<name>` -- is never overwritten without
-`--force`; it is the file someone may have hand-edited. The **shim** is a
-separate question: `init` writes it whenever it is missing, with or
-without `--force`, because the case this solves is a fresh clone that
-already has the tracked hook and none of git's own hooks (git does not
-clone those). If the shim is already there and is not this tool's -- it is
+`--force`; it is the file someone may have hand-edited.
+
+The **shim** is a separate question, and `--force` does not reach it. `init`
+writes it whenever it is missing, which is the case this solves: a fresh
+clone has the tracked hook and none of git's own hooks, because git does not
+clone those. If a shim is already there and is not this tool's -- it is
 probably husky's or a task runner's -- it is left alone and the one line to
-add to it is printed instead of being silently overwritten:
+add to it is printed, **with or without `--force`**. Git's hooks directory
+is shared, `--force` is about the body, and someone refreshing their own
+hand-edited body has not agreed to lose another tool's. Replacing it is a
+deletion you do yourself:
 
 ```
 .git/hooks/pre-commit already exists and was left alone; add this line to it:

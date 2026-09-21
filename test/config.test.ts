@@ -504,12 +504,16 @@ await testAsync("config: init --pre-commit leaves a foreign hook alone and print
     assert.match(run.out, /already exists and was left alone; add this line to it/);
     assert.match(run.out, /\.jev-lint\/hooks\/pre-commit/);
 
-    // --force replaces even a foreign shim: it is the one blanket override
-    // this command has, and the body's own --force already means the same
-    // "yes, replace it" for the file next to it.
+    // --force does not reach it either. The flag's subject is the body --
+    // this tool's own file, which someone may have hand-edited -- and
+    // git's hooks directory is shared. Someone running `--force` to
+    // refresh their body has not consented to losing husky's hook, and a
+    // flag whose name is about one file must not quietly act on another.
+    // Taking the shim over is a deletion they do themselves.
     const forced = await runInit(["init", "--pre-commit", "--force"]);
     assert.equal(forced.code, 0, forced.log);
-    assert.equal(readFileSync(shimPath, "utf8"), hookShim());
+    assert.equal(readFileSync(shimPath, "utf8"), "#!/bin/sh\nexec husky-run pre-commit\n", "still theirs");
+    assert.match(forced.out, /already exists and was left alone; add this line to it/);
   } finally {
     process.chdir(here);
     rmSync(dir, { recursive: true, force: true });
