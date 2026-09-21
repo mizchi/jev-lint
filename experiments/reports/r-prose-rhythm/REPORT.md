@@ -66,7 +66,7 @@ in `review-comments.md` was fused to a confession about the subject
 standalone sentence (0.83).
 
 The unseen run is the family's most useful result: on this repository's
-`docs/findings.md`, `docs/deepdive.md` and `experiments/BRIEF.md` every
+`docs/internal/findings.md`, `docs/deepdive.md` and `experiments/BRIEF.md` every
 finding above the cutoffs was a correct reading of the norm applied to a
 genre the norm is not for. A findings log's preface that says which
 sections supersede which, a deep dive's table of four other documents, a
@@ -112,7 +112,7 @@ state: located
 # at 0.60 the accepted run is P 0.95 R 0.95 (the frame flagged at 0.60, the
 # short declaration missed at 0.58), and the run before it had them the
 # other way round. There is no headroom on either side. On three unseen
-# English documents (docs/findings.md, docs/deepdive.md,
+# English documents (docs/internal/findings.md, docs/deepdive.md,
 # experiments/BRIEF.md) cleans reached 0.57 (a question with a stance at a
 # section head) and the navigational prefaces of the findings log and the
 # deep dive answered 0.78-0.80 -- true by the norm, expected of the genre.
@@ -528,7 +528,7 @@ state: bare
 # gap, 0.13 either side. The defects are soft because "one deliberately open
 # question at the very end" is in the criteria and three of the four
 # abandonments sit near an end. A whole-file subject is cut at 48,000
-# characters: on the 78 KB docs/findings.md the rule answered 0.60 for
+# characters: on the 78 KB docs/internal/findings.md the rule answered 0.60 for
 # promises whose delivery lies beyond the cut, which is the cut speaking,
 # not the document.
 at: 0.5
@@ -580,7 +580,7 @@ SHIP, marginal. It separates with headroom just over 0.10 on eleven
 subjects; the defects are soft (three of four near 0.66) because three of
 them sit near an end and the criteria allow "one deliberately open question
 at the very end". And the whole-file subject is cut at 48,000 characters,
-which on the unseen `docs/findings.md` produced a 0.60 for promises whose
+which on the unseen `docs/internal/findings.md` produced a 0.60 for promises whose
 delivery lies beyond the cut.
 
 ### What I would change
@@ -594,14 +594,14 @@ verdict".
 
 ---
 
-## Unseen: `docs/findings.md`, `docs/deepdive.md`, `experiments/BRIEF.md`
+## Unseen: `docs/internal/findings.md`, `docs/deepdive.md`, `experiments/BRIEF.md`
 
 English, technical, 77 sections, none of it written for the norm. Run
 before the cutoffs were fixed, at `--at 0.5 --retry 3 --loose 40`, recorded
 to the scratchpad; findings read against the text and scored against the
 shipped cutoffs above.
 
-- **`docs/findings.md`** (78 KB, 48 sections): `section-narrates-itself`
+- **`docs/internal/findings.md`** (78 KB, 48 sections): `section-narrates-itself`
   flags the preface (0.80: "Sections 1-8 record ... Section 12 lists ...
   Section 13 is ..."), §14's opening (0.80: "This section is what was worth
   carrying across ... and what each piece measured as") and §12's opening

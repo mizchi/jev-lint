@@ -3,7 +3,7 @@
 The first rule of the pack, and the one whose three attempts found the
 subject shape the other seven started from.
 
-**Rule**: [`rules/shell/runs-downloaded-code/rule.yml`](../../../rules/shell/runs-downloaded-code/rule.yml).
+**Rule**: [`rules/shell/runs-downloaded-code/rule.yml`](../../../../rules/shell/runs-downloaded-code/rule.yml).
 Port of the `dynamic_code` check from is-malicious.
 
 **Corpus**: 11 fixtures, 14 subjects, 5 bad, 9 clean of which 6 hard.

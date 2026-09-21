@@ -7,7 +7,7 @@ import { planBatches } from "../src/batch.ts";
 import { listCommits, commitDiff, commitSubjects, squashSubjects, defaultRange, MAX_DIFF_CHARS } from "../src/commits.ts";
 import { decide } from "../src/gate.ts";
 import { formatPretty } from "../src/report.ts";
-import { scoreRule, tempRepo, commitRule } from "./builders.ts";
+import { scoreRule, tempRepo, commitRule, changeRule } from "./builders.ts";
 import { test } from "./harness.ts";
 
 test("commits: a diff over the budget keeps the stat and the first hunks and says so", () => {
@@ -109,6 +109,91 @@ test("commits: without an upstream there is no default range", () => {
     execFileSync("git", ["init", "-q", "-b", "main"], { cwd: dir });
     execFileSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "root"], { cwd: dir });
     assert.equal(defaultRange(dir), null);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: a change rule gets the diff and the instructions; a commit rule gets neither instruction", () => {
+  const dir = tempRepo([
+    { message: "Set the rules", files: { "AGENTS.md": "- Never use `any`.\n" } },
+    { message: "Add cart", files: { "cart.ts": "export const cart: any = {}\n" } },
+  ]);
+  try {
+    const { subjects } = commitSubjects([commitRule(), changeRule()], "HEAD", dir);
+    assert.equal(subjects.length, 4, "two commits x two rules");
+    const change = subjects.find((s) => s.rule.subject === "change" && s.commit!.diff.includes("cart.ts"))!;
+    assert.equal(change.nodeKind, "change");
+    assert.equal(change.language, "Git");
+    assert.equal(change.line, 1);
+    assert.match(change.text, /1 file changed/, "the subject is the change: the stat");
+    assert.ok(!/Add cart/.test(change.text), "not the message; a change rule is not about the message");
+    assert.deepEqual(change.instructions!.docs.map((d) => d.file), ["AGENTS.md"]);
+    assert.match(change.instructions!.docs[0]!.text, /Never use/);
+    const message = subjects.find((s) => s.rule.subject === "commit" && s.text.startsWith("Add cart"))!;
+    assert.equal(message.instructions, undefined, "a commit rule is judged on the message, not on the instructions");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: a change finding is titled by the stat's summary, never quoted as a commit message", () => {
+  // `gate.ts` used to build every commit-shaped finding's title from
+  // `subject.text.split("\n")[0]`, which is the FIRST line of a commit
+  // message but the FIRST line of a change subject's `text` (the stat) is
+  // a per-file line like " cart.ts | 1 +", not a summary -- and reporting
+  // it under `commit.subject`, quoted, would print it as though someone
+  // had written it as a commit message.
+  const dir = tempRepo([
+    { message: "Set the rules", files: { "AGENTS.md": "- Never use `any`.\n" } },
+    { message: "Add cart", files: { "cart.ts": "export const cart: any = {}\n" } },
+  ]);
+  try {
+    const { subjects } = commitSubjects([changeRule()], "HEAD", dir);
+    const change = subjects.find((s) => s.commit!.diff.includes("cart.ts"))!;
+    const f = decide(change, { value: 0.9, confidence: null, kind: "noul" });
+    assert.equal(f.commit, undefined, "a change finding is not reported as a commit");
+    assert.match(f.change!.summary, /1 file changed/, "titled by the stat's summary line");
+    assert.ok(!/cart\.ts \|/.test(f.change!.summary), "not the per-file stat line, which is not a summary");
+    const pretty = formatPretty(
+      { findings: [f], all: [f], review: [], stats: { subjects: 1, reported: 1, missing: 0, unsure: 0, review: 0, byRule: {}, byFile: {} } },
+      { color: false },
+    );
+    assert.match(pretty, /1 file changed/);
+    assert.ok(!pretty.includes('"'), "not quoted as though it were a message someone wrote");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: a commit with no instruction document produces no change subject, and is counted rather than silently dropped", () => {
+  const dir = tempRepo([{ message: "Add cart", files: { "cart.ts": "a\n" } }]);
+  try {
+    const { subjects, noInstructionDoc } = commitSubjects([commitRule(), changeRule()], "HEAD", dir);
+    assert.deepEqual(subjects.map((s) => s.rule.subject), ["commit"], "no standard, so no question: not a clean verdict");
+    assert.equal(noInstructionDoc, 1, "the reason is not thrown away -- a run has to be able to say why");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("commits: an empty commit gets no change subject either, even with an instruction document in force", () => {
+  // `git commit --allow-empty` is ordinary: a CI trigger, "rebuild", a
+  // rebase-retained marker. Its diff is nothing, so there is nothing for a
+  // change rule to judge -- not symmetrical with a commit rule, which still
+  // has a real message to judge ("this claims X over an empty diff" is a
+  // genuine finding, and the commit subject below still fires).
+  const dir = tempRepo([
+    { message: "Set the rules", files: { "AGENTS.md": "- Never use `any`.\n" } },
+    { message: "Empty on purpose", files: {} },
+  ]);
+  try {
+    const { subjects, noInstructionDoc } = commitSubjects([commitRule(), changeRule()], "HEAD", dir);
+    assert.ok(!subjects.some((s) => s.rule.subject === "change" && s.commit!.stat.trim() === ""), "no change subject has an empty stat");
+    const forEmptyCommit = subjects.filter((s) => s.text.startsWith("Empty on purpose"));
+    assert.equal(forEmptyCommit.length, 1, "only the commit rule gets a subject for the empty commit");
+    assert.equal(forEmptyCommit[0]!.rule.subject, "commit");
+    assert.equal(noInstructionDoc, 0, "there was a standard; the diff was simply empty, which is a different reason");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

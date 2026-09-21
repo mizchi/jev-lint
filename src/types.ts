@@ -76,6 +76,23 @@ export const SHIPPED_CUSTOM_LANGUAGES: Record<string, Omit<CustomLanguage, "libr
 
 /** The one language that is not a grammar. */
 export const COMMIT_LANGUAGE: Language = "Git";
+export interface InstructionDoc {
+  /**
+   * Where this document's text actually came from: one of
+   * `INSTRUCTION_FILES`, or, when a root-level file was a symlink, the
+   * path it resolved to -- which is not always one of those names. A
+   * finding reports against this, not against the link's own name.
+   */
+  file: string;
+  text: string;
+}
+
+export interface Instructions {
+  docs: InstructionDoc[];
+  /** True when the budget cut a document short; the state has to say so. */
+  truncated: boolean;
+}
+
 /** The other: a `subject: block` rule's, whose subjects are blocks of a text file split at a header line. */
 export const TEXT_LANGUAGE: Language = "Text";
 
@@ -482,6 +499,12 @@ export interface Subject extends ResolvedSubject {
    * `file` is then the sha, `text` the message, `line` 1.
    */
   commit?: { files: string[]; stat: string; diff: string; truncated: boolean };
+  /**
+   * Present on a `subject: change` subject: the instruction documents the
+   * diff is judged against, read from the same tree as the diff. A change
+   * subject is never built without them.
+   */
+  instructions?: Instructions;
   /** Assigned when the subject is placed in a batch; meaningful only there. */
   id?: string;
   /** The content-addressed cache key. Assigned by the runner. */
@@ -563,7 +586,10 @@ export interface StatePayload {
   files?: string[];
   stat?: string;
   diff?: string;
+  /** A change subject's state: the project's own instruction documents, in place of a message. */
+  instructions?: Array<{ file: string; text: string }>;
   note_on_diff?: string;
+  note_on_instructions?: string;
   note_on_independence?: string;
   note_on_enclosing_code?: string;
   note_on_related_tests?: string;
@@ -633,6 +659,13 @@ export interface Finding {
   explanation?: { choice: string; confidence: number };
   /** Present on a commit finding: the commit's subject line, for the report. */
   commit?: { subject: string };
+  /**
+   * Present on a change finding: the stat's summary line, for the report.
+   * A change subject's `text` is the stat, not a message -- reporting it
+   * under `commit.subject`, quoted as if someone wrote it, would claim a
+   * commit message that does not exist.
+   */
+  change?: { summary: string };
   /** Present when the block was cut to fit: the verdict is about its first `judged` of `of` characters. */
   cut?: { judged: number; of: number };
 }
@@ -748,7 +781,7 @@ export interface RunResult extends GateResult {
   ignored?: IgnoreStats;
   unpaired?: UnpairedStats;
   /** Present in commits mode: how many commits the range held, and how many merges were skipped. */
-  commits?: { total: number; skippedMerges: number; range: string };
+  commits?: { total: number; skippedMerges: number; range: string; noInstructionDoc: number };
   /** How many times everything was asked; above 1 with `--retry`. */
   retry?: number;
   /**

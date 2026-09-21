@@ -4,6 +4,7 @@
  */
 import { applyRuleSettings, loadRules, ruleSources, selectRules, shippedRulesPath } from "../rules.ts";
 import type { Config } from "../config.ts";
+import { isGitSubject } from "../types.ts";
 import type { Rule } from "../types.ts";
 import type { Log, Options } from "./args.ts";
 
@@ -91,13 +92,18 @@ export function selectForRun(command: string, opts: Options, config: Config, arg
     // this, `run <id>` scanned the whole tree while `check` scanned `paths:`.
     opts.paths = paths.length > 0 ? paths : (config.files ?? []);
     if (!opts.quiet) log(`run: ${rules.map((r) => (r.languageDir ? `${r.languageDir}/${r.id}` : r.id)).join(", ")} from ${picked.from}`);
-    // A commit rule's subjects are commits, so `run` with one is `commits`
-    // and the positional after the id is a range. Mixing the two kinds in
-    // one run has no single source of subjects.
-    const commitRuleCount = rules.filter((r) => r.subject === "commit").length;
-    if (commitRuleCount === rules.length) command = "commits";
-    else if (commitRuleCount > 0) {
-      log("run: a commit rule and a file rule cannot run together; name one, or pick a file with one kind");
+    // A git rule's subjects come from git rather than from a path, so `run`
+    // with one is `commits` and the positional after the id is a range.
+    // Both git subjects count: a `change` rule reads the same range a
+    // `commit` rule does, and counting only `commit` sent it down the file
+    // path instead, where the range was taken as a directory name and the
+    // run planned nothing at all -- silently, since a path that matches no
+    // file is not an error. Mixing the two kinds in one run has no single
+    // source of subjects.
+    const gitRuleCount = rules.filter((r) => isGitSubject(r.subject)).length;
+    if (gitRuleCount === rules.length) command = "commits";
+    else if (gitRuleCount > 0) {
+      log("run: a git rule and a file rule cannot run together; name one, or pick a file with one kind");
       return null;
     } else command = "check";
   } else {

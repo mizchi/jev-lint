@@ -8,7 +8,7 @@
 
 **Tech Stack:** TypeScript on Node 24 (`--experimental-strip-types`, no build step for tests), `node:child_process` for git, the repository's own test harness (`test/harness.ts`, `npm test <substring>`), `jev-lint eval` for rule calibration.
 
-**Spec:** `docs/superpowers/specs/2026-09-21-diff-follows-instructions-design.md`
+**Spec:** `docs/internal/superpowers/specs/2026-09-21-diff-follows-instructions-design.md`
 
 ---
 

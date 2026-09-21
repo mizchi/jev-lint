@@ -13,24 +13,14 @@
  * there was no ground to ask.
  */
 import { execFileSync } from "node:child_process";
+import type { Instructions, InstructionDoc } from "./types.ts";
 import { posix } from "node:path";
 
-export interface InstructionDoc {
-  /**
-   * Where this document's text actually came from: one of
-   * `INSTRUCTION_FILES`, or, when a root-level file was a symlink, the
-   * path it resolved to -- which is not always one of those names. A
-   * finding reports against this, not against the link's own name.
-   */
-  file: string;
-  text: string;
-}
-
-export interface Instructions {
-  docs: InstructionDoc[];
-  /** True when the budget cut a document short; the state has to say so. */
-  truncated: boolean;
-}
+// The two shapes a subject carries live in the contract layer, not here:
+// `src/types.ts` defines what a subject is, and a subject holds these. They
+// are re-exported so a reader who found this module first does not have to
+// know that.
+export type { Instructions, InstructionDoc } from "./types.ts";
 
 /**
  * Repository root only, for DISCOVERY: these are the only paths looked for

@@ -111,7 +111,18 @@ export function decide(
     text: subject.text,
     captured: subject.captured ?? null,
     arm: subject.arm,
-    ...(subject.commit ? { commit: { subject: subject.text.split("\n")[0] ?? "" } } : {}),
+    // A commit subject's `text` is the message, so its first line is a
+    // subject line worth quoting. A change subject's `text` is the STAT --
+    // reporting that under `commit.subject` would title a change finding
+    // with `"cart.ts | 1 +"` as though someone had written it as a commit
+    // message. `change` reports the stat's own summary line instead
+    // (`captured.SUBJECT`, the line `changeSubject` put there for exactly
+    // this), under a field name that does not claim to be a message.
+    ...(subject.commit
+      ? rule.subject === "change"
+        ? { change: { summary: subject.captured?.SUBJECT ?? subject.text.split("\n").pop() ?? "" } }
+        : { commit: { subject: subject.text.split("\n")[0] ?? "" } }
+      : {}),
     ...(subject.textCut ? { cut: { judged: subject.text.length, of: subject.textCut.of } } : {}),
   };
 

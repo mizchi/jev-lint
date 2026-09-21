@@ -11,17 +11,20 @@
 # repository that has to be true about the others.
 files: [src, tools, test, docs, AGENTS.md, package.json]
 #
-# docs/superpowers holds the plans and specs a workflow writes: working
-# documents, read once while the work is done. The prose pack is calibrated
-# on documents meant to be read -- `section-opens-with-an-agenda` asks a
-# section to open with a stance rather than a list of what it will cover,
-# which is a fair thing to ask of docs/first-blog.md and the wrong thing to
-# ask of a plan, whose whole job is to be a list of what will be covered.
-# Eight of the nine findings on the first pull request were this.
-exclude: [test/fixtures, docs/superpowers]
+# docs/internal is the working shelf -- plans, specs, the findings
+# notebook, the architecture notes, a blog draft -- and it is excluded
+# because the prose pack is calibrated on documents meant to be read.
+# `section-opens-with-an-agenda` asks a section to open with a stance
+# rather than a list of what it will cover: fair of a published document,
+# wrong of a plan, whose whole job is to be that list. Eight of the nine
+# findings on the first pull request were this one rule on those files.
+# README.md's prior-art section says as much about where these rules came
+# from: they read their norm's genre, and will flag a reference or a
+# findings log for doing what a reference does.
+exclude: [test/fixtures, docs/internal]
 
-# Every shipped rule, on. The markdown rules see no file here (docs/ is
-# not in `files`), and are listed so that turning one off is a diff.
+# Every shipped rule, on. Listed rather than defaulted, so that turning one
+# off is a diff.
 rules:
   catch-hides-failure: on
   class-shape-shows-its-role: on

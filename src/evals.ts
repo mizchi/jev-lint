@@ -34,6 +34,7 @@ import { cutoffFor, languageDirGrammars, loadRules, ruleTextHash } from "./rules
 import { patchRepo } from "./commits.ts";
 import { run } from "./run.ts";
 import { DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
+import { isGitSubject } from "./types.ts";
 import type { CustomLanguages, Label, Labels, Rule } from "./types.ts";
 
 export interface EvalSuite {
@@ -363,7 +364,7 @@ export function loadSuite(suite: EvalSuite, languages: CustomLanguages = {}): { 
 export async function planEval(suite: EvalSuite, repeat = 1, languages: CustomLanguages = {}): Promise<{ subjects: number; requests: number; tokens: number }> {
   const { rules, errors } = loadSuite(suite, languages);
   if (errors.length) throw new Error(errors.join("\n"));
-  const commitSuite = rules.some((rule) => rule.subject === "commit") ? patchRepo(suite.fixtures) : null;
+  const commitSuite = rules.some((rule) => isGitSubject(rule.subject)) ? patchRepo(suite.fixtures) : null;
   const r = await run({
     rules,
     paths: [suite.fixtures],
@@ -403,9 +404,10 @@ export async function runEval(suite: EvalSuite, opts: RunEvalOptions = {}): Prom
   // so three passes over a suite cost the wall time of one and a bit,
   // and the cases are scanned once rather than once per pass.
   // A commit suite's fixtures are cases: each made a commit of a throwaway
-  // repository, judged as commits, and named by their case directories so
-  // the expectations key on `fixtures/<case>` at line 1.
-  const commitSuite = rules.some((rule) => rule.subject === "commit") ? patchRepo(suite.fixtures) : null;
+  // repository, judged as commits or as changes depending on the suite's
+  // rule, and named by their case directories so the expectations key on
+  // `fixtures/<case>` at line 1.
+  const commitSuite = rules.some((rule) => isGitSubject(rule.subject)) ? patchRepo(suite.fixtures) : null;
   const r = await run({
     rules,
     paths: [suite.fixtures],

@@ -630,8 +630,8 @@ function collectCommits(
   cwd: string,
   label?: (sha: string) => string,
   squash?: string,
-): CollectResult & { commits: { range: string; total: number; skippedMerges: number } } {
-  const { subjects, commits, skippedMerges } =
+): CollectResult & { commits: { range: string; total: number; skippedMerges: number; noInstructionDoc: number } } {
+  const { subjects, commits, skippedMerges, noInstructionDoc } =
     squash !== undefined ? squashSubjects(rules, range, squash, cwd) : commitSubjects(rules, range, cwd, label);
   return {
     subjects,
@@ -646,7 +646,7 @@ function collectCommits(
     duplicateGrammars: 0,
     ignored: { subjects: 0, files: [], unknownRules: [] },
     unpaired: { subjects: 0, files: [] },
-    commits: { range, total: commits, skippedMerges },
+    commits: { range, total: commits, skippedMerges, noInstructionDoc },
   };
 }
 

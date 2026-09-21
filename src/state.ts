@@ -138,22 +138,35 @@ export function buildState({
   language,
   tests = null,
 }: BuildStateArgs): StatePayload {
-  // A commit batch: one commit, its message and its diff. Nothing else in
-  // the state applies -- there is no file, no symbol table, no tests.
+  // A commit batch: one commit, its message and its diff -- or, for a
+  // change rule, the diff and the project's own instruction documents in
+  // place of a message. Nothing else in the state applies -- there is no
+  // file, no symbol table, no tests.
   const commit = subjects[0]?.commit;
   if (commit) {
+    const instructions = subjects[0]?.instructions;
     const state: StatePayload = {
       language: "Git",
-      reviewing: "one commit: its message is what the questions judge, and its diff is what the message is judged against",
-      subjects: subjects.map((s) => ({ id: s.id, rule: s.rule?.id, node: "commit" })),
-      message: subjects[0]!.text,
+      reviewing: instructions
+        ? "one change: the diff is what the questions judge, and the project's own written instructions are what it is judged against"
+        : "one commit: its message is what the questions judge, and its diff is what the message is judged against",
+      subjects: subjects.map((s) => ({ id: s.id, rule: s.rule?.id, node: s.nodeKind })),
+      // A change rule is not handed a message: there may not even be one
+      // (`--staged` runs before a commit exists), and handing it over
+      // invites the rule to judge the message instead of the change.
+      ...(instructions ? {} : { message: subjects[0]!.text }),
       files: commit.files,
       stat: commit.stat,
       diff: commit.diff,
     };
+    if (instructions) state.instructions = instructions.docs;
     if (commit.truncated) {
       state.note_on_diff =
         "`diff` was cut at a hunk boundary to fit; `stat` and `files` are complete. A file or hunk absent from `diff` may still have changed.";
+    }
+    if (instructions?.truncated) {
+      state.note_on_instructions =
+        "`instructions` was cut at a line boundary to fit. Judge what is here; an instruction that is not in it may still exist, so do not read the cut as the end of the document.";
     }
     return state;
   }

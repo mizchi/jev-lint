@@ -15,6 +15,7 @@
  */
 import { describe } from "./gate.ts";
 import { renamedRuleHint } from "./ignore.ts";
+import { isGitSubject } from "./types.ts";
 import type { Finding, ReportInput } from "./types.ts";
 import type { GapRow, StabilityReport } from "./calibrate.ts";
 
@@ -63,8 +64,11 @@ export function formatPretty(
 
   for (const [file, list] of [...byFile.entries()].sort()) {
     // A commit is named by its short sha and subject line, not by a path.
+    // A change has no message to quote -- it is named by the sha and the
+    // stat's own summary line instead.
     const commit = list[0]?.commit;
-    out.push(c.bold(commit ? `${shortRef(file)}  "${commit.subject}"` : file));
+    const change = list[0]?.change;
+    out.push(c.bold(commit ? `${shortRef(file)}  "${commit.subject}"` : change ? `${shortRef(file)}  ${change.summary}` : file));
     for (const f of list.sort((a, b) => a.line - b.line)) {
       const loc = `${f.line}`.padStart(5);
       const tag = (f.messageId ? TAG[f.messageId]?.(c) : null) ?? String(f.messageId);
@@ -124,7 +128,11 @@ export function formatPretty(
     );
     for (const f of review) {
       const num = f.kind === "score" ? `${f.value!.toFixed(2)}/${f.scale ?? 3}` : f.value!.toFixed(2);
-      const where = f.commit ? `${shortRef(f.file)}  "${f.commit.subject}"` : `${f.file}:${f.line}`;
+      const where = f.commit
+        ? `${shortRef(f.file)}  "${f.commit.subject}"`
+        : f.change
+          ? `${shortRef(f.file)}  ${f.change.summary}`
+          : `${f.file}:${f.line}`;
       out.push(c.dim(`  ${where}  ${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  ${f.message ?? f.ask}`));
     }
     out.push("");
@@ -155,6 +163,19 @@ export function formatPretty(
           "(https://github.com/mizchi/jev-lint/blob/main/docs/reference.md#a-language-ast-grep-does-not-have-built-in).",
       ),
     );
+  }
+  // The reason a change rule asked about nothing, stated -- not left for a
+  // reader to infer from its absence from `silent` below, and not called a
+  // matcher that missed: a change rule has none.
+  if (result.commits && result.commits.noInstructionDoc > 0) {
+    const changeRuleIds = (result.rules ?? []).filter((r) => r.subject === "change").map((r) => ruleKey(r));
+    if (changeRuleIds.length > 0) {
+      out.push(
+        c.dim(
+          `${result.commits.noInstructionDoc} commit(s) have no AGENTS.md or CLAUDE.md, so ${changeRuleIds.join(", ")} ${changeRuleIds.length === 1 ? "was" : "were"} not asked about them`,
+        ),
+      );
+    }
   }
   const silent = silentRules(result);
   if (silent.length > 0) {
@@ -279,11 +300,24 @@ export function silentRules(result: Partial<ReportInput>): string[] {
   if (result.commits && result.commits.total === 0) return [];
   const fired = new Set((result.subjects ?? []).map((s) => ruleKey(s.rule)));
   const idle = new Set(idleLanguages(result).map((l) => l.language));
+  // A change rule has no matcher, so it cannot be a matcher that missed.
+  // When `noInstructionDoc` accounts for every non-merge commit in the
+  // range, that is the whole reason it produced nothing -- there was no
+  // AGENTS.md or CLAUDE.md anywhere in the range to judge a diff against,
+  // which `formatPretty` says in its own line. A change rule that still
+  // found nothing despite SOME commit having a document is a different
+  // story and stays reported below, the same as any other silent rule.
+  const nonMergeCommits = result.commits ? result.commits.total - result.commits.skippedMerges : 0;
+  const noStandardAnywhere =
+    Boolean(result.commits) && nonMergeCommits > 0 && (result.commits?.noInstructionDoc ?? 0) >= nonMergeCommits;
   // In commits mode only commit rules can fire, and in file mode only the
   // others can; a rule of the other kind is not silent, it is off duty. So
   // is every rule of a language the run saw no file of.
   const onDuty = (result.rules ?? []).filter(
-    (r) => (r.subject === "commit") === Boolean(result.commits) && !(r.languageDir && idle.has(r.languageDir)),
+    (r) =>
+      isGitSubject(r.subject) === Boolean(result.commits) &&
+      !(r.languageDir && idle.has(r.languageDir)) &&
+      !(noStandardAnywhere && r.subject === "change"),
   );
   return onDuty.map((r) => ruleKey(r)).filter((id) => !fired.has(id));
 }
@@ -298,7 +332,7 @@ export function idleLanguages(result: Partial<ReportInput>): Array<{ language: s
   const fired = new Set((result.subjects ?? []).map((s) => s.rule.languageDir));
   const byDir = new Map<string, number>();
   for (const r of result.rules ?? []) {
-    if (!r.languageDir || r.subject === "commit") continue;
+    if (!r.languageDir || isGitSubject(r.subject)) continue;
     byDir.set(r.languageDir, (byDir.get(r.languageDir) ?? 0) + 1);
   }
   return [...byDir.entries()]
@@ -335,6 +369,7 @@ export function formatJson(result: ReportInput): string {
     passes: f.passes ?? null,
     message: f.message ?? f.ask,
     commit: f.commit ?? null,
+    change: f.change ?? null,
     cut: f.cut ?? null,
   });
   return JSON.stringify(
@@ -384,7 +419,11 @@ export function formatGithub(result: ReportInput): string {
     const title = `${f.rule}${f.messageId === "unsure" ? " (unsure)" : ""}`;
     const num = f.kind === "score" ? `${f.value!.toFixed(2)}/${f.scale ?? 3}` : f.value!.toFixed(2);
     const why = f.explanation ? `; why: ${f.explanation.choice}` : "";
-    const where = f.commit ? `commit ${shortRef(f.file)} "${f.commit.subject}": ` : "";
+    const where = f.commit
+      ? `commit ${shortRef(f.file)} "${f.commit.subject}": `
+      : f.change
+        ? `change ${shortRef(f.file)} (${f.change.summary}): `
+        : "";
     const cut = f.cut ? `; judged on the first ${f.cut.judged} of ${f.cut.of} characters` : "";
     const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}${cut}]`;
     out.push(
