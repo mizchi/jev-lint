@@ -7,11 +7,19 @@ fixtures/store.mbt:
   - line: 27
     label: bad
     window: 0
+    reason: "boundary: the first clause is true (it does remove every expired entry) but the second is quietly false -- it returns `removed`, the count it deleted, not the count that remain, which after a purge is whatever was never expired."
+  - line: 40
+    label: bad
+    window: 0
     reason: "the doc says it drops every expired entry; the body counts them and drops none."
-  - line: 39
+  - line: 52
     label: bad
     window: 0
     reason: "the doc says the keys come back sorted, and nothing sorts them."
+  - line: 62
+    label: bad
+    window: 0
+    reason: "boundary: two of the three promised labels are right (\"empty\" at zero, \"small\" under 100) -- the third is quietly wrong, returning \"huge\" for a count the doc calls \"large\"."
   - line: 3
     label: clean
     window: 0
@@ -20,18 +28,26 @@ fixtures/store.mbt:
     label: clean
     window: 0
     reason: "hard clean: the doc claims two things -- a write and a count returned -- and the body does both."
-  - line: 49
+  - line: 75
     label: clean
     window: 0
     reason: "true, and terse."
-  - line: 55
+  - line: 81
+    label: clean
+    window: 0
+    reason: "boundary, arguable: \"refreshed\" reads two ways -- pulled from some external source (false, there is none) or read fresh with nothing cached (true: `entries.size()` is a direct call every time). Judged clean under the reading the code invites, the same reading `size` two matches below it earns for being a cheap, non-walking check. Residue: the external-refresh reading is real and a reviewer could file this as a defect."
+  - line: 87
     label: clean
     window: 0
     reason: "hard clean: the captured comment is the `///|` separator, which claims nothing; the claim two lines up (`the map knows its own size`) is true of the body."
-  - line: 61
+  - line: 93
     label: clean
     window: 0
     reason: "hard clean: the doc explains WHY, and the why is true of the body."
+  - line: 103
+    label: clean
+    window: 0
+    reason: "boundary, arguable: says it forwards to `size`, but it never calls it -- it computes `entries.size() > 0` directly. Judged clean because that expression is exactly what calling `size(entries) > 0` would evaluate to; the claim is false about implementation but not about the observable answer. Residue: a literal reading of \"forwards to\" as \"calls\" is defensible and would flag this."
 fixtures/retry.mbt:
   - line: 10
     label: bad
@@ -42,14 +58,22 @@ fixtures/retry.mbt:
     window: 0
     reason: "the doc says the delay doubles and is capped at a minute; the body multiplies by the attempt and caps nothing."
   - line: 22
+    label: bad
+    window: 0
+    reason: "boundary: the cap only fails exactly where it is supposed to act -- every attempt at or under 10 is a plain linear multiply, correct and unremarkable, and the one branch meant to enforce \"capped at ten steps\" multiplies by 11 instead of holding at 10, so the delay promised never to grow past step ten does, by exactly one step, for any attempt past it."
+  - line: 32
     label: clean
     window: 0
     reason: "hard clean: a doc that states the obvious about a one-line body is not a false claim."
-  - line: 28
+  - line: 38
     label: clean
     window: 0
-    reason: "a policy of one try is a policy that gives up immediately."
+    reason: "boundary, arguable: \"several\" and \"short\" are adjectives, not numbers -- the doc makes no specific claim a reader could pin down as false, and 3 tries at 200ms each is a defensible reading of both words next to `once` (1 try, 0ms) and `backoff`'s minute-scale delays elsewhere in the file. Residue: a reader who treats \"tuned for network calls\" as a claim this struct alone cannot establish would call it unverifiable rather than clean."
   - line: 3
     label: clean
     window: 0
     reason: "the struct's fields are what the doc names."
+  - line: 44
+    label: clean
+    window: 0
+    reason: "a policy of one try is a policy that gives up immediately."

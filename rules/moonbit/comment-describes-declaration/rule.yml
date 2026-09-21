@@ -9,7 +9,34 @@ state: located
 # defects start at 0.91. Midpoint; the gap is the widest of the three
 # MoonBit rules, which is what a comment rule does when the claim and the
 # code sit next to each other. typescript and python take 0.56.
-at: 0.59
+#
+# 2026-09-22, second pass: six new cases across `store.mbt` and `retry.mbt`,
+# interleaved. `purge` (mean 0.84, passes 0.89/0.80/0.82 -- true that it
+# removes every expired entry, false that it returns how many "remain",
+# which is really how many it removed) is the new quietest defect, beating
+# the 0.91 floor. `size_label` (0.95, one of three promised labels reads
+# "huge" where the doc says "large") and `bounded_backoff` (0.87, the cap
+# branch multiplies by 11 instead of holding at 10) landed loud, like the
+# equivalent attempts in the sibling languages. `live_size` (0.28) and
+# `network_policy` ("several tries with a short wait", 0.14) are clean and
+# safe but under the pre-existing hard-clean ceiling, so neither moved the
+# boundary. `has_entries` ("forwards to `size`", mean 0.58, passes
+# 0.63/0.63/0.47) did move it, and is the one case in this whole family of
+# four that stayed on the right side of ITS OWN sibling residue pattern --
+# `typescript`'s `discard`, `rust`'s `charge` and `javascript`'s `isEmpty`
+# all score their non-calling "forwards to X" as confidently false (0.77-
+# 0.94); `has_entries` computes the identical `entries.size() > 0` inline
+# and the model here answers close to the old cutoff instead of decisively
+# over it -- two of three passes (0.63) did cross the old `at: 0.59`, so
+# this was a real, wobbly boundary case, not a settled one. Pass-to-pass
+# spread over 3 passes: max 0.16 (`has_entries`), median 0.02 -- the widest
+# wobble in this family, exactly where calibration.md says a decision
+# should not be automated. `at: 0.71` is the midpoint of the legitimate gap
+# (`has_entries` 0.47-0.63 worst-pass, `purge` 0.80-0.89 worst-pass), moved
+# up from 0.59: worst-pass headroom is 0.08 on the clean side and 0.09 on
+# the defect side -- tighter than the other three languages' refits,
+# because `has_entries`'s wobble band is itself wide.
+at: 0.71
 axis: file
 severity: warning
 # MoonBit writes a doc comment as `///|` followed by `/// ...` lines, and an

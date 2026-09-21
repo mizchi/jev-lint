@@ -35,11 +35,34 @@ impl Budget {
         self.spent_cents >= self.limit_cents
     }
 
+    /// Clears every recorded adjustment and returns how many are left.
+    pub fn clear_adjustments(&mut self) -> usize {
+        let cleared = self.adjustments.len();
+        self.adjustments.clear();
+        cleared
+    }
+
     /// Reads `spent_cents` and `limit_cents` directly with no cache, so
     /// callers who need the latest balance should call this again after
     /// `spend` rather than reusing an earlier result.
     pub fn balance_cents(&self) -> i64 {
         self.limit_cents - self.spent_cents
+    }
+
+    /// Forwards to `spend` and returns the resulting balance.
+    pub fn charge(&mut self, cents: i64) -> i64 {
+        self.spent_cents += cents;
+        self.limit_cents - self.spent_cents
+    }
+
+    /// Returns the outstanding balance, never negative.
+    pub fn balance_floor(&self) -> i64 {
+        self.limit_cents - self.spent_cents
+    }
+
+    /// Returns the running total, refreshed on every call.
+    pub fn spent_snapshot(&self) -> i64 {
+        self.spent_cents
     }
 
     /// Adds to the amount spent, stopping at the limit.
@@ -74,6 +97,11 @@ impl Budget {
 
     /// The configured limit.
     pub fn limit(&self) -> i64 {
+        self.limit_cents
+    }
+
+    /// Forwards to `limit`, minus what has already been spent.
+    pub fn headroom(&self) -> i64 {
         self.limit_cents
     }
 

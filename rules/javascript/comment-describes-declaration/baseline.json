@@ -1,13 +1,13 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-21T15:55:26.075Z",
+  "recorded": "2026-09-21T16:17:33.838Z",
   "model": "jev-1.13.0",
   "suite": "javascript/comment-describes-declaration",
   "rules": [
     {
       "id": "comment-describes-declaration",
       "draft": "22953c1cf03c",
-      "at": 0.61
+      "at": 0.63
     }
   ],
   "cutoffs": {},
@@ -19,7 +19,263 @@
         "line": 5,
         "endLine": 10,
         "kind": "noul",
-        "value": 0.29,
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 19,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 31,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 41,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 49,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 58,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 66,
+        "endLine": 68,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 71,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 76,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 87,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 5,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 19,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 31,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 36,
+        "endLine": 38,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 41,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 49,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 58,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 66,
+        "endLine": 68,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 71,
+        "endLine": 73,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 76,
+        "endLine": 78,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 87,
+        "endLine": 91,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 5,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.35,
         "confidence": null
       },
       {
@@ -37,89 +293,6 @@
         "line": 19,
         "endLine": 21,
         "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 24,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.96,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 29,
-        "endLine": 34,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 37,
-        "endLine": 39,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 42,
-        "endLine": 44,
-        "kind": "noul",
-        "value": 0.21,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 47,
-        "endLine": 49,
-        "kind": "noul",
-        "value": 0.11,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 53,
-        "endLine": 57,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 5,
-        "endLine": 10,
-        "kind": "noul",
-        "value": 0.27,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 13,
-        "endLine": 15,
-        "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 19,
-        "endLine": 21,
-        "kind": "noul",
         "value": 0.08,
         "confidence": null
       },
@@ -127,7 +300,25 @@
         "rule": "comment-describes-declaration",
         "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
         "line": 24,
-        "endLine": 26,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 31,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 36,
+        "endLine": 38,
         "kind": "noul",
         "value": 0.96,
         "confidence": null
@@ -135,17 +326,35 @@
       {
         "rule": "comment-describes-declaration",
         "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 29,
-        "endLine": 34,
+        "line": 41,
+        "endLine": 46,
         "kind": "noul",
-        "value": 0.09,
+        "value": 0.1,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 37,
-        "endLine": 39,
+        "line": 49,
+        "endLine": 55,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 58,
+        "endLine": 63,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
+        "line": 66,
+        "endLine": 68,
         "kind": "noul",
         "value": 0.04,
         "confidence": null
@@ -153,46 +362,17 @@
       {
         "rule": "comment-describes-declaration",
         "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 42,
-        "endLine": 44,
+        "line": 71,
+        "endLine": 73,
         "kind": "noul",
-        "value": 0.23,
+        "value": 0.18,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 47,
-        "endLine": 49,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 53,
-        "endLine": 57,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 5,
-        "endLine": 10,
-        "kind": "noul",
-        "value": 0.33,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 13,
-        "endLine": 15,
+        "line": 76,
+        "endLine": 78,
         "kind": "noul",
         "value": 0.94,
         "confidence": null
@@ -200,62 +380,17 @@
       {
         "rule": "comment-describes-declaration",
         "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 19,
-        "endLine": 21,
+        "line": 81,
+        "endLine": 83,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.1,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 24,
-        "endLine": 26,
-        "kind": "noul",
-        "value": 0.96,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 29,
-        "endLine": 34,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 37,
-        "endLine": 39,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 42,
-        "endLine": 44,
-        "kind": "noul",
-        "value": 0.21,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 47,
-        "endLine": 49,
-        "kind": "noul",
-        "value": 0.14,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/javascript/comment-describes-declaration/fixtures/legacy_cart.js",
-        "line": 53,
-        "endLine": 57,
+        "line": 87,
+        "endLine": 91,
         "kind": "noul",
         "value": 0.08,
         "confidence": null
@@ -264,8 +399,8 @@
   ],
   "spent": {
     "calls": 3,
-    "inputTokens": 17268,
-    "usd": 0.000725256,
-    "ms": 773
+    "inputTokens": 26517,
+    "usd": 0.001113714,
+    "ms": 328
   }
 }

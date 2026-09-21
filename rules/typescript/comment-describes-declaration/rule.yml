@@ -45,27 +45,39 @@ subject: node
 # its callers or about a type declared elsewhere in the file, so the file is
 # where the confirmation lives. `tools/arms.ts` settles it.
 state: located
-# 2026-09-22: the corpus had five labelled defects and only two labelled
-# cleans, both section dividers -- a shape that makes no claim about the
-# declaration under it, so the rule had never been shown a comment that
-# was accurate and had to be told so. Rebuilt per the procedure
-# `typescript/comment-describes-block` recorded on 2026-09-20 (same file):
-# five new hard cleans, interleaved among the defects rather than left at
-# the top and bottom -- a unit-plus-bound claim that holds only because of
-# an explicit floor (`remainingSeconds`, 0.05), a true-but-vague claim
-# (`touch`, 0.14), an accurate delegation claim sitting one match after the
-# callee's own doc bug (`has`, 0.11), a caller's-contract claim that holds
-# because the count is read fresh with no cache (`liveCount`, 0.18), and an
-# ordering-plus-stability claim that holds because of default lexicographic
-# `sort()` and no caching (`sortedIds`, 0.28). Defects still answer
-# 0.79-0.96 -- `store` (0.79, the obsolete-parameter defect) stays the
-# quietest defect, as it was in the original corpus -- so the gap narrows
-# from 0.61 (pre-existing baseline: cleanTop 0.18, defectMin 0.79) to 0.51.
-# Pass-to-pass spread over 3 passes: max 0.07 (`sortedIds`, 0.24/0.31/0.29),
-# median 0.01. `at: 0.54` is the fitted midpoint of (0.28, 0.79); headroom is
-# 0.26 on the clean side and 0.25 on the defect side, using the mean, and
-# still positive (0.23 both sides) using each case's worst single pass.
-at: 0.54
+# 2026-09-22, second pass: the corpus above (five hard cleans, dated
+# 2026-09-21) had never been shown a case NEAR 0.54 in either direction --
+# quietest defect 0.79, loudest clean 0.28, a 0.51 gap nobody had tested.
+# Six new cases aimed at that gap, interleaved among the existing ones:
+# `reap` (0.90, buried false clause -- true that it removes every expired
+# session, false that it returns how many "remain"), `formatRemaining`
+# (0.94, one of three promised branches wrong), `evictOldest` (0.89, a
+# guarantee -- "never holds more than 500" -- nothing in the file
+# establishes), and `bumpCapped` (0.95, the cap line sets 1001 not 1000) all
+# landed loud, not quiet: this model treats a located, nameable
+# contradiction as confident regardless of how it is buried. They stay as
+# defects (real bugs, useful for recall) but did not do the boundary job.
+# `peek` (mean 0.51, passes 0.52/0.55/0.47) did: "refreshed if it is still
+# active" reads as a no-cache fresh-read claim under the file's own
+# vocabulary (`liveCount`'s "no cache" two matches above it), and one of
+# three passes crosses the old 0.54 cutoff outright. `discard` ("forwards
+# to `remove`", 0.90, passes 0.90/0.91/0.90) does not: it never calls
+# `remove`, only reimplements the identical two operations, and I judge
+# that clean -- the observable result matches a real forward exactly -- but
+# the model reads "forwards to X" as a claim about the call graph, not the
+# result, and answers it as confidently false as a real defect. That is
+# residue, not a mislabel: kept as a documented false positive this rule
+# will actually raise, the same way `var-name-describes-value` keeps its
+# unit case. Pass-to-pass spread over 3 passes: max 0.08 (`peek`), median
+# 0.02. `store` (mean 0.76, passes 0.74/0.77/0.78, the pre-existing
+# obsolete-parameter defect) is now the quietest LEGITIMATE defect -- the
+# new attempts did not beat it. `at: 0.63` is the midpoint of (0.51, 0.76),
+# not the old 0.54: headroom is 0.11 worst-pass on the defect side and 0.08
+# worst-pass on the clean side, versus 0.03 and -0.36 (`discard`) at the
+# old cutoff. `discard` sits at 0.90 regardless of where `at:` falls --
+# no cutoff below it recovers that case, and moving `at:` up to meet it
+# would drop `store` on the wrong side instead.
+at: 0.63
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

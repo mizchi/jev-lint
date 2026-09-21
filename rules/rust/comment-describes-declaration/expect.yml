@@ -20,39 +20,59 @@ fixtures/budget.rs:
     label: bad
     window: 0
     reason: the comment claims it leaves the budget untouched and it increments `checks` -- which makes it a false comment AND a predicate name on a mutating function. Both rules are right about it; flagged by fn-name-promises at 0.82 while this marker named only the comment rule. / Reports whether the budget is exhausted, without changing it.
-  - line: 41
+  - line: 39
+    label: bad
+    window: 0
+    reason: "boundary: the first clause is true (it does clear every adjustment) but the second is quietly false -- it returns `cleared`, the count that WAS there before clearing, not the count left afterward, which is always zero."
+  - line: 48
     label: clean
     window: 0
     reason: "hard clean: a comment about the caller's contract (\"call this again after `spend` rather than reusing an earlier result\") rather than the body -- it holds because the type keeps no cache and every read is a direct field subtraction."
-  - line: 46
+  - line: 53
+    label: clean
+    window: 0
+    reason: "boundary, arguable: says it forwards to `spend`, but it never calls `self.spend(...)` -- it inlines the identical `self.spent_cents += cents` and then computes the balance directly instead of calling `balance_cents`. Judged clean because `spend` itself has no clamp (see its own comment bug below), so the two operations produce identical state and an identical return value to what calling `spend` then `balance_cents` would give; nothing here names a method the type lacks. Residue: a literal reading of \"forwards to\" as \"calls\" is defensible and would flag this."
+  - line: 59
+    label: bad
+    window: 0
+    reason: "boundary: `remaining`, `balance_cents` and this method share the same subtraction, but only this one claims \"never negative,\" and nothing here clamps it -- `credit` (below) subtracts from `spent_cents` with no floor, and an unclamped `spend` (see its own comment bug) can push `spent_cents` above `limit_cents`; either makes `limit_cents - spent_cents` negative, which this function returns unchanged."
+  - line: 64
+    label: clean
+    window: 0
+    reason: "boundary, arguable: \"refreshed\" reads two ways -- renewed from some external source (false, there is none) or read fresh with nothing cached (true: it is a direct field read on every call). Judged clean under the reading the code invites, matching how `balance_cents`'s own comment uses \"no cache\" three matches above it. Residue: the external-refresh reading is real and a reviewer could file this as a defect."
+  - line: 69
     label: bad
     window: 0
     reason: says it saturates at the limit, and it does not clamp at all. / Adds to the amount spent, stopping at the limit.
-  - line: 52
+  - line: 75
     label: clean
     window: 0
     reason: "hard clean: describes what a helper it delegates to does (\"forwards to `check_count`\") where that is exactly the whole body."
-  - line: 57
+  - line: 80
     label: bad
     window: 0
     reason: documents a `reason` parameter the function no longer takes. / Resets the budget, recording `reason` for the audit log.
-  - line: 62
+  - line: 85
     label: clean
     window: 0
     reason: "hard clean: true but vague -- \"applies a pending adjustment\" says nothing about the negative-total clamp or that the delta is recorded into `adjustments`, but nothing it does say is contradicted."
-  - line: 71
+  - line: 94
     label: clean
     window: 0
     reason: "returns exactly the counter the comment names. implicit clean, labelled 2026-09-22."
-  - line: 76
+  - line: 99
     label: clean
     window: 0
     reason: "returns exactly the field the comment names. implicit clean, labelled 2026-09-22."
-  - line: 81
+  - line: 104
+    label: bad
+    window: 0
+    reason: "boundary: the delegation claim is correct about the helper it names -- `limit` really does return `self.limit_cents` -- but wrong about this function: the comment promises the limit \"minus what has already been spent,\" and the body returns `self.limit_cents` unchanged, forgetting to subtract `self.spent_cents` at all."
+  - line: 109
     label: clean
     window: 0
     reason: "comment is about the caller's reason for this method existing (\"so callers can record a refund without auditing\") rather than the body, and it holds -- `credit` really is separate from `spend` and calls nothing audit-related. implicit clean, labelled 2026-09-22."
-  - line: 87
+  - line: 115
     label: clean
     window: 0
     reason: "hard clean: states an ordering (\"oldest first\") -- `adjustments` is only ever appended to via `Vec::push` in `apply_adjustment`, so returning the slice in storage order really is insertion order."

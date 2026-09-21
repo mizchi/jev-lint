@@ -18,9 +18,25 @@ pub fn backoff(policy : Policy, attempt : Int) -> Int {
 }
 
 ///|
+/// Multiplies the delay by the attempt number, capped at ten steps.
+pub fn bounded_backoff(policy : Policy, attempt : Int) -> Int {
+  if attempt > 10 {
+    policy.delay_ms * 11
+  } else {
+    policy.delay_ms * attempt
+  }
+}
+
+///|
 /// The delay for the first attempt, which is always zero.
 pub fn first_delay(policy : Policy) -> Int {
   0
+}
+
+///|
+/// A policy tuned for network calls: several tries with a short wait.
+pub fn network_policy() -> Policy {
+  { tries: 3, delay_ms: 200 }
 }
 
 ///|

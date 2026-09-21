@@ -20,11 +20,39 @@ state: located
 # explicit clamp and a zero-length guard (`paidShare`, 0.07). Defects still
 # answer 0.94-0.96; the new cleans top out at 0.28 (`cheapestFirst`), so the
 # gap narrows from 0.72 (pre-existing baseline: cleanTop 0.19, defectMin
-# 0.91) to 0.66. Pass-to-pass spread over 3 passes: max 0.13 (`cheapestFirst`,
-# 0.21/0.28/0.34), median 0.01 -- even at its high pass `cheapestFirst` stays
-# 0.27 under the cutoff. `at: 0.61` is the fitted midpoint of (0.28, 0.94);
-# headroom is 0.33 on both sides.
-at: 0.61
+# 0.91) to 0.66.
+#
+# 2026-09-22, second pass: five new cases aimed at that gap. Two moved it
+# for real, one accidentally: `removeFree` (mean 0.83, passes
+# 0.83/0.82/0.85 -- true that it removes every free item, false that it
+# returns how many "remain", which is really the count it removed) is the
+# new quietest defect. `cheapestFirst`, an untouched pre-existing hard
+# clean, answered 0.44 this round (passes 0.47/0.42/0.43) against last
+# time's 0.28 -- `located` sends the whole file, and a file that now argues
+# with itself about several delegation claims apparently reads as less
+# certainly innocent even where nothing about `cheapestFirst` changed; it
+# is now the loudest legitimate clean, ahead of any of the five new cases.
+# `applyCappedDiscount` (0.90, the cap substitutes 101 not 100) and
+# `sizeLabel` (0.96, one of three promised labels reads "huge" for what the
+# doc calls "large") landed loud, like the equivalent attempts in the
+# sibling languages -- a nameable, located contradiction reads as confident
+# here regardless of how many other branches are correct. `liveItemCount`
+# ("refreshed on every call", mean 0.12) is clean and safe but well under
+# `cheapestFirst`, so it did not do the boundary job. `isEmpty` ("forwards
+# to `cartTotal`", mean 0.94, passes 0.94/0.93/0.94) is the same residue as
+# `typescript/comment-describes-declaration`'s `discard` and
+# `rust/comment-describes-declaration`'s `charge`: it never calls
+# `cartTotal`, only sums directly, and the zero-comparison is scale-
+# invariant so the observable answer matches exactly what calling
+# `cartTotal(items) === 0` would give -- judged clean on that basis, scored
+# as confidently false as a real defect by the model, kept as documented
+# residue rather than relabelled. Pass-to-pass spread over 3 passes: max
+# 0.05 (`cheapestFirst`, `paidShare`-adjacent context), median 0.01.
+# `at: 0.63` is the midpoint of the legitimate gap (`cheapestFirst` 0.42-0.47
+# worst-pass, `removeFree` 0.82-0.85 worst-pass), moved up from 0.61:
+# worst-pass headroom is 0.16 on the defect side and 0.16 on the clean side.
+# `isEmpty` sits at 0.93-0.94 regardless of where `at:` falls in that gap.
+at: 0.63
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

@@ -1,13 +1,13 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-09-21T04:28:25.501Z",
+  "recorded": "2026-09-21T16:17:34.873Z",
   "model": "jev-1.13.0",
   "suite": "moonbit/comment-describes-declaration",
   "rules": [
     {
       "id": "comment-describes-declaration",
       "draft": "6a08dde882aa",
-      "at": 0.59
+      "at": 0.71
     }
   ],
   "cutoffs": {},
@@ -15,56 +15,11 @@
     [
       {
         "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
-        "line": 3,
-        "endLine": 6,
-        "kind": "noul",
-        "value": 0.13,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
-        "line": 10,
-        "endLine": 12,
-        "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
-        "line": 16,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.96,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
-        "line": 22,
-        "endLine": 24,
-        "kind": "noul",
-        "value": 0.13,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
-        "line": 28,
-        "endLine": 30,
-        "kind": "noul",
-        "value": 0.2,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
         "line": 3,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.07,
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -73,7 +28,7 @@
         "line": 11,
         "endLine": 16,
         "kind": "noul",
-        "value": 0.94,
+        "value": 0.95,
         "confidence": null
       },
       {
@@ -82,23 +37,32 @@
         "line": 20,
         "endLine": 23,
         "kind": "noul",
-        "value": 0.31,
+        "value": 0.24,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
         "line": 27,
-        "endLine": 35,
+        "endLine": 36,
         "kind": "noul",
-        "value": 0.88,
+        "value": 0.78,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 39,
-        "endLine": 45,
+        "line": 40,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 52,
+        "endLine": 58,
         "kind": "noul",
         "value": 0.92,
         "confidence": null
@@ -106,102 +70,55 @@
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 49,
-        "endLine": 51,
+        "line": 62,
+        "endLine": 71,
         "kind": "noul",
-        "value": 0.05,
+        "value": 0.96,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 55,
-        "endLine": 57,
+        "line": 75,
+        "endLine": 77,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.09,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 61,
-        "endLine": 67,
+        "line": 81,
+        "endLine": 83,
         "kind": "noul",
-        "value": 0.24,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 3,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.07,
+        "value": 0.25,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 11,
-        "endLine": 16,
+        "line": 87,
+        "endLine": 89,
         "kind": "noul",
-        "value": 0.94,
+        "value": 0.08,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 20,
-        "endLine": 23,
+        "line": 93,
+        "endLine": 99,
         "kind": "noul",
-        "value": 0.28,
+        "value": 0.22,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 27,
-        "endLine": 35,
+        "line": 103,
+        "endLine": 105,
         "kind": "noul",
-        "value": 0.9,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 39,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.91,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 49,
-        "endLine": 51,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 55,
-        "endLine": 57,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "comment-describes-declaration",
-        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 61,
-        "endLine": 67,
-        "kind": "noul",
-        "value": 0.28,
+        "value": 0.59,
         "confidence": null
       },
       {
@@ -210,7 +127,7 @@
         "line": 3,
         "endLine": 6,
         "kind": "noul",
-        "value": 0.13,
+        "value": 0.08,
         "confidence": null
       },
       {
@@ -219,7 +136,7 @@
         "line": 10,
         "endLine": 12,
         "kind": "noul",
-        "value": 0.94,
+        "value": 0.95,
         "confidence": null
       },
       {
@@ -235,7 +152,16 @@
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
         "line": 22,
-        "endLine": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 32,
+        "endLine": 34,
         "kind": "noul",
         "value": 0.13,
         "confidence": null
@@ -243,10 +169,19 @@
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
-        "line": 28,
-        "endLine": 30,
+        "line": 38,
+        "endLine": 40,
         "kind": "noul",
-        "value": 0.18,
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.14,
         "confidence": null
       }
     ],
@@ -257,7 +192,7 @@
         "line": 3,
         "endLine": 6,
         "kind": "noul",
-        "value": 0.17,
+        "value": 0.09,
         "confidence": null
       },
       {
@@ -266,7 +201,7 @@
         "line": 10,
         "endLine": 12,
         "kind": "noul",
-        "value": 0.94,
+        "value": 0.95,
         "confidence": null
       },
       {
@@ -275,14 +210,23 @@
         "line": 16,
         "endLine": 18,
         "kind": "noul",
-        "value": 0.96,
+        "value": 0.97,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
         "line": 22,
-        "endLine": 24,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 32,
+        "endLine": 34,
         "kind": "noul",
         "value": 0.15,
         "confidence": null
@@ -290,8 +234,17 @@
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
-        "line": 28,
-        "endLine": 30,
+        "line": 38,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 44,
+        "endLine": 46,
         "kind": "noul",
         "value": 0.17,
         "confidence": null
@@ -311,7 +264,7 @@
         "line": 11,
         "endLine": 16,
         "kind": "noul",
-        "value": 0.94,
+        "value": 0.95,
         "confidence": null
       },
       {
@@ -320,23 +273,23 @@
         "line": 20,
         "endLine": 23,
         "kind": "noul",
-        "value": 0.26,
+        "value": 0.22,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
         "line": 27,
-        "endLine": 35,
+        "endLine": 36,
         "kind": "noul",
-        "value": 0.91,
+        "value": 0.71,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 39,
-        "endLine": 45,
+        "line": 40,
+        "endLine": 48,
         "kind": "noul",
         "value": 0.92,
         "confidence": null
@@ -344,17 +297,44 @@
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 49,
-        "endLine": 51,
+        "line": 52,
+        "endLine": 58,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.92,
         "confidence": null
       },
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 55,
-        "endLine": 57,
+        "line": 62,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 75,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 87,
+        "endLine": 89,
         "kind": "noul",
         "value": 0.07,
         "confidence": null
@@ -362,18 +342,200 @@
       {
         "rule": "comment-describes-declaration",
         "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
-        "line": 61,
-        "endLine": 67,
+        "line": 93,
+        "endLine": 99,
         "kind": "noul",
-        "value": 0.26,
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 103,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 3,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 11,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 20,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 27,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 40,
+        "endLine": 48,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 52,
+        "endLine": 58,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 62,
+        "endLine": 71,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 75,
+        "endLine": 77,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 81,
+        "endLine": 83,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 87,
+        "endLine": 89,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 93,
+        "endLine": 99,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/store.mbt",
+        "line": 103,
+        "endLine": 105,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 3,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 10,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 16,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 22,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 32,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 38,
+        "endLine": 40,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "comment-describes-declaration",
+        "file": "rules/moonbit/comment-describes-declaration/fixtures/retry.mbt",
+        "line": 44,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.14,
         "confidence": null
       }
     ]
   ],
   "spent": {
     "calls": 6,
-    "inputTokens": 24951,
-    "usd": 0.001047942,
-    "ms": 305
+    "inputTokens": 35964,
+    "usd": 0.0015104880000000002,
+    "ms": 892
   }
 }

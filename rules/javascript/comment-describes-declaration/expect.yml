@@ -15,24 +15,44 @@ fixtures/legacy_cart.js:
   - line: 24
     label: bad
     window: 0
+    reason: "boundary: the first clause is true (it does remove every free item) but the second is quietly false -- it returns `before - cart.items.length`, the count of items it removed, not the count that remain in the cart."
+  - line: 31
+    label: clean
+    window: 0
+    reason: "boundary, arguable: \"refreshed\" reads two ways -- pulled from some external source (false, there is none) or read fresh with nothing cached (true: a direct `.length` read on every call). Judged clean under the reading the code invites, matching `itemCount`'s own comment two matches above it. Residue: the external-refresh reading is real and a reviewer could file this as a defect."
+  - line: 36
+    label: bad
+    window: 0
     reason: claims it leaves the input alone, and it sorts in place.
-  - line: 29
+  - line: 41
     label: clean
     window: 0
     reason: "hard clean: true but vague -- \"applies a discount\" says nothing about it being percent-based or about returning new item objects instead of mutating them, but nothing it does say is contradicted."
-  - line: 37
+  - line: 49
+    label: bad
+    window: 0
+    reason: "boundary: the cap only fails exactly where it is supposed to act -- every percent at or under 100 is applied unchanged, correct and unremarkable, and the one branch meant to enforce \"capped at 100\" substitutes 101, not 100, so a discount promised never to exceed 100 does, by exactly one, for any input above it."
+  - line: 58
+    label: bad
+    window: 0
+    reason: "boundary: two of the three promised labels are right (\"empty\" at zero, \"small\" under 5000) -- the third is quietly wrong, returning \"huge\" for a total the comment calls \"large\"."
+  - line: 66
     label: clean
     window: 0
     reason: "counts exactly what the comment names. implicit clean."
-  - line: 42
+  - line: 71
     label: clean
     window: 0
     reason: "hard clean: describes what a helper it delegates to does (\"forwards to `cartTotal` and rounds the result\") where that is exactly the whole body, independent of whether `cartTotal`'s own doc comment is accurate."
-  - line: 47
+  - line: 76
+    label: clean
+    window: 0
+    reason: "boundary, arguable: says it forwards to `cartTotal`, but it never calls it -- it sums prices directly and compares to zero, skipping `cartTotal`'s divide-by-100. Judged clean because the comparison is scale-invariant: a sum of prices is zero exactly when that sum divided by 100 is zero, so the observable result -- whether the cart reads as empty -- is identical to what calling `cartTotal(items) === 0` would give. Residue: a literal reading of \"forwards to\" as \"calls\" is defensible and would flag this."
+  - line: 81
     label: clean
     window: 0
     reason: "empties exactly what the comment names. implicit clean."
-  - line: 53
+  - line: 87
     label: clean
     window: 0
     reason: "hard clean: states a bound (\"0 and 100 inclusive\") that would look wrong from the arithmetic alone -- `Math.round` on a ratio near 1 could in principle overshoot -- and holds only because of the explicit `Math.min(100, ...)` clamp and the `items.length === 0` guard against dividing by zero."

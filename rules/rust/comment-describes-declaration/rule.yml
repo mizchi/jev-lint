@@ -19,11 +19,35 @@ state: located
 # Defects still answer 0.92-0.95; the new cleans top out at 0.22
 # (`apply_adjustment`), so the gap narrows to 0.70 -- the four `criteria:
 # "false"` shapes read as more clean, not less, so this is the corpus doing
-# its job rather than the rule getting worse. Pass-to-pass spread over 3
-# passes: max 0.04, median 0.01 -- no case wobbles near a boundary. `at: 0.57`
-# is the fitted midpoint of (0.22, 0.92); headroom is 0.35 on both sides,
-# wide enough that the midpoint is not a coin flip here (see calibration.md).
-at: 0.57
+# its job rather than the rule getting worse.
+#
+# 2026-09-22, second pass: 0.35 of headroom on both sides at `at: 0.57` meant
+# no case in the corpus was near that cutoff either way. Five new cases,
+# interleaved: `clear_adjustments` (mean 0.81, passes 0.77/0.82/0.83 -- true
+# that it clears every adjustment, false that it returns how many are
+# "left", which after a clear is always zero) is now the quietest defect,
+# beating the pre-existing 0.92 floor but still short of the boundary.
+# `balance_floor` (0.92) and `headroom` (0.94, correct about the helper it
+# names -- `limit` really does return `limit_cents` -- wrong about this
+# function, which forgot to subtract `spent_cents` at all) landed loud like
+# the first-pass attempts elsewhere in this family: a located, nameable
+# contradiction reads as confident here regardless of how it is phrased.
+# `spent_snapshot` ("refreshed on every call", mean 0.18) is clean and safe
+# but did not beat the pre-existing hard clean `apply_adjustment` (0.22) --
+# it did not do the boundary job either. `charge` ("forwards to `spend`",
+# mean 0.77, passes 0.78/0.75/0.77) is the same residue as
+# `typescript/comment-describes-declaration`'s `discard`: it never calls
+# `spend`, only inlines the identical arithmetic, and I judge that clean --
+# `spend` itself has no clamp, so the two are behaviourally identical -- but
+# the model answers "forwards to X" as a call-graph claim and scores it as
+# confidently false as a real defect. Kept as documented residue, not
+# relabelled. Pass-to-pass spread over 3 passes: max 0.07 (`utilization`),
+# median 0.02. `at: 0.53` is the midpoint of the legitimate gap
+# (`apply_adjustment` 0.22..0.27 worst-pass, `clear_adjustments` 0.77..0.83
+# worst-pass), not the old 0.57: worst-pass headroom is 0.24 on the defect
+# side (0.77 - 0.53) and 0.26 on the clean side (0.53 - 0.27). `charge`
+# sits at 0.75-0.78 regardless of where `at:` falls inside that gap.
+at: 0.53
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

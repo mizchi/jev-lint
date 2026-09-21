@@ -17,34 +17,58 @@ fixtures/session_store.ts:
     window: 0
     reason: says it does not mutate, and it increments `hits`.
   - line: 36
+    label: bad
+    window: 0
+    reason: "boundary: the first clause is true (it does remove every expired session) but the second is quietly false -- it returns `removed`, the count of sessions it deleted, not the count that remain."
+  - line: 48
     label: clean
     window: 0
     reason: "hard clean: describes what a helper it delegates to does (\"forwards to `lookup`\") where that is exactly the whole body, independent of `lookup`'s own doc comment being wrong two matches above it."
-  - line: 41
-    label: bad
-    window: 0
-    reason: says newest first, sorts oldest first.
-  - line: 47
+  - line: 53
     label: clean
     window: 0
-    reason: "hard clean: a comment about the caller's contract (\"should not hold onto this count across a call to `store` or `remove`\") rather than the body -- it holds because the function reads `sessions.size` fresh on every call with nothing cached."
-  - line: 52
-    label: bad
+    reason: "boundary, arguable: says it forwards to `remove`, but it never calls `remove` -- it reimplements the same two operations (check existence, then delete) directly. Judged clean because the claim a careful reader takes from \"forwards to X\" here is about the observable result (same existence check, same deletion, same return value as calling `remove` would give), and that result is exactly what happens; the code does not name a function it lacks, it just inlines one it has. Residue: a stricter reading of \"forwards to\" as a literal call would flag this, and that reading is defensible too."
+  - line: 60
+    label: clean
     window: 0
-    reason: the comment documents a `ttlSeconds` parameter that no longer exists.
+    reason: "boundary, arguable: \"refreshed\" most naturally suggests the session's expiry is renewed, and nothing here extends `expiresAt`. Judged clean under the reading the code invites: every other use of \"fresh\"/\"refreshed\" in this file (`liveCount`, `balance`-style reads) means \"read from the map with no cache,\" and `peek` does exactly that -- a plain `Map.get` with no memoization -- and correctly returns null once the session has expired, which is the one behavior a TTL-renewal reading would also require. Residue: the renewal reading is real and a reviewer could file this as a defect."
   - line: 67
     label: bad
     window: 0
-    reason: says it throws on an unknown id, and it returns false.
+    reason: says newest first, sorts oldest first.
+  - line: 73
+    label: clean
+    window: 0
+    reason: "hard clean: a comment about the caller's contract (\"should not hold onto this count across a call to `store` or `remove`\") rather than the body -- it holds because the function reads `sessions.size` fresh on every call with nothing cached."
   - line: 78
+    label: bad
+    window: 0
+    reason: "boundary: two of the three promised branches are right (\"expired\", and the seconds branch under a minute) -- the minute branch is quietly wrong, returning a string suffixed `h` (hours) for a value computed as `secs / 60`, which is minutes."
+  - line: 86
+    label: bad
+    window: 0
+    reason: the comment documents a `ttlSeconds` parameter that no longer exists.
+  - line: 101
+    label: bad
+    window: 0
+    reason: says it throws on an unknown id, and it returns false.
+  - line: 106
+    label: bad
+    window: 0
+    reason: "boundary: the body is exactly \"free the oldest session,\" which the comment also says, but the comment adds a guarantee (\"never holds more than 500 at once\") that nothing in this file establishes -- there is no check against `sessions.size`, no constant `500` anywhere, and nothing calls this function on a schedule. One call frees at most one session; the cap is asserted, not implemented."
+  - line: 118
     label: clean
     window: 0
     reason: "hard clean: states an ordering (\"ascending\") and a stability claim (\"stays stable across calls\") -- both hold because `Array.prototype.sort()` on strings is lexicographic ascending by default and the function always recomputes from the current key set rather than caching a prior order."
-  - line: 117
+  - line: 128
+    label: bad
+    window: 0
+    reason: "boundary: the cap only fails exactly where it is supposed to act -- every hit below 1000 is a plain increment, correct and unremarkable, and the one line meant to enforce \"capped at 1000\" sets the value to 1001 instead of 1000, so the counter that was promised never to exceed 1000 does, by exactly one, the moment it would otherwise reach it."
+  - line: 165
     label: clean
     window: 0
     reason: "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"
-  - line: 123
+  - line: 171
     label: clean
     window: 0
     reason: "hard clean: a section heading above the declaration, which names the part of the file and claims nothing about the function"

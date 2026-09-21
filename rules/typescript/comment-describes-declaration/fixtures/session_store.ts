@@ -32,9 +32,35 @@ export function lookup(id: string): StoredSession | null {
   return found ?? null;
 }
 
+/** Removes every expired session and returns how many remain. */
+export function reap(): number {
+  let removed = 0;
+  for (const [id, s] of sessions) {
+    if (s.expiresAt <= Date.now()) {
+      sessions.delete(id);
+      removed += 1;
+    }
+  }
+  return removed;
+}
+
 /** Forwards to `lookup` and reports only whether a session exists. */
 export function has(id: string): boolean {
   return lookup(id) !== null;
+}
+
+/** Forwards to `remove` and reports whether a session was deleted. */
+export function discard(id: string): boolean {
+  const existed = sessions.has(id);
+  sessions.delete(id);
+  return existed;
+}
+
+/** Returns the session, refreshed if it is still active. */
+export function peek(id: string): StoredSession | null {
+  const found = sessions.get(id);
+  if (!found) return null;
+  return found.expiresAt > Date.now() ? found : null;
 }
 
 /** All sessions, newest first. */
@@ -46,6 +72,14 @@ export function allSessions(): StoredSession[] {
  *  this count across a call to `store` or `remove`. */
 export function liveCount(): number {
   return sessions.size;
+}
+
+/** Formats a session's remaining time as seconds, minutes, or "expired". */
+export function formatRemaining(session: StoredSession): string {
+  const secs = Math.max(0, Math.floor((session.expiresAt - Date.now()) / 1000));
+  if (secs === 0) return "expired";
+  if (secs < 60) return `${secs}s`;
+  return `${Math.floor(secs / 60)}h`;
 }
 
 /** Stores a session that expires after `ttlSeconds` seconds. */
@@ -68,6 +102,12 @@ export function remove(id: string): boolean {
   return sessions.delete(id);
 }
 
+/** Evicts the oldest session so the store never holds more than 500 at once. */
+export function evictOldest(): void {
+  const oldest = oldestSession();
+  if (oldest) sessions.delete(oldest.id);
+}
+
 /** Clears the store. */
 export function clear(): void {
   sessions.clear();
@@ -82,6 +122,14 @@ export function sortedIds(): string[] {
 /** Kept separate from `remove` so callers can expire without auditing. */
 export function expire(id: string): void {
   sessions.delete(id);
+}
+
+/** Increments a session's hit counter, capped at 1000. */
+export function bumpCapped(id: string): void {
+  const found = sessions.get(id);
+  if (!found) return;
+  found.hits += 1;
+  if (found.hits > 1000) found.hits = 1001;
 }
 
 /** Increments and returns the hit count, or null if the session is unknown. */
