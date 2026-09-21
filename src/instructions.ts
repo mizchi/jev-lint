@@ -37,42 +37,35 @@ export const INSTRUCTION_FILES = ["AGENTS.md", "CLAUDE.md"] as const;
  * batch of many subjects can, so there is no step-down here to absorb a
  * budget picked too generously.
  *
- * Measured with this repository's own `estimateTokens`, at the sibling
- * caps a change's diff state already uses -- `MAX_DIFF_CHARS` 48,000 of
- * diff, `MAX_STAT_LINES` 120 stat lines, `MAX_FILES` 200 file paths --
- * plus a commit message and the one-subject wrapper, with real source from
- * this repository standing in for the diff so the quote-and-brace density
- * is this codebase's own rather than guessed:
+ * The rest of a change's state -- message, diff, stat, files -- is NOT a
+ * fixed cost to measure this against. `MAX_DIFF_CHARS` bounds the diff by
+ * characters, but `MAX_FILES` and `MAX_STAT_LINES` bound `files` and
+ * `stat` by COUNT, not by the length of each entry, and the commit message
+ * has no bound at all. Measured with this repository's own
+ * `estimateTokens`, holding the diff fixed at real source from this repo
+ * (so the quote-and-brace density is this codebase's own, not guessed) and
+ * varying only path length, stat column width and message length across a
+ * plausible range: the baseline with no instructions runs from about
+ * 20,800 tokens (short paths, a narrow stat, a one-line message) to about
+ * 26,500 (deep monorepo paths, a wide stat, a long message) -- a swing of
+ * roughly 5,700 tokens that has nothing to do with instructions at all. At
+ * the high end, the baseline alone is already at `STATE_BUDGET` (26,214)
+ * with zero characters of instructions added.
  *
- *   STATE_BUDGET            26,214 tokens (MAX_STATE_TOKENS 32,768 / 1.25)
- *   worst case, no docs     20,264 tokens
- *   16,000 chars of docs     4,777 tokens  -> total 25,048, margin 1,166
- *   20,000 chars of docs     5,962 tokens  -> total 26,233, OVER by 19
- *
- * 20,000 already overruns the budget outright once a realistic diff is
- * counted rather than a short one, and the margin shrinks fast enough
- * above that (18,000 chars left only 565 tokens, about 2%) that "under"
- * and "comfortably under" are different numbers here. 16,000 is the
- * largest round one with real headroom: about 1,166 tokens, 4-5% of the
- * budget, to absorb the parts of a real change -- a longer commit message,
- * a diff with a heavier quote-and-brace mix than this repository's own --
- * that this measurement did not carry.
+ * So there is no fixture here where a margin is a stable property of a
+ * chosen number; the honest claim is comparative. Instructions text costs
+ * about 4,777 tokens at 16,000 characters, 5,962 at 20,000, 7,149 at the
+ * old 24,000 -- fixed ratios, since the doc content's shape doesn't swing
+ * the way the baseline does. Under every baseline measured here, 16,000
+ * fits or comes far closer to fitting than 24,000 does, and there is no
+ * baseline measured here where 24,000 fits. 16,000 is picked on that
+ * comparison, not on a margin: a change subject is `arm: "bare"`, and a
+ * one-subject batch has no step-down to recover with, so smaller is safer
+ * here in a way it isn't for a file with many subjects -- and 16,000 is
+ * still enough to carry AGENTS.md and CLAUDE.md whole for a repository of
+ * ordinary size.
  */
 export const MAX_INSTRUCTION_CHARS = 16_000;
-
-/**
- * A pointer line runs to at most this many characters.
- *
- * A symlinked `CLAUDE.md` reads back as its target path -- `AGENTS.md`, or
- * `../AGENTS.md` with a directory in front of it -- and a line written by
- * hand doing the same job is usually "See AGENTS.md" or close to it: both
- * are a handful of characters. What this bound has to exclude is a
- * one-line document long enough to carry an instruction of its own --
- * "Everything in AGENTS.md applies, plus: never commit generated files."
- * is 68 characters and is a real rule, not a pointer. 48 sits between a
- * generous pointer and the shortest plausible one-line rule.
- */
-export const POINTER_LINE_MAX = 48;
 
 function show(ref: string | null, file: string, cwd: string): string | null {
   try {
@@ -112,32 +105,43 @@ function isCopy(text: string, already: InstructionDoc[]): boolean {
 }
 
 /**
- * A document that is nothing but a reference to another one.
+ * A document that IS a symlink, read back as its target.
  *
- * `CLAUDE.md` is very often a symlink to `AGENTS.md` -- git stores that as
- * mode 120000 whose blob content is the target path, so it reads back as
- * the single line `AGENTS.md`, not as a copy of AGENTS.md's text -- or a
- * line someone wrote by hand saying to go read the other file. Either way
- * it says nothing twice.
+ * `CLAUDE.md` is very often a symlink to `AGENTS.md`, at any depth
+ * (`docs/AGENTS.md`, `.github/AGENTS.md`, `../AGENTS.md`) and in either
+ * direction. Git stores a symlink as mode 120000 whose blob content is
+ * nothing but the target path -- no newline, no surrounding prose, no
+ * whitespace at all, because a path can't contain any. That is the whole
+ * signal: a document that is a single line, that line has no whitespace in
+ * it, and it either equals one of `INSTRUCTION_FILES` or ends with `/`
+ * followed by one. No real instruction document is a single bare path, so
+ * this cannot mistake one for a symlink.
  *
- * Checked by name against every entry in `INSTRUCTION_FILES`, not against
- * documents already read: a repository that had `CLAUDE.md` first and
- * symlinked `AGENTS.md` at it for portability points the other way from
- * the usual case, and the first document read has nothing behind it yet to
- * compare against -- a check that only looked backwards would let that
- * direction's target-path blob through as if it were a real document.
+ * It also cannot mistake a symlink for anything longer: this does not try
+ * to catch a written pointer like "See AGENTS.md for all conventions" --
+ * that survives as a document, and costs a few tokens for a sentence that
+ * tells a model nothing false. Checked by name against every entry in
+ * `INSTRUCTION_FILES`, including the document's own name: a symlink can
+ * point either way (a repository that had `CLAUDE.md` first and later
+ * symlinked `AGENTS.md` at it, for portability, points opposite the usual
+ * case), and checking only the other name would miss exactly that
+ * direction the same way comparing only against documents already read
+ * did before this.
  *
- * `POINTER_LINE_MAX` is what keeps a genuine one-line rule from being read
- * as a pointer just because it happens to name the other file.
+ * Two documents that symlink at each other -- `AGENTS.md` -> `CLAUDE.md`
+ * and back -- both get dropped here, leaving `docs: []`, indistinguishable
+ * from a repository with neither file. That's fine: a symlink loop has
+ * nothing to read either way.
  */
-function isPointer(file: string, text: string): boolean {
+function isPointer(text: string): boolean {
   const lines = text
     .trim()
     .split("\n")
     .filter((l) => l.trim() !== "");
   if (lines.length !== 1) return false;
-  const line = lines[0]!;
-  return line.length <= POINTER_LINE_MAX && INSTRUCTION_FILES.some((other) => other !== file && line.includes(other));
+  const line = lines[0]!.trim();
+  if (/\s/.test(line)) return false;
+  return INSTRUCTION_FILES.some((name) => line === name || line.endsWith(`/${name}`));
 }
 
 /**
@@ -161,6 +165,23 @@ function cut(text: string, limit: number): string {
 }
 
 /**
+ * Below this many characters of budget left, a document is skipped rather
+ * than cut down to a scrap.
+ *
+ * `cut`'s no-boundary fallback is the right call for one long paragraph
+ * and the wrong one for whatever is left after an earlier document has
+ * already taken most of the budget: a remainder of a handful of characters
+ * produces a fragment of a word, which tells a model nothing an absent
+ * document doesn't, while still costing the tokens of a second entry in
+ * `docs` and the "here is a standard" framing around it. 40 is roughly the
+ * shortest a real, terse instruction reads -- "Write commits in
+ * English." is 25 characters, "Never commit secrets." is 21 -- so a
+ * remainder under that is treated as exhausted rather than as something to
+ * cut.
+ */
+const MIN_INSTRUCTION_REMAINDER = 40;
+
+/**
  * The documents in the tree `ref` names, or in the index when `ref` is
  * null.
  *
@@ -179,8 +200,8 @@ export function readInstructions(ref: string | null, cwd: string = process.cwd()
     // document is not a standard anything is judged against, so it is
     // treated the same as no document at all rather than as a duplicate.
     if (text === null || text.trim() === "") continue;
-    if (isPointer(file, text) || isCopy(text, docs)) continue;
-    if (left <= 0) {
+    if (isPointer(text) || isCopy(text, docs)) continue;
+    if (left < MIN_INSTRUCTION_REMAINDER) {
       truncated = true;
       continue;
     }

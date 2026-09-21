@@ -2,7 +2,7 @@ import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
 import { rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { MAX_INSTRUCTION_CHARS, POINTER_LINE_MAX, readInstructions } from "../src/instructions.ts";
+import { MAX_INSTRUCTION_CHARS, readInstructions } from "../src/instructions.ts";
 import { tempRepo } from "./builders.ts";
 import { test } from "./harness.ts";
 
@@ -54,16 +54,28 @@ test("instructions: a repository with neither document yields nothing", () => {
   }
 });
 
-test("instructions: a CLAUDE.md that only points at AGENTS.md is dropped, not doubled", () => {
+test("instructions: a CLAUDE.md byte-identical to AGENTS.md is dropped, not doubled", () => {
   const same = "- Never use `any`.\n";
   const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": same, "CLAUDE.md": same } }]);
-  const pointer = tempRepo([{ message: "Rules", files: { "AGENTS.md": same, "CLAUDE.md": "See AGENTS.md\n" } }]);
   try {
     assert.deepEqual(readInstructions("HEAD", dir).docs.map((d) => d.file), ["AGENTS.md"], "identical content");
-    assert.deepEqual(readInstructions("HEAD", pointer).docs.map((d) => d.file), ["AGENTS.md"], "a one-line pointer");
   } finally {
     rmSync(dir, { recursive: true, force: true });
-    rmSync(pointer, { recursive: true, force: true });
+  }
+});
+
+test("instructions: a written pointer, as opposed to a symlink, is kept as a document", () => {
+  // isPointer only catches a document that IS a bare path -- what a
+  // symlink's blob actually is. A sentence a person wrote, even one that
+  // does nothing but point at the other file, has whitespace in it and is
+  // not caught: it costs a few tokens and tells a model nothing false, so
+  // there is no case for the false positives a word-list heuristic would
+  // risk to catch it too.
+  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Never use `any`.\n", "CLAUDE.md": "See AGENTS.md\n" } }]);
+  try {
+    assert.deepEqual(readInstructions("HEAD", dir).docs.map((d) => d.file), ["AGENTS.md", "CLAUDE.md"]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
 });
 
@@ -96,11 +108,25 @@ test("instructions: an AGENTS.md symlinked to CLAUDE.md is caught in the other d
   }
 });
 
+test("instructions: a symlink nested in a directory is still caught", () => {
+  // The case a name-only, no-depth check would miss: AGENTS.md -> docs/AGENTS.md
+  // is a real, ordinary layout, and its blob is "docs/AGENTS.md", not "AGENTS.md".
+  const dir = tempRepo([{ message: "Rules", files: { "docs/AGENTS.md": "- Real rule one.\n- Real rule two.\n" } }]);
+  try {
+    symlinkSync("docs/AGENTS.md", join(dir, "AGENTS.md"));
+    commitAll(dir, "symlink AGENTS.md to docs/AGENTS.md");
+    const got = readInstructions("HEAD", dir);
+    assert.deepEqual(got.docs, [], "docs/AGENTS.md is not an instruction file name, so the only entry is the pointer, and it is dropped");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("instructions: a one-line CLAUDE.md that states a rule of its own survives", () => {
-  // Long enough to be an instruction, not a pointer -- well past
-  // POINTER_LINE_MAX even though it names AGENTS.md.
+  // What saves this from being read as a pointer is that it has whitespace
+  // in it, not that it is long -- isPointer no longer measures length at
+  // all, only whether the whole document is a single bare path.
   const rule = "Everything in AGENTS.md applies, plus: never commit generated files.\n";
-  assert.ok(rule.trim().length > POINTER_LINE_MAX, "fixture must actually exceed the pointer bound");
   const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Base rule.\n", "CLAUDE.md": rule } }]);
   try {
     const got = readInstructions("HEAD", dir);
@@ -152,7 +178,25 @@ test("instructions: MAX_INSTRUCTION_CHARS is the default budget", () => {
   const big = "x".repeat(MAX_INSTRUCTION_CHARS + 5_000);
   const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": big } }]);
   try {
-    assert.equal(readInstructions("HEAD", dir).docs[0]!.text.length, MAX_INSTRUCTION_CHARS);
+    const got = readInstructions("HEAD", dir);
+    assert.equal(got.docs[0]!.text.length, MAX_INSTRUCTION_CHARS);
+    assert.equal(got.truncated, true);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("instructions: a remainder too small to carry an instruction is skipped, not sliced to a scrap", () => {
+  const agents = "- Keep functions small and named for what they promise.\n";
+  const claude = "- Commits are written in English, always.\n";
+  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": agents, "CLAUDE.md": claude } }]);
+  try {
+    // Enough budget for the whole of AGENTS.md plus ten characters -- too
+    // little to be worth cutting a CLAUDE.md fragment out of, but not zero.
+    const got = readInstructions("HEAD", dir, agents.length + 10);
+    assert.deepEqual(got.docs.map((d) => d.file), ["AGENTS.md"]);
+    assert.equal(got.docs[0]!.text, agents, "the document that fit is not itself cut");
+    assert.equal(got.truncated, true, "the dropped CLAUDE.md still has to be reported as a loss");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
