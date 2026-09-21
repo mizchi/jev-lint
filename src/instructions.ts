@@ -64,7 +64,19 @@ function isDuplicate(text: string, already: InstructionDoc[]): boolean {
   return lines.length === 1 && already.some((d) => lines[0]!.includes(d.file));
 }
 
-/** Cut to `limit` characters at a line boundary, never mid-sentence. */
+/**
+ * Cut to `limit` characters at the last line boundary within that window,
+ * so a rule normally sees whole lines rather than a sentence split in two.
+ *
+ * That only holds when the window has a boundary to cut at. A document
+ * that opens with one line at least `limit` characters long has none --
+ * `lastIndexOf("\n")` finds nothing (`-1`) or only the newline `head`
+ * itself started with (`0`, which would throw away the entire window to
+ * return one `"\n"`) -- and there the honest options are the raw head or
+ * nothing at all. The raw head is returned, because a document truncated
+ * mid-line is still evidence and a document dropped for being one long
+ * paragraph is none.
+ */
 function cut(text: string, limit: number): string {
   if (text.length <= limit) return text;
   const head = text.slice(0, limit);

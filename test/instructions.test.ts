@@ -59,7 +59,7 @@ test("instructions: over the budget the text is cut at a line boundary and says 
   }
 });
 
-test("instructions: the index is where --staged reads them", () => {
+test("instructions: a null ref reads the index, including a staged edit", () => {
   const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Old rule.\n" } }]);
   try {
     // Stage a change to the document itself: it is part of the change.
@@ -75,4 +75,18 @@ test("instructions: a git failure is no documents, never an exception", () => {
   // Not a repository at all: the tool must degrade to "no subject", not crash.
   const got = readInstructions("HEAD", "/");
   assert.deepEqual(got.docs, []);
+});
+
+test("instructions: a document with no line boundary in the budget is cut where it must be", () => {
+  // No newline to cut at, so there is no honest boundary and the text is
+  // cut where the budget ends. The alternative is dropping a document for
+  // being one long paragraph.
+  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "x".repeat(30_000) } }]);
+  try {
+    const got = readInstructions("HEAD", dir);
+    assert.equal(got.truncated, true);
+    assert.equal(got.docs[0]!.text.length, MAX_INSTRUCTION_CHARS);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
