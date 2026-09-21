@@ -1,19 +1,21 @@
 default: clean
 fixtures/pure.py:
-  - { line: 25, label: clean, window: 0, reason: "hard clean: to_dict reads self and builds a fresh dict." }
-  - { line: 29, label: bad, window: 0, reason: "assigns order.shipping_cents: mutates the argument on the way to the result." }
-  - { line: 36, label: clean, window: 0, reason: "hard clean: reads a module-level table only." }
-  - { line: 40, label: clean, window: 0, reason: "hard clean: a local accumulator dict, built and returned." }
-  - { line: 47, label: bad, window: 0, reason: "reads the file at `path`: I/O in a compute_." }
-  - { line: 51, label: clean, window: 0, reason: "hard clean: a hasher object is obtained and used on the argument; nothing outside the call changes." }
-  - { line: 57, label: bad, window: 0, reason: "stores the derived key into a module-level cache that outlives the call." }
-  - { line: 63, label: clean, window: 0, reason: "a regex over the argument." }
-  - { line: 67, label: clean, window: 0, reason: "hard clean: copies base and updates the copy; the arguments are untouched." }
-  - { line: 73, label: clean, window: 0, reason: "hard clean: falls back to a module-level constant, which is a read." }
-  - { line: 77, label: bad, window: 0, reason: "logs on every call: an effect in a format_." }
-  - { line: 84, label: clean, window: 0, reason: "hard clean: sorted() returns a new list; the argument is not reordered." }
-  - { line: 89, label: bad, window: 0, reason: "increments counters[\"rows\"], a metric reachable through an argument." }
-  - { line: 94, label: bad, window: 0, reason: "the None branch reads the clock: a default taken from time.time()." }
-  - { line: 100, label: clean, window: 0, reason: "hard clean: a local list appended to and returned." }
-  - { line: 107, label: clean, window: 0, reason: "int() of the argument; raising ValueError is not an effect." }
-  - { line: 111, label: clean, window: 0, reason: "hard clean: builds a parser and parses the argv it was given, not sys.argv." }
+  - { line: 26, label: clean, window: 0, reason: "hard clean: to_dict reads self and builds a fresh dict." }
+  - { line: 30, label: bad, window: 0, reason: "assigns order.shipping_cents: mutates the argument on the way to the result." }
+  - { line: 37, label: clean, window: 0, reason: "hard clean: reads a module-level table only." }
+  - { line: 41, label: clean, window: 0, reason: "hard clean: a local accumulator dict, built and returned." }
+  - { line: 48, label: bad, window: 0, reason: "reads the file at `path`: I/O in a compute_." }
+  - { line: 52, label: clean, window: 0, reason: "hard clean: a hasher object is obtained and used on the argument; nothing outside the call changes." }
+  - { line: 58, label: bad, window: 0, reason: "stores the derived key into a module-level cache that outlives the call." }
+  - { line: 64, label: clean, window: 0, reason: "a regex over the argument." }
+  - { line: 68, label: clean, window: 0, reason: "hard clean: copies base and updates the copy; the arguments are untouched." }
+  - { line: 74, label: clean, window: 0, reason: "hard clean: falls back to a module-level constant, which is a read." }
+  - { line: 78, label: bad, window: 0, reason: "logs on every call: an effect in a format_." }
+  - { line: 85, label: clean, window: 0, reason: "hard clean: sorted() returns a new list; the argument is not reordered." }
+  - { line: 90, label: bad, window: 0, reason: "increments counters[\"rows\"], a metric reachable through an argument." }
+  - { line: 95, label: bad, window: 0, reason: "the None branch reads the clock: a default taken from time.time()." }
+  - { line: 101, label: clean, window: 0, reason: "hard clean: a local list appended to and returned." }
+  - { line: 108, label: clean, window: 0, reason: "int() of the argument; raising ValueError is not an effect." }
+  - { line: 112, label: clean, window: 0, reason: "hard clean: builds a parser and parses the argv it was given, not sys.argv." }
+  - { line: 135, label: clean, window: 0, reason: "boundary clean, ported from typescript/pure-name-is-pure's parseWorkerLimits (0.31 there against a 0.55 cutoff): both _read_env_int and _read_env_str are named for the environment but parse_worker_limits calls them only with fields taken off its own `raw` argument; os.environ is never touched." }
+  - { line: 143, label: bad, window: 0, reason: "boundary defect, ported from typescript/pure-name-is-pure's parseCliOptions (0.60 there against a 0.55 cutoff): os.environ.get(\"CLUSTER_API_TOKEN\", \"\") seeds `token` unconditionally, on every call, before the argv loop that may overwrite it." }

@@ -18,3 +18,8 @@ fixtures/test_client.py:
   - { line: 48, label: clean, window: 0, reason: "hard clean: `ok` is a fixture list paired with `bad`; the two names classify the inputs." }
   - { line: 49, label: clean, window: 0, reason: "hard clean: `bad` is the list of inputs that must fail; paired classification name." }
   - { line: 60, label: clean, window: 0, reason: "hard clean: `healthy` holds the healthy count in a test and is asserted `== 2`; a terse test binding named for what it counts." }
+fixtures/jobs.py:
+  - { line: 22, label: clean, window: 0, reason: "clean, ported from typescript/var-name-describes-value's purgeExpiredSessions: `result` is the raw query result and `.rowcount` is read from it; generic and accurate. The clean twin of line 32." }
+  - { line: 27, label: clean, window: 0, reason: "clean, ported from typescript/var-name-describes-value's rebuildSearchIndex: `documents` is bound to `.rows` of the query result, which is the documents. The clean twin of line 32: same call shape, the name matches what is unwrapped." }
+  - { line: 32, label: bad, window: 0, reason: "boundary defect, ported from typescript/var-name-describes-value's sendDigestEmails (0.59 there against a 0.5 cutoff): `users` is bound to the query result itself, not to `.rows`; the loop two lines down reads `users.rows`, so the name claims the unwrapped users while the binding still holds the wrapper." }
+  - { line: 38, label: clean, window: 0, reason: "boundary clean, ported from typescript/var-name-describes-value's rebalanceShards (0.36 there against a 0.5 cutoff): `shards` is a count read from a setting and compared with 1; the plural-for-a-count convention where the initializer is a call, not a literal." }

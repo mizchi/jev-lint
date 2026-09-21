@@ -3,15 +3,25 @@ language: Python
 kind: noul
 subject: node
 state: local
-# 0.58, fitted 2026-09-20 on this rule's own evals (17 subjects: 6 defects,
-# 11 cleans of which 8 hard, 3 passes). Cleans top out at 0.30
-# (`parse_args`, which builds an argparse parser and parses the argv it was
-# handed) and every other clean answers 0.03-0.04; defects answer 0.85-0.97
-# (a file read in a compute_, a clock default in a to_, a log line in a
-# format_, a cache write in a derive_, a counter and an argument mutated).
-# Midpoint of the gap, 0.27 of headroom on each side, no decision flips,
-# max spread 0.03.
-at: 0.58
+# 0.48, refit 2026-09-22 (19 subjects: 7 defects, 12 cleans, 3 passes; up
+# from 6/11) after porting two boundary cases from typescript/pure-name-is-pure's
+# tightest corpus. Both sides are `state: local`, which is what lets the port
+# carry the uncertainty across languages -- see moonbit/pure-name-is-pure's
+# rule.yml for the same port into `state: located`, where the uncertainty
+# evaporated on sight instead. parse_cli_options (from parseCliOptions, 0.60
+# there against a 0.55 cutoff) seeds `token` from os.environ.get unconditionally,
+# on every call, before an argv loop that may override it; answers 0.59-0.67
+# here, the new quietest defect. parse_worker_limits (from parseWorkerLimits,
+# 0.31 there) calls _read_env_int/_read_env_str, both named for the
+# environment, only with fields taken off its own `raw` argument; answers
+# 0.26-0.33, the new loudest clean -- louder than the previous top,
+# `parse_args` (0.26-0.30, an argparse parser run over the argv it was
+# handed, unmoved). Defects otherwise start at 0.87 (`compute_digest`'s file
+# read, unmoved). Midpoint of the new gap (0.64, 0.31); it also re-separates
+# the old population without a flip. FN-margin 0.16 (parse_cli_options),
+# FP-margin 0.17 (parse_worker_limits), both under 0.25 of scale -- was
+# 0.28/0.26 (blind) before the port.
+at: 0.48
 axis: file
 severity: info
 rule:

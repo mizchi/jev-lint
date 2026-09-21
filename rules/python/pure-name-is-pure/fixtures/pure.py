@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import logging
+import os
 import re
 import time
 from dataclasses import dataclass, field
@@ -113,3 +114,50 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--region", default="CA")
     parser.add_argument("--limit", type=int, default=10)
     return parser.parse_args(argv)
+
+
+def _read_env_int(raw: str, default: int, minimum: int, maximum: int) -> int:
+    if not raw:
+        return default
+    try:
+        n = int(raw)
+    except ValueError:
+        return default
+    if n < minimum or n > maximum:
+        return default
+    return n
+
+
+def _read_env_str(raw: str, default: str) -> str:
+    return raw or default
+
+
+def parse_worker_limits(raw: dict[str, str]) -> dict[str, int | str]:
+    return {
+        "max_jobs": _read_env_int(raw.get("max_jobs", ""), 4, 1, 64),
+        "queue": _read_env_str(raw.get("queue", ""), "default"),
+        "timeout_sec": _read_env_int(raw.get("timeout_sec", ""), 30, 1, 3600),
+    }
+
+
+def parse_cli_options(argv: list[str]) -> dict[str, object]:
+    base_url = ""
+    token = os.environ.get("CLUSTER_API_TOKEN", "")
+    room = "main"
+    as_json = False
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        if arg == "--base-url" and i + 1 < len(argv):
+            base_url = argv[i + 1]
+            i += 1
+        elif arg == "--token" and i + 1 < len(argv):
+            token = argv[i + 1]
+            i += 1
+        elif arg == "--room" and i + 1 < len(argv):
+            room = argv[i + 1]
+            i += 1
+        elif arg == "--json":
+            as_json = True
+        i += 1
+    return {"base_url": base_url, "token": token, "room": room, "json": as_json}

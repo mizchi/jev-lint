@@ -226,3 +226,75 @@ func ComputeRate(c *Counter, now time.Time) float64 {
 	}
 	return float64(c.hits) / elapsed
 }
+
+// readEnvInt and readEnvString are named for the environment but only ever
+// look at the value they are handed; ParseWorkerLimits below is the only
+// place either is called, and it calls them with fields off its own
+// parameter.
+func readEnvInt(raw string, def, min, max int) int {
+	if raw == "" {
+		return def
+	}
+	n, err := strconv.Atoi(raw)
+	if err != nil || n < min || n > max {
+		return def
+	}
+	return n
+}
+
+func readEnvString(raw, def string) string {
+	if raw == "" {
+		return def
+	}
+	return raw
+}
+
+type WorkerLimits struct {
+	MaxJobs    int
+	Queue      string
+	TimeoutSec int
+}
+
+func ParseWorkerLimits(raw map[string]string) WorkerLimits {
+	return WorkerLimits{
+		MaxJobs:    readEnvInt(raw["max_jobs"], 4, 1, 64),
+		Queue:      readEnvString(raw["queue"], "default"),
+		TimeoutSec: readEnvInt(raw["timeout_sec"], 30, 1, 3600),
+	}
+}
+
+type CliOptions struct {
+	BaseURL string
+	Token   string
+	Room    string
+	JSON    bool
+}
+
+func ParseCliOptions(argv []string) CliOptions {
+	baseURL := ""
+	token := os.Getenv("CLUSTER_API_TOKEN")
+	room := "main"
+	asJSON := false
+	for i := 0; i < len(argv); i++ {
+		switch argv[i] {
+		case "--base-url":
+			i++
+			if i < len(argv) {
+				baseURL = argv[i]
+			}
+		case "--token":
+			i++
+			if i < len(argv) {
+				token = argv[i]
+			}
+		case "--room":
+			i++
+			if i < len(argv) {
+				room = argv[i]
+			}
+		case "--json":
+			asJSON = true
+		}
+	}
+	return CliOptions{BaseURL: baseURL, Token: token, Room: room, JSON: asJSON}
+}

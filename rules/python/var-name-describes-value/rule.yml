@@ -3,16 +3,44 @@ language: Python
 kind: noul
 subject: node
 state: located
-# 0.57, fitted 2026-09-20 on this rule's own evals (26 subjects: 6 defects,
-# 20 cleans of which 11 hard, 3 passes). Cleans top out at 0.31 (`healthy`,
-# a test binding holding the count it is named for) then 0.17 (`admin`, a
-# response named for its scenario); defects start at 0.84 (`count` bound to
-# a list, `config_path` bound to lines). Midpoint of the gap, 0.26 of headroom
-# on each side, no decision flips, max spread 0.11 (the `healthy` clean).
+# 0.44, refit 2026-09-22 (30 subjects: 7 defects, 23 cleans, 2 runs of 3
+# passes each, 6 samples per new case; up from 6/20) after porting
+# typescript/var-name-describes-value's jobs.ts shape (the query-unwrap
+# mismatch) into a new fixtures/jobs.py. Both sides are `state: located`, so
+# the port carries the file's context rather than stripping it.
+# `send_digest_emails`'s `users` (from sendDigestEmails, 0.59 there against a
+# 0.5 cutoff) is bound to the raw query result, not to `.rows`; the loop two
+# lines down reads `users.rows`, so the name claims the unwrapped rows while
+# the binding still holds the wrapper. It answers 0.47-0.55 across both runs,
+# the new quietest defect -- at the old cutoff (0.57) this would have been a
+# miss, the same shape as typescript/var-name-describes-value's own
+# batch.test.ts:33. Rather than keep it as a documented miss, the cutoff is
+# refit down through it: nothing between it and the loudest clean is closer,
+# so this is the corpus's actual gap, not one case gerrymandered around. The
+# loudest clean is still `healthy` (a test binding holding the count it is
+# named for, already documented with up to 0.11 of spread): 0.30-0.41 across
+# both runs. `rebalance_shards`'s `shards` (from rebalanceShards, 0.36 there)
+# is a count read from a setting and compared with 1, the plural-for-a-count
+# convention where the initializer is a call; answers 0.26-0.34 across both
+# runs, comfortably clean and not the binding constraint. The other two
+# ported cases are hard cleans, unchanged from typescript's reasoning:
+# `result` (0.04-0.10, generic and accurate) and `documents` (0.07-0.08,
+# named for the `.rows` it is bound to). Original defects still start at
+# 0.80 (`domain_of`'s off-by-one on which side of `@` `username` names). Set
+# at the midpoint of the worst-case gap seen across both runs (0.47 low,
+# 0.41 high), not of a single run's mean, so one noisy pass does not flip a
+# decision. FN-margin 0.03 (`users` at its lowest sampled value), FP-margin
+# 0.03 (`healthy` at its highest) -- was 0.26/0.35 (blind) before the port.
+# This is a deliberately tight fit, tighter than the general 0.25-of-scale
+# floor: `users` and `healthy` are noisy enough pass to pass that a future
+# run could cross 0.44 from either side, which is what a corpus that can see
+# the boundary is supposed to risk. No decision flips against the pre-port
+# population; the one addition that would have been a miss at the old
+# cutoff is instead correctly caught by the refit one.
 # The matcher is `assignment` with an `identifier` on the left, so a
 # dataclass field default and a module constant are subjects too; `self.x =`
 # (an `attribute` on the left) and tuple unpacking are not.
-at: 0.57
+at: 0.44
 axis: file
 severity: warning
 rule:

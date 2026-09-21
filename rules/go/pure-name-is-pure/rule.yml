@@ -3,18 +3,30 @@ language: Go
 kind: noul
 subject: node
 state: local
-# 0.60, fitted 2026-09-20 (6 defects, 12 cleans of which 8 hard, 3 passes):
-# clean tops at 0.31-0.37 (`ComputeRate`, which takes a mutex to read two
-# fields); the next clean is 0.13 (`FormatLocalTime`, a LoadLocation the
-# note calls acquiring a dependency). Defects sit at 0.90-0.97: the slog
-# line in computeTotal, time.Now in CalculateShipping, the key cache, the
-# os.WriteFile in FormatReceipt, os.Getenv in ParseConfig's fallback, and
-# toRow assigning through its pointer. Set just under the midpoint: 0.23
-# over the top clean, 0.30 under the lowest defect. Before the lock, the
-# loader and the parameter-named-env cleans were added the top clean was
-# 0.06; they are what the cutoff is measured against. Report:
-# experiments/reports/j-go/REPORT.md.
-at: 0.60
+# 0.56, refit 2026-09-22 (20 subjects: 7 defects, 13 cleans, 2 runs of 3
+# passes each, 6 samples per new case; up from 6/12) after porting two
+# boundary cases from typescript/pure-name-is-pure's tightest corpus. Both
+# sides are `state: local`, which is what makes the port carry the
+# uncertainty rather than erase it -- moonbit/pure-name-is-pure ported the
+# same two shapes into `state: located` and the uncertainty evaporated on
+# sight (0.89, 0.04); go's own state matches typescript's, and it did not.
+# ParseCliOptions (from parseCliOptions, 0.60 there against a 0.55 cutoff)
+# seeds `token` from os.Getenv unconditionally, on every call, before an
+# argv loop that may override it; answers 0.73-0.79 across both runs, the
+# new quietest defect. ParseWorkerLimits (from parseWorkerLimits, 0.31
+# there) calls readEnvInt/readEnvString, both named for the environment,
+# only with fields taken off its own parameter; answers 0.30-0.38 across
+# both runs, the new loudest clean -- close to the existing ComputeRate
+# (also 0.30-0.38 across both runs, a mutex taken to read two fields,
+# unchanged) rather than clearly above it. Defects otherwise start at 0.90
+# (ParseConfig's os.Getenv fallback, unmoved). Set at the midpoint of the
+# worst-case gap seen across both runs (0.73 low, 0.38 high), not of a
+# single run's mean, so one noisy pass does not flip a decision.
+# FN-margin 0.17 (ParseCliOptions at its lowest sampled value), FP-margin
+# 0.18 (ComputeRate/ParseWorkerLimits at their highest), both under 0.25 of
+# scale -- was 0.30/0.25 (blind) before the port. Report basis:
+# experiments/reports/j-go/REPORT.md (original fit).
+at: 0.56
 rule:
   all:
     - any:
