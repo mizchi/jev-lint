@@ -247,6 +247,7 @@ about a comment you just wrote is worth more while you still remember
 writing it. The argument against is that it spends someone else's money on
 every commit.
 
+<!-- jev-lint-ignore-next-line section-opens-with-an-agenda -->
 ## See also
 
 - [reference.md](reference.md) — every flag, every config key

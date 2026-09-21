@@ -110,12 +110,15 @@ jobs:
           TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
         # No key -- a fork, or before the secret is set -- is a skip, not a
         # failure: a review that could not run is not a review that failed.
-        # `--format github` annotates the diff at `warning`, since no shipped
-        # rule carries `severity: error`, so this reports and never blocks.
+        # `--fail-on error` is what makes the sentence above true: without
+        # it the default is that ANY finding exits 1, and this job failed on
+        # its first run for exactly that reason. No shipped rule carries
+        # `severity: error`, so with it the job annotates and never blocks.
         run: |
           if [ -z "$TYPESAFE_API_KEY" ]; then
             echo "::notice title=jev-lint::no API key available, skipping the review"
             exit 0
           fi
           node --experimental-strip-types src/cli.ts review \
-            --base "origin/${{ github.base_ref }}" --format github --cache none
+            --base "origin/${{ github.base_ref }}" --format github --cache none \
+            --fail-on error
