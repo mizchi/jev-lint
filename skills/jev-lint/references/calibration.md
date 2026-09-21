@@ -125,6 +125,15 @@ of them learned by getting it wrong:
   the corpus does not contain is invisible from inside the corpus. The
   vague-but-true comment, the conventional counter name, the entry point named
   for its directory — those go in.
+- **Aim cases at the cutoff, not at a comfortable distance from it.** A
+  corpus of obvious defects and obvious cleans reports `P 1.00 R 1.00` and
+  tells you nothing: the rule could move a quarter of the way across its
+  scale and every number would stay the same. `jev-lint eval` now fails a
+  suite like that — see below. Fifteen shipped suites were in that state
+  when the check went in, and chasing their boundaries found four real rule
+  defects that the comfortable corpora had hidden, including a confident
+  false positive at 0.84 and a security rule that cannot see who controls a
+  checksum.
 - **Keep the labels out of the files.** A `// DEFECT: named seconds, holds
   milliseconds` line above a defect is inside the file that `located` sends
   and inside the subject of an `enclosing` rule: the model is handed the
@@ -136,6 +145,40 @@ of them learned by getting it wrong:
   sentence.** Splitting one test rule into two made precision and recall drop
   from 1.0/1.0 to 0.5/0.5. The wording was fine; the two failure modes were
   nested, not disjoint, and the labels assumed disjoint. Relabelling fixed it.
+
+## A corpus that cannot see its own rule drift
+
+`jev-lint eval` measures two distances, each normalised by the rule's scale:
+from the cutoff to the **quietest labelled defect**, and from the cutoff to
+the **loudest labelled clean**. They are what the corpus would have to be
+wrong by before a number moved.
+
+| | what it means | what to do |
+| --- | --- | --- |
+| **blind** — both wider than 0.25 of scale | every case is far from the boundary; the rule can drift a quarter of its scale unnoticed | write cases that belong in the middle band |
+| **unstable** — either one narrower than that same case's own pass-to-pass spread | which side of the cutoff that case lands on is decided by the run, not the rule | move the cutoff for headroom, or add passes |
+
+This is step 6 below made mechanical: *the midpoint of a narrow gap is a coin
+flip on the next sample.* A suite that is one of these fails `eval`, including
+`eval --replay`, so it fails CI with no key and no spend.
+
+When it is a property of the rule rather than a lazy corpus, declare it:
+
+```yaml
+inconclusive: >-
+  The middle of this scale is empty because the language and the state arm
+  leave the model nothing to be unsure about, not because nobody looked.
+  Nine candidates aimed at the cutoff across two rounds each landed in one
+  confident band or the other; the per-candidate scores are in the `at:`
+  comment above.
+```
+
+The bar is that sentence's second half. A declaration that does not say what
+was tried and what it answered is a way of not looking, and the check exists
+because nobody had looked. `eval` prints the reason under the rule's row on
+every run the suite is reported — not only the run it breaks on — and a
+declaration on a suite that is neither blind nor unstable is an error, so an
+exemption cannot outlive what it excuses.
 
 ## The procedure
 

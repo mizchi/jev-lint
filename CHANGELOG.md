@@ -54,6 +54,27 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 - **`jev-lint commits --staged`** — the index as one change, which is what a
   pre-commit hook asks.
 
+- **`jev-lint eval` fails a suite whose fixtures cannot measure its own rule.**
+  A rule's corpus exists to catch the rule drifting, and `P 1.00 R 1.00` says
+  nothing about whether it can. Two distances now decide, each normalised by
+  the rule's scale: from the cutoff to the quietest labelled defect, and from
+  the cutoff to the loudest labelled clean.
+
+  Both wider than a quarter of the scale and the corpus is **blind** — every
+  fixture sits so far from the boundary that the rule could move a quarter of
+  the way across it and no number would change. Either one narrower than that
+  same case's own pass-to-pass spread and the corpus is **unstable** — which
+  side of the cutoff that case lands on is decided by the run, not by the
+  rule. Fifteen shipped suites were blind when the first half went in, and
+  `typescript/pure-name-is-pure` was reporting `R 1.00` while its quietest
+  defect cleared the cutoff by 0.00 against a spread of 0.01.
+
+  A suite that is one of these for a reason declares `inconclusive:` in its
+  `rule.yml` saying which. The declaration is printed under the rule's row on
+  every run the suite is reported, not only the run it breaks on, and a
+  declaration on a suite that is neither blind nor unstable is an error, so an
+  exemption cannot outlive the thing it excuses.
+
 ### Changed
 
 - **`init --pre-commit` and `--pre-push` write the hook into the repository**,
@@ -68,6 +89,35 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
   — and git fails a hook on any non-zero exit, so being offline or holding an
   expired key stopped you committing. The shipped bodies let 3 through and
   nothing else.
+
+- **The corpora were aimed at the cutoffs, and the scores went down.** 644
+  labelled defects became 700, and 87 of 98 rules at precision and recall 1.00
+  became 79 of 99. That is the point rather than a regression: the new cases
+  sit next to each rule's decision boundary instead of a comfortable distance
+  from it, so a rule that scored 1.00 on cases it was never going to miss now
+  reports what it does where it actually has to decide. Every cutoff that
+  moved carries the run it moved on in its `at:` comment.
+
+  Four things the boundary found, each kept as a labelled case rather than
+  quietly dropped:
+
+  - `shell/runs-downloaded-code` cannot see **who controls a checksum**. A
+    binary and the `.sha256` it is graded against, both downloaded from the
+    same host, answers 0.13 — inside the clean band, beside genuine
+    verification at 0.08 and 0.10. `sha256sum -c` reads as a check to the
+    model whatever its provenance, and today's wording has no clause for it.
+    Accepted as a miss (`R 0.86`) rather than bought with a false positive on
+    real code.
+  - `text/query-name-describes-sql` reads `WHERE status = 'pending'` under the
+    name `CountActiveOrders` as a **false positive** at 0.83–0.84,
+    confidently, where `deleted_at IS NULL` under `Active` passes.
+  - `rust/module-name-describes-contents` cannot tell **one stray export from
+    one more facet** of a cohesive module: a defect at 0.17 interleaves with a
+    genuine clean at 0.18.
+  - `shell/installs-persistence` and `moonbit/var-name-describes-value` each
+    hold an **inverted pair** — a labelled defect below a labelled clean — so
+    no cutoff gets both right. Both keep precision and take the miss, because
+    a linter that flags correct code on sight is the worse trade.
 
 ### Fixed
 

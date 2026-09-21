@@ -49,7 +49,7 @@ Knowing which half you are working on is most of the job.
 | write a rule for a convention of your own | [references/cookbook.md](references/cookbook.md), then validate as below |
 | know what every field means, `score` vs `noul`, the `state` arms | [references/rule-fields.md](references/rule-fields.md) |
 | fit a cutoff, build a rule's evals, judge whether a rule works | [references/calibration.md](references/calibration.md) |
-| judge commit messages against their diffs | `jev-lint commits`, below |
+| judge commit messages against their diffs, or a change against the repository's own AGENTS.md | `jev-lint commits`, below |
 | install it as a git hook, and know what blocks a commit | [../../docs/use-hooks.md](../../docs/use-hooks.md) |
 
 ## Running it
@@ -61,7 +61,9 @@ npx -y jev-lint check src              # judge whole files
 npx -y jev-lint run fn-name-promises src        # one shipped rule; rust/<id> for one language
 npx -y jev-lint run --file myrule.yml src       # a rule file of your own, and nothing else
 npx -y jev-lint review --base main     # judge only what the diff touched
-npx -y jev-lint commits --base main    # judge each commit's message against its diff
+npx -y jev-lint commits --base main    # judge each commit's message against its diff,
+                                       #   and each change against AGENTS.md / CLAUDE.md
+npx -y jev-lint commits --staged       # the same, on what is about to be committed
 npx -y jev-lint init                   # write .jev-lint.yaml: files, and every shipped rule on
 npx -y jev-lint rules                  # what loaded, and every validation error
 ```
@@ -73,7 +75,7 @@ which is where findings concentrate and costs a fraction of a cent.
 
 ```bash
 jev-lint review --base "$GITHUB_BASE_REF" --format github   # in CI
-jev-lint init --pre-commit      # hook: review --staged --fail-on error, on every commit
+jev-lint init --pre-commit      # hook: review --staged + commits --staged, on every commit
 jev-lint init --pre-push        # hook: commits @{upstream}..HEAD --fail-on error, before every push
 jev-lint check src --retry 3                                 # decide on the mean of 3 passes
 jev-lint check src --at fn-name-promises=0.8                 # override one cutoff for one run
@@ -85,11 +87,15 @@ failed. Any finding exits 1 unless `--fail-on <severity>` raises the bar;
 `--format github` annotates `warning` unless the rule says `severity:
 error`, and no shipped rule does. The pre-commit hook `init --pre-commit`
 writes uses `--fail-on error`, so no *finding* blocks a commit until a rule
-has earned `error`; without a key in the environment it steps aside. **Exit
-3 does block it**, though: git fails a hook on any non-zero exit, so a
-failed request -- offline, an expired key, a rate-limit storm -- stops the
-commit rather than letting it through unreviewed. Whether that is the right
-trade, and the hook body that lets 3 through, are in
+has earned `error`; without a key in the environment it steps aside. It runs
+**two** questions about what is staged -- `review --staged` for the file
+rules, then `commits --staged` for `subject: change` rules, which is where
+`git/diff-follows-instructions` judges the diff against the repository's own
+AGENTS.md or CLAUDE.md. A failed request exits 3, and git fails a hook on any
+non-zero exit, so the shipped bodies let 3 through deliberately: being unable
+to commit while offline is how a hook gets deleted rather than fixed. Both
+bodies are tracked at `.jev-lint/hooks/<name>`, reviewable like any other
+file, with a shim in git's hooks directory that finds and runs them --
 [../../docs/use-hooks.md](../../docs/use-hooks.md). `--staged` reviews what the commit will contain: no untracked files,
 no unstaged edits, though a partially staged file is judged as it is on disk.
 When paths are configured or given, `review` scans only the changed files

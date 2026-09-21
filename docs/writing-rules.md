@@ -80,6 +80,16 @@ the fit then measures the label instead of the rule — which is how this
 repository's own corpus once claimed 22 rules at 1.00/1.00 and had 17.
 Put in the hard clean cases, the ones a lazy rule would flag.
 
+And put them **near the cutoff**. A corpus of obvious defects and obvious
+cleans scores 1.00 on both axes and measures nothing: the rule could drift a
+quarter of the way across its scale and no number would move. `jev-lint eval`
+refuses a suite in that state — and equally one whose nearest case sits closer
+to the cutoff than that case's own pass-to-pass spread, where the score is
+decided by the run rather than by the rule. A rule for which this is a genuine
+property rather than a lazy corpus says so in `inconclusive:`, naming what was
+tried and what it answered; a declaration on a suite that does not need one is
+an error.
+
 ```bash
 jev-lint eval rules/typescript/catch-hides-failure --repeat 3   # ask 3 times, score at the shipped cutoff
 jev-lint eval rules/typescript/catch-hides-failure --accept     # ...and make that run the baseline

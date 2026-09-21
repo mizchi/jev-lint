@@ -28,7 +28,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
 | `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
 | `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
-| `subject` | `node` (default), `enclosing`, `file`, `commit`, `block` | what code is judged. `commit` and `block` have no matcher: `commit` is `language: Git`, its subjects the commits `jev-lint commits` lists; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |
+| `subject` | `node` (default), `enclosing`, `file`, `commit`, `change`, `block` | what code is judged. `commit`, `change` and `block` have no matcher: `commit` and `change` are `language: Git`, their subjects the commits `jev-lint commits` lists; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |
 | `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\w+)`) are the captures. A block runs from its header to the line before the next. Left out, the whole file is one block, cut at 48,000 characters with the cut declared |
 | `extensions` | `block` only | the files the rule reads, by extension (`[sql]`) |
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
@@ -39,6 +39,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `unsureBelow` | 0–1 | `score` only: a confidence under it words the finding as a question |
 | `constraints` / `utils` | | ast-grep's, passed through unchanged; part of the rule's identity for the cache |
 | `docs` / `tags` | | free text, for your own reports |
+| `inconclusive` | | why this rule's own fixtures cannot measure it, when `jev-lint eval` says they cannot. See [calibration.md](calibration.md#a-corpus-that-cannot-see-its-own-rule-drift). A declaration on a suite whose corpus *can* measure it is an error, so an exemption cannot outlive what it excuses. Never read by the model |
 | `divergent` | | why this language's copy of an id deliberately says something else. The loader warns when two copies of one id differ in `ask`, `criteria`, `note` or `explain`; a copy that declares its reason here stands the warning down, and a `divergent` on a copy that says the same thing as the others is a warning in its own right. Never read by the model |
 | `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `at` then runs 0..levels-1 |
 | `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |
@@ -114,6 +115,21 @@ problem and is not one.
   `git/commit-message-describes-diff`, whose fixtures are
   `fixtures/<case>/{message, before/, after/}` — each case becomes one
   commit on its own branch of a throwaway repository when the eval runs.
+- `change` — the **change itself**, not its message: the diff is the subject,
+  and the state carries the diff together with the `AGENTS.md` / `CLAUDE.md`
+  in force *in that change's own tree*. A commit rule's subject is the
+  message, and at pre-commit time there is no message yet, which is why this
+  is a separate subject rather than a flag on `commit`. No matcher,
+  `language: Git`, `state: bare`. Runs under `jev-lint commits`, including
+  `commits --staged`, which presents the index as one change. A tree holding
+  neither document yields **no subject at all** — the run reports how many
+  commits that was, rather than counting the rule as a matcher that missed.
+  Shipped: `git/diff-follows-instructions`.
+
+  The half that makes such a rule usable is `criteria.false`. An `AGENTS.md`
+  is mostly instructions a diff cannot be held against — *develop test-first*,
+  *ask when unclear* — and judging those puts every answer mid-scale, where no
+  cutoff separates. Name them as false and they stand aside.
 - `block` — a block of a text file no grammar parses, split at every line
   matching `split:` (an sqlc query file at each `-- name: GetUser :one`).
   No matcher, `language: Text`, `state: bare` or `located`; the header's
