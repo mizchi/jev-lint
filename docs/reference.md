@@ -57,7 +57,7 @@ failed and nothing was reported.
 | `commits --staged` | the index as one change, for a pre-commit hook: `git diff --cached` is the change and `git show :AGENTS.md` the instructions, so a staged edit to the document is judged as part of the change it arrives with. `subject: change` rules only -- there is no message yet |
 | `commits --squash [range] --message-file <path\|->` | the whole range as one change — the diff from its merge base — judged against that message: a pull request's description (`gh pr view --json title,body -q '.title+"\n\n"+.body' \| jev-lint commits --squash main..HEAD --message-file -`), a changelog entry. `--message <text>` inline. One subject, named by the range |
 | `init --pre-push` | write a hook running `commits '@{upstream}..HEAD' --fail-on error`; steps aside with no key or no upstream |
-| `eval [dirs...]` | in a checkout of this repository, or over your own rule directories: run every `rules/<lang>/<id>/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression, a changed question, or a suite reported `blind` (see Calibrating) |
+| `eval [dirs...]` | in a checkout of this repository, or over your own rule directories: run every `rules/<lang>/<id>/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression, a changed question, or a suite reported `blind` or `unstable` (see Calibrating) |
 | `--repeat <n>` / `--labels <path>` | `calibrate`: re-ask n times, fit against labels |
 | `--record <path>` | write a replayable run record — do this for anything you will quote |
 | `--force` | ignore cached verdicts |
@@ -116,7 +116,7 @@ The exit code is the same as for text.
 | `replay` | as `check`, plus `gaps` |
 | `gaps` | `gaps` (the rows of the table), `stats`, `cached`, `spent` |
 | `calibrate` | `passes`, `gaps`, `stability` (with `--repeat`), `fits` (with `--labels`), `spent` |
-| `eval` | `suites[]` with `ok`, `score` (each rule scored: `tp`/`fp`/`fn`, `precision`, `recall`, `cleanTop`, `fnMargin`, `fpMargin`, `blind`, `blindReason`), `diff`, `changedDrafts`, `recorded`, `passes`; `failed`. With `--dry-run`, each suite's `plan` |
+| `eval` | `suites[]` with `ok`, `score` (each rule scored: `tp`/`fp`/`fn`, `precision`, `recall`, `cleanTop`, `fnMargin`, `fpMargin`, `fnSpread`, `fpSpread`, `blind`, `unstable`, `inconclusiveReason`), `diff`, `changedDrafts`, `recorded`, `passes`; `failed`. With `--dry-run`, each suite's `plan` |
 | `eval --compare` | `suite`, `a`, `b` (each with `rules`), `changedDrafts`, `diff` |
 | `rules` | `rules[]` with `id`, `languageDir`, `languages`, `kind`, `subject`, `state`, `cutoff`, `loose`, `severity`, `ask`, `note`, `explain`, `uncalibrated`, `source`; `errors`, `warnings` |
 | `init` | `wrote`, and `keySet` or `hook` |
@@ -236,7 +236,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `severity` | `hint`, `info`, `warning` (default), `error` | `error` fails a build; earn it first |
 | `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `at` then runs 0..levels-1 and a finding's level is numbered. The `rules/markdown/` rules are five-level rubrics from JevSlop |
 | `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |
-| `blind` | | why this rule's own eval corpus cannot see the rule drift (see Calibrating): a non-empty reason suppresses `eval`'s `blind` failure and is shown in its place. Validated against the suite's own margins at eval time — a reason on a suite that is not blind is an error |
+| `inconclusive` | | why this rule's own eval corpus cannot speak reliably about the rule drifting (see Calibrating): blind, unstable, or both. A non-empty reason suppresses `eval`'s failure for whichever applies and is shown in its place. Validated against the suite's own margins and spreads at eval time — a reason on a suite that is neither blind nor unstable is an error |
 
 ### `score` or `noul`
 
@@ -951,7 +951,7 @@ and asks a reader for one look per twenty subjects. A rule that has
 measured its own clean band can set `loose:` just above it; `jev-lint eval`
 prints that number as `cleanTop`.
 
-### Can this corpus see the rule drift? `blind`
+### Can this corpus see the rule drift? `blind` and `unstable`
 
 Precision and recall from a suite's own fixtures are only worth something
 if the fixtures could have caught the rule getting worse. `jev-lint eval`
@@ -978,20 +978,46 @@ clean found, and a line nobody chose is not that evidence. A suite with no
 explicit label of a class has no margin on that side — reported as `null`,
 distinct from a wide one, since "never spoke" and "spoke and came back
 wide" are different problems. Below **six** matched subjects for the rule
-— `calibration.md`'s own floor for a gap to mean anything — `blind` is
-withheld rather than asserted either way, for the same reason: two labelled
-cases is a real number and a weak claim.
+— `calibration.md`'s own floor for a gap to mean anything — `blind` and
+`unstable` are both withheld rather than asserted either way, for the same
+reason: two labelled cases is a real number and a weak claim.
 
 A suite is **`blind`** when both margins are explicit, past the floor, and
 at or over **0.25** of scale — the value this repository's own survey of
 its suites used to separate blind ones from the rest, a convention, not a
-measurement. `eval --replay` fails on a blind suite exactly as it fails on
-a regression, through the same exit code. A rule that has tried and cannot
-be un-blind — fixtures genuinely aimed at the boundary that still resolve
-confidently — declares why in `blind:`, which suppresses the failure and is
-printed in the verdict's place; an empty or missing `blind:` on a blind
-suite fails, and so does a `blind:` declared on a suite that turns out not
-to be blind — a stale exemption is worse than none.
+measurement. Blind is confident and wrong: the corpus cannot see drift that
+happens.
+
+The mirror failure is **`unstable`**: a margin smaller than the
+pass-to-pass spread (max minus min, normalised the same way) of the ONE
+case that sets it — the quietest defect for FN-margin, the loudest clean
+for FP-margin — not the widest spread anywhere near the boundary, because
+the margin is a claim about that specific case's mean and it is that
+case's own noise, not some other case's, that decides whether the mean is
+signal. This is `calibration.md`'s wobble band, applied to the case an
+eval is actually trusting: "a decision inside the wobble band should not
+be automated." Either side narrower than its own spread is enough — unlike
+`blind`, which needs both sides wide before the corpus is uninformative in
+every direction, `unstable` needs only one side to make that side's margin
+a coin flip. A run of one pass (`--repeat 1` is legal) has no spread to
+compare a margin against — one value has no range — so its spread is
+`null`, not `0`, and `unstable` is never asserted from it: unmeasured is
+not the same claim as stable.
+
+`eval --replay` fails on a blind or unstable suite exactly as it fails on
+a regression, through the same exit code. A rule that has tried and
+cannot be fixed — fixtures genuinely aimed at the boundary that still
+resolve confidently, or a corpus that has tried more passes and still
+lands a margin inside its own noise — declares why in `inconclusive:`,
+which suppresses the failure for whichever applies and is printed beside
+`cleanTop`/`fitted` in the eval table every time the suite is looked at,
+not only when it breaks. An empty or missing `inconclusive:` on a suite
+that is blind or unstable fails, and so does an `inconclusive:` declared
+on a suite that turns out to be neither — a stale exemption is worse than
+none. One field covers both: a corpus that cannot speak reliably about
+drift is one idea with two symmetrical shapes, not two fields to keep in
+sync. (This field was named `blind` before it covered `unstable` too;
+renamed because neither of the two names fit the other's failure mode.)
 
 What the band is **not** is a threshold to fail on. A ratio of the score is
 the wrong shape for that: the noise is additive (a few hundredths, rarely

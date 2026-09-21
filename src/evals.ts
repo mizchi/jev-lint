@@ -106,6 +106,19 @@ export interface RuleScore {
    */
   fpMargin: number | null;
   /**
+   * The pass-to-pass spread (max minus min, normalised by `scaleOf` like the
+   * margin it sits beside) of the ONE case that sets `fnMargin` -- the
+   * quietest labelled defect, not the widest spread anywhere near the
+   * boundary. Reused because the margin is a claim about that specific
+   * case's mean, so it is that case's own noise, not some other case's,
+   * that decides whether the margin is signal or a coin flip. `null` when
+   * `fnMargin` is `null`, or the run had fewer than two passes for that
+   * case -- see the single-pass note on `unstable`.
+   */
+  fnSpread: number | null;
+  /** As `fnSpread`, for the case that sets `fpMargin`. */
+  fpSpread: number | null;
+  /**
    * Both margins at or over `BLIND_THRESHOLD`, with the corpus past
    * `MIN_MARGIN_SUBJECTS`: this suite's own fixtures cannot see the rule
    * drift, so `RULES.md`'s precision and recall from it are not worth much.
@@ -114,8 +127,29 @@ export interface RuleScore {
    * as a suite that spoke and came back wide.
    */
   blind: boolean;
-  /** This rule's own `blind:` declaration in its `rule.yml`, verbatim, or null. */
-  blindReason: string | null;
+  /**
+   * The mirror failure: `Math.abs(margin)` narrower than the pass-to-pass
+   * spread of the case that sets it, with the corpus past
+   * `MIN_MARGIN_SUBJECTS`. Which side of the cutoff that case lands on is
+   * then decided by which pass happened to run, not by the rule --
+   * `calibration.md`'s wobble band, applied to the case an eval is
+   * actually trusting. The absolute value, not the signed margin: a large
+   * NEGATIVE margin is a case decided wrong on every pass (a plain miss,
+   * already visible as `wrong`), not one whose side is in doubt -- a
+   * signed comparison would call every confidently-wrong case unstable for
+   * free. `false` when neither margin is both present and narrower (in
+   * magnitude) than its own spread, when the corpus is too small to say,
+   * or when the run had too few passes to measure a spread at all (see
+   * `MIN_SPREAD_PASSES`).
+   */
+  unstable: boolean;
+  /**
+   * This rule's own `inconclusive:` declaration in its `rule.yml`,
+   * verbatim, or null. Covers both `blind` and `unstable`: one field, since
+   * a corpus that cannot speak reliably about drift is one idea with two
+   * symmetrical shapes, not two fields to keep in sync.
+   */
+  inconclusiveReason: string | null;
 }
 
 /**
@@ -138,6 +172,18 @@ export const BLIND_THRESHOLD = 0.25;
  * and came back wide.
  */
 export const MIN_MARGIN_SUBJECTS = 6;
+
+/**
+ * A spread is a range across passes; a single number has no range. Under
+ * this many passes for the case that sets a margin, its spread is `null`
+ * rather than `0` -- `0` would claim the case is perfectly stable, which is
+ * not known, only unmeasured. `--repeat 1` is a legal eval (the shipped
+ * loop's `eval` mode defaults to 3, but a rule may be checked with one), and
+ * every case in a single-pass run has exactly one value, so `unstable` is
+ * never asserted from one: the run simply has not spoken on stability,
+ * which is not the same claim as "stable".
+ */
+export const MIN_SPREAD_PASSES = 2;
 
 /**
  * A label from an entry someone actually wrote, never from `$default`.
@@ -305,21 +351,58 @@ export function scoreEval(
     const at = atFor.get(r.id)!;
     const scale = scaleOf(r);
 
-    // Explicit-only, unlike `cleanTop` above: see `explicitLabelFor`.
-    const explicitBad = mine
-      .filter((c) => explicitLabelFor(labels, c.file, c.line, c.rule) === "bad")
-      .map((c) => c.mean);
-    const explicitClean = mine
-      .filter((c) => explicitLabelFor(labels, c.file, c.line, c.rule) === "clean")
-      .map((c) => c.mean);
-    const fnMargin = explicitBad.length > 0 ? round((Math.min(...explicitBad) - at) / scale) : null;
-    const fpMargin = explicitClean.length > 0 ? round((at - Math.max(...explicitClean)) / scale) : null;
+    // Explicit-only, unlike `cleanTop` above: see `explicitLabelFor`. Kept as
+    // the case objects, not just their means, so the margin-setting case's
+    // own `values` (its answer on every pass) is still at hand below --
+    // the spread is that specific case's noise, not the corpus's.
+    const explicitBad = mine.filter((c) => explicitLabelFor(labels, c.file, c.line, c.rule) === "bad");
+    const explicitClean = mine.filter((c) => explicitLabelFor(labels, c.file, c.line, c.rule) === "clean");
+    // The quietest defect / loudest clean: the one case each margin is
+    // actually a claim about. Ties keep the first in `cases`' sort order
+    // (rule, file, line), which is deterministic, not meaningful.
+    const quietestBad = explicitBad.length > 0 ? explicitBad.reduce((min, c) => (c.mean < min.mean ? c : min)) : null;
+    const loudestClean = explicitClean.length > 0 ? explicitClean.reduce((max, c) => (c.mean > max.mean ? c : max)) : null;
+    const fnMargin = quietestBad ? round((quietestBad.mean - at) / scale) : null;
+    const fpMargin = loudestClean ? round((at - loudestClean.mean) / scale) : null;
+
+    // The spread of THAT case, across whichever passes fed this score --
+    // not the widest spread anywhere near the boundary. A margin is a claim
+    // about one case's mean; whether that mean is signal or noise is decided
+    // by that case's own range, not by how noisy some other case happens to
+    // be. See `MIN_SPREAD_PASSES` for why fewer than two passes gives `null`.
+    const spreadOf = (c: CaseScore | null): number | null =>
+      c && c.values.length >= MIN_SPREAD_PASSES ? round((Math.max(...c.values) - Math.min(...c.values)) / scale) : null;
+    const fnSpread = spreadOf(quietestBad);
+    const fpSpread = spreadOf(loudestClean);
+
+    const enoughSubjects = mine.length >= MIN_MARGIN_SUBJECTS;
     const blind =
-      mine.length >= MIN_MARGIN_SUBJECTS &&
+      enoughSubjects &&
       fnMargin !== null &&
       fpMargin !== null &&
       fnMargin >= BLIND_THRESHOLD &&
       fpMargin >= BLIND_THRESHOLD;
+    // Either side is enough: a margin narrower than its own case's spread is
+    // a coin flip on THAT side regardless of how solid the other side is --
+    // unlike `blind`, which needs both sides wide before the corpus is
+    // uninformative in every direction.
+    //
+    // Compared on `Math.abs(margin)`, not the signed margin: a large
+    // NEGATIVE margin is a case that is confidently decided wrong on every
+    // pass (already counted in `tp`/`fp`/`fn`, already visible as `wrong`
+    // in the report), not a case whose side is undecided. Signed comparison
+    // would call every sufficiently-wrong case "unstable" for free, since
+    // any negative number is smaller than any non-negative spread --
+    // measured on this repository's own suites: `comment-describes-declaration`'s
+    // one labelled clean sits at 0.79 against a cutoff of 0.53 with a
+    // spread of 0.17 (values 0.69/0.81/0.86, all three over the cutoff on
+    // every single pass) -- an FP-margin of -0.26, confidently wrong, and
+    // wrongly `unstable` under a signed comparison. `Math.abs` correctly
+    // leaves it alone: 0.26 is not smaller than 0.17.
+    const unstable =
+      enoughSubjects &&
+      ((fnMargin !== null && fnSpread !== null && Math.abs(fnMargin) < fnSpread) ||
+        (fpMargin !== null && fpSpread !== null && Math.abs(fpMargin) < fpSpread));
 
     return {
       rule: r.id,
@@ -336,8 +419,11 @@ export function scoreEval(
         : null,
       fnMargin,
       fpMargin,
+      fnSpread,
+      fpSpread,
       blind,
-      blindReason: r.blind,
+      unstable,
+      inconclusiveReason: r.inconclusive,
     };
   });
   return { rules: ruleScores, cases };
@@ -346,26 +432,47 @@ export function scoreEval(
 const round = (n: number): number => Math.round(n * 100) / 100;
 
 /**
- * `blind:` and the margins disagreeing, named per rule: a suite blind with
- * no declaration, or a declaration on a suite that is not (any more) blind.
+ * `inconclusive:` and the two verdicts disagreeing, named per rule: a suite
+ * blind or unstable with no declaration, or a declaration on a suite that
+ * is (any more) neither.
  *
  * Read by `compareEvals` below and folded into its `reasons`, so `eval
  * --replay` fails on this through the one exit-code path it already has for
  * a regression, rather than a second mechanism beside it: `cmdEval` reads
- * only `diff.ok`/`diff.reasons`, unchanged.
+ * only `diff.ok`/`diff.reasons`, unchanged. Kept the name `blindTrouble`
+ * even though it now also reports `unstable`: it is still the one function
+ * `compareEvals` calls for "this corpus cannot speak reliably", and a
+ * rename here would be a second thing to keep in sync with `inconclusive`
+ * for no reader benefit.
  */
 export function blindTrouble(score: EvalScore): string[] {
   const fmt = (n: number | null) => (n === null ? "-" : n.toFixed(2));
   const reasons: string[] = [];
   for (const r of score.rules) {
-    if (r.blind && !r.blindReason) {
+    const troubled = r.blind || r.unstable;
+    if (troubled && !r.inconclusiveReason) {
+      if (r.blind) {
+        reasons.push(
+          `${r.rule}: blind -- FN-margin ${fmt(r.fnMargin)} and FP-margin ${fmt(r.fpMargin)} are both >= ${BLIND_THRESHOLD} of scale, ` +
+            "so this corpus cannot see the rule drift. Declare `inconclusive:` in its rule.yml with why, or aim a fixture at the boundary.",
+        );
+      }
+      if (r.unstable && r.fnMargin !== null && r.fnSpread !== null && Math.abs(r.fnMargin) < r.fnSpread) {
+        reasons.push(
+          `${r.rule}: unstable on the FN side -- FN-margin ${fmt(r.fnMargin)} is smaller than the quietest labelled defect's own pass-to-pass spread ${fmt(r.fnSpread)}, ` +
+            "so whether it clears the cutoff is decided by the run, not the rule. Declare `inconclusive:` in its rule.yml with why, or add a pass or fixtures with less pass-to-pass noise at the boundary.",
+        );
+      }
+      if (r.unstable && r.fpMargin !== null && r.fpSpread !== null && Math.abs(r.fpMargin) < r.fpSpread) {
+        reasons.push(
+          `${r.rule}: unstable on the FP side -- FP-margin ${fmt(r.fpMargin)} is smaller than the loudest labelled clean's own pass-to-pass spread ${fmt(r.fpSpread)}, ` +
+            "so whether it stays under the cutoff is decided by the run, not the rule. Declare `inconclusive:` in its rule.yml with why, or add a pass or fixtures with less pass-to-pass noise at the boundary.",
+        );
+      }
+    } else if (!troubled && r.inconclusiveReason) {
       reasons.push(
-        `${r.rule}: blind -- FN-margin ${fmt(r.fnMargin)} and FP-margin ${fmt(r.fpMargin)} are both >= ${BLIND_THRESHOLD} of scale, ` +
-          "so this corpus cannot see the rule drift. Declare `blind:` in its rule.yml with why, or aim a fixture at the boundary.",
-      );
-    } else if (!r.blind && r.blindReason) {
-      reasons.push(
-        `${r.rule}: declares \`blind: ${r.blindReason.slice(0, 80)}\` but its margins (FN-margin ${fmt(r.fnMargin)}, FP-margin ${fmt(r.fpMargin)}) are not both wide -- stale exemption, drop it.`,
+        `${r.rule}: declares \`inconclusive: ${r.inconclusiveReason.slice(0, 80)}\` but it is neither blind nor unstable ` +
+          `(FN-margin ${fmt(r.fnMargin)}/spread ${fmt(r.fnSpread)}, FP-margin ${fmt(r.fpMargin)}/spread ${fmt(r.fpSpread)}) -- stale exemption, drop it.`,
       );
     }
   }
@@ -378,8 +485,9 @@ export function blindTrouble(score: EvalScore): string[] {
  * A regression is a case that was decided rightly and now is not; an
  * improvement the reverse. A case only one side has is reported, not judged.
  * With `draftChanged` the baseline answered a different question, and the
- * comparison is refused rather than made. A suite blind with no `blind:`,
- * or declaring one it no longer earns, fails here too -- see `blindTrouble`.
+ * comparison is refused rather than made. A suite blind or unstable with no
+ * `inconclusive:`, or declaring one it no longer earns, fails here too --
+ * see `blindTrouble`.
  */
 export function compareEvals(
   baseline: EvalScore,

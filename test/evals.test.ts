@@ -123,14 +123,14 @@ const widePasses = [[
   answer("a", 5, 0.5), answer("a", 6, 0.5),
 ]];
 
-test("evals: both margins wide fails, at the shared 0.25-of-scale threshold, with no `blind:` declared", () => {
+test("evals: both margins wide fails, at the shared 0.25-of-scale threshold, with no `inconclusive:` declared", () => {
   const rule = evalRule("a", 0.5);
   const score = scoreEval(widePasses, marginLabels, [rule]);
   const a = score.rules.find((r) => r.rule === "a")!;
   assert.ok(a.fnMargin !== null && a.fnMargin >= BLIND_THRESHOLD, `fnMargin ${a.fnMargin} should be wide`);
   assert.ok(a.fpMargin !== null && a.fpMargin >= BLIND_THRESHOLD, `fpMargin ${a.fpMargin} should be wide`);
   assert.equal(a.blind, true);
-  assert.equal(a.blindReason, null);
+  assert.equal(a.inconclusiveReason, null);
   const diff = compareEvals(score, score, { draftChanged: false });
   assert.equal(diff.ok, false, "a blind suite with no declaration fails eval --replay's own gate");
   assert.match(diff.reasons.join(" "), /a: blind/);
@@ -155,19 +155,19 @@ test("evals: a near-boundary case on either side keeps a suite un-blind, and it 
   assert.deepEqual(blindTrouble(score), []);
 });
 
-test("evals: a `blind:` reason on a suite that IS blind suppresses the failure and is carried on the score", () => {
-  const reasoned = noulRule({ id: "a", at: 0.5, blind: "Nine boundary-aimed candidates over two rounds all resolved confidently to one side. Recorded 2026-09-22." });
+test("evals: an `inconclusive:` reason on a suite that IS blind suppresses the failure and is carried on the score", () => {
+  const reasoned = noulRule({ id: "a", at: 0.5, inconclusive: "Nine boundary-aimed candidates over two rounds all resolved confidently to one side. Recorded 2026-09-22." });
   const score = scoreEval(widePasses, marginLabels, [reasoned]);
   const a = score.rules.find((r) => r.rule === "a")!;
   assert.equal(a.blind, true);
-  assert.equal(a.blindReason, "Nine boundary-aimed candidates over two rounds all resolved confidently to one side. Recorded 2026-09-22.", "the declared reason is on the score, in the verdict's place");
+  assert.equal(a.inconclusiveReason, "Nine boundary-aimed candidates over two rounds all resolved confidently to one side. Recorded 2026-09-22.", "the declared reason is on the score, in the verdict's place");
   const diff = compareEvals(score, score, { draftChanged: false });
   assert.equal(diff.ok, true, "a declared reason suppresses the blind failure");
   assert.deepEqual(blindTrouble(score), []);
 });
 
-test("evals: a `blind:` declared on a rule that is NOT blind is an error", () => {
-  const reasoned = noulRule({ id: "a", at: 0.5, blind: "declared just in case" });
+test("evals: an `inconclusive:` declared on a rule that is neither blind nor unstable is an error", () => {
+  const reasoned = noulRule({ id: "a", at: 0.5, inconclusive: "declared just in case" });
   // Narrow margins on both sides: nothing near the boundary was labelled.
   const narrowLabels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
     { line: 1, label: "bad" as const, rule: "a", window: 0 },
@@ -182,10 +182,11 @@ test("evals: a `blind:` declared on a rule that is NOT blind is an error", () =>
   const score = scoreEval(narrowPasses, narrowLabels, [reasoned]);
   const a = score.rules.find((r) => r.rule === "a")!;
   assert.equal(a.blind, false, "the margins are not both wide");
-  assert.equal(a.blindReason, "declared just in case");
+  assert.equal(a.unstable, false, "one pass gives no spread to compare a margin against");
+  assert.equal(a.inconclusiveReason, "declared just in case");
   const diff = compareEvals(score, score, { draftChanged: false });
-  assert.equal(diff.ok, false, "a stale `blind:` fails, same as none on an actually-blind suite");
-  assert.match(diff.reasons.join(" "), /declares `blind:.*stale/);
+  assert.equal(diff.ok, false, "a stale `inconclusive:` fails, same as none on an actually-blind-or-unstable suite");
+  assert.match(diff.reasons.join(" "), /declares `inconclusive:.*stale/);
 });
 
 test("evals: a margin needs an EXPLICIT label of its class -- an implicit `$default` clean does not set FP-margin", () => {
@@ -247,6 +248,161 @@ test("evals: a score rule's margins are normalised by its own scale (scaleOf), n
   assert.equal(s.fnMargin, 0.3, "0.9 / 3");
   assert.equal(s.fpMargin, 0.5, "1.5 / 3");
   assert.equal(s.blind, true);
+});
+
+test("evals: a score rule's SPREAD is normalised by scaleOf too, not just its margin", () => {
+  const rule = scoreRule({ id: "s", at: 2 });
+  const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "bad" as const, rule: "s", window: 0 },
+    { line: 2, label: "bad" as const, rule: "s", window: 0 },
+    { line: 3, label: "clean" as const, rule: "s", window: 0 },
+    { line: 4, label: "clean" as const, rule: "s", window: 0 },
+  ] };
+  const passes = [
+    [answer("s", 1, 2.9), answer("s", 2, 3), answer("s", 3, 0.5), answer("s", 4, 0.5), answer("s", 5, 2), answer("s", 6, 2)],
+    // Line 1 swings from 2.9 to 2.0: a raw spread of 0.9 on the 0-3 scale,
+    // which is the same fraction of scale as the fnMargin test above --
+    // 0.3 normalised, not 0.9 raw.
+    [answer("s", 1, 2), answer("s", 2, 3), answer("s", 3, 0.5), answer("s", 4, 0.5), answer("s", 5, 2), answer("s", 6, 2)],
+  ];
+  const score = scoreEval(passes, labels, [rule]);
+  const s = score.rules.find((r) => r.rule === "s")!;
+  assert.equal(s.fnMargin, 0.15, "mean 2.45 at a cutoff of 2, on a 0-3 scale: 0.45 / 3");
+  assert.equal(s.fnSpread, 0.3, "raw spread 0.9 (2.9 - 2.0) / 3, not 0.9");
+  assert.equal(s.unstable, true, "0.15 < 0.3 once both are on the same scale");
+});
+
+test("evals: a margin narrower than its own case's pass-to-pass spread is `unstable`, named with both numbers, and fails the same gate as `blind`", () => {
+  const rule = evalRule("a", 0.5);
+  // Two passes. Line 1 (the quietest labelled defect) lands at 0.6 then 0.4:
+  // mean 0.5, dead on the cutoff, margin 0 -- and a spread of 0.2, wider than
+  // that margin, so which pass you happened to run decides whether it flags.
+  // Line 3/4 (clean) barely move, so the FP side stays solid.
+  const twoPasses = [
+    [answer("a", 1, 0.6), answer("a", 2, 0.99), answer("a", 3, 0.05), answer("a", 4, 0.05), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+    [answer("a", 1, 0.4), answer("a", 2, 0.85), answer("a", 3, 0.06), answer("a", 4, 0.05), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+  ];
+  const score = scoreEval(twoPasses, marginLabels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.fnMargin, 0, "mean 0.5 at a cutoff of 0.5");
+  assert.equal(a.fnSpread, 0.2, "0.6 - 0.4");
+  assert.equal(a.blind, false, "the FN-margin is nowhere near BLIND_THRESHOLD");
+  assert.equal(a.unstable, true, "the FN-margin is smaller than that same case's own spread");
+  const diff = compareEvals(score, score, { draftChanged: false });
+  assert.equal(diff.ok, false, "an unstable suite with no declaration fails eval --replay's own gate, same as blind");
+  assert.match(diff.reasons.join(" "), /a: unstable on the FN side -- FN-margin 0\.00 is smaller than .* spread 0\.20/);
+  assert.deepEqual(blindTrouble(score).length, 1);
+});
+
+test("evals: `unstable` needs only one side narrower than its spread -- the other side does not have to agree, unlike `blind`", () => {
+  // Same shape as the previous case, but the clean side is ALSO wide open
+  // (loudestClean sits right at the cutoff with plenty of spread). Both
+  // sides are troubled here, so this just confirms neither is required to
+  // rescue the other into `unstable: false`.
+  const rule = evalRule("a", 0.5);
+  const bothSides = [
+    [answer("a", 1, 0.6), answer("a", 2, 0.99), answer("a", 3, 0.55), answer("a", 4, 0.05), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+    [answer("a", 1, 0.4), answer("a", 2, 0.85), answer("a", 3, 0.45), answer("a", 4, 0.05), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+  ];
+  const score = scoreEval(bothSides, marginLabels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.unstable, true);
+  const reasons = blindTrouble(score);
+  assert.ok(reasons.some((r) => r.includes("unstable on the FN side")));
+  assert.ok(reasons.some((r) => r.includes("unstable on the FP side")));
+});
+
+test("evals: `unstable` is decided by the margin-setting case's OWN spread, not the widest spread anywhere near the boundary", () => {
+  // Line 2 is also an explicit defect and is far noisier (spread 0.59) than
+  // line 1, but line 1 has the lower mean, so line 1 -- not line 2 -- is the
+  // quietest defect that sets fnMargin. Line 1's own spread (0.02) is what
+  // fnMargin is compared against; line 2's noise is beside the point.
+  const rule = evalRule("a", 0.5);
+  const passes = [
+    [answer("a", 1, 0.6), answer("a", 2, 0.99), answer("a", 3, 0.05), answer("a", 4, 0.05), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+    [answer("a", 1, 0.62), answer("a", 2, 0.4), answer("a", 3, 0.06), answer("a", 4, 0.05), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+  ];
+  const score = scoreEval(passes, marginLabels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.fnMargin, 0.11, "mean 0.61 at a cutoff of 0.5");
+  assert.equal(a.fnSpread, 0.02, "line 1's own spread (0.62 - 0.6), not line 2's (0.59)");
+  assert.equal(a.unstable, false, "line 1's margin comfortably clears line 1's own spread");
+});
+
+test("evals: a confidently-wrong case (large negative margin, tight spread) is not `unstable` -- Math.abs of the margin is what is compared, not the signed value", () => {
+  // Found by running `eval --replay` against this repository's own shipped
+  // suites, not by reasoning about the formula: a loudest-clean case that
+  // sits WELL above the cutoff on every single pass (values 0.78/0.82, a
+  // spread of only 0.04) is a plain false positive, decided the same way
+  // every time -- not a case whose side is a coin flip. A signed
+  // `fpMargin < fpSpread` comparison would call it unstable for free,
+  // since any sufficiently negative margin is smaller than any spread.
+  const rule = evalRule("a", 0.5);
+  const passes = [
+    [answer("a", 1, 0.95), answer("a", 2, 0.97), answer("a", 3, 0.78), answer("a", 4, 0.05), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+    [answer("a", 1, 0.94), answer("a", 2, 0.96), answer("a", 3, 0.82), answer("a", 4, 0.06), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+  ];
+  const score = scoreEval(passes, marginLabels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.fpMargin, -0.3, "the loudest clean (line 3) sits 0.3 over the cutoff on the mean");
+  assert.equal(a.fpSpread, 0.04, "and stays over it on every pass -- 0.78 and 0.82 are both above 0.5");
+  assert.equal(a.unstable, false, "confidently wrong is not the same claim as decided by the run");
+  assert.equal(a.blind, false, "a margin this far past its sign is not evidence of blindness either");
+});
+
+test("evals: a single-pass run has no spread to measure, so `unstable` is never asserted from it -- even for a negative margin", () => {
+  // Only one value per case: `fnSpread` cannot be computed (MIN_SPREAD_PASSES
+  // is 2), so it is `null`, not `0`. Had it been coerced to `0`, a negative
+  // margin (a defect that actually misses the cutoff -- a real wrong
+  // decision, already counted in `fn`) would read as `unstable` too, which
+  // is a different claim: "this is noise" versus "this has not been
+  // measured for noise at all". `--repeat 1` is a legal eval.
+  const rule = evalRule("a", 0.5);
+  const onePass = [[
+    answer("a", 1, 0.45), answer("a", 2, 0.95), answer("a", 3, 0.05), answer("a", 4, 0.1),
+    answer("a", 5, 0.5), answer("a", 6, 0.5),
+  ]];
+  const score = scoreEval(onePass, marginLabels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.fnMargin, -0.05, "the defect at line 1 actually misses the cutoff");
+  assert.equal(a.fnSpread, null, "one pass gives one value: no range to measure");
+  assert.equal(a.unstable, false, "unmeasured is not the same claim as stable");
+});
+
+test("evals: an `inconclusive:` reason on a suite that is unstable (but not blind) suppresses the failure", () => {
+  const reasoned = noulRule({ id: "a", at: 0.5, inconclusive: "the boundary case is a coin flip across passes; accepted, see rule.yml history." });
+  const twoPasses = [
+    [answer("a", 1, 0.6), answer("a", 2, 0.99), answer("a", 3, 0.05), answer("a", 4, 0.05), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+    [answer("a", 1, 0.4), answer("a", 2, 0.85), answer("a", 3, 0.06), answer("a", 4, 0.05), answer("a", 5, 0.5), answer("a", 6, 0.5)],
+  ];
+  const score = scoreEval(twoPasses, marginLabels, [reasoned]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.equal(a.unstable, true);
+  assert.equal(a.blind, false);
+  const diff = compareEvals(score, score, { draftChanged: false });
+  assert.equal(diff.ok, true, "a declared reason suppresses the unstable failure too, same field as blind");
+  assert.deepEqual(blindTrouble(score), []);
+});
+
+test("evals: below the calibration floor, `unstable` is withheld too, same as `blind`", () => {
+  const rule = evalRule("a", 0.5);
+  // Two matched subjects, well under MIN_MARGIN_SUBJECTS: the defect's
+  // margin (0) is narrower than its spread (0.2), which would be `unstable`
+  // past the floor, but a corpus this thin has not spoken either way yet.
+  const passes = [
+    [answer("a", 1, 0.6), answer("a", 2, 0.05)],
+    [answer("a", 1, 0.4), answer("a", 2, 0.06)],
+  ];
+  const labels = { $default: "clean" as const, "rules/a/evals/cases/x.ts": [
+    { line: 1, label: "bad" as const, rule: "a", window: 0 },
+    { line: 2, label: "clean" as const, rule: "a", window: 0 },
+  ] };
+  const score = scoreEval(passes, labels, [rule]);
+  const a = score.rules.find((r) => r.rule === "a")!;
+  assert.ok(a.subjects < MIN_MARGIN_SUBJECTS);
+  assert.equal(a.fnMargin, 0);
+  assert.equal(a.fnSpread, 0.2);
+  assert.equal(a.unstable, false, "the floor was not met, so unstable is withheld rather than asserted");
 });
 
 test("evals: comparing with a baseline names the cases that got worse, and a changed question", () => {

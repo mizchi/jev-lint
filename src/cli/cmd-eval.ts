@@ -224,8 +224,12 @@ export function formatEvalSuite(
   lines.push(`  ${"rule".padEnd(36)} ${"at".padEnd(5)} ${"tp".padStart(3)} ${"fp".padStart(3)} ${"fn".padStart(3)}  ${"P".padEnd(5)} ${"R".padEnd(5)} ${"flips".padEnd(5)} ${"cleanTop".padEnd(8)} fitted`);
   const fmt = (n: number | null) => (n === null ? "-" : n.toFixed(2));
   for (const r of score.rules) {
+    // The rule's own `inconclusive:` reason goes on this row, not only in
+    // `diff.reasons` when it fails: an exemption should be read every time
+    // someone looks at the suite, not only the run it broke on.
+    const exemption = r.inconclusiveReason ? `  [inconclusive: ${r.inconclusiveReason}]` : "";
     lines.push(
-      `  ${r.rule.padEnd(36)} ${String(r.at).padEnd(5)} ${String(r.tp).padStart(3)} ${String(r.fp).padStart(3)} ${String(r.fn).padStart(3)}  ${fmt(r.precision).padEnd(5)} ${fmt(r.recall).padEnd(5)} ${String(r.flips).padEnd(5)} ${String(r.cleanTop ?? "-").padEnd(8)} ${r.fitted ?? "-"}  ${r.fitReason}`,
+      `  ${r.rule.padEnd(36)} ${String(r.at).padEnd(5)} ${String(r.tp).padStart(3)} ${String(r.fp).padStart(3)} ${String(r.fn).padStart(3)}  ${fmt(r.precision).padEnd(5)} ${fmt(r.recall).padEnd(5)} ${String(r.flips).padEnd(5)} ${String(r.cleanTop ?? "-").padEnd(8)} ${r.fitted ?? "-"}  ${r.fitReason}${exemption}`,
     );
   }
   const rel = (f: string) => relative(suite.fixtures, f);

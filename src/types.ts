@@ -270,17 +270,27 @@ export interface RuleBase {
    */
   divergent: string | null;
   /**
-   * Why this rule's own eval corpus cannot see the rule drift: both
-   * margins (`evals.ts`: FN-margin and FP-margin, the distance from the
-   * cutoff to the quietest labelled defect and the loudest labelled clean)
-   * are wide despite the fixtures being genuinely aimed at the boundary.
+   * Why this rule's own eval corpus cannot speak reliably about the rule
+   * drifting, in either of the two symmetrical ways `evals.ts` scores:
    *
-   * A non-empty value suppresses `eval`'s `blind` failure for this rule and
-   * is shown in its place; null or empty on a suite that is in fact blind
-   * fails, and so does a non-empty value on a suite that is not -- a stale
-   * exemption is worse than none. Never read by the model.
+   * - **blind** -- both margins (FN-margin and FP-margin, the distance
+   *   from the cutoff to the quietest labelled defect and the loudest
+   *   labelled clean) are wide, despite fixtures genuinely aimed at the
+   *   boundary: the corpus cannot see drift that happens.
+   * - **unstable** -- a margin is narrower than that same case's own
+   *   pass-to-pass spread: which side of the cutoff it lands on is
+   *   decided by the run, not the rule, so the corpus reports drift that
+   *   did not happen.
+   *
+   * A non-empty value suppresses `eval`'s failure for whichever of the two
+   * applies and is shown in its place; null or empty on a rule that is in
+   * fact blind or unstable fails, and so does a non-empty value on a rule
+   * that is neither -- a stale exemption is worse than none. Never read by
+   * the model. Named `inconclusive` rather than `blind`, its original name,
+   * because it now covers both failure modes and neither name on its own
+   * fit the other.
    */
-  blind: string | null;
+  inconclusive: string | null;
   /**
    * Labels for a follow-up `choice`, asked of this rule's findings only when
    * the run is given `--explain`: which of these best names why the verdict

@@ -701,18 +701,18 @@ test("rules: `divergent` must say why, not just that", () => {
   }
 });
 
-test("rules: `blind` says why a suite cannot see its rule drift, and must say why", () => {
+test("rules: `inconclusive` says why a suite cannot speak reliably about its rule drift, and must say why", () => {
   const good = normalizeRule({
     id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a.",
-    blind: "Nine boundary-aimed candidates over two rounds all resolved confidently to one side.",
+    inconclusive: "Nine boundary-aimed candidates over two rounds all resolved confidently to one side.",
   });
   assert.equal(good.error, undefined);
-  assert.equal(good.rule!.blind, "Nine boundary-aimed candidates over two rounds all resolved confidently to one side.");
-  assert.equal(normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a." }).rule!.blind, null, "no declaration means null, not empty string");
-  const empty = normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a.", blind: "   " });
-  assert.match(empty.error!, /`blind` must say why/);
-  const truthy = normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a.", blind: true });
-  assert.match(truthy.error!, /`blind` must say why/);
+  assert.equal(good.rule!.inconclusive, "Nine boundary-aimed candidates over two rounds all resolved confidently to one side.");
+  assert.equal(normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a." }).rule!.inconclusive, null, "no declaration means null, not empty string");
+  const empty = normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a.", inconclusive: "   " });
+  assert.match(empty.error!, /`inconclusive` must say why/);
+  const truthy = normalizeRule({ id: "a", language: "TypeScript", rule: { kind: "x" }, ask: "a.", inconclusive: true });
+  assert.match(truthy.error!, /`inconclusive` must say why/);
 });
 
 test("rules: every field `normalizeRule` validates refuses a bad value by name", () => {
