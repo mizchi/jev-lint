@@ -563,8 +563,8 @@ test("evals: a subject a pass never answered is counted, because nothing else co
   // and NOTHING in the summary line distinguishes a suite that answered ten
   // subjects from one that answered three and lost seven to HTTP 529. One
   // agent calibrating the shell pack read `P 1.00 R 0.67` off three of ten;
-  // in the whole-run case a baseline of nothing replays as "all as shipped"
-  // with tp, fp and fn all zero. This is the number that makes that visible.
+  // in the whole-run case an unanswered baseline scores tp, fp and fn all
+  // zero. This count lets the command reject that incomplete result.
   const full = [
     [answer("a", 1, 0.9), answer("a", 2, 0.1)],
     [answer("a", 1, 0.88), answer("a", 2, 0.12)],

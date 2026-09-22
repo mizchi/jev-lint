@@ -634,8 +634,8 @@ export async function planEval(suite: EvalSuite, repeat = 1, languages: CustomLa
  * whatever came back, which is the right thing for it to do and says nothing
  * about the rest: precision, recall and flips off three answered subjects of
  * ten look exactly like precision, recall and flips off ten. In the whole-run
- * case a baseline of nothing replays as "all as shipped" with tp, fp and fn
- * all zero. Everything that reports or accepts a record asks this first.
+ * case an unanswered baseline scores tp, fp and fn all zero. The command
+ * checks this count separately so incomplete scores cannot pass the gate.
  */
 export function unanswered(passes: EvalAnswer[][]): number {
   return passes.reduce((n, pass) => n + pass.filter((a) => a.value === null).length, 0);
