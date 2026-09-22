@@ -20,7 +20,7 @@ import type { Options, Log } from "./args.ts";
  * changed since the baseline was taken. `--accept`: make this run's record
  * the baseline; with `--accept-last`, the previous run's last.json, no
  * requests. Exit 1 on a regression or a stale baseline, so the gate can
- * fail a build.
+ * fail a build. Exit 3 when any subject-answer is missing, including on replay.
  */
 export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClient | null = null, baseDir: string = process.cwd()): Promise<number> {
   const sources = opts.rules.length > 0 ? opts.rules : ruleSources(baseDir);
@@ -32,6 +32,7 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
     return 2;
   }
   let failed = 0;
+  let missingVerdicts = false;
   const results: Array<Record<string, unknown>> = [];
   for (const suite of suites) {
     const { rules, labels, errors } = loadSuite(suite, opts.languages);
@@ -107,27 +108,32 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
       if (holes > 0) log(`${suite.name}: this baseline has ${holes} unanswered subject-answer(s) in it -- what it anchors is measured over the rest`);
     }
 
+    const empty = unanswered(record.passes);
+    if (empty > 0) {
+      missingVerdicts = true;
+      if (diff) {
+        diff.ok = false;
+        diff.reasons.push(missingVerdictReason(empty));
+        const unjudged = new Set(unjudgedSubjects(record).map(subjectKey));
+        diff.removed = diff.removed.filter((c) => !unjudged.has(subjectKey(c)));
+      }
+    }
     const wrong = score.cases.filter((c) => c.label !== "unlabeled" && !c.right);
     // With a baseline, the gate is the comparison; without one, the cases.
-    const ok = diff ? diff.ok : wrong.length === 0;
+    const ok = empty === 0 && (diff ? diff.ok : wrong.length === 0);
     if (!ok) failed += 1;
 
     if (opts.format === "json") {
-      results.push({ suite: suite.name, dir: suite.dir, ok, score, diff, changedDrafts, recorded: record.recorded, passes: record.passes.length });
+      results.push({ suite: suite.name, dir: suite.dir, ok, unanswered: empty, score, diff, changedDrafts, recorded: record.recorded, passes: record.passes.length });
     } else {
       out(formatEvalSuite(suite, score, diff, wrong, changedDrafts, record, baselineRecord, opts.replay));
     }
 
     if (opts.accept && !opts.replay) {
-      // A baseline is the contract, and a contract with holes in it is worse
-      // than none: the holes are invisible afterwards. `--replay` reproduces
-      // a null perfectly and reports the suite as shipped, so a run that lost
-      // subjects to a failed request would be accepted once and believed
-      // forever. Re-running costs a cent; this cost an afternoon.
-      const empty = unanswered(record.passes);
+      // Keep the accepted contract intact until every pass has an answer
+      // for every matched subject; scoring alone cannot detect these holes.
       if (empty > 0) {
         log(`${suite.name}: not accepting a baseline with ${empty} unanswered subject-answer(s); run it again`);
-        failed += 1;
         continue;
       }
       writeFileSync(suite.baseline, `${JSON.stringify(record, null, 2)}\n`);
@@ -136,7 +142,19 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
   }
   if (opts.format === "json") out(JSON.stringify({ suites: results, failed }, null, 2));
   else out(failed === 0 ? `${suites.length} suite(s), all as shipped` : `${failed} of ${suites.length} suite(s) failed`);
-  return failed === 0 ? 0 : 1;
+  return missingVerdicts ? 3 : failed === 0 ? 0 : 1;
+}
+
+function subjectKey(subject: { rule: string; file: string; line: number }): string {
+  return `${subject.rule}\u0000${subject.file}\u0000${subject.line}`;
+}
+
+function unjudgedSubjects(record: EvalRecord) {
+  return [...new Map(record.passes.flat().filter((a) => a.value === null).map((a) => [subjectKey(a), a])).values()];
+}
+
+function missingVerdictReason(count: number): string {
+  return `${count} subject-answer(s) got no verdict -- cannot compare with the shipped baseline; re-run the eval`;
 }
 
 /**
@@ -175,11 +193,20 @@ export function cmdEvalCompare(opts: Options, out: Log, log: Log): number {
   const drafts = new Map(left.rules.map((r) => [r.id, r.draft]));
   const changed = right.rules.filter((r) => drafts.has(r.id) && drafts.get(r.id) !== r.draft).map((r) => r.id);
   const diff = compareEvals(scoreL, scoreR, { draftChanged: false });
+  const missing = unanswered(left.passes) + unanswered(right.passes);
+  if (missing > 0) {
+    diff.ok = false;
+    diff.reasons.push(`${missing} subject-answer(s) got no verdict -- cannot compare incomplete records; re-run the eval`);
+    const unjudgedLeft = new Set(unjudgedSubjects(left).map(subjectKey));
+    const unjudgedRight = new Set(unjudgedSubjects(right).map(subjectKey));
+    diff.added = diff.added.filter((c) => !unjudgedLeft.has(subjectKey(c)));
+    diff.removed = diff.removed.filter((c) => !unjudgedRight.has(subjectKey(c)));
+  }
   const rel = (f: string) => relative(suite.fixtures, f);
   if (opts.format === "json") {
-    const summary = (path: string, rec: EvalRecord, sc: EvalScore) => ({ path, recorded: rec.recorded, model: rec.model ?? null, passes: rec.passes.length, rules: sc.rules });
+    const summary = (path: string, rec: EvalRecord, sc: EvalScore) => ({ path, recorded: rec.recorded, model: rec.model ?? null, passes: rec.passes.length, unanswered: unanswered(rec.passes), rules: sc.rules });
     out(JSON.stringify({ suite: suite.name, a: summary(a, left, scoreL), b: summary(b, right, scoreR), changedDrafts: changed, diff }, null, 2));
-    return diff.regressions.length > 0 ? 1 : 0;
+    return missing > 0 ? 3 : diff.regressions.length > 0 ? 1 : 0;
   }
   const side = (name: string, rec: EvalRecord, sc: EvalScore) => {
     out(`${name}: ${rec.recorded.slice(0, 19)}  model ${rec.model ?? "?"}  ${rec.passes.length} pass(es)`);
@@ -191,6 +218,10 @@ export function cmdEvalCompare(opts: Options, out: Log, log: Log): number {
   side(`A ${a}`, left, scoreL);
   side(`B ${b}`, right, scoreR);
   if (changed.length) out(`the question changed between A and B for: ${changed.join(", ")}`);
+  if (missing > 0) {
+    for (const reason of diff.reasons) out(`  ! ${reason}`);
+    return 3;
+  }
   out(`B against A: ${diff.regressions.length} worse, ${diff.improvements.length} better, ${diff.added.length} new, ${diff.removed.length} gone`);
   for (const c of diff.regressions) out(`  - ${rel(c.file)}:${c.line}  ${c.rule}  ${c.label}: A ${c.was}, B ${c.now} (${c.mean.toFixed(2)})`);
   for (const c of diff.improvements) out(`  + ${rel(c.file)}:${c.line}  ${c.rule}  ${c.label}: A ${c.was}, B ${c.now} (${c.mean.toFixed(2)})`);
@@ -229,6 +260,11 @@ export function formatEvalSuite(
     );
   }
   const rel = (f: string) => relative(suite.fixtures, f);
+  const empty = unanswered(record.passes);
+  if (empty > 0) {
+    if (!diff) lines.push(`  ! ${missingVerdictReason(empty)}`);
+    for (const a of unjudgedSubjects(record)) lines.push(`  ? ${rel(a.file)}:${a.line}  ${a.rule}  unjudged in one or more passes`);
+  }
   const vals = (c: CaseScore) => `[${c.values.map((v) => v.toFixed(2)).join(" ")}]`;
   for (const c of wrong) {
     lines.push(`  x ${rel(c.file)}:${c.line}  ${c.rule}  ${c.label} but ${c.decision} at ${c.mean.toFixed(2)} ${vals(c)}`);
@@ -255,7 +291,7 @@ export function formatEvalSuite(
       for (const c of diff.added) lines.push(`    ? ${rel(c.file)}:${c.line}  ${c.rule}  new subject, ${c.decision} at ${c.mean.toFixed(2)}`);
       for (const c of diff.removed) lines.push(`    ? ${rel(c.file)}:${c.line}  ${c.rule}  subject gone from the cases`);
     }
-  } else if (!baseline) {
+  } else if (!baseline && empty === 0) {
     lines.push(`  no baseline yet: \`jev-lint eval ${suite.dir} --accept\` makes this one`);
   }
   lines.push("");

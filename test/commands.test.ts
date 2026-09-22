@@ -183,6 +183,124 @@ await testAsync("commands: eval asks, accepts a baseline, replays it for free, a
   }
 });
 
+function verdictSuite(): string {
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-verdict-")));
+  mkdirSync(join(dir, "fixtures"));
+  writeFileSync(join(dir, "rule.yml"), [
+    "id: name-lies", "language: TypeScript", "kind: noul", "at: 0.5",
+    "rule: { kind: function_declaration, has: { field: name, pattern: $NAME } }",
+    "ask: This function's name ($NAME) lies.",
+    "criteria: { 'true': it lies, 'false': it does not }", "",
+  ].join("\n"));
+  writeFileSync(join(dir, "fixtures", "a.ts"), "export function honest() {}\nexport function liar() {}\n");
+  writeFileSync(join(dir, "expect.yml"), "default: clean\nfixtures/a.ts:\n  - { line: 2, label: bad, window: 0, reason: it lies }\n");
+  return dir;
+}
+
+for (const mode of ["all", "partial", "one-pass", "no-baseline"] as const) {
+  await testAsync(`commands: eval missing verdicts (${mode}) fail in text and JSON`, async () => {
+    const dir = verdictSuite();
+    const base = ["eval", dir, "--no-config", "--cache", "none", "--repeat", "2"];
+    try {
+      if (mode !== "no-baseline") assert.equal((await cli([...base, "--accept"])).code, 0);
+      for (const json of [false, true]) {
+        const broken = fakeClient(judge);
+        const ask = broken.askSplitting.bind(broken);
+        let calls = 0;
+        broken.askSplitting = async (...args) => {
+          calls += 1;
+          if (mode === "one-pass" && calls > 1) return ask(...args);
+          if (mode === "partial") {
+            const reply = await ask(...args);
+            assert.ok(reply.answers);
+            delete reply.answers[Object.keys(reply.answers)[0]!];
+            return reply;
+          }
+          throw new Error("HTTP 401: decider unavailable");
+        };
+        const result = await cli([...base, "--quiet", ...(json ? ["--format", "json"] : [])], broken);
+        assert.equal(result.code, 3, result.out + result.log);
+        assert.doesNotMatch(result.out, /all as shipped|subject gone from the cases/);
+        if (json) {
+          const report = JSON.parse(result.out);
+          assert.equal(report.failed, 1);
+          assert.equal(report.suites[0].ok, false);
+          assert.equal(report.suites[0].unanswered, mode === "all" || mode === "no-baseline" ? 4 : 2);
+          if (mode !== "no-baseline") assert.equal(report.suites[0].diff.ok, false);
+        } else {
+          assert.match(result.out, /unjudged/);
+          assert.match(result.out, /cannot compare/);
+          assert.match(result.out, /1 of 1 suite\(s\) failed/);
+        }
+      }
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+}
+
+await testAsync("commands: eval missing verdicts cannot be accepted or replayed as success", async () => {
+  const dir = verdictSuite();
+  const base = ["eval", dir, "--no-config", "--repeat", "1"];
+  try {
+    assert.equal((await cli([...base, "--accept"])).code, 0);
+    const baseline = readFileSync(join(dir, "baseline.json"), "utf8");
+    const broken = fakeClient(judge);
+    broken.askSplitting = async () => { throw new Error("HTTP 401: decider unavailable"); };
+    const rejected = await cli([...base, "--accept"], broken);
+    assert.equal(rejected.code, 3, rejected.out + rejected.log);
+    assert.match(rejected.out, /1 of 1 suite\(s\) failed/);
+    assert.equal(readFileSync(join(dir, "baseline.json"), "utf8"), baseline);
+    assert.equal((await cli([...base, "--accept-last"])).code, 3);
+    assert.equal(readFileSync(join(dir, "baseline.json"), "utf8"), baseline);
+    for (const reverse of [false, true]) {
+      for (const json of [false, true]) {
+        const records = [join(dir, "baseline.json"), join(dir, "last.json")];
+        if (reverse) records.reverse();
+        const compared = await cli(["eval", "--compare", ...records, "--no-config", "-R", dir, ...(json ? ["--format", "json"] : [])]);
+        assert.equal(compared.code, 3, compared.out + compared.log);
+        if (json) {
+          const report = JSON.parse(compared.out);
+          assert.equal(report.diff.ok, false);
+          assert.equal(report[reverse ? "a" : "b"].unanswered, 2);
+          assert.deepEqual(report.diff.removed, [], "unjudged subjects have not disappeared");
+          assert.deepEqual(report.diff.added, [], "previously unjudged subjects are not new");
+        } else {
+          assert.match(compared.out, /cannot compare/);
+          assert.doesNotMatch(compared.out, /gone/);
+        }
+      }
+    }
+    writeFileSync(join(dir, "baseline.json"), readFileSync(join(dir, "last.json")));
+    const replay = await cli([...base, "--replay"]);
+    assert.equal(replay.code, 3);
+    assert.doesNotMatch(replay.out, /all as shipped/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("commands: eval distinguishes an absent subject from an unjudged subject", async () => {
+  const dir = verdictSuite();
+  const base = ["eval", dir, "--no-config", "--repeat", "1"];
+  try {
+    assert.equal((await cli([...base, "--accept"])).code, 0);
+    writeFileSync(join(dir, "fixtures", "a.ts"), "export function honest() {}\n");
+    const broken = fakeClient(judge);
+    broken.askSplitting = async () => { throw new Error("HTTP 401: decider unavailable"); };
+    const result = await cli(base, broken);
+    assert.equal(result.code, 3);
+    assert.match(result.out, /a\.ts:1.*unjudged/);
+    assert.match(result.out, /a\.ts:2.*subject gone from the cases/);
+    const healthy = await cli(base);
+    assert.equal(healthy.code, 0, healthy.out + healthy.log);
+    assert.match(healthy.out, /a\.ts:2.*subject gone from the cases/);
+    assert.doesNotMatch(healthy.out, /unjudged/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 await testAsync("commands: review judges only what the diff touched, and commits judges the range", async () => {
   const { dir, rules, src } = project();
   const git = (args: string[]) => execFileSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", ...args], { cwd: dir, stdio: "pipe" }).toString();

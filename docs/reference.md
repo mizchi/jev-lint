@@ -116,10 +116,18 @@ The exit code is the same as for text.
 | `replay` | as `check`, plus `gaps` |
 | `gaps` | `gaps` (the rows of the table), `stats`, `cached`, `spent` |
 | `calibrate` | `passes`, `gaps`, `stability` (with `--repeat`), `fits` (with `--labels`), `spent` |
-| `eval` | `suites[]` with `ok`, `score`, `diff`, `changedDrafts`, `recorded`, `passes`; `failed`. With `--dry-run`, each suite's `plan` |
-| `eval --compare` | `suite`, `a`, `b` (each with `rules`), `changedDrafts`, `diff` |
+| `eval` | `suites[]` with `ok`, `score`, `diff`, `changedDrafts`, `recorded`, `passes`, `unanswered` (missing answers counted per pass); `failed`. With `--dry-run`, each suite's `plan` |
+| `eval --compare` | `suite`, `a`, `b` (each with `rules` and `unanswered`), `changedDrafts`, `diff` |
 | `rules` | `rules[]` with `id`, `languageDir`, `languages`, `kind`, `subject`, `state`, `cutoff`, `loose`, `severity`, `ask`, `note`, `explain`, `uncalibrated`, `source`; `errors`, `warnings` |
 | `init` | `wrote`, and `keySet` or `hook` |
+
+An `eval` with any missing subject-answer exits `3`, including when only
+one repeat is missing or `--quiet` is used. It reports the affected subjects
+as `unjudged`, separately from subjects no longer matched by the fixtures.
+Scores cover only the answers received; an incomplete run cannot pass the
+gate or replace a baseline through `--accept` or `--accept-last`.
+`--replay` also exits `3` for an incomplete baseline, and `--compare` does so
+if either record is incomplete.
 
 A `review` with no changed file is an empty document of the usual shape,
 not a line of prose.
