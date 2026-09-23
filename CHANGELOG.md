@@ -10,6 +10,33 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ### Added
 
+- **`extends`: a project's rule built from a shipped one.** Adapting a
+  shipped rule to a project's conventions meant copying its file under a new
+  id, and from then on the copy got none of the upstream fixes to its
+  matcher, criteria or cutoff. A rule file may now name a base --
+  `extends: typescript/test-name-verifies-claim`, or a bare id when its
+  `languages` pick one language -- and give only the fields that differ.
+  `criteria` may give one branch alone, and `note: { append: ... }` adds to
+  the base's note instead of replacing it, since on a shipped rule the note
+  is usually measured wording. The base is found among the rules loaded
+  beside it, then in the shipped packs, which are read for the lookup and
+  not run because of it. The extending rule needs its own id; a missing, an
+  ambiguous and a circular base are load errors. A rule that changes what is
+  asked but keeps the base's `at` is warned about: that cutoff was fitted to
+  another question.
+
+- **`context`: documents the model reads beside the code.** A project's
+  conventions -- that a screenshot comparison is the assertion of a visual
+  test, what a helper in another file sets up -- are not in the code under
+  review, and a `note` copied into each rule drifts from the document it was
+  copied from. `context: [path, ...]`, relative to the rule file, is read at
+  load time and sent in the state as `context_documents` on every arm. The
+  text is part of the draft hash, so editing the document retires the
+  verdicts given against the old one. Up to 40,000 characters in all, about
+  a third of the state budget, refused rather than cut; a missing or empty
+  document is a load error. Rules with different documents are never
+  batched into one state. `jev-lint rules` lists both fields.
+
 - **A diff judged against the `AGENTS.md` the repository wrote for itself.**
   `AGENTS.md` and `CLAUDE.md` say what a change is supposed to do and nothing
   checked them: a diff that adds the dependency the file forbids, edits the
@@ -139,6 +166,13 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
   them changed a decision on its own fixtures.
 
 ### Fixed
+
+- **An HTML 403 no longer stops the run.** A web application firewall in
+  front of the API refuses some requests by their content with its own HTML
+  page and a 403. Every 403 was taken as an account error, which stops the
+  run on the first one, so one refused file left most of a run without a
+  verdict. A 403 whose body is markup is now a failure of that batch alone,
+  and its message says it did not come from the API.
 
 - **A commit subject and a change subject over the same commit shared one
   batch, and one of them lost its state.** Both are `arm: "bare"` with the

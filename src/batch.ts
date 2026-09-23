@@ -220,7 +220,13 @@ export function planBatches(
     // anyway. Keying on the subject kind keeps the two apart; for every
     // other subject `rule.subject` is constant within a file anyway, so
     // nothing else regroups.
-    const key = `${s.arm}\u0000${s.file}\u0000${s.rule.subject}`;
+    //
+    // The same holds for `context:` documents: the state carries one set,
+    // so rules written against different documents are kept apart, and
+    // rules without any -- every rule before the field existed -- share as
+    // they always did.
+    const docs = s.rule.context ? JSON.stringify(s.rule.context) : "";
+    const key = `${s.arm}\u0000${s.file}\u0000${s.rule.subject}\u0000${docs}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key)!.push(s);
   }

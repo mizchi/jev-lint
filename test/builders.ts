@@ -194,20 +194,25 @@ export const configurable = (over: Partial<Configurable> = {}): Configurable => 
  * A model that answers without a network: `judge` sees each question's
  * instructions and returns the probability (noul) or level (score) it
  * wants; `spent` counts as the real client's does. What was asked is kept
- * on `asked`, question by question, for a test to look at.
+ * on `asked`, question by question, and each request's state on `states`,
+ * for a test to look at.
  */
 export function fakeClient(judge: (instructions: Record<string, unknown>, question: Record<string, unknown>) => number): AskClient & {
   asked: Array<Record<string, unknown>>;
+  states: Array<Record<string, unknown>>;
 } {
   const asked: Array<Record<string, unknown>> = [];
+  const states: Array<Record<string, unknown>> = [];
   const spent = { calls: 0, inputTokens: 0, usd: 0, ms: 0 };
   return {
     model: "fake",
     servedModel: "fake-1",
     spent,
     asked,
-    async askSplitting(_state: unknown, questions: Record<string, Question>) {
+    states,
+    async askSplitting(state: unknown, questions: Record<string, Question>) {
       spent.calls += 1;
+      states.push(state as Record<string, unknown>);
       const answers: Record<string, unknown> = {};
       for (const [id, q] of Object.entries(questions)) {
         const question = q as unknown as Record<string, unknown>;

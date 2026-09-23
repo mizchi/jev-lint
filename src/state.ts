@@ -239,7 +239,21 @@ export function buildState({
     }
   }
 
+  withContextDocuments(state, subjects[0]?.rule);
   return state;
+}
+
+/**
+ * A rule's `context:` documents, on any arm: they are not evidence about the
+ * file, so the arm's choice of how much of the file to send has no say in
+ * them. The planner keeps rules with different documents out of one batch,
+ * so the first subject's rule speaks for the batch.
+ */
+function withContextDocuments(state: StatePayload, rule: Rule | undefined): void {
+  if (!rule?.context) return;
+  state.context_documents = rule.context;
+  state.note_on_context_documents =
+    "`context_documents` are the project's own documents that the rules in the questions were written against: its conventions, not code under review. Read them for what the project counts as honouring a rule; judge only the subjects.";
 }
 
 /**
@@ -345,6 +359,7 @@ export function buildRuleState({
   }
 
   if (rule?.id) state.matcher = `all items matched one structural matcher for the rule \`${rule.id}\``;
+  withContextDocuments(state, rule);
   return state;
 }
 

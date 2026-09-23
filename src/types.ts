@@ -227,6 +227,12 @@ export interface NoulCriteria {
  * is gated at, and how a finding is reported. What differs is in
  * `RuleJudgment` and `RuleSource`; `Rule` is the three together.
  */
+/** A `context:` document: its path as the rule file wrote it, and its text. */
+export interface ContextDoc {
+  path: string;
+  text: string;
+}
+
 export interface RuleBase {
   id: string;
   /** The first of `languages`; kept for display and single-language callers. */
@@ -297,6 +303,21 @@ export interface RuleBase {
    * holds. Never part of the verdict question, so never part of the draft.
    */
   explain: Record<string, string> | null;
+  /**
+   * The rule this one was built from, as `<lang>/<id>` or a flat id, or null.
+   * An extending rule is the base with the fields its own file gives laid
+   * over it; this names the base so a report can say where the rest came from.
+   */
+  extends: string | null;
+  /**
+   * Documents the model reads beside the code, in the state: a project's
+   * conventions the rule is judged against, which are not in the code under
+   * review. Read from files named relative to the rule file, at load time,
+   * so their text is part of the draft hash and an edited document retires
+   * the verdicts that were given against the old one. null when there are
+   * none.
+   */
+  context: ContextDoc[] | null;
   /**
    * The language directory the rule was loaded from under the shipped
    * layout (`rules/<lang>/<id>/rule.yml`), or null for any other rule
@@ -610,6 +631,9 @@ export interface StatePayload {
   diff?: string;
   /** A change subject's state: the project's own instruction documents, in place of a message. */
   instructions?: Array<{ file: string; text: string }>;
+  /** The rule's `context:` documents: the conventions it is judged against. */
+  context_documents?: ContextDoc[];
+  note_on_context_documents?: string;
   note_on_diff?: string;
   note_on_instructions?: string;
   note_on_independence?: string;
