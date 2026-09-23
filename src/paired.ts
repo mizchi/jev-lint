@@ -61,7 +61,7 @@ export function excerptBudget(subjects: number): number {
 const EXCERPT_CONTEXT_LINES = 2;
 
 /**
- * A test file, by the usual spellings: `a.test.ts`, `a.vitest.ts`, `a.spec.js`, `a_test.go`,
+ * A test file, by the usual spellings: `a.test.ts`, `a.vitest.ts`, `a.spec.js`, `a_test.go`, `a_wbtest.mbt`,
  * `test_a.py` anywhere; or, under a `test`, `tests`, `__tests__` or `spec` directory, a
  * file that actually opens a test. The second clause needs the content:
  * `test/fixtures/cart.ts` sits under `test/` and is a fixture, and pairing
@@ -73,7 +73,7 @@ const EXCERPT_CONTEXT_LINES = 2;
  * `src/contest/` are not tests, and `spec-parser.ts` is a parser.
  */
 const TEST_DIRECTORY = /(?:^|\/)(?:tests?|__tests__|spec)(?:\/|$)/;
-const TEST_NAME = /(?:[._-](?:spec|test|vitest)|_(?:spec|test))\.[A-Za-z0-9]+$|^test_[^/]+\.py$/;
+const TEST_NAME = /(?:[._-](?:spec|test|vitest)\.[A-Za-z0-9]+|_wbtest\.mbt)$|^test_[^/]+\.py$/;
 
 export function isTestFile(path: string, content?: string): boolean {
   const p = path.split(sep).join("/");

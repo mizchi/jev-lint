@@ -46,6 +46,23 @@ test("paired: a colocated .vitest.ts file is discovered as related test evidence
   }
 });
 
+test("paired: MoonBit whitebox tests are discovered beside their module", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-paired-wbtest-"));
+  try {
+    mkdirSync(join(dir, "src", "loader"), { recursive: true });
+    writeFileSync(join(dir, "src", "loader", "download.mbt"), "pub fn download() -> Unit raise { fail() }\n");
+    writeFileSync(join(dir, "src", "loader", "download_wbtest.mbt"), 'test "download failure" { inspect(download()) }\n');
+
+    assert.ok(isTestFile("src/loader/download_wbtest.mbt"));
+    assert.ok(!isTestFile("src/loader/download_wbtest.ts"));
+    assert.deepEqual(findTestFiles(["src"], dir), ["src/loader/download_wbtest.mbt"]);
+    const paired = pairTests(["src/loader/download.mbt"], { roots: ["src"], cwd: dir, keywords: () => ["download"] });
+    assert.deepEqual(paired.get("src/loader/download.mbt")?.map((test) => test.path), ["src/loader/download_wbtest.mbt"]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("paired: related tests are ranked by stem, then directory, capped, and never the file itself", () => {
   const tests = [
     "test/other.test.ts",
