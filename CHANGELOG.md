@@ -6,7 +6,10 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/internal/findings.md](docs/internal/findings.md).
 
-## Unreleased
+## 0.6.5 — 2026-09-23
+
+This section also carries what 0.6.2 through 0.6.4 published without a
+section of their own.
 
 ### Added
 
