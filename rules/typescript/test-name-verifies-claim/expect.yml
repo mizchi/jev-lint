@@ -271,3 +271,57 @@ fixtures/insource.ts:
     label: bad
     window: 0
     reason: "in-source. The title claims false; the body asserts the type is boolean, which true also is."
+fixtures/panel.test.ts:
+  - line: 5
+    label: clean
+    window: 0
+    reason: "hard clean: a visual regression test. The body puts the panel in the named state (a hovered row) and compares it with a reviewed baseline image; for a claim about what is visibly rendered, the comparison is the assertion."
+  - line: 10
+    label: bad
+    window: 0
+    reason: "a screenshot under a title naming a state the body never sets up: nothing is pinned and nothing reloads, so the image shows the default panel."
+  - line: 15
+    label: clean
+    window: 0
+    reason: "hard clean: visual regression test; the body sets up the named case (no orders) and the claim is a message shown."
+  - line: 20
+    label: bad
+    window: 0
+    reason: "the title claims no request is made; a screenshot cannot show a request, so a refetch would pass."
+  - line: 27
+    label: clean
+    window: 0
+    reason: "hard clean: a query by accessible name that has to succeed is the assertion that the button exposes that name."
+  - line: 32
+    label: bad
+    window: 0
+    reason: "the title claims the list reloads; the body only asserts the button it clicked is still visible."
+fixtures/sparkline.test.ts:
+  - line: 12
+    label: clean
+    window: 0
+    reason: "hard clean: the title's claim is itself that drawing does not throw on a gap, and not.toThrow is that claim."
+  - line: 17
+    label: clean
+    window: 0
+    reason: "hard clean: a title that only claims the line is drawn is established by some ink on the canvas."
+  - line: 22
+    label: bad
+    window: 0
+    reason: "the title claims a specific marker is not drawn; ink somewhere on the canvas holds whether or not it was."
+  - line: 28
+    label: clean
+    window: 0
+    reason: "the pixel at the marker's position is asserted to be the accent colour."
+  - line: 33
+    label: bad
+    window: 0
+    reason: "the title claims an offset; not throwing establishes nothing about where the chart was drawn."
+  - line: 39
+    label: clean
+    window: 0
+    reason: "hard clean: accepting a config is the claim, and parsing without a throw establishes it."
+  - line: 43
+    label: bad
+    window: 0
+    reason: "the title claims a clamped result; the body only checks that parsing does not throw."

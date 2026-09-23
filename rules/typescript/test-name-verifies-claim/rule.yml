@@ -51,6 +51,21 @@ state: bare
 # very nearly crosses 0.62. 0.66 clears profile.test.ts:164 by 0.0833 and
 # inventory.test.ts:77 by 0.0967, both past their own spreads. Same 37
 # defects caught, same 0 false positives.
+#
+# 2026-09-24, kept at 0.66 with a note paragraph on three more assertions.
+# On an unseen front-end suite the rule read screenshot tests, accessible-name
+# queries and not-throw tests whose names claimed exactly that as unproven.
+# fixtures/panel.test.ts and fixtures/sparkline.test.ts hold those shapes, 6
+# defects and 7 cleans; before the paragraph the two screenshot cleans
+# answered 0.76-0.78 and the accepts-a-config clean 0.75, all flagged. Four
+# wordings were measured. Naming the canvas ink check too, or saying the
+# paragraph was "not a text or DOM snapshot", pulled the snapshot cases of the
+# paragraph above: profile.test.ts:164 rose to 0.71 and two snapshot defects
+# fell under the cutoff. Leaving the accessible-name sentence out sent
+# panel.test.ts:27 from 0.15 to 0.61-0.67 across runs. The three sentences as
+# written, five passes: 43 defects, 50 cleans, P 1 R 1, no flips; the loudest
+# clean is still profile.test.ts:164 at 0.58 (0.55-0.61), the quietest defect
+# inventory.test.ts:94 at 0.72 (0.71-0.73); the fitted midpoint is 0.66.
 at: 0.66
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
@@ -80,6 +95,25 @@ note: >-
   rendered, it is the whole claim. And a body whose named operation is never
   called, or whose named case is never set up, establishes nothing however exact
   its assertion is.
+
+  Three more, for assertions that are not a snapshot of text. A screenshot
+  comparison (toHaveScreenshot) against a baseline image a person reviewed is
+  the assertion under a name claiming what is visibly on screen in a state the
+  body sets up; it shows nothing a picture cannot, such as a request or a
+  stored value. A query by accessible name, getByRole(role, { name }), that
+  has to succeed establishes that the element exposes that name. And when the
+  name claims only that something does not fail -- it completes without
+  throwing, it accepts an input -- an assertion that it does not throw
+  establishes it.
+# The paragraph above is this copy's alone. Screenshot comparisons,
+# accessible-name queries and not-throw assertions are how TypeScript
+# front-end tests are written; the
+# Rust, Go and MoonBit suites have no such idiom, and their corpora have no
+# case that would measure the wording.
+divergent: >-
+  The TypeScript note adds a paragraph on screenshot comparisons,
+  accessible-name queries and not-throw assertions, test idioms the other
+  languages' suites do not have.
 criteria:
   "true": >-
     The body does not establish what the name claims: it asserts nothing at all,
