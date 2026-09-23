@@ -74,7 +74,7 @@ failed and nothing was reported.
 
 Environment: **`TYPESAFE_API_KEY`** (required for anything that asks), with
 `TYPESAFEAI_API_KEY` accepted as a fallback; `TYPESAFE_BASE_URL`,
-`JEV_LINT_MODEL`, `JEV_LINT_AST_GREP`; `JEV_LINT_TOKENS_PER_SECOND` and
+`JEV_LINT_CACHE`, `JEV_LINT_MODEL`, `JEV_LINT_AST_GREP`; `JEV_LINT_TOKENS_PER_SECOND` and
 `JEV_LINT_TOKEN_BURST` (defaults 200000 and 1200000), the client's mirror of
 the server's input-token rate limit, which it paces itself against and
 adjusts on a 429 -- raise them if your key has a higher limit and a large
@@ -339,7 +339,8 @@ text.
 
 `paired` is different in kind from the others: its evidence is in **another
 file**. A test file is related when its name contains the module's stem
-(`cart.ts` ↔ `cart.test.ts`, `test/cart.test.ts`, `__tests__/cart.spec.ts`)
+(`cart.ts` ↔ `cart.test.ts`, `cart.vitest.ts`, `test/cart.test.ts`,
+`__tests__/cart.spec.ts`)
 or when it imports the module — the second is what pairs a repository whose
 tests all live in one file, and a name match outranks an import. One hop
 of imports is followed: a test that drives an entry point (`main.ts`, an
@@ -1220,6 +1221,24 @@ directory, and is meant to be committed: a run over the same commit answers
 from it, and CI lints from it with no API key. It is trusted input --
 anything that can edit it can silence a rule or invent a finding.
 
+`JEV_LINT_CACHE` selects a verdict cache for the current environment. The
+priority is `--cache` / `-c`, then a non-empty `JEV_LINT_CACHE`, then the
+config's `cache:`, then the default. Set it to `none` to disable persistence;
+an empty value is ignored. Relative paths are resolved from the config's
+directory, or the working directory when no config is loaded. Absolute paths
+are used as given.
+
+For example, give an alternate backend its own cache:
+
+```bash
+TYPESAFE_BASE_URL=http://127.0.0.1:8797 \
+JEV_LINT_CACHE=.jev-lint/local-backend.json jev-lint check src
+```
+
+Cache keys do not include the endpoint or model, so use a separate path for
+each backend/model combination. `eval` and `calibrate` bypass the verdict
+cache regardless of this setting.
+
 ## Upgrading from 0.4
 
 - **The config selects the rules.** `paths:` is `files:`; `rules:` is a
@@ -1272,4 +1291,3 @@ test/test.ts    the suite, no API key needed
 ```
 
 `docs/internal/architecture.md` has the module-by-module map.
-

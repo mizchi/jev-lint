@@ -1,9 +1,9 @@
 /**
  * The config file, found and folded into the options.
  *
- * A flag beats the file and the file beats the built-in default, which is
- * the only order that lets a project commit a configuration and still let
- * someone override one setting for one run.
+ * Flags override the file, which overrides built-in defaults. For the cache,
+ * JEV_LINT_CACHE sits between flags and the file so a backend can select its
+ * own verdict cache without changing the project's committed configuration.
  */
 import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -23,11 +23,8 @@ export interface Context {
 
 /** Null when the configuration is unusable, after saying why; `main` then exits 2. */
 export function resolveContext(opts: Options, rest: string[], log: Log): Context | null {
-  // A flag beats the file and the file beats the built-in default, which is the
-  // only order that lets a project commit a configuration and still let someone
-  // override one setting for one run. `explicit` is how that is enforced: it
-  // records which flags were actually PASSED, since a parsed default is
-  // indistinguishable from one the user typed.
+  // Parsed defaults cannot reveal which flags were passed. Both the config
+  // and the cache environment override must preserve explicit CLI choices.
   const explicit = new Set(rest.filter((a) => a.startsWith("-")));
   // `paths:` in the config is what `check` looks at with no argument. It is
   // not what `eval` looks at: its positional arguments are rule directories,
@@ -52,6 +49,8 @@ export function resolveContext(opts: Options, rest: string[], log: Log): Context
   for (const e of configErrors) log(`config error: ${e}`);
   if (configErrors.length > 0) return null;
   applyConfig(opts, config, explicit);
+  const envCache = process.env.JEV_LINT_CACHE;
+  if (envCache && !explicit.has("--cache") && !explicit.has("-c")) opts.cache = envCache;
   if (configPath && !opts.quiet) log(`using ${configPath}`);
 
   const baseDir = configPath ? dirname(resolve(configPath)) : process.cwd();

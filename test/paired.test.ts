@@ -30,6 +30,22 @@ test("paired: a test file is recognised by its name or its directory, in the usu
   assert.ok(isTestFile("test/fixtures/cart.test.ts", "export const x = 1;"), "named as a test: always a test");
 });
 
+test("paired: a colocated .vitest.ts file is discovered as related test evidence", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-paired-vitest-"));
+  try {
+    mkdirSync(join(dir, "src"), { recursive: true });
+    writeFileSync(join(dir, "src/cart.ts"), "export const total = () => 0;\n");
+    writeFileSync(join(dir, "src/cart.vitest.ts"), 'import { total } from "./cart";\ntest("total", () => total());\n');
+
+    assert.ok(isTestFile("src/cart.vitest.ts"));
+    assert.deepEqual(findTestFiles(["src"], dir), ["src/cart.vitest.ts"]);
+    const paired = pairTests(["src/cart.ts"], { roots: ["src"], cwd: dir, keywords: () => ["total"] });
+    assert.deepEqual(paired.get("src/cart.ts")?.map((test) => test.path), ["src/cart.vitest.ts"]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("paired: related tests are ranked by stem, then directory, capped, and never the file itself", () => {
   const tests = [
     "test/other.test.ts",

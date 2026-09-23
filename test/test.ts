@@ -44,6 +44,7 @@ const files = [
   "evals",
   "retry",
   "config",
+  "context",
   "cost",
   "testcalls",
   "commands",

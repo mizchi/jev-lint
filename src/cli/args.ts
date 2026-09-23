@@ -209,6 +209,7 @@ environment:
   ${API_KEY_VARS[0]}         required for anything that asks
   ${API_KEY_VARS[1]}       accepted as a fallback
   ${BASE_URL_VARS[0]}        override the API endpoint
+  JEV_LINT_CACHE           verdict cache path ("none" to disable; --cache takes precedence)
   JEV_LINT_MODEL           override the model
   JEV_LINT_AST_GREP        path to an ast-grep binary
 
