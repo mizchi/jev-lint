@@ -60,6 +60,10 @@ test("rules: the config's `rules:` selects and overrides, and names nothing it c
   // `a: on` is both languages; `rust/a: off` is one of them, and wins over the bare id.
   const one = applyRuleSettings(loaded, { a: { enabled: true }, "rust/a": { enabled: false }, b: { enabled: true, severity: "error", at: 2.5, loose: 1 } });
   assert.deepEqual(one.errors, []);
+  assert.deepEqual(one.warnings, [
+    "`a` omits a language namespace; use explicit keys: `rust/a`, `typescript/a`",
+    "`b` omits a language namespace; use explicit keys: `typescript/b`",
+  ]);
   assert.deepEqual(one.rules.map((r) => `${r.languageDir}/${r.id}`), ["typescript/a", "typescript/b"]);
   const overridden = one.rules.find((r) => r.id === "b")!;
   assert.equal(overridden.severity, "error");
@@ -68,6 +72,9 @@ test("rules: the config's `rules:` selects and overrides, and names nothing it c
   assert.equal(one.rules.find((r) => r.id === "a")!.severity, "warning", "`on` keeps the rule's own");
   // A rule the config does not name does not run.
   assert.deepEqual(applyRuleSettings(loaded, { b: { enabled: true } }).rules.map((r) => r.id), ["b"]);
+  assert.deepEqual(applyRuleSettings(loaded, { "typescript/a": { enabled: true } }).warnings, []);
+  const flat = normalizeRule({ id: "local", language: "TypeScript", rule: { kind: "x" }, ask: "local" }).rule!;
+  assert.deepEqual(applyRuleSettings([flat], { local: { enabled: true } }).warnings, [], "a flat project rule has no namespace to write");
   // A name that matches nothing is an error, as ESLint's "definition not found" is.
   const missing = applyRuleSettings(loaded, { c: { enabled: true }, "python/a": { enabled: false } });
   assert.equal(missing.errors.length, 2);

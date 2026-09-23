@@ -113,14 +113,14 @@ npx -y jev-lint check src
 Adjust a cutoff without touching the pack, per run or in the config:
 
 ```bash
-jev-lint check src --at var-name-describes-value=0.7 --at fn-name-promises=0.8
+jev-lint check src --at typescript/var-name-describes-value=0.7 --at typescript/fn-name-promises=0.8
 ```
 
 ```yaml
 # .jev-lint.yaml
 rules:
-  var-name-describes-value: { at: 0.7 }
-  fn-name-promises: { at: 0.8, severity: error }
+  typescript/var-name-describes-value: { at: 0.7 }
+  typescript/fn-name-promises: { at: 0.8, severity: error }
   rust/fn-name-promises: off
 ```
 
@@ -187,9 +187,13 @@ like any of them:
 ```yaml
 # .jev-lint.yaml
 rules:
-  fn-name-promises: on
+  typescript/fn-name-promises: on
   acme-endpoint-names-resource: warning     # .jev-lint/rules/acme-endpoint-names-resource.yml
 ```
+
+Use `language/id` for namespaced rules. A bare shipped id still selects all
+of its language variants, but emits a config warning. Flat project rules have
+no language namespace and do not warn.
 
 Ids must be unique across every source; a duplicate is a validation error
 naming both files. Prefix your own (`acme-...`) to make the split visible in

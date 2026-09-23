@@ -15,11 +15,10 @@
  * supported form: it names the variable to read, which is a secret's location
  * rather than the secret.
  *
- * **It never carries a cutoff it has not been told is a cutoff.** `at:` is a
- * map of rule id to number and is validated as one, because the alternative --
- * accepting anything and applying what parses -- turns a typo into a silently
- * different threshold, which is the one failure this whole tool is built to
- * avoid.
+ * **It never carries a cutoff it has not been told is a cutoff.** `at` lives
+ * under one `rules:` entry and is validated as a number; the old top-level
+ * `at:` is an error. Accepting anything that parses would turn a typo into a
+ * silently different threshold.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
@@ -148,7 +147,7 @@ export function loadConfig(path: string | null): LoadedConfig {
     if (k in MOVED) {
       errors.push(`${where(k)}: ${MOVED[k]}`);
     } else if (k === "rules" && (Array.isArray(src.rules) || typeof src.rules === "string")) {
-      errors.push(`${where(k)}: \`rules\` names rules since 0.5 (\`rules: { fn-name-promises: on }\`); a rule directory is \`.jev-lint/rules/\`, or \`-R <dir>\` for one run`);
+      errors.push(`${where(k)}: \`rules\` names rules since 0.5 (\`rules: { typescript/fn-name-promises: on }\`); a rule directory is \`.jev-lint/rules/\`, or \`-R <dir>\` for one run`);
     } else if (k === "apiKey" || k === "api_key") {
       errors.push(
         `${where(k)} is not supported: a config file belongs in version control and an API key does not. ` +
@@ -330,7 +329,7 @@ function ruleSetting(v: unknown): RuleSetting | string {
  * the list is the catalogue -- and every other setting commented with its
  * default.
  */
-export function initialConfig(ruleIds: string[]): string {
+export function initialConfig(ruleKeys: string[]): string {
   return `# jev-lint configuration. A flag of the same name overrides a setting here,
 # so a project can commit this and still let someone change one thing for one
 # run. A commented setting takes the built-in default shown after it.
@@ -341,17 +340,18 @@ files: [src]
 # exclude: [src/fixtures, '**/*.gen.ts']   # paths, or globs
 
 # The rules that run: \`on\`, \`off\`, a severity (hint, info, warning, error),
-# or a mapping -- \`{ severity: error, at: 0.7 }\`. An id names the rule in
-# every language that has it; \`rust/<id>\` names one language's. Every rule
-# the package ships is listed here, on; delete or turn off what you do not
-# want. Their cutoffs were fitted to the package's own corpus, not to your
+# or a mapping -- \`{ severity: error, at: 0.7 }\`. Write \`lang/id\` to
+# select one language's rule. A bare shipped id selects every language that
+# has it and warns. Every shipped rule is listed here, on; remove or turn off the
+# ones you do not want. Their cutoffs were fitted to this package's corpus,
+# not to your
 # code: https://github.com/mizchi/jev-lint#calibrating
 #
 # A rule of your own goes in .jev-lint/rules/ (a rule.yml, or the shipped
 # layout <language>/<id>/rule.yml with fixtures beside it) and is named here
 # like any other.
 rules:
-${ruleIds.map((id) => `  ${id}: on`).join("\n")}
+${ruleKeys.map((key) => `  ${key}: on`).join("\n")}
 
 # A grammar ast-grep does not have built in: a tree-sitter parser compiled to
 # a dynamic library (\`tree-sitter build --output moonbit.dylib\`), named here

@@ -25,9 +25,9 @@ export function cmdInit(opts: Options, out: Log, log: Log): number {
   }
   // The starter lists every shipped rule, on: the catalogue, to prune.
   const shippedDir = shippedRulesPath();
-  const ids = shippedDir ? [...new Set(loadRules([shippedDir]).rules.map((r) => r.id))].sort() : [];
+  const keys = shippedDir ? loadRules([shippedDir]).rules.map((r) => r.languageDir ? `${r.languageDir}/${r.id}` : r.id).sort() : [];
   try {
-    writeFileSync(target, initialConfig(ids));
+    writeFileSync(target, initialConfig(keys));
   } catch (err: unknown) {
     log(`could not write ${target}: ${String(err).slice(0, 160)}`);
     return 2;
@@ -49,8 +49,8 @@ export function cmdInit(opts: Options, out: Log, log: Log): number {
   out(`  npx jev-lint check src --dry-run   # what it would ask, and the price`);
   out(`  npx jev-lint check src             # ask it`);
   out("");
-  out("Everything in the file is commented out, so it changes nothing until you");
-  out("uncomment a line. The shipped rules' cutoffs were fitted to this");
+  out("Every shipped rule is enabled in the file; remove or turn off those you do not want.");
+  out("The shipped rules' cutoffs were fitted to this");
   out("package's own corpus -- see `jev-lint gaps` and `jev-lint calibrate`");
   out("before trusting them on your code.");
   return 0;

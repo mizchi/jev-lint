@@ -702,16 +702,18 @@ export function ruleSources(base: string = process.cwd()): string[] {
 /**
  * The config's `rules:` applied to what loaded: only the rules it names and
  * turns on run, with the severity, cutoff and loose floor it gives them.
- * `id` names the rule in every language that has it; `lang/id` names one,
- * and wins over the bare id for that language. A name that matches no
+ * `lang/id` names one rule; a bare `id` still names every language that has
+ * it, but warns because it can silently enable another language. A qualified
+ * setting wins over the bare id for that language. A name that matches no
  * loaded rule is an error -- ESLint's "definition for rule not found" --
  * since a misspelt id that ran nothing would look like a clean rule.
  */
 export function applyRuleSettings(
   rules: Rule[],
   settings: Record<string, RuleSetting>,
-): { rules: Rule[]; errors: string[] } {
+): { rules: Rule[]; errors: string[]; warnings: string[] } {
   const errors: string[] = [];
+  const warnings: string[] = [];
   const used = new Set<string>();
   const out: Rule[] = [];
   for (const rule of rules) {
@@ -729,8 +731,12 @@ export function applyRuleSettings(
   }
   for (const name of Object.keys(settings)) {
     if (!used.has(name)) errors.push(`\`${name}\` names no loaded rule (see \`jev-lint rules\` for the ids)`);
+    if (used.has(name) && !name.includes("/")) {
+      const qualified = rules.filter((r) => r.id === name && r.languageDir).map((r) => `\`${r.languageDir}/${r.id}\``).sort();
+      if (qualified.length > 0) warnings.push(`\`${name}\` omits a language namespace; use explicit keys: ${qualified.join(", ")}`);
+    }
   }
-  return { rules: out, errors };
+  return { rules: out, errors, warnings };
 }
 
 /** The packaged rules, wherever this copy of the tool is installed; null if not found. */

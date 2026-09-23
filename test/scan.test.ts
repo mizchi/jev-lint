@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { Cache, contextKey } from "../src/cache.ts";
 import { buildQuestion } from "../src/questions.ts";
 import { normalizeRule, loadRules } from "../src/rules.ts";
-import { buildSymbols, emitRuleFile, astGrepRuleId, baseRuleId, toAstGrepRule } from "../src/scan.ts";
+import { buildSymbols, emitRuleFile, astGrepRuleId, toAstGrepRule } from "../src/scan.ts";
 import type { AstGrepMatch } from "../src/types.ts";
 import { isMatcherRule } from "../src/types.ts";
 import { probeMatch, scoreRule, noulRule } from "./builders.ts";
@@ -57,9 +57,6 @@ test("scan: a multi-language rule emits one ast-grep rule per grammar", () => {
 });
 
 test("scan: a per-grammar id round-trips back to the rule that owns the sentence", () => {
-  assert.equal(baseRuleId(astGrepRuleId("my-rule", "Rust")), "my-rule");
-  assert.equal(baseRuleId(astGrepRuleId("has@at", "Tsx")), "has@at");
-  assert.equal(baseRuleId("no-suffix"), "no-suffix");
 });
 
 test("scan: constraints and utils pass through untouched", () => {

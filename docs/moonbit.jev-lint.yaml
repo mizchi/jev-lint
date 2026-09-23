@@ -16,23 +16,23 @@ languages:
     extensions: [mbt]
     expandoChar: _
 rules:
-  catch-hides-failure: on
-  comment-describes-block: on
-  comment-describes-declaration: on
-  doc-errors-match-body: on
-  error-message-matches-condition: on
-  fn-name-promises: on
-  idempotent-name: on
-  log-level-matches-event: on
-  log-message-matches-event: on
-  module-name-describes-contents: on
-  module-naming-consistent: on
-  pure-name-is-pure: on
-  safe-name-is-safe: on
-  snapshot-only-behaviour-claim: on
-  test-name-describes-code: on
-  test-name-verifies-claim: on
-  tests-cover-failure-paths: on
-  trait-name-describes-methods: on
-  type-name-describes-shape: on
-  var-name-describes-value: on
+  moonbit/catch-hides-failure: on
+  moonbit/comment-describes-block: on
+  moonbit/comment-describes-declaration: on
+  moonbit/doc-errors-match-body: on
+  moonbit/error-message-matches-condition: on
+  moonbit/fn-name-promises: on
+  moonbit/idempotent-name: on
+  moonbit/log-level-matches-event: on
+  moonbit/log-message-matches-event: on
+  moonbit/module-name-describes-contents: on
+  moonbit/module-naming-consistent: on
+  moonbit/pure-name-is-pure: on
+  moonbit/safe-name-is-safe: on
+  moonbit/snapshot-only-behaviour-claim: on
+  moonbit/test-name-describes-code: on
+  moonbit/test-name-verifies-claim: on
+  moonbit/tests-cover-failure-paths: on
+  moonbit/trait-name-describes-methods: on
+  moonbit/type-name-describes-shape: on
+  moonbit/var-name-describes-value: on

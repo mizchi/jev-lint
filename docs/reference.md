@@ -52,7 +52,7 @@ failed and nothing was reported.
 | `--base <ref>` / `--staged` | what `review` diffs against: the merge base with `ref`, or the index (what a commit will contain: no untracked files, no unstaged edits) |
 | `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any finding |
 | `init --pre-commit` | write a hook running `review --staged --fail-on error`; refuses to overwrite an existing hook without `--force` |
-| `run <rule> [paths...]` | `check` with one rule: a shipped id (every language that has it), `lang/<id>` (one), or a project rule when no shipped one has the id; an unknown id names the nearest. `--file <rules.yml>` uses that file's rules instead — all of them, or the one `<rule>` names in it. Every `check` flag applies |
+| `run <rule> [paths...]` | `check` with one rule: prefer `lang/<id>` (one language); a bare shipped id selects every language that has it. An unknown id names the nearest. `--file <rules.yml>` uses that file's rules instead — all of them, or the one `<rule>` names in it. Every `check` flag applies |
 | `commits [range]` | judge each non-merge commit with the git rules: a `subject: commit` rule judges the message against the diff, a `subject: change` rule judges the change against the `AGENTS.md` / `CLAUDE.md` in that commit's own tree (a commit whose tree holds neither produces no change subject, and the run says how many); the range is a positional (`main..HEAD`), else `--base <ref>`, else `@{upstream}..HEAD`. Findings are `<sha>:1`, named by short sha and subject line in every format. `--retry`, `--loose`, `--explain` and the cache apply; the cache keys on message and diff together |
 | `commits --staged` | the index as one change, for a pre-commit hook: `git diff --cached` is the change and `git show :AGENTS.md` the instructions, so a staged edit to the document is judged as part of the change it arrives with. `subject: change` rules only -- there is no message yet |
 | `commits --squash [range] --message-file <path\|->` | the whole range as one change — the diff from its merge base — judged against that message: a pull request's description (`gh pr view --json title,body -q '.title+"\n\n"+.body' \| jev-lint commits --squash main..HEAD --message-file -`), a changelog entry. `--message <text>` inline. One subject, named by the range |
@@ -1144,16 +1144,18 @@ ESLint's does:
 files: [src, test]              # what `check` looks at with no path given
 exclude: [test/fixtures]        # under those, never judged
 rules:                          # only these run
-  fn-name-promises: on          # the rule's own severity and cutoff
-  rust/fn-name-promises: off    # one language of the id
-  comment-describes-block: { at: 0.7, severity: error, loose: 0.4 }
+  typescript/fn-name-promises: on  # the rule's own severity and cutoff
+  rust/fn-name-promises: off
+  typescript/comment-describes-block: { at: 0.7, severity: error, loose: 0.4 }
   my-rule: warning              # a severity: on, at that severity
 cache: .jev-lint/baseline.json  # the default; `none` disables
 ```
 
-A rule is named by its id, which is every language that has it, or by
-`lang/id`, which is one and wins over the bare id for that language. The
-value is `on`, `off`, a severity (`hint`, `info`, `warning`, `error`) or a
+A namespaced rule is normally named by `lang/id`, which selects one language.
+A bare id still selects every language that has it but emits a warning, because
+it may enable another language unintentionally. A flat project rule has no
+namespace and does not warn. A qualified setting wins over the bare setting
+for that language. Values are `on`, `off`, a severity (`hint`, `info`, `warning`, `error`) or a
 mapping of `severity`, `at` and `loose`. A name that matches no loaded rule
 is an error, exit 2 -- a misspelt id that ran nothing would look like a
 clean rule. A config with no `rules:` runs nothing and says what to write;
