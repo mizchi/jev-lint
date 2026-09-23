@@ -1,0 +1,20 @@
+default: clean
+fixtures/total_test.vibe:
+  - line: 5
+    label: bad
+    reason: "A positive result does not establish that the result is five."
+  - line: 9
+    label: clean
+    reason: "The assertion checks the named result exactly."
+  - line: 13
+    label: bad
+    reason: "The test compares one call with itself, so it cannot establish commutativity."
+  - line: 17
+    label: clean
+    reason: "The assertion tests the zero operand and the named result."
+  - line: 21
+    label: bad
+    reason: "A negative result would pass the non-positive assertion."
+  - line: 25
+    label: clean
+    reason: "The assertion directly tests a negative result."

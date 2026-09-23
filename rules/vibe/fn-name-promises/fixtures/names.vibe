@@ -1,0 +1,31 @@
+fn count_items(items: Array[Int]) -> Int {
+  Array::length(items)
+}
+
+fn count_names(names: Array[String]) -> Array[String] {
+  names
+}
+
+fn is_empty(items: Array[Int]) -> Bool {
+  Array::length(items) == 0
+}
+
+fn is_ready(flag: Bool) -> Int {
+  if flag { 1 } else { 0 }
+}
+
+fn save_report(report: String) -> String {
+  report
+}
+
+fn identity(value: Int) -> Int {
+  value
+}
+
+fn double(value: Int) -> Int {
+  value * 2
+}
+
+fn remove_first(items: Array[Int]) -> Array[Int] {
+  Array::slice(items, 1, Array::length(items))
+}

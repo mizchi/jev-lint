@@ -149,7 +149,7 @@ covers the exit code that will stop you committing while offline.
 
 ## What ships
 
-99 rules under `rules/<language>/<id>/`, and the files you point it at decide
+101 rules under `rules/<language>/<id>/`, and the files you point it at decide
 which run. Nothing to select.
 
 | point it at | what runs |
@@ -158,6 +158,7 @@ which run. Nothing to select.
 | `.rs` | `rust/` — 9, first tier |
 | `.py` `.go` | `python/` — 14, `go/` — 9 |
 | `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |
+| `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |
 | `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |
 | `.md` `.mdx` | `markdown/` — 11 writing rules |
 | `package.json`, sqlc `.sql` | `json/` — 1, `text/` — 1 |

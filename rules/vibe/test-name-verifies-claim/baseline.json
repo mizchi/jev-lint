@@ -1,0 +1,190 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-23T16:48:29.505Z",
+  "model": "jev-1.13.0",
+  "suite": "vibe/test-name-verifies-claim",
+  "rules": [
+    {
+      "id": "test-name-verifies-claim",
+      "draft": "0cd131b94cdf",
+      "at": 0.5
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 25,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 25,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.65,
+        "confidence": null
+      },
+      {
+        "rule": "test-name-verifies-claim",
+        "file": "rules/vibe/test-name-verifies-claim/fixtures/total_test.vibe",
+        "line": 25,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 10584,
+    "usd": 0.000444528,
+    "ms": 259
+  }
+}

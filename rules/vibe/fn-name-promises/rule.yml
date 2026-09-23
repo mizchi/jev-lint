@@ -1,0 +1,44 @@
+id: fn-name-promises
+language: vibe
+kind: noul
+subject: node
+state: located
+# 0.54, fitted 2026-09-24 on 8 labeled Vibe functions (3 defects, 5 cleans,
+# 3 passes). Defects answered 0.74-0.89; cleans topped at 0.11. The quietest
+# defect spread 0.05 across passes. The midpoint fit was 0.43; 0.54 leans
+# toward precision while retaining 0.22 of margin above the quietest defect.
+at: 0.54
+axis: file
+severity: warning
+rule:
+  all:
+    - kind: function_declaration
+    - has: { field: name, pattern: $NAME }
+# The same sentence as typescript/fn-name-promises, by copy: the loader warns
+# if the copies drift.
+ask: >-
+  The body of this function does something materially different from what its
+  name promises.
+criteria:
+  # Both branches describe situations visible in the function's own text. An
+  # exception phrased in terms of something the subject cannot show -- "unless
+  # the caller needs it" -- makes every answer land mid-scale, which looks
+  # like a threshold problem and is not one.
+  "true": >-
+    Someone who read only the name and the parameter list would be wrong about
+    what this function does: it returns a different kind of thing than the name
+    suggests (a count that is a list, a predicate that is a number), it changes
+    state when the name says it only reads, checks, looks up or serialises, it
+    can fail or return nothing when the name promises a value, it handles only a
+    narrower case than the name claims, it never performs an effect or
+    repetition the name names (a drain or remove that leaves the container as it
+    was, a retry that tries once), it computes something no reading of the name
+    accounts for, or it does substantial work the name does not mention at all,
+    such as writing what it was asked to read.
+  "false": >-
+    The name and parameter list describe what the body actually does. Someone
+    who read only them would not be surprised by the body, even if a longer or
+    more specific name could be imagined. A terse or conventional name (run,
+    handle, take, len, fmt, toString, a getter) that the body fits is not a
+    violation, and a comment inside the body that is wrong about the body is a
+    wrong comment, not a wrong name.

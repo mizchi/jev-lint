@@ -1,0 +1,244 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-23T16:48:29.231Z",
+  "model": "jev-1.13.0",
+  "suite": "vibe/fn-name-promises",
+  "rules": [
+    {
+      "id": "fn-name-promises",
+      "draft": "85e8db0363cb",
+      "at": 0.54
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 25,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 25,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 9,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 13,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 17,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 21,
+        "endLine": 23,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 25,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "fn-name-promises",
+        "file": "rules/vibe/fn-name-promises/fixtures/names.vibe",
+        "line": 29,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 3,
+    "inputTokens": 13230,
+    "usd": 0.00055566,
+    "ms": 316
+  }
+}

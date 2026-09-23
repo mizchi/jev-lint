@@ -72,6 +72,7 @@ export type CustomLanguages = Record<string, CustomLanguage>;
  */
 export const SHIPPED_CUSTOM_LANGUAGES: Record<string, Omit<CustomLanguage, "libraryPath">> = {
   moonbit: { extensions: ["mbt"], expandoChar: "_" },
+  vibe: { extensions: ["vibe"], expandoChar: "_" },
 };
 
 /** The one language that is not a grammar. */

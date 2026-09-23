@@ -1225,6 +1225,24 @@ Four things decide whether it works, each measured on MoonBit:
   ast-grep error rather than pass silently. Any other declared language
   runs on `bare` and `located`, which need no probes.
 
+### vibe-lang
+
+The Vibe grammar lives in `mizchi/vibe-lang/integrations/treesitter-vibe`.
+That repository's `.jev-lint.yaml` declares the parser and enables the two
+calibrated `vibe/` rules. With `vibe-lang` and `jev-lint` as sibling checkouts,
+run `pkf run jev-parser` to build the native library and `pkf run jev-plan`
+to inspect the planned scan of `lib/`. The latter is a dry run and needs no
+API key. A direct check uses `jev-lint check --config .jev-lint.yaml lib/` from
+the vibe-lang root. Both the native parser and the two checked-in WASM copies
+must be rebuilt after a grammar change; the Vibe repository gates their corpus
+and artifact hashes together.
+
+The grammar's `function_declaration` and `test_block` nodes carry `name`
+fields, so the shipped rules match and capture names directly. The parser is
+required for `.vibe` files, as with MoonBit. See
+[the dogfood report](internal/dogfood-vibe-lang-2026-09-24.md) for the measured
+coverage and current blind spots.
+
 The verdict cache is `.jev-lint/baseline.json`, relative to the config's
 directory, and is meant to be committed: a run over the same commit answers
 from it, and CI lints from it with no API key. It is trusted input --
