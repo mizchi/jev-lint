@@ -104,6 +104,9 @@ await testAsync("run: `exclude` keeps a path under the roots out of the subjects
     const some = await collectSubjects({ rules: [code, block], paths: ["src"], cwd: dir, exclude: ["src/fixtures"] });
     assert.deepEqual(some.subjects.map((s) => s.file), ["src/a.ts"]);
     assert.equal(some.excluded, 2);
+    const globbed = await collectSubjects({ rules: [code, block], paths: ["src"], cwd: dir, exclude: ["**/planted.ts", "**/*.sql"] });
+    assert.deepEqual(globbed.subjects.map((s) => s.file), ["src/a.ts"], "a glob leaves out what it matches");
+    assert.equal(globbed.excluded, 2);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

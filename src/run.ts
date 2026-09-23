@@ -30,7 +30,7 @@ import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "
 import { excerptBudget, pairTests, type RelatedTest } from "./paired.ts";
 import { commitSubjects, squashSubjects, stagedSubjects } from "./commits.ts";
 import { findTextFiles, textSubjects } from "./text.ts";
-import { FileIndex, isUnder, tryReadFile } from "./files.ts";
+import { FileIndex, isExcludedBy, tryReadFile } from "./files.ts";
 import type {
   CustomLanguages,
   Answer,
@@ -94,7 +94,7 @@ export async function collectSubjects({
   languages = {},
   cwd = process.cwd(),
 }: CollectOptions): Promise<CollectResult> {
-  const isExcluded = (file: string) => exclude.some((p) => isUnder(file, p));
+  const isExcluded = (file: string) => exclude.some((p) => isExcludedBy(file, p));
   let excluded = 0;
   // A rule for a language ast-grep has no grammar for until a config names
   // the parser cannot be handed to it: one rule it cannot read fails the

@@ -2,7 +2,7 @@ import { strict as assert } from "node:assert";
 import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, sep } from "node:path";
-import { FileIndex, listFiles, isUnder } from "../src/files.ts";
+import { FileIndex, listFiles, isUnder, isExcludedBy } from "../src/files.ts";
 import { findTestFiles } from "../src/paired.ts";
 import { findTextFiles } from "../src/text.ts";
 import { test } from "./harness.ts";
@@ -39,4 +39,17 @@ test("files: one index walks each root once, and a later caller adds only the ro
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("files: an exclude entry is a path the file is under, or a glob it matches", () => {
+  // `exclude: ['**/*.snapshot.test.ts']` was taken as a path prefix, matched
+  // nothing, and said nothing: every file it meant to leave out was judged.
+  assert.ok(isExcludedBy("src/fixtures/a.ts", "src/fixtures"), "a path, as before");
+  assert.ok(!isExcludedBy("src/fixtures-old/a.ts", "src/fixtures"), "a path is whole segments");
+  assert.ok(isExcludedBy("core/src/components/Chart.snapshot.test.ts", "**/*.snapshot.test.ts"));
+  assert.ok(isExcludedBy("run.sh", "**/*.sh"), "** matches no directory at all");
+  assert.ok(isExcludedBy("scripts/deep/run.sh", "**/*.sh"));
+  assert.ok(isExcludedBy("pkg/a/fixtures/x/y.ts", "**/fixtures"), "a glob naming a directory takes what is under it");
+  assert.ok(!isExcludedBy("src/a/b.ts", "src/*.ts"), "* stays inside one segment");
+  assert.ok(isExcludedBy("src/b.ts", "./src/*.ts"), "a leading ./ is the same path");
 });

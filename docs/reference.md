@@ -136,7 +136,11 @@ not a line of prose.
 
 `--exclude <path>` (repeatable), or `exclude:` in the config, names a path
 under the roots whose files are never subjects: fixtures with planted
-defects, vendored code, a generated directory. The walk still passes
+defects, vendored code, a generated directory. An entry with glob
+characters (`*`, `?`, `[`, `{`) is a glob instead, matched against the
+file's path and every directory above it, so `**/*.snapshot.test.ts`
+leaves out one kind of file and `**/fixtures` every directory of that
+name. The walk still passes
 through it -- an excluded test file can still be a `paired` arm's evidence
 -- but nothing in it is judged, and the run's last line counts what was
 left out. The flag replaces the config's list rather than adding to it.

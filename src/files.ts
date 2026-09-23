@@ -8,7 +8,7 @@
  * lazily and once per run, that both filter.
  */
 import { readdirSync, readFileSync, statSync, type Dirent } from "node:fs";
-import { isAbsolute, join, relative, sep } from "node:path";
+import { isAbsolute, join, matchesGlob, relative, sep } from "node:path";
 
 /**
  * The one decision about a file or directory that cannot be read: it is
@@ -120,4 +120,20 @@ export function isUnder(file: string, root: string): boolean {
   const r = root.split(sep).join("/").replace(/^\.\/?/, "").replace(/\/$/, "");
   if (r === "" || r === ".") return true;
   return file === r || file.startsWith(`${r}/`);
+}
+
+const GLOB_CHARS = /[*?[\]{}]/;
+
+/**
+ * Does an `exclude` entry leave `file` (relative, forward slashes) out? A
+ * path takes the file at or under it, as a root does; an entry with glob
+ * characters is a glob, matched against the file and, so that `**\/fixtures`
+ * works like `fixtures` does, against every directory above it. Globs were
+ * once read as paths: `**\/*.snapshot.test.ts` matched no prefix, excluded
+ * nothing, and the run said nothing about it.
+ */
+export function isExcludedBy(file: string, entry: string): boolean {
+  const pattern = entry.split(sep).join("/").replace(/^\.\//, "");
+  if (!GLOB_CHARS.test(pattern)) return isUnder(file, pattern);
+  return matchesGlob(file, pattern) || matchesGlob(file, `${pattern.replace(/\/$/, "")}/**`);
 }
