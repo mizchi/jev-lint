@@ -31,6 +31,8 @@ export function cmdRules(opts: Options, out: Log, log: Log, baseDir: string = pr
             ask: r.ask,
             note: r.note,
             explain: r.explain ? Object.keys(r.explain) : null,
+            extends: r.extends,
+            context: r.context ? r.context.map((d) => d.path) : null,
             uncalibrated: uncalibrated(r),
             source: r.source ?? null,
           })),
@@ -47,8 +49,10 @@ export function cmdRules(opts: Options, out: Log, log: Log, baseDir: string = pr
     out(
       `${r.languageDir ? `${r.languageDir}/` : ""}${r.id}\n  ${r.languages.join(", ")}  kind=${r.kind}  subject=${r.subject}  arm=${r.state}  cutoff=${cutoffFor(r, opts.at).toFixed(2)}  severity=${r.severity}`,
     );
+    if (r.extends) out(`  extends: ${r.extends}`);
     out(`  ask: ${r.ask}`);
     if (r.note) out(`  note (model only): ${r.note}`);
+    if (r.context) out(`  context (model only): ${r.context.map((d) => `${d.path} (${d.text.length.toLocaleString("en-US")} chars)`).join(", ")}`);
     if (r.explain) out(`  explain (--explain): ${Object.keys(r.explain).join(" | ")}`);
     if (r.loose !== null) out(`  loose floor (--loose): ${r.loose}`);
     // A shipped rule outside the first tier may ship without a baseline;

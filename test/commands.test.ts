@@ -733,3 +733,36 @@ await testAsync("commands: a declared `inconclusive:` reason is printed under th
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+await testAsync("commands: a project rule that extends a shipped one runs with the base's matcher and question, its own context documents in the state", async () => {
+  const { dir } = project();
+  const here = process.cwd();
+  try {
+    const ruleDir = join(dir, ".jev-lint", "rules", "typescript", "acme-fn-name");
+    mkdirSync(ruleDir, { recursive: true });
+    mkdirSync(join(dir, "docs"));
+    writeFileSync(join(dir, "docs", "naming.md"), "In this project `liar` is the conventional name for a constant function.\n");
+    writeFileSync(
+      join(ruleDir, "rule.yml"),
+      ["id: acme-fn-name", "extends: typescript/fn-name-promises", "note: { append: Read the naming document. }", "context: [../../../../docs/naming.md]", "at: 0.5", ""].join("\n"),
+    );
+    writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nrules:\n  acme-fn-name: on\n");
+    process.chdir(dir);
+
+    const run = await cli(["check", "--cache", "none", "--json"]);
+    assert.deepEqual(Object.keys(JSON.parse(run.out).stats.byRule), ["acme-fn-name"], run.log);
+    assert.ok(run.client.asked.length >= 2, "the shipped matcher found both functions");
+    const shipped = loadRules([join(here, "rules", "typescript", "fn-name-promises")]).rules[0]!;
+    assert.ok(run.client.asked.every((q) => String(JSON.stringify(q)).includes(shipped.ask.slice(0, 40))), "the base's question was asked");
+    assert.ok(run.client.asked.every((q) => String(JSON.stringify(q)).includes("Read the naming document.")), "with the appended note");
+    assert.ok(run.client.states.length > 0 && run.client.states.every((s) => JSON.stringify(s.context_documents).includes("conventional name")));
+
+    const listed = JSON.parse((await cli(["rules", "--json"])).out);
+    const mine = listed.rules.find((r: { id: string }) => r.id === "acme-fn-name");
+    assert.equal(mine.extends, "typescript/fn-name-promises");
+    assert.deepEqual(mine.context, ["../../../../docs/naming.md"]);
+  } finally {
+    process.chdir(here);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

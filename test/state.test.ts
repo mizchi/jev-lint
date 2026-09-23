@@ -356,3 +356,16 @@ test("state: a cut instruction document says so, so a rule that is still there i
   const [batch] = planBatches([subject]);
   assert.match(String(batch!.state.note_on_instructions), /cut/);
 });
+
+test("state: a rule's context documents travel in the state, on every arm, and only when there are some", () => {
+  const conventions = [{ path: "../docs/testing.md", text: "A screenshot comparison is the assertion of a visual test.\n" }];
+  const withDocs = subjectOf({ id: "q0000", rule: { ...scoreRule(), context: conventions } });
+  for (const arm of ["bare", "local", "paired", "located", "graph", "full"] as StateArm[]) {
+    const state = buildState({ file: "a.ts", source: "x", entry: sampleEntry(), subjects: [withDocs], arm, language: "TypeScript" });
+    assert.deepEqual(state.context_documents, conventions, arm);
+    assert.match(String(state.note_on_context_documents), /conventions/, arm);
+  }
+  const plain = buildState({ file: "a.ts", source: "x", entry: sampleEntry(), subjects: [subjectOf({ id: "q0000" })], arm: "bare", language: "TypeScript" });
+  assert.equal(plain.context_documents, undefined);
+  assert.equal(plain.note_on_context_documents, undefined);
+});

@@ -758,3 +758,179 @@ test("rules: `shell` is a language directory, and its rules read sh, bash and zs
   assert.equal(error, undefined);
   assert.deepEqual(rule!.languages, ["Bash"]);
 });
+
+/** A throwaway rules root; `write` lays files out under it, `done` removes it. */
+function rulesRoot(prefix: string): { root: string; write: (rel: string, text: string) => string; done: () => void } {
+  const root = mkdtempSync(join(tmpdir(), prefix));
+  return {
+    root,
+    write: (rel, text) => {
+      mkdirSync(join(root, rel, ".."), { recursive: true });
+      writeFileSync(join(root, rel), text);
+      return join(root, rel);
+    },
+    done: () => rmSync(root, { recursive: true, force: true }),
+  };
+}
+
+test("rules: `extends` takes a shipped rule whole and replaces only the fields the file gives", () => {
+  // A project that wants the shipped test rule with its own conventions
+  // used to copy the rule file and give it a new id -- and from then on the
+  // copy never got the upstream fixes to its matcher, criteria or cutoff.
+  const t = rulesRoot("jev-extends-");
+  try {
+    t.write(
+      "typescript/acme-test-name/rule.yml",
+      "id: acme-test-name\nextends: typescript/test-name-verifies-claim\nstate: local\n",
+    );
+    const { rules, errors } = loadRules([t.root]);
+    assert.deepEqual(errors, []);
+    const child = rules.find((r) => r.id === "acme-test-name")!;
+    const base = loadRules([shippedRulesPath()!]).rules.find((r) => r.id === "test-name-verifies-claim" && r.languageDir === "typescript")!;
+    assert.equal(child.extends, "typescript/test-name-verifies-claim");
+    assert.equal(child.ask, base.ask);
+    assert.deepEqual(child.criteria, base.criteria);
+    assert.deepEqual(child.matcher, base.matcher);
+    assert.equal(child.note, base.note);
+    assert.deepEqual(child.languages, base.languages);
+    assert.equal(child.state, "local", "the field the file gives wins");
+    assert.equal(child.languageDir, "typescript");
+    assert.notEqual(ruleTextHash(child), ruleTextHash(base), "a different state is a different question");
+    assert.equal(rules.filter((r) => r.id === "test-name-verifies-claim").length, 0, "the base is looked up, not loaded as a rule of this source");
+  } finally {
+    t.done();
+  }
+});
+
+test("rules: `extends` may append to the base's note, or replace one branch of its criteria", () => {
+  const t = rulesRoot("jev-extends-merge-");
+  try {
+    t.write("base.yml", "id: base\nlanguage: TypeScript\nkind: noul\nrule: { kind: x }\nask: q\nnote: base note\ncriteria: { \"true\": yes, \"false\": no }\nat: 0.6\n");
+    t.write("a.yml", "id: a\nextends: base\nnote: { append: our convention }\n");
+    t.write("b.yml", "id: b\nextends: base\ncriteria: { \"false\": \"no, unless it is a screenshot\" }\n");
+    t.write("c.yml", "id: c\nextends: base\nnote: replaced\n");
+    const { rules, errors } = loadRules([t.root]);
+    assert.deepEqual(errors, []);
+    const by = (id: string) => rules.find((r) => r.id === id)!;
+    assert.equal(by("a").note, "base note\n\nour convention");
+    assert.deepEqual(by("b").criteria, { true: "yes", false: "no, unless it is a screenshot" });
+    assert.equal(by("c").note, "replaced");
+    assert.equal(by("a").at, 0.6, "the cutoff is inherited");
+  } finally {
+    t.done();
+  }
+});
+
+test("rules: `extends` that changes the question but keeps the base's cutoff is warned about", () => {
+  // The base's `at` was fitted to the base's question. A child that asks
+  // something else and inherits it is running on a number nobody measured.
+  const t = rulesRoot("jev-extends-at-");
+  try {
+    t.write("base.yml", "id: base\nlanguage: TypeScript\nkind: noul\nrule: { kind: x }\nask: q\ncriteria: { \"true\": y, \"false\": n }\nat: 0.6\n");
+    t.write("asks.yml", "id: asks\nextends: base\nnote: { append: more }\n");
+    t.write("fitted.yml", "id: fitted\nextends: base\nnote: { append: more }\nat: 0.7\n");
+    t.write("severity.yml", "id: severity\nextends: base\nseverity: error\n");
+    const { warnings, errors } = loadRules([t.root]);
+    assert.deepEqual(errors, []);
+    assert.equal(warnings.length, 1, warnings.join("\n"));
+    assert.match(warnings[0]!, /asks.*base.*`at`/);
+  } finally {
+    t.done();
+  }
+});
+
+test("rules: an `extends` that names nothing, names several, loops or reuses the id is an error", () => {
+  const t = rulesRoot("jev-extends-bad-");
+  try {
+    t.write("missing.yml", "id: missing\nextends: no-such-rule\n");
+    // Four languages ship this id; the file names none of them.
+    t.write("ambiguous.yml", "id: ambiguous\nextends: test-name-verifies-claim\n");
+    t.write("loop-a.yml", "id: loop-a\nextends: loop-b\n");
+    t.write("loop-b.yml", "id: loop-b\nextends: loop-a\n");
+    t.write("same.yml", "id: fn-name-promises\nextends: typescript/fn-name-promises\n");
+    const { rules, errors } = loadRules([t.root]);
+    assert.deepEqual(rules.map((r) => r.id), []);
+    const about = (id: string) => errors.find((e) => e.startsWith(`${id}:`) || e.includes(`/${id}.yml`)) ?? "";
+    assert.match(about("missing"), /no-such-rule.*no loaded or shipped rule/);
+    assert.match(about("ambiguous"), /test-name-verifies-claim.*(go|rust|moonbit|typescript).*<lang>\/<id>|languages/);
+    assert.match(about("loop-a"), /cycle/);
+    assert.match(about("fn-name-promises"), /its own id/);
+  } finally {
+    t.done();
+  }
+});
+
+test("rules: a bare `extends` id resolves to the one base whose grammars cover the file's languages", () => {
+  const t = rulesRoot("jev-extends-lang-");
+  try {
+    t.write("mine.yml", "id: mine\nextends: test-name-verifies-claim\nlanguages: [TypeScript, Tsx]\n");
+    const { rules, errors } = loadRules([t.root]);
+    assert.deepEqual(errors, []);
+    assert.equal(rules[0]!.extends, "typescript/test-name-verifies-claim");
+    assert.deepEqual(rules[0]!.languages, ["TypeScript", "Tsx"]);
+  } finally {
+    t.done();
+  }
+});
+
+test("rules: `context` reads documents beside the rule file into the rule, and they are part of the draft", () => {
+  // Project conventions the model should judge against -- that a screenshot
+  // comparison is the assertion of a visual test, that a helper in another
+  // file sets the case up -- are not in the code under review, and a `note`
+  // copied into every rule drifts from the document it was copied from.
+  const t = rulesRoot("jev-context-");
+  try {
+    t.write("docs/testing.md", "Screenshot comparisons are assertions.\n");
+    const file = t.write("rules/r.yml", "id: r\nlanguage: TypeScript\nrule: { kind: x }\nask: q\ncontext: [../docs/testing.md]\n");
+    const first = loadRules([file]);
+    assert.deepEqual(first.errors, []);
+    assert.deepEqual(first.rules[0]!.context, [{ path: "../docs/testing.md", text: "Screenshot comparisons are assertions.\n" }]);
+    const before = ruleTextHash(first.rules[0]!);
+    t.write("docs/testing.md", "Screenshot comparisons are not assertions.\n");
+    assert.notEqual(ruleTextHash(loadRules([file]).rules[0]!), before, "an edited document is a different question");
+    const plain = normalizeRule({ id: "r", language: "TypeScript", rule: { kind: "x" }, ask: "q" }).rule!;
+    assert.equal(plain.context, null);
+  } finally {
+    t.done();
+  }
+});
+
+test("rules: a `context` document that is missing, empty, too large or not a list is a load error", () => {
+  const t = rulesRoot("jev-context-bad-");
+  try {
+    t.write("empty.md", "");
+    t.write("huge.md", "x".repeat(40_001));
+    t.write("missing.yml", "id: missing\nlanguage: TypeScript\nrule: { kind: x }\nask: q\ncontext: [nope.md]\n");
+    t.write("empty.yml", "id: empty\nlanguage: TypeScript\nrule: { kind: x }\nask: q\ncontext: [empty.md]\n");
+    t.write("huge.yml", "id: huge\nlanguage: TypeScript\nrule: { kind: x }\nask: q\ncontext: [huge.md]\n");
+    t.write("shape.yml", "id: shape\nlanguage: TypeScript\nrule: { kind: x }\nask: q\ncontext: nope.md\n");
+    const { rules, errors } = loadRules([t.root]);
+    assert.deepEqual(rules, []);
+    assert.equal(errors.length, 4, errors.join("\n"));
+    assert.match(errors.find((e) => e.startsWith("missing:"))!, /nope\.md/);
+    assert.match(errors.find((e) => e.startsWith("empty:"))!, /empty/);
+    assert.match(errors.find((e) => e.startsWith("huge:"))!, /40,000/);
+    assert.match(errors.find((e) => e.startsWith("shape:"))!, /list/);
+    assert.match(normalizeRule({ id: "x", language: "TypeScript", rule: { kind: "x" }, ask: "q", context: ["a.md"] }).error!, /rule file/);
+  } finally {
+    t.done();
+  }
+});
+
+test("rules: an extending rule's `context` is added to its base's, each read beside its own file", () => {
+  const t = rulesRoot("jev-context-extends-");
+  try {
+    t.write("base/a.md", "A\n");
+    t.write("child/b.md", "B\n");
+    t.write("base/base.yml", "id: base\nlanguage: TypeScript\nrule: { kind: x }\nask: q\ncontext: [a.md]\n");
+    t.write("child/child.yml", "id: child\nextends: base\ncontext: [b.md]\n");
+    const { rules, errors } = loadRules([t.root]);
+    assert.deepEqual(errors, []);
+    assert.deepEqual(rules.find((r) => r.id === "child")!.context, [
+      { path: "a.md", text: "A\n" },
+      { path: "b.md", text: "B\n" },
+    ]);
+  } finally {
+    t.done();
+  }
+});

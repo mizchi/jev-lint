@@ -131,7 +131,30 @@ code's clean band goes higher. `var-name-describes-value` and
 `module-name-describes-contents` are the two with the least headroom and the
 first to refit.
 
-### 2. Copy one and edit
+### 2. Extend one
+
+A rule that `extends` a shipped one is that rule with the fields its own
+file gives laid over it. It keeps the upstream matcher, criteria and note,
+and keeps getting their fixes:
+
+```yaml
+# .jev-lint/rules/typescript/acme-test-name/rule.yml
+id: acme-test-name
+extends: typescript/test-name-verifies-claim
+note: { append: A screenshot comparison is the assertion of a visual test. }
+context: [../../../../docs/testing.md]   # read beside the code, in the state
+at: 0.7   # uncalibrated -- the base's cutoff was fitted to the base's question
+```
+
+Turn the shipped one off in `rules:` and yours on. A change to what is
+asked -- `note`, `criteria`, `state`, `context` -- is a new question, so
+fit its `at` as for any rule of your own ([calibration.md](calibration.md));
+the loader warns while it still carries the base's.
+
+### 2b. Copy one and edit
+
+When the base's matcher or sentence is not the one you want at all,
+copy it instead:
 
 ```bash
 mkdir -p .jev-lint/rules/typescript

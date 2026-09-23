@@ -31,6 +31,35 @@ test("jev: a billing refusal is an auth error, since retrying will not help", ()
   assert.equal(Jev.classify(500, ""), "other");
 });
 
+test("jev: a 403 whose body is an HTML page is one batch refused by a proxy, not the account", () => {
+  // A web application firewall in front of the API answered 403 with its
+  // own HTML page for two files out of 474 -- a shell script and a test --
+  // and the run stopped on the first one, leaving 9,239 of 10,886 subjects
+  // without a verdict. The key was fine: every other batch answered.
+  const page = '<!DOCTYPE html>\n<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->';
+  assert.equal(Jev.classify(403, page), "other");
+  assert.equal(Jev.classify(403, "  <html><body>Forbidden</body></html>"), "other");
+  assert.equal(Jev.classify(403, '{"error":"forbidden"}'), "auth", "the API's own refusal still stops the run");
+});
+
+await testAsync("jev: an HTML 403 reaches the caller as a per-batch failure naming the proxy", async () => {
+  const fakeFetch = (async () =>
+    new Response("<!DOCTYPE html><html><body>Access denied</body></html>", { status: 403 })) as typeof fetch;
+  const jev = new Jev({ apiKey: "k", retries: 0, fetch: fakeFetch });
+  await assert.rejects(
+    () =>
+      jev.ask({}, {
+        q0000: { type: "noul", instructions: {}, criteria: { true: "y", false: "n" } },
+      }),
+    (err: unknown) => {
+      assert.ok(err instanceof JevError);
+      assert.equal((err as JevError).kind, "other");
+      assert.match((err as JevError).message, /not from the API/);
+      return true;
+    },
+  );
+});
+
 await testAsync("jev: an empty question set costs nothing and makes no request", async () => {
   let called = false;
   const jev = new Jev({ apiKey: "k", onRequest: () => (called = true) });

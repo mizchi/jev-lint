@@ -39,6 +39,7 @@ import {
   SHIPPED_CUSTOM_LANGUAGES,
   STATE_ARMS,
   SUBJECTS,
+  type ContextDoc,
   type CustomLanguages,
   type Criterion,
   type CriterionDetail,
@@ -208,15 +209,37 @@ export function undeclared(rules: Rule[], custom: CustomLanguages): string[] {
 }
 
 /**
+ * What `context:` may carry, in characters, all documents together. The
+ * state budget is 32Ki tokens and a `located` state also carries the file;
+ * 40,000 characters is about 10k tokens, a third of it, which leaves the
+ * file room. Refused rather than cut: a convention document read to its
+ * middle is a different convention.
+ */
+export const MAX_CONTEXT_CHARS = 40_000;
+
+/** Where a rule came from, for the fields that need to know. */
+export interface NormalizeOptions {
+  /** The directory of the rule file; `context:` paths resolve against it. null for a rule built in memory. */
+  ruleDir?: string | null;
+  /** An extending rule's base's documents, which come first. */
+  inheritedContext?: ContextDoc[];
+  /** The base an extending rule was built from, as `<lang>/<id>` or an id. */
+  extendsName?: string | null;
+}
+
+/**
  * Validate and normalize one rule object.
  * Returns `{rule}` or `{error}`; never throws.
  */
-export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages = {}): RuleResult {
+export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages = {}, options: NormalizeOptions = {}): RuleResult {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
     return { error: `${where}: not a mapping` };
   }
   const id = typeof raw.id === "string" ? raw.id.trim() : "";
   if (id === "") return { error: `${where}: missing \`id\`` };
+  if (raw.extends !== undefined) {
+    return { error: `${id}: \`extends\` is resolved when rule files are loaded, against the rules loaded beside it and the shipped packs; a rule built in memory has neither` };
+  }
   if (id.startsWith(PROBE_PREFIX)) {
     return {
       error: `${where}: id may not start with \`${PROBE_PREFIX}\`, which is reserved for structural probes`,
@@ -311,7 +334,13 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     return { error: `${id}: \`unsureBelow\` must be a number between 0 and 1` };
   }
 
+  if (raw.note !== undefined && raw.note !== null && typeof raw.note !== "string") {
+    return { error: `${id}: \`note\` must be a string${options.extendsName ? "" : " (`note: { append: ... }` is for a rule that `extends` another)"}` };
+  }
   const note = typeof raw.note === "string" && raw.note.trim() !== "" ? raw.note.trim() : null;
+
+  const context = readContext(raw.context, id, options);
+  if ("error" in context) return { error: context.error };
 
   // Labels for the `--explain` follow-up: a closed mapping, two or more, each
   // described. One label is not a choice, and a label without a description
@@ -365,7 +394,7 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
     "note", "kind", "criteria", "at", "subject", "state", "axis", "severity",
     "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions", "levels",
-    "divergent", "inconclusive",
+    "divergent", "inconclusive", "context",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
   if (unknown.length > 0) {
@@ -390,9 +419,47 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     docs: typeof raw.docs === "string" ? raw.docs : null,
     tags: Array.isArray(raw.tags) ? raw.tags.filter((t: unknown) => typeof t === "string") : [],
     explain,
+    extends: options.extendsName ?? null,
+    context: context.docs.length > 0 ? context.docs : null,
     languageDir: null,
   };
   return { rule: { ...base, ...judgment, ...source } };
+}
+
+/**
+ * The `context:` documents, read now: the base's first, then this file's,
+ * each path resolved against the file that named it. Every way a document
+ * can be wrong is an error that names it -- a missing convention document
+ * that quietly sent nothing would judge against no convention at all.
+ */
+function readContext(raw: unknown, id: string, options: NormalizeOptions): { docs: ContextDoc[] } | { error: string } {
+  const docs: ContextDoc[] = [...(options.inheritedContext ?? [])];
+  if (raw !== undefined && raw !== null) {
+    if (!Array.isArray(raw) || raw.length === 0 || raw.some((p) => typeof p !== "string" || p.trim() === "")) {
+      return { error: `${id}: \`context\` must be a non-empty list of paths, relative to the rule file` };
+    }
+    if (!options.ruleDir) {
+      return { error: `${id}: \`context\` names documents relative to the rule file, and a rule built in memory has no rule file` };
+    }
+    for (const p of raw as string[]) {
+      const full = resolve(options.ruleDir, p);
+      let text: string;
+      try {
+        text = readFileSync(full, "utf8");
+      } catch {
+        return { error: `${id}: context document \`${p}\` not found (looked for ${full})` };
+      }
+      if (text.trim() === "") return { error: `${id}: context document \`${p}\` is empty` };
+      docs.push({ path: p, text });
+    }
+  }
+  const total = docs.reduce((n, d) => n + d.text.length, 0);
+  if (total > MAX_CONTEXT_CHARS) {
+    return {
+      error: `${id}: context documents are ${total.toLocaleString("en-US")} characters; the limit is ${MAX_CONTEXT_CHARS.toLocaleString("en-US")}, so they leave the state room for the code -- send the part that holds the convention`,
+    };
+  }
+  return { docs };
 }
 
 /**
@@ -781,6 +848,10 @@ export function ruleTextHash(rule: Rule): string {
         // Only on a block rule: appending an empty line for every other rule
         // retired every baseline the day this landed.
         ...(rule.split ? [rule.split] : []),
+        // The documents are shown, so their text is in the draft: a verdict
+        // given against one version of a convention does not answer for the
+        // next. Only when there are some, for the same reason as `split`.
+        ...(rule.context ? [canonical(rule.context)] : []),
       ].join("\n"),
     )
     .digest("hex")
@@ -833,6 +904,7 @@ export function loadRules(
   const rules: Rule[] = [];
   const errors: string[] = [];
   const seen = new Map<string, string>();
+  const pending: PendingExtends[] = [];
 
   for (const { path, missing } of files) {
     if (missing) {
@@ -873,40 +945,231 @@ export function loadRules(
       items.forEach((item: unknown, j: number) => {
         const where =
           items.length > 1 || docs.length > 1 ? `${path}#${docs.length > 1 ? i : j}` : path;
-        const { rule, error } = normalizeRule(item, where, custom);
+        // An extending rule is only a rule once its base is known, and the
+        // base may be in a file not read yet; it waits for the second pass.
+        if (item && typeof item === "object" && !Array.isArray(item) && "extends" in item) {
+          pending.push({ raw: item as Record<string, unknown>, where, path, layout });
+          return;
+        }
+        const { rule, error } = normalizeRule(item, where, custom, { ruleDir: dirname(path) });
         if (error || !rule) {
           errors.push(error ?? `${where}: could not be normalized`);
           return;
         }
-        if (layout) {
-          // Under the layout the directory names the rule and bounds its
-          // grammars; a document that disagrees with its path is an error,
-          // not a rule that quietly lives somewhere else.
-          if (rule.id !== layout.id) {
-            errors.push(`${where}: id \`${rule.id}\` must be the directory's name \`${layout.id}\``);
-            return;
-          }
-          const admitted = languageDirGrammars(layout.languageDir, custom)!;
-          const outside = rule.languages.filter((l) => !admitted.includes(l));
-          if (outside.length > 0) {
-            errors.push(
-              `${where}: ${outside.join(", ")} is not a grammar of the \`${layout.languageDir}\` directory (it admits ${admitted.join(", ")})`,
-            );
-            return;
-          }
-          rule.languageDir = layout.languageDir;
-        }
-        const key = `${rule.languageDir ?? ""}/${rule.id}`;
-        if (seen.has(key)) {
-          errors.push(`${rule.id}: duplicate id (also in ${seen.get(key)})`);
-          return;
-        }
-        seen.set(key, where);
-        rules.push({ ...rule, source: path, pack: layout ? layout.languageDir : basename(path, extname(path)) });
+        admit(rule, where, path, layout);
       });
     });
   }
-  return { rules, errors, warnings: driftWarnings(rules) };
+
+  const warnings: string[] = [];
+  if (pending.length > 0) {
+    resolveExtends(pending, rules, custom, errors, warnings, admit);
+  }
+  return { rules, errors, warnings: [...driftWarnings(rules), ...warnings] };
+
+  /** Layout and duplicate checks, then into the set. */
+  function admit(rule: Rule, where: string, path: string, layout: { languageDir: string; id: string } | null): boolean {
+    if (layout) {
+      // Under the layout the directory names the rule and bounds its
+      // grammars; a document that disagrees with its path is an error,
+      // not a rule that quietly lives somewhere else.
+      if (rule.id !== layout.id) {
+        errors.push(`${where}: id \`${rule.id}\` must be the directory's name \`${layout.id}\``);
+        return false;
+      }
+      const admitted = languageDirGrammars(layout.languageDir, custom)!;
+      const outside = rule.languages.filter((l) => !admitted.includes(l));
+      if (outside.length > 0) {
+        errors.push(
+          `${where}: ${outside.join(", ")} is not a grammar of the \`${layout.languageDir}\` directory (it admits ${admitted.join(", ")})`,
+        );
+        return false;
+      }
+      rule.languageDir = layout.languageDir;
+    }
+    const key = `${rule.languageDir ?? ""}/${rule.id}`;
+    if (seen.has(key)) {
+      errors.push(`${rule.id}: duplicate id (also in ${seen.get(key)})`);
+      return false;
+    }
+    seen.set(key, where);
+    rules.push({ ...rule, source: path, pack: layout ? layout.languageDir : basename(path, extname(path)) });
+    return true;
+  }
+}
+
+interface PendingExtends {
+  raw: Record<string, unknown>;
+  where: string;
+  path: string;
+  layout: { languageDir: string; id: string } | null;
+}
+
+/**
+ * The fields that change what the model is asked. An extending rule that
+ * gives one of these asks a different question from its base, and the
+ * base's cutoff was fitted to the base's question.
+ */
+const QUESTION_FIELDS = ["ask", "note", "criteria", "rule", "constraints", "utils", "subject", "state", "context", "kind", "levels", "split"];
+
+/**
+ * The second pass: each `extends` laid over its base.
+ *
+ * The base is looked up among the rules this call loaded first -- a
+ * project's rule may extend another of its own -- then in the shipped
+ * packs, which are read for the lookup and never added to the result: a
+ * project that extends `typescript/test-name-verifies-claim` has not asked
+ * for the shipped rule to run. A chain resolves in dependency order; a
+ * cycle is an error on every rule in it.
+ */
+function resolveExtends(
+  pending: PendingExtends[],
+  loaded: Rule[],
+  custom: CustomLanguages,
+  errors: string[],
+  warnings: string[],
+  admit: (rule: Rule, where: string, path: string, layout: PendingExtends["layout"]) => boolean,
+): void {
+  let shipped: Rule[] | null = null;
+  const shippedRules = (): Rule[] => {
+    if (shipped === null) {
+      const dir = shippedRulesPath();
+      shipped = dir ? loadRules([dir], custom).rules : [];
+    }
+    return shipped;
+  };
+  const idOf = (p: PendingExtends) => (typeof p.raw.id === "string" ? p.raw.id.trim() : "");
+  const done = new Map<PendingExtends, Rule | null>();
+
+  const resolveOne = (p: PendingExtends, stack: string[]): Rule | null => {
+    if (done.has(p)) return done.get(p)!;
+    const id = idOf(p);
+    const fail = (message: string): null => {
+      errors.push(`${id || p.where}: ${message}`);
+      done.set(p, null);
+      return null;
+    };
+    if (id === "") return fail(`missing \`id\``);
+    const name = typeof p.raw.extends === "string" ? p.raw.extends.trim() : "";
+    if (name === "") return fail("`extends` must name a rule, as `<lang>/<id>` or an id");
+    const baseId = name.split("/").pop()!;
+    if (baseId === id) return fail(`extends \`${name}\` and must have its own id; the same id would be a second definition of the base`);
+    if (stack.includes(id)) return fail(`extends in a cycle: ${[...stack, id].join(" -> ")}`);
+
+    // What the file's own languages ask for, so a bare id shipped in four
+    // languages can resolve to the one whose grammars cover them.
+    const rawLangs = p.raw.languages ?? p.raw.language;
+    const wanted = rawLangs === undefined ? [] : (Array.isArray(rawLangs) ? rawLangs : [rawLangs]).map((l) => normalizeLanguage(l, custom)).filter((l): l is Language => l !== null);
+    const named = (r: { id: string; languageDir: string | null }) => (name.includes("/") ? `${r.languageDir}/${r.id}` === name : r.id === name);
+    const covers = (r: Rule) => wanted.every((l) => r.languages.includes(l));
+
+    // A base that is itself pending resolves first.
+    const pendingBase = pending.filter((q) => q !== p && idOf(q) === baseId && (!name.includes("/") || q.layout?.languageDir === name.split("/")[0]));
+    let candidates: Rule[] = loaded.filter(named);
+    if (candidates.length === 0 && pendingBase.length > 0) {
+      candidates = pendingBase.map((q) => resolveOne(q, [...stack, id])).filter((r): r is Rule => r !== null);
+      if (candidates.length === 0) return fail(`extends \`${name}\`, which did not load`);
+    }
+    if (candidates.length === 0) candidates = shippedRules().filter(named);
+    if (candidates.length === 0) return fail(`extends \`${name}\`, but there is no loaded or shipped rule by that id`);
+    if (candidates.length > 1) candidates = candidates.filter(covers);
+    if (candidates.length !== 1) {
+      const all = [...loaded, ...shippedRules()].filter(named).map((r) => `${r.languageDir ?? "(flat)"}/${r.id}`);
+      return fail(
+        `extends \`${name}\`, which names ${all.join(", ")}; write \`extends: <lang>/<id>\`, or give \`languages\` that only one of them covers`,
+      );
+    }
+    const base = candidates[0]!;
+
+    const merged: Record<string, unknown> = { ...ruleToRaw(base) };
+    for (const [k, v] of Object.entries(p.raw)) {
+      if (k === "extends") continue;
+      merged[k] = v;
+    }
+    if (p.raw.language !== undefined) delete merged.languages;
+    if (p.raw.languages !== undefined) delete merged.language;
+    // One branch of the criteria may be given alone.
+    const childCriteria = p.raw.criteria;
+    if (childCriteria && typeof childCriteria === "object" && !Array.isArray(childCriteria) && base.criteria) {
+      merged.criteria = { true: base.criteria.true, false: base.criteria.false, ...(childCriteria as object) };
+    }
+    // `note: { append }` keeps the base's note -- which on a shipped rule
+    // is usually measured wording -- and adds to it.
+    const childNote = p.raw.note;
+    if (childNote && typeof childNote === "object" && !Array.isArray(childNote)) {
+      const keys = Object.keys(childNote);
+      const append = (childNote as Record<string, unknown>).append;
+      if (keys.length !== 1 || typeof append !== "string" || append.trim() === "") {
+        return fail("`note` is a string that replaces the base's, or `{ append: <text> }` that adds to it");
+      }
+      merged.note = [base.note, append.trim()].filter(Boolean).join("\n\n");
+    }
+    // The base's context is already read, against the base's file; the
+    // file's own `context` is read against the file.
+    delete merged.context;
+    if (p.raw.context !== undefined) merged.context = p.raw.context;
+
+    const baseName = base.languageDir ? `${base.languageDir}/${base.id}` : base.id;
+    const { rule, error } = normalizeRule(merged, p.where, custom, {
+      ruleDir: dirname(p.path),
+      inheritedContext: base.context ?? [],
+      extendsName: baseName,
+    });
+    if (error || !rule) return fail((error ?? "could not be normalized").replace(/^[^:]+: /, ""));
+
+    const asksOther = QUESTION_FIELDS.some((k) => p.raw[k] !== undefined);
+    if (asksOther && p.raw.at === undefined && base.at !== null) {
+      warnings.push(
+        `${id}: extends ${baseName} and changes what the model is asked, but inherits ${baseName}'s cutoff (\`at: ${base.at}\`), which was fitted to ${baseName}'s question -- fit its own \`at\``,
+      );
+    }
+    if (!admit(rule, p.where, p.path, p.layout)) {
+      done.set(p, null);
+      return null;
+    }
+    done.set(p, rule);
+    return rule;
+  };
+
+  for (const p of pending) resolveOne(p, []);
+}
+
+/**
+ * A normalized rule back as the fields of a rule file, for an extending
+ * rule to be laid over. Null fields are left out, since a rule file says
+ * "the default" by not naming a field; `divergent` and `inconclusive` are
+ * statements about the base's own copies and fixtures, and do not carry.
+ */
+function ruleToRaw(rule: Rule): Record<string, unknown> {
+  const raw: Record<string, unknown> = {
+    id: rule.id,
+    languages: rule.languages,
+    kind: rule.kind,
+    ask: rule.ask,
+    subject: rule.subject,
+    state: rule.state,
+    severity: rule.severity,
+    tags: rule.tags,
+  };
+  const optional: Record<string, unknown> = {
+    note: rule.note,
+    criteria: rule.criteria,
+    levels: rule.levels,
+    at: rule.at,
+    loose: rule.loose,
+    axis: rule.axis,
+    message: rule.message,
+    unsureBelow: rule.unsureBelow,
+    docs: rule.docs,
+    explain: rule.explain,
+    rule: rule.matcher,
+    constraints: rule.constraints,
+    utils: rule.utils,
+    split: rule.split,
+    extensions: rule.extensions,
+  };
+  for (const [k, v] of Object.entries(optional)) if (v !== null && v !== undefined) raw[k] = v;
+  return raw;
 }
 
 /**

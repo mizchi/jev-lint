@@ -300,9 +300,15 @@ export class Jev implements AskClient {
    * anything the account has to fix -- a bad key (401, 403) or no credit
    * (402) -- and it is the same answer for every batch and every pass, so the
    * runner stops on the first one rather than collecting it 69 times.
+   *
+   * A 403 that is an HTML page is the exception: that is a proxy or web
+   * application firewall in front of the API refusing this one request by
+   * its content, and every other batch may still be answered. Taking it as
+   * `auth` once stopped a run after one batch and left 85% of it unasked.
    */
   static classify(status: number, body: string): JevErrorKind {
     if (status === 400 && body.includes("max_tokens_exceeded")) return "too_big";
+    if (status === 403 && isHtml(body)) return "other";
     if (status === 401 || status === 402 || status === 403) return "auth";
     return "other";
   }
@@ -385,7 +391,8 @@ export class Jev implements AskClient {
         return parsed;
       }
 
-      last = new JevError(`HTTP ${res.status}: ${text.slice(0, 240)}`, {
+      const proxied = res.status === 403 && isHtml(text) ? " (an HTML page, not from the API: a proxy or firewall refused this request by its content)" : "";
+      last = new JevError(`HTTP ${res.status}${proxied}: ${text.slice(0, 240)}`, {
         status: res.status,
         kind: Jev.classify(res.status, text),
       });
@@ -449,6 +456,11 @@ function rateLimitWait(nth: number, baseMs: number, retryAfter?: string | null):
     ? hinted
     : Math.min(5_000, baseMs * 1.5 ** (nth - 1)) * (0.5 + Math.random());
   return new Promise<void>((r) => setTimeout(r, wait));
+}
+
+/** The API answers in JSON; a body that opens with markup came from something in front of it. */
+function isHtml(body: string): boolean {
+  return /^\s*</.test(body);
 }
 
 function backoff(attempt: number, retryAfter?: string | null): Promise<void> {

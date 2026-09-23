@@ -380,3 +380,28 @@ test("batch: a commit and a change subject over one commit do not share a state"
   assert.equal(byKind.commit!.instructions, undefined);
   assert.equal(byKind.commit!.message, "Add cart");
 });
+
+test("batch: subjects of rules with different context documents never share a state", () => {
+  // The state is per batch and carries one set of documents, so two rules
+  // that were written against different conventions cannot be asked in one
+  // request: the second would be judged against the first's documents.
+  const a = { ...scoreRule({ id: "a" }), context: [{ path: "a.md", text: "A" }] };
+  const b = { ...scoreRule({ id: "b" }), context: [{ path: "b.md", text: "B" }] };
+  const a2 = { ...scoreRule({ id: "a2" }), context: [{ path: "a.md", text: "A" }] };
+  const plain = scoreRule({ id: "p" });
+  const subjects = [a, b, a2, plain].map((rule, i) => subjectOf({ rule, line: i + 1, text: `fetch(u${i})` }));
+  const batches = planBatches(subjects, { sources: new Map([["a.ts", "source"]]), symbols: new Map([["a.ts", sampleEntry()]]) });
+  const together = batches.map((batch) => batch.subjects.map((s) => s.rule.id).sort().join(","));
+  assert.deepEqual(together.sort(), ["a,a2", "b", "p"], "the same documents share; different ones do not");
+  for (const batch of batches) {
+    const docs = batch.subjects[0]!.rule.context;
+    assert.deepEqual(batch.state.context_documents, docs ?? undefined);
+  }
+});
+
+test("batch: a rule-grouped batch carries its rule's context documents", () => {
+  const rule = { ...scoreRule({ id: "a" }), context: [{ path: "a.md", text: "A" }] };
+  const batches = planRuleBatches([subjectOf({ rule }), subjectOf({ rule, file: "b.ts", text: "fetch(v)" })], {});
+  assert.equal(batches.length, 1);
+  assert.deepEqual(batches[0]!.state.context_documents, rule.context);
+});
