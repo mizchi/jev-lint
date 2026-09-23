@@ -133,7 +133,7 @@ earned it on your own code, not before:
 
 ```yaml
 rules:
-  comment-describes-declaration: { at: 0.7, severity: error }
+  typescript/comment-describes-declaration: { at: 0.7, severity: error }
 ```
 
 Read [calibration](../.claude/skills/jev-lint/references/calibration.md)

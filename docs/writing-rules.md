@@ -49,7 +49,7 @@ Then check it does something:
 ```bash
 jev-lint rules                                      # loaded, or the validation error
 jev-lint check src --dry-run --show-subjects        # which nodes it found, with captures
-jev-lint check src --at catch-hides-failure=2 --retry 3   # a score runs 0-3
+jev-lint check src --at typescript/catch-hides-failure=2 --retry 3   # a score runs 0-3
 ```
 
 ### Evals: the cases a rule ships with
@@ -108,4 +108,3 @@ repository's `npm run ci` ends in it.
 Every field, `score` versus `noul`, the state arms with their measurements,
 and sharing one sentence across grammars are in
 [docs/reference.md](docs/reference.md#rule-fields).
-

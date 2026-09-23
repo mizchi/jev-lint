@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { applyConfig, findConfig, hookShim, initialConfig, initialHook, initialPushHook, loadConfig } from "../src/config.ts";
 import { blocks } from "../src/gate.ts";
+import { loadRules, shippedRulesPath } from "../src/rules.ts";
 import { main } from "../src/cli/main.ts";
 import { configurable } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
@@ -523,17 +524,37 @@ await testAsync("config: init --pre-commit leaves a foreign hook alone and print
 test("config: the file init writes is valid, names the files and every shipped rule, and nothing else is set", () => {
   // A starter config that errors, or that silently changes behaviour, is worse
   // than none. Since 0.5 a config selects its rules, so the starter lists
-  // every shipped id turned on -- a reader deletes what they do not want --
+  // every shipped language/id turned on -- a reader deletes what they do not want --
   // and every other setting commented with its default.
   const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
   try {
-    const text = initialConfig(["fn-name-promises", "comment-describes-block"]);
+    const text = initialConfig(["typescript/fn-name-promises", "rust/fn-name-promises", "typescript/comment-describes-block"]);
     const { config, errors } = loadConfig(writeConfig(dir, text));
     assert.deepEqual(errors, [], "the shipped starter config must parse clean");
-    assert.deepEqual(config, { files: ["src"], rules: { "fn-name-promises": { enabled: true }, "comment-describes-block": { enabled: true } } });
+    assert.deepEqual(config, { files: ["src"], rules: { "typescript/fn-name-promises": { enabled: true }, "rust/fn-name-promises": { enabled: true }, "typescript/comment-describes-block": { enabled: true } } });
     assert.match(text, /apiKeyEnv/, "and it must say where the key goes");
     assert.ok(!/^\s*apiKey:/m.test(text), "and never suggest putting the key in it");
     assert.match(text, /\.jev-lint\/rules/, "and says where a rule of one's own goes");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("config: init writes a language-qualified key for every shipped rule", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-init-"));
+  try {
+    const path = join(dir, ".jev-lint.yaml");
+    assert.equal(await main(["init", "--config", path], { out: () => {}, log: () => {} }), 0);
+    const { config, errors } = loadConfig(path);
+    assert.deepEqual(errors, []);
+    const names = Object.keys(config.rules ?? {}).sort();
+    const shipped = shippedRulesPath();
+    assert.ok(shipped);
+    const expected = loadRules([shipped!]).rules.map((rule) => `${rule.languageDir}/${rule.id}`).sort();
+    assert.deepEqual(names, expected, "init must list every shipped rule separately");
+    assert.ok(names.every((name) => name.includes("/")), "a bare id would enable several languages at once");
+    assert.ok(names.includes("moonbit/fn-name-promises"));
+    assert.ok(names.includes("typescript/fn-name-promises"));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

@@ -113,7 +113,7 @@ a committed cache with no key at all.
 | `jev-lint review --base main` | only the lines a diff touched — where findings concentrate, at a fraction of the cost |
 | `jev-lint commits --base main` | each commit's message against its diff, and each change against the `AGENTS.md` the repository wrote for itself |
 | `jev-lint commits --staged` | the same, on what is about to be committed |
-| `jev-lint run fn-name-promises src` | one rule; `--file mine.yml` for one of your own |
+| `jev-lint run typescript/fn-name-promises src` | one rule; `--file mine.yml` for one of your own |
 | `jev-lint rules` | every loaded rule: its question, cutoff and file |
 
 The config picks the rules, as ESLint's does. `init` writes every shipped
@@ -123,10 +123,14 @@ rule turned on, as a catalogue to prune:
 files: [src, test]
 exclude: [test/fixtures]
 rules:
-  fn-name-promises: on
-  rust/fn-name-promises: off          # one language of the id
-  comment-describes-block: { at: 0.7, severity: error }
+  typescript/fn-name-promises: on
+  rust/fn-name-promises: off
+  typescript/comment-describes-block: { at: 0.7, severity: error }
 ```
+
+Use `language/id` for namespaced rules. A bare shipped id still selects every
+language with that id, but jev-lint warns because it can enable a language
+unintentionally. A flat project rule has no namespace and does not warn.
 
 To silence one finding, or one file, in any comment syntax:
 

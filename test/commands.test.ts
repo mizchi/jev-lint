@@ -579,6 +579,7 @@ await testAsync("commands: since 0.5 a config picks its rules by id, .jev-lint/r
     writeFileSync(join(dir, ".jev-lint.yaml"), "files: [src]\nrules:\n  body-short: { severity: error, at: 0.5 }\n  fn-name-promises: off\n");
     const some = await cli(["check", "--cache", "none", "--json"]);
     assert.equal(some.code, 1, some.log);
+    assert.match(some.log, /config warning: rules: `fn-name-promises` omits a language namespace/);
     const report = JSON.parse(some.out);
     assert.deepEqual(Object.keys(report.stats.byRule), ["body-short"]);
     assert.equal(report.findings[0].severity, "error");
@@ -613,8 +614,9 @@ await testAsync("commands: since 0.5 a config picks its rules by id, .jev-lint/r
     assert.equal(started.code, 0);
     const written = readFileSync(join(dir, ".jev-lint.yaml"), "utf8");
     assert.match(written, /^files: \[src\]$/m);
-    assert.match(written, /^  fn-name-promises: on$/m);
-    assert.match(written, /^  document-is-slop: on$/m);
+    assert.match(written, /^  typescript\/fn-name-promises: on$/m);
+    assert.match(written, /^  moonbit\/fn-name-promises: on$/m);
+    assert.match(written, /^  markdown\/document-is-slop: on$/m);
   } finally {
     process.chdir(here);
     rmSync(dir, { recursive: true, force: true });

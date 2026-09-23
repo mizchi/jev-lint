@@ -10,6 +10,24 @@ import { selectForRun } from "../src/cli/select.ts";
 import { resolveTargets } from "../src/cli/targets.ts";
 import { test, testAsync } from "./harness.ts";
 
+test("cli: a bare config rule warns while a qualified rule selects quietly", () => {
+  const shipped = join(realpathSync("."), "rules");
+  const select = (name: string) => {
+    const said: string[] = [];
+    const opts = parseArgs(["-R", shipped], { color: false });
+    opts.ruleSettings = { [name]: { enabled: true } };
+    const result = selectForRun("check", opts, { files: ["src"] }, [], (message) => said.push(message), process.cwd(), true);
+    return { result, said };
+  };
+  const bare = select("fn-name-promises");
+  assert.ok(bare.result);
+  assert.ok(bare.result!.rules.length > 1);
+  assert.match(bare.said.join("\n"), /config warning: rules: `fn-name-promises` omits a language namespace/);
+  const qualified = select("typescript/fn-name-promises");
+  assert.equal(qualified.result?.rules.length, 1);
+  assert.ok(!qualified.said.some((message) => message.includes("config warning")));
+});
+
 await testAsync("cli: `commits --base <ref>` with `paths:` in the config judges the range, not the paths", async () => {
   // Found by running the tool on itself: `.jev-lint.yaml` names `paths:
   // [src, ...]`, and `commits --base v0.4.1` judged 52 commits "in src" --

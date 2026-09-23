@@ -78,7 +78,7 @@ jev-lint review --base "$GITHUB_BASE_REF" --format github   # in CI
 jev-lint init --pre-commit      # hook: review --staged + commits --staged, on every commit
 jev-lint init --pre-push        # hook: commits @{upstream}..HEAD --fail-on error, before every push
 jev-lint check src --retry 3                                 # decide on the mean of 3 passes
-jev-lint check src --at fn-name-promises=0.8                 # override one cutoff for one run
+jev-lint check src --at typescript/fn-name-promises=0.8     # override one cutoff for one run
 jev-lint check src -R my-rules.yml -R rules                  # rule sources, repeatable
 ```
 

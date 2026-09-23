@@ -139,6 +139,24 @@ await testAsync("run: a rule for a language nobody declared a parser for is drop
   }
 });
 
+await testAsync("run: same rule id in two languages keeps each language's contract", async () => {
+  const { collectSubjects } = await import("../src/run.ts");
+  const dir = mkdtempSync(join(tmpdir(), "jev-shared-id-"));
+  try {
+    writeFileSync(join(dir, "a.ts"), "export function a() {}\n");
+    writeFileSync(join(dir, "b.py"), "def b():\n    pass\n");
+    const ts = { ...noulRule({ id: "shared", language: "TypeScript", rule: { kind: "function_declaration" }, ask: "TypeScript contract" }), languageDir: "typescript" };
+    const py = { ...noulRule({ id: "shared", language: "Python", rule: { kind: "function_definition" }, ask: "Python contract" }), languageDir: "python" };
+    const { subjects } = await collectSubjects({ rules: [ts, py], paths: ["."], cwd: dir });
+    assert.deepEqual(subjects.map((s) => [s.file, s.rule.languageDir, s.rule.ask]).sort(), [
+      ["a.ts", "typescript", "TypeScript contract"],
+      ["b.py", "python", "Python contract"],
+    ]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 await testAsync("run: a paired subject with no related test is dropped and counted, never asked", async () => {
   // A question about tests with no tests in the state is one the state cannot
   // answer; asking it anyway returns whatever the model thinks of untested

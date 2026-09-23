@@ -29,6 +29,7 @@ export function loadOrDie(opts: Options, log: Log, baseDir: string = process.cwd
   if (opts.ruleSettings) {
     const selected = applyRuleSettings(loaded, opts.ruleSettings);
     for (const e of selected.errors) log(`config error: rules: ${e}`);
+    for (const w of selected.warnings) log(`config warning: rules: ${w}`);
     if (selected.errors.length > 0) return null;
     rules = selected.rules;
     if (rules.length === 0) {
@@ -36,7 +37,7 @@ export function loadOrDie(opts: Options, log: Log, baseDir: string = process.cwd
       return null;
     }
   } else if (hasConfig && opts.rules.length === 0) {
-    log("the config names no `rules:`, so nothing runs. List the rules to run -- `rules: { fn-name-promises: on, ... }` -- or `jev-lint init --force` writes them all");
+    log("the config names no `rules:`, so nothing runs. List the rules to run -- `rules: { typescript/fn-name-promises: on, ... }` -- or `jev-lint init --force` writes them all");
     return null;
   } else if (opts.rulesAreShipped) {
     // Judging someone's code against packaged rules is reasonable; doing it

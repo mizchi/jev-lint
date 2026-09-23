@@ -70,7 +70,7 @@ npx jev-lint check src --dry-run       # 何を聞くかと値段。リクエス
 | `jev-lint review --base main` | diff が触れた行だけ。finding が集中する場所を、ごく安く |
 | `jev-lint commits --base main` | 各コミットのメッセージを diff に、各変更をリポジトリ自身の `AGENTS.md` に照らす |
 | `jev-lint commits --staged` | 同じことを、これからコミットするものに対して |
-| `jev-lint run fn-name-promises src` | ルール一つ。自作なら `--file mine.yml` |
+| `jev-lint run typescript/fn-name-promises src` | ルール一つ。自作なら `--file mine.yml` |
 | `jev-lint rules` | 読み込まれた全ルール。問い、cutoff、ファイル |
 
 ルールを選ぶのは config で、ESLint と同じ形。`init` は同梱ルールを全部 on にして書き出すので、そこから削る:
@@ -79,10 +79,13 @@ npx jev-lint check src --dry-run       # 何を聞くかと値段。リクエス
 files: [src, test]
 exclude: [test/fixtures]
 rules:
-  fn-name-promises: on
-  rust/fn-name-promises: off          # その id の一言語だけ
-  comment-describes-block: { at: 0.7, severity: error }
+  typescript/fn-name-promises: on
+  rust/fn-name-promises: off
+  typescript/comment-describes-block: { at: 0.7, severity: error }
 ```
+
+言語別ルールは `language/id` で指定する。省略した同梱 id も全言語を選ぶが、
+意図しない言語まで有効になるため警告を出す。言語名前空間のない自作ルールは例外。
 
 finding 一つ、またはファイル一つを黙らせるには、どのコメント構文でも:
 

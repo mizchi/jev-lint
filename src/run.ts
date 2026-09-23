@@ -16,7 +16,7 @@
  */
 import { isAbsolute, join } from "node:path";
 import { Jev, JevError, mapLimit, DEFAULT_CONCURRENCY, type AskClient } from "./jev.ts";
-import { runAstGrep, buildSymbols, baseRuleId, ruleLanguages } from "./scan.ts";
+import { runAstGrep, buildSymbols, astGrepRuleId, ruleLanguages } from "./scan.ts";
 import { resolveSubject, widenCommentCapture } from "./state.ts";
 import { buildExplainQuestion, questionId, readAnswer, readChoice } from "./questions.ts";
 import { planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
@@ -109,7 +109,7 @@ export async function collectSubjects({
   const { matches, probes, stderr } = await runAstGrep(scannable, paths, { cwd, languages });
   const grammars = ruleLanguages(scannable);
   const symbols = buildSymbols(probes, grammars);
-  const byId = new Map(rules.map((r) => [r.id, r]));
+  const byId = new Map(scannable.flatMap((r) => r.languages.map((language) => [astGrepRuleId(r.id, language), r] as const)));
 
   const sources = new Map<string, string>();
   const readSource = (file: string): string => {
@@ -150,7 +150,7 @@ export async function collectSubjects({
   for (const m of matches) {
     // Matches come back tagged with the per-grammar id the emitter used, which
     // maps back to the one jev-lint rule that owns the sentence.
-    const rule = byId.get(baseRuleId(m.ruleId));
+    const rule = byId.get(m.ruleId);
     if (!rule) continue;
     if (isExcluded(m.file)) {
       excluded += 1;

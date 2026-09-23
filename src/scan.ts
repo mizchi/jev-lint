@@ -290,19 +290,13 @@ function probeRules(languages: Language[]): ProbeRule[] {
 
 /**
  * Separator between a jev-lint rule id and the grammar an emitted ast-grep rule
- * was specialised for. ast-grep ids must be unique, but a multi-language rule
- * is ONE rule as far as cutoffs, drafts and the cache are concerned, so the
- * suffix is stripped again when matches come back.
+ * was specialised for. The full id identifies the originating rule when the
+ * same bare id exists in several language packs with different contracts.
  */
 const LANG_SUFFIX = "@";
 
 export function astGrepRuleId(ruleId: string, language: Language): string {
   return `${ruleId}${LANG_SUFFIX}${language}`;
-}
-
-export function baseRuleId(astGrepId: string): string {
-  const i = astGrepId.lastIndexOf(LANG_SUFFIX);
-  return i < 1 ? astGrepId : astGrepId.slice(0, i);
 }
 
 /** Strip jev-lint-only fields; what is left is a valid ast-grep rule. */
