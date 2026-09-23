@@ -2,7 +2,19 @@ import { strict as assert } from "node:assert";
 import { relative } from "node:path";
 import { widestGap, gapReport, fitCutoffs, labelFor, stabilityReport } from "../src/calibrate.ts";
 import { labelsOf, scoreRule, noulRule } from "./builders.ts";
-import { test } from "./harness.ts";
+import { test, testAsync } from "./harness.ts";
+
+await testAsync("calibrate: merging passes keeps language rules distinct at one location", async () => {
+  const { mergeRuns } = await import("../src/cli/cmd-calibrate.ts");
+  const findings = [
+    { rule: "shared", ruleKey: "typescript/shared", file: "same", line: 1, text: "x", value: 0.3 },
+    { rule: "shared", ruleKey: "python/shared", file: "same", line: 1, text: "x", value: 0.7 },
+  ];
+  const merged = mergeRuns([findings, findings] as Parameters<typeof mergeRuns>[0]);
+  assert.deepEqual(merged.map((f) => [f.ruleKey, f.value]), [
+    ["typescript/shared", 0.3], ["python/shared", 0.7],
+  ]);
+});
 
 test("calibrate: widestGap finds the largest step and where it sits", () => {
   const g = widestGap([0.1, 0.15, 0.9, 0.95]);
@@ -11,6 +23,42 @@ test("calibrate: widestGap finds the largest step and where it sits", () => {
   assert.ok(Math.abs(g.high! - 0.9) < 1e-9);
   assert.equal(widestGap([]).gap, 0);
   assert.equal(widestGap([0.5]).gap, 0);
+});
+
+test("calibrate: same-id language rules keep separate gaps, stability and fits", () => {
+  const ts = { ...noulRule({ id: "shared", language: "TypeScript", at: 0.3 }), languageDir: "typescript" };
+  const py = { ...noulRule({ id: "shared", language: "Python", at: 0.7 }), languageDir: "python" };
+  const scored = [
+    { rule: "shared", ruleKey: "typescript/shared", file: "a.ts", line: 1, value: 0.5 },
+    { rule: "shared", ruleKey: "python/shared", file: "b.py", line: 1, value: 0.5 },
+  ];
+  const gaps = gapReport(scored, [ts, py]);
+  assert.deepEqual(gaps.map((g) => [g.rule, g.matches, g.reported]), [
+    ["typescript/shared", 1, 1], ["python/shared", 1, 0],
+  ]);
+
+  const first = [
+    { ...scored[0]!, value: 0.25 },
+    { ...scored[1]!, value: 0.65 },
+  ];
+  const second = [
+    { ...scored[0]!, value: 0.35 },
+    { ...scored[1]!, value: 0.75 },
+  ];
+  const stability = stabilityReport([first, second], [ts, py]);
+  assert.deepEqual(stability.rows.map((r) => [r.rule, r.subjects, r.flipped]), [
+    ["typescript/shared", 1, 1], ["python/shared", 1, 1],
+  ]);
+
+  const fitted = fitCutoffs([
+    { ...scored[0]!, line: 1, value: 0.1 },
+    { ...scored[0]!, line: 10, value: 0.9 },
+    { ...scored[1]!, line: 1, value: 0.2 },
+    { ...scored[1]!, line: 10, value: 0.8 },
+  ], labelsOf({ $default: "clean", "a.ts": [{ line: 10, label: "bad", rule: "typescript/shared" }], "b.py": [{ line: 10, label: "bad", rule: "python/shared" }] }), [ts, py]);
+  assert.deepEqual(fitted.map((f) => [f.rule, f.clean, f.bad]), [
+    ["typescript/shared", 1, 1], ["python/shared", 1, 1],
+  ]);
 });
 
 test("calibrate: a wide gap with the cutoff inside it reads `works`", () => {

@@ -4,6 +4,19 @@ import { mergePasses } from "../src/run.ts";
 import { scoreRule, noulRule, subjectOf, answer } from "./builders.ts";
 import { test } from "./harness.ts";
 
+test("retry: same-id rules from different languages keep separate answers", () => {
+  const ts = { ...noulRule({ id: "shared", language: "TypeScript", at: 0.3 }), languageDir: "typescript" };
+  const py = { ...noulRule({ id: "shared", language: "Python", at: 0.7 }), languageDir: "python" };
+  const subjects = [
+    subjectOf({ rule: ts, file: "same", line: 1, text: "x", language: "TypeScript" }),
+    subjectOf({ rule: py, file: "same", line: 1, text: "x", language: "Python" }),
+  ];
+  const pass = subjects.map((subject) => ({ subject, answer: { value: 0.5, confidence: null, kind: "noul" as const }, cached: false }));
+  const merged = mergePasses([pass, pass], {});
+  assert.equal(merged.length, 2);
+  assert.deepEqual(merged.map((r) => r.stability!.over), [2, 0]);
+});
+
 test("retry: the mean decides, and the pass count is kept beside it", () => {
   const rule = noulRule({ id: "n", at: 0.6 });
   const s = subjectOf({ rule, file: "a.ts", line: 1 });

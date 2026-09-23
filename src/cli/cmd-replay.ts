@@ -22,8 +22,13 @@ export function cmdReplay(opts: Options, out: Log, log: Log): number {
     log(`could not read ${path}: ${String(err).slice(0, 160)}`);
     return 2;
   }
-  if (record.schema !== "jev-lint-run-1") {
-    log(`${path}: unexpected schema ${record.schema}`);
+  if (record?.schema !== "jev-lint-run-1") {
+    log(`${path}: unexpected schema ${record?.schema}`);
+    return 2;
+  }
+  if (!Array.isArray(record.rules) || !Array.isArray(record.answers)
+    || record.rules.some((rule: any) => !rule || typeof rule.id !== "string")) {
+    log(`${path}: invalid rules or answers in run record`);
     return 2;
   }
 
@@ -38,15 +43,23 @@ export function cmdReplay(opts: Options, out: Log, log: Log): number {
     message: null,
     docs: null,
   }));
-  const byId = new Map<string, Rule>(rules.map((r) => [r.id, r]));
+  const byKey = new Map<string, Rule>(rules.map((r) => [r.languageDir ? `${r.languageDir}/${r.id}` : r.id, r]));
+  const byId = new Map<string, Rule[]>();
+  for (const rule of rules) byId.set(rule.id, [...(byId.get(rule.id) ?? []), rule]);
+  for (const answer of record.answers) {
+    const candidates = byId.get(answer.rule) ?? [];
+    if (!answer.ruleKey && candidates.length !== 1) {
+      log(`${path}: ambiguous recorded rule ${answer.rule}; record again to retain its language namespace`);
+      return 2;
+    }
+    if (answer.ruleKey && !byKey.has(answer.ruleKey)) {
+      log(`${path}: unknown recorded rule ${answer.ruleKey}`);
+      return 2;
+    }
+  }
   const results = record.answers.map((a: any) => ({
     subject: {
-      rule: (byId.get(a.rule) ?? {
-        id: a.rule,
-        kind: a.kind ?? "score",
-        severity: "warning",
-        ask: a.rule,
-      }) as Rule,
+      rule: (a.ruleKey ? byKey.get(a.ruleKey) : byId.get(a.rule)?.[0]) as Rule,
       file: a.file,
       line: a.line,
       endLine: a.endLine,

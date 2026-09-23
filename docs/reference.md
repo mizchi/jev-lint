@@ -496,6 +496,9 @@ with zero requests, and with `--labels` re-fits them too — so record anything
 you will quote. A cutoff is a claim about a specific set of answers, and whoever
 holds the record can re-derive it without an API key. Without that,
 recalibrating silently rewrites history.
+Each recorded answer keeps its `language/id` identity. An older record with
+the same bare ID in multiple languages cannot be replayed safely and is
+rejected; record a fresh run to retain the language-specific cutoffs.
 
 ### The corpus is the investment
 
