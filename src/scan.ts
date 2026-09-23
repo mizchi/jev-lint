@@ -145,6 +145,20 @@ export const STRUCTURE: Partial<Record<Language, LanguageStructure>> = {
     exports: [],
     testMarker: null,
   },
+  vibe: {
+    containers: [
+      { kind: "function_declaration", role: "function", nameField: "name" },
+      { kind: "test_block", role: "test", nameField: "name", isTest: true },
+      { kind: "struct_declaration", role: "struct", nameField: "name" },
+      { kind: "enum_declaration", role: "enum", nameField: "name" },
+      { kind: "trait_declaration", role: "trait", nameField: "name" },
+      { kind: "module_declaration", role: "module", nameField: "name" },
+    ],
+    imports: ["import_statement"],
+    exports: [],
+    exportedIf: (source: string) => /^\s*export\b/.test(source),
+    testMarker: null,
+  },
   // The four ECMAScript grammars share most kinds, but not all: `ast-grep`
   // REJECTS a rule naming a kind absent from the target grammar, and one
   // rejected probe fails the whole scan rather than just itself. So the

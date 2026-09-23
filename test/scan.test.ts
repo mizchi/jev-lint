@@ -34,6 +34,14 @@ await testAsync("scan: a declared language reaches ast-grep as its own sgconfig,
   );
 });
 
+test("scan: Vibe probes include named functions, tests and imports", () => {
+  const rule = normalizeRule({ id: "v", language: "vibe", rule: { kind: "function_declaration" }, ask: "a." }).rule!;
+  const emitted = emitRuleFile([rule], ["vibe"]);
+  assert.match(emitted, /kind: function_declaration/);
+  assert.match(emitted, /kind: test_block/);
+  assert.match(emitted, /kind: import_statement/);
+});
+
 test("scan: emitted rules are valid ast-grep rules with jev-lint fields stripped", () => {
   const r = scoreRule({ at: 2, note: "x" });
   assert.ok(isMatcherRule(r));

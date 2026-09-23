@@ -1,0 +1,27 @@
+fn total(a: Int, b: Int) -> Int {
+  a + b
+}
+
+test "total returns five for two and three" {
+  assert_true(total(2, 3) > 0)
+}
+
+test "total adds two and three" {
+  assert_eq(total(2, 3), 5)
+}
+
+test "total is commutative" {
+  assert_eq(total(2, 3), total(2, 3))
+}
+
+test "zero is neutral for total" {
+  assert_eq(total(4, 0), 4)
+}
+
+test "opposite numbers sum to zero" {
+  assert_true(total(2, -2) <= 0)
+}
+
+test "a negative sum stays negative" {
+  assert_true(total(-2, -3) < 0)
+}

@@ -1,0 +1,26 @@
+default: clean
+fixtures/names.vibe:
+  - line: 1
+    label: clean
+    reason: "The result is the number of items."
+  - line: 5
+    label: bad
+    reason: "count_names returns the input array rather than a count."
+  - line: 9
+    label: clean
+    reason: "is_empty returns a boolean for the empty case."
+  - line: 13
+    label: bad
+    reason: "is_ready has a predicate name but returns an integer."
+  - line: 17
+    label: bad
+    reason: "save_report returns its input without saving it."
+  - line: 21
+    label: clean
+    reason: "identity returns the value it was given."
+  - line: 25
+    label: clean
+    reason: "double returns twice its input."
+  - line: 29
+    label: clean
+    reason: "A functional remove operation may return the remaining items without mutating its input."

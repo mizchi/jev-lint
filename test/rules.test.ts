@@ -238,7 +238,7 @@ test("rules: `run` selects one shipped rule by id, in every language or one, or 
   assert.ok(existsSync(shipped));
   const every = selectRules({ id: "fn-name-promises", shipped, projectRules: [] });
   assert.deepEqual(every.errors, []);
-  assert.deepEqual(every.rules.map((r) => r.languageDir).sort(), ["go", "moonbit", "python", "rust", "typescript"]);
+  assert.deepEqual(every.rules.map((r) => r.languageDir).sort(), ["go", "moonbit", "python", "rust", "typescript", "vibe"]);
   const one = selectRules({ id: "rust/fn-name-promises", shipped, projectRules: [] });
   assert.deepEqual(one.rules.map((r) => `${r.languageDir}/${r.id}`), ["rust/fn-name-promises"]);
   // Unknown: an error that names the nearest ids, never an empty run.
@@ -653,6 +653,15 @@ test("rules: a language the package ships rules for loads without a parser, and 
   assert.deepEqual(undeclared([mbt, ts], {}), ["moonbit"]);
   assert.deepEqual(undeclared([mbt, ts], { moonbit: { libraryPath: "/opt/m.so", extensions: ["mbt"] } }), []);
   assert.deepEqual(undeclared([ts], {}), []);
+});
+
+test("rules: shipped Vibe rules require a declared native parser before scanning", () => {
+  assert.equal(normalizeLanguage("vibe"), "vibe");
+  assert.deepEqual(languageDirGrammars("vibe"), ["vibe"]);
+  assert.deepEqual(SHIPPED_CUSTOM_LANGUAGES.vibe!.extensions, ["vibe"]);
+  const rule = normalizeRule({ id: "v", language: "vibe", rule: { kind: "function_declaration" }, ask: "a." }).rule!;
+  assert.deepEqual(undeclared([rule], {}), ["vibe"]);
+  assert.deepEqual(undeclared([rule], { vibe: { libraryPath: "/opt/vibe.dylib", extensions: ["vibe"] } }), []);
 });
 
 test("rules: `divergent` declares a deliberate difference, and silences the drift warning for that id", () => {
