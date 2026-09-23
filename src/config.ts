@@ -338,7 +338,7 @@ export function initialConfig(ruleIds: string[]): string {
 # What \`jev-lint check\` looks at with no path given, and what under those
 # paths it never judges: fixtures with planted defects, vendored code.
 files: [src]
-# exclude: [src/fixtures]
+# exclude: [src/fixtures, '**/*.gen.ts']   # paths, or globs
 
 # The rules that run: \`on\`, \`off\`, a severity (hint, info, warning, error),
 # or a mapping -- \`{ severity: error, at: 0.7 }\`. An id names the rule in

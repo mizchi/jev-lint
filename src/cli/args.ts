@@ -165,8 +165,8 @@ options:
       --dry-run            plan and price the run without asking anything
       --show-missing       list subjects that got no verdict
       --summary            the findings counted by rule, and by file densest first
-      --exclude <path>     a path under the roots whose files are never judged (repeatable;
-                           \`exclude:\` in the config)
+      --exclude <path>     a path under the roots whose files are never judged, or a
+                           glob such as '**/*.gen.ts' (repeatable; \`exclude:\` in the config)
       --show-subjects      with --dry-run: list every subject the matchers found,
                            with its node kind and captures -- the free way to
                            see what a rule would ask about, and about what

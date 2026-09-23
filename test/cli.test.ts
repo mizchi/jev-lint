@@ -370,3 +370,14 @@ await testAsync("cli: the labels file for a fit is read once and its absence is 
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("cli: the Claude Code plugin manifests carry the package's version", () => {
+  // Releases 0.4.2 through 0.6.5 bumped package.json and left both manifests
+  // at 0.4.1, so an installed plugin never saw the skill or docs change:
+  // Claude Code keys a plugin update on this field.
+  const pkg = JSON.parse(readFileSync("package.json", "utf8")).version;
+  const plugin = JSON.parse(readFileSync(".claude-plugin/plugin.json", "utf8"));
+  const market = JSON.parse(readFileSync(".claude-plugin/marketplace.json", "utf8"));
+  assert.equal(plugin.version, pkg, ".claude-plugin/plugin.json");
+  assert.deepEqual(market.plugins.map((p: { version: string }) => p.version), [pkg], ".claude-plugin/marketplace.json");
+});

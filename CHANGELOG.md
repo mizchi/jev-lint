@@ -6,6 +6,19 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/internal/findings.md](docs/internal/findings.md).
 
+## Unreleased
+
+### Fixed
+
+- **`exclude:` takes globs.** An entry was always a path prefix, so
+  `exclude: ['**/*.snapshot.test.ts']` matched nothing, excluded nothing, and
+  the run did not say so. An entry with glob characters is now a glob,
+  matched against the file and every directory above it (`**/fixtures`
+  leaves out every directory of that name); a plain path works as before.
+- **The Claude Code plugin manifests carry the package's version.** Both
+  stayed at 0.4.1 from 0.4.2 through 0.6.5, so an installed plugin was never
+  offered the updated skill. A test now holds them to `package.json`.
+
 ## 0.6.5 — 2026-09-23
 
 This section also carries what 0.6.2 through 0.6.4 published without a
