@@ -128,7 +128,7 @@ export type ResolvedLabel = "bad" | "clean" | "unlabeled";
  * caller -- including a replay reading a recorded run, and every test -- to
  * manufacture fields no code here looks at.
  */
-export type ScoredSubject = Pick<Finding, "rule" | "file" | "line" | "value"> & {
+export type ScoredSubject = Pick<Finding, "rule" | "ruleKey" | "file" | "line" | "value"> & {
   text?: string;
   /**
    * The lowest and highest value this subject's passes actually produced.
@@ -142,6 +142,20 @@ export type ScoredSubject = Pick<Finding, "rule" | "file" | "line" | "value"> & 
   min?: number;
   max?: number;
 };
+
+function ruleIdentity(rule: Rule): string {
+  return rule.languageDir ? `${rule.languageDir}/${rule.id}` : rule.id;
+}
+
+function scoredIdentity(subject: ScoredSubject, rules: Rule[]): string {
+  if (subject.ruleKey) return subject.ruleKey;
+  const matches = rules.filter((rule) => rule.id === subject.rule);
+  return matches.length === 1 ? ruleIdentity(matches[0]!) : subject.rule;
+}
+
+function displayedRule(rule: Rule, rules: Rule[]): string {
+  return rules.filter((other) => other.id === rule.id).length > 1 ? ruleIdentity(rule) : rule.id;
+}
 
 /** Largest step between consecutive sorted values, and where it sits. */
 export function widestGap(values: number[]): { gap: number; low: number | null; high: number | null } {
@@ -177,16 +191,17 @@ export function gapReport(
   rules: Rule[],
   { cutoffs = {} }: { cutoffs?: Record<string, number> } = {},
 ): GapRow[] {
-  const byRule = new Map<string, ScoredSubject[]>(rules.map((r) => [r.id, [] as ScoredSubject[]]));
+  const byRule = new Map<string, ScoredSubject[]>(rules.map((r) => [ruleIdentity(r), [] as ScoredSubject[]]));
   for (const f of all) {
     if (typeof f.value !== "number") continue;
-    if (!byRule.has(f.rule)) byRule.set(f.rule, []);
-    byRule.get(f.rule)!.push(f);
+    const key = scoredIdentity(f, rules);
+    if (!byRule.has(key)) byRule.set(key, []);
+    byRule.get(key)!.push(f);
   }
 
   const rows: GapRow[] = [];
   for (const rule of rules) {
-    const answers = byRule.get(rule.id) ?? [];
+    const answers = byRule.get(ruleIdentity(rule)) ?? [];
     const values = answers.map((a) => a.value!) as number[];
     const at = cutoffFor(rule, cutoffs);
     const scale = scaleOf(rule);
@@ -214,7 +229,7 @@ export function gapReport(
     else verdict = "move";
 
     rows.push({
-      rule: rule.id,
+      rule: displayedRule(rule, rules),
       kind: rule.kind,
       matches: values.length,
       reported,
@@ -267,8 +282,9 @@ export function stabilityReport(
   rules: Rule[],
   { cutoffs = {} }: { cutoffs?: Record<string, number> } = {},
 ): StabilityReport {
-  const atFor = new Map(rules.map((r) => [r.id, cutoffFor(r, cutoffs)]));
-  const bySubject = new Map<string, { rule: string; file: string; line: number; values: number[] }>();
+  const atFor = new Map(rules.map((r) => [ruleIdentity(r), cutoffFor(r, cutoffs)]));
+  const display = new Map(rules.map((r) => [ruleIdentity(r), displayedRule(r, rules)]));
+  const bySubject = new Map<string, { rule: string; ruleKey: string; file: string; line: number; values: number[] }>();
   for (const run of runs) {
     for (const f of run) {
       if (typeof f.value !== "number") continue;
@@ -277,8 +293,9 @@ export function stabilityReport(
       // is two bindings -- and keying on the line alone averages them together,
       // so their spread, distance and flip counts come out across different
       // subjects. The gap table was fixed for this; this table was not.
-      const key = `${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
-      if (!bySubject.has(key)) bySubject.set(key, { rule: f.rule, file: f.file, line: f.line, values: [] });
+      const ruleKey = scoredIdentity(f, rules);
+      const key = `${ruleKey}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
+      if (!bySubject.has(key)) bySubject.set(key, { rule: display.get(ruleKey) ?? f.rule, ruleKey, file: f.file, line: f.line, values: [] });
       bySubject.get(key)!.values.push(f.value!);
     }
   }
@@ -286,11 +303,14 @@ export function stabilityReport(
   const subjects: StabilitySubject[] = [];
   for (const s of bySubject.values()) {
     if (s.values.length < 2) continue;
-    const at = atFor.get(s.rule) ?? 0;
+    const at = atFor.get(s.ruleKey) ?? 0;
     const decisions = s.values.map((v) => v >= at);
     const flipped = decisions.some((d) => d !== decisions[0]);
     subjects.push({
-      ...s,
+      rule: s.rule,
+      file: s.file,
+      line: s.line,
+      values: s.values,
       runs: s.values.length,
       min: Math.min(...s.values),
       max: Math.max(...s.values),
@@ -368,9 +388,10 @@ export function fitCutoffs(all: ScoredSubject[], labels: Labels, rules: Rule[]):
   const byRule = new Map<string, Array<ScoredSubject & { label: ResolvedLabel }>>();
   for (const f of all) {
     if (typeof f.value !== "number") continue;
-    if (!byRule.has(f.rule)) byRule.set(f.rule, []);
-    const label = labelFor(labels, f.file, f.line, f.rule);
-    byRule.get(f.rule)!.push({ ...f, label });
+    const key = scoredIdentity(f, rules);
+    if (!byRule.has(key)) byRule.set(key, []);
+    const label = labelFor(labels, f.file, f.line, key, [f.rule]);
+    byRule.get(key)!.push({ ...f, label });
   }
 
   // A case with no explicit range is a point: both edges sit at its value,
@@ -380,14 +401,14 @@ export function fitCutoffs(all: ScoredSubject[], labels: Labels, rules: Rule[]):
 
   const fits: CutoffFit[] = [];
   for (const rule of rules) {
-    const answers = byRule.get(rule.id) ?? [];
+    const answers = byRule.get(ruleIdentity(rule)) ?? [];
     const scale = scaleOf(rule);
     const badAnswers = answers.filter((a) => a.label === "bad");
     const cleanAnswers = answers.filter((a) => a.label === "clean");
 
     if (badAnswers.length === 0 || cleanAnswers.length === 0) {
       fits.push({
-        rule: rule.id,
+        rule: displayedRule(rule, rules),
         fitted: null,
         reason: badAnswers.length === 0 ? "no labeled violations matched" : "no labeled clean matches",
         bad: badAnswers.length,
@@ -424,7 +445,7 @@ export function fitCutoffs(all: ScoredSubject[], labels: Labels, rules: Rule[]):
     const { tp, fp, fn } = score(answers, fitted);
 
     fits.push({
-      rule: rule.id,
+      rule: displayedRule(rule, rules),
       fitted,
       separable: rangesSeparable,
       hiClean: round2(hiClean),
@@ -483,6 +504,7 @@ export function labelFor(
   file: string,
   line: number,
   rule: string,
+  aliases: string[] = [],
 ): ResolvedLabel {
   // `$default` lets a corpus mark only its defects and treat everything else as
   // clean, which is the only practical way to author one: the clean cases are
@@ -495,7 +517,7 @@ export function labelFor(
   for (const l of forFile) {
     const within = Math.abs((l.line ?? -1) - line) <= (l.window ?? 3);
     if (!within) continue;
-    if (l.rule && l.rule !== rule) continue;
+    if (l.rule && l.rule !== rule && !aliases.includes(l.rule)) continue;
     // A `bad` label wins over anything else covering the same lines: the
     // windows are loose and a defect inside a nearby clean span is still a
     // defect.

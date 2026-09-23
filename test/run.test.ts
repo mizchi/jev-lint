@@ -7,7 +7,7 @@ import { commitFixtureSubjects } from "../src/commits.ts";
 import { evalCorpus } from "../src/evals.ts";
 import { undeclared } from "../src/rules.ts";
 import { SHIPPED_CUSTOM_LANGUAGES } from "../src/types.ts";
-import { decide, blocks } from "../src/gate.ts";
+import { decide, blocks, gate } from "../src/gate.ts";
 import { JevError } from "../src/jev.ts";
 import { buildQuestion } from "../src/questions.ts";
 import { formatGithub, formatJson, formatPretty } from "../src/report.ts";
@@ -16,8 +16,8 @@ import { emitRuleFile, ruleLanguages } from "../src/scan.ts";
 import { explain } from "../src/schedule.ts";
 import { splitBlocks, textSubjects, MAX_BLOCK_CHARS } from "../src/text.ts";
 import { LANGUAGE_DIRS } from "../src/types.ts";
-import type { Rule } from "../src/types.ts";
-import { scoreRule, noulRule, tempRepo, commitRule, changeRule } from "./builders.ts";
+import type { Rule, RunResult } from "../src/types.ts";
+import { scoreRule, noulRule, tempRepo, commitRule, changeRule, subjectOf } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
 
 const blockRule = (over: Record<string, unknown> = {}): Rule =>
@@ -155,6 +155,26 @@ await testAsync("run: same rule id in two languages keeps each language's contra
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+await testAsync("run: a replay record preserves each answer's qualified rule identity", async () => {
+  const { buildRecord } = await import("../src/run.ts");
+  const ts = { ...noulRule({ id: "shared", language: "TypeScript", at: 0.3 }), languageDir: "typescript" };
+  const py = { ...noulRule({ id: "shared", language: "Python", at: 0.7 }), languageDir: "python" };
+  const subjects = [
+    subjectOf({ rule: ts, file: "a.ts", language: "TypeScript" }),
+    subjectOf({ rule: py, file: "b.py", language: "Python" }),
+  ];
+  const result = {
+    ...gate(subjects.map((subject) => ({ subject, answer: { kind: "noul" as const, value: 0.5, confidence: null } }))),
+    rules: [ts, py], subjects, batches: [], cachedCount: 0, spent: {},
+  } as unknown as RunResult;
+  const record = buildRecord(result, { arm: null, cutoffs: {}, unsureBelow: null }) as {
+    rules: Array<{ languageDir: string }>;
+    answers: Array<{ ruleKey: string }>;
+  };
+  assert.deepEqual(record.rules.map((r) => r.languageDir), ["typescript", "python"]);
+  assert.deepEqual(record.answers.map((a) => a.ruleKey), ["typescript/shared", "python/shared"]);
 });
 
 await testAsync("run: a paired subject with no related test is dropped and counted, never asked", async () => {

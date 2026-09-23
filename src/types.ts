@@ -672,6 +672,8 @@ export interface Finding {
   messageId: MessageId | null;
   reported: boolean;
   rule: string;
+  /** Stable identity for records when different language packs share an id. */
+  ruleKey?: string;
   severity: Severity;
   file: string;
   line: number;

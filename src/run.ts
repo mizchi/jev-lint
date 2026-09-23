@@ -587,7 +587,7 @@ export async function run({
       asked.filter((r) => r.stability).map((r) => [identify(r.subject), r.stability!]),
     );
     for (const f of gated.all) {
-      const st = stability.get(`${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`);
+      const st = stability.get(findingIdentity(f));
       if (st) f.passes = st;
     }
   }
@@ -684,7 +684,7 @@ async function explainFindings(
   errors: RunError[],
 ): Promise<void> {
   const byIdentity = new Map<string, Finding>();
-  for (const f of findings) byIdentity.set(`${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`, f);
+  for (const f of findings) byIdentity.set(findingIdentity(f), f);
   const jobs: Array<{ batch: Batch; asked: Array<{ subject: Subject; finding: Finding }> }> = [];
   for (const batch of batches) {
     const asked: Array<{ subject: Subject; finding: Finding }> = [];
@@ -854,7 +854,7 @@ async function attributeFindings(
 
 /** Same identity as `identify`, for a `Finding` rather than a `Subject`. */
 function findingIdentity(f: Finding): string {
-  return `${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
+  return `${f.ruleKey ?? f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
 }
 
 /** One subject's verdict, plus how it behaved across `--retry` passes. */
@@ -867,7 +867,8 @@ export interface Scored {
 
 /** Identity for matching one subject across passes, and to its finding. */
 function identify(s: Subject): string {
-  return `${s.rule.id}\u0000${s.file}\u0000${s.line}\u0000${s.text ?? ""}`;
+  const ruleKey = s.rule.languageDir ? `${s.rule.languageDir}/${s.rule.id}` : s.rule.id;
+  return `${ruleKey}\u0000${s.file}\u0000${s.line}\u0000${s.text ?? ""}`;
 }
 
 /**
@@ -963,9 +964,11 @@ export function buildRecord(
       subject: r.subject,
       severity: r.severity,
       language: r.language,
+      languageDir: r.languageDir,
     })),
     answers: result.all.map((f) => ({
       rule: f.rule,
+      ruleKey: f.ruleKey ?? f.rule,
       file: f.file,
       line: f.line,
       endLine: f.endLine,

@@ -206,7 +206,7 @@ export function mergeRuns(runs: Finding[][]): Finding[] {
   for (const r of runs) {
     for (const f of r) {
       if (typeof f.value !== "number") continue;
-      const k = `${f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
+      const k = `${f.ruleKey ?? f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
       if (!acc.has(k)) acc.set(k, { ...f, _n: 0, _sum: 0 });
       const e = acc.get(k)!;
       e._n += 1;

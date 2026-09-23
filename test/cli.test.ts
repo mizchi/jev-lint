@@ -9,6 +9,7 @@ import { resolveContext } from "../src/cli/context.ts";
 import { selectForRun } from "../src/cli/select.ts";
 import { resolveTargets } from "../src/cli/targets.ts";
 import { test, testAsync } from "./harness.ts";
+import { noulRule } from "./builders.ts";
 
 test("cli: a bare config rule warns while a qualified rule selects quietly", () => {
   const shipped = join(realpathSync("."), "rules");
@@ -311,6 +312,10 @@ await testAsync("cli: init writes the starter config once, and replay refuses wh
     writeFileSync(wrongSchemaPath, JSON.stringify({ schema: "something-else" }));
     assert.equal(cmdReplay(parseArgs([wrongSchemaPath], { color: false }), out, log), 2);
     assert.match(said.at(-1)!, /unexpected schema/);
+    const malformedPath = join(dir, "malformed.json");
+    writeFileSync(malformedPath, JSON.stringify({ schema: "jev-lint-run-1", answers: [] }));
+    assert.equal(cmdReplay(parseArgs([malformedPath], { color: false }), out, log), 2);
+    assert.match(said.at(-1)!, /invalid rules or answers/);
     const record = join(realpathSync("."), "docs", "data", "self-lint-2026-09-20.json");
     assert.equal(cmdReplay(parseArgs([record, "--format", "json"], { color: false }), out, log), 1, "a recorded run with findings replays to exit 1");
     assert.ok(said.some((s) => s.startsWith("{")), "and prints the report");
@@ -324,6 +329,45 @@ await testAsync("cli: init writes the starter config once, and replay refuses wh
     const beforeBroken = said.length;
     assert.equal(cmdRules(parseArgs(["-R", brokenPath], { color: false }), out, log), 2);
     assert.ok(said.slice(beforeBroken).some((s) => /^rule error: /.test(s)), "the error is named, before the listing");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+await testAsync("cli: replay keeps same-id rules in their recorded language", async () => {
+  const { cmdReplay } = await import("../src/cli/cmd-replay.ts");
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-replay-language-")));
+  try {
+    const ts = { ...noulRule({ id: "shared", language: "TypeScript", at: 0.3 }), languageDir: "typescript" };
+    const py = { ...noulRule({ id: "shared", language: "Python", at: 0.7 }), languageDir: "python" };
+    const record = join(dir, "run.json");
+    const base = {
+      schema: "jev-lint-run-1", recorded: "2026-09-24", model: "test", arm: null,
+      cutoffs: {}, unsureBelow: null, spent: {}, rules: [ts, py],
+    };
+    const answer = (ruleKey: string, file: string) => ({
+      rule: "shared", ruleKey, file, line: 1, endLine: 1, kind: "noul", value: 0.5,
+      confidence: null, arm: "local",
+    });
+    writeFileSync(record, JSON.stringify({
+      ...base, answers: [answer("typescript/shared", "a.ts"), answer("python/shared", "b.py")],
+    }));
+    const output: string[] = [];
+    const logs: string[] = [];
+    const replay = () => cmdReplay(parseArgs([record, "--json"], { color: false }),
+      (line) => output.push(line), (line) => logs.push(line));
+    assert.equal(replay(), 1);
+    const report = JSON.parse(output[0]!);
+    assert.deepEqual(report.findings.map((f: { file: string }) => f.file), ["a.ts"]);
+    assert.deepEqual(report.findings.map((f: { cutoff: number }) => f.cutoff), [0.3]);
+
+    output.length = 0;
+    writeFileSync(record, JSON.stringify({
+      ...base, answers: [{ ...answer("typescript/shared", "a.ts"), ruleKey: undefined }],
+    }));
+    assert.equal(replay(), 2, "an ambiguous legacy answer must not borrow another language's cutoff");
+    assert.equal(output.length, 0);
+    assert.match(logs.at(-1)!, /ambiguous.*shared/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
