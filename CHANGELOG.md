@@ -6,7 +6,12 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/internal/findings.md](docs/internal/findings.md).
 
-## Unreleased
+## 0.6.7 — 2026-09-24
+
+### Added
+
+- **A MoonBit whitebox test is a test.** A `*_wbtest.mbt` file is found as
+  related evidence for the `paired` arm, like `*_test.mbt`.
 
 ### Changed
 
@@ -20,6 +25,15 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
   shapes. Five passes: 43 defects and 50 cleans, precision and recall 1, at
   the unchanged cutoff 0.66. The paragraph is the TypeScript copy's alone and
   says so in `divergent:`.
+
+### Fixed
+
+- **Replay and calibration keep each answer's language.** A recorded answer
+  now carries its `<lang>/<id>` key, and retries, gaps, stability and fitted
+  cutoffs are computed per language rule, so the Rust and TypeScript copies
+  of one id no longer pool their answers. An older record holding one bare
+  id in several languages cannot be told apart and is refused, with a
+  message to record the run again.
 
 ## 0.6.6 — 2026-09-24
 
