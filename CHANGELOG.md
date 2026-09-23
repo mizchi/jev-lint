@@ -6,6 +6,21 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/internal/findings.md](docs/internal/findings.md).
 
+## Unreleased
+
+### Changed
+
+- **`typescript/test-name-verifies-claim` reads three more assertions.** On
+  an unseen front-end suite it flagged tests that were right: a screenshot
+  comparison under a name about what is on screen, a `getByRole(…, { name })`
+  query under a name about an accessible name, and a not-throw assertion under
+  a name claiming only that something does not throw. A paragraph in its
+  note now says what each establishes, and `fixtures/panel.test.ts` and
+  `fixtures/sparkline.test.ts` add six defects and seven cleans of those
+  shapes. Five passes: 43 defects and 50 cleans, precision and recall 1, at
+  the unchanged cutoff 0.66. The paragraph is the TypeScript copy's alone and
+  says so in `divergent:`.
+
 ## 0.6.6 — 2026-09-24
 
 ### Added
