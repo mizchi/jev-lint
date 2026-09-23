@@ -71,7 +71,7 @@ manual inspection of matched comments, not by a Jev verdict.
 
 ## Live measurement
 
-| Repository | Answered subjects | Findings | Missing verdicts | Degraded batches | Unpaired subjects | API calls | Measured cost |
+| Repository | Subjects | Findings | Missing verdicts | Degraded batches | Unpaired subjects | API calls | Measured cost |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | vlmkit | 13,739 | 458 | 0 | 9 | 94 | 1,655 | $0.611 |
 | chaosbringer | 4,616 | 137 | 16 | 4 | 20 | 617 | $0.194 |
