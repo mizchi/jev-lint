@@ -1,6 +1,6 @@
 {
   "name": "jev-lint",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "Lint the things a linter cannot: names that drifted from their implementation, comments that became false, tests that do not verify what they claim. ast-grep picks the code, one sentence is the rule, a model answers it. Includes the shipped rule packs, a cookbook for writing your own, and the calibration procedure.",
   "author": {
     "name": "mizchi",

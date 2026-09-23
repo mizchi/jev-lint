@@ -9,7 +9,7 @@
     {
       "name": "jev-lint",
       "description": "Run jev-lint, use its shipped rule packs, write and calibrate your own rules",
-      "version": "0.6.5",
+      "version": "0.6.6",
       "source": "./",
       "author": {
         "name": "mizchi"

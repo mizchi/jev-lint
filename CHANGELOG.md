@@ -6,7 +6,24 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/internal/findings.md](docs/internal/findings.md).
 
-## Unreleased
+## 0.6.6 — 2026-09-24
+
+### Added
+
+- **`JEV_LINT_CACHE` names the verdict cache.** It sits between the flags
+  and the config: a backend can point a run at its own cache without
+  editing the project's committed `.jev-lint.yaml`, and an explicit
+  `--cache` / `-c` still wins.
+- **A colocated `*.vitest.ts` file is a test.** It is found as related
+  evidence for the `paired` arm like `*.test.ts` and `*.spec.ts`.
+
+### Changed
+
+- **Rule keys are language-qualified.** `init` writes every shipped rule as
+  `<lang>/<id>`, enabled. A bare id in `rules:` still selects the rule in
+  every language that has it, but now warns and names the qualified keys,
+  since it can quietly turn on another language's copy. An ast-grep match is
+  mapped back to the exact language rule that produced it.
 
 ### Fixed
 
