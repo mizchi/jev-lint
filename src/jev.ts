@@ -304,7 +304,7 @@ export class Jev implements AskClient {
    * A 403 that is an HTML page is the exception: that is a proxy or web
    * application firewall in front of the API refusing this one request by
    * its content, and every other batch may still be answered. Taking it as
-   * `auth` once stopped a run after one batch and left 85% of it unasked.
+   * `auth` once stopped a run after one batch and left most of it unasked.
    */
   static classify(status: number, body: string): JevErrorKind {
     if (status === 400 && body.includes("max_tokens_exceeded")) return "too_big";

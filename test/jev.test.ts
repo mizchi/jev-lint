@@ -33,9 +33,9 @@ test("jev: a billing refusal is an auth error, since retrying will not help", ()
 
 test("jev: a 403 whose body is an HTML page is one batch refused by a proxy, not the account", () => {
   // A web application firewall in front of the API answered 403 with its
-  // own HTML page for two files out of 474 -- a shell script and a test --
-  // and the run stopped on the first one, leaving 9,239 of 10,886 subjects
-  // without a verdict. The key was fine: every other batch answered.
+  // own HTML page for a couple of files, and the run stopped on the first
+  // one, leaving most of its subjects without a verdict. The key was fine:
+  // every other batch answered.
   const page = '<!DOCTYPE html>\n<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->';
   assert.equal(Jev.classify(403, page), "other");
   assert.equal(Jev.classify(403, "  <html><body>Forbidden</body></html>"), "other");
