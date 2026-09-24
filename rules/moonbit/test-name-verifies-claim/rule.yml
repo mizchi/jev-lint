@@ -6,12 +6,12 @@ subject: node
 # things being compared -- the title and the body the matcher captured --
 # and the file adds no evidence.
 state: bare
-# 0.62, kept after the fit 2026-09-21 on the fixtures beside it (9 subjects:
-# 3 defects, 6 cleans, 3 passes). Cleans top at 0.48 (`first_line returns
-# None`, whose assertion is a match that fails on the wrong branch rather
-# than an assert_eq), defects start at 0.86; the midpoint is 0.67 and
-# typescript's 0.62 sits inside the same gap, so the copies agree.
-at: 0.62
+# 0.62, kept after the 2026-09-24 bench exclusion fit on the fixtures beside
+# it (9 subjects: 3 defects, 6 cleans, 3 passes). Cleans top at 0.51,
+# defects start at 0.87; the largest pass-to-pass spread is 0.04, and no
+# decision flipped. The midpoint is 0.69;
+# typescript's 0.62 still sits inside the gap, so the copies agree.
+threshold: 0.62
 axis: file
 severity: warning
 # `test "name" { ... }`: the string is the claim and the block is the body.
@@ -21,6 +21,12 @@ rule:
   all:
     - kind: test_definition
     - has: { kind: string_literal, stopBy: end, pattern: $TITLE }
+# The title is captured before this filter. A `bench:` case measures elapsed
+# time through @bench.T; requiring a correctness assertion flagged 79 such
+# cases across converge and converge_audit before this exclusion.
+constraints:
+  TITLE:
+    not: { regex: '^"bench:' }
 # The same sentence as typescript/test-name-verifies-claim, by copy.
 ask: >-
   This test would still pass if the behaviour its name claims were broken.

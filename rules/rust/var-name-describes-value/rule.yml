@@ -31,8 +31,8 @@ state: located
 # 0.39 recorded above -- and any `at` under roughly 0.50 puts its own
 # spread inside the cutoff too. That trade is refused, same as
 # `shell/installs-persistence` and `moonbit/var-name-describes-value`
-# refuse theirs (see their own `at:` comments). What the fit DOES buy for
-# free: `at: 0.52` clears `ttl`'s FP-margin (0.2033, past its own 0.19
+# refuse theirs (see their own `threshold:` comments). What the fit DOES buy for
+# free: `threshold: 0.52` clears `ttl`'s FP-margin (0.2033, past its own 0.19
 # spread) without touching `ids` or any other decision -- precision and
 # recall unchanged (1.00 / 0.90, the same accepted miss as before).
 inconclusive: >-
@@ -40,9 +40,9 @@ inconclusive: >-
   its passes ran 0.37/0.40/0.54, straddling any cutoff this corpus could
   defend -- not a boundary a refit can move past without flagging `ttl`
   (cache.rs:46, mean 0.3167, spread 0.19), a correctly-named clean whose own
-  noise reaches 0.38. No cutoff clears both; documented in the `at:` comment
+  noise reaches 0.38. No cutoff clears both; documented in the `threshold:` comment
   above.
-at: 0.52
+threshold: 0.52
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

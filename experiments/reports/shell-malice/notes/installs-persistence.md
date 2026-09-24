@@ -10,7 +10,7 @@ language: Bash
 kind: noul
 subject: node
 state: located
-at: 0.50
+threshold: 0.50
 axis: file
 severity: warning
 rule:
@@ -189,7 +189,7 @@ both of which stayed under 0.22.
   a script that only drops a unit and lets a later `daemon-reload` find it would
   slip through. Following the variable would need `utils` plus a
   `follows:`-style binding, not worth it while activation is always present.
-- The corpus has no Windows-ish or `at`/`systemd-run` defect and no
+- The corpus has no Windows-ish or `threshold`/`systemd-run` defect and no
   `/etc/rc.local` case; those branches of the matcher are untested against a
   labelled defect.
 - If this rule and `runs-downloaded-code` ship together they will both fire on

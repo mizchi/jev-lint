@@ -18,7 +18,7 @@ state: local
 # error-message-matches-condition solves by matching the guard; here the
 # call is the subject, so the corpus carries the pair across two
 # functions, which is how the typescript copy's own example reads.
-at: 0.62
+threshold: 0.62
 axis: file
 severity: warning
 # The same two shapes log-level-matches-event matches -- a package call

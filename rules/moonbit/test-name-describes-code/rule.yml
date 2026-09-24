@@ -14,7 +14,7 @@ state: bare
 # the gap the other three leave (0.15 to 0.91), so the copies agree; the
 # midpoint that would catch the miss is 0.22, which the next file's clean
 # band would cross.
-at: 0.70
+threshold: 0.70
 axis: file
 severity: warning
 # `test "name" { ... }`, the same subject test-name-verifies-claim takes.

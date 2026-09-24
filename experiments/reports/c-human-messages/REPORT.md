@@ -53,7 +53,7 @@ match. That is a `src/` change and outside this brief's write scope.
   # (clean max 0.40 vs 0.49) on the same corpus and wording.
   subject: node
   state: local
-  at: 0.6
+  threshold: 0.6
   rule:
     any:
       - pattern: $LOGGER.$LEVEL($MSG, $$$REST)
@@ -115,7 +115,7 @@ Hard cleans: `error` in a catch that recovers by rebuilding an unexpected snapsh
 
 **Fit** (`records/final.json`, subject node, at 0.6)
 
-Fitted midpoint 0.57; set `at: 0.6` for headroom. Precision 1, recall 1 (tp 6, fp 0, fn 0). Bad band 0.75-0.92, clean band 0.06-0.39; headroom above the highest clean 0.21, below the lowest bad 0.15. 0 decision flips across the 3 passes; max spread 0.07, mean 0.02.
+Fitted midpoint 0.57; set `threshold: 0.6` for headroom. Precision 1, recall 1 (tp 6, fp 0, fn 0). Bad band 0.75-0.92, clean band 0.06-0.39; headroom above the highest clean 0.21, below the lowest bad 0.15. 0 decision flips across the 3 passes; max spread 0.07, mean 0.02.
 
 **Verdict**: SHIP -- separates with headroom 0.21/0.15 and no flips, on a corpus whose closest cleans are the two hard ones a lazy rule flags (refused login at info, "failed" inside a retry at warn). Two caveats that do not change the verdict but bound it: the `false` branch names two corpus cases by kind ("refused logins", "usage error in a command-line entry point"), which moved the refused-login clean from 0.49 to 0.39, so the headroom on unseen code is more like 0.10 than 0.20 until step 5 of calibration.md is run on a real repository; and the weakest defect (debug for a refused payment, 0.75) is the one the brief itself called arguable.
 
@@ -139,7 +139,7 @@ Fitted midpoint 0.57; set `at: 0.6` for headroom. Precision 1, recall 1 (tp 6, f
   # verdict; keep one user-facing message per function until that is fixed.
   subject: enclosing
   state: local
-  at: 0.62
+  threshold: 0.62
   rule:
     any:
       # toast("..."), notify("..."), alert("..."), showMessage("..."),
@@ -243,7 +243,7 @@ Hard cleans: "Request received" after the same enqueue (`:18`); "Saving..." befo
 
 **Fit** (`records/final.json`, subject enclosing, at 0.62)
 
-Calibrate's midpoint is 0.53 (tp 10, fp 0, fn 0 on pass means) but it sits inside the wobble: the expired-link defect ran 0.52-0.59 and "Subscription cancelled" ran 0.34-0.55, so that number is a coin flip. At `at: 0.62`: precision 1, recall 0.9 (tp 9, fp 0, fn 1 -- the expired-link case at 0.56). Highest clean 0.51 ("Request received"; max pass 0.53), lowest strong bad 0.77; headroom 0.11 above the highest clean mean, 0.07 above its highest pass. 0 flips at 0.62; max spread 0.21, mean 0.03.
+Calibrate's midpoint is 0.53 (tp 10, fp 0, fn 0 on pass means) but it sits inside the wobble: the expired-link defect ran 0.52-0.59 and "Subscription cancelled" ran 0.34-0.55, so that number is a coin flip. At `threshold: 0.62`: precision 1, recall 0.9 (tp 9, fp 0, fn 1 -- the expired-link case at 0.56). Highest clean 0.51 ("Request received"; max pass 0.53), lowest strong bad 0.77; headroom 0.11 above the highest clean mean, 0.07 above its highest pass. 0 flips at 0.62; max spread 0.21, mean 0.03.
 
 **Verdict**: COOKBOOK -- nine of ten defects sit at 0.77 and above against cleans at 0.51 and below, but the tenth (a specific cause named for a multi-cause branch) lives in the same 0.45-0.59 band as the two hard cleans that are true only by convention, and `enclosing` is the subject that jev-lint currently cannot key correctly when a function has more than one message. Worth a recipe with the caveat; not a shipped cutoff.
 
@@ -264,7 +264,7 @@ Calibrate's midpoint is 0.53 (tp 10, fp 0, fn 0 on pass means) but it sits insid
   # answer (max 0.29 vs 0.44) with the bad band unchanged.
   subject: node
   state: local
-  at: 0.65
+  threshold: 0.65
   rule:
     any:
       - pattern: assert($COND, $MSG)
@@ -333,7 +333,7 @@ Decision recorded in `note:`/criteria: consequence phrasing counts as matching. 
 
 **Fit** (`records/final.json`, subject node, at 0.65)
 
-Calibrate's midpoint 0.39 gives tp 7, fp 0, fn 0 on means, but underflow ran 0.44-0.61 and the highest clean ("duplicate ids") ran 0.19-0.32, so that cutoff has 0.12 of headroom on one side and sits on a case whose own spread is 0.17. At `at: 0.65`: precision 1, recall 0.86 (tp 6, fp 0, fn 1 -- underflow at 0.51). Bad band 0.89-0.97, clean band 0.04-0.28; headroom 0.37 above the highest clean, 0.24 below the lowest strong bad. 0 flips at 0.65; max spread 0.17, mean 0.04.
+Calibrate's midpoint 0.39 gives tp 7, fp 0, fn 0 on means, but underflow ran 0.44-0.61 and the highest clean ("duplicate ids") ran 0.19-0.32, so that cutoff has 0.12 of headroom on one side and sits on a case whose own spread is 0.17. At `threshold: 0.65`: precision 1, recall 0.86 (tp 6, fp 0, fn 1 -- underflow at 0.51). Bad band 0.89-0.97, clean band 0.04-0.28; headroom 0.37 above the highest clean, 0.24 below the lowest strong bad. 0 flips at 0.65; max spread 0.17, mean 0.04.
 
 **Verdict**: COOKBOOK -- six of seven defect classes (wrong thing, wrong bound, wrong failure, wrong quantity, copied message) separate from every hard clean by 0.37 of headroom with no flips, which is the widest gap in the family; but the seventh, a wrong technical term for the direction of an overrun, does not separate at any stable cutoff after three sentences, and criteria v2 cites two corpus cases by name ("duplicate ids", "forbidden"), so the clean band is optimistic by an unknown amount. Ship it after a run on unseen code that keeps the clean band under 0.4; until then it is a recipe with a known miss.
 
@@ -428,11 +428,11 @@ single-rule copy the unseen run used)
   # failure on a call counter or a route. The matcher now drops a bare counter
   # compared to a positive integer and any throw inside a mock factory's
   # callback; the criteria say a throw in a test double describes the
-  # scenario, not the condition. `at` stays 0.65: fitted trade-off 0.56, and
+  # scenario, not the condition. `threshold` stays 0.65: fitted trade-off 0.56, and
   # the stub band tops out at 0.55.
   subject: node
   state: local
-  at: 0.65
+  threshold: 0.65
   rule:
     all:
       - any:
@@ -559,7 +559,7 @@ passes: 0.51 and 0.72).
 
 Fitted trade-off 0.56, precision 0.89, recall 0.89 (tp 8, fp 1, fn 1) on pass
 means -- the fp is the nested guard (mean 0.58), the fn is underflow (0.56).
-At `at: 0.65`, on means: precision 1, recall 0.89 (tp 8, fp 0, fn 1). Bad
+At `threshold: 0.65`, on means: precision 1, recall 0.89 (tp 8, fp 0, fn 1). Bad
 band 0.73-0.98 with underflow at 0.56; clean band 0.03-0.58. 2 decision flips
 across the 3 passes, both at the cutoff's edge: the nested guard ran 0.49,
 0.55, 0.70 and the underflow miss 0.49, 0.55, 0.65. Max spread 0.21, mean

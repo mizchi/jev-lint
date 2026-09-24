@@ -27,7 +27,7 @@ subject: file
 # top answer being the same file in every self-lint record. Raise it to
 # `warning` once you have several labelled cases of your own.
 state: graph
-at: 0.65
+threshold: 0.65
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: info

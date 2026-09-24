@@ -288,13 +288,17 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
   if ("error" in judgment) return { error: judgment.error };
   const { kind, levels } = judgment;
 
-  const at = raw.at === undefined ? null : raw.at;
-  if (at !== null && typeof at !== "number") {
-    return { error: `${id}: \`at\` must be a number` };
+  if (raw.at !== undefined && raw.threshold !== undefined) {
+    return { error: `${id}: cannot set both \`at\` and \`threshold\`; use \`threshold\`` };
+  }
+  const at = raw.threshold ?? raw.at ?? null;
+  const thresholdField = raw.threshold !== undefined ? "threshold" : "at";
+  if (at !== null && (typeof at !== "number" || !Number.isFinite(at))) {
+    return { error: `${id}: \`${thresholdField}\` must be a number (finite)` };
   }
   const max = kind === "score" ? (levels ? levels.length - 1 : 3) : 1;
   if (at !== null && (at < 0 || at > max + 0.01)) {
-    return { error: `${id}: \`at\` must be between 0 and ${max} for \`kind: ${kind}\`` };
+    return { error: `${id}: \`${thresholdField}\` must be between 0 and ${max} for \`kind: ${kind}\`` };
   }
 
   // The `--loose` floor. Strictly under the cutoff, or the band is empty.
@@ -392,8 +396,8 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
 
   const known = new Set([
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
-    "note", "kind", "criteria", "at", "subject", "state", "axis", "severity",
-    "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions", "levels",
+    "note", "kind", "criteria", "threshold", "at", "subject", "state", "axis", "severity",
+    "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions", "filenames", "levels",
     "divergent", "inconclusive", "context",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
@@ -423,7 +427,10 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     context: context.docs.length > 0 ? context.docs : null,
     languageDir: null,
   };
-  return { rule: { ...base, ...judgment, ...source } };
+  return {
+    rule: { ...base, ...judgment, ...source },
+    ...(raw.at !== undefined ? { warnings: [`${id}: \`at\` is deprecated; use \`threshold\``] } : {}),
+  };
 }
 
 /**
@@ -488,6 +495,7 @@ function normalizeSource(raw: any, id: string, languages: Language[]): RuleSourc
   }
   let split: string | null = null;
   let extensions: string[] = [];
+  let filenames: string[] | null = null;
   if (isBlock && (!hasText || languages.length !== 1)) {
     return { error: `${id}: a \`subject: block\` rule is \`language: Text\` and nothing else (got ${languages.join(", ")})` };
   }
@@ -495,6 +503,9 @@ function normalizeSource(raw: any, id: string, languages: Language[]): RuleSourc
     return { error: `${id}: \`Text\` is the grammar of \`subject: block\` rules only; a ${JSON.stringify(raw.subject ?? "node")} subject needs a real grammar` };
   }
   if (isGit) {
+    if (raw.filenames !== undefined) {
+      return { error: `${id}: \`filenames\` belongs to \`subject: block\` rules` };
+    }
     if (raw.rule !== undefined) {
       return { error: `${id}: a \`subject: ${subject}\` rule takes no matcher; its subjects are ${subject}s, not nodes` };
     }
@@ -524,12 +535,18 @@ function normalizeSource(raw: any, id: string, languages: Language[]): RuleSourc
       return { error: `${id}: a \`subject: block\` rule needs \`extensions\`, a non-empty list such as [sql]` };
     }
     extensions = raw.extensions.map((e: string) => e.trim().replace(/^\./, ""));
+    if (raw.filenames !== undefined) {
+      if (!Array.isArray(raw.filenames) || raw.filenames.length === 0 || raw.filenames.some((name: unknown) => typeof name !== "string" || name.trim() === "" || name.includes("/") || name.includes("\\"))) {
+        return { error: `${id}: \`filenames\` must be a non-empty list of basenames, such as [AGENTS.md]` };
+      }
+      filenames = raw.filenames;
+    }
     if (raw.state !== undefined && raw.state !== "bare" && raw.state !== "located") {
       return { error: `${id}: a \`subject: block\` rule is \`state: bare\` or \`located\`; a text file has no graph` };
     }
   } else {
-    if (raw.split !== undefined || raw.extensions !== undefined) {
-      return { error: `${id}: \`split\` and \`extensions\` belong to \`subject: block\` rules` };
+    if (raw.split !== undefined || raw.extensions !== undefined || raw.filenames !== undefined) {
+      return { error: `${id}: \`split\`, \`extensions\` and \`filenames\` belong to \`subject: block\` rules` };
     }
     if (raw.rule === undefined || raw.rule === null) {
       return { error: `${id}: missing \`rule\` (the ast-grep matcher)` };
@@ -539,9 +556,9 @@ function normalizeSource(raw: any, id: string, languages: Language[]): RuleSourc
     }
   }
 
-  if (isGit) return { subject, matcher: null, constraints: null, utils: null, split: null, extensions: null };
-  if (isBlock) return { subject: "block", matcher: null, constraints: null, utils: null, split, extensions };
-  return { subject, matcher: raw.rule, constraints: raw.constraints ?? null, utils: raw.utils ?? null, split: null, extensions: null };
+  if (isGit) return { subject, matcher: null, constraints: null, utils: null, split: null, extensions: null, filenames: null };
+  if (isBlock) return { subject: "block", matcher: null, constraints: null, utils: null, split, extensions, filenames };
+  return { subject, matcher: raw.rule, constraints: raw.constraints ?? null, utils: raw.utils ?? null, split: null, extensions: null, filenames: null };
 }
 
 /**
@@ -824,7 +841,7 @@ export function cutoffFor(rule: Rule, overrides: Record<string, number> = {}): n
  *
  * Editing the sentence is editing the question, so a verdict for the old
  * wording must never answer for the new one. The hash covers everything the
- * model is shown and nothing else: `at` is deliberately excluded, because
+ * model is shown and nothing else: `threshold` is deliberately excluded, because
  * re-calibrating a threshold must not cost a single request.
  *
  * The matcher is in it because the matcher is shown, indirectly: the node kind
@@ -854,6 +871,7 @@ export function ruleTextHash(rule: Rule): string {
         // Only on a block rule: appending an empty line for every other rule
         // retired every baseline the day this landed.
         ...(rule.split ? [rule.split] : []),
+        ...(rule.filenames ? [canonical(rule.filenames)] : []),
         // The documents are shown, so their text is in the draft: a verdict
         // given against one version of a convention does not answer for the
         // next. Only when there are some, for the same reason as `split`.
@@ -909,6 +927,7 @@ export function loadRules(
 
   const rules: Rule[] = [];
   const errors: string[] = [];
+  const warnings: string[] = [];
   const seen = new Map<string, string>();
   const pending: PendingExtends[] = [];
 
@@ -957,17 +976,17 @@ export function loadRules(
           pending.push({ raw: item as Record<string, unknown>, where, path, layout });
           return;
         }
-        const { rule, error } = normalizeRule(item, where, custom, { ruleDir: dirname(path) });
+        const { rule, error, warnings: ruleWarnings } = normalizeRule(item, where, custom, { ruleDir: dirname(path) });
         if (error || !rule) {
           errors.push(error ?? `${where}: could not be normalized`);
           return;
         }
+        for (const warning of ruleWarnings ?? []) warnings.push(`${where}: ${warning}`);
         admit(rule, where, path, layout);
       });
     });
   }
 
-  const warnings: string[] = [];
   if (pending.length > 0) {
     resolveExtends(pending, rules, custom, errors, warnings, admit);
   }
@@ -1087,11 +1106,17 @@ function resolveExtends(
     }
     const base = candidates[0]!;
 
+    if (p.raw.at !== undefined && p.raw.threshold !== undefined) {
+      return fail("cannot set both `at` and `threshold`; use `threshold`");
+    }
+
     const merged: Record<string, unknown> = { ...ruleToRaw(base) };
     for (const [k, v] of Object.entries(p.raw)) {
       if (k === "extends") continue;
       merged[k] = v;
     }
+    if (p.raw.at !== undefined) delete merged.threshold;
+    if (p.raw.threshold !== undefined) delete merged.at;
     if (p.raw.language !== undefined) delete merged.languages;
     if (p.raw.languages !== undefined) delete merged.language;
     // One branch of the criteria may be given alone.
@@ -1116,17 +1141,18 @@ function resolveExtends(
     if (p.raw.context !== undefined) merged.context = p.raw.context;
 
     const baseName = base.languageDir ? `${base.languageDir}/${base.id}` : base.id;
-    const { rule, error } = normalizeRule(merged, p.where, custom, {
+    const { rule, error, warnings: ruleWarnings } = normalizeRule(merged, p.where, custom, {
       ruleDir: dirname(p.path),
       inheritedContext: base.context ?? [],
       extendsName: baseName,
     });
     if (error || !rule) return fail((error ?? "could not be normalized").replace(/^[^:]+: /, ""));
+    for (const warning of ruleWarnings ?? []) warnings.push(`${p.where}: ${warning}`);
 
     const asksOther = QUESTION_FIELDS.some((k) => p.raw[k] !== undefined);
-    if (asksOther && p.raw.at === undefined && base.at !== null) {
+    if (asksOther && p.raw.at === undefined && p.raw.threshold === undefined && base.at !== null) {
       warnings.push(
-        `${id}: extends ${baseName} and changes what the model is asked, but inherits ${baseName}'s cutoff (\`at: ${base.at}\`), which was fitted to ${baseName}'s question -- fit its own \`at\``,
+        `${id}: extends ${baseName} and changes what the model is asked, but inherits ${baseName}'s cutoff (\`threshold: ${base.at}\`), which was fitted to ${baseName}'s question -- fit its own \`threshold\``,
       );
     }
     if (!admit(rule, p.where, p.path, p.layout)) {
@@ -1161,7 +1187,7 @@ function ruleToRaw(rule: Rule): Record<string, unknown> {
     note: rule.note,
     criteria: rule.criteria,
     levels: rule.levels,
-    at: rule.at,
+    threshold: rule.at,
     loose: rule.loose,
     axis: rule.axis,
     message: rule.message,
@@ -1173,6 +1199,7 @@ function ruleToRaw(rule: Rule): Record<string, unknown> {
     utils: rule.utils,
     split: rule.split,
     extensions: rule.extensions,
+    filenames: rule.filenames,
   };
   for (const [k, v] of Object.entries(optional)) if (v !== null && v !== undefined) raw[k] = v;
   return raw;

@@ -1,0 +1,22 @@
+#!/bin/sh
+# Review this repository with its checked-out CLI, including changes to the
+# CLI that have not been built or published yet.
+if [ -z "$TYPESAFE_API_KEY" ] && [ -z "$TYPESAFEAI_API_KEY" ]; then
+  echo "jev-lint: no API key in the environment, skipping the review" >&2
+  exit 0
+fi
+
+root=$(git rev-parse --show-toplevel) || exit 2
+cd "$root" || exit 2
+
+node --experimental-strip-types "$root/src/cli.ts" review --staged --fail-on error
+status=$?
+if [ "$status" -ne 0 ] && [ "$status" -ne 3 ]; then
+  exit "$status"
+fi
+
+node --experimental-strip-types "$root/src/cli.ts" commits --staged --fail-on error
+status=$?
+if [ "$status" -ne 0 ] && [ "$status" -ne 3 ]; then
+  exit "$status"
+fi

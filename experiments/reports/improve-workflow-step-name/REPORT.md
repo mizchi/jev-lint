@@ -9,7 +9,7 @@ GitHub Actions step `name:` versus its `run:`/`uses:`; `subject: node`,
 | | start | end |
 | --- | --- | --- |
 | subjects | 33 (10 bad, 23 clean, 17 hard) | 68 (18 bad, 50 clean, ~35 distinct hard after dedup) |
-| `at:` | 0.44 | 0.62 (fitted midpoint of the final run) |
+| `threshold:` | 0.44 | 0.62 (fitted midpoint of the final run) |
 | P / R | 1.00 / 1.00 | 1.00 / 1.00 |
 | flips | 0 | 0 |
 | bad band | 0.56-0.95 | 0.68-0.96 |
@@ -57,7 +57,7 @@ at 0.56 and the summarising `Bump version` clean at 0.30.
 4. Criteria: identifier clause removed entirely (every version of it made
    the case worse). P 0.95 R 1.00 at 0.44, fitted 0.62. `Setup MoonBit`
    0.53 [0.58 0.49 0.53]; all other cleans <= 0.25; bads 0.71-0.96.
-5. `at:` 0.44 -> 0.62 (fitted midpoint). Accept run: P 1.00 R 1.00, 0
+5. `threshold:` 0.44 -> 0.62 (fitted midpoint). Accept run: P 1.00 R 1.00, 0
    flips; `Setup MoonBit` 0.42 [0.34 0.49 0.44], `Bump version` + canary
    publish 0.68, `Check production queues` 0.72. `--replay` passes.
 
@@ -137,7 +137,7 @@ where the bar wants 0.20:
   version prerelease` + `npm publish --tag canary`: 0.68-0.75 across every
   run. The model half-reads a canary publish as part of a nightly bump.
 
-At `at: 0.62` the accepted run has 0.20 of headroom on the clean side and
+At `threshold: 0.62` the accepted run has 0.20 of headroom on the clean side and
 0.06 on the bad side; the previous run with the same criteria had 0.09
 and 0.09. No decision flipped in either run and no mean is within 0.03 of
 the cutoff. Precision and recall are 1.00 on 18 defects and 50 cleans.

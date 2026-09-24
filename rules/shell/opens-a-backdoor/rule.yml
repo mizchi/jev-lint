@@ -23,7 +23,7 @@ state: located
 # passes, widest pass-to-pass spread on one subject 0.05. The first sentence put
 # that entrypoint cluster at 0.52-0.66 and lost all three of them at 0.70: it left
 # "an account nothing runs as" to be inferred, and the criteria now say it.
-at: 0.50
+threshold: 0.50
 axis: file
 severity: warning
 # Everywhere a shell script hands out login or privilege, over-matched on

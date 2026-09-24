@@ -1,0 +1,19 @@
+default: clean
+fixtures/ambiguous/AGENTS.md:
+  - { line: 1, label: bad, window: 0, reason: "important, carefully and risky give no trigger or action two reviewers could apply consistently" }
+  - { line: 5, label: clean, window: 0, reason: "names the path trigger, exact command and failure handoff" }
+fixtures/undefined/AGENTS.md:
+  - { line: 1, label: bad, window: 0, reason: "normal release process and good enough are undefined in this document" }
+  - { line: 5, label: clean, window: 0, reason: "names the source and test directories" }
+fixtures/defined-elsewhere/AGENTS.md:
+  - { line: 1, label: clean, window: 0, reason: "project checks is defined in the next section; the short rule is actionable with that definition" }
+  - { line: 5, label: clean, window: 0, reason: "defines the exact checks and failure handling" }
+fixtures/scope/AGENTS.md:
+  - { line: 1, label: clean, window: 0, reason: "precise path restriction and generation command" }
+  - { line: 5, label: clean, window: 0, reason: "observable commit subject and body conditions" }
+fixtures/terse/AGENTS.md:
+  - { line: 1, label: clean, window: 0, reason: "short instruction has a clear prohibited artifact" }
+  - { line: 5, label: clean, window: 0, reason: "names the trigger and document" }
+fixtures/japanese/AGENTS.md:
+  - { line: 1, label: bad, window: 0, reason: "重要, 適切, 十分 are not defined as triggers or review actions" }
+  - { line: 5, label: clean, window: 0, reason: "the source path, test command and failure report are concrete" }

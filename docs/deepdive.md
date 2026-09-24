@@ -51,7 +51,7 @@ rewriting history.
 first time it existed, showed ast-grep's `secondary` bookkeeping capture
 going out to the model as `matcher_captured.secondary` on 62 of the corpus's
 276 subjects. Removing it changes the question for those subjects, so the
-packs were refit: every `at:` moved by 0.08 or less (`fn-name-promises`
+packs were refit: every `threshold:` moved by 0.08 or less (`fn-name-promises`
 0.76 → 0.83 was the largest, its clean band having risen to 0.75), no
 labelled decision changed, 12 rules still reach 1.00/1.00, and repeating the
 fit moved it by 0.02 or less. The tables in §2–§6 that quote a cutoff were

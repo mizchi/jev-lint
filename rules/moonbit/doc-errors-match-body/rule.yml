@@ -49,7 +49,7 @@ state: located
 # every clean aimed at the boundary landed quiet instead. Midpoint of the
 # original 11-case corpus was 0.50 already and nothing here moves it; rust
 # takes 0.54 and every non-residue defect here still answers over that too.
-at: 0.50
+threshold: 0.50
 axis: file
 severity: warning
 # A `///` run is one `comment` per line, so the line carrying the failure

@@ -9,7 +9,7 @@ state: graph
 # parses a config line (0.95), and `util.mbt`, a clamp beside a string
 # repeat (0.66-0.67). The midpoint is 0.46; rust's 0.55 sits in the same
 # gap and is kept so the copies agree.
-at: 0.55
+threshold: 0.55
 axis: file
 severity: info
 # The file's root. The subject is the module outline -- its path and its

@@ -13,7 +13,7 @@ state: local
 # in the same gap. The two functions named for absorbing failure --
 # `try_read` and `load_config_or_default` -- are excluded by the matcher,
 # which `--show-subjects` confirms: 8 catches in the file, 6 matched.
-at: 0.55
+threshold: 0.55
 axis: file
 severity: warning
 # The `catch` arm of a `try ... catch { }` or of an expression-level

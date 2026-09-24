@@ -37,6 +37,7 @@ export interface Options {
   explain: boolean;
   loose: number | null;
   at: Record<string, number>;
+  deprecatedAt: boolean;
   unsureBelow: number | null;
   failOn: Severity | null;
   preCommit: boolean;
@@ -100,7 +101,7 @@ usage:
   jev-lint commits --squash [range] --message-file <path|->
                                    judge the whole range as one change against
                                    that message: a PR description, a changelog entry
-  jev-lint commits --staged        judge what is staged against AGENTS.md / CLAUDE.md,
+  jev-lint commits --staged        judge what is staged against AGENTS.md (CLAUDE.md fallback),
                                    as a pre-commit hook does -- no range, no message yet
   jev-lint gaps [paths...]         per-rule separation report (read this first)
   jev-lint calibrate [paths...]    repeat runs, and fit cutoffs if labels exist
@@ -140,12 +141,14 @@ options:
                            a reader, closest to the cutoff first, at most n.
                            Never a finding: does not count, does not fail. Free.
       --explain-schedule   print the axis chosen per rule, and why
-      --at <rule=n>        override one cutoff (repeatable); rust/<rule>=n for one language
+      --threshold <rule=n> override one cutoff (repeatable); an answer at or
+                           above it is a finding; rust/<rule>=n for one language
+      --at <rule=n>        deprecated alias for --threshold
       --unsure-below <n>   confidence under which a finding is worded as a question
       --base <ref>         review against a merge base (e.g. --base main)
       --staged             review: only staged changes; commits: the index, as
                            one change, in place of a range -- both as a pre-commit
-                           hook would run them
+                           hook would run them; hooks.precommit selects their rules
       --fail-on <severity> exit 1 only for findings at or above hint | info |
                            warning | error (default: any finding)
       --format <fmt>       pretty | json | github
@@ -235,6 +238,7 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
     explain: false,
     loose: null,
     at: {},
+    deprecatedAt: false,
     unsureBelow: null,
     failOn: null,
     preCommit: false,
@@ -329,13 +333,15 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
       case "--explain-schedule":
         opts.explainSchedule = true;
         break;
+      case "--threshold":
       case "--at": {
         const v = need(i, a);
         const eq = v.lastIndexOf("=");
-        if (eq < 1) throw new Error(`--at needs rule=number, got ${v}`);
+        if (eq < 1) throw new Error(`${a} needs rule=number, got ${v}`);
         const n = Number(v.slice(eq + 1));
-        if (!Number.isFinite(n)) throw new Error(`--at ${v}: not a number`);
+        if (!Number.isFinite(n)) throw new Error(`${a} ${v}: not a number`);
         opts.at[v.slice(0, eq)] = n;
+        if (a === "--at") opts.deprecatedAt = true;
         i += 1;
         break;
       }

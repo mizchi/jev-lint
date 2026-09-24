@@ -32,7 +32,7 @@ https://github.com/mizchi/jev-lint
     "false": >-
       The name and parameter list describe what the body actually does.
   state: located
-  at: 0.86
+  threshold: 0.86
 ```
 
 

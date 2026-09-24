@@ -45,7 +45,7 @@ state: located
 # count) as its HIGHEST clean, so the family already reads a plural name
 # over a count of those things as acceptable, and the label was out of step
 # with the family, not the model with the label.
-at: 0.62
+threshold: 0.62
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

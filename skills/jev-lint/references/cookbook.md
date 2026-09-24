@@ -3,7 +3,7 @@
 Recipes for rules of your own, each one a complete YAML block that loads and
 matches. Copy the nearest one, change the sentence and the criteria, keep the
 shape. Every field is explained in [rule-fields.md](rule-fields.md); how to
-fit `at:` is in [calibration.md](calibration.md).
+fit `threshold:` is in [calibration.md](calibration.md).
 
 The question behind every recipe is the same: **what does this code claim
 about itself, and does the body honour the claim?** A name is a claim. A
@@ -122,7 +122,7 @@ is used.
   kind: noul
   subject: node
   state: located
-  at: 0.55
+  threshold: 0.55
   rule:
     any:
       - all:
@@ -159,7 +159,7 @@ is used.
   kind: noul
   subject: node
   state: located
-  at: 0.66
+  threshold: 0.66
   rule:
     all:
       - kind: function_item
@@ -195,7 +195,7 @@ The same recipe narrowed to names that make a specific promise. `is*`,
   kind: noul
   subject: node
   state: located
-  at: 0.7        # uncalibrated
+  threshold: 0.7        # uncalibrated
   rule:
     any:
       - all:
@@ -251,7 +251,7 @@ session, a `Config` that is a list of errors.
   kind: noul
   subject: node
   state: located
-  at: 0.7
+  threshold: 0.7
   rule:
     all:
       - any:
@@ -286,7 +286,7 @@ need it, sharing the sentence by anchor.
   kind: noul
   subject: node
   state: located
-  at: 0.62
+  threshold: 0.62
   rule:
     all:
       - kind: variable_declarator
@@ -332,7 +332,7 @@ the right thing and still not establish it.
   kind: noul
   subject: node
   state: bare
-  at: 0.93
+  threshold: 0.93
   rule: &test_matcher
     any:
       - pattern: it($TITLE, $BODY)
@@ -359,7 +359,7 @@ the right thing and still not establish it.
   kind: noul
   subject: node
   state: bare
-  at: 0.53
+  threshold: 0.53
   rule: *test_matcher
   ask: >-
     This test would still pass if the behaviour its name claims were broken.
@@ -392,7 +392,7 @@ and the matched node is the code it is about.
   kind: noul
   subject: node
   state: located
-  at: 0.75
+  threshold: 0.75
   rule:
     any:
       - all:
@@ -455,7 +455,7 @@ docstring is the first statement, a bare string expression.
   kind: noul
   subject: node
   state: local
-  at: 0.7        # uncalibrated
+  threshold: 0.7        # uncalibrated
   rule:
     all:
       - kind: function_definition
@@ -509,7 +509,7 @@ it is the evidence.
   kind: noul
   subject: enclosing
   state: bare
-  at: 0.7
+  threshold: 0.7
   severity: info
   rule:
     kind: comment
@@ -545,7 +545,7 @@ promised its caller.
   kind: noul
   subject: enclosing
   state: local
-  at: 0.7
+  threshold: 0.7
   rule:
     kind: catch_clause
   ask: >-
@@ -579,7 +579,7 @@ model from flagging every `tryParse`.
   kind: noul
   subject: enclosing
   state: local
-  at: 0.7
+  threshold: 0.7
   rule:
     any:
       - pattern: throw new Error($MSG)
@@ -614,7 +614,7 @@ imports — is enough.
   kind: noul
   subject: file
   state: graph
-  at: 0.62
+  threshold: 0.62
   severity: info
   rule:
     kind: program
@@ -646,7 +646,7 @@ The `score` recipe. Use it when the answer is "how badly" rather than
   kind: score
   subject: enclosing
   state: local
-  at: 2.0
+  threshold: 2.0
   rule:
     pattern: fetch($$$ARGS)
   ask: >-
@@ -691,7 +691,7 @@ together. Report: `experiments/reports/f-resource-names/`.
   kind: noul
   subject: node
   state: local
-  at: 0.56
+  threshold: 0.56
   rule:
     any:
       - all:
@@ -785,7 +785,7 @@ phrasing. Report: `experiments/reports/g-paired-contracts/`.
   kind: noul
   subject: node
   state: located
-  at: 0.40
+  threshold: 0.40
   rule:
     any:
       - all:
@@ -876,4 +876,4 @@ field-by-field framing flagged at 0.48.
   mid-scale. Rewrite the branch in terms of what the code in front of the
   model shows, or widen `subject`/`state` until it does.
 - **A number in the sentence** ("more than 3 parameters"). That is a cutoff,
-  and it belongs in `at:` or in a parser.
+  and it belongs in `threshold:` or in a parser.

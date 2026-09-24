@@ -11,13 +11,14 @@ not a sentiment. Vague entries are worse than absent ones.
   an `expect.yml` labelling them, and the accepted `baseline.json`. A rule
   file anywhere else has no fixtures and no tier, and that is a different
   thing.
-- A rule ships with a cutoff that was fitted, and the `at:` carries a
+- A rule ships with a cutoff that was fitted, and the `threshold:` carries a
   comment naming the run it came from, what the defects answered, where the
   cleans topped out, and the pass-to-pass spread. A guessed cutoff is
-  written `at: 0.7  # uncalibrated` and does not ship that way.
+  written `threshold: 0.7  # uncalibrated` and does not ship that way.
 - `baseline.json` is committed; `last.json` is not — `.gitignore` already
-  says so. A rule whose `rule.yml` changes and whose `baseline.json` does
-  not is a rule whose numbers no longer describe it.
+  says so. A change to what a rule asks or matches needs a newly accepted
+  baseline. Renaming `at:` to `threshold:` without changing the number
+  preserves the normalized rule and its accepted answers.
 - The same `id` under two language directories carries the same `ask:`,
   `criteria:` and `note:`. Change one and change the other, or say in
   `divergent:` why that language's failure is shaped differently.

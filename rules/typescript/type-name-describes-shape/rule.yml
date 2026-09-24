@@ -36,7 +36,7 @@ state: located
 # the weakest defect (Users, 0.61-0.72). The recall on defect classes the
 # criteria do not name is not measured here; the clean band is the number
 # to trust. See experiments/reports/l-recipes/REPORT.md.
-at: 0.42
+threshold: 0.42
 severity: warning
 rule:
   all:

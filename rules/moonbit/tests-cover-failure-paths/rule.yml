@@ -13,7 +13,7 @@ state: paired
 # 0.47 and typescript's 0.68 sits in the same gap. The pairing is by name
 # -- `basket.mbt` with `basket_test.mbt`, MoonBit's own convention --
 # which `collectSubjects` reports as `paired_by: its name`.
-at: 0.68
+threshold: 0.68
 axis: file
 severity: warning
 # A public function: `pub` or `pub(all)` in its own text, which is how

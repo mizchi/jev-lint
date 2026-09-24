@@ -79,7 +79,7 @@ matched" for the `evals/labels.json` layout), so the fits here are from
   # on the mean and 0.07 across passes; the midpoint is 0.56 and the headroom
   # is under 0.10 on both sides, which is why this is a cookbook recipe and
   # not a shipped cutoff.
-  at: 0.56
+  threshold: 0.56
   rule:
     any:
       - all:

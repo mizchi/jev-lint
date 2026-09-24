@@ -21,7 +21,7 @@ false` hunk under "Add --json" is.
 One shipped rule: `rules/git/commit-message-describes-diff`. The accepted
 run is `baseline.json` beside it; the unseen-code run is quoted below from
 its record (session scratchpad `unseen.json`, run with
-`--at commit-message-describes-diff=0` so every value printed).
+`--threshold commit-message-describes-diff=0` so every value printed).
 
 ---
 
@@ -48,7 +48,7 @@ kind: noul
 # rule candidates under a message about something else answered 0.73 and
 # 0.47. 0.65 keeps the 0.73 and passes the fence-sitter; the 0.47 is the
 # residue. See experiments/reports/k-commits.
-at: 0.65
+threshold: 0.65
 ask: >-
   This commit's message ($SUBJECT) claims something the diff does not do, or
   the diff does something material that the message does not mention.
@@ -203,7 +203,7 @@ deleted-test move came from the sentence.
 | also-in-body | clean | 0.06 | 0.06 0.06 0.06 | 0.00 |
 | fix-pagination-off-by-one | clean | 0.03 | 0.03 0.03 0.04 | 0.01 |
 
-- Fitted cutoff (midpoint): 0.60. Shipped `at: 0.65`.
+- Fitted cutoff (midpoint): 0.60. Shipped `threshold: 0.65`.
 - At 0.65: precision 1.00, recall 1.00, tp 7 / fp 0 / fn 0.
 - Decision flips across the 3 passes: 0. Max spread: 0.03.
 - Gap 0.35 -> 0.85 (0.50 wide). Headroom from clean top to 0.65: 0.30;

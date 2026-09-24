@@ -14,7 +14,7 @@ state: paired
 # The `test_` prefix pairs `test_cart.py` with `cart.py` (the runner splits
 # a test file's name on `_`); a helper defined in a test file matches the
 # matcher and is dropped as unpaired, which the run reports as one subject.
-at: 0.52
+threshold: 0.52
 axis: file
 rule:
   all:

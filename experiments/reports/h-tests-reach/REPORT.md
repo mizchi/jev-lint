@@ -50,7 +50,7 @@ paid run first; the corpus run never exceeded $0.004.
   # corpus contains, and the first run on unseen code (jev-lint's own src/)
   # answered 0.76 for a fallback `return captured` that no criteria wording
   # here names as not-a-failure. See experiments/reports/h-tests-reach.
-  at: 0.68
+  threshold: 0.68
   rule:
     any:
       - all:
@@ -217,7 +217,7 @@ nesting only; the corpus still finds 27, `src/` drops from 113 to 88.
 ### Fit
 
 Accepted run (`evals/baseline.json`, 3 passes, after the matcher change):
-fitted cutoff 0.65 (midpoint); shipped `at: 0.68`. Precision 1.00, recall
+fitted cutoff 0.65 (midpoint); shipped `threshold: 0.68`. Precision 1.00, recall
 1.00, tp 7 / fp 0 / fn 0 at 0.68 and at any cutoff in 0.47-0.84. Decision
 flips across the 3 passes: 0. Max spread 0.07 (`retry.ts:15`); defects
 0.85-0.96 with spread at most 0.02. Clean band: top 0.44 on means
@@ -382,6 +382,6 @@ Written by the integrator after the report above, on the same day.
 - Refit on the same 27 subjects, 3 passes, $0.004: P 1.00 / R 1.00, 0
   flips, max spread 0.08. Defects 0.88–0.95; cleans top at 0.36
   (`readConfig`), 0.28 (`retry`), 0.27 (`truncateSlug`, down from 0.44 now
-  that its whole test travels). Fitted midpoint 0.62; `at: 0.68` kept.
+  that its whole test travels). Fitted midpoint 0.62; `threshold: 0.68` kept.
 - Promoted: `rules/tests-cover-failure-paths/`, baseline accepted
   2026-09-20. The candidate directory this report names no longer exists.

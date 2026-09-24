@@ -31,7 +31,7 @@ state: bare
 # post-mortem 1.58 with its "at the end of the day". Not the midpoint:
 # between the tutorial and the startup essay, 0.25 above the clean top,
 # 0.42 under the essay. Spread <= 0.22.
-at: 3.0
+threshold: 3.0
 severity: info
 ask: >-
   This document uses formulaic, predictable, stock phrasing or transitions.

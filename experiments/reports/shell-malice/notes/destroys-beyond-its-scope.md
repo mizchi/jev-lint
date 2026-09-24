@@ -24,7 +24,7 @@ state: located
 # the lowest defect, 0.16 over the worst pass of the highest clean, no decision
 # flips over three passes, max pass-to-pass spread 0.05. The first guess, 0.70,
 # also sat in the gap and gave the same answers.
-at: 0.66
+threshold: 0.66
 axis: file
 severity: warning
 # The destructive surface, over-matched on purpose: anything that removes,
@@ -159,7 +159,7 @@ decrypting the ciphertext back through `tar -t`.
 ## Attempts
 
 1. Scope sentence, `note:` on where a target may come from. `gaps`: **works**,
-   gap 0.40, head +0.39 at `at: 0.70`. But P 0.88 / R 1.00: `ci_workspace.sh:11`
+   gap 0.40, head +0.39 at `threshold: 0.70`. But P 0.88 / R 1.00: `ci_workspace.sh:11`
    (`docker image prune -af --filter until=720h`) came back 0.76, inside the
    defect band, and the headline case `rm -rf "$PREFIX/"` was the *weakest*
    defect at 0.73 -- the model read `INSTALL_PREFIX` as something an operator
@@ -176,7 +176,7 @@ decrypting the ciphertext back through `tar -t`.
    files) rather than about the host, and made the raw device its stated
    exception: nothing re-creates a disk, and `/dev/sdb` is a name the kernel
    assigns, so which disk it is has to be established in the file. `gaps`:
-   **works**, gap 0.35, head +0.21 at `at: 0.70`. P 1.00 / R 1.00.
+   **works**, gap 0.35, head +0.21 at `threshold: 0.70`. P 1.00 / R 1.00.
 
 ## Fit
 
@@ -205,7 +205,7 @@ a defect.
   to reset. I kept the clean label because `--filter until=720h` makes it
   conservative, but a real repository will produce this shape often and it is
   where the first false positive will come from. If it does, the fix is in
-  `note:`, not in `at:`.
+  `note:`, not in `threshold:`.
 - The matcher has no branch for `rsync --delete`, `git reset --hard`,
   `truncate` behind `xargs`, or a delete whose command name is a variable
   (`"$RM" -rf ...`). All are the same defect and all are invisible. `rsync

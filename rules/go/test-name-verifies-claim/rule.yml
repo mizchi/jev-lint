@@ -14,7 +14,7 @@ state: bare
 # are non-nil -- the fitted midpoint 0.56 would take it with 0.07 of
 # headroom a side. 0.70 keeps 0.19 over the top clean and 0.16 under the
 # lowest found defect. Report: experiments/reports/j-go/REPORT.md.
-at: 0.70
+threshold: 0.70
 axis: file
 severity: warning
 rule:

@@ -1,0 +1,72 @@
+{
+  "schema": "jev-lint-run-1",
+  "recorded": "2026-09-24T03:26:51.974Z",
+  "model": "jev-1.13.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 2,
+    "inputTokens": 15756,
+    "outputTokens": 48,
+    "ms": 1499,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.000661752,
+    "wallMs": 769
+  },
+  "rules": [
+    {
+      "id": "module-name-describes-contents",
+      "kind": "noul",
+      "ask": "This module's name does not describe what the module contains.",
+      "note": "A module holding one cohesive group of items is not a mismatch merely for holding several of them, and a conventional entry-point name (index, mod, lib, main) is named by its directory rather than by itself.",
+      "draft": "b2cd5b5edc87",
+      "at": 0.65,
+      "state": "graph",
+      "subject": "file",
+      "severity": "info",
+      "language": "TypeScript",
+      "languageDir": "typescript"
+    },
+    {
+      "id": "module-naming-consistent",
+      "kind": "noul",
+      "ask": "This module's public items use different verbs for the same kind of operation.",
+      "note": "Judge the public items against each other. Private helpers, imports and call edges are evidence of what each public item does, not subjects. Different nouns are expected; the question is only whether the verbs disagree about the same operation.",
+      "draft": "3b93b6610647",
+      "at": 0.6,
+      "state": "graph",
+      "subject": "file",
+      "severity": "info",
+      "language": "TypeScript",
+      "languageDir": "typescript"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "module-name-describes-contents",
+      "ruleKey": "typescript/module-name-describes-contents",
+      "file": "examples/cf-game-audit/src/index.ts",
+      "line": 1,
+      "endLine": 9517,
+      "kind": "noul",
+      "value": 0.33,
+      "confidence": null,
+      "arm": "graph"
+    },
+    {
+      "rule": "module-naming-consistent",
+      "ruleKey": "typescript/module-naming-consistent",
+      "file": "examples/cf-game-audit/src/index.ts",
+      "line": 1,
+      "endLine": 9517,
+      "kind": "noul",
+      "value": 0.41,
+      "confidence": null,
+      "arm": "graph"
+    }
+  ]
+}

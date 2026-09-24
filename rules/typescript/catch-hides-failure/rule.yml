@@ -40,7 +40,7 @@ state: local
 # clean 0.04-0.32, no flips. Midpoint 0.55: 0.21 over the highest clean
 # pass (readSettings falling back to defaults on ENOENT, 0.34), 0.23 under
 # the lowest defect. See experiments/reports/l-recipes/REPORT.md.
-at: 0.55
+threshold: 0.55
 severity: warning
 rule:
   all:

@@ -1,0 +1,406 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-24T08:40:58.638Z",
+  "model": "jev-1.13.0",
+  "suite": "markdown/agent-instructions-conflict",
+  "rules": [
+    {
+      "id": "agent-instructions-conflict",
+      "draft": "afebbdea512c",
+      "at": 0.4
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/generated/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/generated/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/japanese/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/japanese/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/by-hand/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/by-hand/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/scoped/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/scoped/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/exception/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/exception/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/precedence/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/precedence/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/tests/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/tests/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/tests/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/tests/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/japanese/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/japanese/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/precedence/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/precedence/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/scoped/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/scoped/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/generated/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/generated/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/exception/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/exception/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/by-hand/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/by-hand/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/scoped/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/scoped/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/generated/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.54,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/generated/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/japanese/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/japanese/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/precedence/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/precedence/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/tests/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/tests/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/by-hand/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/by-hand/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/exception/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instructions-conflict",
+        "file": "rules/markdown/agent-instructions-conflict/fixtures/exception/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 21,
+    "inputTokens": 21921,
+    "usd": 0.000920682,
+    "ms": 643
+  }
+}

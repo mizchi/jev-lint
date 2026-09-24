@@ -71,13 +71,13 @@ state: located
 # unit case. Pass-to-pass spread over 3 passes: max 0.08 (`peek`), median
 # 0.02. `store` (mean 0.76, passes 0.74/0.77/0.78, the pre-existing
 # obsolete-parameter defect) is now the quietest LEGITIMATE defect -- the
-# new attempts did not beat it. `at: 0.63` is the midpoint of (0.51, 0.76),
+# new attempts did not beat it. `threshold: 0.63` is the midpoint of (0.51, 0.76),
 # not the old 0.54: headroom is 0.11 worst-pass on the defect side and 0.08
 # worst-pass on the clean side, versus 0.03 and -0.36 (`discard`) at the
-# old cutoff. `discard` sits at 0.90 regardless of where `at:` falls --
-# no cutoff below it recovers that case, and moving `at:` up to meet it
+# old cutoff. `discard` sits at 0.90 regardless of where `threshold:` falls --
+# no cutoff below it recovers that case, and moving `threshold:` up to meet it
 # would drop `store` on the wrong side instead.
-at: 0.63
+threshold: 0.63
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

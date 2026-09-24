@@ -14,7 +14,7 @@ Ships.
 | subjects | 30 (2 fixture files) |
 | defects | 11 |
 | cleans | 19, of which 12 are hard twins of a defect in the same file |
-| cutoff (`at:`) | **0.55** |
+| cutoff (`threshold:`) | **0.55** |
 | fitted midpoint | 0.53 – 0.55 depending on the run |
 | precision | 1.00 |
 | recall | 1.00 |

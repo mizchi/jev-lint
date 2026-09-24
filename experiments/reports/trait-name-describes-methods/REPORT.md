@@ -22,7 +22,7 @@ serialises: each is a claim a reader acts on and the methods contradict.
 | subjects | 10 | 11 |
 | defects | 4 | 5 |
 | cleans | 6, of which 5 hard | 6, of which 5 hard |
-| cutoff (`at:`) | **0.62** | **0.60** |
+| cutoff (`threshold:`) | **0.62** | **0.60** |
 | precision / recall | 1.00 / 1.00 | 1.00 / 1.00 |
 | clean band tops at | 0.44 | 0.46 |
 | defects start at | 0.81 | 0.75 |

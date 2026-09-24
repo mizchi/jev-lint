@@ -25,7 +25,7 @@ Spec: `docs/internal/superpowers/specs/2026-09-20-rules-by-language-design.md`.
 - [x] **Step 2: Run** `npm test rules:` → fails.
 - [x] **Step 3: Implement.** In `types.ts`: `LANGUAGE_DIRS: Record<string, Language[]> = { typescript: [TypeScript, Tsx, JavaScript, Jsx], javascript: [JavaScript, Jsx], rust: [Rust], python: [Python], go: [Go], git: [] }` plus a fallback `normalizeLanguage(dirName)` for any other name; `TIER_ONE = ["typescript", "rust"]`. In `rules.ts`: `loadRules` returns `{ rules, errors, warnings }`; when a file path ends `/<lang>/<id>/rule.yml` and `<lang>` is a known dir, set `languageDir`, require the document's `id` to equal `<id>`, and reject grammars outside the dir. Duplicate key is `${languageDir ?? ""}/${id}`. After loading, group by id across dirs and push a warning per id whose `ask`/`criteria`/`note`/`explain` differ (compare canonical JSON). `cutoffFor`: `overrides[`${rule.languageDir}/${rule.id}`] ?? overrides[rule.id] ?? rule.at ?? default`.
 - [x] **Step 4: Run** `npm test` → green (existing callers of `loadRules` ignore `warnings`).
-- [x] **Step 5:** `jev-lint rules` prints warnings; `--at` parsing accepts `lang/id=n`. Commit: `Loader: language directories, (lang, id) identity, drift warnings`.
+- [x] **Step 5:** `jev-lint rules` prints warnings; `--threshold` parsing accepts `lang/id=n`. Commit: `Loader: language directories, (lang, id) identity, drift warnings`.
 
 ### Task 2: Evals discover `expect.yml`
 
@@ -64,7 +64,7 @@ Spec: `docs/internal/superpowers/specs/2026-09-20-rules-by-language-design.md`.
 
 > Done: Python 11 of 12 shipped, Go 9 of 13; the rest are candidates with reports. Shipped rules are second tier (calibrated, not promised).
 
-- [x] Dispatch two subagents with `experiments/BRIEF.md`, each producing `experiments/rule-candidates/<python|go>/<id>/` for the transferable families listed in spec §Phase 2, with fixtures, `expect.yml`, calibrated `at:`, baseline, and a report under `experiments/reports/i-python/` and `experiments/reports/j-go/`. Budget $1.00 per language. Node kinds per spec.
+- [x] Dispatch two subagents with `experiments/BRIEF.md`, each producing `experiments/rule-candidates/<python|go>/<id>/` for the transferable families listed in spec §Phase 2, with fixtures, `expect.yml`, calibrated `threshold:`, baseline, and a report under `experiments/reports/i-python/` and `experiments/reports/j-go/`. Budget $1.00 per language. Node kinds per spec.
 - [x] Integrate: `git mv` each SHIP/COOKBOOK candidate to `rules/<lang>/<id>/`; `eval --replay` green; docs list them as tier two. Commit per language.
 
 ## Phase 3 — commits
@@ -91,7 +91,7 @@ Spec: `docs/internal/superpowers/specs/2026-09-20-rules-by-language-design.md`.
 
 ### Task 10: The rule and its corpus
 
-> Done with one change: fixtures are `fixtures/<case>/{message, before/, after/}`, not `.patch` files (see the spec's Phase 3 note). The corpus is sixteen cases, `at: 0.65`.
+> Done with one change: fixtures are `fixtures/<case>/{message, before/, after/}`, not `.patch` files (see the spec's Phase 3 note). The corpus is sixteen cases, `threshold: 0.65`.
 
 - [x] `rules/git/commit-message-describes-diff/rule.yml` per spec; `fixtures/*.patch` (≥ 8: message claims a fix, diff adds a feature; "no behaviour change" over a changed default; "remove X" that leaves X; a rename described as a rewrite; hard cleans: terse subject over a large but faithful diff, an "also" body, a mechanical rename, a revert), `expect.yml` at line 1 per patch, `eval` runs commits by feeding each `.patch` through `git am` into a temp repo — implement `evalCorpus` support: when a suite's rule is `subject: commit`, the runner builds a temp repo from the fixtures in order and judges `HEAD~N..HEAD`. Calibrate with `eval --repeat 3 --accept`. Commit.
 

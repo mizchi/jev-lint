@@ -21,7 +21,7 @@ severity: warning
 # other than it), then 0.13; defects start at 0.71 (`has` returning a
 # string, the weakest) and the rest answer 0.89-0.93. Midpoint, 0.25 on
 # the clean side and 0.21 on the defect side, no flips.
-at: 0.50
+threshold: 0.50
 languages: [TypeScript, Tsx]
 # A method of a class, with the class's name captured beside its own. A
 # constructor has no name to judge; a method of an object literal or of an

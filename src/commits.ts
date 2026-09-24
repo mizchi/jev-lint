@@ -214,16 +214,10 @@ export function commitSubjects(
  * runs before a message exists. `SUBJECT` is the stat's summary line, which
  * is what a rule refers to when it needs the size of the change.
  *
- * Building this costs two more `git show` per commit than a commit rule
- * alone pays (`readInstructions` reads `AGENTS.md` and `CLAUDE.md` each):
- * measured at 775ms for a commit rule over 21 commits of this repository's
- * own history, 1290ms with a change rule loaded beside it. Not cached --
- * a memo keyed on the sha can never hit (each sha is read once, ever), and
- * one keyed on the blob needs a `git show` of its own to learn the blob id
- * before it could even ask whether it has that blob, which is the cost
- * being avoided. Against real model calls this is noise; if it ever is not,
- * the fix is one `git cat-file --batch` for every sha in the range instead
- * of two per sha, not a cache.
+ * `readInstructions` looks up `AGENTS.md`, then `CLAUDE.md` only when the
+ * first document is missing or unusable. The change subject reads these
+ * from the same tree as the diff. A memo keyed on the sha cannot help here:
+ * each sha is read once in the range.
  */
 function changeSubject(rule: Rule, file: string, diff: CommitDiff, instructions: Instructions): Subject {
   const summary = diff.stat.trim().split("\n").pop() ?? "";

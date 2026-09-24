@@ -45,7 +45,7 @@ Verdicts at a glance:
 | tests-cover-failure-paths | 0.40 | 1.00 / 1.00 (5/0/0) | 0 | 0.22 / 0.11 | SHIP |
 
 Headroom is measured on the accepted run's means (single-pass extremes are
-in each section). tp/fp/fn are at the fitted `at`.
+in each section). tp/fp/fn are at the fitted `threshold`.
 
 ---
 ## fn-name-promises
@@ -66,7 +66,7 @@ state: located
 # widest spread in the corpus) then 0.60 (`Summarize`); the other seven sit at
 # 0.76-0.95. Set under the midpoint so Drain's lowest pass keeps 0.10 and the
 # top clean keeps 0.14. Report: experiments/reports/j-go/REPORT.md.
-at: 0.40
+threshold: 0.40
 axis: file
 severity: warning
 rule:
@@ -184,7 +184,7 @@ state: located
 # would take `host` with 0.07 of headroom a side; 0.50 sits in the wide gap
 # instead, 0.36 over the top clean and 0.21 under the lowest found defect.
 # Report: experiments/reports/j-go/REPORT.md.
-at: 0.50
+threshold: 0.50
 axis: file
 severity: warning
 rule:
@@ -342,7 +342,7 @@ state: located
 # list.Back) at 0.22 -- the second needs container/list knowledge, which
 # the model is measured to lack. 0.40 keeps 0.19 over the top clean and
 # 0.06 under New's lowest pass; a cookbook cutoff, not a shipped one. Report: experiments/reports/j-go/REPORT.md.
-at: 0.40
+threshold: 0.40
 axis: file
 severity: warning
 rule:
@@ -474,7 +474,7 @@ state: bare
 # order. 0.50 keeps 0.05-0.16 over the ordinary cleans and 0.06 under the
 # lowest defect pass; a cookbook cutoff, not a shipped one.
 # Report: experiments/reports/j-go/REPORT.md.
-at: 0.50
+threshold: 0.50
 severity: info
 utils:
   statement:
@@ -653,7 +653,7 @@ state: bare
 # gap: 0.10 over the top clean and 0.11 under the lowest defect on means,
 # but 0.02 over the synonym's highest single pass -- a cookbook cutoff until
 # a corpus with more synonym titles says where that class really sits. Report: experiments/reports/j-go/REPORT.md.
-at: 0.78
+threshold: 0.78
 axis: file
 severity: warning
 rule:
@@ -808,7 +808,7 @@ state: bare
 # are non-nil -- the fitted midpoint 0.56 would take it with 0.07 of
 # headroom a side. 0.70 keeps 0.19 over the top clean and 0.16 under the
 # lowest found defect. Report: experiments/reports/j-go/REPORT.md.
-at: 0.70
+threshold: 0.70
 axis: file
 severity: warning
 rule:
@@ -949,7 +949,7 @@ state: graph
 # its directory. The outline lists Go functions and methods but not type
 # declarations (the probe has no name field for them), so a file of types
 # shows only its methods. Report: experiments/reports/j-go/REPORT.md.
-at: 0.60
+threshold: 0.60
 axis: file
 severity: info
 rule:
@@ -1055,7 +1055,7 @@ state: located
 # on a duplicate pattern -- API knowledge, and the weakest answer for it.
 # Midpoint of the 0.26-0.59 gap: 0.16 over the top clean, 0.13 under the
 # lowest defect pass. Report: experiments/reports/j-go/REPORT.md.
-at: 0.42
+threshold: 0.42
 axis: file
 rule:
   all:
@@ -1162,7 +1162,7 @@ state: local
 # loader and the parameter-named-env cleans were added the top clean was
 # 0.06; they are what the cutoff is measured against. Report:
 # experiments/reports/j-go/REPORT.md.
-at: 0.60
+threshold: 0.60
 rule:
   all:
     - any:
@@ -1283,7 +1283,7 @@ state: local
 # and 0.11 under the lowest defect on single passes. Without the note's
 # last sentence the two error-returning cleans sat at 0.63 and 0.49, inside
 # the defect band. Report: experiments/reports/j-go/REPORT.md.
-at: 0.43
+threshold: 0.43
 rule:
   all:
     - any:
@@ -1415,7 +1415,7 @@ state: local
 # from 0.18 to 0.09, so the sentence went back to its first form. 0.75 keeps
 # 0.18 over the top clean and 0.18 under the lowest found defect. Report:
 # experiments/reports/j-go/REPORT.md.
-at: 0.75
+threshold: 0.75
 axis: file
 rule:
   all:
@@ -1535,7 +1535,7 @@ state: local
 # 0.16 gap: 0.10 over the top clean and 0.09 under the lowest defect on
 # means, 0.08 a side on single passes. A cookbook cutoff until the fatal
 # class has more cases. Report: experiments/reports/j-go/REPORT.md.
-at: 0.66
+threshold: 0.66
 # Not a `pattern:`: in the Go grammar `$LOGGER.$LEVEL($MSG)` parses as a
 # type conversion (`pkg.Type(x)`), so the one-argument pattern matches no
 # call at all. The kind-based form matches any arity.
@@ -1668,7 +1668,7 @@ state: paired
 # cart.rs, split the excerpt budget three ways and cut the Go test file
 # to 2665 characters, which lost `TestLine` and flagged `Line` at 0.83.
 # Report: experiments/reports/j-go/REPORT.md.
-at: 0.40
+threshold: 0.40
 rule:
   all:
     - any:

@@ -15,9 +15,9 @@
  * supported form: it names the variable to read, which is a secret's location
  * rather than the secret.
  *
- * **It never carries a cutoff it has not been told is a cutoff.** `at` lives
- * under one `rules:` entry and is validated as a number; the old top-level
- * `at:` is an error. Accepting anything that parses would turn a typo into a
+ * **It never carries a cutoff it has not been told is a cutoff.** `threshold`
+ * lives under one `rules:` entry and is validated as a number; a top-level
+ * `threshold:` is an error. Accepting anything that parses would turn a typo into a
  * silently different threshold.
  */
 import { existsSync, readFileSync } from "node:fs";
@@ -51,6 +51,12 @@ export interface RuleSetting {
   loose?: number;
 }
 
+/** Rule selection for commands that inspect the staged pre-commit change. */
+export interface HookRuleSelection {
+  extends: boolean;
+  rules: Record<string, RuleSetting>;
+}
+
 /** Everything a config file may set. Every field is optional. */
 export interface Config {
   /** What `check` looks at with no positional. */
@@ -63,6 +69,7 @@ export interface Config {
    * nothing and says so.
    */
   rules?: Record<string, RuleSetting>;
+  hooks?: { precommit?: HookRuleSelection };
   cache?: string | null;
   model?: string;
   baseUrl?: string;
@@ -87,6 +94,7 @@ export interface LoadedConfig {
   path: string | null;
   /** Everything wrong with it. A config that does not parse is not obeyed. */
   errors: string[];
+  warnings: string[];
 }
 
 /** Walk up from `from` until a config file turns up, or the root does. */
@@ -115,33 +123,34 @@ export function findConfig(from: string = process.cwd()): string | null {
  * unrelated key is worse -- but the bad field is reported, not dropped.
  */
 export function loadConfig(path: string | null): LoadedConfig {
-  if (!path) return { config: {}, path: null, errors: [] };
+  if (!path) return { config: {}, path: null, errors: [], warnings: [] };
 
   let raw: unknown;
   try {
     raw = YAML.parse(readFileSync(path, "utf8"));
   } catch (err: unknown) {
-    return { config: {}, path, errors: [`${path}: ${String(err).slice(0, 200)}`] };
+    return { config: {}, path, errors: [`${path}: ${String(err).slice(0, 200)}`], warnings: [] };
   }
-  if (raw === null || raw === undefined) return { config: {}, path, errors: [] };
+  if (raw === null || raw === undefined) return { config: {}, path, errors: [], warnings: [] };
   if (typeof raw !== "object" || Array.isArray(raw)) {
-    return { config: {}, path, errors: [`${path}: not a mapping`] };
+    return { config: {}, path, errors: [`${path}: not a mapping`], warnings: [] };
   }
 
   const errors: string[] = [];
+  const warnings: string[] = [];
   const config: Config = {};
   const where = (k: string) => `${path}: \`${k}\``;
   const src = raw as Record<string, unknown>;
 
   const KNOWN = new Set([
-    "files", "exclude", "rules", "languages", "cache", "model", "baseUrl", "apiKeyEnv", "group", "arm",
+    "files", "exclude", "rules", "hooks", "languages", "cache", "model", "baseUrl", "apiKeyEnv", "group", "arm",
     "concurrency", "batchSize", "ruleBatchCap", "retry", "unsureBelow",
   ]);
   // The 0.4 spellings, refused by name: a key read as nothing would run
   // every rule over the whole tree and say nothing about it.
   const MOVED: Record<string, string> = {
     paths: "`paths` is `files` since 0.5",
-    at: "`at` moved under `rules` since 0.5: `rules: { <id>: { at: 0.7 } }`",
+    at: "top-level `at` is obsolete; use `rules: { <id>: { threshold: 0.7 } }`",
   };
   for (const k of Object.keys(src)) {
     if (k in MOVED) {
@@ -173,20 +182,54 @@ export function loadConfig(path: string | null): LoadedConfig {
   stringList("files");
   stringList("exclude");
 
-  if (src.rules !== undefined && !Array.isArray(src.rules) && typeof src.rules !== "string") {
-    if (typeof src.rules !== "object" || src.rules === null) {
-      errors.push(`${where("rules")} must be a mapping of rule id to on, off, a severity, or { severity, at, loose }`);
-    } else {
-      const rules: Record<string, RuleSetting> = {};
-      for (const [id, v] of Object.entries(src.rules as Record<string, unknown>)) {
-        const setting = ruleSetting(v);
-        if (typeof setting === "string") {
-          errors.push(`${path}: \`rules.${id}\` ${setting}`);
-          continue;
-        }
+  const parseRuleMap = (value: unknown, key: string): Record<string, RuleSetting> | null => {
+    if (typeof value !== "object" || value === null || Array.isArray(value)) {
+      errors.push(`${where(key)} must be a mapping of rule id to on, off, a severity, or { severity, threshold, loose }`);
+      return null;
+    }
+    const rules: Record<string, RuleSetting> = {};
+    for (const [id, v] of Object.entries(value as Record<string, unknown>)) {
+      const setting = ruleSetting(v);
+      if (typeof setting === "string") errors.push(`${where(`${key}.${id}`)} ${setting}`);
+      else {
         rules[id] = setting;
+        if (v && typeof v === "object" && !Array.isArray(v) && "at" in v) {
+          warnings.push(`${where(`${key}.${id}`)}: \`at\` is deprecated; use \`threshold\``);
+        }
       }
-      config.rules = rules;
+    }
+    return rules;
+  };
+  if (src.rules !== undefined && !Array.isArray(src.rules) && typeof src.rules !== "string") {
+    const rules = parseRuleMap(src.rules, "rules");
+    if (rules) config.rules = rules;
+  }
+
+  if (src.hooks !== undefined) {
+    if (typeof src.hooks !== "object" || src.hooks === null || Array.isArray(src.hooks)) {
+      errors.push(`${where("hooks")} must be a mapping of hook names`);
+    } else {
+      const hooks = src.hooks as Record<string, unknown>;
+      for (const key of Object.keys(hooks)) {
+        if (key !== "precommit") errors.push(`${where(`hooks.${key}`)} is not a known hook`);
+      }
+      if (hooks.precommit !== undefined) {
+        const key = "hooks.precommit";
+        const value = hooks.precommit;
+        if (typeof value !== "object" || value === null || Array.isArray(value)) {
+          errors.push(`${where(key)} must be a mapping of extends and rules`);
+        } else {
+          const precommit = value as Record<string, unknown>;
+          for (const field of Object.keys(precommit)) {
+            if (field !== "extends" && field !== "rules") errors.push(`${where(`${key}.${field}`)} is not a known setting`);
+          }
+          if (typeof precommit.extends !== "boolean") errors.push(`${where(`${key}.extends`)} must be true or false`);
+          const rules = parseRuleMap(precommit.rules, `${key}.rules`);
+          if (typeof precommit.extends === "boolean" && rules) {
+            config.hooks = { precommit: { extends: precommit.extends, rules } };
+          }
+        }
+      }
     }
   }
 
@@ -265,7 +308,16 @@ export function loadConfig(path: string | null): LoadedConfig {
     }
   }
 
-  return { config, path, errors };
+  return { config, path, errors, warnings };
+}
+
+/** Resolve the staged rule set without changing the ordinary configuration. */
+export function precommitRules(config: Config): Record<string, RuleSetting> | null {
+  const selection = config.hooks?.precommit;
+  if (!selection) return config.rules ?? null;
+  return selection.extends
+    ? { ...(config.rules ?? {}), ...selection.rules }
+    : { ...selection.rules };
 }
 
 /**
@@ -302,22 +354,24 @@ function ruleSetting(v: unknown): RuleSetting | string {
   if (v === false || v === "off") return { enabled: false };
   if (typeof v === "string" && (SEVERITIES as readonly string[]).includes(v)) return { enabled: true, severity: v as Severity };
   if (typeof v !== "object" || v === null || Array.isArray(v)) {
-    return `must be on, off, one of ${SEVERITIES.join(", ")}, or a mapping of severity / at / loose`;
+    return `must be on, off, one of ${SEVERITIES.join(", ")}, or a mapping of severity / threshold / loose`;
   }
   const o = v as Record<string, unknown>;
+  if ("at" in o && "threshold" in o) return "cannot set both `at` and `threshold`; use `threshold`";
   const out: RuleSetting = { enabled: true };
   for (const k of Object.keys(o)) {
     if (k === "severity") {
       if (typeof o.severity !== "string" || !(SEVERITIES as readonly string[]).includes(o.severity)) return `\`severity\` must be one of ${SEVERITIES.join(", ")}`;
       out.severity = o.severity as Severity;
-    } else if (k === "at" || k === "loose") {
-      if (typeof o[k] !== "number" || Number.isNaN(o[k])) return `\`${k}\` must be a number`;
-      out[k] = o[k] as number;
+    } else if (k === "at" || k === "threshold" || k === "loose") {
+      if (typeof o[k] !== "number" || !Number.isFinite(o[k])) return `\`${k}\` must be a number (finite)`;
+      if (k === "loose") out.loose = o[k] as number;
+      else out.at = o[k] as number;
     } else if (k === "enabled") {
       if (typeof o.enabled !== "boolean") return "`enabled` must be true or false";
       out.enabled = o.enabled;
     } else {
-      return `has an unknown field \`${k}\`; the fields are severity, at, loose`;
+      return `has an unknown field \`${k}\`; the fields are severity, threshold, loose`;
     }
   }
   return out;
@@ -340,7 +394,7 @@ files: [src]
 # exclude: [src/fixtures, '**/*.gen.ts']   # paths, or globs
 
 # The rules that run: \`on\`, \`off\`, a severity (hint, info, warning, error),
-# or a mapping -- \`{ severity: error, at: 0.7 }\`. Write \`lang/id\` to
+# or a mapping -- \`{ severity: error, threshold: 0.7 }\`. Write \`lang/id\` to
 # select one language's rule. A bare shipped id selects every language that
 # has it and warns. Every shipped rule is listed here, on; remove or turn off the
 # ones you do not want. Their cutoffs were fitted to this package's corpus,
@@ -352,6 +406,18 @@ files: [src]
 # like any other.
 rules:
 ${ruleKeys.map((key) => `  ${key}: on`).join("\n")}
+
+# The rule selection for both \`review --staged\` and \`commits --staged\`.
+# Without this section they use \`rules:\` above. \`extends: true\` copies
+# those entries, then overrides matching ids with the entries here;
+# \`extends: false\` selects only the entries here. A commit-message rule
+# has no subject before the commit exists, so it runs on pre-push instead.
+# hooks:
+#   precommit:
+#     extends: true
+#     rules:
+#       git/diff-follows-instructions: on
+#       git/my-snapshot-change-rule: on  # define under .jev-lint/rules/git/
 
 # A grammar ast-grep does not have built in: a tree-sitter parser compiled to
 # a dynamic library (\`tree-sitter build --output moonbit.dylib\`), named here

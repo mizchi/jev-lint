@@ -25,7 +25,7 @@ state: local
 # The midpoint of the gap: 0.17 of headroom each side on the means, 0.10
 # clean / 0.14 defect on the worst pass, no flips. Report:
 # experiments/reports/o-log-message/REPORT.md.
-at: 0.62
+threshold: 0.62
 rule:
   any:
     - pattern: $LOGGER.$LEVEL($MESSAGE, $$$REST)

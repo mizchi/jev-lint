@@ -73,7 +73,7 @@ function, so give it the distance to the statement you labelled.
 
 1. Write `rule.yml` (cookbook shape). Over-match in the matcher; capture what
    the sentence compares; criteria in terms of what the code shows; `note:`
-   for exceptions; `at: 0.7  # uncalibrated`.
+   for exceptions; `threshold: 0.7  # uncalibrated`.
 2. `rules -R <dir> --no-config` -> loads, 0 errors.
 3. `check <dir>/fixtures -R <dir>/rule.yml --no-config --cache none
    --dry-run --show-subjects` -> every intended subject found, captures
@@ -83,8 +83,8 @@ function, so give it the distance to the statement you labelled.
    to the thesaurus. Up to 3 attempts at the sentence per rule; record each
    attempt's gap in the report.
 5. `eval <dir> --repeat 3 --no-config --cache none` -> precision, recall and
-   flips at the rule's `at:`, the fitted cutoff beside them. Write the fitted
-   `at:` into rule.yml, remove `# uncalibrated`, and `eval <dir> --repeat 3
+   flips at the rule's `threshold:`, the fitted cutoff beside them. Write the fitted
+   `threshold:` into rule.yml, remove `# uncalibrated`, and `eval <dir> --repeat 3
    --accept --no-config --cache none` to take the baseline.
 
    `--cache none` on the `--accept` run too, and then look inside

@@ -11,7 +11,7 @@ state: local
 # try) and 0.82 (`port_or_default`, an int() outside any try), the rest
 # 0.90-0.95. Midpoint of the gap, 0.12 of headroom on each side, no
 # decision flips, max spread 0.10 (the try_lock clean).
-at: 0.59
+threshold: 0.59
 axis: file
 rule:
   all:

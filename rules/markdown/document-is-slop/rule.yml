@@ -34,7 +34,7 @@ state: bare
 #
 # Boundary hunt, 2026-09-22 (19 documents: 9 defects, 10 cleans incl. 2
 # hard, 3 passes, `eval --repeat 3 --accept`; scored against the old
-# at:2.0, FN-margin was -0.08 and FP-margin 0.39 -- not blind by the
+# threshold:2.0, FN-margin was -0.08 and FP-margin 0.39 -- not blind by the
 # threshold, since a negative FN-margin means an outright miss, but R had
 # dropped to 0.90). Six candidates aimed at the empty 0.34-3.02 band,
 # spread across it and across English and Japanese: two "throat-clearing
@@ -50,7 +50,7 @@ state: bare
 # intro/conclusion, 3 of 7 items carrying a real number and 4 pure
 # platitude -- answered 1.69 [1.67 1.68 1.73], labelled bad (half the
 # document, by item count and by structure, is exactly the
-# thin/generic/formulaic shape the rubric names) but under the old at:2.0,
+# thin/generic/formulaic shape the rubric names) but under the old threshold:2.0,
 # a real miss (R 0.90). Refit to 1.1: the midpoint of the clean top (0.44)
 # and this quietest labelled defect (1.69) is 1.07; a genuinely mixed,
 # half-grounded listicle is what "mixed" was supposed to catch, and the
@@ -58,7 +58,7 @@ state: bare
 # midpoint was a guess made with no mid-band evidence to test it against --
 # this is that evidence, and it disagrees. Re-accepted at the new cutoff:
 # FN-margin 0.15, FP-margin 0.17, P 1.00, R 1.00, no longer blind.
-at: 1.1
+threshold: 1.1
 severity: info
 ask: >-
   Overall, this document reads as low-value: thin, generic, padded, repetitive, formulaic, or superficially polished.

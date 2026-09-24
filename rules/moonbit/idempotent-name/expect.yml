@@ -11,7 +11,7 @@ fixtures/registry.mbt:
   - line: 74
     label: clean
     window: 0
-    reason: "boundary clean: `register_boot` increments `metrics.boots` -- the same effect `setup_metrics` below performs unconditionally -- but does it behind `not(plugins.contains(name))`, keyed on the same field the keyed write below it also uses; a second call with the same name finds the membership check already true and skips the increment. The correct twin of `ensure_metric_slot` and `register_login`, both added the same day: the guard exists AND checks the collection the effect actually depends on. Answered 0.54, 0.71, 0.56 across the accepted three passes -- decided correctly on the mean (0.60) but not settled, since the 0.71 pass alone crosses the fitted 0.67; see the `at:` comment."
+    reason: "boundary clean: `register_boot` increments `metrics.boots` -- the same effect `setup_metrics` below performs unconditionally -- but does it behind `not(plugins.contains(name))`, keyed on the same field the keyed write below it also uses; a second call with the same name finds the membership check already true and skips the increment. The correct twin of `ensure_metric_slot` and `register_login`, both added the same day: the guard exists AND checks the collection the effect actually depends on. Answered 0.54, 0.71, 0.56 across the accepted three passes -- decided correctly on the mean (0.60) but not settled, since the 0.71 pass alone crosses the fitted 0.67; see the `threshold:` comment."
   - line: 82
     label: bad
     window: 0

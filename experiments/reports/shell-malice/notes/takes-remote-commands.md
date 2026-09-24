@@ -25,7 +25,7 @@ state: located
 # above, no decision flips over three passes, max pass-to-pass spread 0.04. The
 # first guess, 0.70, gave the same decisions -- the gap is wide enough that any
 # cutoff in it does.
-at: 0.50
+threshold: 0.50
 axis: file
 severity: warning
 # Five places a shell meets a socket, over-matched on purpose: the tools that
@@ -164,7 +164,7 @@ file the state carries whole. That last one is the corpus's real cutoff-setter.
 
 ## Attempts
 
-1. **`subject: node`, `state: located`, sentence as shipped, `at: 0.7`** --
+1. **`subject: node`, `state: located`, sentence as shipped, `threshold: 0.7`** --
    `gaps`: **works**, gap **0.58**, head **+0.48**, suggest 0.51. Separated on
    the first sentence; no rewrite was needed.
 2. **Same sentence, one corpus correction.** The first `eval` put

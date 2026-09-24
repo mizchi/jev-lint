@@ -11,7 +11,7 @@ state: located
 # table, os.mkdir without exist_ok, CREATE TABLE without IF NOT EXISTS, two
 # appends, and logging's addHandler on every call). Midpoint of the gap,
 # 0.20 of headroom on each side, no decision flips, max spread 0.06.
-at: 0.68
+threshold: 0.68
 axis: file
 rule:
   all:

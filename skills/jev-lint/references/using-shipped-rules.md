@@ -1,13 +1,13 @@
 # Using the shipped rules
 
-jev-lint ships 65 rules in the npm package's `rules/` directory, one
+jev-lint ships rules in the npm package's `rules/` directory, one
 directory per rule under its language (`rules/typescript/<id>/`,
 `rules/rust/<id>/`, …) with `rule.yml`, the `fixtures/` that prove it and
 `expect.yml`.
 They are the rules to start from: each one has a cutoff fitted to a labelled
 corpus, a `state` arm chosen by measurement, and a `criteria` block that took
 several rounds to get right. Write your own only for a convention they do not
-cover — see [cookbook.md](cookbook.md).
+cover — see [writing-project-rules.md](writing-project-rules.md).
 
 ## What ships
 
@@ -101,9 +101,7 @@ So the zero-configuration path is: install nothing, run `npx -y jev-lint
 check src`, get the packs. The configured path is `jev-lint init`, which
 writes `files:` and every shipped rule on, to prune.
 
-## Three ways to adopt them
-
-### 1. Use them as they are
+## Use them as they are
 
 ```bash
 npx -y jev-lint check src --dry-run     # count and price first
@@ -113,14 +111,14 @@ npx -y jev-lint check src
 Adjust a cutoff without touching the pack, per run or in the config:
 
 ```bash
-jev-lint check src --at typescript/var-name-describes-value=0.7 --at typescript/fn-name-promises=0.8
+jev-lint check src --threshold typescript/var-name-describes-value=0.7 --threshold typescript/fn-name-promises=0.8
 ```
 
 ```yaml
 # .jev-lint.yaml
 rules:
-  typescript/var-name-describes-value: { at: 0.7 }
-  typescript/fn-name-promises: { at: 0.8, severity: error }
+  typescript/var-name-describes-value: { threshold: 0.7 }
+  typescript/fn-name-promises: { threshold: 0.8, severity: error }
   rust/fn-name-promises: off
 ```
 
@@ -131,84 +129,20 @@ code's clean band goes higher. `var-name-describes-value` and
 `module-name-describes-contents` are the two with the least headroom and the
 first to refit.
 
-### 2. Extend one
-
-A rule that `extends` a shipped one is that rule with the fields its own
-file gives laid over it. It keeps the upstream matcher, criteria and note,
-and keeps getting their fixes:
-
-```yaml
-# .jev-lint/rules/typescript/acme-test-name/rule.yml
-id: acme-test-name
-extends: typescript/test-name-verifies-claim
-note: { append: A screenshot comparison is the assertion of a visual test. }
-context: [../../../../docs/testing.md]   # read beside the code, in the state
-at: 0.7   # uncalibrated -- the base's cutoff was fitted to the base's question
-```
-
-Turn the shipped one off in `rules:` and yours on. A change to what is
-asked -- `note`, `criteria`, `state`, `context` -- is a new question, so
-fit its `at` as for any rule of your own ([calibration.md](calibration.md));
-the loader warns while it still carries the base's.
-
-### 2b. Copy one and edit
-
-When the base's matcher or sentence is not the one you want at all,
-copy it instead:
-
-```bash
-mkdir -p .jev-lint/rules/typescript
-cp -R node_modules/jev-lint/rules/typescript/fn-name-promises .jev-lint/rules/typescript/acme-fn-name-promises
-```
-
-Give the copy its own id (`acme-...`; a copy with the shipped id is a
-duplicate and the loader says so), turn the shipped one off in `rules:`
-and the copy on, then rewrite `criteria:` for your domain and add `note:`
-with your exceptions. Two things to know before editing:
-
-- **Editing `ask`, `criteria`, `note`, `rule`, `subject` or `state`
-  invalidates that rule's cached verdicts** — it is a new question. Editing
-  `at` or `severity` invalidates nothing. Recalibration is free by design.
-- **A rule in two languages is two files with one id** (`rules/typescript/<id>`,
-  `rules/rust/<id>`). The sentence is a copy; the loader warns when the copies
-  drift, so edit both, or declare in `divergent:` why one of them has to say
-  something else.
-
-Dropping a language variant is a deletion, not a `languages:` edit: the Rust
-rule names Rust node kinds, and ast-grep rejects a kind absent from the target
-grammar — one rejected rule fails the whole scan.
-
-### 3. Add your own beside them
-
-A rule file under `.jev-lint/rules/` -- flat, or `<language>/<id>/rule.yml`
-with fixtures beside it -- loads with the packs, and is named in `rules:`
-like any of them:
-
-```yaml
-# .jev-lint.yaml
-rules:
-  typescript/fn-name-promises: on
-  acme-endpoint-names-resource: warning     # .jev-lint/rules/acme-endpoint-names-resource.yml
-```
-
-Use `language/id` for namespaced rules. A bare shipped id still selects all
-of its language variants, but emits a config warning. Flat project rules have
-no language namespace and do not warn.
-
-Ids must be unique across every source; a duplicate is a validation error
-naming both files. Prefix your own (`acme-...`) to make the split visible in
-reports. For one run over a directory of rules and nothing else: `-R <dir>`.
+To extend, copy, or add a rule in a particular repository, follow
+[writing-project-rules.md](writing-project-rules.md). Keep the project's rule
+under `.jev-lint/rules/` and fit a new cutoff when the question changes.
 
 ## Picking a subset
 
-There is no per-rule enable flag. Pick directories:
+For a one-off run that bypasses the config's selection, pick rule directories:
 
 ```bash
-jev-lint check src -R node_modules/jev-lint/rules/fn-name-promises -R node_modules/jev-lint/rules/test-name-verifies-claim
+jev-lint check src -R node_modules/jev-lint/rules/typescript/fn-name-promises -R node_modules/jev-lint/rules/typescript/test-name-verifies-claim --no-config
 ```
 
-or copy (way 2) and delete. To silence a rule in one file without changing
-the rules, use a suppression comment:
+For regular runs, select ids in `.jev-lint.yaml`. To silence a rule in one
+file without changing the rules, use a suppression comment:
 
 ```ts
 // jev-lint-ignore-file comment-describes-block
@@ -216,8 +150,9 @@ the rules, use a suppression comment:
 
 ## What the shipped cutoffs are worth
 
-Fitted on each rule's own fixtures (`rules/<lang>/<id>/`, 467 labelled defects
-across the 65 rules, three passes each). 56 of the 65 reach precision and
+In the earlier 65-rule corpus, the rules were fitted on their own fixtures
+(`rules/<lang>/<id>/`, 467 labelled defects, three passes each). 56 of the 65
+reached precision and
 recall 1.00 at their shipped cutoffs; the seven that do not each miss one
 labelled defect the rule file names — a binding holding one branch of a
 union result, a Rust field taken under another field's name, an inline

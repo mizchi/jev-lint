@@ -30,7 +30,7 @@ state: bare
 # 40 subjects in five wasmtime files answered 0.51 at most (a comment naming
 # QEMU above an `if` that tests another variable -- a fair candidate) and
 # 0.41 next.
-at: 0.45
+threshold: 0.45
 severity: info
 # A statement or a block's tail expression that follows a comment, as a
 # direct child of the block (ast-grep needs a positive kind, so the tail

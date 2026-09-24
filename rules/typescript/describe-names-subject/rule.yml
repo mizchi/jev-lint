@@ -30,7 +30,7 @@ state: bare
 # since a clean case's corpus answer is an upper bound on its real-code
 # answer only in the other direction. One sentence attempt; `gaps` said
 # `works` on the first and the widened corpus.
-at: 0.45
+threshold: 0.45
 axis: file
 severity: warning
 # One suite call in any of the frameworks src/testcalls.ts knows --

@@ -7,7 +7,7 @@ in `rules/test-name-describes-code/`. Shares `cart.test.ts` and
 `store_test.rs` with `test-name-verifies-claim` as separate copies, and now
 also `inventory.test.ts` and `ledger_test.rs`; the copies are byte-identical.
 
-**Start** (3 passes, shipped `at: 0.95` / `0.93`):
+**Start** (3 passes, shipped `threshold: 0.95` / `0.93`):
 
 | rule | P | R | defects | cleans | clean top | defect floor | flips |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -18,7 +18,7 @@ The one false positive per variant was `cart.test.ts:32` / `store_test.rs:24`
 ("returns items sorted by price" over `expect(items.length).toBe(2)`), the
 case the rule's comments call an inversion.
 
-**End** (3 passes, `at: 0.72` / `0.70`, baseline accepted, replay passes):
+**End** (3 passes, `threshold: 0.72` / `0.70`, baseline accepted, replay passes):
 
 | rule | P | R | defects | cleans (hard) | clean top | defect floor | headroom | flips |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -50,7 +50,7 @@ the note buys (attempt 3).
 
 ## Attempts
 
-Numbers are at the shipped `at:` of the time (0.95 / 0.93) until the last row.
+Numbers are at the shipped `threshold:` of the time (0.95 / 0.93) until the last row.
 
 0. Add cases, relabel :32 / :24, question untouched -> TS P 1.00 R 0.40,
    clean top 0.81 (a `toBeDefined` over the sorted result), defect floor 0.88,
@@ -77,7 +77,7 @@ Numbers are at the shipped `at:` of the time (0.95 / 0.93) until the last row.
    an item listed twice" over a body expecting the doubled sum -- the rule was
    right and the title was wrong (see cases). TS clean top after the rename
    0.54, defect floor 0.85; Rust 0.50 / 0.84.
-4. `at:` 0.95 -> 0.72 and 0.93 -> 0.70, a little above the fitted midpoints
+4. `threshold:` 0.95 -> 0.72 and 0.93 -> 0.70, a little above the fitted midpoints
    (0.69 / 0.68) -> P 1.00 R 1.00 both, 0 flips on the fitting run, 1 flip
    (`inventory.test.ts:77`, one pass at 0.70) on the accept run.
 

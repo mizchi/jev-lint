@@ -32,7 +32,7 @@ state: bare
 # padded. Midpoint; 0.49 above the clean top, 0.46 under the lowest defect.
 # Spread <= 0.16. On unseen documents this repository's README answered
 # 1.35 and docs/findings.md 1.30: 0.15 of headroom on long reference prose.
-at: 1.5
+threshold: 1.5
 severity: info
 ask: >-
   Text could be removed from this document without losing useful information, reasoning, evidence, or voice.

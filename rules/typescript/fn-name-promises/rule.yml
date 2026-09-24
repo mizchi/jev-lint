@@ -16,7 +16,7 @@
 # anywhere between 0.20 and 0.94. A shared threshold throws away the rules that
 # answer quietly.
 #
-# The `at:` values below were fitted to THIS repository's corpus (13 files, 276
+# The `threshold:` values below were fitted to THIS repository's corpus (13 files, 276
 # subjects, Rust, TypeScript and JavaScript) as the midpoint of each rule's own
 # clean/violation gap. They are a starting point on your code, not a calibration
 # for it: a cutoff fitted to one corpus is an opinion about that corpus. Run
@@ -63,7 +63,7 @@ state: located
 # real-world defects added since -- a getter that creates, a loader that
 # writes, a `retry` that tries once, a `toJSON` that clears state -- answer
 # at 0.66-0.87 and were all missed at 0.82.
-at: 0.55
+threshold: 0.55
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

@@ -32,7 +32,7 @@ state: located
 # softest because a probe does legitimately need capabilities -- just not
 # those). Midpoint of a gap 0.36 wide, 0.17 of headroom below and 0.18 above,
 # no decision flips over three passes, widest pass-to-pass spread 0.04.
-at: 0.54
+threshold: 0.54
 axis: file
 severity: warning
 # Five places a shell script can acquire power, over-matched on purpose: a

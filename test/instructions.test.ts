@@ -27,17 +27,27 @@ function commitAll(dir: string, message: string): void {
   });
 }
 
-test("instructions: both documents are read from the commit's own tree", () => {
+test("instructions: AGENTS.md takes precedence in the commit's own tree", () => {
   const dir = tempRepo([
     { message: "Set the rules", files: { "AGENTS.md": "- Never use `any`.\n", "CLAUDE.md": "- Write commits in English.\n" } },
     { message: "Loosen them", files: { "AGENTS.md": "- `any` is fine now.\n" } },
   ]);
   try {
     const first = readInstructions("HEAD~1", dir);
-    assert.deepEqual(first.docs.map((d) => d.file), ["AGENTS.md", "CLAUDE.md"]);
+    assert.deepEqual(first.docs.map((d) => d.file), ["AGENTS.md"]);
     assert.match(first.docs[0]!.text, /Never use/, "the older commit is judged by the older document");
     const second = readInstructions("HEAD", dir);
+    assert.deepEqual(second.docs.map((d) => d.file), ["AGENTS.md"]);
     assert.match(second.docs[0]!.text, /fine now/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("instructions: CLAUDE.md is used when AGENTS.md is absent", () => {
+  const dir = tempRepo([{ message: "Rules", files: { "CLAUDE.md": "- Write commits in English.\n" } }]);
+  try {
+    assert.deepEqual(readInstructions("HEAD", dir).docs, [{ file: "CLAUDE.md", text: "- Write commits in English.\n" }]);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -54,7 +64,7 @@ test("instructions: a repository with neither document yields nothing", () => {
   }
 });
 
-test("instructions: a CLAUDE.md byte-identical to AGENTS.md is dropped, not doubled", () => {
+test("instructions: a CLAUDE.md byte-identical to AGENTS.md is not read twice", () => {
   const same = "- Never use `any`.\n";
   const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": same, "CLAUDE.md": same } }]);
   try {
@@ -64,16 +74,16 @@ test("instructions: a CLAUDE.md byte-identical to AGENTS.md is dropped, not doub
   }
 });
 
-test("instructions: a written pointer, as opposed to a symlink, is kept as a document", () => {
+test("instructions: a written pointer in AGENTS.md is kept as a document", () => {
   // Only a document that IS a bare path -- what a symlink's blob actually
   // is -- is treated as a pointer. A sentence a person wrote, even one
   // that does nothing but point at the other file, has whitespace in it
   // and is not caught: it costs a few tokens and tells a model nothing
   // false, so there is no case for the false positives a word-list
   // heuristic would risk to catch it too.
-  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Never use `any`.\n", "CLAUDE.md": "See AGENTS.md\n" } }]);
+  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "See CLAUDE.md\n", "CLAUDE.md": "- Never use `any`.\n" } }]);
   try {
-    assert.deepEqual(readInstructions("HEAD", dir).docs.map((d) => d.file), ["AGENTS.md", "CLAUDE.md"]);
+    assert.deepEqual(readInstructions("HEAD", dir).docs, [{ file: "AGENTS.md", text: "See CLAUDE.md\n" }]);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -159,20 +169,20 @@ test("instructions: a symlink target that escapes the repository is not followed
   }
 });
 
-test("instructions: a dangling symlink is dropped, not turned into a document containing its own path", () => {
-  const dir = tempRepo([{ message: "seed", files: { "seed.txt": "x\n" } }]);
+test("instructions: a dangling AGENTS.md symlink falls back to CLAUDE.md", () => {
+  const dir = tempRepo([{ message: "seed", files: { "CLAUDE.md": "- Fallback rule.\n" } }]);
   try {
     // AGENTS.md points at a docs/AGENTS.md that was never committed.
     symlinkSync("docs/AGENTS.md", join(dir, "AGENTS.md"));
     commitAll(dir, "dangling symlink");
     const got = readInstructions("HEAD", dir);
-    assert.deepEqual(got.docs, []);
+    assert.deepEqual(got.docs, [{ file: "CLAUDE.md", text: "- Fallback rule.\n" }]);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
 });
 
-test("instructions: two symlinks resolving to the same target dedup across the hop", () => {
+test("instructions: two symlinks resolving to the same target use AGENTS.md first", () => {
   const real = "- Real rule one.\n- Real rule two.\n";
   const dir = tempRepo([{ message: "Rules", files: { "docs/AGENTS.md": real } }]);
   try {
@@ -186,16 +196,16 @@ test("instructions: two symlinks resolving to the same target dedup across the h
   }
 });
 
-test("instructions: a one-line CLAUDE.md that states a rule of its own survives", () => {
+test("instructions: a one-line CLAUDE.md rule survives when it is the fallback", () => {
   // What saves this from being read as a pointer is that it has whitespace
   // in it, not that it is long -- isPointer no longer measures length at
   // all, only whether the whole document is a single bare path.
   const rule = "Everything in AGENTS.md applies, plus: never commit generated files.\n";
-  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Base rule.\n", "CLAUDE.md": rule } }]);
+  const dir = tempRepo([{ message: "Rules", files: { "CLAUDE.md": rule } }]);
   try {
     const got = readInstructions("HEAD", dir);
-    assert.deepEqual(got.docs.map((d) => d.file), ["AGENTS.md", "CLAUDE.md"], "a real one-line rule is not a pointer");
-    assert.match(got.docs[1]!.text, /never commit generated files/);
+    assert.deepEqual(got.docs.map((d) => d.file), ["CLAUDE.md"], "a real one-line rule is not a pointer");
+    assert.match(got.docs[0]!.text, /never commit generated files/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -250,29 +260,26 @@ test("instructions: MAX_INSTRUCTION_CHARS is the default budget", () => {
   }
 });
 
-test("instructions: a remainder too small to carry an instruction is skipped, not sliced to a scrap", () => {
+test("instructions: a budget too small to carry an instruction is skipped", () => {
   const agents = "- Keep functions small and named for what they promise.\n";
-  const claude = "- Commits are written in English, always.\n";
-  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": agents, "CLAUDE.md": claude } }]);
+  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": agents } }]);
   try {
-    // Enough budget for the whole of AGENTS.md plus ten characters -- too
-    // little to be worth cutting a CLAUDE.md fragment out of, but not zero.
-    const got = readInstructions("HEAD", dir, agents.length + 10);
-    assert.deepEqual(got.docs.map((d) => d.file), ["AGENTS.md"]);
-    assert.equal(got.docs[0]!.text, agents, "the document that fit is not itself cut");
-    assert.equal(got.truncated, true, "the dropped CLAUDE.md still has to be reported as a loss");
+    const got = readInstructions("HEAD", dir, 10);
+    assert.deepEqual(got.docs, []);
+    assert.equal(got.truncated, true);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
 });
 
 test("instructions: a null ref reads the index, including a staged edit", () => {
-  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Old rule.\n" } }]);
+  const dir = tempRepo([{ message: "Rules", files: { "AGENTS.md": "- Old rule.\n", "CLAUDE.md": "- Legacy rule.\n" } }]);
   try {
     // Stage a change to the document itself: it is part of the change.
     writeFileSync(join(dir, "AGENTS.md"), "- New rule.\n");
     execFileSync("git", ["add", "-A"], { cwd: dir, stdio: ["ignore", "pipe", "pipe"] });
-    assert.match(readInstructions(null, dir).docs[0]!.text, /New rule/);
+    const got = readInstructions(null, dir);
+    assert.deepEqual(got.docs, [{ file: "AGENTS.md", text: "- New rule.\n" }]);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

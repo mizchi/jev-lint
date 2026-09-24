@@ -19,7 +19,7 @@ state: bare
 # defect written with positional arguments (`bulk_rate(200, 3)`) answered
 # 0.27 until the fixture named the fields -- the model cannot tell which
 # argument is the unit count, and neither could a reader.
-at: 0.70
+threshold: 0.70
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

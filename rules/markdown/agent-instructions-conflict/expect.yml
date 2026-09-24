@@ -1,0 +1,22 @@
+default: clean
+fixtures/tests/AGENTS.md:
+  - { line: 1, label: bad, window: 0, reason: "a src commit must both run and never run pnpm test before committing" }
+  - { line: 5, label: bad, window: 0, reason: "the same src commit makes this prohibition incompatible with the test requirement" }
+fixtures/generated/AGENTS.md:
+  - { line: 1, label: bad, window: 0, reason: "a schema change requires generating the file that this section forbids changing by any means" }
+  - { line: 5, label: bad, window: 0, reason: "codegen writes the exact path the earlier section forbids changing" }
+fixtures/exception/AGENTS.md:
+  - { line: 1, label: clean, window: 0, reason: "explicit exception separates generated-only changes from source changes" }
+  - { line: 5, label: clean, window: 0, reason: "the generated-only case is carved out of the test requirement" }
+fixtures/scoped/AGENTS.md:
+  - { line: 1, label: clean, window: 0, reason: "pull-request preparation and uncommitted local edits are different situations" }
+  - { line: 5, label: clean, window: 0, reason: "a local edit can run its focused test and later run the full suite before a PR" }
+fixtures/precedence/AGENTS.md:
+  - { line: 1, label: clean, window: 0, reason: "explicit vendor exception narrows the general quoting rule" }
+  - { line: 5, label: clean, window: 0, reason: "vendor formatting falls under the stated exception" }
+fixtures/by-hand/AGENTS.md:
+  - { line: 1, label: clean, window: 0, reason: "manual edits are forbidden but generated writes are permitted" }
+  - { line: 5, label: clean, window: 0, reason: "running the generator does not break the by-hand restriction" }
+fixtures/japanese/AGENTS.md:
+  - { line: 1, label: bad, window: 0, reason: "the same src commit must run and never run pnpm test before committing" }
+  - { line: 5, label: bad, window: 0, reason: "the prohibition has exactly the same trigger and time as the requirement" }

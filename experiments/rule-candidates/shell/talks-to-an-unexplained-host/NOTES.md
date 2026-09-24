@@ -35,7 +35,7 @@ state: located
 # gap 0.54 wide, 0.27 of headroom on each side, no decision flips over three
 # passes, max pass-to-pass spread 0.02. The first guess, 0.70, gave the same
 # decisions.
-at: 0.59
+threshold: 0.59
 axis: file
 severity: warning
 # Five places a shell names somewhere to talk to, over-matched on purpose: a
@@ -217,7 +217,7 @@ their line twice.
 
 ## Fit
 
-Fitted cutoff **0.59**, written into `at:`. 23 subjects, 3 passes, 25-33
+Fitted cutoff **0.59**, written into `threshold:`. 23 subjects, 3 passes, 25-33
 requests per run.
 
 | | |

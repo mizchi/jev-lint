@@ -43,7 +43,7 @@ kind: noul
 # rule candidates under a message about something else answered 0.73 and
 # 0.47. 0.65 keeps the 0.73 and passes the fence-sitter; the 0.47 is the
 # residue. See experiments/reports/k-commits.
-at: 0.65
+threshold: 0.65
 ask: >-
   This commit's message ($SUBJECT) claims something the diff does not do, or
   the diff does something material that the message does not mention.

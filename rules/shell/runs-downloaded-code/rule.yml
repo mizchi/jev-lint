@@ -30,9 +30,9 @@ state: located
 # check to the model regardless of who controls what it is graded against,
 # and today's `ask`/`criteria` have no clause for that -- the residue this
 # rule ships with. Cleans otherwise top out at 0.12, defects otherwise start
-# at 0.67: unchanged from the previous fit, so `at: 0.40` stands, 0.27 of
+# at 0.67: unchanged from the previous fit, so `threshold: 0.40` stands, 0.27 of
 # headroom below the defect floor and 0.28 above the clean ceiling.
-at: 0.40
+threshold: 0.40
 axis: file
 severity: warning
 # Three places bytes turn into behaviour, over-matched on purpose: a pipeline

@@ -49,7 +49,7 @@ Then check it does something:
 ```bash
 jev-lint rules                                      # loaded, or the validation error
 jev-lint check src --dry-run --show-subjects        # which nodes it found, with captures
-jev-lint check src --at typescript/catch-hides-failure=2 --retry 3   # a score runs 0-3
+jev-lint check src --threshold typescript/catch-hides-failure=2 --retry 3   # a score runs 0-3
 ```
 
 ### Evals: the cases a rule ships with
@@ -68,7 +68,7 @@ rules/typescript/catch-hides-failure/
 The language directory admits only its own grammars (`typescript` admits
 the ECMAScript four), so one language's matcher cannot land in another's
 file. The same id under two languages is one rule in two languages: it
-shares the id in findings and `--at`, and the loader warns if the two
+shares the id in findings and `--threshold`, and the loader warns if the two
 copies of the sentence drift. Two languages are first tier — `typescript`
 and `rust` — and every shipped rule under them has fixtures, an expect
 file and an accepted baseline; a rule under any other language directory

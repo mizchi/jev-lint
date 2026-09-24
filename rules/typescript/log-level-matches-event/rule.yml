@@ -24,7 +24,7 @@ languages:
 kind: noul
 subject: node
 state: local
-at: 0.6
+threshold: 0.6
 rule:
   any:
     - pattern: $LOGGER.$LEVEL($MSG, $$$REST)

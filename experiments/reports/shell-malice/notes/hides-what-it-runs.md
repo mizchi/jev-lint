@@ -11,7 +11,7 @@ language: Bash
 kind: noul
 subject: node
 state: located
-at: 0.30
+threshold: 0.30
 axis: file
 severity: warning
 rule:

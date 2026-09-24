@@ -26,7 +26,7 @@ severity: warning
 # opens) and run to 0.92. Midpoint of the gap, 0.14 on the clean side and
 # 0.15 on the defect side, no flips. rust's copy fits at 0.62 on the same
 # cases.
-at: 0.60
+threshold: 0.60
 # MoonBit's grammar declares no fields, so the name is the identifier under
 # the declaration.
 rule:

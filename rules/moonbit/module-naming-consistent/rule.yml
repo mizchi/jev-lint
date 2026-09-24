@@ -11,7 +11,7 @@ axis: file
 # operations (0.16) and a two-export cart. typescript's 0.6 sits in the
 # gap. The corpus is small because the subject is a whole file: three
 # files is three subjects.
-at: 0.6
+threshold: 0.6
 severity: info
 # The file's root: the subject is the module outline, not the source, so
 # the matcher fires once per file.

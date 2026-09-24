@@ -1,0 +1,5 @@
+using .jev-lint.dogfood.yml
+pass 1/3: 154 subject(s), 25 reported, 20 request(s), $0.00684
+pass 2/3: 154 subject(s), 22 reported, 20 request(s), $0.00684
+pass 3/3: 154 subject(s), 24 reported, 20 request(s), $0.00684
+recorded 3 pass(es) to /Users/mz/ghq/github.com/mizchi/jev-lint/experiments/dogfood/converge_audit-2026-09-24/paired-stability.json

@@ -12,7 +12,7 @@ state: located
 # (`summarize` in backoff.rs, a vague name over a nonsense sum -- the weakest
 # contradiction in the corpus and the one that keeps the headroom at 0.09 a
 # side instead of 0.10). The next defect is at 0.76.
-at: 0.57
+threshold: 0.57
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

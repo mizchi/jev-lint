@@ -19,7 +19,7 @@ state: located
 # used. The grammar hoists a comment that opens a block out of the block;
 # the second arm matches the block itself so those comments are asked
 # about too, and the subject is the enclosing function either way.
-at: 0.45
+threshold: 0.45
 severity: info
 rule:
   any:

@@ -13,7 +13,7 @@
  *   other. It also keeps the build inside `erasableSyntaxOnly`, so the same
  *   source runs under `tsc` and under Node's type stripping.
  * - **`null` means "known to be absent", `undefined` means "not applicable
- *   here".** A rule with `at: null` has no cutoff of its own and takes the
+ *   here".** A rule with `threshold: null` has no cutoff of its own and takes the
  *   default; a subject with no `id` has not been assigned to a batch yet.
  */
 
@@ -343,7 +343,7 @@ export type RuleJudgment =
       criteria: null;
       /**
        * The rule's own ordered rubric, clean to worst, in place of the
-       * shared four-level scale; null takes the shared one. `at` then runs
+       * shared four-level scale; null takes the shared one. `threshold` then runs
        * 0..levels-1.
        */
       levels: string[] | null;
@@ -358,6 +358,7 @@ export type RuleSource =
       utils: Record<string, unknown> | null;
       split: null;
       extensions: null;
+      filenames: null;
     }
   | {
       /**
@@ -374,6 +375,7 @@ export type RuleSource =
       utils: null;
       split: null;
       extensions: null;
+      filenames: null;
     }
   | {
       subject: "block";
@@ -387,6 +389,8 @@ export type RuleSource =
       split: string | null;
       /** The file extensions the rule applies to. */
       extensions: string[];
+      /** Optional exact basenames, such as AGENTS.md. */
+      filenames: string[] | null;
     };
 
 /**
@@ -412,7 +416,7 @@ export function isGitSubject(subject: SubjectMode): subject is "commit" | "chang
 }
 
 /** The result of validating one rule: the rule, or the reason it is not one, never both. */
-export type RuleResult = { rule: Rule; error?: undefined } | { rule?: undefined; error: string };
+export type RuleResult = { rule: Rule; error?: undefined; warnings?: string[] } | { rule?: undefined; error: string; warnings?: string[] };
 
 // ------------------------------------------------------------------ ast-grep
 

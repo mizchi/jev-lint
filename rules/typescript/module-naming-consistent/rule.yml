@@ -24,7 +24,7 @@ kind: noul
 subject: file
 state: graph
 axis: file
-at: 0.6
+threshold: 0.6
 rule:
   kind: program
 ask: This module's public items use different verbs for the same kind of operation.

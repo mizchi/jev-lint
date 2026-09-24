@@ -10,7 +10,7 @@ and responses; `subject: node`, `state: bare`, matcher unchanged.
 | | start | end |
 | --- | --- | --- |
 | subjects | 18 (9 bad, 9 clean, all hard) | 30 (16 bad, 14 clean, all hard) |
-| `at:` | 0.58 | 0.58 (fitted midpoint 0.46-0.48; kept above it) |
+| `threshold:` | 0.58 | 0.58 (fitted midpoint 0.46-0.48; kept above it) |
 | P / R | 1.00 / 0.89 | 1.00 / 1.00 |
 | flips | 0 | 0 |
 | bad band | 0.83-0.96, one at 0.40 | 0.77-0.96 |
@@ -71,7 +71,7 @@ omit, so the rule will fire on it.
 2. Accept run (same question): P 1.00 R 1.00, 0 flips, fitted 0.46; bad
    band 0.77-0.96, clean band 0.04-0.16. `--replay` passes.
 
-`at:` stays 0.58: above the fitted midpoint for headroom on real specs,
+`threshold:` stays 0.58: above the fitted midpoint for headroom on real specs,
 with 0.19 to the lowest defect (`webhooks.yaml:114`, "only `url` and
 `events` can be changed" over a body that also accepts `active` and
 `description`, 0.77-0.80).

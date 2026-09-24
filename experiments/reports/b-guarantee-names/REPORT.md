@@ -43,7 +43,7 @@ beforehand. Attempt 1's `gaps` was priced that way and cost $0.0013.
   kind: noul
   subject: node
   state: local
-  at: 0.63
+  threshold: 0.63
   # Fitted on records/final-local.json: clean tops at 0.47 (ensureBucket),
   # defects start at 0.79 (ensureDir). Midpoint of that gap, 0.16 headroom each
   # side. `located` widened the gap by 0.08 and changed no decision.
@@ -181,7 +181,7 @@ and it removes only X") and needs `located` to see the use.
   kind: noul
   subject: node
   state: local
-  at: 0.48
+  threshold: 0.48
   # Fitted on records/final-local.json: clean tops at 0.27 (tryAcquireLock),
   # defects start at 0.70 (safeReadJson). `located` widened the gap to 0.66
   # and changed no decision; not needed.
@@ -307,7 +307,7 @@ them once there is a case.
   kind: noul
   subject: node
   state: located
-  at: 0.47
+  threshold: 0.47
   # `located`, measured: on `local` the unconditional ALTER TABLE in
   # setupDatabase scores 0.22-0.28, under the top clean (setupLogger 0.25);
   # with the file in view it scores 0.64-0.72. Fitted on
@@ -453,7 +453,7 @@ clean for this rule and a defect for `guard-name-guards` at once.
   kind: noul
   subject: node
   state: local
-  at: 0.48
+  threshold: 0.48
   # Fitted on records/final-local.json: clean tops at 0.07, defects start at
   # 0.87. Memoisation into a module-level Map is decided to be an effect (see
   # note); exempting it in attempt 2 shrank the gap from 0.80 to 0.17.
@@ -646,7 +646,7 @@ Six findings, zero real. Revision 1's precision on unseen code was 0.
   kind: noul
   subject: node
   state: local
-  at: 0.55
+  threshold: 0.55
   # Fitted on records/pure-v2.json: clean tops at 0.31 (parseWorkerLimits), defects
   # start at 0.60 (parseCliOptions); midpoint 0.46. Set at 0.55 for the unseen
   # band (records/pure-v2-unseen.json): its top clean is 0.50, its lowest real
@@ -833,7 +833,7 @@ Values are rev 1 / attempt 1 / attempt 2 / attempt 3.
 
 | subject | values | judgement |
 | --- | --- | --- |
-| `apps/agent-worker/worker.ts:16594 parseOrchestratorDialogueSession` | 0.23 / 0.47 / **0.83** / 0.85 | **real**: `new Date().toISOString()` as the default for `at`, `created_at`, `updated_at`; the same input parses differently at a different time |
+| `apps/agent-worker/worker.ts:16594 parseOrchestratorDialogueSession` | 0.23 / 0.47 / **0.83** / 0.85 | **real**: `new Date().toISOString()` as the default for `threshold`, `created_at`, `updated_at`; the same input parses differently at a different time |
 | `apps/agent-worker/worker.ts:5308 parseVirtualFsPrCheckpoint` | 0.26 / 0.46 / **0.83** / 0.82 | **real**: `new Date().toISOString()` as the default `started_at`/`updated_at` |
 | `apps/agent-worker/worker.ts:7586 parseAuthD1PrincipalRecord` | 0.29 / 0.56 / **0.82** / 0.87 | **real**: `const nowIso = new Date().toISOString()` used as the default for both timestamps |
 | `apps/agent-worker/worker.ts:5133 toHubPrRecordFromGitPrContract` | 0.45 / 0.55 / **0.73** / 0.78 | **real**: `pr_id: current?.pr_id ?? \`hpr_${crypto.randomUUID()}\`` -- a random source when there is no current record |

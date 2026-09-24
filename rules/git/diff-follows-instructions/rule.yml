@@ -1,9 +1,8 @@
 # Diffs against the instructions the repository wrote for itself.
 #
-# `AGENTS.md` and `CLAUDE.md` are where a repository writes down what a
-# change is supposed to do, and nothing checks them -- no compiler, no
-# linter, no type checker reads either one. This rule holds a diff against
-# them.
+# `AGENTS.md` is the default document for a repository's instructions;
+# `CLAUDE.md` is used when it is absent. No compiler, linter or type checker
+# reads those instructions. This rule holds a diff against the chosen one.
 #
 # `subject: change` has no matcher: `jev-lint commits <range>` builds one
 # subject per non-merge commit -- the diff's stat is the subject text --
@@ -53,14 +52,14 @@ kind: noul
 # last 12 commits, judged at --retry 3 (docs/data is not where this lives;
 # the record was read and discarded). Median 0.24, and the top two answered
 # 0.67 -- under a 0.70 cutoff, and both are real breaches of this
-# repository's AGENTS.md. 8f78303 adds a rule carrying `at: 0.7 #
+# repository's AGENTS.md. 8f78303 adds a rule carrying `threshold: 0.7 #
 # uncalibrated`, which AGENTS.md says does not ship that way; 9bb59aa's
 # message describes a README change over a diff that also carried 180 lines
 # of src/directives.ts, which AGENTS.md says a message has to name. 0.70
 # missed both. 0.65 reports both and clears the next answer down (0.59, an
 # honest commit) by 0.06, which is thin and is the residue: the first false
 # positive on unseen code will come from that band, not from the fixtures.
-at: 0.65
+threshold: 0.65
 ask: >-
   This change does something the project's own written instructions forbid,
   or leaves out something they require of a change like this one.

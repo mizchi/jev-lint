@@ -46,7 +46,7 @@ matcher cannot see is not a clean case.
 
 ## Fit
 
-`at: 0.40`, the midpoint. 3 passes, tp 5 / fp 0 / fn 0, P 1.00, R 1.00, 0
+`threshold: 0.40`, the midpoint. 3 passes, tp 5 / fp 0 / fn 0, P 1.00, R 1.00, 0
 flips. Cleans top at 0.11, defects start at 0.66, headroom 0.29 below and
 0.26 above. The first guess, 0.70, sat inside the defect band and lost the
 dropper on two passes of three.

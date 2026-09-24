@@ -14,7 +14,7 @@ state: paired
 # cart.rs, split the excerpt budget three ways and cut the Go test file
 # to 2665 characters, which lost `TestLine` and flagged `Line` at 0.83.
 # Report: experiments/reports/j-go/REPORT.md.
-at: 0.40
+threshold: 0.40
 rule:
   all:
     - any:

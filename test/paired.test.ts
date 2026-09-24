@@ -63,6 +63,26 @@ test("paired: MoonBit whitebox tests are discovered beside their module", () => 
   }
 });
 
+test("paired: a MoonBit package test that calls a function in another file supplies its failure-path evidence", () => {
+  const files = new Map([
+    ["src/audit/policy.mbt", "pub fn open_checkpoint_policy(raw : Int) -> Int { if raw < 0 { abort(\"invalid\") }; raw }"],
+    ["src/audit/audit_test.mbt", 'test "rejects a negative interval" { inspect(open_checkpoint_policy(-1), content="invalid") }'],
+    ["src/audit/other_test.mbt", 'test "other policy" { inspect(other_policy(-1), content="invalid") }'],
+    ["src/audit/comment_test.mbt", 'test "other policy" { // open_checkpoint_policy(-1)\n inspect(other_policy(-1), content="invalid") }'],
+    ["src/audit/string_test.mbt", 'test "other policy" { let hint = "open_checkpoint_policy(-1)"; inspect(other_policy(-1), content=hint) }'],
+    ["src/audit/nested/nested_test.mbt", 'test "different MoonBit package" { inspect(open_checkpoint_policy(-1), content="invalid") }'],
+    ["src/other/audit_test.mbt", 'test "different package" { inspect(open_checkpoint_policy(-1), content="invalid") }'],
+  ]);
+  const read = (path: string) => files.get(path) ?? "";
+  const paired = pairTests(["src/audit/policy.mbt"], {
+    roots: ["src"], testFiles: [...files.keys()].filter((path) => path.endsWith("_test.mbt")),
+    readSource: read, keywords: () => ["open_checkpoint_policy"],
+  });
+  assert.deepEqual(paired.get("src/audit/policy.mbt")?.map((t) => t.path), ["src/audit/audit_test.mbt"]);
+  assert.equal(paired.get("src/audit/policy.mbt")?.[0]?.via, "call");
+  assert.match(paired.get("src/audit/policy.mbt")?.[0]?.code ?? "", /open_checkpoint_policy\(-1\)/);
+});
+
 test("paired: related tests are ranked by stem, then directory, capped, and never the file itself", () => {
   const tests = [
     "test/other.test.ts",

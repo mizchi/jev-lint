@@ -31,7 +31,7 @@ state: full
 # `conftest.py` (mean 0.2633, passes 0.25/0.27/0.27, spread 0.02). 0.4
 # clears `billing` by 0.24 and `conftest.py` by 0.14, both past their own
 # spreads. Same 4 defects caught, same 0 false positives.
-at: 0.4
+threshold: 0.4
 axis: file
 severity: info
 rule:

@@ -140,7 +140,7 @@ this rule is usable:
 `note` says the instructions are the standard and the diff is the
 evidence: whether the instructions are good ones is not the question.
 
-`at:` is fitted from the rule's own evals, not guessed. The first
+`threshold:` is fitted from the rule's own evals, not guessed. The first
 committed value carries the run it came from, as every shipped rule's
 does.
 
@@ -197,7 +197,7 @@ diff that has nothing to do with them; an instruction a linter already
 enforces; a change to `AGENTS.md` itself.
 
 `jev-lint eval rules/git/diff-follows-instructions --repeat 3 --accept`
-fits `at:` and writes `baseline.json`.
+fits `threshold:` and writes `baseline.json`.
 
 ## 6. Hooks under `.jev-lint/hooks/`
 

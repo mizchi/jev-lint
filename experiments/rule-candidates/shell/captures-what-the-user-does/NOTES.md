@@ -13,7 +13,7 @@ language: Bash
 kind: noul
 subject: node
 state: located
-at: 0.50
+threshold: 0.50
 axis: file
 severity: warning
 utils:
@@ -89,7 +89,7 @@ One attempt at the sentence, and one at the corpus.
 | # | change | result |
 | --- | --- | --- |
 | 1 | `subject: node`, `state: located`, three-limb `true` (hidden / broader / leaves), destination reasoning in `note:` | `gaps`: gap **0.38**, suggest 0.49, verdict **move** (the uncalibrated 0.70 was outside the gap, not a sentence problem). `eval --repeat 1`: P 1.00, R 0.83, cleanTop 0.28, one defect at 0.69 under the 0.70 guess |
-| 1b | same sentence, `at:` moved into the gap | `eval --repeat 3` at 0.50: P/R 1.00, 0 flips, cleanTop 0.30, gap 0.39 |
+| 1b | same sentence, `threshold:` moved into the gap | `eval --repeat 3` at 0.50: P/R 1.00, 0 flips, cleanTop 0.30, gap 0.39 |
 | 2 | **corpus**, not sentence: the 19-subject corpus separated on the first try, which is the failure mode the brief warns about, so I added the two hardest cases I could construct -- a covert capture that never leaves (`focustime`) and `xinput test` as a legitimate whole job (`whichkey`) | both landed right: 0.80 and 0.09. cleanTop 0.31, defect floor 0.68, P/R 1.00, 0 flips |
 
 Nothing was rewritten because nothing failed; the honest summary is that the
@@ -112,7 +112,7 @@ flips** over three passes, max pass-to-pass spread **0.03**.
 0.91  lowlat.sh:16          bad
 0.81  focustime.sh:12       bad   (hidden, never uploaded)
 0.68  sound_doctor.sh:14    bad   <- defect floor
-        ---- at: 0.50 ----
+        ---- threshold: 0.50 ----
 0.31  sound_doctor.sh:9     clean (adjacent, 5 lines above the defect)
 0.28  onboard.sh:11         clean (adjacent)
 0.25  clipd.sh:25           clean (hard: the daemon's own poll loop)
@@ -201,7 +201,7 @@ case, not the five easy ones.
 | --- | --- | --- |
 | `gaps` (19 subjects) | 12 | 0.00104 |
 | `eval --repeat 1` | 12 | 0.00104 |
-| two `check --at ... --format json` distribution attempts (both returned no verdicts -- `--at <id>=n` did not take with `-R` on a candidate dir; wasted) | ~24 | ~0.0021 |
+| two `check --threshold ... --format json` distribution attempts (both returned no verdicts -- `--threshold <id>=n` did not take with `-R` on a candidate dir; wasted) | ~24 | ~0.0021 |
 | `eval --repeat 3` | 36 | 0.00312 |
 | `eval --repeat 3 --accept` | 36 | 0.00312 |
 | `eval --repeat 3` (22-subject corpus) | 42 | 0.00363 |

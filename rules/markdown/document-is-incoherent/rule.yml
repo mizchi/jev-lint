@@ -41,7 +41,7 @@ state: bare
 # since a template holds its parts together even when nothing in one depends
 # on another; their emptiness is the generic and formulaic rules' finding.
 # Midpoint 1.89.
-at: 1.9
+threshold: 1.9
 severity: info
 ask: >-
   This document's ideas are connected by superficial transitions rather than developed logically.

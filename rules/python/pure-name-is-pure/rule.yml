@@ -21,7 +21,7 @@ state: local
 # the old population without a flip. FN-margin 0.16 (parse_cli_options),
 # FP-margin 0.17 (parse_worker_limits), both under 0.25 of scale -- was
 # 0.28/0.26 (blind) before the port.
-at: 0.48
+threshold: 0.48
 axis: file
 severity: info
 rule:

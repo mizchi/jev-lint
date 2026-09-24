@@ -13,7 +13,7 @@ state: located
 # 0.55, the value this rule takes in its other languages
 # (typescript 0.55, rust 0.57, python 0.5, go 0.4); every defect answered over
 # it anyway.
-at: 0.44
+threshold: 0.44
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

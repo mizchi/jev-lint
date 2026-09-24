@@ -19,7 +19,7 @@ state: bare
 # 0.04 and the clean by 0.0767, both past their own spreads -- the same
 # narrow snapshot-axis gap as above, just below its old midpoint. Same 17
 # defects caught, same 0 false positives.
-at: 0.53
+threshold: 0.53
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

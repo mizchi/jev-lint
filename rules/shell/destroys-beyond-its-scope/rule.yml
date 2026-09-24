@@ -19,7 +19,7 @@ state: located
 # the lowest defect, 0.16 over the worst pass of the highest clean, no decision
 # flips over three passes, max pass-to-pass spread 0.05. The first guess, 0.70,
 # also sat in the gap and gave the same answers.
-at: 0.66
+threshold: 0.66
 axis: file
 severity: warning
 # The destructive surface, over-matched on purpose: anything that removes,

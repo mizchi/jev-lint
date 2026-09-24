@@ -48,11 +48,11 @@ state: located
 # as confidently false as a real defect by the model, kept as documented
 # residue rather than relabelled. Pass-to-pass spread over 3 passes: max
 # 0.05 (`cheapestFirst`, `paidShare`-adjacent context), median 0.01.
-# `at: 0.63` is the midpoint of the legitimate gap (`cheapestFirst` 0.42-0.47
+# `threshold: 0.63` is the midpoint of the legitimate gap (`cheapestFirst` 0.42-0.47
 # worst-pass, `removeFree` 0.82-0.85 worst-pass), moved up from 0.61:
 # worst-pass headroom is 0.16 on the defect side and 0.16 on the clean side.
-# `isEmpty` sits at 0.93-0.94 regardless of where `at:` falls in that gap.
-at: 0.63
+# `isEmpty` sits at 0.93-0.94 regardless of where `threshold:` falls in that gap.
+threshold: 0.63
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

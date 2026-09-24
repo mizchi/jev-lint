@@ -71,10 +71,12 @@ rules in all. Roughly:
   take orders from elsewhere, hide what it runs.
 - **Whether a document is worth reading.** Slop, filler, padding, vagueness;
   a section that opens with an agenda or ends by previewing the next.
+- **Whether `AGENTS.md` is usable.** Each section's instructions must be
+  clear enough to follow and consistent with the rest of the file.
 - **A commit message against its diff**, and **a change against the
-  instructions the repository wrote for itself** -- the `AGENTS.md` or
-  `CLAUDE.md` in its own tree, read as of that change. Only the instructions
-  a diff can be held against: "never edit the generated file" is judged,
+  instructions the repository wrote for itself** -- `AGENTS.md` in its own
+  tree, or `CLAUDE.md` when `AGENTS.md` is absent, read as of that change.
+  Only the instructions a diff can be held against: "never edit the generated file" is judged,
   "develop test-first" is not.
 
 [RULES.md](RULES.md) is all of them, each with its cutoff and its score on
@@ -112,7 +114,7 @@ a committed cache with no key at all.
 | `jev-lint check src` | judge whole files |
 | `jev-lint review --base main` | only the lines a diff touched — where findings concentrate, at a fraction of the cost |
 | `jev-lint commits --base main` | each commit's message against its diff, and each change against the `AGENTS.md` the repository wrote for itself |
-| `jev-lint commits --staged` | the same, on what is about to be committed |
+| `jev-lint commits --staged` | the staged change against repository instructions; there is no commit message yet |
 | `jev-lint run typescript/fn-name-promises src` | one rule; `--file mine.yml` for one of your own |
 | `jev-lint rules` | every loaded rule: its question, cutoff and file |
 
@@ -125,8 +127,12 @@ exclude: [test/fixtures]
 rules:
   typescript/fn-name-promises: on
   rust/fn-name-promises: off
-  typescript/comment-describes-block: { at: 0.7, severity: error }
+  typescript/comment-describes-block: { threshold: 0.7, severity: error }
 ```
+
+An answer at or above `threshold` becomes a finding. The old `at` spelling
+still loads with a warning. `hooks.precommit` can inherit this `rules:` map or
+select its own rules for staged review; see [the hook guide](docs/use-hooks.md).
 
 Use `language/id` for namespaced rules. A bare shipped id still selects every
 language with that id, but jev-lint warns because it can enable a language
@@ -203,8 +209,11 @@ the fixtures and the fitted cutoff a rule ships with.
 
 ## For a coding agent
 
-The repository ships a skill — how to run jev-lint, which packs to use, a
-cookbook of validated rules, and the calibration procedure:
+The repository ships a skill — how to run jev-lint and use its packs, plus a
+separate guide to writing rules in your own repository for code, custom
+grammars, text files, and Git changes:
+
+[Project rule authoring guide](skills/jev-lint/references/writing-project-rules.md)
 
 ```bash
 npx skills add mizchi/jev-lint --skill jev-lint

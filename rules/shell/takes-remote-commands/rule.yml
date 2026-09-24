@@ -46,7 +46,7 @@ state: located
 # either way. 0.31 clears `preview_tunnel.sh` by 0.07 (equal to its own
 # spread) and the clean by 0.0467, both past what `eval --replay` requires.
 # Same 10 defects caught, same 0 false positives.
-at: 0.31
+threshold: 0.31
 axis: file
 severity: warning
 # Five places a shell meets a socket, over-matched on purpose: the tools that

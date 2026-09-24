@@ -55,7 +55,7 @@ state: located
 # worst-pass gap (0.48 to 0.63): 0.10 of clean headroom and 0.05 of defect
 # headroom, so this is a recipe cutoff, not a shipped one. Report:
 # experiments/reports/n-rust-safety/REPORT.md.
-at: 0.58
+threshold: 0.58
 severity: warning
 rule:
   all:
@@ -266,7 +266,7 @@ against a grow that leaves `len == cap`; `end = index + width` against a
 check on `index`) are the quiet ones at 0.63-0.67; the cited-check-is-absent,
 wrong-vec, off-by-one-loop, documented-null and boilerplate defects are
 found at 0.79-0.95 by every wording. Worth a recipe with `located` and this
-cutoff; not a shipped `at:` until a second corpus shows the quiet class
+cutoff; not a shipped `threshold:` until a second corpus shows the quiet class
 higher.
 
 ### What I would change

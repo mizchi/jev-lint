@@ -16,7 +16,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
   ask: fetch must always be given a timeout, such as AbortSignal.timeout.
   # Context for the model, never shown in the finding. Exceptions go here.
   note: not a violation if it is inside a retry wrapper that already sets one.
-  at: 2.0
+  threshold: 2.0
 ```
 
 | field | | |
@@ -26,8 +26,8 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `language` / `languages` | required | one grammar, or several, by ast-grep's names: `Bash`, `C`, `Cpp`, `CSharp`, `Css`, `Dart`, `Elixir`, `Go`, `Haskell`, `Html`, `Java`, `JavaScript`, `Json`, `Jsx`, `Kotlin`, `Lua`, `Php`, `Python`, `Ruby`, `Rust`, `Scala`, `Solidity`, `Swift`, `Tsx`, `TypeScript`, `Yaml` |
 | `kind` | `score` (default) or `noul` | see below |
 | `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
-| `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
-| `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
+| `threshold` | cutoff | 0–3 for `score`, 0–1 for `noul`; an answer **at or above** it is a finding. `at` is a deprecated alias that warns; do not set both |
+| `loose` | | floor of the `--loose` band, strictly under `threshold`. Default: half of `threshold`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
 | `subject` | `node` (default), `enclosing`, `file`, `commit`, `change`, `block` | what code is judged. `commit`, `change` and `block` have no matcher: `commit` and `change` are `language: Git`, their subjects the commits `jev-lint commits` lists; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |
 | `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\w+)`) are the captures. A block runs from its header to the line before the next. Left out, the whole file is one block, cut at 48,000 characters with the cut declared |
 | `extensions` | `block` only | the files the rule reads, by extension (`[sql]`) |
@@ -39,11 +39,11 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `unsureBelow` | 0–1 | `score` only: a confidence under it words the finding as a question |
 | `constraints` / `utils` | | ast-grep's, passed through unchanged; part of the rule's identity for the cache |
 | `docs` / `tags` | | free text, for your own reports |
-| `extends` | | another rule's id -- `<lang>/<id>`, or a bare id when the file's `languages` pick one language -- to build this rule from. The base comes from the rules loaded beside it, then from the shipped packs (read for the lookup, never run because of it). Every field the file gives replaces the base's; `criteria` may give one branch alone, and `note: { append: ... }` keeps the base's note and adds to it. The rule needs its own id. A file that changes what is asked (`ask`, `note`, `criteria`, `rule`, `state`, `context`, ...) but not `at` is warned: the inherited cutoff was fitted to the base's question |
+| `extends` | | another rule's id -- `<lang>/<id>`, or a bare id when the file's `languages` pick one language -- to build this rule from. The base comes from the rules loaded beside it, then from the shipped packs (read for the lookup, never run because of it). Every field the file gives replaces the base's; `criteria` may give one branch alone, and `note: { append: ... }` keeps the base's note and adds to it. The rule needs its own id. A file that changes what is asked (`ask`, `note`, `criteria`, `rule`, `state`, `context`, ...) but not `threshold` is warned: the inherited cutoff was fitted to the base's question |
 | `context` | | a list of documents, by path relative to the rule file, that the model reads in the state beside the code: the project's own conventions the rule is judged against. Read at load time; their text is part of the draft, so an edited document retires the verdicts given against the old one. Up to 40,000 characters in all; a missing or empty document is a load error. Rules with different documents never share a request |
 | `inconclusive` | | why this rule's own fixtures cannot measure it, when `jev-lint eval` says they cannot. See [calibration.md](calibration.md#a-corpus-that-cannot-see-its-own-rule-drift). A declaration on a suite whose corpus *can* measure it is an error, so an exemption cannot outlive what it excuses. Never read by the model |
 | `divergent` | | why this language's copy of an id deliberately says something else. The loader warns when two copies of one id differ in `ask`, `criteria`, `note` or `explain`; a copy that declares its reason here stands the warning down, and a `divergent` on a copy that says the same thing as the others is a warning in its own right. Never read by the model |
-| `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `at` then runs 0..levels-1 |
+| `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `threshold` then runs 0..levels-1 |
 | `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |
 
 An unknown field is a validation error, so a typo cannot quietly do nothing.
@@ -118,7 +118,7 @@ problem and is not one.
   `fixtures/<case>/{message, before/, after/}` — each case becomes one
   commit on its own branch of a throwaway repository when the eval runs.
 - `change` — the **change itself**, not its message: the diff is the subject,
-  and the state carries the diff together with the `AGENTS.md` / `CLAUDE.md`
+  and the state carries the diff together with `AGENTS.md` (or `CLAUDE.md` if absent)
   in force *in that change's own tree*. A commit rule's subject is the
   message, and at pre-commit time there is no message yet, which is why this
   is a separate subject rather than a flag on `commit`. No matcher,
@@ -136,7 +136,11 @@ problem and is not one.
   matching `split:` (an sqlc query file at each `-- name: GetUser :one`).
   No matcher, `language: Text`, `state: bare` or `located`; the header's
   named groups are the captures. Runs under `check` and `review` over the
-  files whose extension the rule names. Shipped: `text/query-name-describes-sql`.
+  files whose extension the rule names. `filenames: [AGENTS.md]` optionally
+  restricts matches to that exact basename, even in nested directories.
+  Shipped: `text/query-name-describes-sql`,
+  `markdown/agent-instruction-is-unclear`, and
+  `markdown/agent-instructions-conflict`.
   Shape:
 
   ```yaml
@@ -231,7 +235,7 @@ The sentence is a copy, and `jev-lint rules` warns when the two copies of
 an id differ in `ask`, `criteria`, `note` or `explain`. A language
 directory admits only its own grammars (`typescript` admits the ECMAScript
 four). The identity of a rule is `(language, id)`: findings,
-`jev-lint-ignore` and `--at <id>=n` apply to every language; `--at
+`jev-lint-ignore` and `--threshold <id>=n` apply to every language; `--threshold
 rust/<id>=n` to one.
 
 In a flat rule file (`rules/mine.yml`, or one passed with `-R`) a rule file
@@ -252,4 +256,3 @@ sentence within one document:
   ask: *fn_ask
   criteria: *fn_criteria
 ```
-

@@ -25,7 +25,7 @@ severity: info
 # typescript copy, written again: cleans top at 0.18, defects start at
 # 0.56 and run to 0.93, and the two languages agree case by case. Its own
 # midpoint is 0.37; 0.38 is typescript's, and both sit in the same gap.
-at: 0.38
+threshold: 0.38
 language: Python
 rule:
   all:

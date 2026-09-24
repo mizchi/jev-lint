@@ -24,11 +24,11 @@ judged, not just listed.
    cutoff but over a floor no clean subject on the rule's own evals reached,
    so the rule cannot say and you can. Read them the same way, closest to the
    cutoff first, and report only the ones where the code or the name is
-   actually wrong; say nothing about the rest. Never suggest lowering `at:`
+   actually wrong; say nothing about the rest. Never suggest lowering `threshold:`
    because of one of these.
 6. Report the two lines that are never noise if they appeared: rules that
    matched nothing beyond the expected other-language variants, and subjects
    without a verdict.
 
 Do not silence findings with `jev-lint-ignore` comments unless asked. Do not
-edit `at:` in the rules to make a finding go away; propose a refit instead.
+edit `threshold:` in the rules to make a finding go away; propose a refit instead.

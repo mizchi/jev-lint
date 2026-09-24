@@ -44,7 +44,7 @@ between twins any more.
    honest. P 1.00 R 1.00, fitted 0.63; `:112` 0.88, `admin_handlers.ts:8`
    0.86, the "no longer valid" sibling 0.12. Clean max 0.50 (`handlers.ts:25`,
    "Account closed. Data is retained for 30 days, then removed."), bad min
-   0.76 ("Comment deleted" for a PATCH `hidden: true`). Set `at: 0.63`.
+   0.76 ("Comment deleted" for a PATCH `hidden: true`). Set `threshold: 0.63`.
 4. Matcher, no wording change: the prefix regex from attempt 2 had lost its
    `$` anchor, so `notify*` matched `notifyLoopIterateGateRejectedCandidates`
    on the unseen repository; anchored. `message.includes(...)` (a string

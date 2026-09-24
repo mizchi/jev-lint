@@ -31,7 +31,7 @@ state: bare
 #
 # Boundary hunt, 2026-09-22 (17 documents: 7 defects, 10 cleans incl. 2
 # hard, 3 passes, `eval --repeat 3 --accept`; scored against the old
-# at:2.2, FN-margin was -0.14 and FP-margin 0.28 -- not blind by the
+# threshold:2.2, FN-margin was -0.14 and FP-margin 0.28 -- not blind by the
 # threshold, since a negative FN-margin means an outright miss, but R had
 # dropped to 0.78 on two subjects). Six candidates targeted the empty
 # 1.09-3.22 band, in English and Japanese: a document arguing from a real
@@ -49,14 +49,14 @@ state: bare
 # derivation, TTL expiry, load-balancer routing) and pure vague benefit
 # language ("more resilient, more flexible, easier to reason about") -- 3
 # of 5 paragraphs generic -- answered 1.62 [1.60 1.62 1.63] (en) and 1.83
-# [1.78 1.82 1.89] (ja), both labelled bad but under the old at:2.2 a miss
+# [1.78 1.82 1.89] (ja), both labelled bad but under the old threshold:2.2 a miss
 # on both languages (R 0.78). Refit to 1.4: the midpoint of the clean top
 # (1.13) and the quietest labelled defect (1.62) is 1.37; a document that
 # is honestly half mechanism and half marketing copy is exactly what
 # "mixed" describes, and it was scoring under the old cutoff on both
 # languages, not one. Re-accepted at the new cutoff: FN-margin 0.05,
 # FP-margin 0.07, P 1.00, R 1.00, no longer blind.
-at: 1.4
+threshold: 1.4
 severity: info
 ask: >-
   This document is vague and generic rather than specific and concrete.

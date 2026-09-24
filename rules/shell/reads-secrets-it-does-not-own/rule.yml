@@ -22,7 +22,7 @@ state: located
 # flips over three passes, max pass-to-pass spread 0.03. The first guess, 0.70,
 # sat inside the defect band and lost the `scp` on the sentence's first two
 # attempts, when the question weighed whose secret it was and not where it went.
-at: 0.62
+threshold: 0.62
 axis: file
 severity: warning
 # Two halves of the same defect, over-matched on purpose and joined by `any:`:

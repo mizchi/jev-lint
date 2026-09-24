@@ -40,7 +40,7 @@ state: located
 # first. The original four defects and the original hard cleans are
 # unaffected (same as before: defects at 0.83-0.97, cleans at 0.17 and
 # under).
-at: 0.60
+threshold: 0.60
 axis: file
 severity: warning
 # Four places a shell script leaves something behind, over-matched on purpose:

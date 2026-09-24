@@ -1,8 +1,8 @@
 /**
  * The instructions a repository wrote for itself, as evidence.
  *
- * `AGENTS.md` and `CLAUDE.md` say what a change is supposed to do, and
- * nothing checks them. Read here from the same tree as the diff they will
+ * `AGENTS.md` (or `CLAUDE.md` when absent) says what a change is supposed
+ * to do. Read here from the same tree as the diff it will
  * be held against -- `git show <sha>:AGENTS.md` for a commit, `git show
  * :AGENTS.md` for the index -- so a commit is judged by the instructions
  * that were in force when it was made, and a staged edit to the document
@@ -65,7 +65,7 @@ export const INSTRUCTION_FILES = ["AGENTS.md", "CLAUDE.md"] as const;
  * comparison, not on a margin: a change subject is `arm: "bare"`, and a
  * one-subject batch has no step-down to recover with, so smaller is safer
  * here in a way it isn't for a file with many subjects -- and 16,000 is
- * still enough to carry AGENTS.md and CLAUDE.md whole for a repository of
+ * still enough to carry an AGENTS.md whole for a repository of
  * ordinary size.
  */
 export const MAX_INSTRUCTION_CHARS = 16_000;
@@ -83,30 +83,13 @@ function show(ref: string | null, file: string, cwd: string): string | null {
     // the tree, `cwd` not a repository, but also a partial clone still
     // missing this blob, a permissions error, a corrupt object. None of
     // those are distinguished from "no document", which means a real
-    // failure here is invisible downstream -- the run reports no
-    // instructions, a change rule produces no subject, and the run reads
-    // as clean for a repository that HAS an AGENTS.md and was never
-    // actually looked at. Anyone chasing that should start by running the
+    // failure here is invisible downstream -- a fallback CLAUDE.md may be
+    // used, or the run may report no instructions and produce no change
+    // subject despite a real AGENTS.md. Anyone chasing that should start by running the
     // `git show` command above by hand, not by reading a stack trace,
     // because there isn't one.
     return null;
   }
-}
-
-/**
- * A duplicate copy: byte-identical, trimmed, to a document already kept.
- *
- * A hand-copied `CLAUDE.md` (`cp AGENTS.md CLAUDE.md` where a symlink
- * would have done the job) reads back this way -- the same rules, said
- * twice, costing tokens for nothing a model doesn't already have. Checked
- * only against documents already kept, in the order `readInstructions`
- * processes `INSTRUCTION_FILES`, so of two identical documents -- however
- * each one got read, directly or by following a symlink -- the first one
- * kept is the one that stays.
- */
-function isCopy(text: string, already: InstructionDoc[]): boolean {
-  const body = text.trim();
-  return already.some((d) => d.text.trim() === body);
 }
 
 /**
@@ -195,65 +178,40 @@ function cut(text: string, limit: number): string {
 }
 
 /**
- * Below this many characters of budget left, a document is skipped rather
- * than cut down to a scrap.
+ * Below this many characters of budget, a document is skipped rather than
+ * cut down to a scrap.
  *
- * `cut`'s no-boundary fallback is the right call for one long paragraph
- * and the wrong one for whatever is left after an earlier document has
- * already taken most of the budget: a remainder of a handful of characters
- * produces a fragment of a word, which tells a model nothing an absent
- * document doesn't, while still costing the tokens of a second entry in
- * `docs` and the "here is a standard" framing around it. 40 is roughly the
+ * A budget of a handful of characters produces a fragment of a word,
+ * which tells a model nothing an absent document doesn't. 40 is roughly the
  * shortest a real, terse instruction reads -- "Write commits in
  * English." is 25 characters, "Never commit secrets." is 21 -- so a
- * remainder under that is treated as exhausted rather than as something to
+ * budget under that is treated as exhausted rather than as something to
  * cut.
  */
 const MIN_INSTRUCTION_REMAINDER = 40;
 
 /**
- * The documents in the tree `ref` names, or in the index when `ref` is
+ * The instruction document in the tree `ref` names, or in the index when `ref` is
  * null.
  *
- * Order is `INSTRUCTION_FILES`, so `AGENTS.md` is the one kept whole when
- * `budget` bites. `budget` mirrors `commitDiff`'s and `rangeDiff`'s own
+ * `AGENTS.md` takes precedence; `CLAUDE.md` is a fallback. `budget` mirrors
+ * `commitDiff`'s and `rangeDiff`'s own
  * parameter in `src/commits.ts` -- same module pair, same concern -- and
  * defaults to `MAX_INSTRUCTION_CHARS`.
  */
 export function readInstructions(ref: string | null, cwd: string = process.cwd(), budget: number = MAX_INSTRUCTION_CHARS): Instructions {
-  const docs: InstructionDoc[] = [];
-  let left = budget;
-  let truncated = false;
-
-  // Shared by both the direct read below and a document `resolvePointer`
-  // hands back: dedup, the remainder floor, and the cut all apply the same
-  // way regardless of whether the text came from `INSTRUCTION_FILES`
-  // directly or from following a symlink to get to it.
-  const keep = (file: string, text: string): void => {
-    if (isCopy(text, docs)) return;
-    if (left < MIN_INSTRUCTION_REMAINDER) {
-      truncated = true;
-      return;
-    }
-    const kept = cut(text, left);
-    if (kept.length < text.length) truncated = true;
-    docs.push({ file, text: kept });
-    left -= kept.length;
-  };
-
   for (const file of INSTRUCTION_FILES) {
     const text = show(ref, file, cwd);
     // Absent from the tree, or nothing but whitespace in it: an empty
     // document is not a standard anything is judged against, so it is
-    // treated the same as no document at all rather than as a duplicate.
+    // treated the same as no document at all.
     if (text === null || text.trim() === "") continue;
     const target = pointerTarget(text);
-    if (target !== null) {
-      const resolved = resolvePointer(ref, target, cwd);
-      if (resolved !== null) keep(resolved.file, resolved.text);
-      continue;
-    }
-    keep(file, text);
+    const document = target !== null ? resolvePointer(ref, target, cwd) : { file, text };
+    if (document === null) continue;
+    if (budget < MIN_INSTRUCTION_REMAINDER) return { docs: [], truncated: true };
+    const kept = cut(document.text, budget);
+    return { docs: [{ file: document.file, text: kept }], truncated: kept.length < document.text.length };
   }
-  return { docs, truncated };
+  return { docs: [], truncated: false };
 }

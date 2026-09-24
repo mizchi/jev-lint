@@ -1,0 +1,19 @@
+{
+  "runs": [
+    {
+      "repo": "mizchi/converge",
+      "revision": "373b0b0d2217065f4209202d39ca89c4e7bfc73a",
+      "checkout": "/Users/mz/ghq/github.com/mizchi/converge",
+      "record": "converge-2026-09-24/after-record.json",
+      "result": "converge-2026-09-24/after-result.json"
+    },
+    {
+      "repo": "mizchi/converge_audit",
+      "revision": "30d9ff2a8edae271938ccb03d50f2e2745fbed72",
+      "checkout": "/Users/mz/ghq/github.com/mizchi/converge_audit",
+      "record": "converge_audit-2026-09-24/after-record.json",
+      "result": "converge_audit-2026-09-24/after-result.json",
+      "supplements": ["converge_audit-2026-09-24/missing-rule-group-record.json"]
+    }
+  ]
+}

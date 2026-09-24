@@ -39,7 +39,7 @@
    a check that fires when a write would run past the end of a buffer or a
    queue is already full"). P 1.00 R 1.00, fitted 0.57; underflow 0.89.
    Clean max 0.40 (FakeQueue), bad min 0.73 (`runner-config.ts:32`,
-   "missing env" for a value read with a default). Set `at: 0.60`.
+   "missing env" for a value read with a default). Set `threshold: 0.60`.
    Unseen run at this point: 0 findings, but the seven copies of
    `normalizeBaseUrl` (`trimmed.length === 0` / "missing required option")
    had risen to 0.55 -- 0.05 under the cutoff -- and `cli.ts:317`

@@ -775,8 +775,8 @@ Ordered by how much each would change the decision to prefer one batching axis.
    separation with the file. Section 9, `docs/data/calibration-rule-axis.json`,
    `calibration-rule-axis-comments.json`, `grouping-refit.json`. Cost $0.005.
    Still open underneath it: the rule-axis cutoffs are documented but not
-   *shippable* — a rule carries one `at:`, so running `--group rule` still
-   needs the refit passed by hand with `--at`.
+   *shippable* — a rule carries one `threshold:`, so running `--group rule` still
+   needs the refit passed by hand with `--threshold`.
 
 5. **No accuracy measurement at the shipped cap.** The sweep used
    1/4/16/64/256 — never 32, which is what ships.

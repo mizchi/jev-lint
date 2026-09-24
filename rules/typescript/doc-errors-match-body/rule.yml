@@ -20,7 +20,7 @@ state: located
 # then 0.82. Midpoint of the gap, 0.18 of headroom on each side, no decision
 # flips, max spread 0.05. On 10 unseen subjects in jev-lint's own src/ the
 # clean band topped at 0.27.
-at: 0.56
+threshold: 0.56
 axis: file
 severity: warning
 rule:

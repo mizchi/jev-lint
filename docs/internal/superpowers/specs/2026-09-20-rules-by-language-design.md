@@ -43,9 +43,9 @@ rules/
 The identity of a rule is `(language, id)`. `fn-name-promises-rust`
 becomes `rust/fn-name-promises`; the `-rust` and `-js` suffixes go.
 
-- Findings, `jev-lint-ignore` comments and `--at id=n` name the `id` and
+- Findings, `jev-lint-ignore` comments and `--threshold id=n` name the `id` and
   apply to every language that has it. A file is one grammar, so an ignore
-  is never ambiguous. `--at rust/fn-name-promises=0.6` names one language.
+  is never ambiguous. `--threshold rust/fn-name-promises=0.6` names one language.
   `cutoffFor` looks up `lang/id` before `id`.
 - The cache key already hashes the matcher, so two languages' verdicts
   never collide. Nothing in the cache changes shape.
@@ -153,7 +153,7 @@ default. Added on request, in the new layout, as `rules/git/`.
   subject mode with no ast-grep matcher: `rule:` is absent, `languages` is
   `[Git]`, a pseudo-grammar the loader admits only under `git/` and only
   with `subject: commit`. Nothing else about a rule changes: `kind`,
-  `criteria`, `note`, `at`, `loose`, `explain` all apply.
+  `criteria`, `note`, `threshold`, `loose`, `explain` all apply.
 - **Command.** `jev-lint commits [--base <ref> | <range>]` (default
   `@{upstream}..HEAD`, else `--base main`) builds one subject per commit:
   the message is the subject text and travels in the question; the state

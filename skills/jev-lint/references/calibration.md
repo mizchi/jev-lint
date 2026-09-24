@@ -68,7 +68,7 @@ fn-name-promises          noul  26      6        0.67   0.10   0.55  0.65    wor
 | verdict | what to do |
 | --- | --- |
 | `works` | nothing. Any cutoff inside the gap gives the same answers. |
-| `move` | set `at:` to `suggest`. The rule discriminates; the threshold is misplaced. |
+| `move` | set `threshold:` to `suggest`. The rule discriminates; the threshold is misplaced. |
 | `rewrite` | the answers are not separated. **No cutoff helps.** First check whether the subject can show what it is being asked (`subject`, `state`); *then* rewrite the sentence and criteria. |
 | `silent` | the matcher never fired. Loosen it — this is the only place a dead matcher is visible. |
 | `thin` | under 6 matches. Not a pass. Add cases. |
@@ -169,7 +169,7 @@ inconclusive: >-
   The middle of this scale is empty because the language and the state arm
   leave the model nothing to be unsure about, not because nobody looked.
   Nine candidates aimed at the cutoff across two rounds each landed in one
-  confident band or the other; the per-candidate scores are in the `at:`
+  confident band or the other; the per-candidate scores are in the `threshold:`
   comment above.
 ```
 
@@ -202,7 +202,7 @@ exemption cannot outlive what it excuses.
    estimate of it.
 6. **Set the cutoff for headroom, not at the midpoint,** where the gap is
    narrow. The midpoint of a narrow gap is a coin flip on the next sample.
-7. **Write it into the rule as `at:`, and commit the record.** Then any later
+7. **Write it into the rule as `threshold:`, and commit the record.** Then any later
    claim about the rule is checkable without a key, and recalibrating cannot
    silently rewrite history.
 

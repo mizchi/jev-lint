@@ -261,7 +261,7 @@ drops:
 
 `rules:` is the selection, applied after loading by `applyRuleSettings`:
 only the ids it turns on run, each with the severity, cutoff and loose floor
-its entry gives it; an id matching nothing is an error. `--at one=0.5` still
+its entry gives it; an id matching nothing is an error. `--threshold one=0.5` still
 overrides one rule for one run and leaves the others standing.
 
 The starter file `init` writes sets `files:` and every shipped rule on, and
@@ -283,7 +283,7 @@ Every component is load-bearing:
 | `group` | file grouping puts a subject next to its own file's matches, rule grouping next to unrelated ones |
 | `subjectText` | not the line number, which moves for free |
 
-**`at` is deliberately excluded**, which is what makes recalibration free:
+**`threshold` is deliberately excluded**, which is what makes recalibration free:
 changing a cutoff invalidates nothing. `ruleTextHash` covers everything the
 model is shown and nothing else — which is why the matcher went in: it is
 shown, as `node` and `matcher_captured`, and until it was hashed a matcher

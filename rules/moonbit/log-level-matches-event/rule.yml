@@ -28,7 +28,7 @@ state: local
 # alignment with typescript's 0.6 is now a coincidence of two independently
 # fitted corpora rather than a deliberate match, which is what per-language
 # fitting always meant to be.
-at: 0.49
+threshold: 0.49
 axis: file
 severity: warning
 # Two shapes reach a leveled logger in MoonBit. A package call --

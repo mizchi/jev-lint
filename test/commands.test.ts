@@ -623,6 +623,72 @@ await testAsync("commands: since 0.5 a config picks its rules by id, .jev-lint/r
   }
 });
 
+await testAsync("commands: staged review and commits use hooks.precommit rules, while ordinary check keeps the base rules", async () => {
+  const { dir, rules } = project();
+  const here = process.cwd();
+  const git = (...args: string[]) => execFileSync("git", args, { cwd: dir, stdio: ["ignore", "pipe", "pipe"] });
+  try {
+    writeFileSync(rules, readFileSync(rules, "utf8") + [
+      "- id: local-diff-rule",
+      "  language: Git",
+      "  subject: change",
+      "  kind: noul",
+      "  at: 0.5",
+      "  ask: This change contradicts the repository instructions.",
+      "  criteria: { 'true': it contradicts them, 'false': it follows them }",
+      "",
+    ].join("\n"));
+    writeFileSync(join(dir, "AGENTS.md"), "A change must keep function names honest.\n");
+    git("init", "-q", "-b", "main");
+    git("-c", "user.name=Test", "-c", "user.email=test@example.com", "add", ".");
+    git("-c", "user.name=Test", "-c", "user.email=test@example.com", "commit", "-q", "-m", "baseline");
+    writeFileSync(join(dir, "src", "a.ts"), readFileSync(join(dir, "src", "a.ts"), "utf8").replace("return 2;", "return 3;"));
+    git("add", "src/a.ts");
+    process.chdir(dir);
+    const configPath = join(dir, ".jev-lint.yaml");
+    const config = (inherit: boolean) => [
+      "files: [src]",
+      "rules: { name-lies: on }",
+      "hooks:",
+      "  precommit:",
+      `    extends: ${inherit}`,
+      "    rules: { body-short: on, local-diff-rule: on }",
+      "",
+    ].join("\n");
+    const args = ["-R", rules, "--cache", "none", "--dry-run", "--show-subjects"];
+
+    writeFileSync(configPath, config(true));
+    const ordinary = await cli(["check", ...args]);
+    assert.equal(ordinary.code, 0, ordinary.log);
+    assert.match(ordinary.out, /name-lies/);
+    assert.ok(!ordinary.out.includes("body-short"), "ordinary check does not inherit hook-only rules");
+    const inherited = await cli(["review", "--staged", ...args]);
+    assert.equal(inherited.code, 0, inherited.log);
+    assert.match(inherited.out, /name-lies/);
+    assert.match(inherited.out, /body-short/);
+    const stagedChange = await cli(["commits", "--staged", ...args]);
+    assert.equal(stagedChange.code, 0, stagedChange.log);
+    assert.match(stagedChange.out, /local-diff-rule/);
+
+    writeFileSync(configPath, config(false));
+    const independent = await cli(["review", "--staged", ...args]);
+    assert.equal(independent.code, 0, independent.log);
+    assert.match(independent.out, /body-short/);
+    assert.ok(!independent.out.includes("name-lies"), "independent hook rules do not select the base rule");
+    const stillOrdinary = await cli(["check", ...args]);
+    assert.match(stillOrdinary.out, /name-lies/);
+    assert.ok(!stillOrdinary.out.includes("body-short"));
+
+    writeFileSync(configPath, "files: [src]\nrules: { name-lies: on }\nhooks: { precommit: { extends: false, rules: { body-short: on } } }\n");
+    const noChangeRule = await cli(["commits", "--staged", ...args]);
+    assert.equal(noChangeRule.code, 0, noChangeRule.log);
+    assert.match(noChangeRule.log, /no subject: change rule.*skipping/);
+  } finally {
+    process.chdir(here);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 /**
  * A suite whose corpus cannot see its rule drift, carrying the `inconclusive:`
  * that accepts it. Seven explicitly labelled subjects -- past

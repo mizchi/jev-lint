@@ -39,6 +39,8 @@ rules:
   go/var-name-describes-value: on
   javascript/comment-describes-declaration: on
   json/script-name-does: on
+  markdown/agent-instruction-is-unclear: on
+  markdown/agent-instructions-conflict: on
   markdown/document-abandons-a-question: on
   markdown/document-is-filler: on
   markdown/document-is-formulaic: on
@@ -125,5 +127,13 @@ rules:
   typescript/tests-cover-failure-paths: on
   typescript/type-name-describes-shape: on
   typescript/var-name-describes-value: on
+# Staged review inherits the ordinary rules. The change rule can judge the
+# index; the commit-message rule has no message until pre-push.
+hooks:
+  precommit:
+    extends: true
+    rules:
+      git/commit-message-describes-diff: on
+      git/diff-follows-instructions: on
 # The verdict cache, committed: a run over the same commit answers from it.
 # cache: .jev-lint/baseline.json

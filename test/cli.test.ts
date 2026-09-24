@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
-import { execFileSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync, realpathSync, existsSync, readFileSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync, realpathSync, existsSync, readFileSync, copyFileSync, chmodSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadRules } from "../src/rules.ts";
@@ -27,6 +27,26 @@ test("cli: a bare config rule warns while a qualified rule selects quietly", () 
   const qualified = select("typescript/fn-name-promises");
   assert.equal(qualified.result?.rules.length, 1);
   assert.ok(!qualified.said.some((message) => message.includes("config warning")));
+});
+
+test("cli: --threshold replaces --at, while --at remains a warned alias", () => {
+  const preferred = parseArgs(["--threshold", "typescript/fn-name-promises=0.8"], { color: false });
+  assert.deepEqual(preferred.at, { "typescript/fn-name-promises": 0.8 });
+  assert.equal(preferred.deprecatedAt, false);
+  const alias = parseArgs(["--at", "typescript/fn-name-promises=0.8"], { color: false });
+  assert.deepEqual(alias.at, preferred.at);
+  assert.equal(alias.deprecatedAt, true);
+  const cli = join(realpathSync("."), "src/cli.ts");
+  const rule = join(realpathSync("."), "rules", "typescript", "fn-name-promises", "rule.yml");
+  const run = (flag: string) => spawnSync("node", ["--experimental-strip-types", cli, "rules", "--no-config", "-R", rule, flag, "typescript/fn-name-promises=0.8", "--json"], { encoding: "utf8" });
+  const current = run("--threshold");
+  assert.equal(current.status, 0, current.stderr);
+  assert.equal(JSON.parse(current.stdout).rules[0].cutoff, 0.8);
+  assert.ok(!current.stderr.includes("deprecated"));
+  const legacy = run("--at");
+  assert.equal(legacy.status, 0, legacy.stderr);
+  assert.equal(JSON.parse(legacy.stdout).rules[0].cutoff, 0.8);
+  assert.match(legacy.stderr, /--at is deprecated; use --threshold/);
 });
 
 await testAsync("cli: `commits --base <ref>` with `paths:` in the config judges the range, not the paths", async () => {
@@ -413,6 +433,44 @@ await testAsync("cli: init --pre-commit writes the hook where git keeps hooks, o
     }
   } finally {
     process.chdir(here);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("cli: this repository's pre-commit hook reviews staged changes with the local CLI", () => {
+  const source = join(realpathSync("."), ".jev-lint", "hooks", "pre-commit");
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-self-hook-")));
+  try {
+    execFileSync("git", ["init", "-q"], { cwd: dir });
+    mkdirSync(join(dir, ".jev-lint", "hooks"), { recursive: true });
+    const hook = join(dir, ".jev-lint", "hooks", "pre-commit");
+    copyFileSync(source, hook);
+    mkdirSync(join(dir, "bin"));
+    const calls = join(dir, "calls");
+    const fakeNode = join(dir, "bin", "node");
+    writeFileSync(fakeNode, '#!/bin/sh\nprintf "%s\\n" "$*" >> "$HOOK_CALLS"\ncase "$*" in\n  *" review "*) exit "${REVIEW_STATUS:-0}";;\n  *" commits "*) exit "${COMMITS_STATUS:-0}";;\nesac\nexit 99\n');
+    chmodSync(fakeNode, 0o755);
+    const run = (reviewStatus: number, commitsStatus: number, key?: string) => {
+      rmSync(calls, { force: true });
+      return spawnSync("sh", [hook], {
+        cwd: dir,
+        encoding: "utf8",
+        env: { ...process.env, PATH: `${join(dir, "bin")}:${process.env.PATH}`, HOOK_CALLS: calls,
+          REVIEW_STATUS: String(reviewStatus), COMMITS_STATUS: String(commitsStatus),
+          TYPESAFE_API_KEY: key ?? "", TYPESAFEAI_API_KEY: "" },
+      });
+    };
+    assert.equal(run(0, 0).status, 0);
+    assert.equal(existsSync(calls), false, "a missing key makes no request");
+    assert.equal(run(3, 0, "test-key").status, 0, "a failed request still reaches the second check");
+    assert.deepEqual(readFileSync(calls, "utf8").trim().split("\n"), [
+      `--experimental-strip-types ${join(dir, "src", "cli.ts")} review --staged --fail-on error`,
+      `--experimental-strip-types ${join(dir, "src", "cli.ts")} commits --staged --fail-on error`,
+    ]);
+    assert.equal(run(1, 0, "test-key").status, 1, "a blocking finding stops the commit");
+    assert.equal(readFileSync(calls, "utf8").trim().split("\n").length, 1);
+    assert.equal(run(0, 2, "test-key").status, 2, "a configuration error stops the commit");
+  } finally {
     rmSync(dir, { recursive: true, force: true });
   }
 });

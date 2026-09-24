@@ -9,7 +9,7 @@ state: located
 # widest spread in the corpus) then 0.60 (`Summarize`); the other seven sit at
 # 0.76-0.95. Set under the midpoint so Drain's lowest pass keeps 0.10 and the
 # top clean keeps 0.14. Report: experiments/reports/j-go/REPORT.md.
-at: 0.40
+threshold: 0.40
 axis: file
 severity: warning
 rule:

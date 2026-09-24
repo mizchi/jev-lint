@@ -27,7 +27,7 @@ severity: info
 # answer 0.82-0.90. Midpoint, 0.17 on the clean side and 0.18 on the
 # defect side, no flips. The corpus is small because the subject is a
 # whole class: eight classes is eight subjects.
-at: 0.38
+threshold: 0.38
 languages: [TypeScript, Tsx]
 rule:
   all:

@@ -11,7 +11,7 @@ state: located
 # on a duplicate pattern -- API knowledge, and the weakest answer for it.
 # Midpoint of the 0.26-0.59 gap: 0.16 over the top clean, 0.13 under the
 # lowest defect pass. Report: experiments/reports/j-go/REPORT.md.
-at: 0.42
+threshold: 0.42
 axis: file
 rule:
   all:

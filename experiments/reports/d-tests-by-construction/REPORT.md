@@ -37,7 +37,7 @@ for the coverage comparison). Nothing outside this directory was touched.
   # Fitted 0.29 on records/family-d-located.json (5 bad, 28 clean, 3 passes,
   # 0 flips): clean top 0.16, lowest bad 0.42. The bad band is quiet
   # (0.42-0.64 for four of five), so this cutoff is low by construction.
-  at: 0.30
+  threshold: 0.30
   rule: &js_test_matcher
     any:
       - pattern: it($TITLE, $BODY)
@@ -131,7 +131,7 @@ class boundary (0.16 to 0.42). The labelled fit is what counts here.
 
 **Fit** (`records/family-d-located.json`, 3 passes)
 
-- fitted cutoff 0.29, written as `at: 0.30`; precision 1.00, recall 1.00
+- fitted cutoff 0.29, written as `threshold: 0.30`; precision 1.00, recall 1.00
   (tp 5, fp 0, fn 0)
 - scores: bad 0.94 / 0.64 / 0.58 / 0.52 / 0.42; clean top 0.16 (the
   no-replacement spy), then 0.14, 0.13
@@ -178,7 +178,7 @@ matcher and `subject` are right; `located` is required.
   state: located
   # Fitted 0.51 on records/family-d-located.json (4 bad, 29 clean, 3 passes,
   # 0 flips): clean top 0.19, lowest bad 0.84.
-  at: 0.50
+  threshold: 0.50
   rule: *js_test_matcher
   ask: >-
     This test's name claims an outcome, but its assertions only check that a
@@ -235,7 +235,7 @@ API" (`:131`).
 
 **Fit** (`records/family-d-located.json`, 3 passes)
 
-- fitted cutoff 0.51, written as `at: 0.50`; precision 1.00, recall 1.00
+- fitted cutoff 0.51, written as `threshold: 0.50`; precision 1.00, recall 1.00
   (tp 4, fp 0, fn 0)
 - scores: bad 0.95 / 0.92 / 0.89 / 0.84; clean top 0.19 ("does not send
   any email"), 0.18 ("calls save exactly once"), 0.17
@@ -276,7 +276,7 @@ right arm.
   state: located
   # Fitted 0.66 on records/family-d-located.json (4 bad, 29 clean, 3 passes,
   # 0 flips): clean top 0.44, lowest bad 0.88.
-  at: 0.66
+  threshold: 0.66
   rule: *js_test_matcher
   ask: >-
     This test's name claims a specific behaviour, but the body only compares
@@ -346,7 +346,7 @@ property claim.
 
 **Fit** (`records/family-d-located.json`, 3 passes)
 
-- fitted cutoff 0.66, written as `at: 0.66`; precision 1.00, recall 1.00
+- fitted cutoff 0.66, written as `threshold: 0.66`; precision 1.00, recall 1.00
   (tp 4, fp 0, fn 0)
 - scores: bad 0.95 / 0.90 / 0.90 / 0.88; clean top 0.44 ("renders the
   receipt for a single-item order"), 0.38 (the one-line inline literal),

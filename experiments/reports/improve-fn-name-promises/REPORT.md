@@ -8,14 +8,14 @@ both; `axis: file`.
 
 | | start (2026-09-19 baseline) | end (2026-09-20 baseline) |
 | --- | --- | --- |
-| TS `at` | 0.82 | 0.55 |
+| TS `threshold` | 0.82 | 0.55 |
 | TS P / R / flips | 1.00 / 1.00 / 0 | 1.00 / 1.00 / 0 |
 | TS defects / cleans | 6 / 9 (0 labelled hard) | 11 / 24 (14 labelled hard) |
-| TS clean top -> `at` -> defect bottom | 0.69 -> 0.82 -> 0.85 (0.13 / 0.03) | 0.38 -> 0.55 -> 0.65 (0.17 / 0.10) |
-| Rust `at` | 0.68 | 0.57 |
+| TS clean top -> `threshold` -> defect bottom | 0.69 -> 0.82 -> 0.85 (0.13 / 0.03) | 0.38 -> 0.55 -> 0.65 (0.17 / 0.10) |
+| Rust `threshold` | 0.68 | 0.57 |
 | Rust P / R / flips | 1.00 / 0.83 / 0 (1 fn) | 1.00 / 1.00 / 0 |
 | Rust defects / cleans | 6 / 17 (0 labelled hard; 4 stale-doc-comment cleans in budget.rs) | 10 / 29 (9 labelled hard, plus those 4) |
-| Rust clean top -> `at` -> defect bottom | 0.69 -> 0.68 -> 0.62 (inverted) | 0.46 -> 0.57 -> 0.66 (0.11 / 0.09) |
+| Rust clean top -> `threshold` -> defect bottom | 0.69 -> 0.68 -> 0.62 (inverted) | 0.46 -> 0.57 -> 0.66 (0.11 / 0.09) |
 
 Nothing outside `rules/fn-name-promises/` was touched. Three passes, decisions
 on the mean, every number below from `eval --repeat 3 --no-config`.
@@ -66,14 +66,14 @@ on the mean, every number below from `eval --repeat 3 --no-config`.
 7. **`checkRateLimit` -> `consume`** in `limits.ts`, same body. 0.37. TS:
    clean top 0.37, defect bottom 0.66, fitted 0.52. Rust unchanged
    (0.48 / 0.66, fitted 0.57). $0.0058.
-8. **`at:` TS 0.55, Rust 0.57; `--accept`.** TS 11/0/0, clean top 0.38,
+8. **`threshold:` TS 0.55, Rust 0.57; `--accept`.** TS 11/0/0, clean top 0.38,
    defect bottom 0.65, flips 0, nothing within 0.03. Rust 10/0/0, clean top
    0.46, defect bottom 0.66, flips 0, nothing within 0.03. `--replay` passes.
    $0.0058.
 
 Criteria were edited twice (attempts 2 and 4); the other changes are cases,
-state and cutoff. TS `at` is set above the fitted midpoint (0.52) for the
-real-code headroom the unseen check showed; Rust `at` is at its midpoint
+state and cutoff. TS `threshold` is set above the fitted midpoint (0.52) for the
+real-code headroom the unseen check showed; Rust `threshold` is at its midpoint
 because `summarize` leaves no room above it.
 
 ## Cases added
@@ -83,7 +83,7 @@ because `summarize` leaves no room above it.
 - `:21 loadConfig` **bad** -- promises a read; rewrites the config file on
   every call. 0.87.
 - `:28 getJob` **bad** -- promises a lookup; creates and registers the job
-  when missing. 0.65. The lowest defect and the one that bounds `at` from
+  when missing. 0.65. The lowest defect and the one that bounds `threshold` from
   above.
 - `:37 countFailed` **bad** -- promises a number; returns the array. 0.84.
 - `:41 retry` **bad** -- promises attempts; calls once and rethrows. 0.83.
@@ -133,7 +133,7 @@ class. 0.46 -- still the Rust top clean.
 ## What stops the bar
 
 **Rust: `backoff.rs:39 summarize`**, bad, 0.66 (0.66-0.67 across passes),
-0.09 above `at: 0.57`; the bar asks 0.10. Every other Rust defect is at
+0.09 above `threshold: 0.57`; the bar asks 0.10. Every other Rust defect is at
 0.77 or above. `summarize(&self) -> u64` adds three numbers derived from
 the backoff's own fields and calls the sum a summary. Its sibling
 `session.ts:45 summarize` scores 0.86 because one of its terms ignores the
@@ -155,7 +155,7 @@ creates -- the findOrCreate class scores lowest of the real-world defects.
 `check` over six agent-cluster files (`apps/bit-relay/worker.ts`,
 `apps/shared/auth.ts`, `packages/agent-cluster/hub-pr-review.ts`,
 `apps/agent-worker/{loop-domain,loop-contract,moonbit-inline}.ts`), 100
-subjects, `--at fn-name-promises=0.48` (the fitted midpoint at the time),
+subjects, `--threshold fn-name-promises=0.48` (the fitted midpoint at the time),
 record in the scratchpad. Median 0.15. Two findings, both at 0.50:
 
 - `apps/agent-worker/moonbit-inline.ts:89 callInlineMoonbitRunnerTest` --
@@ -166,7 +166,7 @@ record in the scratchpad. Median 0.15. Two findings, both at 0.50:
   checks. Clean by convention (see attempt 6).
 
 Next: 0.43 (`checkScopedRelayApiAuth`), 0.41, 0.32. The real-code clean band
-tops at 0.50 against 0.38 in the corpus, which is why TS `at` is 0.55 and
+tops at 0.50 against 0.38 in the corpus, which is why TS `threshold` is 0.55 and
 not the midpoint 0.52. At 0.55 the run has no findings. The Rust variant
 matched nothing (no Rust in agent-cluster).
 

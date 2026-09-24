@@ -18,7 +18,7 @@ answers yes just as loudly as a silent beacon does.
 
 The final YAML is `rule.yml` beside this file. The parts that carry it:
 
-- `subject: node`, `state: located`, `axis: file`, `at: 0.55`, `severity: info`.
+- `subject: node`, `state: located`, `axis: file`, `threshold: 0.55`, `severity: info`.
 - Matcher, over-matched on purpose, three branches: every `curl`/`wget`-family
   command whatever its shape; the same tools behind a wrapper that eats the
   command name (`sudo`, `nohup`, `timeout`, `env`, ...); and every `trap`.
@@ -97,7 +97,7 @@ is being sent and where it lands, never by what it is for.
 
 ## Fit
 
-- Fitted cutoff **0.55** (midpoint), written into `at:`.
+- Fitted cutoff **0.55** (midpoint), written into `threshold:`.
 - Precision **1.00**, recall **1.00**: tp 6, fp 0, fn 0.
 - **0 decision flips** over 3 passes; max pass-to-pass spread **0.02**.
 - Cleans top out at **0.14**; reportable cases start at **0.95** and the other

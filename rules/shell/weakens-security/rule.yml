@@ -23,7 +23,7 @@ state: located
 # `located` does not bleed here: the clean loopback health check three lines under
 # `run_worker.sh`'s privileged container answers 0.12, and the clean at the foot of
 # `provision_agent.sh` 0.11, both in files whose other subjects are defects.
-at: 0.66
+threshold: 0.66
 axis: file
 severity: warning
 # Four places a shell script can take a guard off, over-matched on purpose:

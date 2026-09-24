@@ -7,11 +7,11 @@
 
 | | start | end |
 | --- | --- | --- |
-| TS `at` / state | 0.94 / `bare` | 0.75 (parked, see below) / `located` |
+| TS `threshold` / state | 0.94 / `bare` | 0.75 (parked, see below) / `located` |
 | TS P / R / flips | 1.00 / 0.50 / 0 | 1.00 / 0.92 / 0 |
 | TS defects / hard cleans | 2 / 3 (the 3 were marker-laden, see below) | 12 / 13 |
 | TS headroom (clean -> at -> lowest caught defect) | preambles at 0.81-0.93 on real code sat OVER one defect | 0.34 -> 0.75 -> 0.83: 0.41 / 0.08 |
-| Rust `at` / state | 0.90 / `bare` | 0.45 / `bare` |
+| Rust `threshold` / state | 0.90 / `bare` | 0.45 / `bare` |
 | Rust P / R / flips | 1.00 / 0.50 / 0 | 1.00 / 1.00 / 0 |
 | Rust defects / hard cleans | 2 / 0 | 10 / 8 |
 | Rust headroom | - | 0.12 -> 0.45 -> 0.60: 0.33 / 0.15 |
@@ -94,7 +94,7 @@ steps down to `local` and the TS model sees only the statement.
 6. Case fix: `retry_queue.ts:54` ("remove the head" above `queue[0]`) had a
    second line marking the job as claimed, which half-achieves what the
    comment promises; the model sat at 0.69-0.74, on the cutoff. Removed that
-   line; it answers 0.86. Rust `at` 0.50 -> 0.45 for headroom under
+   line; it answers 0.86. Rust `threshold` 0.50 -> 0.45 for headroom under
    `scheduler.rs:86` (0.56-0.65). Accepted. $0.0049 x 3 (one run with
    shifted labels, one accept, one re-accept).
 

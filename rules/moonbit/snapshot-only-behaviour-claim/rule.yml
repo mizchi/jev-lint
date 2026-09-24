@@ -15,7 +15,7 @@ state: located
 # assertion -- an escaped `a&amp;b` in the content establishes the
 # escaping -- and the defect is a title claiming what the recording cannot
 # show: an absence, an alignment, a truncation the content does not carry.
-at: 0.55
+threshold: 0.55
 axis: file
 severity: warning
 # `test "..." { }`, the same subject the two test rules take. MoonBit's

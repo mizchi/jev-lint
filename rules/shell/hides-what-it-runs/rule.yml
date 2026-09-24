@@ -21,7 +21,7 @@ state: located
 # single pass (0.49), with no decision flips over three passes. Not the midpoint
 # (0.315): the clean band is tight -- 0.02 of spread at most -- while the
 # laggard defect wobbles 0.08, so the room belongs under the defects.
-at: 0.30
+threshold: 0.30
 axis: file
 severity: warning
 # Nine shapes a shell script uses to stop being readable, over-matched on

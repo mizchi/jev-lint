@@ -115,7 +115,7 @@ export function renderRulesMd(rulesRoot: string, repoRoot: string): string {
   out.push("");
   out.push("## By family");
   out.push("");
-  out.push("The cutoff (`at`) where the rule exists in that language; blank where it does not.");
+  out.push("The cutoff (`threshold`) where the rule exists in that language; blank where it does not.");
   out.push("");
   out.push(`| rule | ${languages.join(" | ")} |`);
   out.push(`| --- | ${languages.map(() => "---").join(" | ")} |`);
@@ -141,7 +141,7 @@ export function renderRulesMd(rulesRoot: string, repoRoot: string): string {
         `kind \`${rule.kind}\``,
         `subject \`${rule.subject}\``,
         `state \`${rule.state}\``,
-        `at ${fmt(rule.at)}`,
+        `threshold ${fmt(rule.at)}`,
         ...(rule.loose !== null ? [`loose ${fmt(rule.loose)}`] : []),
         `severity \`${rule.severity}\``,
         `languages ${rule.languages.join(", ")}`,

@@ -41,7 +41,7 @@ state: local
 # code: the sibling assertion-message-matches found its false positives
 # there, in test doubles, which is why the doubles are in this corpus.
 # See experiments/reports/l-recipes/REPORT.md.
-at: 0.65
+threshold: 0.65
 severity: warning
 rule:
   all:

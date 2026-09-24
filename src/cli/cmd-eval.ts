@@ -212,7 +212,7 @@ export function cmdEvalCompare(opts: Options, out: Log, log: Log): number {
     out(`${name}: ${rec.recorded.slice(0, 19)}  model ${rec.model ?? "?"}  ${rec.passes.length} pass(es)`);
     for (const r of sc.rules) {
       const fmt = (n: number | null) => (n === null ? "-" : n.toFixed(2));
-      out(`  ${r.rule.padEnd(36)} at ${String(r.at).padEnd(5)} tp ${r.tp} fp ${r.fp} fn ${r.fn}  P ${fmt(r.precision)} R ${fmt(r.recall)}  flips ${r.flips}`);
+      out(`  ${r.rule.padEnd(36)} threshold ${String(r.at).padEnd(5)} tp ${r.tp} fp ${r.fp} fn ${r.fn}  P ${fmt(r.precision)} R ${fmt(r.recall)}  flips ${r.flips}`);
     }
   };
   side(`A ${a}`, left, scoreL);
@@ -273,11 +273,11 @@ export function formatEvalSuite(
   const lines: string[] = [];
   const passes = record.passes.length;
   lines.push(`${suite.name}  (${suite.dir}; ${replay ? "baseline" : "run"} of ${record.recorded.slice(0, 10)}, ${passes} pass(es))`);
-  lines.push(`  ${"rule".padEnd(36)} ${"at".padEnd(5)} ${"tp".padStart(3)} ${"fp".padStart(3)} ${"fn".padStart(3)}  ${"P".padEnd(5)} ${"R".padEnd(5)} ${"flips".padEnd(5)} ${"cleanTop".padEnd(8)} fitted`);
+  lines.push(`  ${"rule".padEnd(36)} ${"threshold".padEnd(9)} ${"tp".padStart(3)} ${"fp".padStart(3)} ${"fn".padStart(3)}  ${"P".padEnd(5)} ${"R".padEnd(5)} ${"flips".padEnd(5)} ${"cleanTop".padEnd(8)} fitted`);
   const fmt = (n: number | null) => (n === null ? "-" : n.toFixed(2));
   for (const r of score.rules) {
     lines.push(
-      `  ${r.rule.padEnd(36)} ${String(r.at).padEnd(5)} ${String(r.tp).padStart(3)} ${String(r.fp).padStart(3)} ${String(r.fn).padStart(3)}  ${fmt(r.precision).padEnd(5)} ${fmt(r.recall).padEnd(5)} ${String(r.flips).padEnd(5)} ${String(r.cleanTop ?? "-").padEnd(8)} ${r.fitted ?? "-"}  ${r.fitReason}`,
+      `  ${r.rule.padEnd(36)} ${String(r.at).padEnd(9)} ${String(r.tp).padStart(3)} ${String(r.fp).padStart(3)} ${String(r.fn).padStart(3)}  ${fmt(r.precision).padEnd(5)} ${fmt(r.recall).padEnd(5)} ${String(r.flips).padEnd(5)} ${String(r.cleanTop ?? "-").padEnd(8)} ${r.fitted ?? "-"}  ${r.fitReason}`,
     );
     // The rule's own `inconclusive:` reason is printed on every run the suite
     // is reported, not only in `diff.reasons` when it fails: an exemption

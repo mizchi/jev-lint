@@ -11,7 +11,7 @@ state: bare
 # 0.94-0.96. Midpoint of the gap, 0.14 of headroom on each side, no
 # decision flips, max spread 0.07. The three hard cleans near the cutoff
 # are the other rule's defects, which is the split the two rules exist for.
-at: 0.79
+threshold: 0.79
 axis: file
 severity: warning
 rule:

@@ -12,7 +12,7 @@ generic-sounding explainer is empty or merely conventional, whether an
 argument with no data is vague or merely evidence-free -- those are readings,
 and the corpus below is built so that each rule is measured on the reading
 it is supposed to make and on the neighbouring one it is supposed not to.
-The rubrics were not edited (they are the port); what was fitted is `at:`,
+The rubrics were not edited (they are the port); what was fitted is `threshold:`,
 and two rubrics turned out not to be fittable as ported: one because its
 level names run the wrong way, one because its level names give the model
 nothing to count.
@@ -96,7 +96,7 @@ state: bare
 # reference) and 0.08 (the opinion piece with no data). Midpoint is 1.68;
 # 2.0 is the rubric's own "mixed" boundary and leaves 1.0 to the lowest
 # defect and 1.7 to the highest clean. Pass-to-pass spread <= 0.06.
-at: 2.0
+threshold: 2.0
 severity: info
 ask: >-
   Overall, this document reads as low-value: thin, generic, padded, repetitive, formulaic, or superficially polished.
@@ -130,12 +130,12 @@ Japanese 副業 listicle.
 
 ### Attempts
 
-1. Rubric as ported, `at: 3` -> P 1.00 R 1.00 at 3 already; fitted 1.68,
+1. Rubric as ported, `threshold: 3` -> P 1.00 R 1.00 at 3 already; fitted 1.68,
    defects 3.02-3.98, cleans <= 0.34, gap 2.68. No second attempt needed.
 
 ### Fit
 
-`at: 2.0`. P 1.00, R 1.00 (tp 7, fp 0, fn 0). Flips 0. Max spread 0.06.
+`threshold: 2.0`. P 1.00, R 1.00 (tp 7, fp 0, fn 0). Flips 0. Max spread 0.06.
 Headroom 1.66 above the clean top (tutorial 0.34), 1.02 under the lowest
 defect (Kubernetes explainer 3.02). 2.0 rather than the 1.68 midpoint because
 2 is the rubric's own "mixed" boundary and the clean band is far below it.
@@ -172,7 +172,7 @@ state: bare
 # and the README, reference, post-mortem and Japanese migration post all
 # under 0.5. Midpoint 1.82, rounded up for precision: 0.57 above the clean
 # top, 0.41 under the lowest defect. Spread <= 0.10.
-at: 1.9
+threshold: 1.9
 severity: info
 ask: >-
   This document contains little substantive information relative to its length.
@@ -200,14 +200,14 @@ launch post (four features described by their names).
 
 ### Attempts
 
-1. Rubric as ported, `at: 3` -> P 1.00 R 0.50 (three defects at 2.31-2.89
+1. Rubric as ported, `threshold: 3` -> P 1.00 R 0.50 (three defects at 2.31-2.89
    under 3, one flip at 3.02). Fitted 1.82, gap 0.98 between confident
    generalities 2.31 and the Kubernetes explainer 1.33. Threshold, not
    rubric: no second attempt.
 
 ### Fit
 
-`at: 1.9`. P 1.00, R 1.00 (tp 6, fp 0, fn 0). Flips 0. Max spread 0.10.
+`threshold: 1.9`. P 1.00, R 1.00 (tp 6, fp 0, fn 0). Flips 0. Max spread 0.10.
 Headroom 0.57 above the clean top, 0.41 under the lowest defect. Rounded up
 from the 1.82 midpoint for precision.
 
@@ -243,7 +243,7 @@ state: bare
 # README and the config reference 1.11 and the opinion piece with no data
 # 0.99, whose argument is its own. Midpoint 2.65, rounded up: 1.0 above the
 # clean top, 0.9 under the lowest defect.
-at: 2.7
+threshold: 2.7
 severity: info
 ask: >-
   This document's prose is interchangeable with generic writing on the same subject.
@@ -272,12 +272,12 @@ name).
 
 ### Attempts
 
-1. Rubric as ported, `at: 3` -> P 1.00 R 1.00 at 3 already; fitted 2.64,
+1. Rubric as ported, `threshold: 3` -> P 1.00 R 1.00 at 3 already; fitted 2.64,
    defects 3.60-4.00, cleans <= 1.69, gap 1.91. No second attempt.
 
 ### Fit
 
-`at: 2.7`. P 1.00, R 1.00 (tp 6, fp 0, fn 0). Flips 0. Max spread 0.40 (the
+`threshold: 2.7`. P 1.00, R 1.00 (tp 6, fp 0, fn 0). Flips 0. Max spread 0.40 (the
 tutorial, 1.49-1.89 across passes; everything else <= 0.25). Headroom 1.01
 above the clean top, 0.90 under the lowest defect.
 
@@ -311,7 +311,7 @@ state: bare
 # with no anecdote; everything with a number or a command answers 0.00-0.01.
 # Midpoint 2.16, rounded up; 1.1 above the clean top, 1.0 under the lowest
 # defect. Spread <= 0.19.
-at: 2.2
+threshold: 2.2
 severity: info
 ask: >-
   This document is vague and generic rather than specific and concrete.
@@ -338,12 +338,12 @@ note: >-
 
 ### Attempts
 
-1. Rubric as ported, `at: 3` -> P 1.00 R 1.00 at 3 already; fitted 2.16,
+1. Rubric as ported, `threshold: 3` -> P 1.00 R 1.00 at 3 already; fitted 2.16,
    defects 3.22-3.95, cleans <= 1.09, gap 2.13. No second attempt.
 
 ### Fit
 
-`at: 2.2`. P 1.00, R 1.00 (tp 5, fp 0, fn 0). Flips 0. Max spread 0.19.
+`threshold: 2.2`. P 1.00, R 1.00 (tp 5, fp 0, fn 0). Flips 0. Max spread 0.19.
 Headroom 1.11 above the clean top (opinion piece 1.09), 1.02 under the lowest
 defect.
 
@@ -384,7 +384,7 @@ state: bare
 # padded. Midpoint; 0.49 above the clean top, 0.46 under the lowest defect.
 # Spread <= 0.16. On unseen documents this repository's README answered
 # 1.35 and docs/internal/findings.md 1.30: 0.15 of headroom on long reference prose.
-at: 1.5
+threshold: 1.5
 severity: info
 ask: >-
   Text could be removed from this document without losing useful information, reasoning, evidence, or voice.
@@ -412,14 +412,14 @@ confident generalities; the 副業 listicle.
 
 ### Attempts
 
-1. Rubric as ported, `at: 3`, 12 documents -> R 0.00 at 3 (defects
+1. Rubric as ported, `threshold: 3`, 12 documents -> R 0.00 at 3 (defects
    1.95-2.95). Fitted 1.5, gap 0.89 (ja-slop 1.95 over tutorial 1.06).
 2. Same rubric, two strongly padded documents added (billing notice 3.57,
    ja-repeats 3.34) so the defect band has a top. Fitted 1.48, gap 0.95.
 
 ### Fit
 
-`at: 1.5`. P 1.00, R 1.00 (tp 8, fp 0, fn 0). Flips 0. Max spread 0.16.
+`threshold: 1.5`. P 1.00, R 1.00 (tp 8, fp 0, fn 0). Flips 0. Max spread 0.16.
 Headroom 0.49 above the clean top (tutorial 1.01), 0.46 under the lowest
 defect (ja-slop 1.96). Midpoint.
 
@@ -459,7 +459,7 @@ state: bare
 # Midpoint of a 0.47 gap: 0.22 above the clean top, 0.25 under the launch
 # post. Narrow; a document that repeats with the intent of a tutorial will
 # sit near it. Spread <= 0.13.
-at: 1.8
+threshold: 1.8
 severity: info
 ask: >-
   This document repeats the same ideas without adding useful information.
@@ -500,7 +500,7 @@ launch post (title three times in the intro).
 
 ### Fit
 
-`at: 1.8`. P 1.00, R 1.00 (tp 4, fp 0, fn 0). Flips 0. Max spread 0.13.
+`threshold: 1.8`. P 1.00, R 1.00 (tp 4, fp 0, fn 0). Flips 0. Max spread 0.13.
 Headroom 0.22 above the clean top (tutorial 1.58), 0.25 under the lowest
 defect (launch post 2.05).
 
@@ -541,7 +541,7 @@ state: bare
 # post-mortem 1.58 with its "at the end of the day". Not the midpoint:
 # between the tutorial and the startup essay, 0.25 above the clean top,
 # 0.42 under the essay. Spread <= 0.22.
-at: 3.0
+threshold: 3.0
 severity: info
 ask: >-
   This document uses formulaic, predictable, stock phrasing or transitions.
@@ -584,7 +584,7 @@ paragraph joint a stock transition).
 
 ### Fit
 
-`at: 3.0`. P 1.00, R 0.83 (tp 5, fp 0, fn 1: scattered thoughts at 2.38).
+`threshold: 3.0`. P 1.00, R 0.83 (tp 5, fp 0, fn 1: scattered thoughts at 2.38).
 Flips 0. Max spread 0.22. Headroom 0.25 above the clean top (tutorial 2.75),
 0.42 under the lowest flagged defect (confident generalities 3.42).
 
@@ -624,7 +624,7 @@ state: bare
 # would be a cutoff inside the noise. At 3 the rule flags nothing; see the
 # family report (experiments/reports/q-markdown) for the level wording that
 # moves the defects to 2.2-2.8.
-at: 3
+threshold: 3
 severity: info
 ask: >-
   This document's ideas are connected by superficial transitions rather than developed logically.
@@ -671,7 +671,7 @@ the microservices essay whose every conclusion contradicts its own paragraph
 
 ### Fit
 
-Not fitted. At the shipped `at: 3`: P -, R 0.00 (tp 0, fp 0, fn 5). Flips 0.
+Not fitted. At the shipped `threshold: 3`: P -, R 0.00 (tp 0, fp 0, fn 5). Flips 0.
 Max spread 0.10. The fitted 0.66 is rejected: it sits between 0.61 and 0.71
 on a scale whose bottom two levels both mean "coherent".
 
@@ -680,7 +680,7 @@ on a scale whose bottom two levels both mean "coherent".
 DROP as ported. The model reads any document with a heading structure as
 coherent, and the rubric's level names ("Exceptionally coherent ...
 Highly incoherent") give it nothing to hang a "3" on; contradiction inside a
-paragraph is not what it counts. `at: 3` is left so the rule flags nothing.
+paragraph is not what it counts. `threshold: 3` is left so the rule flags nothing.
 
 ### What I would change
 
@@ -711,7 +711,7 @@ state: bare
 # the corpus; do not enable it as ported. Rewording each level as a
 # statement about the document ("carries no firsthand evidence at all")
 # separates at 2.72 with 0.5 either side -- see the family report.
-at: 3
+threshold: 3
 severity: info
 ask: >-
   This document lacks firsthand experience, concrete observation, original evidence, or author-specific detail.
@@ -762,13 +762,13 @@ README (a measured throughput on named hardware).
 
 ### Fit
 
-Not fitted. At the shipped `at: 3`: P 0.00, R 0.00 (tp 0, fp 1, fn 8): the
+Not fitted. At the shipped `threshold: 3`: P 0.00, R 0.00 (tp 0, fp 1, fn 8): the
 one document flagged is the post-mortem. Flips 0. Max spread 0.21.
 
 ### Verdict
 
 DROP as ported; SHIP at 2.7 with the levels reworded. The rubric separates
-its classes cleanly -- in the wrong direction. `at: 3` is left with a comment
+its classes cleanly -- in the wrong direction. `threshold: 3` is left with a comment
 saying not to enable it.
 
 ### What I would change

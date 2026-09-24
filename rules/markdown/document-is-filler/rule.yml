@@ -30,7 +30,7 @@ state: bare
 # and the README, reference, post-mortem and Japanese migration post all
 # under 0.5. Midpoint 1.82, rounded up for precision: 0.57 above the clean
 # top, 0.41 under the lowest defect. Spread <= 0.10.
-at: 1.9
+threshold: 1.9
 severity: info
 ask: >-
   This document contains little substantive information relative to its length.

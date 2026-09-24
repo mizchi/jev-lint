@@ -62,6 +62,8 @@ test("state: the paired arm carries the enclosing code and the related tests, ne
   assert.equal(paired.file, "src/a.ts");
   assert.equal(paired.enclosing_code!.length, 1, "it carries what local carries");
   assert.deepEqual(paired.related_tests, [{ path: "test/a.test.ts", paired_by: "its name", code: 'it("outer throws on empty", () => { ... })' }]);
+  const byCall = buildState({ ...args, arm: "paired", tests: [{ path: "src/audit/audit_test.mbt", via: "call" as const, code: "open_checkpoint_policy(-1)" }] });
+  assert.equal(byCall.related_tests?.[0]?.paired_by, "it calls a named function in this MoonBit package");
   assert.match(String(paired.note_on_related_tests), /excerpt/i, "and says the tests are excerpts, not whole files");
 
   // The other arms never carry tests, even when they are offered.

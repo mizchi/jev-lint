@@ -36,7 +36,7 @@ state: located
 # midpoint 0.645. On three unseen English documents cleans topped at 0.32
 # and the one finding (a section ending "Section 5 is what happened on code
 # nobody planted") answered 0.76.
-at: 0.65
+threshold: 0.65
 ask: >-
   This section ends by announcing what comes next instead of ending on its subject.
 criteria:

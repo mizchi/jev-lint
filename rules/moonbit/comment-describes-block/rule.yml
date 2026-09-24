@@ -16,7 +16,7 @@ state: bare
 # midpoint fit that would catch it, 0.24, leaves 0.03 of headroom a side
 # and would flag the first clean on the next file; 0.45 -- what rust takes
 # -- leaves 0.24 on the clean side and misses that one case.
-at: 0.45
+threshold: 0.45
 severity: info
 # A statement, or a block's tail expression, directly after a comment inside
 # a block. ast-grep needs positive kinds, and MoonBit's grammar has no

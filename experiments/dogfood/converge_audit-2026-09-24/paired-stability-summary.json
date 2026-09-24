@@ -1,0 +1,3034 @@
+{
+  "passes": 3,
+  "gaps": [
+    {
+      "rule": "tests-cover-failure-paths",
+      "kind": "noul",
+      "matches": 154,
+      "reported": 23,
+      "at": 0.68,
+      "min": 0.05000000000000001,
+      "max": 0.8866666666666667,
+      "median": 0.12,
+      "gap": 0.07333333333333336,
+      "gapLow": 0.37666666666666665,
+      "gapHigh": 0.45,
+      "inGap": false,
+      "suggested": 0.41,
+      "verdict": "rewrite",
+      "values": [
+        0.8866666666666667,
+        0.88,
+        0.8666666666666667,
+        0.8633333333333333,
+        0.8366666666666666,
+        0.8266666666666667,
+        0.8166666666666665,
+        0.8133333333333334,
+        0.81,
+        0.8000000000000002,
+        0.7966666666666667,
+        0.7933333333333333,
+        0.79,
+        0.7866666666666667,
+        0.7833333333333333,
+        0.7799999999999999,
+        0.7766666666666667,
+        0.7600000000000001,
+        0.7566666666666667,
+        0.73,
+        0.7133333333333333,
+        0.7000000000000001,
+        0.6866666666666665,
+        0.6733333333333333,
+        0.6666666666666666,
+        0.6566666666666667,
+        0.6533333333333333,
+        0.6366666666666667,
+        0.6366666666666667,
+        0.63,
+        0.6133333333333333,
+        0.61,
+        0.6066666666666666,
+        0.59,
+        0.5733333333333334,
+        0.5599999999999999,
+        0.5366666666666667,
+        0.5299999999999999,
+        0.49333333333333335,
+        0.4766666666666666,
+        0.4566666666666667,
+        0.45,
+        0.37666666666666665,
+        0.37666666666666665,
+        0.3466666666666667,
+        0.34333333333333327,
+        0.34,
+        0.3333333333333333,
+        0.32666666666666666,
+        0.30666666666666664,
+        0.29000000000000004,
+        0.29,
+        0.2833333333333334,
+        0.25,
+        0.2233333333333333,
+        0.22,
+        0.19000000000000003,
+        0.17,
+        0.15666666666666665,
+        0.15666666666666665,
+        0.15666666666666665,
+        0.15000000000000002,
+        0.1466666666666667,
+        0.1466666666666667,
+        0.14666666666666667,
+        0.14333333333333334,
+        0.14333333333333334,
+        0.14333333333333334,
+        0.14333333333333334,
+        0.14,
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13333333333333333,
+        0.13,
+        0.12666666666666668,
+        0.12333333333333334,
+        0.12333333333333334,
+        0.12,
+        0.12,
+        0.11666666666666665,
+        0.11666666666666665,
+        0.11333333333333333,
+        0.11333333333333333,
+        0.11333333333333333,
+        0.11333333333333333,
+        0.11333333333333333,
+        0.10666666666666667,
+        0.10333333333333335,
+        0.10333333333333335,
+        0.10333333333333335,
+        0.10000000000000002,
+        0.10000000000000002,
+        0.09666666666666668,
+        0.09666666666666668,
+        0.09333333333333334,
+        0.09333333333333334,
+        0.09000000000000001,
+        0.09000000000000001,
+        0.09000000000000001,
+        0.09000000000000001,
+        0.08666666666666667,
+        0.08666666666666667,
+        0.08666666666666667,
+        0.08333333333333333,
+        0.08333333333333333,
+        0.08333333333333333,
+        0.08333333333333333,
+        0.08,
+        0.08,
+        0.08,
+        0.08,
+        0.08,
+        0.07666666666666667,
+        0.07666666666666667,
+        0.07333333333333335,
+        0.07,
+        0.07,
+        0.07,
+        0.07,
+        0.07,
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06666666666666667,
+        0.06333333333333334,
+        0.06333333333333334,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.056666666666666664,
+        0.056666666666666664,
+        0.056666666666666664,
+        0.05333333333333334,
+        0.05333333333333334,
+        0.05333333333333334,
+        0.05333333333333334,
+        0.05333333333333334,
+        0.05000000000000001
+      ],
+      "highestBelow": 0.6733333333333333,
+      "headroom": 0.01
+    }
+  ],
+  "stability": {
+    "runs": 3,
+    "subjects": [
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/key_lifecycle/key_lifecycle.mbt",
+        "line": 19,
+        "values": [
+          0.63,
+          0.59,
+          0.61
+        ],
+        "runs": 3,
+        "min": 0.59,
+        "max": 0.63,
+        "spread": 0.04,
+        "mean": 0.61,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.05
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/evidence_polling.mbt",
+        "line": 5,
+        "values": [
+          0.21,
+          0.23,
+          0.22
+        ],
+        "runs": 3,
+        "min": 0.21,
+        "max": 0.23,
+        "spread": 0.02,
+        "mean": 0.22,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.45
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/time.mbt",
+        "line": 15,
+        "values": [
+          0.29,
+          0.32,
+          0.31
+        ],
+        "runs": 3,
+        "min": 0.29,
+        "max": 0.32,
+        "spread": 0.03,
+        "mean": 0.31,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.36
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/commitment/commitment.mbt",
+        "line": 32,
+        "values": [
+          0.09,
+          0.09,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.09,
+        "spread": 0.01,
+        "mean": 0.09,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.59
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/vote/participant_vote.mbt",
+        "line": 15,
+        "values": [
+          0.22,
+          0.21,
+          0.24
+        ],
+        "runs": 3,
+        "min": 0.21,
+        "max": 0.24,
+        "spread": 0.03,
+        "mean": 0.22,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.44
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/vote/participant_vote.mbt",
+        "line": 35,
+        "values": [
+          0.18,
+          0.14,
+          0.15
+        ],
+        "runs": 3,
+        "min": 0.14,
+        "max": 0.18,
+        "spread": 0.04,
+        "mean": 0.16,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.5
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/vote/participant_vote.mbt",
+        "line": 50,
+        "values": [
+          0.16,
+          0.13,
+          0.14
+        ],
+        "runs": 3,
+        "min": 0.13,
+        "max": 0.16,
+        "spread": 0.03,
+        "mean": 0.14,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.52
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/evidence_inbox.mbt",
+        "line": 5,
+        "values": [
+          0.15,
+          0.15,
+          0.17
+        ],
+        "runs": 3,
+        "min": 0.15,
+        "max": 0.17,
+        "spread": 0.02,
+        "mean": 0.16,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.51
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/head.mbt",
+        "line": 18,
+        "values": [
+          0.34,
+          0.36,
+          0.32
+        ],
+        "runs": 3,
+        "min": 0.32,
+        "max": 0.36,
+        "spread": 0.04,
+        "mean": 0.34,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.32
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/head.mbt",
+        "line": 61,
+        "values": [
+          0.05,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.05,
+        "max": 0.06,
+        "spread": 0.01,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/head.mbt",
+        "line": 66,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/delivery_auth/delivery.mbt",
+        "line": 79,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/delivery_auth/delivery.mbt",
+        "line": 86,
+        "values": [
+          0.05,
+          0.05,
+          0.05
+        ],
+        "runs": 3,
+        "min": 0.05,
+        "max": 0.05,
+        "spread": 0,
+        "mean": 0.05,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.63
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/delivery_auth/delivery.mbt",
+        "line": 93,
+        "values": [
+          0.05,
+          0.05,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.05,
+        "max": 0.06,
+        "spread": 0.01,
+        "mean": 0.05,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/delivery_auth/delivery.mbt",
+        "line": 107,
+        "values": [
+          0.11,
+          0.12,
+          0.11
+        ],
+        "runs": 3,
+        "min": 0.11,
+        "max": 0.12,
+        "spread": 0.01,
+        "mean": 0.11,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.56
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/delivery_auth/delivery.mbt",
+        "line": 127,
+        "values": [
+          0.09,
+          0.1,
+          0.1
+        ],
+        "runs": 3,
+        "min": 0.09,
+        "max": 0.1,
+        "spread": 0.01,
+        "mean": 0.1,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.58
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/delivery_auth/delivery.mbt",
+        "line": 139,
+        "values": [
+          0.12,
+          0.11,
+          0.12
+        ],
+        "runs": 3,
+        "min": 0.11,
+        "max": 0.12,
+        "spread": 0.01,
+        "mean": 0.12,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.56
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/delivery_auth/delivery.mbt",
+        "line": 158,
+        "values": [
+          0.14,
+          0.15,
+          0.15
+        ],
+        "runs": 3,
+        "min": 0.14,
+        "max": 0.15,
+        "spread": 0.01,
+        "mean": 0.15,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.53
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/delivery_auth/delivery.mbt",
+        "line": 224,
+        "values": [
+          0.87,
+          0.87,
+          0.86
+        ],
+        "runs": 3,
+        "min": 0.86,
+        "max": 0.87,
+        "spread": 0.01,
+        "mean": 0.87,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.18
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/evidence_poll_schedule.mbt",
+        "line": 4,
+        "values": [
+          0.12,
+          0.14,
+          0.14
+        ],
+        "runs": 3,
+        "min": 0.12,
+        "max": 0.14,
+        "spread": 0.02,
+        "mean": 0.13,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.54
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/evidence_poll_schedule.mbt",
+        "line": 18,
+        "values": [
+          0.44,
+          0.42,
+          0.51
+        ],
+        "runs": 3,
+        "min": 0.42,
+        "max": 0.51,
+        "spread": 0.09,
+        "mean": 0.46,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.17
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/evidence_poll_schedule.mbt",
+        "line": 39,
+        "values": [
+          0.86,
+          0.87,
+          0.86
+        ],
+        "runs": 3,
+        "min": 0.86,
+        "max": 0.87,
+        "spread": 0.01,
+        "mean": 0.86,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.18
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/evidence_poll_schedule.mbt",
+        "line": 62,
+        "values": [
+          0.79,
+          0.79,
+          0.8
+        ],
+        "runs": 3,
+        "min": 0.79,
+        "max": 0.8,
+        "spread": 0.01,
+        "mean": 0.79,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.11
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/peer_transport.mbt",
+        "line": 58,
+        "values": [
+          0.66,
+          0.66,
+          0.65
+        ],
+        "runs": 3,
+        "min": 0.65,
+        "max": 0.66,
+        "spread": 0.01,
+        "mean": 0.66,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.02
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/peer_transport.mbt",
+        "line": 132,
+        "values": [
+          0.77,
+          0.76,
+          0.75
+        ],
+        "runs": 3,
+        "min": 0.75,
+        "max": 0.77,
+        "spread": 0.02,
+        "mean": 0.76,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.07
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/peer_transport.mbt",
+        "line": 165,
+        "values": [
+          0.78,
+          0.79,
+          0.77
+        ],
+        "runs": 3,
+        "min": 0.77,
+        "max": 0.79,
+        "spread": 0.02,
+        "mean": 0.78,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.09
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/peer_transport.mbt",
+        "line": 203,
+        "values": [
+          0.69,
+          0.67,
+          0.7
+        ],
+        "runs": 3,
+        "min": 0.67,
+        "max": 0.7,
+        "spread": 0.03,
+        "mean": 0.69,
+        "at": 0.68,
+        "flipped": true,
+        "distance": 0.01
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/policy.mbt",
+        "line": 62,
+        "values": [
+          0.62,
+          0.64,
+          0.65
+        ],
+        "runs": 3,
+        "min": 0.62,
+        "max": 0.65,
+        "spread": 0.03,
+        "mean": 0.64,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.03
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/policy.mbt",
+        "line": 129,
+        "values": [
+          0.06,
+          0.05,
+          0.05
+        ],
+        "runs": 3,
+        "min": 0.05,
+        "max": 0.06,
+        "spread": 0.01,
+        "mean": 0.05,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/policy.mbt",
+        "line": 146,
+        "values": [
+          0.33,
+          0.33,
+          0.32
+        ],
+        "runs": 3,
+        "min": 0.32,
+        "max": 0.33,
+        "spread": 0.01,
+        "mean": 0.33,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.35
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/policy.mbt",
+        "line": 156,
+        "values": [
+          0.38,
+          0.33,
+          0.33
+        ],
+        "runs": 3,
+        "min": 0.33,
+        "max": 0.38,
+        "spread": 0.05,
+        "mean": 0.35,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.3
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/policy.mbt",
+        "line": 166,
+        "values": [
+          0.33,
+          0.32,
+          0.35
+        ],
+        "runs": 3,
+        "min": 0.32,
+        "max": 0.35,
+        "spread": 0.03,
+        "mean": 0.33,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.33
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/policy.mbt",
+        "line": 178,
+        "values": [
+          0.12,
+          0.11,
+          0.11
+        ],
+        "runs": 3,
+        "min": 0.11,
+        "max": 0.12,
+        "spread": 0.01,
+        "mean": 0.11,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.56
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/policy.mbt",
+        "line": 187,
+        "values": [
+          0.09,
+          0.11,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.09,
+        "max": 0.11,
+        "spread": 0.02,
+        "mean": 0.1,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.57
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/policy.mbt",
+        "line": 244,
+        "values": [
+          0.08,
+          0.08,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.09,
+        "spread": 0.01,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.59
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/policy.mbt",
+        "line": 304,
+        "values": [
+          0.05,
+          0.06,
+          0.05
+        ],
+        "runs": 3,
+        "min": 0.05,
+        "max": 0.06,
+        "spread": 0.01,
+        "mean": 0.05,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/seal.mbt",
+        "line": 157,
+        "values": [
+          0.61,
+          0.63,
+          0.6
+        ],
+        "runs": 3,
+        "min": 0.6,
+        "max": 0.63,
+        "spread": 0.03,
+        "mean": 0.61,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.05
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/seal.mbt",
+        "line": 256,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/seal.mbt",
+        "line": 263,
+        "values": [
+          0.07,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.07,
+        "spread": 0.01,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/seal.mbt",
+        "line": 270,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/seal.mbt",
+        "line": 277,
+        "values": [
+          0.06,
+          0.07,
+          0.07
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.07,
+        "spread": 0.01,
+        "mean": 0.07,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/seal.mbt",
+        "line": 284,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/seal.mbt",
+        "line": 291,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/seal.mbt",
+        "line": 298,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/merkle/merkle.mbt",
+        "line": 34,
+        "values": [
+          0.08,
+          0.09,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.09,
+        "spread": 0.01,
+        "mean": 0.09,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.59
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/merkle/merkle.mbt",
+        "line": 43,
+        "values": [
+          0.08,
+          0.08,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.08,
+        "spread": 0,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.6
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/merkle/merkle.mbt",
+        "line": 56,
+        "values": [
+          0.08,
+          0.1,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.1,
+        "spread": 0.02,
+        "mean": 0.09,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.58
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/merkle/merkle.mbt",
+        "line": 64,
+        "values": [
+          0.08,
+          0.08,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.09,
+        "spread": 0.01,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.59
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/merkle/merkle.mbt",
+        "line": 105,
+        "values": [
+          0.1,
+          0.11,
+          0.1
+        ],
+        "runs": 3,
+        "min": 0.1,
+        "max": 0.11,
+        "spread": 0.01,
+        "mean": 0.1,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.57
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/merkle/merkle.mbt",
+        "line": 145,
+        "values": [
+          0.05,
+          0.06,
+          0.05
+        ],
+        "runs": 3,
+        "min": 0.05,
+        "max": 0.06,
+        "spread": 0.01,
+        "mean": 0.05,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/merkle/merkle.mbt",
+        "line": 150,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/merkle/merkle.mbt",
+        "line": 156,
+        "values": [
+          0.54,
+          0.57,
+          0.48
+        ],
+        "runs": 3,
+        "min": 0.48,
+        "max": 0.57,
+        "spread": 0.09,
+        "mean": 0.53,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.11
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/merkle/merkle.mbt",
+        "line": 181,
+        "values": [
+          0.44,
+          0.44,
+          0.47
+        ],
+        "runs": 3,
+        "min": 0.44,
+        "max": 0.47,
+        "spread": 0.03,
+        "mean": 0.45,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.21
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/pruning.mbt",
+        "line": 5,
+        "values": [
+          0.14,
+          0.12,
+          0.13
+        ],
+        "runs": 3,
+        "min": 0.12,
+        "max": 0.14,
+        "spread": 0.02,
+        "mean": 0.13,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.54
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/pruning.mbt",
+        "line": 24,
+        "values": [
+          0.08,
+          0.07,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.07,
+        "max": 0.08,
+        "spread": 0.01,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.6
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/pruning.mbt",
+        "line": 35,
+        "values": [
+          0.1,
+          0.1,
+          0.1
+        ],
+        "runs": 3,
+        "min": 0.1,
+        "max": 0.1,
+        "spread": 0,
+        "mean": 0.1,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.58
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/pruning.mbt",
+        "line": 55,
+        "values": [
+          0.1,
+          0.08,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.1,
+        "spread": 0.02,
+        "mean": 0.09,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.58
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/pruning.mbt",
+        "line": 75,
+        "values": [
+          0.08,
+          0.08,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.08,
+        "spread": 0,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.6
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/pruning.mbt",
+        "line": 87,
+        "values": [
+          0.09,
+          0.09,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.09,
+        "max": 0.09,
+        "spread": 0,
+        "mean": 0.09,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.59
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/pruning.mbt",
+        "line": 102,
+        "values": [
+          0.09,
+          0.08,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.09,
+        "spread": 0.01,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.59
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/quorum.mbt",
+        "line": 90,
+        "values": [
+          0.1,
+          0.09,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.09,
+        "max": 0.1,
+        "spread": 0.01,
+        "mean": 0.09,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.58
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/quorum.mbt",
+        "line": 106,
+        "values": [
+          0.12,
+          0.11,
+          0.12
+        ],
+        "runs": 3,
+        "min": 0.11,
+        "max": 0.12,
+        "spread": 0.01,
+        "mean": 0.12,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.56
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/quorum.mbt",
+        "line": 125,
+        "values": [
+          0.14,
+          0.13,
+          0.16
+        ],
+        "runs": 3,
+        "min": 0.13,
+        "max": 0.16,
+        "spread": 0.03,
+        "mean": 0.14,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.52
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/quorum.mbt",
+        "line": 161,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/quorum.mbt",
+        "line": 166,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/quorum.mbt",
+        "line": 171,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/quorum.mbt",
+        "line": 192,
+        "values": [
+          0.89,
+          0.89,
+          0.88
+        ],
+        "runs": 3,
+        "min": 0.88,
+        "max": 0.89,
+        "spread": 0.01,
+        "mean": 0.89,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.2
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/quorum/quorum.mbt",
+        "line": 277,
+        "values": [
+          0.14,
+          0.14,
+          0.14
+        ],
+        "runs": 3,
+        "min": 0.14,
+        "max": 0.14,
+        "spread": 0,
+        "mean": 0.14,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.54
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 166,
+        "values": [
+          0.12,
+          0.13,
+          0.12
+        ],
+        "runs": 3,
+        "min": 0.12,
+        "max": 0.13,
+        "spread": 0.01,
+        "mean": 0.12,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.55
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 199,
+        "values": [
+          0.12,
+          0.13,
+          0.13
+        ],
+        "runs": 3,
+        "min": 0.12,
+        "max": 0.13,
+        "spread": 0.01,
+        "mean": 0.13,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.55
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 216,
+        "values": [
+          0.6,
+          0.59,
+          0.58
+        ],
+        "runs": 3,
+        "min": 0.58,
+        "max": 0.6,
+        "spread": 0.02,
+        "mean": 0.59,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.08
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 248,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 255,
+        "values": [
+          0.07,
+          0.07,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.07,
+        "max": 0.08,
+        "spread": 0.01,
+        "mean": 0.07,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.6
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 262,
+        "values": [
+          0.81,
+          0.79,
+          0.79
+        ],
+        "runs": 3,
+        "min": 0.79,
+        "max": 0.81,
+        "spread": 0.02,
+        "mean": 0.8,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.11
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 439,
+        "values": [
+          0.64,
+          0.6,
+          0.67
+        ],
+        "runs": 3,
+        "min": 0.6,
+        "max": 0.67,
+        "spread": 0.07,
+        "mean": 0.64,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.01
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 485,
+        "values": [
+          0.05,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.05,
+        "max": 0.06,
+        "spread": 0.01,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 490,
+        "values": [
+          0.07,
+          0.07,
+          0.07
+        ],
+        "runs": 3,
+        "min": 0.07,
+        "max": 0.07,
+        "spread": 0,
+        "mean": 0.07,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 497,
+        "values": [
+          0.07,
+          0.07,
+          0.07
+        ],
+        "runs": 3,
+        "min": 0.07,
+        "max": 0.07,
+        "spread": 0,
+        "mean": 0.07,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 504,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 511,
+        "values": [
+          0.68,
+          0.66,
+          0.68
+        ],
+        "runs": 3,
+        "min": 0.66,
+        "max": 0.68,
+        "spread": 0.02,
+        "mean": 0.67,
+        "at": 0.68,
+        "flipped": true,
+        "distance": 0
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 524,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 531,
+        "values": [
+          0.82,
+          0.81,
+          0.82
+        ],
+        "runs": 3,
+        "min": 0.81,
+        "max": 0.82,
+        "spread": 0.01,
+        "mean": 0.82,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.13
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 543,
+        "values": [
+          0.61,
+          0.58,
+          0.53
+        ],
+        "runs": 3,
+        "min": 0.53,
+        "max": 0.61,
+        "spread": 0.08,
+        "mean": 0.57,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.07
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 551,
+        "values": [
+          0.59,
+          0.63,
+          0.67
+        ],
+        "runs": 3,
+        "min": 0.59,
+        "max": 0.67,
+        "spread": 0.08,
+        "mean": 0.63,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.01
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 574,
+        "values": [
+          0.5,
+          0.45,
+          0.53
+        ],
+        "runs": 3,
+        "min": 0.45,
+        "max": 0.53,
+        "spread": 0.08,
+        "mean": 0.49,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.15
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 595,
+        "values": [
+          0.73,
+          0.69,
+          0.68
+        ],
+        "runs": 3,
+        "min": 0.68,
+        "max": 0.73,
+        "spread": 0.05,
+        "mean": 0.7,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 625,
+        "values": [
+          0.13,
+          0.14,
+          0.13
+        ],
+        "runs": 3,
+        "min": 0.13,
+        "max": 0.14,
+        "spread": 0.01,
+        "mean": 0.13,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.54
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 103,
+        "values": [
+          0.63,
+          0.6,
+          0.59
+        ],
+        "runs": 3,
+        "min": 0.59,
+        "max": 0.63,
+        "spread": 0.04,
+        "mean": 0.61,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.05
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 129,
+        "values": [
+          0.06,
+          0.06,
+          0.07
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.07,
+        "spread": 0.01,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 136,
+        "values": [
+          0.07,
+          0.07,
+          0.07
+        ],
+        "runs": 3,
+        "min": 0.07,
+        "max": 0.07,
+        "spread": 0,
+        "mean": 0.07,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 177,
+        "values": [
+          0.63,
+          0.67,
+          0.66
+        ],
+        "runs": 3,
+        "min": 0.63,
+        "max": 0.67,
+        "spread": 0.04,
+        "mean": 0.65,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.01
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 211,
+        "values": [
+          0.05,
+          0.06,
+          0.05
+        ],
+        "runs": 3,
+        "min": 0.05,
+        "max": 0.06,
+        "spread": 0.01,
+        "mean": 0.05,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 218,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 225,
+        "values": [
+          0.06,
+          0.05,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.05,
+        "max": 0.06,
+        "spread": 0.01,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 230,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 237,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 244,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 251,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 299,
+        "values": [
+          0.81,
+          0.81,
+          0.81
+        ],
+        "runs": 3,
+        "min": 0.81,
+        "max": 0.81,
+        "spread": 0,
+        "mean": 0.81,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.13
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 329,
+        "values": [
+          0.09,
+          0.1,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.09,
+        "max": 0.1,
+        "spread": 0.01,
+        "mean": 0.09,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.58
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 369,
+        "values": [
+          0.72,
+          0.72,
+          0.7
+        ],
+        "runs": 3,
+        "min": 0.7,
+        "max": 0.72,
+        "spread": 0.02,
+        "mean": 0.71,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.02
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 458,
+        "values": [
+          0.68,
+          0.66,
+          0.66
+        ],
+        "runs": 3,
+        "min": 0.66,
+        "max": 0.68,
+        "spread": 0.02,
+        "mean": 0.67,
+        "at": 0.68,
+        "flipped": true,
+        "distance": 0
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 479,
+        "values": [
+          0.07,
+          0.07,
+          0.07
+        ],
+        "runs": 3,
+        "min": 0.07,
+        "max": 0.07,
+        "spread": 0,
+        "mean": 0.07,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 495,
+        "values": [
+          0.55,
+          0.52,
+          0.54
+        ],
+        "runs": 3,
+        "min": 0.52,
+        "max": 0.55,
+        "spread": 0.03,
+        "mean": 0.54,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.13
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 20,
+        "values": [
+          0.14,
+          0.15,
+          0.15
+        ],
+        "runs": 3,
+        "min": 0.14,
+        "max": 0.15,
+        "spread": 0.01,
+        "mean": 0.15,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.53
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 50,
+        "values": [
+          0.11,
+          0.12,
+          0.13
+        ],
+        "runs": 3,
+        "min": 0.11,
+        "max": 0.13,
+        "spread": 0.02,
+        "mean": 0.12,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.55
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 65,
+        "values": [
+          0.13,
+          0.13,
+          0.11
+        ],
+        "runs": 3,
+        "min": 0.11,
+        "max": 0.13,
+        "spread": 0.02,
+        "mean": 0.12,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.55
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 77,
+        "values": [
+          0.14,
+          0.13,
+          0.13
+        ],
+        "runs": 3,
+        "min": 0.13,
+        "max": 0.14,
+        "spread": 0.01,
+        "mean": 0.13,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.54
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 93,
+        "values": [
+          0.14,
+          0.14,
+          0.15
+        ],
+        "runs": 3,
+        "min": 0.14,
+        "max": 0.15,
+        "spread": 0.01,
+        "mean": 0.14,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.53
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 109,
+        "values": [
+          0.16,
+          0.16,
+          0.15
+        ],
+        "runs": 3,
+        "min": 0.15,
+        "max": 0.16,
+        "spread": 0.01,
+        "mean": 0.16,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.52
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 127,
+        "values": [
+          0.15,
+          0.15,
+          0.14
+        ],
+        "runs": 3,
+        "min": 0.14,
+        "max": 0.15,
+        "spread": 0.01,
+        "mean": 0.15,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.53
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 140,
+        "values": [
+          0.18,
+          0.17,
+          0.16
+        ],
+        "runs": 3,
+        "min": 0.16,
+        "max": 0.18,
+        "spread": 0.02,
+        "mean": 0.17,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.5
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 152,
+        "values": [
+          0.13,
+          0.17,
+          0.15
+        ],
+        "runs": 3,
+        "min": 0.13,
+        "max": 0.17,
+        "spread": 0.04,
+        "mean": 0.15,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.51
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 167,
+        "values": [
+          0.5,
+          0.45,
+          0.48
+        ],
+        "runs": 3,
+        "min": 0.45,
+        "max": 0.5,
+        "spread": 0.05,
+        "mean": 0.48,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.18
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 259,
+        "values": [
+          0.79,
+          0.8,
+          0.81
+        ],
+        "runs": 3,
+        "min": 0.79,
+        "max": 0.81,
+        "spread": 0.02,
+        "mean": 0.8,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.11
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 410,
+        "values": [
+          0.82,
+          0.81,
+          0.81
+        ],
+        "runs": 3,
+        "min": 0.81,
+        "max": 0.82,
+        "spread": 0.01,
+        "mean": 0.81,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.13
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 474,
+        "values": [
+          0.33,
+          0.35,
+          0.35
+        ],
+        "runs": 3,
+        "min": 0.33,
+        "max": 0.35,
+        "spread": 0.02,
+        "mean": 0.34,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.33
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 507,
+        "values": [
+          0.36,
+          0.36,
+          0.41
+        ],
+        "runs": 3,
+        "min": 0.36,
+        "max": 0.41,
+        "spread": 0.05,
+        "mean": 0.38,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.27
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 534,
+        "values": [
+          0.78,
+          0.77,
+          0.78
+        ],
+        "runs": 3,
+        "min": 0.77,
+        "max": 0.78,
+        "spread": 0.01,
+        "mean": 0.78,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.09
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/bridge/bridge.mbt",
+        "line": 639,
+        "values": [
+          0.83,
+          0.85,
+          0.83
+        ],
+        "runs": 3,
+        "min": 0.83,
+        "max": 0.85,
+        "spread": 0.02,
+        "mean": 0.84,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.15
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 262,
+        "values": [
+          0.88,
+          0.88,
+          0.88
+        ],
+        "runs": 3,
+        "min": 0.88,
+        "max": 0.88,
+        "spread": 0,
+        "mean": 0.88,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.2
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 301,
+        "values": [
+          0.74,
+          0.73,
+          0.72
+        ],
+        "runs": 3,
+        "min": 0.72,
+        "max": 0.74,
+        "spread": 0.02,
+        "mean": 0.73,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.04
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 400,
+        "values": [
+          0.09,
+          0.09,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.09,
+        "max": 0.09,
+        "spread": 0,
+        "mean": 0.09,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.59
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 478,
+        "values": [
+          0.12,
+          0.12,
+          0.12
+        ],
+        "runs": 3,
+        "min": 0.12,
+        "max": 0.12,
+        "spread": 0,
+        "mean": 0.12,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.56
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 516,
+        "values": [
+          0.54,
+          0.59,
+          0.55
+        ],
+        "runs": 3,
+        "min": 0.54,
+        "max": 0.59,
+        "spread": 0.05,
+        "mean": 0.56,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.09
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 538,
+        "values": [
+          0.76,
+          0.75,
+          0.76
+        ],
+        "runs": 3,
+        "min": 0.75,
+        "max": 0.76,
+        "spread": 0.01,
+        "mean": 0.76,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.07
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 569,
+        "values": [
+          0.08,
+          0.08,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.08,
+        "spread": 0,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.6
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 866,
+        "values": [
+          0.77,
+          0.81,
+          0.78
+        ],
+        "runs": 3,
+        "min": 0.77,
+        "max": 0.81,
+        "spread": 0.04,
+        "mean": 0.79,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.09
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 924,
+        "values": [
+          0.07,
+          0.08,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.07,
+        "max": 0.08,
+        "spread": 0.01,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.6
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 929,
+        "values": [
+          0.1,
+          0.1,
+          0.1
+        ],
+        "runs": 3,
+        "min": 0.1,
+        "max": 0.1,
+        "spread": 0,
+        "mean": 0.1,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.58
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 936,
+        "values": [
+          0.08,
+          0.08,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.09,
+        "spread": 0.01,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.59
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 943,
+        "values": [
+          0.06,
+          0.07,
+          0.07
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.07,
+        "spread": 0.01,
+        "mean": 0.07,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 950,
+        "values": [
+          0.06,
+          0.07,
+          0.07
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.07,
+        "spread": 0.01,
+        "mean": 0.07,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 959,
+        "values": [
+          0.8,
+          0.77,
+          0.8
+        ],
+        "runs": 3,
+        "min": 0.77,
+        "max": 0.8,
+        "spread": 0.03,
+        "mean": 0.79,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.09
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 985,
+        "values": [
+          0.82,
+          0.83,
+          0.83
+        ],
+        "runs": 3,
+        "min": 0.82,
+        "max": 0.83,
+        "spread": 0.01,
+        "mean": 0.83,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.14
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 1003,
+        "values": [
+          0.78,
+          0.79,
+          0.78
+        ],
+        "runs": 3,
+        "min": 0.78,
+        "max": 0.79,
+        "spread": 0.01,
+        "mean": 0.78,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.1
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/local_store.mbt",
+        "line": 1024,
+        "values": [
+          0.08,
+          0.08,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.08,
+        "spread": 0,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.6
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 93,
+        "values": [
+          0.11,
+          0.12,
+          0.11
+        ],
+        "runs": 3,
+        "min": 0.11,
+        "max": 0.12,
+        "spread": 0.01,
+        "mean": 0.11,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.56
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 98,
+        "values": [
+          0.11,
+          0.1,
+          0.1
+        ],
+        "runs": 3,
+        "min": 0.1,
+        "max": 0.11,
+        "spread": 0.01,
+        "mean": 0.1,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.57
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 108,
+        "values": [
+          0.11,
+          0.1,
+          0.11
+        ],
+        "runs": 3,
+        "min": 0.1,
+        "max": 0.11,
+        "spread": 0.01,
+        "mean": 0.11,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.57
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 387,
+        "values": [
+          0.08,
+          0.08,
+          0.08
+        ],
+        "runs": 3,
+        "min": 0.08,
+        "max": 0.08,
+        "spread": 0,
+        "mean": 0.08,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.6
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 397,
+        "values": [
+          0.07,
+          0.07,
+          0.07
+        ],
+        "runs": 3,
+        "min": 0.07,
+        "max": 0.07,
+        "spread": 0,
+        "mean": 0.07,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.61
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 407,
+        "values": [
+          0.09,
+          0.09,
+          0.09
+        ],
+        "runs": 3,
+        "min": 0.09,
+        "max": 0.09,
+        "spread": 0,
+        "mean": 0.09,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.59
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 431,
+        "values": [
+          0.11,
+          0.1,
+          0.1
+        ],
+        "runs": 3,
+        "min": 0.1,
+        "max": 0.11,
+        "spread": 0.01,
+        "mean": 0.1,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.57
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 441,
+        "values": [
+          0.31,
+          0.3,
+          0.26
+        ],
+        "runs": 3,
+        "min": 0.26,
+        "max": 0.31,
+        "spread": 0.05,
+        "mean": 0.29,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.37
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 468,
+        "values": [
+          0.12,
+          0.11,
+          0.11
+        ],
+        "runs": 3,
+        "min": 0.11,
+        "max": 0.12,
+        "spread": 0.01,
+        "mean": 0.11,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.56
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 477,
+        "values": [
+          0.06,
+          0.06,
+          0.06
+        ],
+        "runs": 3,
+        "min": 0.06,
+        "max": 0.06,
+        "spread": 0,
+        "mean": 0.06,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.62
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 514,
+        "values": [
+          0.26,
+          0.3,
+          0.29
+        ],
+        "runs": 3,
+        "min": 0.26,
+        "max": 0.3,
+        "spread": 0.04,
+        "mean": 0.28,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.38
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 548,
+        "values": [
+          0.19,
+          0.18,
+          0.2
+        ],
+        "runs": 3,
+        "min": 0.18,
+        "max": 0.2,
+        "spread": 0.02,
+        "mean": 0.19,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.48
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 563,
+        "values": [
+          0.42,
+          0.35,
+          0.36
+        ],
+        "runs": 3,
+        "min": 0.35,
+        "max": 0.42,
+        "spread": 0.07,
+        "mean": 0.38,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.26
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 702,
+        "values": [
+          0.14,
+          0.15,
+          0.14
+        ],
+        "runs": 3,
+        "min": 0.14,
+        "max": 0.15,
+        "spread": 0.01,
+        "mean": 0.14,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.53
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 723,
+        "values": [
+          0.12,
+          0.11,
+          0.11
+        ],
+        "runs": 3,
+        "min": 0.11,
+        "max": 0.12,
+        "spread": 0.01,
+        "mean": 0.11,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.56
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 753,
+        "values": [
+          0.27,
+          0.34,
+          0.26
+        ],
+        "runs": 3,
+        "min": 0.26,
+        "max": 0.34,
+        "spread": 0.08,
+        "mean": 0.29,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.34
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/authmap/authmap.mbt",
+        "line": 768,
+        "values": [
+          0.25,
+          0.26,
+          0.24
+        ],
+        "runs": 3,
+        "min": 0.24,
+        "max": 0.26,
+        "spread": 0.02,
+        "mean": 0.25,
+        "at": 0.68,
+        "flipped": false,
+        "distance": 0.42
+      }
+    ],
+    "rows": [
+      {
+        "rule": "tests-cover-failure-paths",
+        "subjects": 154,
+        "flipped": 3,
+        "maxSpread": 0.09,
+        "meanSpread": 0.02
+      }
+    ],
+    "flipped": [
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/peer_transport.mbt",
+        "line": 203,
+        "values": [
+          0.69,
+          0.67,
+          0.7
+        ],
+        "runs": 3,
+        "min": 0.67,
+        "max": 0.7,
+        "spread": 0.03,
+        "mean": 0.69,
+        "at": 0.68,
+        "flipped": true,
+        "distance": 0.01
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/layered/layered.mbt",
+        "line": 511,
+        "values": [
+          0.68,
+          0.66,
+          0.68
+        ],
+        "runs": 3,
+        "min": 0.66,
+        "max": 0.68,
+        "spread": 0.02,
+        "mean": 0.67,
+        "at": 0.68,
+        "flipped": true,
+        "distance": 0
+      },
+      {
+        "rule": "tests-cover-failure-paths",
+        "file": "src/audit/runtime/runtime.mbt",
+        "line": 458,
+        "values": [
+          0.68,
+          0.66,
+          0.66
+        ],
+        "runs": 3,
+        "min": 0.66,
+        "max": 0.68,
+        "spread": 0.02,
+        "mean": 0.67,
+        "at": 0.68,
+        "flipped": true,
+        "distance": 0
+      }
+    ]
+  },
+  "fits": null,
+  "spent": {
+    "calls": 20,
+    "inputTokens": 162972,
+    "outputTokens": 3160,
+    "ms": 6480,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.006844824000000001,
+    "wallMs": 410
+  }
+}

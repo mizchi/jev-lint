@@ -118,7 +118,7 @@ state: located
 # deep dive answered 0.78-0.80 -- true by the norm, expected of the genre.
 # A cookbook cutoff, not a shipped one: a finding between 0.55 and 0.70 is
 # for a reader.
-at: 0.6
+threshold: 0.6
 # Wording attempts (the corpus: 12 documents, 50 sections, 20 bad, 3 passes):
 #   1. as ported -- ask: "contains a sentence whose topic is the document
 #      itself ... rather than its subject"; the four allowed forms only in
@@ -140,7 +140,7 @@ at: 0.6
 #      document ... and says nothing new about its subject or the
 #      narrator's judgment"); attempt 2's criteria kept, minus a clause that
 #      claimed the mid-argument reading instruction, which the note hands to
-#      the address rule. See the calibration comment at `at:`.
+#      the address rule. See the calibration comment at `threshold:`.
 ask: >-
   This section contains a sentence that updates only the document -- what
   the text will do next, what it does not cover, how it looks so far, or
@@ -272,7 +272,7 @@ state: located
 # midpoint 0.645. On three unseen English documents cleans topped at 0.32
 # and the one finding (a section ending "Section 5 is what happened on code
 # nobody planted") answered 0.76.
-at: 0.65
+threshold: 0.65
 ask: >-
   This section ends by announcing what comes next instead of ending on its subject.
 criteria:
@@ -352,7 +352,7 @@ state: located
 # the cutoff is set above the real clean band: 0.12 over 0.60, 0.19 under
 # 0.91. The one-line agenda sits inside the real clean band and is not
 # recoverable by a cutoff.
-at: 0.72
+threshold: 0.72
 ask: >-
   This section opens with an agenda that carries no stance -- a table of what will be covered -- instead of a question, a discomfort, or a confession.
 criteria:
@@ -441,7 +441,7 @@ state: located
 # two findings were real: "Read the 12 as ... and note the baseline" inside
 # an argument (0.75) and a "Do not quote" inside a list item (0.51, under
 # the cutoff, so a miss).
-at: 0.73
+threshold: 0.73
 ask: >-
   This section addresses the reader directly -- a request, an apology, a hedge about the author -- in the middle of an argument rather than at its opening or close.
 criteria:
@@ -531,7 +531,7 @@ state: bare
 # characters: on the 78 KB docs/internal/findings.md the rule answered 0.60 for
 # promises whose delivery lies beyond the cut, which is the cut speaking,
 # not the document.
-at: 0.5
+threshold: 0.5
 ask: >-
   This document raises a question, an assumption or a promise that it never returns to.
 criteria:
@@ -597,7 +597,7 @@ verdict".
 ## Unseen: `docs/internal/findings.md`, `docs/deepdive.md`, `experiments/BRIEF.md`
 
 English, technical, 77 sections, none of it written for the norm. Run
-before the cutoffs were fixed, at `--at 0.5 --retry 3 --loose 40`, recorded
+before the cutoffs were fixed, at `--threshold 0.5 --retry 3 --loose 40`, recorded
 to the scratchpad; findings read against the text and scored against the
 shipped cutoffs above.
 
@@ -652,14 +652,14 @@ runs ($0.029). Well under the $1.00 ceiling.
   `section-narrates-itself` said `rewrite`, which was right). `eval` with
   `expect.yml` is the measurement; `gaps` is a smoke test.
 - `eval` prints `fitted` as the midpoint of the gap, and the family's
-  `at:` disagrees with it twice on purpose (agenda 0.72 vs 0.35, from the
+  `threshold:` disagrees with it twice on purpose (agenda 0.72 vs 0.35, from the
   unseen band; preview 0.65 vs 0.65 by coincidence). Nothing in `eval`
-  records why, so the comment at `at:` has to.
+  records why, so the comment at `threshold:` has to.
 - A `block` rule without `split` cuts the subject at 48,000 characters
   "with the cut declared", and the abandons rule then judges the promises it
   saw against the returns it could not see: `check <unseen> -R
   rules/markdown/document-abandons-a-question/rule.yml --no-config --cache
-  none --retry 3 --at document-abandons-a-question=0.5` gave
+  none --retry 3 --threshold document-abandons-a-question=0.5` gave
   `findings.md:1  0.60  arm bare  3/3 passes` for the 78 KB findings log.
   Nothing in the finding says the subject was cut. Not fixed here (`src/`
   is out of bounds); recorded in the rule's calibration comment.

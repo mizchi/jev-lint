@@ -41,7 +41,7 @@ state: bare
 # piece at 0.01-0.02, the README and the tutorial at 2.08-2.21 -- technical
 # documents with no narrator sit at "some", which is where a rule about
 # firsthand evidence should put them and not a defect. Midpoint 2.74.
-at: 2.7
+threshold: 2.7
 severity: info
 ask: >-
   This document lacks firsthand experience, concrete observation, original evidence, or author-specific detail.

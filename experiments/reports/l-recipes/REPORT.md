@@ -1,7 +1,7 @@
 # Family L: four cookbook recipes, measured
 
 Four recipes from `skills/jev-lint/references/cookbook.md` that shipped as
-YAML with `at: 0.7` and no corpus behind them -- recipe 3 (a type's name
+YAML with `threshold: 0.7` and no corpus behind them -- recipe 3 (a type's name
 versus its shape), recipe 9 (an error message versus the condition that
 raises it), recipe 7 (a TODO above work already done) and recipe 8 (a
 catch that swallows a failure the caller needed). Each is a claim the code
@@ -116,7 +116,7 @@ state: located
 # the weakest defect (Users, 0.61-0.72). The recall on defect classes the
 # criteria do not name is not measured here; the clean band is the number
 # to trust. See experiments/reports/l-recipes/REPORT.md.
-at: 0.42
+threshold: 0.42
 severity: warning
 rule:
   all:
@@ -196,7 +196,7 @@ ReturnType<typeof parseOrder>`.
    Repository, a ReturnType alias), wording unchanged. All five 0.05-0.10.
    Fitted 0.42; bad 0.65-0.86, clean 0.06-0.20.
 
-**Fit** (accepted run): `at: 0.42`; precision 1.00, recall 1.00, tp 6 fp
+**Fit** (accepted run): `threshold: 0.42`; precision 1.00, recall 1.00, tp 6 fp
 0 fn 0; 0 flips across the three passes; max pass-to-pass spread 0.05
 (Timestamps 0.14-0.19); bad 0.66-0.86, clean 0.05-0.20; headroom 0.21
 over the highest clean, 0.22 under the lowest defect (Users, lowest pass
@@ -265,7 +265,7 @@ state: local
 # code: the sibling assertion-message-matches found its false positives
 # there, in test doubles, which is why the doubles are in this corpus.
 # See experiments/reports/l-recipes/REPORT.md.
-at: 0.65
+threshold: 0.65
 severity: warning
 rule:
   all:
@@ -430,7 +430,7 @@ inline object double in a test throwing "gateway unavailable" when
    at 0.7, fitted 0.63, 0 flips; the inline double 0.29; bad 0.85-0.97,
    clean 0.05-0.42.
 
-**Fit** (accepted run): `at: 0.65`; precision 1.00, recall 1.00, tp 5 fp
+**Fit** (accepted run): `threshold: 0.65`; precision 1.00, recall 1.00, tp 5 fp
 0 fn 0; 0 flips; max spread 0.10 (`accounts.ts:21`, 0.17-0.27); bad
 0.85-0.98, clean 0.05-0.34; headroom 0.29 over the highest clean pass
 (0.36, "API_KEY is not set" on the first of the copied pair), 0.19 under
@@ -493,7 +493,7 @@ state: bare
 # over the highest clean pass, 0.16 under the lowest defect pass ("throws
 # on an empty file" above a blank-text guard, 0.63-0.67). See
 # experiments/reports/l-recipes/REPORT.md.
-at: 0.47
+threshold: 0.47
 severity: info
 rule:
   all:
@@ -607,7 +607,7 @@ importer sends qty" above the compatibility branch; and the top-level
    0.47, P 1.00 R 0.86 at 0.7 (the new "throws on an empty file" at 0.65),
    0 flips. The campaign-end clean 0.28, the missing-qty clean 0.08.
 
-**Fit** (accepted run): `at: 0.47`; precision 1.00, recall 1.00, tp 7 fp
+**Fit** (accepted run): `threshold: 0.47`; precision 1.00, recall 1.00, tp 7 fp
 0 fn 0; 0 flips; max spread 0.09 (the campaign-end clean, 0.27-0.36); bad
 0.67-0.89, clean 0.05-0.33; headroom 0.11 over the highest clean pass
 (0.36), 0.19 under the lowest defect pass (0.66).
@@ -678,7 +678,7 @@ state: local
 # clean 0.04-0.32, no flips. Midpoint 0.55: 0.21 over the highest clean
 # pass (readSettings falling back to defaults on ENOENT, 0.34), 0.23 under
 # the lowest defect. See experiments/reports/l-recipes/REPORT.md.
-at: 0.55
+threshold: 0.55
 severity: warning
 rule:
   all:
@@ -781,7 +781,7 @@ return value; an idempotent `removeArtifact` that swallows ENOENT;
    Fitted 0.55, P 1.00 R 1.00, 0 flips; the delete 0.18; bad 0.78-0.93,
    clean 0.04-0.32.
 
-**Fit** (accepted run): `at: 0.55`; precision 1.00, recall 1.00, tp 6 fp
+**Fit** (accepted run): `threshold: 0.55`; precision 1.00, recall 1.00, tp 6 fp
 0 fn 0; 0 flips; max spread 0.10 (readSettings 0.28-0.38); bad 0.79-0.93,
 clean 0.04-0.34; headroom 0.17 over the highest clean pass (0.38), 0.24
 under the lowest defect (parseInvoice, 0.79 in every pass).

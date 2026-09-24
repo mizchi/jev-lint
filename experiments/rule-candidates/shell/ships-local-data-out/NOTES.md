@@ -15,7 +15,7 @@ language: Bash
 kind: noul
 subject: node
 state: located
-at: 0.41
+threshold: 0.41
 axis: file
 severity: warning
 utils:
@@ -137,7 +137,7 @@ the cleans did not move (cleanTop 0.19 → 0.19, `mirror_push` 0.05 → 0.06,
 
 ## Fit
 
-Fitted cutoff **0.41** (midpoint of the clean/violation gap), written into `at:`.
+Fitted cutoff **0.41** (midpoint of the clean/violation gap), written into `threshold:`.
 
 - precision **1.00**, recall **1.00** -- tp 9, fp 0, fn 0
 - decision flips across 3 passes: **0**
@@ -146,7 +146,7 @@ Fitted cutoff **0.41** (midpoint of the clean/violation gap), written into `at:`
 - cleans top out at **0.19** (`schema_drift.sh:9`), next 0.18, then 0.17
 - defects start at **0.62** (`contact_index.sh:10`), next 0.83
 - gap **0.43** wide, headroom **0.22 / 0.21** on each side
-- baseline accepted; re-run at `at: 0.41` reports "same decisions"
+- baseline accepted; re-run at `threshold: 0.41` reports "same decisions"
 
 The shape of the band is worth recording: the defect floor is the one defect
 where *nothing leaves the box on the matched line* -- the `sqlite3` read that

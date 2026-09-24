@@ -6,11 +6,25 @@ import { decide, describe as describeFinding } from "../src/gate.ts";
 import { buildQuestion } from "../src/questions.ts";
 import { normalizeRule, loadRules, cutoffFor, ruleTextHash, normalizeLanguage, ruleSources, USER_RULES_DIR, applyRuleSettings, languageDirGrammars, undeclared, shippedRulesPath, selectRules, DEFAULT_SCORE_AT, scaleOf } from "../src/rules.ts";
 import { SHIPPED_CUSTOM_LANGUAGES } from "../src/types.ts";
-import { emitRuleFile, ruleLanguages } from "../src/scan.ts";
+import { emitRuleFile, ruleLanguages, runAstGrep } from "../src/scan.ts";
 import { explain } from "../src/schedule.ts";
 import { PROBE_PREFIX, LANGUAGE_DIRS, TIER_ONE } from "../src/types.ts";
 import { scoreRule, noulRule, subjectOf } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
+
+await testAsync("rules: MoonBit claim checks leave timing benchmarks out of correctness review", async () => {
+  const parser = join(process.cwd(), ".jev-lint", "parsers", "moonbit.dylib");
+  if (!existsSync(parser)) return;
+  const languages = { moonbit: { libraryPath: parser, extensions: ["mbt"], expandoChar: "_" } };
+  const suite = join(process.cwd(), "rules", "moonbit", "test-name-verifies-claim");
+  const { rules, errors } = loadRules(join(suite, "rule.yml"), languages);
+  assert.deepEqual(errors, []);
+  const result = await runAstGrep(rules, [join(suite, "fixtures", "cart_test.mbt")], { languages });
+  const subjects = result.matches.filter((m) => !m.ruleId.startsWith(PROBE_PREFIX));
+  assert.equal(subjects.length, 9, "the nine correctness tests remain reviewable");
+  assert.ok(subjects.every((m) => !m.text.includes('"bench:')),
+    "a benchmark measures time and does not assert its title as a correctness claim");
+});
 
 test("rules: the sources are the shipped packs and, when it exists, .jev-lint/rules/ -- never a bare ./rules", () => {
   // A fresh install used to exit 2 with "no usable rules found in rules":
@@ -50,6 +64,32 @@ test("rules: a declared language is one a rule may name, and an undeclared one i
   assert.match(normalizeRule({ id: "m", language: "elm", rule: { kind: "x" }, ask: "a." }).error!, /unknown language/);
   assert.deepEqual(languageDirGrammars("elm", elm), ["elm"]);
   assert.equal(languageDirGrammars("elm"), null);
+});
+
+test("rules: threshold is preferred; at is a warned alias and cannot coexist with it", () => {
+  const t = rulesRoot("jev-threshold-");
+  try {
+    t.write("preferred.yml", "id: preferred\nlanguage: TypeScript\nrule: { kind: function_declaration }\nask: a.\nthreshold: 2.5\n");
+    t.write("legacy.yml", "id: legacy\nlanguage: TypeScript\nrule: { kind: function_declaration }\nask: a.\nat: 2.5\n");
+    const loaded = loadRules([t.root]);
+    assert.deepEqual(loaded.errors, []);
+    assert.equal(loaded.rules.find((r) => r.id === "preferred")?.at, 2.5);
+    assert.equal(loaded.rules.find((r) => r.id === "legacy")?.at, 2.5);
+    assert.equal(loaded.warnings.length, 1, loaded.warnings.join("\n"));
+    assert.match(loaded.warnings[0]!, /legacy.*`at`.*`threshold`/);
+    assert.match(normalizeRule({ id: "both", language: "TypeScript", rule: { kind: "x" }, ask: "a", at: 2, threshold: 2.5 }).error!, /both.*`at`.*`threshold`/);
+    assert.match(normalizeRule({ id: "bad", language: "TypeScript", rule: { kind: "x" }, ask: "a", threshold: Infinity }).error!, /finite/);
+  } finally {
+    t.done();
+  }
+});
+
+test("rules: filenames restrict only block rules and require names", () => {
+  const block = { id: "agent-rule", language: "Text", subject: "block", extensions: ["md"], ask: "a." };
+  assert.deepEqual(normalizeRule({ ...block, filenames: ["AGENTS.md"] }).rule?.filenames, ["AGENTS.md"]);
+  assert.match(normalizeRule({ ...block, filenames: [] }).error!, /filenames/);
+  assert.match(normalizeRule({ ...block, filenames: ["docs/AGENTS.md"] }).error!, /filenames/);
+  assert.match(normalizeRule({ id: "node-rule", language: "TypeScript", rule: { kind: "x" }, ask: "a.", filenames: ["AGENTS.md"] }).error!, /filenames/);
 });
 
 test("rules: the config's `rules:` selects and overrides, and names nothing it cannot find", () => {
@@ -752,7 +792,7 @@ test("rules: every field `normalizeRule` validates refuses a bad value by name",
     ["criteria that are not the two branches", { ...good, kind: "noul", criteria: "yes" }, /`criteria` must be a mapping with `true` and `false`/],
     ["a criterion's not_for that is not a sentence", { ...good, kind: "noul", criteria: { true: { what: "w", not_for: 3 }, false: "f" } }, /not_for must be a non-empty string/],
     ["a block rule's split that is not a regex string", { id: "a", language: "Text", subject: "block", split: 42, extensions: ["sql"], ask: "a." }, /`split` must be a regex matched at the start of each line/],
-    ["split on a rule that is not a block rule", { ...good, split: "^(?<NAME>\\w+)" }, /`split` and `extensions` belong to `subject: block` rules/],
+    ["split on a rule that is not a block rule", { ...good, split: "^(?<NAME>\\w+)" }, /`split`, `extensions` and `filenames` belong to `subject: block` rules/],
   ];
   for (const [what, raw, expected] of rows) {
     const { rule, error } = normalizeRule(raw as never);
@@ -842,14 +882,26 @@ test("rules: `extends` that changes the question but keeps the base's cutoff is 
   // something else and inherits it is running on a number nobody measured.
   const t = rulesRoot("jev-extends-at-");
   try {
-    t.write("base.yml", "id: base\nlanguage: TypeScript\nkind: noul\nrule: { kind: x }\nask: q\ncriteria: { \"true\": y, \"false\": n }\nat: 0.6\n");
+    t.write("base.yml", "id: base\nlanguage: TypeScript\nkind: noul\nrule: { kind: x }\nask: q\ncriteria: { \"true\": y, \"false\": n }\nthreshold: 0.6\n");
     t.write("asks.yml", "id: asks\nextends: base\nnote: { append: more }\n");
-    t.write("fitted.yml", "id: fitted\nextends: base\nnote: { append: more }\nat: 0.7\n");
+    t.write("fitted.yml", "id: fitted\nextends: base\nnote: { append: more }\nthreshold: 0.7\n");
     t.write("severity.yml", "id: severity\nextends: base\nseverity: error\n");
     const { warnings, errors } = loadRules([t.root]);
     assert.deepEqual(errors, []);
     assert.equal(warnings.length, 1, warnings.join("\n"));
-    assert.match(warnings[0]!, /asks.*base.*`at`/);
+    assert.match(warnings[0]!, /asks.*base.*`threshold`/);
+  } finally {
+    t.done();
+  }
+});
+
+test("rules: an extending rule cannot set both threshold spellings", () => {
+  const t = rulesRoot("jev-extends-threshold-");
+  try {
+    t.write("base.yml", "id: base\nlanguage: TypeScript\nrule: { kind: x }\nask: q\nthreshold: 2\n");
+    t.write("child.yml", "id: child\nextends: base\nat: 2\nthreshold: 2.5\n");
+    const loaded = loadRules([t.root]);
+    assert.match(loaded.errors.join("\n"), /cannot set both `at` and `threshold`/);
   } finally {
     t.done();
   }

@@ -15,7 +15,7 @@ The final YAML is `rule.yml` beside this file; it is complete and loads with
 0 errors. The parts that matter:
 
 - `language: Bash`, `subject: node`, `state: located`, `axis: file`,
-  `severity: warning`, `at: 0.72`.
+  `severity: warning`, `threshold: 0.72`.
 - Matcher, five branches, over-matching the surface deliberately: `echo` /
   `printf` (minus bare `echo`, minus anything inside a command substitution,
   minus anything redirected into a file -- `>&2` deliberately kept, because
@@ -75,7 +75,7 @@ Eight more cleans sit inside a file that also contains a defect
 Two attempts. Both used the same subject, state and matcher; only the sentence
 moved.
 
-| # | change | verdict | gap | cleanTop | defect floor | head at `at` |
+| # | change | verdict | gap | cleanTop | defect floor | head at `threshold` |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `ask:` as shipped; criteria listing five deception shapes; `note:` with a one-line anti-contamination clause | `gaps`: **works**, gap 0.27, suggest 0.73, head +0.11 -- but the labels say otherwise | 0.03 (single pass) | 0.54 | 0.57 | +0.01 |
 | 2 | criteria: a prompt is read together with the text that sets it up, so a bland `read -s` under a false banner inherits the banner's claim. `note:`: an explicit split between the neighbours' character (not evidence) and the setup of the same interaction (evidence) | -- | **0.27** | 0.57 | 0.84 | +0.15 |
@@ -106,7 +106,7 @@ written before the first paid run.
 
 Accepted baseline, 3 passes, 41 subjects:
 
-- **fitted cutoff (midpoint): 0.70. Written into `at:`: 0.72.**
+- **fitted cutoff (midpoint): 0.70. Written into `threshold:`: 0.72.**
 - precision **1.00**, recall **1.00**, tp **8**, fp **0**, fn **0**
 - decision flips across the three passes: **0**
 - clean band tops out at **0.57** (mean); defects start at **0.84** (mean)

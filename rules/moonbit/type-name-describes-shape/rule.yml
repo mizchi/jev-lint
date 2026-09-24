@@ -18,7 +18,7 @@ state: located
 # currency, and the weakest contradiction here. typescript's 0.42 sits
 # inside that one's band and flipped it across passes; the midpoint 0.28
 # clears it by 0.11 and the clean band by 0.15.
-at: 0.28
+threshold: 0.28
 axis: file
 severity: warning
 # The declaration forms, each named by the identifier directly under it.

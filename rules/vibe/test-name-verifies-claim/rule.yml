@@ -7,7 +7,7 @@ state: bare
 # 3 passes). Defects answered 0.63-0.96; cleans topped at 0.25. The quietest
 # defect spread 0.02 across passes. The midpoint fit was 0.44; 0.50 keeps
 # distance from both bands and catches the weakest labeled defect.
-at: 0.50
+threshold: 0.50
 axis: file
 severity: warning
 rule:

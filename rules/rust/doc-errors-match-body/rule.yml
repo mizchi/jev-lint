@@ -19,7 +19,7 @@ state: located
 # Midpoint of the gap, 0.13 of headroom on the defect side and 0.16 on the
 # clean side, no decision flips, max spread 0.07. On 12 unseen subjects in
 # serde_json the clean band topped at 0.26.
-at: 0.54
+threshold: 0.54
 axis: file
 severity: warning
 rule:

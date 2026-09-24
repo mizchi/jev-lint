@@ -4,7 +4,7 @@ Two hooks, two different questions.
 
 | | what it judges | what it costs | `jev-lint init` |
 | --- | --- | --- | --- |
-| `pre-commit` | the staged diff against the file rules, and against the project's own instructions (AGENTS.md / CLAUDE.md) | a fraction of a cent per commit | `--pre-commit` |
+| `pre-commit` | the staged diff against the file rules, and against the project's own instructions (`AGENTS.md`, falling back to `CLAUDE.md`) | a fraction of a cent per commit | `--pre-commit` |
 | `pre-push` | each commit's message against its diff, and each commit's change against the project's instructions | a fraction of a cent per commit pushed | `--pre-push` |
 
 Both print what they find. **Neither blocks**, until you decide one of your
@@ -64,10 +64,41 @@ npx -y jev-lint review --staged --fail-on error
 npx -y jev-lint commits --staged --fail-on error
 ```
 
+Both calls select `hooks.precommit.rules` from `.jev-lint.yaml` when it is
+present. Use `extends: true` to inherit top-level `rules:` and override or
+add entries; use `extends: false` to run only the hook's entries. Without a
+`hooks.precommit` section, the hook keeps using top-level `rules:`:
+
+```yaml
+rules:
+  typescript/fn-name-promises: on
+hooks:
+  precommit:
+    extends: true
+    rules:
+      git/diff-follows-instructions: on
+      git/snapshot-change-justified: on  # project rule in .jev-lint/rules/git/
+```
+
+A project can define `git/snapshot-change-justified` as a `subject: change`
+rule to review Vitest or Playwright snapshot changes against the diff that
+produced them. At present a `subject: change` is built only when the staged
+tree has an AGENTS.md or CLAUDE.md; a repository without either document
+gets no change subject. The shipped `git/diff-follows-instructions` compares
+the staged implementation with AGENTS.md, or CLAUDE.md when AGENTS.md is absent. A
+`subject: commit` rule such as `git/commit-message-describes-diff` has no
+message to inspect yet and produces no pre-commit subject; the pre-push
+hook runs it after the commit exists. A misspelled or undefined rule id is a
+configuration error, so the snapshot example needs a project rule file
+before enabling it.
+If the hook selects no `subject: change` rule, its `commits --staged` call
+prints that it has no question and exits cleanly; file rules still run in
+`review --staged`.
+
 `review --staged` scans only the files the commit will contain and keeps
 only the matches whose subject overlaps a changed line. `commits --staged`
 asks the other question `--staged` can ask: does this change break an
-instruction the repository wrote for itself, in AGENTS.md or CLAUDE.md. On
+instruction the repository wrote for itself, in AGENTS.md or, if absent, CLAUDE.md. On
 a repository where `check` would cost dollars, each of these costs a
 fraction of a cent, because almost nothing in a commit is a subject.
 
@@ -96,7 +127,7 @@ its diff. One request per commit, and the verdict cache keys on the message
 and the diff together, so amending a message re-asks and rebasing without
 changing anything does not. A `commit`-subject rule and a `change`-subject
 rule both run per commit off this one call -- with the shipped rules, that
-is the message-vs-diff question above and the same AGENTS.md / CLAUDE.md
+is the message-vs-diff question above and the same AGENTS.md-first instruction
 question `pre-commit` asks, now asked of every commit about to be pushed
 rather than only what is staged right now.
 
@@ -133,7 +164,7 @@ earned it on your own code, not before:
 
 ```yaml
 rules:
-  typescript/comment-describes-declaration: { at: 0.7, severity: error }
+  typescript/comment-describes-declaration: { threshold: 0.7, severity: error }
 ```
 
 Read [calibration](../.claude/skills/jev-lint/references/calibration.md)

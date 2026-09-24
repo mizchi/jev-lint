@@ -48,7 +48,7 @@ state: paired
 # own src/, 113 subjects) was a continuum with 7 over 0.70, 4 of them right
 # and one a fallback `return captured` that the note now names as
 # not-a-failure. See experiments/reports/h-tests-reach.
-at: 0.68
+threshold: 0.68
 rule:
   any:
     - all:

@@ -27,7 +27,7 @@ directories you were given, plus your report under
 
 ## The bar
 
-A rule is done when, on its own evals at its shipped `at:`, three passes,
+A rule is done when, on its own evals at its shipped `threshold:`, three passes,
 decisions on the mean:
 
 - precision 1.00 and recall 1.00,
@@ -35,7 +35,7 @@ decisions on the mean:
   lazy rule would flag: the terse but accurate name, the vague but true
   comment, the conventional exception, the preamble, the section heading),
 - headroom of at least 0.10 on both sides of the cutoff (highest clean
-  mean to `at`, `at` to lowest defect mean), so the next real file does not
+  mean to `threshold`, `threshold` to lowest defect mean), so the next real file does not
   land on it,
 - at most one case whose decision flips between passes, and none within
   0.03 of the cutoff.
@@ -55,7 +55,7 @@ what it cannot do is worth more than one that hides it.
   subject, widen; when the model is distracted by what is inside, narrow.
   Measure `state` changes rather than guess (`--arm` is not available in
   eval; edit `state:` and run).
-- `at:`: to the fitted midpoint, or above it for headroom on real code.
+- `threshold:`: to the fitted midpoint, or above it for headroom on real code.
 - `fixtures/` and `expect.yml`: add cases. Real-looking code,
   10-40 lines per case, and NEVER a marker comment (`// DEFECT`, `// CLEAN`,
   `// this is wrong because`) in a case file -- the model reads the file.

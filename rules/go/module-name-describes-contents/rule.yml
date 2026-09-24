@@ -12,7 +12,7 @@ state: graph
 # its directory. The outline lists Go functions and methods but not type
 # declarations (the probe has no name field for them), so a file of types
 # shows only its methods. Report: experiments/reports/j-go/REPORT.md.
-at: 0.60
+threshold: 0.60
 axis: file
 severity: info
 rule:

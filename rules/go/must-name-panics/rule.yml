@@ -16,7 +16,7 @@ state: local
 # from 0.18 to 0.09, so the sentence went back to its first form. 0.75 keeps
 # 0.18 over the top clean and 0.18 under the lowest found defect. Report:
 # experiments/reports/j-go/REPORT.md.
-at: 0.75
+threshold: 0.75
 axis: file
 rule:
   all:

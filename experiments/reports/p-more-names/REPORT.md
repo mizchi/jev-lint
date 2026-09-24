@@ -68,7 +68,7 @@ state: bare
 # since a clean case's corpus answer is an upper bound on its real-code
 # answer only in the other direction. One sentence attempt; `gaps` said
 # `works` on the first and the widened corpus.
-at: 0.45
+threshold: 0.45
 axis: file
 severity: warning
 rule:
@@ -180,7 +180,7 @@ One sentence, no rewrite. The corpus was widened once.
 
 ### Fit
 
-Accepted baseline (3 passes): fitted 0.48 (midpoint), shipped `at: 0.45`.
+Accepted baseline (3 passes): fitted 0.48 (midpoint), shipped `threshold: 0.45`.
 Precision 1.00, recall 1.00, tp 10 / fp 0 / fn 0 at 0.45 and at any cutoff
 in 0.21-0.72. Decision flips across the 3 passes: 0. Max spread 0.05
 (`CartService`, 0.73-0.78). Defects 0.75-0.96 (`createOrder` 0.75,
@@ -245,7 +245,7 @@ subject: enclosing
 state: local
 # Fitted 2026-09-20 on fixtures/ (91 subjects on distinct lines: 8 defects,
 # 83 cleans of which 27 are labelled hard; 3 passes, 0 flips at this
-# cutoff, max spread 0.08). Corpus cleans top out at 0.38 (`at`, a cutoff
+# cutoff, max spread 0.08). Corpus cleans top out at 0.38 (`threshold`, a cutoff
 # parameter) and 0.37 (`maxLength` used with `- 1`); defects start at 0.56
 # (`userIds` read as `userIds[0]` and handed to a session lookup -- a
 # compound case) and the rest sit at 0.71-0.95. Corpus midpoint 0.47.
@@ -256,7 +256,7 @@ state: local
 # a finding. 0.50 sits between the unseen clean top and the defect floor
 # with 0.03 and 0.06 of headroom: enough to separate this corpus, not
 # enough to ship. Cookbook recipe, not a shipped cutoff.
-at: 0.50
+threshold: 0.50
 axis: file
 severity: warning
 rule:
@@ -365,7 +365,7 @@ loop, `force` skipping a cache read, `count` as a truthiness guard, `id` in a
 URL, `items[0]` behind a length check, `handler` stored and never called,
 `onDone` passed to `.then`, `_req`, the express triple, node-style `cb`, and
 -- added after the unseen run -- `fixtures: string` (a directory named for
-what it holds) and `at: number` (a cutoff, from this repository's own
+what it holds) and `threshold: number` (a cutoff, from this repository's own
 vocabulary). A destructured parameter is present (`resolveUpload`) and is
 not a subject by construction.
 
@@ -403,7 +403,7 @@ body-bearing function node gave 75.
    (`records/param-unseen-attempt2-src.json`, 701 parameters, one pass, at
    0.42): 7 findings -- `palette(color: boolean)` 0.66 (a noun used as a
    flag; arguably right), `fixtures: string` 0.63 and 0.58 (a directory
-   named for what it holds; wrong), and `at`, `scale`, `id`, `spec`/`budget`
+   named for what it holds; wrong), and `threshold`, `scale`, `id`, `spec`/`budget`
    at 0.45-0.49 (terse names from the code's own vocabulary; wrong). Real
    clean band top: 0.63 against a corpus clean top of 0.28.
 3. Criteria: the false branch adds directory/file to the container list
@@ -411,7 +411,7 @@ body-bearing function node gave 75.
    vocabulary (at, n, spec)"; two fixtures taken from the unseen findings.
    99 subjects: `gaps` `matched 99 reported 7 median 0.05 top<at 0.59 head
    +0.11 gap 0.15 suggest 0.40 rewrite` (single pass); eval at 0.7 P 1.00 R
-   0.88 (fn `userIds` 0.56), 0 flips, fitted 0.47; `at` 0.38, `fixtures`
+   0.88 (fn `userIds` 0.56), 0 flips, fitted 0.47; `threshold` 0.38, `fixtures`
    0.25, `maxLength` 0.37. Unseen run again
    (`records/param-unseen-attempt3-src.json`, at 0.47): 3 findings --
    `color` 0.67, `fixtures` (the second one) 0.47, `id` 0.47; `bestTradeoff`
@@ -420,11 +420,11 @@ body-bearing function node gave 75.
 ### Fit
 
 Accepted baseline (3 passes, attempt 3 wording): fitted 0.50 (midpoint),
-shipped `at: 0.50`. Precision 1.00, recall 1.00, tp 8 / fp 0 / fn 0 at 0.50
+shipped `threshold: 0.50`. Precision 1.00, recall 1.00, tp 8 / fp 0 / fn 0 at 0.50
 and at any cutoff in 0.45-0.56. Decision flips across the 3 passes: 0. Max
 spread 0.06 (`prefix`, 0.70-0.76; `maxLength`, 0.31-0.37). Defects: 0.59
 (`userIds`, 0.57-0.61), 0.72 (`prefix`), 0.76 (`options`), then 0.87-0.95.
-Clean band: 0.42 (`at`, 0.40-0.44), 0.35 (`maxLength`), 0.23 (`fixtures`),
+Clean band: 0.42 (`threshold`, 0.40-0.44), 0.35 (`maxLength`), 0.23 (`fixtures`),
 0.18, then everything else at 0.16 and under. Headroom at 0.50: 0.08 above
 the highest clean mean, 0.06 above the highest single clean pass, 0.09 below
 the lowest defect mean, 0.07 below its lowest pass. On unseen code (attempt
@@ -445,7 +445,7 @@ would produce its next false positive on the next terse name.
 Corpus: more defects of the quiet classes -- plural-used-as-one-of-another-
 kind (`userIds` 0.59) and position words (`prefix` 0.72) -- to learn whether
 they are a band or two outliers, and hard cleans from other real
-repositories, since this repository's vocabulary (`at`, `spec`, `fixtures`)
+repositories, since this repository's vocabulary (`threshold`, `spec`, `fixtures`)
 is now in the false branch by name. Matcher: consider `not: { regex:
 "^_" }` on the name so `_unused` parameters are not subjects at all (they
 answer 0.05, so it is only cost). State: `local` on an `enclosing` subject
@@ -499,7 +499,7 @@ state: located
 # keeps 0.33 of headroom over the corpus cleans and 0.22 under its defects,
 # and trims the unseen list from 11 to 10; it does not separate the
 # domain-knowledge cases, which no cutoff does. Cookbook recipe.
-at: 0.60
+threshold: 0.60
 axis: file
 severity: warning
 rule:
@@ -693,7 +693,7 @@ what it does, which is why `graph` was not measured.
 ### Fit
 
 Accepted baseline (3 passes, attempt 3 wording): fitted 0.55 (midpoint),
-shipped `at: 0.60`. Precision 1.00, recall 1.00, tp 11 / fp 0 / fn 0 at 0.60
+shipped `threshold: 0.60`. Precision 1.00, recall 1.00, tp 11 / fp 0 / fn 0 at 0.60
 and at any cutoff in 0.35-0.77. Decision flips across the 3 passes: 0. Max
 spread 0.07 (`rename_customers_to_accounts`, 0.27-0.34). Defects 0.80-0.96
 (`add_index_on_orders_customer` 0.80, `add_not_null` 0.83, the rest

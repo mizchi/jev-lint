@@ -24,7 +24,7 @@ severity: warning
 # (`Sortable` with one `sort_key`, where the name is an adjective and the
 # method a noun), then 0.29; defects start at 0.81 (`Named` with three
 # methods) and run to 0.92. Midpoint, 0.18 of headroom a side, no flips.
-at: 0.62
+threshold: 0.62
 rule:
   all:
     - kind: trait_item

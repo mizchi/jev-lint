@@ -11,7 +11,7 @@
  * file, `bare` does not. No matcher, so no loose-matcher caveat.
  */
 import { readFileSync } from "node:fs";
-import { extname, isAbsolute, join } from "node:path";
+import { basename, extname, isAbsolute, join } from "node:path";
 import { FileIndex, isUnder, walkName } from "./files.ts";
 import type { Rule, Subject } from "./types.ts";
 
@@ -104,6 +104,7 @@ export function textSubjects(
     if (rule.subject !== "block") continue;
     const header = rule.split ? new RegExp(rule.split) : null;
     for (const file of findTextFiles(paths, rule.extensions, cwd, index)) {
+      if (rule.filenames && !rule.filenames.includes(basename(file))) continue;
       let source: string;
       try {
         source = read(file);

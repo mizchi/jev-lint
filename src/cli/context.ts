@@ -43,11 +43,12 @@ export function resolveContext(opts: Options, rest: string[], log: Log): Context
     log(`config not found: ${opts.config}`);
     return null;
   }
-  const { config, errors: configErrors } = loadConfig(configPath);
+  const { config, errors: configErrors, warnings: configWarnings } = loadConfig(configPath);
   // Loudly, and fatally. A config with a typo in it is a configuration that
   // does something other than what it says, which is worse than no config.
   for (const e of configErrors) log(`config error: ${e}`);
   if (configErrors.length > 0) return null;
+  for (const w of configWarnings) log(`config warning: ${w}`);
   applyConfig(opts, config, explicit);
   const envCache = process.env.JEV_LINT_CACHE;
   if (envCache && !explicit.has("--cache") && !explicit.has("-c")) opts.cache = envCache;

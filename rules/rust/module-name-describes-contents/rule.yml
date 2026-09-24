@@ -42,7 +42,7 @@ state: graph
 # sits inside the clean band (cart.rs, catalog.rs) and would wreck
 # precision (still 1.00 here, including against three fixtures built
 # adversarially to be clean-but-tempting) without fixing the blind spot.
-at: 0.55
+threshold: 0.55
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: info

@@ -26,7 +26,7 @@ state: local
 # 0.18 (ComputeRate/ParseWorkerLimits at their highest), both under 0.25 of
 # scale -- was 0.30/0.25 (blind) before the port. Report basis:
 # experiments/reports/j-go/REPORT.md (original fit).
-at: 0.56
+threshold: 0.56
 rule:
   all:
     - any:

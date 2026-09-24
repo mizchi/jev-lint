@@ -44,7 +44,8 @@ examples/cart.ts
 - **黙ってしまう失敗。** 失敗を隠す `catch`、条件と噛み合わないエラーメッセージ、イベントと噛み合わないログレベル。
 - **シェルスクリプトが、読み手に見えない形でマシンに何をするか。** ダウンロードしたコードの実行、渡されていない秘密の読み取り、永続化の設置、自分の範囲を越える削除、防御の無効化、侵入口の開放、外部からの命令の受け取り、実行内容の隠蔽。
 - **その文書は読む価値があるか。** slop、埋め草、水増し、曖昧さ。扱う内容の一覧で始まる節、次回予告で終わる節。
-- **コミットメッセージと、その diff。** そして **変更と、リポジトリが自分のために書いた指示** — その変更自身のツリーにある `AGENTS.md` か `CLAUDE.md`。ただし diff に照らせる指示だけで、「生成ファイルを手で編集しない」は裁き、「TDD で書く」は裁かない。
+- **`AGENTS.md` を実行できるか。** 各節の指示が明瞭で、ファイル内のほかの指示と矛盾しないか。
+- **コミットメッセージと、その diff。** そして **変更と、リポジトリが自分のために書いた指示** — その変更自身のツリーにある `AGENTS.md`。なければ `CLAUDE.md` を使う。ただし diff に照らせる指示だけで、「生成ファイルを手で編集しない」は裁き、「TDD で書く」は裁かない。
 
 [RULES.md](RULES.md) に全部ある。各ルールの cutoff と、自分の fixtures での成績付きで。これらが一つの族なのは、どれも**コードが自分について宣言している主張**を、コードが実際にやっていることに照らすからだ。その照合は、両方を読んだ読み手にしか見えない。
 
@@ -69,7 +70,7 @@ npx jev-lint check src --dry-run       # 何を聞くかと値段。リクエス
 | `jev-lint check src` | ファイル全体を裁く |
 | `jev-lint review --base main` | diff が触れた行だけ。finding が集中する場所を、ごく安く |
 | `jev-lint commits --base main` | 各コミットのメッセージを diff に、各変更をリポジトリ自身の `AGENTS.md` に照らす |
-| `jev-lint commits --staged` | 同じことを、これからコミットするものに対して |
+| `jev-lint commits --staged` | staged の変更をリポジトリの指示と照合。コミットメッセージはまだない |
 | `jev-lint run typescript/fn-name-promises src` | ルール一つ。自作なら `--file mine.yml` |
 | `jev-lint rules` | 読み込まれた全ルール。問い、cutoff、ファイル |
 
@@ -81,8 +82,12 @@ exclude: [test/fixtures]
 rules:
   typescript/fn-name-promises: on
   rust/fn-name-promises: off
-  typescript/comment-describes-block: { at: 0.7, severity: error }
+  typescript/comment-describes-block: { threshold: 0.7, severity: error }
 ```
+
+回答値が `threshold` 以上なら finding になる。旧名の `at` も警告付きで読み込む。
+`hooks.precommit` では、この `rules:` を継承するか、staged review 専用のルールを選べる。
+詳しくは [hook の説明](docs/use-hooks.md)。
 
 言語別ルールは `language/id` で指定する。省略した同梱 id も全言語を選ぶが、
 意図しない言語まで有効になるため警告を出す。言語名前空間のない自作ルールは例外。
@@ -139,7 +144,9 @@ ask: This catch block swallows a failure the caller needed to know about.
 
 ## コーディングエージェント向け
 
-リポジトリは skill を同梱している。jev-lint の走らせ方、どのパックを使うか、検証済みルールのクックブック、較正の手順:
+リポジトリは skill を同梱している。jev-lint の走らせ方と同梱ルールの使い方に加え、各リポジトリでコード、独自 grammar、テキスト、Git のルールを作るための独立したガイドがある:
+
+[プロジェクトごとのルール作成ガイド](skills/jev-lint/references/writing-project-rules.md)
 
 ```bash
 npx skills add mizchi/jev-lint --skill jev-lint

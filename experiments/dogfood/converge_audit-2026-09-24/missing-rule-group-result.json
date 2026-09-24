@@ -1,0 +1,45 @@
+{
+  "findings": [],
+  "review": [],
+  "stats": {
+    "subjects": 2,
+    "reported": 0,
+    "missing": 0,
+    "unsure": 0,
+    "review": 0,
+    "byRule": {},
+    "byFile": {
+      "examples/cf-game-audit/src/index.ts": {
+        "findings": 0,
+        "subjects": 2
+      }
+    }
+  },
+  "degraded": [],
+  "silentRules": [],
+  "idleLanguages": [],
+  "ignored": {
+    "subjects": 0,
+    "files": [],
+    "unknownRules": []
+  },
+  "unpaired": {
+    "subjects": 0,
+    "files": []
+  },
+  "retry": 1,
+  "spent": {
+    "calls": 2,
+    "inputTokens": 15756,
+    "outputTokens": 48,
+    "ms": 1499,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.000661752,
+    "wallMs": 769
+  },
+  "errors": [],
+  "elapsedMs": 829
+}

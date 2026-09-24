@@ -54,3 +54,8 @@ test "is_empty reports an empty cart" {
   let answer = is_empty([])
   assert_true(answer.length() > 0)
 }
+
+///|
+test "bench: cart_total over ten lines" (b : @bench.T) {
+  b.bench(fn() { b.keep(cart_total(lines())) })
+}

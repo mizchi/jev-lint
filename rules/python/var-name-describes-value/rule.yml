@@ -46,7 +46,7 @@ state: located
 # mean 0.3367 (passes 0.33/0.29/0.39, spread 0.10). Clearing `users`' own
 # spread needs `at` <= 0.41; clearing `healthy`'s needs `at` >= 0.43 -- the
 # two requirements do not overlap, so no cutoff resolves both, checked by
-# hand against every two-decimal value from 0.40 to 0.44. `at: 0.44` is
+# hand against every two-decimal value from 0.40 to 0.44. `threshold: 0.44` is
 # kept: it is the shipped value this paragraph already chose deliberately,
 # it still clears `healthy` (FP-margin 0.10, equal to spread), and only
 # `users` remains inside its own noise band (FN-margin 0.07, spread 0.10).
@@ -55,9 +55,9 @@ inconclusive: >-
   (test_client.py:60, mean 0.3367, spread 0.10) sit close enough, and wobble
   enough pass to pass, that no cutoff clears both cases' own spread: fixing
   `users`' FN-margin needs at <= 0.41, fixing `healthy`'s FP-margin needs at
-  >= 0.43. This is the crossing the `at:` comment above already predicted
+  >= 0.43. This is the crossing the `threshold:` comment above already predicted
   when the corpus was ported, not a new defect in the rule.
-at: 0.44
+threshold: 0.44
 axis: file
 severity: warning
 rule:

@@ -41,7 +41,7 @@ failed and nothing was reported.
 | `-R, --rules <path>` | rule file or directory, repeatable, loaded in place of the packaged packs and `.jev-lint/rules/` for this run |
 | `-r, --retry <n>` | ask everything n times and decide on the mean (default 1) — see [Asking more than once](#asking-more-than-once) |
 | `-c, --cache <path>` | verdict cache (default `.jev-lint/baseline.json`, relative to the config's directory; `none` to disable) |
-| `--at <rule=n>` | override one cutoff, repeatable |
+| `--threshold <rule=n>` | override one cutoff, repeatable; `--at` is a deprecated alias that warns |
 | `--unsure-below <n>` | confidence under which a finding is worded as a question |
 | `--arm <name>` | override every rule's state arm: `bare`, `local`, `located`, `graph`, `full` |
 | `--group <how>` | `file` (default), `rule`, `auto` — see [Batching](#batching) |
@@ -51,10 +51,10 @@ failed and nothing was reported.
 | `--explain-schedule` | print the axis chosen per rule, and why |
 | `--base <ref>` / `--staged` | what `review` diffs against: the merge base with `ref`, or the index (what a commit will contain: no untracked files, no unstaged edits) |
 | `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any finding |
-| `init --pre-commit` | write a hook running `review --staged --fail-on error`; refuses to overwrite an existing hook without `--force` |
+| `init --pre-commit` | write a hook running `review --staged --fail-on error` and `commits --staged --fail-on error`; both use `hooks.precommit` when present. Refuses to overwrite an existing hook body without `--force` |
 | `run <rule> [paths...]` | `check` with one rule: prefer `lang/<id>` (one language); a bare shipped id selects every language that has it. An unknown id names the nearest. `--file <rules.yml>` uses that file's rules instead — all of them, or the one `<rule>` names in it. Every `check` flag applies |
-| `commits [range]` | judge each non-merge commit with the git rules: a `subject: commit` rule judges the message against the diff, a `subject: change` rule judges the change against the `AGENTS.md` / `CLAUDE.md` in that commit's own tree (a commit whose tree holds neither produces no change subject, and the run says how many); the range is a positional (`main..HEAD`), else `--base <ref>`, else `@{upstream}..HEAD`. Findings are `<sha>:1`, named by short sha and subject line in every format. `--retry`, `--loose`, `--explain` and the cache apply; the cache keys on message and diff together |
-| `commits --staged` | the index as one change, for a pre-commit hook: `git diff --cached` is the change and `git show :AGENTS.md` the instructions, so a staged edit to the document is judged as part of the change it arrives with. `subject: change` rules only -- there is no message yet |
+| `commits [range]` | judge each non-merge commit with the git rules: a `subject: commit` rule judges the message against the diff, a `subject: change` rule judges the change against the `AGENTS.md` in that commit's own tree (falling back to `CLAUDE.md` if absent; a commit whose tree holds neither produces no change subject, and the run says how many); the range is a positional (`main..HEAD`), else `--base <ref>`, else `@{upstream}..HEAD`. Findings are `<sha>:1`, named by short sha and subject line in every format. `--retry`, `--loose`, `--explain` and the cache apply; the cache keys on message and diff together |
+| `commits --staged` | the index as one change, for a pre-commit hook: `git diff --cached` is the change and `git show :AGENTS.md` the instructions (falling back to `:CLAUDE.md` if absent), so a staged edit to the document is judged as part of the change it arrives with. `subject: change` rules only -- there is no message yet |
 | `commits --squash [range] --message-file <path\|->` | the whole range as one change — the diff from its merge base — judged against that message: a pull request's description (`gh pr view --json title,body -q '.title+"\n\n"+.body' \| jev-lint commits --squash main..HEAD --message-file -`), a changelog entry. `--message <text>` inline. One subject, named by the range |
 | `init --pre-push` | write a hook running `commits '@{upstream}..HEAD' --fail-on error`; steps aside with no key or no upstream |
 | `eval [dirs...]` | in a checkout of this repository, or over your own rule directories: run every `rules/<lang>/<id>/` suite (`--repeat n`, default 3), score at the shipped cutoff, compare with the baseline; `--accept` makes the run the baseline, `--accept-last` promotes the previous run without asking, `--replay` re-scores every baseline at the current cutoffs with no request and fails on a regression, a changed question, or a suite reported `blind` or `unstable` (see Calibrating) |
@@ -227,7 +227,7 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
   ask: fetch must always be given a timeout, such as AbortSignal.timeout.
   # Context for the model, never shown in the finding. Exceptions go here.
   note: not a violation if it is inside a retry wrapper that already sets one.
-  at: 2.0
+  threshold: 2.0
 ```
 
 | field | | |
@@ -237,8 +237,8 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `language` / `languages` | required | one grammar, or several |
 | `kind` | `score` (default) or `noul` | see below |
 | `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |
-| `at` | cutoff | 0–3 for `score`, 0–1 for `noul` |
-| `loose` | | floor of the `--loose` band, strictly under `at`. Default: half of `at`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
+| `threshold` | cutoff | 0–3 for `score`, 0–1 for `noul`; an answer **at or above** it is a finding. `at` remains an alias but warns; do not set both |
+| `loose` | | floor of the `--loose` band, strictly under `threshold`. Default: half of `threshold`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |
 | `subject` | `node` (default), `enclosing`, `file`, `commit`, `block` | what code is judged. `commit` and `block` have no matcher: `commit` is `language: Git`, its subjects the commits `jev-lint commits` lists, the message judged and the diff the state; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |
 | `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\w+)`) are the captures. A block runs from its header to the line before the next. Left out, the whole file is one block — a document judged as a whole — cut at 48,000 characters with the cut declared |
 | `extensions` | `block` only | the files the rule reads, by extension (`[sql]`); no grammar claims them, so the rule has to say |
@@ -246,9 +246,9 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `note` | | context for the model only |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
 | `severity` | `hint`, `info`, `warning` (default), `error` | `error` fails a build; earn it first |
-| `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `at` then runs 0..levels-1 and a finding's level is numbered. The `rules/markdown/` rules are five-level rubrics from JevSlop |
+| `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `threshold` then runs 0..levels-1 and a finding's level is numbered. The `rules/markdown/` rules are five-level rubrics from JevSlop |
 | `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |
-| `extends` | | another rule's id -- `<lang>/<id>`, or a bare id when the file's `languages` pick one language -- to build this rule from. The base comes from the rules loaded beside it, then from the shipped packs (read for the lookup, never run because of it). Every field the file gives replaces the base's; `criteria` may give one branch alone, and `note: { append: ... }` keeps the base's note and adds to it. The rule needs its own id. A file that changes what is asked (`ask`, `note`, `criteria`, `rule`, `state`, `context`, ...) but not `at` is warned: the inherited cutoff was fitted to the base's question |
+| `extends` | | another rule's id -- `<lang>/<id>`, or a bare id when the file's `languages` pick one language -- to build this rule from. The base comes from the rules loaded beside it, then from the shipped packs (read for the lookup, never run because of it). Every field the file gives replaces the base's; `criteria` may give one branch alone, and `note: { append: ... }` keeps the base's note and adds to it. The rule needs its own id. A file that changes what is asked (`ask`, `note`, `criteria`, `rule`, `state`, `context`, ...) but not `threshold` is warned: the inherited cutoff was fitted to the base's question |
 | `context` | | a list of documents, by path relative to the rule file, that the model reads in the state beside the code: the project's own conventions the rule is judged against. Read at load time; their text is part of the draft, so an edited document retires the verdicts given against the old one. Up to 40,000 characters in all; a missing or empty document is a load error. Rules with different documents never share a request |
 | `inconclusive` | | why this rule's own eval corpus cannot speak reliably about the rule drifting (see Calibrating): blind, unstable, or both. A non-empty reason suppresses `eval`'s failure for whichever applies and is shown in its place. Validated against the suite's own margins and spreads at eval time — a reason on a suite that is neither blind nor unstable is an error |
 
@@ -324,7 +324,12 @@ problem and is not one.
   No matcher, `language: Text`, `state: bare` or `located`; the header's
   named groups are the captures and the block is the subject's text. Runs
   under `check` and `review` beside the ast-grep rules, over the files whose
-  extension the rule names. The one shipped is `text/query-name-describes-sql`.
+  extension the rule names. Optional `filenames: [AGENTS.md]` restricts a
+  Text rule to that exact basename, including in nested directories. Without
+  it, every file with a listed extension is eligible. The shipped
+  `markdown/agent-instruction-is-unclear` and
+  `markdown/agent-instructions-conflict` rules use this to review each
+  `AGENTS.md` section against the whole document.
 
 ### `state`: what else the model sees
 
@@ -349,8 +354,10 @@ or when it imports the module — the second is what pairs a repository whose
 tests all live in one file, and a name match outranks an import. One hop
 of imports is followed: a test that drives an entry point (`main.ts`, an
 `index`) which imports the module is that module's test too. One hop and
-not a walk, since two hops from a test reach most of a tree. Of the
-related files, the four that name the most of what is being asked about
+not a walk, since two hops from a test reach most of a tree. For MoonBit,
+a test in the same package also pairs when its code calls one of the
+file's named functions; a neighbouring test without a call is not evidence.
+Of the related files, the four that name the most of what is being asked about
 travel — the subjects' own names first, then the module's other exports —
 and the excerpt budget (8,000 characters for one subject in the file,
 2,000 more per further subject, 32,000 at most) is split among them by
@@ -452,7 +459,7 @@ its own. A
 language directory admits only its own grammars (`typescript` admits the
 ECMAScript four), so a Rust kind cannot land in the TypeScript file. The
 identity of a rule is `(language, id)`: findings, `jev-lint-ignore` and
-`--at <id>=n` name the id and apply to every language, and `--at
+`--threshold <id>=n` name the id and apply to every language, and `--threshold
 rust/<id>=n` names one.
 
 Outside that layout a rule file may still be a *list* of rules or a `---`
@@ -542,8 +549,8 @@ Three consequences before you switch it on:
    axis, because a rule-axis state spans files and so cannot carry one.
 2. **A cutoff belongs to an axis.** Switching means re-fitting — `jev-lint replay
    <record> --labels <labels>` does that for free — and the rule-axis numbers
-   are not shippable today, because a rule carries one `at:`, so they have to be
-   passed with `--at`.
+   are not shippable today, because a rule carries one `threshold:`, so they have to be
+   passed with `--threshold`.
 3. **It invalidates the whole verdict cache**, since the axis is part of the key.
    That breaks the commit-the-cache workflow below until the next full run.
 
@@ -1149,8 +1156,13 @@ exclude: [test/fixtures]        # under those, never judged
 rules:                          # only these run
   typescript/fn-name-promises: on  # the rule's own severity and cutoff
   rust/fn-name-promises: off
-  typescript/comment-describes-block: { at: 0.7, severity: error, loose: 0.4 }
+  typescript/comment-describes-block: { threshold: 0.7, severity: error, loose: 0.4 }
   my-rule: warning              # a severity: on, at that severity
+hooks:
+  precommit:
+    extends: true               # inherit rules: above, then override by id
+    rules:
+      git/diff-follows-instructions: on
 cache: .jev-lint/baseline.json  # the default; `none` disables
 ```
 
@@ -1159,10 +1171,28 @@ A bare id still selects every language that has it but emits a warning, because
 it may enable another language unintentionally. A flat project rule has no
 namespace and does not warn. A qualified setting wins over the bare setting
 for that language. Values are `on`, `off`, a severity (`hint`, `info`, `warning`, `error`) or a
-mapping of `severity`, `at` and `loose`. A name that matches no loaded rule
+mapping of `severity`, `threshold` and `loose`. A name that matches no loaded rule
 is an error, exit 2 -- a misspelt id that ran nothing would look like a
 clean rule. A config with no `rules:` runs nothing and says what to write;
 with no config at all, every loaded rule runs and the run says so.
+
+`hooks.precommit` selects rules for `review --staged` and `commits --staged`,
+including the two calls made by the generated pre-commit hook. Its `extends`
+field is required: `true` copies the top-level `rules:` mapping and replaces
+matching entries with those under the hook; `false` uses only the hook's
+entries. Each replacement is a whole rule setting, so a hook entry such as
+`{ threshold: 0.8 }` does not retain a top-level severity override for that id.
+Without `hooks.precommit`, staged commands keep using top-level `rules:`.
+Ordinary `check`, `review --base`, and non-staged `commits` still use the
+top-level selection. `commits --staged` has no message to judge, so a
+`subject: commit` rule selected here waits until a later commit-range run;
+`subject: change` rules can judge the staged diff now.
+
+The `threshold` in a config rule entry overrides that rule's own cutoff for
+the run. `at` is accepted as a deprecated alias with a warning, and setting
+both on the same entry is an error. `--threshold` is the corresponding
+one-run flag; `--at` still works with a warning. These names change no
+stored answer or accepted baseline.
 
 The rules load from the package's own packs and, when the directory
 exists, `.jev-lint/rules/` beside the config: a flat `*.yml` there, or the
@@ -1269,8 +1299,8 @@ cache regardless of this setting.
 ## Upgrading from 0.4
 
 - **The config selects the rules.** `paths:` is `files:`; `rules:` is a
-  mapping of rule id to `on` / `off` / a severity / `{ severity, at, loose
-  }`, not a list of directories; `at:` moved under each rule. Each of the
+  mapping of rule id to `on` / `off` / a severity / `{ severity, threshold, loose
+  }`, not a list of directories; `threshold:` moved under each rule. Each of the
   old keys is refused with the new spelling, exit 2, rather than read as
   something else. `jev-lint init --force` writes a config with every
   shipped rule on.
@@ -1286,7 +1316,7 @@ cache regardless of this setting.
   `rust/fn-name-promises`; the plain id names every language. A
   `jev-lint-ignore fn-name-promises-rust` comment now suppresses nothing,
   and the "names a rule that does not exist" line says what to write
-  instead. `--at fn-name-promises-rust=n` is `--at rust/fn-name-promises=n`.
+  instead. `--threshold fn-name-promises-rust=n` is `--threshold rust/fn-name-promises=n`.
 - **Your own rule files are unchanged**: a flat `rules/*.yml` loads as it
   did. Only rules placed as `rules/<lang>/<id>/rule.yml` get the language
   directory's checks and fixtures; `labels.json` there is `expect.yml`.

@@ -11,7 +11,7 @@ state: located
 # headroom on each side, no decision flips, max spread 0.08. One node is one
 # subject: a declaration with both a `#` comment above and a docstring is
 # asked once, about the comment.
-at: 0.67
+threshold: 0.67
 axis: file
 severity: warning
 rule:

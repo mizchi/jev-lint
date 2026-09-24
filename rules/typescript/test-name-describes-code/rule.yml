@@ -72,7 +72,7 @@ state: bare
 # something other", and the note says a weak or missing assertion is not a
 # different outcome. The quietest defect is the adjacent-name one (a title
 # saying reserves over a body that restocks), at 0.89.
-at: 0.72
+threshold: 0.72
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

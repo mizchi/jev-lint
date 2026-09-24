@@ -7,7 +7,7 @@ state: located
 # 3 passes). Defects answered 0.74-0.89; cleans topped at 0.11. The quietest
 # defect spread 0.05 across passes. The midpoint fit was 0.43; 0.54 leans
 # toward precision while retaining 0.22 of margin above the quietest defect.
-at: 0.54
+threshold: 0.54
 axis: file
 severity: warning
 rule:

@@ -30,7 +30,7 @@ state: located
 # 0.20 and `try_config` by 0.15, both past their own spreads, and is inside
 # the same clean/defect gap the 2026-09-21 fit already found. Same 5
 # defects caught, same 0 false positives.
-at: 0.33
+threshold: 0.33
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

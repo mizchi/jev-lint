@@ -22,7 +22,7 @@ severity: warning
 # Midpoint, 0.12 a side -- narrower than typescript's 0.21 on the same
 # cases, because python's clean band sits higher: a method that writes is
 # less surprising where every attribute is public.
-at: 0.47
+threshold: 0.47
 language: Python
 # A method of a class. `stopBy: end` reaches the class through the
 # `decorated_definition` a `@property` sits in. A dunder has no name to

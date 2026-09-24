@@ -12,7 +12,7 @@ state: local
 # Midpoint of the gap, 0.16 of headroom on each side, no decision flips,
 # max spread 0.05. `$LOGGER` matches `self.log` and the `logging` module
 # as well as a bare `logger`.
-at: 0.60
+threshold: 0.60
 axis: file
 rule:
   any:

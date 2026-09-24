@@ -18,7 +18,7 @@ language: Json
 kind: noul
 subject: node
 state: bare
-at: 0.52
+threshold: 0.52
 rule:
   kind: pair
   all:

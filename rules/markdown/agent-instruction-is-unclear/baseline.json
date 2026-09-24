@@ -1,0 +1,352 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-09-24T08:40:58.657Z",
+  "model": "jev-1.13.0",
+  "suite": "markdown/agent-instruction-is-unclear",
+  "rules": [
+    {
+      "id": "agent-instruction-is-unclear",
+      "draft": "7d2cfc87a187",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/ambiguous/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/ambiguous/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/terse/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/terse/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/undefined/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/undefined/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/japanese/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/japanese/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/scope/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/scope/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.51,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/defined-elsewhere/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/defined-elsewhere/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/scope/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/scope/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/japanese/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/japanese/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/terse/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/terse/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/defined-elsewhere/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/defined-elsewhere/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.3,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/ambiguous/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/ambiguous/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/undefined/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/undefined/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/japanese/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/japanese/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/defined-elsewhere/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/defined-elsewhere/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/undefined/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/undefined/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/scope/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/scope/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.48,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/terse/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/terse/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.35,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/ambiguous/AGENTS.md",
+        "line": 1,
+        "endLine": 3,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "agent-instruction-is-unclear",
+        "file": "rules/markdown/agent-instruction-is-unclear/fixtures/ambiguous/AGENTS.md",
+        "line": 5,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 18,
+    "inputTokens": 19281,
+    "usd": 0.000809802,
+    "ms": 613
+  }
+}

@@ -12,7 +12,7 @@ state: located
 # under its band catches it on every pass while the highest clean sits at
 # 0.32. Measured on `local` the same defect answers 0.22-0.28 -- under the
 # cleans -- which is why this rule alone in its pack carries the file.
-at: 0.4
+threshold: 0.4
 rule:
   any:
     - all:

@@ -31,7 +31,7 @@ key.
   kind: noul
   subject: node
   state: bare
-  at: 0.44
+  threshold: 0.44
   rule:
     # A step: the mapping directly under a sequence item, holding a `name:`
     # and a `run:` or `uses:`. The mapping is the subject, so the claim and
@@ -157,7 +157,7 @@ intended steps found, nothing unintended, captures right.
   kind: noul
   subject: node
   state: bare
-  at: 0.56
+  threshold: 0.56
   rule:
     # One entry of `"scripts": { ... }` in a package.json: the pair is the
     # subject, the key is the claim, the value is the command.
@@ -274,7 +274,7 @@ both sides, `bare` was right first time, and 37/37 subjects were found with
   kind: noul
   subject: node
   state: bare
-  at: 0.58
+  threshold: 0.58
   rule:
     # An operation: the mapping that is the value of an HTTP-method key and
     # holds `responses:`. Its `summary`/`description` are the claim; its

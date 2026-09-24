@@ -23,7 +23,7 @@ constraint differs by necessity (`log-level-matches-event`'s level list).
 Procedure per rule, as the BRIEF: node kinds found with `ast-grep
 --debug-query=ast` on concrete snippets; `rules -R` to 0 errors;
 `--dry-run --show-subjects` until every intended subject and capture was
-right; `gaps`; `eval --repeat 3`; the fitted `at:` written with its
+right; `gaps`; `eval --repeat 3`; the fitted `threshold:` written with its
 reasons; `eval --repeat 3 --accept`. Every paid run was priced with
 `--dry-run` first; no single run exceeded $0.003. Verdicts: 10 SHIP, 1
 COOKBOOK (`test-name-verifies-claim`), 0 DROP. Three fixtures were
@@ -86,7 +86,7 @@ state: located
 # the gap, 0.10 of headroom on each side, no decision flips, max spread 0.05.
 # Methods are `function_definition` inside `class_definition`, so one arm
 # covers functions, methods and decorated definitions.
-at: 0.51
+threshold: 0.51
 axis: file
 severity: warning
 rule:
@@ -189,7 +189,7 @@ state: located
 # The matcher is `assignment` with an `identifier` on the left, so a
 # dataclass field default and a module constant are subjects too; `self.x =`
 # (an `attribute` on the left) and tuple unpacking are not.
-at: 0.57
+threshold: 0.57
 axis: file
 severity: warning
 rule:
@@ -307,7 +307,7 @@ state: located
 # headroom on each side, no decision flips, max spread 0.08. One node is one
 # subject: a declaration with both a `#` comment above and a docstring is
 # asked once, about the comment.
-at: 0.67
+threshold: 0.67
 axis: file
 severity: warning
 rule:
@@ -464,7 +464,7 @@ state: located
 # used. The grammar hoists a comment that opens a block out of the block;
 # the second arm matches the block itself so those comments are asked
 # about too, and the subject is the enclosing function either way.
-at: 0.45
+threshold: 0.45
 severity: info
 rule:
   any:
@@ -577,7 +577,7 @@ query line, "must not raise" over a second `close()`.
 
 ### Fit
 
-`at: 0.45`, set for headroom rather than at the midpoint: 0.23 over the
+`threshold: 0.45`, set for headroom rather than at the midpoint: 0.23 over the
 evals' cleans, 0.13 over the unseen clean band, 0.11 under the inverted
 condition (0.08 on its lowest pass). Accepted run: precision 1.00, recall
 0.86, tp 6 / fp 0 / fn 1 -- the fn is "keep the newest" (0.33), false
@@ -621,7 +621,7 @@ state: bare
 # 0.94-0.96. Midpoint of the gap, 0.14 of headroom on each side, no
 # decision flips, max spread 0.07. The three hard cleans near the cutoff
 # are the other rule's defects, which is the split the two rules exist for.
-at: 0.79
+threshold: 0.79
 axis: file
 severity: warning
 rule:
@@ -742,7 +742,7 @@ state: bare
 # 0.27 but takes that same defect down to 0.53, level with the cleans, so
 # `bare` is kept, as in the TypeScript variant. Expect pytest code that
 # builds its inputs in fixtures and helpers to sit in the 0.5-0.65 band.
-at: 0.68
+threshold: 0.68
 axis: file
 severity: warning
 rule:
@@ -875,7 +875,7 @@ state: full
 # (mean 0.64): the widest spread in this pack, and its low pass clears the
 # cutoff by 0.06, so on a package whose __init__ misnames its contents
 # expect a `--retry 3` to matter.
-at: 0.46
+threshold: 0.46
 axis: file
 severity: info
 rule:
@@ -971,7 +971,7 @@ state: located
 # table, os.mkdir without exist_ok, CREATE TABLE without IF NOT EXISTS, two
 # appends, and logging's addHandler on every call). Midpoint of the gap,
 # 0.20 of headroom on each side, no decision flips, max spread 0.06.
-at: 0.68
+threshold: 0.68
 axis: file
 rule:
   all:
@@ -1066,7 +1066,7 @@ state: local
 # format_, a cache write in a derive_, a counter and an argument mutated).
 # Midpoint of the gap, 0.27 of headroom on each side, no decision flips,
 # max spread 0.03.
-at: 0.58
+threshold: 0.58
 axis: file
 severity: info
 rule:
@@ -1175,7 +1175,7 @@ state: local
 # try) and 0.82 (`port_or_default`, an int() outside any try), the rest
 # 0.90-0.95. Midpoint of the gap, 0.12 of headroom on each side, no
 # decision flips, max spread 0.10 (the try_lock clean).
-at: 0.59
+threshold: 0.59
 axis: file
 rule:
   all:
@@ -1275,7 +1275,7 @@ state: local
 # Midpoint of the gap, 0.16 of headroom on each side, no decision flips,
 # max spread 0.05. `$LOGGER` matches `self.log` and the `logging` module
 # as well as a bare `logger`.
-at: 0.60
+threshold: 0.60
 axis: file
 rule:
   any:
@@ -1381,7 +1381,7 @@ state: paired
 # The `test_` prefix pairs `test_cart.py` with `cart.py` (the runner splits
 # a test file's name on `_`); a helper defined in a test file matches the
 # matcher and is dropped as unpaired, which the run reports as one subject.
-at: 0.52
+threshold: 0.52
 axis: file
 rule:
   all:

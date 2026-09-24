@@ -168,7 +168,7 @@ export function cmdInitHook(opts: Options, out: Log, log: Log, which: "pre-commi
   out("has the body can still commit.");
   out("");
   if (which === "pre-commit") {
-    out("It reviews the staged diff and judges it against AGENTS.md / CLAUDE.md");
+    out("It reviews the staged diff and judges it against AGENTS.md (CLAUDE.md fallback)");
     out("on every commit, prints what it finds, and blocks only on a rule with");
     out("`severity: error` -- no shipped rule has it. With no API key in the");
     out("environment, or a request that fails outright, it steps aside. Skip it");

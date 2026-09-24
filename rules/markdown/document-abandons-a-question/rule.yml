@@ -38,7 +38,7 @@ state: bare
 # characters: on the 78 KB docs/findings.md the rule answered 0.60 for
 # promises whose delivery lies beyond the cut, which is the cut speaking,
 # not the document.
-at: 0.5
+threshold: 0.5
 ask: >-
   This document raises a question, an assumption or a promise that it never returns to.
 criteria:

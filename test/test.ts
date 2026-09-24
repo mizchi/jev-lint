@@ -25,6 +25,8 @@ const files = [
   "questions",
   "state",
   "report",
+  "viewer",
+  "tui",
   "ignore",
   "files",
   "paired",

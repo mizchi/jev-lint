@@ -55,7 +55,7 @@ and identical signatures; they are the hard cleans a lazy rule flags, and
    band (`formatters` 0.77 -> 0.71, `handlers` 0.82 -> 0.78). score:
    `sync.ts` 2.67 (confidence 0.65-0.68) against a bad band from 2.81 --
    worse than on `full` and narrower than the noul. Dropped.
-5. Score variant removed, `at: 0.60`, fresh `--accept` run (noul only, 27
+5. Score variant removed, `threshold: 0.60`, fresh `--accept` run (noul only, 27
    requests per pass): P 1.00 R 1.00, fitted 0.60, bad 0.71-0.92, clean
    0.05-0.48, 0 flips, headroom 0.12 / 0.11. Same decisions as attempt 4.
 
@@ -166,7 +166,7 @@ object plus an optional `AbortSignal`, on a combinator over its siblings):
 | unseen highest clean (`hub-pr-watch.ts`) | 0.39 | 0.45 |
 
 Every other case moved 0.04 or less. The clause cost `formatters.ts` 0.06,
-so `at` moved from 0.60 to 0.55: 10 bad in 0.65-0.92, 19 clean in
+so `threshold` moved from 0.60 to 0.55: 10 bad in 0.65-0.92, 19 clean in
 0.05-0.42, 0 flips, headroom 0.10 bad / 0.13 clean on the corpus, 0.10 on
 the unseen clean side. `loop-service.ts` is now a finding at 0.04 over --
 in the wobble band, and this rule is `info`, so that is where it belongs.

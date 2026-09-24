@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, statSync, writeFileSync, rmSync, mkdirSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { applyConfig, findConfig, hookShim, initialConfig, initialHook, initialPushHook, loadConfig } from "../src/config.ts";
+import { applyConfig, findConfig, hookShim, initialConfig, initialHook, initialPushHook, loadConfig, precommitRules } from "../src/config.ts";
 import { blocks } from "../src/gate.ts";
 import { loadRules, shippedRulesPath } from "../src/rules.ts";
 import { main } from "../src/cli/main.ts";
@@ -106,6 +106,65 @@ test("config: an unknown key, a bad value and bad YAML are all reported", () => 
   }
 });
 
+test("config: hooks.precommit has a checked rule map and explicit inheritance", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
+  try {
+    const parsed = loadConfig(writeConfig(dir, [
+      "rules:",
+      "  typescript/fn-name-promises: warning",
+      "  git/diff-follows-instructions: off",
+      "hooks:",
+      "  precommit:",
+      "    extends: true",
+      "    rules:",
+      "      typescript/fn-name-promises: { severity: error, at: 0.8 }",
+      "      git/diff-follows-instructions: on",
+    ].join("\n")));
+    assert.deepEqual(parsed.errors, []);
+    assert.deepEqual(precommitRules(parsed.config), {
+      "typescript/fn-name-promises": { enabled: true, severity: "error", at: 0.8 },
+      "git/diff-follows-instructions": { enabled: true },
+    });
+    assert.deepEqual(parsed.config.rules?.["typescript/fn-name-promises"], { enabled: true, severity: "warning" }, "ordinary rule settings stay intact");
+
+    const separate = loadConfig(writeConfig(dir, "rules: { typescript/fn-name-promises: on }\nhooks: { precommit: { extends: false, rules: { git/diff-follows-instructions: on } } }\n"));
+    assert.deepEqual(separate.errors, []);
+    assert.deepEqual(precommitRules(separate.config), { "git/diff-follows-instructions": { enabled: true } });
+    assert.deepEqual(precommitRules({ rules: { "typescript/fn-name-promises": { enabled: true } } }), { "typescript/fn-name-promises": { enabled: true } }, "no hook section preserves the old selection");
+
+    const bad = (body: string) => loadConfig(writeConfig(dir, body)).errors.join("\n");
+    assert.match(bad("hooks: []\n"), /`hooks`.*mapping/);
+    assert.match(bad("hooks: { precommmit: {} }\n"), /precommmit/);
+    assert.match(bad("hooks: { precommit: { rules: {} } }\n"), /extends/);
+    assert.match(bad("hooks: { precommit: { extends: yes, rules: {} } }\n"), /extends/);
+    assert.match(bad("hooks: { precommit: { extends: false, rules: { x: { at: high } } } }\n"), /rules\.x.*number/);
+    assert.match(bad("hooks: { precommit: { extends: false, rules: {}, typo: true } }\n"), /typo/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("config: threshold is preferred and at remains a warned alias", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-cfg-"));
+  try {
+    const preferred = loadConfig(writeConfig(dir, "rules: { typescript/fn-name-promises: { threshold: 0.8 } }\nhooks: { precommit: { extends: true, rules: { git/diff-follows-instructions: { threshold: 0.6 } } } }\n"));
+    assert.deepEqual(preferred.errors, []);
+    assert.deepEqual(preferred.warnings, []);
+    assert.equal(preferred.config.rules?.["typescript/fn-name-promises"]?.at, 0.8);
+    assert.equal(preferred.config.hooks?.precommit?.rules["git/diff-follows-instructions"]?.at, 0.6);
+
+    const alias = loadConfig(writeConfig(dir, "rules: { typescript/fn-name-promises: { at: 0.8 } }\n"));
+    assert.deepEqual(alias.errors, []);
+    assert.match(alias.warnings.join("\n"), /rules\.typescript\/fn-name-promises.*`at`.*`threshold`/);
+    assert.equal(alias.config.rules?.["typescript/fn-name-promises"]?.at, 0.8);
+    const conflict = loadConfig(writeConfig(dir, "rules: { x: { at: 0.7, threshold: 0.8 } }\n"));
+    assert.match(conflict.errors.join("\n"), /both.*`at`.*`threshold`/);
+    assert.match(loadConfig(writeConfig(dir, "rules: { x: { threshold: .inf } }\n")).errors.join("\n"), /finite/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("config: a flag beats the file, and the file beats the default", () => {
   // The precedence that lets a project commit a config and still be overridden
   // for one run. `explicit` is why it works: `concurrency` is already 4 before
@@ -164,7 +223,7 @@ test("config: the 0.4 keys are refused with the 0.5 spelling, not read as someth
     assert.equal(errors.length, 3, errors.join("\n"));
     assert.match(errors[0]!, /`paths` is `files` since 0\.5/);
     assert.match(errors[1]!, /`rules` names rules since 0\.5.*\.jev-lint\/rules/);
-    assert.match(errors[2]!, /`at` moved under `rules` since 0\.5/);
+    assert.match(errors[2]!, /top-level `at` is obsolete.*threshold:/);
     const bad = loadConfig(writeConfig(dir, "rules:\n  x: maybe\n  y: { at: high }\n  z: { severity: loud }\n  w: [1]\n"));
     assert.equal(bad.errors.length, 4, bad.errors.join("\n"));
     assert.match(bad.errors[0]!, /rules\.x/);

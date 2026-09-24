@@ -9,8 +9,9 @@
  *
  * "Which tests" is a heuristic, deliberately. Resolving imports would be the
  * exact answer and would also be a build system; the conventions -- a test
- * named for the module, a test directory mirroring the source tree -- cover
- * the ordinary case, and the arm says what it found so the model can weigh
+ * named for the module, a test directory mirroring the source tree, a MoonBit
+ * package test that calls one of the file's functions -- cover the ordinary
+ * case, and the arm says what it found so the model can weigh
  * a weak pairing rather than mistake it for a strong one.
  *
  * What travels is an EXCERPT, not the file. A test file is mostly setup; the
@@ -27,8 +28,8 @@ import { FileIndex, tryReadFile } from "./files.ts";
 /** One related test, as the state carries it. */
 export interface RelatedTest {
   path: string;
-  /** What made it related: its name, that it imports the file, or that it IS the file (vitest in-source tests). */
-  via: "name" | "import" | "in-source";
+  /** What made it related: its name, an import, a same-package call, or an in-source test. */
+  via: "name" | "import" | "call" | "in-source";
   /** The excerpt, or the whole file when nothing in it matched. */
   code: string;
 }
@@ -111,19 +112,17 @@ function readIfUnderTestDirectory(full: string, rel: string): string | undefined
 /**
  * The tests most likely to be about a file, best first.
  *
- * A test is related when its NAME contains the module's name, or when it
- * IMPORTS the module -- the second is what pairs a repository whose tests
- * all live in one file. Sitting under the module's directory, or under a
- * directory named for the module (the mirrored `test/cart/` for `src/cart/`),
- * only ranks the related ones. A same-directory test named for something
- * else is not evidence about this file -- counting it would pair every file
- * in a flat `src/` with four arbitrary neighbours. A module named by its
- * directory, `cart/index.ts`, is named `cart`, and its mirror
+ * A test is related when its NAME contains the module's name, when it
+ * IMPORTS the module, or (for MoonBit) when it calls one of the file's
+ * functions from the same package. Directory proximity alone only ranks
+ * the related ones: a same-directory test named for something else and
+ * calling none of this file's functions is no evidence about it. A module
+ * named by its directory, `cart/index.ts`, is named `cart`, and its mirror
  * `cart/index.test.ts` counts as a name match too, since `index` on its own
  * names nothing. A test file is not its own test.
  *
- * `readSource` is what makes the import signal possible; without it only
- * the name is consulted.
+ * `readSource` makes import and call evidence possible; without it only
+ * names are consulted.
  */
 export function relatedTestFiles(
   file: string,
@@ -139,6 +138,7 @@ export function relatedTests(
   testFiles: string[],
   readSource?: (path: string) => string,
   limit: number = MAX_RELATED_TESTS,
+  calledNames: string[] = [],
 ): Array<{ path: string; via: RelatedTest["via"] }> {
   const id = moduleIdentity(file);
   const name = (id.named_by_directory ?? id.stem).toLowerCase();
@@ -161,16 +161,30 @@ export function relatedTests(
         names(base).includes(name) || (id.named_by_directory !== null && mirrored && names(base).includes(own));
       const byImport = !byName && readSource !== undefined && importsModule(readSource(t), file, t, readSource);
       const byDir = dir !== "" && lower.startsWith(dir);
-      const via: RelatedTest["via"] = byName ? "name" : "import";
+      // MoonBit package members share a namespace. A call in a neighbouring
+      // test can name this file's function without importing this file or
+      // naming it in the test filename. Proximity alone is not evidence.
+      const byCall = !byName && !byImport && family === "mbt" && dirname(lower) === dirname(file.toLowerCase()) && readSource !== undefined &&
+        callsNamedFunction(readSource(t), calledNames);
+      const via: RelatedTest["via"] = byName ? "name" : byImport ? "import" : "call";
       // A file named for the module outranks one that merely imports it:
       // every test file may import a module for a fixture builder, and
       // the four that did, alphabetically, once shut out `rules.test.ts`.
-      return { t, via, score: byName ? 4 + (byDir || mirrored ? 1 : 0) : byImport ? 2 + (byDir || mirrored ? 1 : 0) : 0 };
+      return { t, via, score: byName ? 4 + (byDir || mirrored ? 1 : 0) : byImport || byCall ? 2 + (byDir || mirrored ? 1 : 0) : 0 };
     })
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score || a.t.localeCompare(b.t))
     .slice(0, limit)
     .map(({ t, via }) => ({ path: t, via }));
+}
+
+/** A call spelling in MoonBit test code, excluding mentions in prose. */
+function callsNamedFunction(source: string, names: string[]): boolean {
+  const code = source
+    .replace(/"(?:\\.|[^"\\])*"/g, '""')
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\/\/[^\n]*/g, "");
+  return names.some((word) => /^[A-Za-z_][A-Za-z0-9_]*$/.test(word) && new RegExp(`\\b${word}\\s*\\(`).test(code));
 }
 
 /** The opener of a vitest in-source test block. */
@@ -452,7 +466,7 @@ export function pairTests(
       const text = source(path);
       return needles.reduce((n, k, i) => n + (k.test(text) ? needles.length - i : 0), 0);
     };
-    const related = relatedTests(file, candidates, source, Infinity)
+    const related = relatedTests(file, candidates, source, Infinity, words.slice(0, -1))
       .map((r, order) => ({ ...r, order, hits: relevance(r.path) }))
       .sort((a, b) => b.hits - a.hits || a.order - b.order)
       .slice(0, MAX_RELATED_TESTS);

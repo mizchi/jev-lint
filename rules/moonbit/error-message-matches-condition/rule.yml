@@ -13,7 +13,7 @@ state: local
 # typescript ships at 0.65, which sits INSIDE this corpus's clean band and
 # flipped that case across passes; the midpoint leaves 0.10 above the
 # clean band and 0.10 below the defects.
-at: 0.76
+threshold: 0.76
 axis: file
 severity: warning
 # The guarding branch AND the failure inside it as ONE match, so that two

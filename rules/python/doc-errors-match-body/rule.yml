@@ -21,7 +21,7 @@ state: located
 # defect at 0.93 and one false positive at 0.79 (`raise_on_not_writable_file`,
 # which raises PermissionError under a `:raises OSError:` clause -- that the
 # one is the other is API knowledge).
-at: 0.70
+threshold: 0.70
 axis: file
 severity: warning
 rule:

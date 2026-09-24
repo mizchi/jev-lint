@@ -11,7 +11,7 @@ state: located
 # the gap, 0.10 of headroom on each side, no decision flips, max spread 0.05.
 # Methods are `function_definition` inside `class_definition`, so one arm
 # covers functions, methods and decorated definitions.
-at: 0.51
+threshold: 0.51
 axis: file
 severity: warning
 rule:

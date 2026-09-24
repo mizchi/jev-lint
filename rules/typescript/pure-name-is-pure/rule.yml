@@ -33,7 +33,7 @@ languages:
 kind: noul
 subject: node
 state: local
-at: 0.54
+threshold: 0.54
 rule:
   any:
     - all:

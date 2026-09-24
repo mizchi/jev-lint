@@ -29,7 +29,7 @@ state: bare
 # README and the config reference 1.11 and the opinion piece with no data
 # 0.99, whose argument is its own. Midpoint 2.65, rounded up: 1.0 above the
 # clean top, 0.9 under the lowest defect.
-at: 2.7
+threshold: 2.7
 severity: info
 ask: >-
   This document's prose is interchangeable with generic writing on the same subject.

@@ -29,7 +29,7 @@ Knowing which half you are working on is most of the job.
    way a rule fails, and it looks exactly like a threshold problem: every answer
    lands mid-scale and no cutoff separates. Check `subject` and `state` before
    touching the wording.
-3. **Never put a threshold in the sentence.** The cutoff is `at:`; baking it
+3. **Never put a threshold in the sentence.** The cutoff is `threshold:`; baking it
    into the question means every recalibration rewrites the question.
 4. **The API key lives in the environment** (`TYPESAFE_API_KEY`), never in
    `.jev-lint.yaml`, which belongs in version control. `apiKey:` in the file
@@ -46,7 +46,7 @@ Knowing which half you are working on is most of the job.
 | --- | --- |
 | run it, add it to CI, tune output | this file, next section |
 | use the rules that ship with it, pick some, adjust a cutoff | [references/using-shipped-rules.md](references/using-shipped-rules.md) |
-| write a rule for a convention of your own | [references/cookbook.md](references/cookbook.md), then validate as below |
+| write a rule in your own TypeScript, custom-grammar, Text, or Git repository | [references/writing-project-rules.md](references/writing-project-rules.md), then [references/cookbook.md](references/cookbook.md) |
 | know what every field means, `score` vs `noul`, the `state` arms | [references/rule-fields.md](references/rule-fields.md) |
 | fit a cutoff, build a rule's evals, judge whether a rule works | [references/calibration.md](references/calibration.md) |
 | judge commit messages against their diffs, or a change against the repository's own AGENTS.md | `jev-lint commits`, below |
@@ -62,7 +62,7 @@ npx -y jev-lint run fn-name-promises src        # one shipped rule; rust/<id> fo
 npx -y jev-lint run --file myrule.yml src       # a rule file of your own, and nothing else
 npx -y jev-lint review --base main     # judge only what the diff touched
 npx -y jev-lint commits --base main    # judge each commit's message against its diff,
-                                       #   and each change against AGENTS.md / CLAUDE.md
+                                       #   and each change against AGENTS.md (CLAUDE.md fallback)
 npx -y jev-lint commits --staged       # the same, on what is about to be committed
 npx -y jev-lint init                   # write .jev-lint.yaml: files, and every shipped rule on
 npx -y jev-lint rules                  # what loaded, and every validation error
@@ -78,7 +78,7 @@ jev-lint review --base "$GITHUB_BASE_REF" --format github   # in CI
 jev-lint init --pre-commit      # hook: review --staged + commits --staged, on every commit
 jev-lint init --pre-push        # hook: commits @{upstream}..HEAD --fail-on error, before every push
 jev-lint check src --retry 3                                 # decide on the mean of 3 passes
-jev-lint check src --at typescript/fn-name-promises=0.8     # override one cutoff for one run
+jev-lint check src --threshold typescript/fn-name-promises=0.8     # override one cutoff for one run
 jev-lint check src -R my-rules.yml -R rules                  # rule sources, repeatable
 ```
 
@@ -91,7 +91,7 @@ has earned `error`; without a key in the environment it steps aside. It runs
 **two** questions about what is staged -- `review --staged` for the file
 rules, then `commits --staged` for `subject: change` rules, which is where
 `git/diff-follows-instructions` judges the diff against the repository's own
-AGENTS.md or CLAUDE.md. A failed request exits 3, and git fails a hook on any
+AGENTS.md, or CLAUDE.md when absent. A failed request exits 3, and git fails a hook on any
 non-zero exit, so the shipped bodies let 3 through deliberately: being unable
 to commit while offline is how a hook gets deleted rather than fixed. Both
 bodies are tracked at `.jev-lint/hooks/<name>`, reviewable like any other
@@ -107,13 +107,19 @@ tree-sitter parser compiled to a dynamic library — see
 [the reference](../../docs/reference.md#a-language-ast-grep-does-not-have-built-in);
 MoonBit is measured there). `files:` there lets `jev-lint check` take no argument; `rules:` picks the
 rules, ESLint-style — `fn-name-promises: on`, `rust/fn-name-promises: off`,
-`comment-describes-block: { at: 0.7, severity: error }` — from the shipped
+`comment-describes-block: { threshold: 0.7, severity: error }` — from the shipped
 packs and the project's own `.jev-lint/rules/`; a config with no `rules:`
 runs nothing. Unknown keys are errors. A `-R` run inside a repository that
 has a config still merges that config — its `rules:`, its `files:` — so pass
 **`--no-config`** when testing a rule in isolation, and **`--cache none`** so
 no earlier verdict is reused (the cache is `.jev-lint/baseline.json`; `-c
 <path>` names another).
+
+`hooks.precommit` can select a separate rule set for `review --staged` and
+`commits --staged`. `extends: true` inherits top-level `rules:` and applies
+the hook entries over it; `extends: false` uses only hook entries. Without the
+section, staged runs use top-level `rules:`. See
+[the hook guide](../../docs/use-hooks.md#pre-commit).
 
 **Two output lines that are never noise:**
 
@@ -139,90 +145,15 @@ that does not exist.
 spread has a median of 0.01 but a maximum of 0.30. It bypasses the verdict
 cache and costs n times the tokens. (`-r` is retry; `-R` is rules.)
 
-## Writing a rule: the loop
+## Writing a rule in a project
 
-A rule is YAML in a file under `.jev-lint/rules/` (or anywhere, passed with `-R`), named in the config's `rules:` like a shipped one.
-Start from the nearest recipe in [references/cookbook.md](references/cookbook.md);
-every recipe there is validated to load and to match.
-
-```yaml
-- id: fn-name-promises
-  languages: [TypeScript, Tsx, JavaScript, Jsx]
-  kind: noul
-  rule:
-    kind: function_declaration
-    has: { field: name, pattern: $NAME }     # capture what the sentence is about
-  ask: >-
-    The body of this function does something materially different from what
-    its name promises.
-  criteria:
-    "true": >-
-      Someone who read only the name and the parameter list would be wrong
-      about what this function does.
-    "false": >-
-      The name and parameter list describe what the body actually does.
-  state: located
-  at: 0.55
-```
-
-Work in this order, and do not skip a step because the rule "looks right":
-
-1. **Over-match in the matcher.** Its job is to find candidates cheaply; the
-   sentence judges. A matcher hand-tightened to avoid false positives misses
-   silently. Capture the things the sentence compares (`$NAME`, `$TITLE`,
-   `$DOC`): "does the body do what `$NAME` promises" is answerable, "is this
-   well named" is not.
-2. **Pick `subject` so it can contain the answer**: `node` (the match),
-   `enclosing` (its function), `file` (the module as an outline). Then pick
-   `state`, the least context that still contains the answer — `bare`,
-   `local`, `paired`, `located` (default, the whole file), `graph`, `full`.
-   Neither is a quality knob; see [rule-fields.md](references/rule-fields.md).
-   Rule of thumb: if the matched node already holds both sides of the
-   comparison (a test's title and body, a docstring and its function), start
-   at `bare` or `local`; if the answer depends on how the thing is *used* (a
-   binding's unit, a function's callers), `located`; if the answer is in the
-   file's **tests** (does any test reach this path), `paired` — the one arm
-   that reaches into another file, and a file with no related test then
-   yields no subject rather than a guess.
-3. **Choose `kind`.** `noul` for a yes/no predicate with `criteria` describing
-   what true and false look like *in the code itself* — this is what every
-   shipped rule uses. `score` for an ordered "how badly", 0–3, with a
-   confidence. Never phrase an exception in terms of something the subject
-   cannot show ("unless the caller needs it"). Until it is fitted, write
-   `at: 0.7` for a `noul` or `at: 2.0` for a `score` with a comment saying
-   `# uncalibrated`; the sentence is sent verbatim, and captures travel
-   beside it as `matcher_captured`, so `$NAME` in `ask:` is a reference the
-   model resolves, not text that is substituted.
-4. **Validate, without spending anything:**
-
-   ```bash
-   npx -y jev-lint rules -R .jev-lint/rules/my-rule.yml --no-config       # loaded? or the exact validation error
-   npx -y jev-lint check src -R .jev-lint/rules/my-rule.yml --no-config --cache none --dry-run --show-subjects
-   ```
-
-   The dry run lists, per file, how many subjects the matcher found;
-   `--show-subjects` lists each one with its line, node kind and captures
-   (`$NAME="isExpired"`), which is how you check that the matcher found the
-   four predicates and not the loader, and that the capture holds a name and
-   not a whole declaration. Zero subjects on code that contains the case is
-   a matcher problem, not a model problem. An ast-grep error naming a node
-   kind means that kind does not exist in that grammar — one rejected rule
-   fails the whole scan.
-5. **Ask, on a few files, with `--retry 3` and an `--at` you guess**, and read
-   every finding against the code. Then, if the rule will be kept, give it
-   fixtures: `.jev-lint/rules/<lang>/<id>/fixtures/` with a handful of defects and the
-   hard clean cases, `expect.yml` beside them, and `jev-lint eval
-   .jev-lint/rules/<lang>/<id> --repeat 3 --accept` — see
-   [references/calibration.md](references/calibration.md). A rule ships
-   with a fitted `at:` and an accepted baseline, not a guess.
-
-Two grammars, one rule: Rust and TypeScript spell the same idea with
-different node kinds, so the rule lives twice, `rules/typescript/<id>/` and
-`rules/rust/<id>/`, same id, each with its own matcher, state, cutoff and
-fixtures. The sentence is a copy; the loader warns when the copies drift,
-so edit both -- or, when a language's failures are shaped differently and
-the sentence cannot be the same one, declare the reason in `divergent:`
-and the warning stands down.
+Use [writing-project-rules.md](references/writing-project-rules.md) for the
+rule's location and the steps for a built-in grammar, a custom parser, a
+Text block, or a Git change. It links the validated
+[cookbook](references/cookbook.md), the [field reference](references/rule-fields.md),
+and the [calibration procedure](references/calibration.md). Keep the
+`--dry-run --show-subjects` matcher check separate from the paid, labelled
+evaluation; a guessed `threshold:` is not a calibrated rule.
 
 ## Judging the output
 

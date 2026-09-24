@@ -52,7 +52,7 @@ state: located
 # 0.28 (`setup_retry_budget`) against defects starting at 0.71
 # (`install_plugin`). Python's copy of this rule sits at 0.68 and
 # TypeScript's at 0.40.
-at: 0.67
+threshold: 0.67
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

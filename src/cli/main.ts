@@ -6,6 +6,7 @@
  * resolve the targets, run -- and the rest take the options as parsed.
  */
 import { readFileSync } from "node:fs";
+import { precommitRules } from "../config.ts";
 import { parseArgs, USAGE, type Deps, type Log } from "./args.ts";
 import { cmdCalibrate, cmdGaps } from "./cmd-calibrate.ts";
 import { cmdCheck } from "./cmd-check.ts";
@@ -46,6 +47,7 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   const log: Log = deps.log ?? ((s) => process.stderr.write(`${s}\n`));
   const out: Log = deps.out ?? ((s) => process.stdout.write(`${s}\n`));
   const client = deps.client ?? null;
+  if (opts.deprecatedAt) log("warning: --at is deprecated; use --threshold");
 
   if (command === "init") return cmdInit(opts, out, log);
 
@@ -57,10 +59,20 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   if (command === "replay") return cmdReplay(opts, out, log);
   if (command === "eval") return cmdEval({ ...opts, paths: argPaths }, out, log, client, baseDir);
 
+  if (opts.staged && (command === "review" || command === "commits") && config.hooks?.precommit) {
+    opts.ruleSettings = precommitRules(config);
+    if (!opts.quiet) log(`using hooks.precommit rules (${config.hooks.precommit.extends ? "extends" : "independent"})`);
+  }
+
   const selected = selectForRun(command, opts, config, argPaths, log, baseDir, configPath !== null);
   if (!selected) return 2;
   const { rules, rangeArg } = selected;
   command = selected.command;
+
+  if (command === "commits" && opts.staged && config.hooks?.precommit && !rules.some((rule) => rule.subject === "change")) {
+    if (!opts.quiet) log("hooks.precommit: no subject: change rule selected; skipping commits --staged");
+    return 0;
+  }
 
   const targets = await resolveTargets(command, rules, opts, rangeArg, out, log);
   if ("exit" in targets) return targets.exit;

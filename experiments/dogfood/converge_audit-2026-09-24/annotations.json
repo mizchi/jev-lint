@@ -1,0 +1,17 @@
+{
+  "schema": "jev-lint-dogfood-labels-1",
+  "repository": "mizchi/converge_audit",
+  "revision": "30d9ff2a8edae271938ccb03d50f2e2745fbed72",
+  "cases": [
+    {
+      "rule": "moonbit/tests-cover-failure-paths",
+      "file": "src/audit/policy.mbt",
+      "line": 62,
+      "label": "clean",
+      "reason": "src/audit/audit_test.mbt:44-78 calls open_checkpoint_policy with inputs for all six Refused branches and checks each refusal. The original name/import pairing omitted that same-package test file.",
+      "before": 0.92,
+      "after": [0.62, 0.64, 0.65],
+      "cutoff": 0.68
+    }
+  ]
+}

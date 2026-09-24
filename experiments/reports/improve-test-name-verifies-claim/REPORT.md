@@ -7,7 +7,7 @@ in `rules/test-name-verifies-claim/`. Shares `cart.test.ts`, `store_test.rs`,
 `inventory.test.ts` and `ledger_test.rs` with `test-name-describes-code` as
 byte-identical copies; `profile.test.ts` and `notify_test.rs` are its own.
 
-**Start** (3 passes, shipped `at: 0.52` / `0.53`):
+**Start** (3 passes, shipped `threshold: 0.52` / `0.53`):
 
 | rule | P | R | defects | cleans | clean top | defect floor | flips |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -18,7 +18,7 @@ The TS false positive was `cart.test.ts:76` (the preamble test) at 0.56;
 `order-summary.test.ts:53` ("renders" over a snapshot) sat on the cutoff
 and flipped, as did `:63`.
 
-**End** (3 passes, `at: 0.62` / `0.54`, baseline accepted, replay passes):
+**End** (3 passes, `threshold: 0.62` / `0.54`, baseline accepted, replay passes):
 
 | rule | P | R | defects | cleans (hard) | clean top | defect floor | headroom | flips |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -32,7 +32,7 @@ headroom. The reason is one class, stated below.
 
 ## Attempts
 
-Numbers at the shipped `at:` of the time (0.52 / 0.53) unless stated.
+Numbers at the shipped `threshold:` of the time (0.52 / 0.53) unless stated.
 
 0. Cases added (shared files plus `profile.test.ts`, `notify_test.rs`),
    question untouched -> TS P 0.97 R 1.00, clean top 0.54, defect floor 0.55;
@@ -67,7 +67,7 @@ Numbers at the shipped `at:` of the time (0.52 / 0.53) unless stated.
    (the second clause works) but `profile.test.ts:164` 0.58 and the Rust
    label-only snapshot cleans 0.50-0.54 (the first clause hurts). Reverted;
    the similar-name clause alone was not tried, as it would be a fifth change.
-5. `at:` 0.52 -> 0.62 (TS) and 0.53 -> 0.54 (Rust, the midpoint of two
+5. `threshold:` 0.52 -> 0.62 (TS) and 0.53 -> 0.54 (Rust, the midpoint of two
    runs). Accept run: TS P 1.00 R 1.00, `inventory.test.ts:77` at 0.73 this
    time (it spans 0.46-0.81 across six passes), `profile.test.ts:164` 0.58
    with one pass at 0.62; Rust P 1.00 R 1.00, `ledger_test.rs:39` at 0.57.
@@ -168,7 +168,7 @@ has never had its arm measured post-split.
 `check` over six agent-cluster test files (loop-service, cli,
 self-improve-loop, validate-cluster-config, collect-autonomous-results,
 watch-open-hub-prs; 82 subjects, `--cache none`, $0.0050): 2 findings at
-`at: 0.62`, median 0.16.
+`threshold: 0.62`, median 0.16.
 
 - `apps/agent-worker/loop-service.test.ts:1283` "executeLoopIterateMergePhase
   merges adopted record and publishes base/rebase events", 0.68: TRUE

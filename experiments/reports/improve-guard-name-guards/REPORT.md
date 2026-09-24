@@ -9,10 +9,10 @@
 
 | | start (2026-09-19 baseline) | end (2026-09-20 baseline) |
 | --- | --- | --- |
-| `at` | 0.63 | 0.59 |
+| `threshold` | 0.63 | 0.59 |
 | P / R / flips | 1.00 / 1.00 / 0 | 1.00 / 1.00 / 0 |
 | defects / cleans | 4 / 11 (7 labelled hard) | 10 / 20 (16 labelled hard) |
-| clean top -> `at` -> defect bottom | 0.52 -> 0.63 -> 0.80 (0.11 / 0.17) | 0.51 -> 0.59 -> 0.66 (0.08 / 0.07) |
+| clean top -> `threshold` -> defect bottom | 0.52 -> 0.63 -> 0.80 (0.11 / 0.17) | 0.51 -> 0.59 -> 0.66 (0.08 / 0.07) |
 | unseen (agent-cluster, 26 subjects) | 4 findings, 2 false | 3 findings, 0 clearly false |
 
 Nothing outside the rule's directory was touched. Three passes, decisions
@@ -61,7 +61,7 @@ on the mean, every number from `eval --repeat 3 --no-config`.
    skipped check even when the early return looks like a type guard".
    10/0/0, defects 0.66-0.95, cleans <= 0.51, fitted 0.59, flips 0.
    ~$0.0025.
-6. **`at: 0.59`; `--accept`.** 10/0/0, flips 0, nothing within 0.03 of the
+6. **`threshold: 0.59`; `--accept`.** 10/0/0, flips 0, nothing within 0.03 of the
    cutoff. Clean top `validateAlignmentFallback` 0.51 (0.48-0.54), defect
    bottom `assertPositive` 0.66 (0.64-0.67). `--replay` passes. $0.0030.
 
@@ -136,7 +136,7 @@ and scores 0.25.
 
 ## Unseen check
 
-`check apps packages -R rule.yml --no-config --cache none --at
+`check apps packages -R rule.yml --no-config --cache none --threshold
 guard-name-guards=0.59` over agent-cluster: 26 subjects, 8 requests,
 $0.0010, record in the scratchpad. Three findings:
 

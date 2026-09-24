@@ -9,7 +9,7 @@ halves pass through `JSON.parse`, `Record<string, unknown>` or a string; a
 test only catches it when someone thought to round-trip; ast-grep can find the
 writer by name but cannot say whether `exp: expiresAt.getTime()` and
 `new Date(payload.exp * 1000)` are inverses. Jev holds the two bodies in mind
-at once, which is the one thing the model is measured to be good at: two
+at once, which is the one thing the model is measured to be good threshold: two
 pieces of code that contradict a contract they declare about each other. The
 matcher over-matches one half (the writer, by name regex) with
 `state: located` so the other half is in the state, and the criteria say what
@@ -49,7 +49,7 @@ from `eval --repeat 3`'s `last.json` after each attempt, and each attempt's
   # defects moved by 0.3-0.6 between phrasings of the question, which is why
   # this is a cookbook recipe and not a shipped cutoff. See
   # experiments/reports/g-paired-contracts/REPORT.md.
-  at: 0.40
+  threshold: 0.40
   rule:
     any:
       - all:

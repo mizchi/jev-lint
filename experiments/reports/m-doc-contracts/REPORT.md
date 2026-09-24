@@ -82,7 +82,7 @@ state: located
 # then 0.82. Midpoint of the gap, 0.18 of headroom on each side, no decision
 # flips, max spread 0.05. On 10 unseen subjects in jev-lint's own src/ the
 # clean band topped at 0.27.
-at: 0.56
+threshold: 0.56
 axis: file
 severity: warning
 rule:
@@ -220,7 +220,7 @@ the gap slightly (the hard cleans moved down, the defects did not move).
 
 ### Fit
 
-Accepted baseline at `at: 0.56` (attempt 3): precision 1.00, recall 1.00,
+Accepted baseline at `threshold: 0.56` (attempt 3): precision 1.00, recall 1.00,
 tp/fp/fn 6/0/0, 0 decision flips across 3 passes, max spread 0.05. Clean
 top 0.36 (`peek`), then 0.31, 0.29, 0.28 (the three fetch/JSON.parse hard
 cleans); defect floor 0.74 (`parseTtl`), then 0.82 (`promote`). Headroom
@@ -279,7 +279,7 @@ state: located
 # defect at 0.93 and one false positive at 0.79 (`raise_on_not_writable_file`,
 # which raises PermissionError under a `:raises OSError:` clause -- that the
 # one is the other is API knowledge).
-at: 0.70
+threshold: 0.70
 axis: file
 severity: warning
 rule:
@@ -403,7 +403,7 @@ would fire first on a corpus without it.
 
 ### Fit
 
-Accepted baseline at `at: 0.70` (attempt 3, regex trimmed): precision 1.00,
+Accepted baseline at `threshold: 0.70` (attempt 3, regex trimmed): precision 1.00,
 recall 1.00, tp/fp/fn 6/0/0, 0 decision flips across 3 passes, max spread
 0.05. Clean top 0.50 (`main`), then 0.30 (`fetch_job`, `fetch_job_or_none`);
 defect floor 0.88 (`start`), then 0.92. Headroom 0.18 on the defect side,
@@ -468,7 +468,7 @@ state: located
 # Midpoint of the gap, 0.13 of headroom on the defect side and 0.16 on the
 # clean side, no decision flips, max spread 0.07. On 12 unseen subjects in
 # serde_json the clean band topped at 0.26.
-at: 0.54
+threshold: 0.54
 axis: file
 severity: warning
 rule:
@@ -609,7 +609,7 @@ every attempt, and `parse_line` ("never panics" over an index) rose from
 
 ### Fit
 
-Accepted baseline at `at: 0.54` (attempt 3): precision 1.00, recall 1.00,
+Accepted baseline at `threshold: 0.54` (attempt 3): precision 1.00, recall 1.00,
 tp/fp/fn 6/0/0, 0 decision flips across 3 passes, max spread 0.07. Clean
 top 0.38 (`save`, `parse_workers`), then 0.36 (`load_or_default`), 0.34
 (`split_at`); defect floor 0.67 (`parse_line`), then 0.84. Headroom 0.13 on

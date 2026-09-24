@@ -67,7 +67,7 @@ state: located
 # cutoff near 0.50 -- exactly the coin-flip a midpoint fit is supposed to
 # avoid. Midpoint of the *reliable* bands (loud defects 0.85+, safe
 # cleans up to 0.17) is unchanged from the original fit.
-at: 0.61
+threshold: 0.61
 ask: >-
   This query's name ($NAME) misdescribes the SQL under it.
 criteria:

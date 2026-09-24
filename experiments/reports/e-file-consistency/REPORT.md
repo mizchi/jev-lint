@@ -39,7 +39,7 @@ cost is in the Attempts sections.
   axis: file
   # Fitted on records/attempt5-full-repeat3.json: 19 modules, 6 defects,
   # precision 1 recall 1, gap 0.29-0.72, 0 flips over 3 passes.
-  at: 0.51
+  threshold: 0.51
   rule:
     kind: program
   ask: >-
@@ -159,7 +159,7 @@ rule -- and the next one -- would work on `graph` at outline cost, on a
   # NOT a calibrated cutoff: no cutoff separates on the corpus. 0.65 is the
   # best trade-off (precision 1, recall 0.86, headroom 0.03 over the highest
   # clean). See REPORT.md; the `score` form below is the recommended shape.
-  at: 0.65
+  threshold: 0.65
   rule:
     kind: program
   ask: >-
@@ -198,9 +198,9 @@ rule -- and the next one -- would work on `graph` at outline cost, on a
   # 2.5 reports only the signature-level deviants (2.77-2.87, confidence
   # ~0.8): precision 1, recall 0.57, headroom 0.14, 0 flips. The name-level
   # deviants and the "everyone differs" clean case share a band at 2.2-2.4
-  # with confidence 0.2-0.35; `at: 2.0` with `unsureBelow: 0.5` reports that
+  # with confidence 0.2-0.35; `threshold: 2.0` with `unsureBelow: 0.5` reports that
   # band as questions instead.
-  at: 2.5
+  threshold: 2.5
   unsureBelow: 0.5
   rule:
     kind: program
@@ -305,7 +305,7 @@ confidence ~0.8) in a band of their own, and puts the name-level deviants
 in the same band as the one clean file the noul cannot get rid of
 (`settings`), *with a confidence of 0.2-0.35 that says so*. The noul returns
 0.59 for `settings` and 0.62-0.71 for `auth_routes` with nothing to tell
-them apart. With `at: 2.0` and `unsureBelow: 0.5` the score form reports
+them apart. With `threshold: 2.0` and `unsureBelow: 0.5` the score form reports
 the clear band as findings and the 2.2 band as questions -- the "route the
 wobble to a person" case from calibration.md. The name-level band is also
 exactly the naming rule's territory (`notifications` 0.93, `lookups` 0.94,

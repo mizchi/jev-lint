@@ -59,7 +59,7 @@ test("rules: a `subject: change` rule is Git, matcherless and bare, like a commi
     kind: "noul",
     ask: "This change breaks an instruction.",
     criteria: { true: "y", false: "n" },
-    at: 0.6,
+    threshold: 0.6,
   });
   assert.equal(error, undefined, `should load: ${error}`);
   assert.equal(rule!.subject, "change");
@@ -838,7 +838,7 @@ export const changeRule = (over: Record<string, unknown> = {}): Rule =>
     kind: "noul",
     ask: "This change breaks one of the project's own written instructions.",
     criteria: { true: "y", false: "n" },
-    at: 0.5,
+    threshold: 0.5,
     ...over,
   }).rule!;
 ```
@@ -1927,7 +1927,7 @@ function changeProject(): { dir: string; rules: string } {
       "  language: Git",
       "  subject: change",
       "  kind: noul",
-      "  at: 0.5",
+      "  threshold: 0.5",
       "  ask: This change breaks one of the project's own written instructions.",
       "  criteria: { 'true': it does, 'false': it does not }",
       "",
@@ -2292,7 +2292,7 @@ language: Git
 subject: change
 kind: noul
 # uncalibrated -- fitted in the eval step, with the run it came from.
-at: 0.7
+threshold: 0.7
 ask: >-
   This change does something the project's own written instructions forbid,
   or leaves out something they require of a change like this one.
@@ -2488,7 +2488,7 @@ document itself."
 ## Task 13: Fit the cutoff
 
 **Files:**
-- Modify: `rules/git/diff-follows-instructions/rule.yml` (the `at:` and its comment)
+- Modify: `rules/git/diff-follows-instructions/rule.yml` (the `threshold:` and its comment)
 - Create: `rules/git/diff-follows-instructions/baseline.json`
 
 This step spends money and needs `TYPESAFE_API_KEY`. It is the step that
@@ -2513,7 +2513,7 @@ is wrong. Fix the fixture or the criteria, never the label, and re-run.
 
 - [ ] **Step 3: Pick the cutoff**
 
-Put `at:` between the quietest defect and the loudest clean, nearer the
+Put `threshold:` between the quietest defect and the loudest clean, nearer the
 loud clean when the two overlap. Replace the `# uncalibrated` comment with
 the real one, in the shape `rules/git/commit-message-describes-diff/rule.yml`
 uses: the date, the corpus, where the defects answered, where the cleans
@@ -2535,7 +2535,7 @@ node --experimental-strip-types src/cli.ts commits HEAD~12..HEAD --no-config --c
 ```
 
 Read every finding against its commit. Record what the residue is — the
-findings you disagree with and why — in the `at:` comment, the way the
+findings you disagree with and why — in the `threshold:` comment, the way the
 commit rule's does.
 
 - [ ] **Step 6: Commit**

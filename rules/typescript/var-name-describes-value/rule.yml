@@ -36,7 +36,7 @@ state: located
 # `timeoutSeconds = 5000` answers 0.73-0.84 now that the file compares it
 # with an `elapsedMs`; beside a bare setTimeout it stayed at 0.13. See
 # experiments/reports/improve-var-name-describes-value/REPORT.md.
-at: 0.5
+threshold: 0.5
 # Calibrated on the file axis; pinned so the scheduler cannot move it.
 axis: file
 severity: warning

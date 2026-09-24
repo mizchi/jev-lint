@@ -185,7 +185,7 @@ export function emitFits(
     );
   }
   out("");
-  out("Apply with --at rule=value, or write `at:` into the rule file.");
+  out("Apply with --threshold rule=value, or write `threshold:` into the rule file.");
   out("A fitted number is a starting point on YOUR corpus, not a calibration for anyone else's.");
   out(
     "Refit after changing --group: a cutoff belongs to an axis. Refitting these rules on " +

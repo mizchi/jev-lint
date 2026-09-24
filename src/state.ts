@@ -129,6 +129,13 @@ export interface BuildStateArgs {
   tests?: RelatedTest[] | null;
 }
 
+const PAIRED_BY: Record<RelatedTest["via"], string> = {
+  name: "its name",
+  import: "it imports this file",
+  call: "it calls a named function in this MoonBit package",
+  "in-source": "it is this file's own test block",
+};
+
 export function buildState({
   file,
   source,
@@ -229,7 +236,7 @@ export function buildState({
     if (tests && tests.length > 0) {
       state.related_tests = tests.map((t) => ({
         path: t.path,
-        paired_by: t.via === "import" ? "it imports this file" : t.via === "in-source" ? "it is this file's own test block" : "its name",
+        paired_by: PAIRED_BY[t.via],
         code: t.code,
       }));
       state.note_on_related_tests =

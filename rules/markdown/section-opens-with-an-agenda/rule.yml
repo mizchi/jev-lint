@@ -38,7 +38,7 @@ state: located
 # the cutoff is set above the real clean band: 0.12 over 0.60, 0.19 under
 # 0.91. The one-line agenda sits inside the real clean band and is not
 # recoverable by a cutoff.
-at: 0.72
+threshold: 0.72
 ask: >-
   This section opens with an agenda that carries no stance -- a table of what will be covered -- instead of a question, a discomfort, or a confession.
 criteria:

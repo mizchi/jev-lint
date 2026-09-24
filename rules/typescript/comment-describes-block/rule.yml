@@ -73,9 +73,9 @@ state: located
 # 0.08 to spare (the lowest caught, a unit mismatch, answers 0.83). The one
 # it misses is stated in the evals: `session_store.ts:69` (0.51), where the
 # comment is true of the sort it sits above and false only together with
-# the loop after it. Set `at: 0.5` on a codebase whose inline comments are
+# the loop after it. Set `threshold: 0.5` on a codebase whose inline comments are
 # claims rather than rationale.
-at: 0.75
+threshold: 0.75
 severity: info
 rule:
   all:
