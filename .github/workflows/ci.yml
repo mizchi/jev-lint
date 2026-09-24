@@ -35,6 +35,7 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: npm
       - run: npm ci
+      - run: npm run skills:check
 
       # The suite must not need a key, and here there is none. That is the
       # point: a test that quietly reached the real service would pass on a

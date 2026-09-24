@@ -229,6 +229,12 @@ which also installs `/jev-lint:review`, `/jev-lint:commits`,
 /plugin install jev-lint@jev-lint
 ```
 
+`skills/jev-lint/` is the single source for the user-facing skill.
+`.claude/skills/jev-lint` is a tracked symlink to it; edits appear in both
+places immediately. `.claude/skills/jev-lint-repo` is a separate maintainer
+skill. Run `just skills-check` to verify the link or `just skills-sync` to
+restore it. CI checks the link so a copied skill cannot drift silently.
+
 ## Documentation
 
 | | |

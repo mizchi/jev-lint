@@ -6,6 +6,50 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/internal/findings.md](docs/internal/findings.md).
 
+## 0.7.0 — 2026-09-24
+
+### Added
+
+- **AGENTS.md quality checks.** `markdown/agent-instruction-is-unclear` and
+  `markdown/agent-instructions-conflict` judge each heading section against
+  the full document. Text rules can use `filenames: [AGENTS.md]` to select
+  exact basenames without judging every Markdown file. The two new suites
+  have 12 and 14 labelled sections respectively, with no wrong decisions
+  across three accepted passes at their shipped cutoffs.
+- **Vibe language support.** The shipped pack adds calibrated
+  `fn-name-promises` and `test-name-verifies-claim` rules for `.vibe` files.
+- **A repository review TUI prototype.** It colors findings and near-cutoff
+  answers, shows source at pinned revisions, and exports explicit human
+  labels. Recorded full reviews of `mizchi/converge` and
+  `mizchi/converge_audit` live under `experiments/dogfood/`; the TUI is a
+  repository tool, not part of the npm package.
+- **Skill link checks.** `skills/jev-lint` remains the single source for the
+  user-facing skill; `skills:check` verifies its `.claude/skills` symlink in
+  CI, and `skills:sync` repairs a missing or stale link. The separate
+  maintainer skill stays under `.claude/skills/jev-lint-repo`.
+
+### Changed
+
+- **`threshold` is the preferred cutoff name.** Rule files and the CLI use
+  `threshold:` and `--threshold`; `at:` and `--at` still work but warn.
+  Shipped rules and active documentation now use the preferred spelling.
+- **AGENTS.md takes precedence over CLAUDE.md.** A change is judged against
+  the `AGENTS.md` in its own tree or index; `CLAUDE.md` is used only when
+  that document is absent or unusable. Both are no longer combined.
+- **Pre-commit rules can be selected separately.** `hooks.precommit.extends`
+  chooses whether staged review inherits top-level rules, and
+  `hooks.precommit.rules` adds or overrides the hook's selection. The
+  repository now carries its own review hook. The Claude skill separates
+  using shipped rules from writing rules in a target repository.
+
+### Fixed
+
+- **MoonBit benchmark titles are outside correctness review.**
+  `test-name-verifies-claim` excludes `bench:` tests, which time an operation
+  rather than assert its behaviour. Same-package test pairing also uses
+  call evidence so failure-path checks can see related MoonBit tests. The
+  before and after measurements are retained in `experiments/dogfood/`.
+
 ## 0.6.7 — 2026-09-24
 
 ### Added

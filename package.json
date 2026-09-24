@@ -1,6 +1,6 @@
 {
   "name": "jev-lint",
-  "version": "0.6.7",
+  "version": "0.7.0",
   "description": "A natural-language linter: ast-grep picks the code, a sentence you write is the rule, and Jev returns the verdict",
   "keywords": [
     "lint",
@@ -78,12 +78,14 @@
     "rules": "node --experimental-strip-types src/cli.ts rules",
     "rules:md": "node --experimental-strip-types tools/rules-md.ts",
     "rules:md:check": "node --experimental-strip-types tools/rules-md.ts --check",
+    "skills:sync": "node --experimental-strip-types tools/sync-skills.ts",
+    "skills:check": "node --experimental-strip-types tools/sync-skills.ts --check",
     "eval": "node --experimental-strip-types src/cli.ts eval --repeat 3",
     "eval:replay": "node --experimental-strip-types src/cli.ts eval --replay",
     "arms": "node --experimental-strip-types tools/arms.ts --repeat 2",
     "grouping": "node --experimental-strip-types tools/grouping.ts --repeat 2",
     "dry": "node --experimental-strip-types src/cli.ts check --dry-run --cache none",
-    "ci": "npm run typecheck && npm test && npm run build && npm run eval:replay",
+    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay",
     "prepack": "npm run clean && npm run build",
     "parsers:moonbit": "node --experimental-strip-types tools/build-parser.ts moonbit"
   },

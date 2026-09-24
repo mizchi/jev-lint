@@ -159,6 +159,8 @@ npx skills add mizchi/jev-lint --skill jev-lint
 /plugin install jev-lint@jev-lint
 ```
 
+利用者向け skill の正本は `skills/jev-lint/` だけ。`.claude/skills/jev-lint` はそこを指す追跡済みの symlink なので、更新は両方に即時反映される。`.claude/skills/jev-lint-repo` は別のメンテナ向け skill。`just skills-check` でリンクを検証し、`just skills-sync` で復旧できる。CI でもコピーへの置き換えを検出する。
+
 ## ドキュメント
 
 | | |

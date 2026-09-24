@@ -40,6 +40,7 @@ const files = [
   "jev",
   "run",
   "text",
+  "skills",
   "commits",
   "instructions",
   "directives",

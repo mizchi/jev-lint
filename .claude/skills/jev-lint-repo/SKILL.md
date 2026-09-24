@@ -8,6 +8,7 @@ description: "Use when changing jev-lint ITSELF — editing src/, shipped rule s
 The user-facing skill (`skills/jev-lint/`, symlinked into `.claude/skills/`)
 is the contract; this file is what is different when the repository is
 jev-lint's own. Read `docs/internal.md` before editing `src/`.
+The symlink is checked by `npm run ci`; run `just skills-sync` if it is missing.
 
 ## The loop
 
