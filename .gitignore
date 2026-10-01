@@ -1,4 +1,5 @@
 node_modules/
+.env
 # The verdict cache. jev-lint's default is to commit it, so CI lints without
 # an API key and reviewers see the verdicts you did; this repository changes
 # its source on most commits and would carry a megabyte of churn each time,
@@ -18,3 +19,5 @@ rules/*/*/last.json
 experiments/rule-candidates/*/*/last.json
 # Draft labels are autosaved by the dogfood TUI; explicit exports can be committed.
 experiments/dogfood/viewer-labels.local.json
+# Provider comparisons are separate from accepted rule baselines.
+experiments/clef/

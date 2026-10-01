@@ -107,6 +107,18 @@ works without one: `--dry-run` prices a run, `jev-lint rules` lists what
 would run, `jev-lint replay` re-scores a recorded run, and CI can lint from
 a committed cache with no key at all.
 
+## Model recommendation
+
+Jev is the recommended model for normal linting. The shipped rules and cutoffs
+are calibrated for Jev, and it performed best at those cutoffs in the
+[81-suite fixture comparison](docs/clef-evaluation.md#live-results-2026-10-02).
+
+Cloudflare Clef and Clef-flash are optional experimental models for comparison
+from a repository checkout. `just clef-plan` previews the requests and cost;
+`just clef-eval` runs the comparison with Cloudflare credentials. See the
+[evaluation guide](docs/clef-evaluation.md) for setup, recorded results and
+the limits of fitting new cutoffs on the same fixtures.
+
 ## Using it
 
 | | |

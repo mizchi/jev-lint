@@ -82,6 +82,7 @@
     "skills:check": "node --experimental-strip-types tools/sync-skills.ts --check",
     "eval": "node --experimental-strip-types src/cli.ts eval --repeat 3",
     "eval:replay": "node --experimental-strip-types src/cli.ts eval --replay",
+    "eval:clef": "node --experimental-strip-types tools/compare-models.ts",
     "arms": "node --experimental-strip-types tools/arms.ts --repeat 2",
     "grouping": "node --experimental-strip-types tools/grouping.ts --repeat 2",
     "dry": "node --experimental-strip-types src/cli.ts check --dry-run --cache none",

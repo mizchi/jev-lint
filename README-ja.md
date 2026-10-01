@@ -63,6 +63,17 @@ npx jev-lint check src --dry-run       # 何を聞くかと値段。リクエス
 
 キーを読み込むのは環境変数からだけで (`TYPESAFE_API_KEY` か `TYPESAFEAI_API_KEY`)、config ファイルからは読まない。config はバージョン管理に入るものであり、キーはそうではないから。モデルに聞かない操作はキー無しで動く。`--dry-run` は値段を出し、`jev-lint rules` は何が走るかを並べ、`jev-lint replay` は記録済みの実行を採点し直し、CI はコミット済みキャッシュからキー無しで lint できる。
 
+## 推奨モデル
+
+通常の lint には Jev を推奨する。同梱ルールと cutoff は Jev で較正されていて、
+その cutoff を使った [81 suite の fixture 比較](docs/clef-evaluation.md#live-results-2026-10-02)
+でも Jev が最も良い成績だった。
+
+Cloudflare Clef と Clef-flash も、リポジトリを checkout して実験的に比較評価できる。
+`just clef-plan` でリクエストと費用を確認し、Cloudflare の認証情報を設定して
+`just clef-eval` で比較する。設定、記録済みの結果、同じ fixture で cutoff を
+合わせ直す場合の限界は[評価ガイド](docs/clef-evaluation.md)にある。
+
 ## 使う
 
 | | |
