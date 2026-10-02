@@ -6,6 +6,24 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/internal/findings.md](docs/internal/findings.md).
 
+## 0.7.1 — 2026-10-02
+
+### Added
+
+- **Optional Clef evaluation in the repository.** `just clef-plan`,
+  `just clef-eval` and `just clef-replay` compare Clef and Clef-flash with
+  Jev on the existing labelled suites. Normal lint commands continue to
+  use Jev; the comparison procedure and results are documented in
+  [docs/clef-evaluation.md](docs/clef-evaluation.md).
+
+### Fixed
+
+- **Suppression comments apply to text blocks.** `jev-lint-ignore-file`
+  and `jev-lint-ignore-next-line` now silence Markdown document and section
+  rules as well as code rules. Suppressed blocks are omitted before asking
+  the model and counted in the ignore statistics.
+  ([#16](https://github.com/mizchi/jev-lint/pull/16))
+
 ## 0.7.0 — 2026-09-24
 
 ### Added
