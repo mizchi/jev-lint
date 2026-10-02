@@ -201,6 +201,10 @@ export async function collectSubjects({
       skippedByDiff += 1;
       continue;
     }
+    if (isIgnored(ignoresIn(s.file), s.line, s.rule.id)) {
+      ignoredSubjects += 1;
+      continue;
+    }
     subjects.push({ ...s, arm: arm ?? s.rule.state });
   }
 

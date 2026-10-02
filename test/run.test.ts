@@ -112,6 +112,24 @@ await testAsync("run: `exclude` keeps a path under the roots out of the subjects
   }
 });
 
+await testAsync("run: a suppression comment silences a block rule as it does a code rule", async () => {
+  // Block subjects come from the text walk, not from ast-grep, so the
+  // markers have to be consulted there too, or a markdown document rule
+  // judges a file whose `<!-- jev-lint-ignore-file <id> -->` names it.
+  const { collectSubjects } = await import("../src/run.ts");
+  const dir = mkdtempSync(join(tmpdir(), "jev-ignore-block-"));
+  try {
+    writeFileSync(join(dir, "a.sql"), "-- jev-lint-ignore-file q\n-- name: GetA :one\nselect 1;\n");
+    writeFileSync(join(dir, "b.sql"), "-- jev-lint-ignore-file other\n-- name: GetB :one\nselect 2;\n");
+    const block = noulRule({ id: "q", language: "Text", subject: "block", split: "^-- name: (?<NAME>\\w+)", extensions: ["sql"], rule: undefined });
+    const { subjects, ignored } = await collectSubjects({ rules: [block], paths: ["."], cwd: dir });
+    assert.deepEqual(subjects.map((s) => s.file), ["b.sql"], "only the file whose marker names the rule is left out");
+    assert.equal(ignored.subjects, 1);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 await testAsync("run: a rule for a language nobody declared a parser for is dropped, and the run names the language", async () => {
   // The shipped `moonbit` rules load anywhere; they can only be SCANNED
   // where a config names the compiled parser. Handing them to ast-grep
