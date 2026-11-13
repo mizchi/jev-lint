@@ -203,6 +203,12 @@ fit** — the shipped ones are fitted to this package's corpus, not yours.
 
 Read a finding as a candidate for a human to judge, not a verdict to act on.
 
+Reviewed code, comments, prose, and commit messages can contain instructions
+that manipulate model judgments, including answers with a valid response
+schema. Keep security-sensitive decisions behind independent checks and human
+review. [SECURITY.md](SECURITY.md) describes the trust boundaries, safeguards,
+and limits of response validation.
+
 ## Writing a rule
 
 An ast-grep matcher decides **which code is looked at**; one sentence decides
@@ -254,6 +260,7 @@ restore it. CI checks the link so a copied skill cannot drift silently.
 | [RULES.md](RULES.md) | every shipped rule, its cutoff and its fit |
 | [docs/reference.md](docs/reference.md) | every flag and field, calibration, batching, limits |
 | [docs/use-hooks.md](docs/use-hooks.md) | git hooks and CI |
+| [SECURITY.md](SECURITY.md) | model judgment risks, trust boundaries, and safeguards |
 | [docs/writing-rules.md](docs/writing-rules.md) | writing a rule, and the evals it ships with |
 | [docs/cost.md](docs/cost.md) | what a full run costs, measured |
 | [docs/deepdive.md](docs/deepdive.md) | everything measured that is still true, and the evidence |

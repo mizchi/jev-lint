@@ -136,6 +136,18 @@ test("gate: a missing answer is recorded, not scored as clean", () => {
   assert.match(describeFinding(f), /no verdict/);
 });
 
+test("gate: cached and recorded answers must still satisfy the rule's kind and scale", () => {
+  const rule = scoreRule();
+  for (const value of [-1, 4, Infinity, NaN]) {
+    const result = gate([{ subject: subjectOf({ rule }), answer: { value, confidence: 0.9, kind: "score" } }]);
+    assert.equal(result.stats.missing, 1);
+    assert.equal(result.findings.length, 0);
+  }
+  assert.equal(decide(subjectOf({ rule }), { value: 0.9, confidence: null, kind: "noul" }).messageId, "missing");
+  const custom = scoreRule({ levels: ["none", "mild", "moderate", "strong", "certain"], at: 3.5 });
+  assert.equal(decide(subjectOf({ rule: custom }), { value: 4, confidence: 1, kind: "score" }).reported, true);
+});
+
 test("gate: findings rank by distance past their own cutoff, not by raw value", () => {
   // Raw values from different rules are not comparable; margins are.
   const loose = noulRule({ id: "loose", at: 0.2 });

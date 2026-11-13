@@ -76,8 +76,7 @@ export async function cmdCheck(
   else if (opts.format === "github") out(formatGithub(result));
   else out(formatPretty(result, { color: opts.color, showMissing: opts.showMissing, summary: opts.summary }));
 
-  // Exit 1 when something was reported, 0 when clean. A request failure is not
-  // a finding, but it must not read as success either -- hence 3.
-  if (result.errors?.length && result.findings.length === 0) return 3;
-  return blocks(result.findings, opts.failOn) ? 1 : 0;
+  // A nonblocking finding does not make an incomplete run successful.
+  if (blocks(result.findings, opts.failOn)) return 1;
+  return result.errors?.length || result.stats.missing > 0 ? 3 : 0;
 }

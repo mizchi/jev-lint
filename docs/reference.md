@@ -33,8 +33,11 @@ freshly written code, because old names have already been argued over.
 jev-lint review --base "$GITHUB_BASE_REF" --format github
 ```
 
-Exit codes: `0` clean, `1` findings, `2` configuration error, `3` requests
-failed and nothing was reported.
+Exit codes: `0` complete with no blocking findings, `1` findings at or above
+`--fail-on`, `2` configuration error, `3` request errors or missing/unusable
+verdicts with no blocking findings. Nonblocking findings do not hide an
+incomplete run. `replay` uses the same missing-verdict check for recorded
+answers.
 
 | flag | |
 | --- | --- |
@@ -1123,6 +1126,19 @@ reviewers see the verdicts you saw; leave it ignored and CI pays for a fresh
 pass each run. Changing a **cutoff** invalidates nothing, by design, so
 recalibration is free; changing a rule's *sentence*, its matcher, its arm, or
 the batching axis invalidates the verdicts that depended on them.
+
+Model responses are checked before use: probabilities and confidence must be
+finite and within `0..1`, scores within the rule's rubric, and explanation
+labels among those requested. Invalid verdicts are missing, not clamped to
+zero or cached as clean. Cached and recorded verdicts are also checked at the
+gate. An incomplete attribution follow-up keeps the original finding and
+reports an error; only a complete set of usable negative answers can retract it.
+
+These checks do not detect an attacker-influenced answer that fits the schema.
+Reviewed content can contain instructions intended to manipulate the model;
+JSON separation of state and questions does not prevent that. See
+[SECURITY.md](../SECURITY.md) for the trust boundaries and independent safeguards
+required around consequential decisions.
 
 ## Limits
 

@@ -188,7 +188,7 @@ git's hooks directory exits 0 on its own once the file it looks for is gone.
 | 0 | clean, or nothing over `--fail-on` |
 | 1 | something was reported at or above `--fail-on` |
 | 2 | configuration error — a bad config, an unknown rule id, no range |
-| 3 | requests failed; **this is not a clean run** |
+| 3 | request errors or missing/unusable verdicts, with no blocking findings; **this is not a clean run** |
 
 ### Exit 3 does not block the shipped hook
 

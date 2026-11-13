@@ -17,7 +17,7 @@ import { explain } from "../src/schedule.ts";
 import { splitBlocks, textSubjects, MAX_BLOCK_CHARS } from "../src/text.ts";
 import { LANGUAGE_DIRS } from "../src/types.ts";
 import type { Rule, RunResult } from "../src/types.ts";
-import { scoreRule, noulRule, tempRepo, commitRule, changeRule, subjectOf } from "./builders.ts";
+import { scoreRule, noulRule, tempRepo, commitRule, changeRule, subjectOf, fakeClient } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
 
 const blockRule = (over: Record<string, unknown> = {}): Rule =>
@@ -271,6 +271,39 @@ await testAsync("run: --explain asks a second question of the findings only, and
   const plain = await run({ rules: [rule], paths: ["rules/typescript/fn-name-promises/fixtures"], cachePath: null, client });
   assert.equal(seen.filter((qs) => Object.values(qs).some((q) => q.type === "choice")).length, 0);
   assert.ok(plain.findings.every((f) => f.explanation === undefined));
+});
+
+await testAsync("run: an explanation outside the requested labels is discarded without removing its finding", async () => {
+  const { run } = await import("../src/run.ts");
+  const rule = scoreRule({ rule: { kind: "function_declaration" }, explain: { mutates: "It changes state", narrows: "It handles a narrower case" } });
+  const client = fakeClient(() => 3);
+  const ask = client.askSplitting;
+  client.askSplitting = async (state, questions) => {
+    if (Object.values(questions)[0]!.type !== "choice") return ask(state, questions);
+    return { answers: Object.fromEntries(Object.keys(questions).map((id) => [id, { type: "choice", choice: "attacker-label", confidence: 1 }])) };
+  };
+  const result = await run({ rules: [rule], paths: ["rules/typescript/fn-name-promises/fixtures"], cachePath: null, client, explain: true });
+  assert.ok(result.findings.length > 0);
+  assert.ok(result.findings.every((f) => f.explanation === undefined));
+  assert.ok(result.errors?.some((e) => /^explain:/.test(e.error)));
+});
+
+await testAsync("run: score validation follows each rule's rubric before caching", async () => {
+  const { run } = await import("../src/run.ts");
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "jev-score-bounds-")));
+  try {
+    writeFileSync(join(dir, "a.ts"), "export function f() {}\n");
+    const rule = scoreRule({ rule: { kind: "function_declaration" }, levels: ["none", "mild", "moderate", "strong", "certain"], at: 3.5 });
+    const cachePath = join(dir, "cache.json");
+    const valid = await run({ rules: [rule], paths: ["a.ts"], cwd: dir, cachePath, client: fakeClient(() => 4) });
+    assert.equal(valid.findings[0]!.value, 4, "a custom rubric can exceed the shared 0-3 scale");
+    const invalid = await run({ rules: [rule], paths: ["a.ts"], cwd: dir, cachePath, force: true, client: fakeClient(() => 5) });
+    assert.equal(invalid.stats.missing, 1);
+    const cached = Object.values(JSON.parse(readFileSync(cachePath, "utf8")).entries) as Array<{ value: number }>;
+    assert.deepEqual(cached.map((entry) => entry.value), [4], "the malformed answer never replaces a usable cached verdict");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 await testAsync("run: --loose reaches every format as a section of its own, and costs no request", async () => {
@@ -587,7 +620,7 @@ await testAsync("end to end: overlapping grammars produce one subject per node",
 });
 
 // The attribution pass over a `subject: change` finding: the fixture repo
-// below is shared across the next four tests. One commit, one AGENTS.md with
+// below has one commit, one AGENTS.md with
 // two top-level bullets (two directives, `splitDirectives` puts the first at
 // line 3), a `package.json` that adds the dependency the first bullet
 // forbids. A directive question is told apart from the verdict question by
@@ -702,6 +735,33 @@ await testAsync("run: a failed attribution request leaves the finding exactly as
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+for (const mode of ["missing", "partial", "malformed", "out-of-range"] as const) {
+  await testAsync(`run: ${mode} attribution answers cannot retract a finding`, async () => {
+    const { run } = await import("../src/run.ts");
+    const dir = changeFixture();
+    try {
+      const client = fakeClient(() => 0.9);
+      const ask = client.askSplitting;
+      client.askSplitting = async (state, questions) => {
+        if (!isDirectiveQuestion(Object.values(questions)[0]!)) return ask(state, questions);
+        const ids = Object.keys(questions);
+        assert.equal(ids.length, 2);
+        const answers: Record<string, unknown> = {};
+        if (mode !== "missing") answers[ids[0]!] = { type: "noul", noul: 0.1 };
+        if (mode === "malformed") answers[ids[1]!] = { type: "score", score: 0 };
+        if (mode === "out-of-range") answers[ids[1]!] = { type: "noul", noul: -1 };
+        return { answers };
+      };
+      const result = await run({ rules: [changeRule()], paths: [], commits: { range: "HEAD" }, cwd: dir, cachePath: null, client });
+      assert.equal(result.findings.length, 1, "absence of usable evidence is not a negative attribution");
+      assert.equal(result.findings[0]!.violates, undefined);
+      assert.ok(result.errors?.some((e) => /^attribute:/.test(e.error)), "an incomplete follow-up is visible in the report");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+}
 
 await testAsync("run: two change rules over one commit share a batch but never a question id", async () => {
   // `planBatches` groups by (arm, file, rule.subject), not by rule id, so

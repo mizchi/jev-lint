@@ -139,6 +139,8 @@ finding 一つ、またはファイル一つを黙らせるには、どのコメ
 
 finding は人間が判断するための候補であって、実行すべき判決ではない。
 
+レビュー対象のコード、コメント、文章、コミットメッセージに含まれる指示は、応答形式が正しくてもモデルの判定を誘導しうる。セキュリティ上重要な判断には、独立した検査と人間のレビューを組み合わせる。[SECURITY.md](SECURITY.md) に信頼境界、対策、応答検証の限界をまとめている。
+
 ## ルールを書く
 
 ast-grep のマッチャーが**どのコードを見るか**を決め、一文が**それが問題かどうか**を決める:
@@ -179,6 +181,7 @@ npx skills add mizchi/jev-lint --skill jev-lint
 | [RULES.md](RULES.md) | 同梱ルール全部、cutoff と当てはめ |
 | [docs/reference.md](docs/reference.md) | 全フラグと全フィールド、calibrate、バッチ、限界 |
 | [docs/use-hooks.md](docs/use-hooks.md) | git hook と CI |
+| [SECURITY.md](SECURITY.md) | モデル判定のリスク、信頼境界、対策 |
 | [docs/writing-rules.md](docs/writing-rules.md) | ルールの書き方と、同梱する eval |
 | [docs/cost.md](docs/cost.md) | 一周の費用、実測 |
 | [docs/deepdive.md](docs/deepdive.md) | 測定してまだ真であること全部と、その証拠 |
