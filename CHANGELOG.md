@@ -6,6 +6,25 @@ are re-derived by `jev-lint eval --replay` from the accepted baselines,
 and [RULES.md](RULES.md) is the current list. Measurements behind each
 change are in [docs/internal/findings.md](docs/internal/findings.md).
 
+## Unreleased
+
+### Fixed
+
+- Reject unusable model verdicts, including non-finite or out-of-range values,
+  and explanation labels outside the requested choices. Check cached and
+  recorded verdicts against the rule's kind and scale too.
+- Keep a change finding when its attribution answers are missing or malformed,
+  and report the incomplete follow-up instead of silently retracting it.
+- Exit `3` for incomplete checks and replays with no blocking findings,
+  including when nonblocking findings are present.
+
+### Added
+
+- Document model decision manipulation, trust boundaries, and independent
+  safeguards in [SECURITY.md](SECURITY.md), following
+  [#18](https://github.com/mizchi/jev-lint/issues/18). Structurally valid
+  attacker-influenced judgments remain a limitation.
+
 ## 0.7.1 — 2026-10-02
 
 ### Added

@@ -112,6 +112,61 @@ await testAsync("commands: a client that fails leaves no verdict, and the run ex
   }
 });
 
+await testAsync("commands: replay validates scores against the recorded custom rubric", async () => {
+  const { dir, rules, src } = project();
+  try {
+    writeFileSync(rules, readFileSync(rules, "utf8").replace("  at: 2", "  at: 3.5\n  levels: [none, mild, moderate, strong, certain]"));
+    const record = join(dir, "run.json");
+    const checked = await cli(["check", src, "--no-config", "--cache", "none", "-R", rules, "--record", record, "--json"], fakeClient((_, q) => q.type === "score" ? 4 : 0.1));
+    assert.equal(checked.code, 1, checked.out + checked.log);
+    const replay = await cli(["replay", record, "--no-config", "--json"]);
+    assert.equal(replay.code, 1, replay.out + replay.log);
+    assert.equal(JSON.parse(replay.out).stats.missing, 0);
+    assert.deepEqual(JSON.parse(replay.out).findings.map((f: { value: number }) => f.value), [4, 4]);
+    const invalid = JSON.parse(readFileSync(record, "utf8"));
+    for (const answer of invalid.answers) if (answer.kind === "score") answer.value = -1;
+    writeFileSync(record, JSON.stringify(invalid));
+    const rejected = await cli(["replay", record, "--no-config", "--json"]);
+    assert.equal(rejected.code, 3, rejected.out + rejected.log);
+    assert.equal(JSON.parse(rejected.out).stats.missing, 2);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+for (const format of ["pretty", "json", "github"] as const) {
+  for (const mode of ["missing", "malformed", "nonblocking", "blocking"] as const) {
+    await testAsync(`commands: incomplete check and replay (${mode}, ${format}) never exit clean`, async () => {
+      const { dir, rules, src } = project();
+      try {
+        const client = fakeClient(() => 0.1);
+        client.askSplitting = async (_state, questions) => {
+          const answers: Record<string, unknown> = {};
+          for (const [id, question] of Object.entries(questions)) {
+            if (question.type === "score") {
+              if (mode === "malformed") answers[id] = { type: "score", score: -1 };
+            } else {
+              answers[id] = { type: "noul", noul: mode === "nonblocking" || mode === "blocking" ? 0.9 : 0.1 };
+            }
+          }
+          return { answers };
+        };
+        const record = join(dir, "run.json");
+        const severity = mode === "nonblocking" ? ["--fail-on", "error"] : [];
+        const run = await cli(["check", src, "--no-config", "--cache", "none", "-R", rules, "--no-color", "--format", format, "--record", record, ...severity], client);
+        const expected = mode === "blocking" ? 1 : 3;
+        assert.equal(run.code, expected, run.out + run.log);
+        if (format === "json") assert.equal(JSON.parse(run.out).stats.missing, 2);
+        const replay = await cli(["replay", record, "--no-config", "--no-color", "--format", format, ...severity]);
+        assert.equal(replay.code, expected, replay.out + replay.log);
+        assert.equal(replay.client.spent.calls, 0);
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    });
+  }
+}
+
 await testAsync("commands: gaps and calibrate print their tables, and calibrate fits against labels", async () => {
   const { dir, rules, src } = project();
   try {

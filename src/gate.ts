@@ -26,6 +26,7 @@
  *    failed must not look like a clean repository.
  */
 import { cutoffFor, DEFAULT_UNSURE_BELOW, SCORE_LEVEL_NAMES, scaleOf } from "./rules.ts";
+import { isUsableAnswer } from "./questions.ts";
 import { SEVERITIES } from "./types.ts";
 import type { Answer, Finding, GateResult, Rule, Severity, Subject } from "./types.ts";
 export { MESSAGE_IDS } from "./types.ts";
@@ -74,7 +75,7 @@ export function decide(
   const rule = subject.rule;
   const at = cutoffFor(rule, cutoffs);
 
-  if (!answer) {
+  if (!isUsableAnswer(answer, rule.kind, scaleOf(rule))) {
     return {
       messageId: "missing",
       reported: false,

@@ -184,39 +184,64 @@ function subjectFields(rule: Rule, subject: Subject, id: string): Record<string,
   return shared;
 }
 
-/** Read one answer back. Returns null when the answer is unusable. */
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function inRange(value: unknown, maximum: number): value is number {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= maximum;
+}
+
+function validProbabilities(value: unknown): boolean {
+  return value == null || (isRecord(value) && Object.values(value).every((p) => inRange(p, 1)));
+}
+
+function answerObject(answers: Record<string, unknown> | undefined, id: string): Record<string, unknown> | null {
+  if (!isRecord(answers) || !Object.hasOwn(answers, id)) return null;
+  return isRecord(answers[id]) ? answers[id] : null;
+}
+
+/** Validate normalized verdicts too: cache hits and replay bypass the wire reader. */
+export function isUsableAnswer(answer: unknown, kind: RuleKind, maxScore = SCORE_LEVELS.length - 1): answer is Answer {
+  return isRecord(answer) && answer.kind === kind && inRange(answer.value, kind === "noul" ? 1 : maxScore)
+    && (answer.confidence === null || (kind === "score" && inRange(answer.confidence, 1)))
+    && validProbabilities(answer.probabilities);
+}
+
+/** Read one answer back. Bounds check; never clamp a malformed verdict to a passing value. */
 export function readAnswer(
   answers: Record<string, unknown> | undefined,
   id: string,
   kind: RuleKind,
+  maxScore = SCORE_LEVELS.length - 1,
 ): Answer | null {
-  const a = answers?.[id] as
-    | { type?: string; noul?: unknown; score?: unknown; confidence?: unknown; probabilities?: unknown }
-    | undefined;
+  const a = answerObject(answers, id);
   if (!a) return null;
   if (kind === "noul") {
-    if (a.type !== "noul" || typeof a.noul !== "number") return null;
+    if (a.type !== "noul" || !inRange(a.noul, 1)) return null;
     // A noul carries no confidence of its own; the probability IS the answer.
-    return { value: a.noul as number, confidence: null, kind: "noul" };
+    return { value: a.noul, confidence: null, kind: "noul" };
   }
-  if (a.type !== "score" || typeof a.score !== "number") return null;
-  return {
-    value: a.score as number,
-    confidence: typeof a.confidence === "number" ? a.confidence : null,
+  if (a.type !== "score") return null;
+  const answer = {
+    value: a.score,
+    confidence: a.confidence ?? null,
     kind: "score",
-    probabilities: (a.probabilities as Record<string, number> | undefined) ?? null,
+    probabilities: a.probabilities ?? null,
   };
+  return isUsableAnswer(answer, kind, maxScore) ? answer : null;
 }
 
 /** Read a choice back. Null when the answer is not a usable choice. */
-export function readChoice(answers: Record<string, unknown> | undefined, id: string): Choice | null {
-  const a = answers?.[id] as
-    | { type?: string; choice?: unknown; confidence?: unknown; probabilities?: unknown }
-    | undefined;
-  if (!a || a.type !== "choice" || typeof a.choice !== "string") return null;
+export function readChoice(answers: Record<string, unknown> | undefined, id: string, choices: readonly string[]): Choice | null {
+  const a = answerObject(answers, id);
+  if (!a || a.type !== "choice" || typeof a.choice !== "string" || !choices.includes(a.choice)) return null;
+  const confidence = a.confidence ?? 0;
+  if (!inRange(confidence, 1) || !validProbabilities(a.probabilities)) return null;
+  if (isRecord(a.probabilities) && Object.keys(a.probabilities).some((label) => !choices.includes(label))) return null;
   return {
     choice: a.choice,
-    confidence: typeof a.confidence === "number" ? a.confidence : 0,
+    confidence,
     probabilities: (a.probabilities as Record<string, number> | undefined) ?? null,
   };
 }

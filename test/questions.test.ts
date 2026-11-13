@@ -86,11 +86,19 @@ test("questions: an explain question is a choice over the rule's labels, about t
   assert.match(String(q.instructions.task), /judged to hold/, "and says the verdict is already in");
   // A choice answer reads back as its label and confidence; anything else is null.
   assert.deepEqual(
-    readChoice({ q0003: { type: "choice", choice: "mutates", confidence: 0.8, probabilities: { mutates: 0.8, narrows: 0.2 } } }, "q0003"),
+    readChoice({ q0003: { type: "choice", choice: "mutates", confidence: 0.8, probabilities: { mutates: 0.8, narrows: 0.2 } } }, "q0003", ["mutates", "narrows"]),
     { choice: "mutates", confidence: 0.8, probabilities: { mutates: 0.8, narrows: 0.2 } },
   );
-  assert.equal(readChoice({ q0003: { type: "noul", noul: 0.9 } }, "q0003"), null);
-  assert.equal(readChoice({}, "q0003"), null);
+  assert.equal(readChoice({ q0003: { type: "noul", noul: 0.9 } }, "q0003", ["mutates"]), null);
+  assert.equal(readChoice({}, "q0003", ["mutates"]), null);
+});
+
+test("questions: choices must name a requested label and carry usable probabilities", () => {
+  assert.equal(readChoice({ q: { type: "choice", choice: "unexpected", confidence: 1 } }, "q", ["mutates"]), null);
+  for (const confidence of [-1, 1.1, NaN, Infinity, "0.9"]) {
+    assert.equal(readChoice({ q: { type: "choice", choice: "mutates", confidence } }, "q", ["mutates"]), null);
+  }
+  assert.equal(readChoice({ q: { type: "choice", choice: "mutates", probabilities: { mutates: 2 } } }, "q", ["mutates"]), null);
 });
 
 test("questions: ids are stable and zero-padded", () => {
@@ -113,6 +121,27 @@ test("questions: unusable answers read back as null rather than as zero", () => 
     readAnswer({ q0000: { type: "noul", noul: 0.9, confidence: 0.3 } }, "q0000", "noul")!.confidence,
     null,
   );
+});
+
+test("questions: verdict numbers must be finite and within the requested scale", () => {
+  for (const value of [-0.1, 1.1, NaN, Infinity, -Infinity]) {
+    assert.equal(readAnswer({ q: { type: "noul", noul: value } }, "q", "noul"), null, String(value));
+  }
+  for (const value of [-1, 3.1, NaN, Infinity, -Infinity]) {
+    assert.equal(readAnswer({ q: { type: "score", score: value } }, "q", "score"), null, String(value));
+  }
+  for (const confidence of [-0.1, 1.1, NaN, Infinity, "0.9"]) {
+    assert.equal(readAnswer({ q: { type: "score", score: 2, confidence } }, "q", "score"), null);
+  }
+  for (const value of [0, 1]) assert.equal(readAnswer({ q: { type: "noul", noul: value } }, "q", "noul")!.value, value);
+  for (const value of [0, 2.5, 3]) assert.equal(readAnswer({ q: { type: "score", score: value } }, "q", "score")!.value, value);
+});
+
+test("questions: malformed probability maps and inherited answers are unusable", () => {
+  for (const probabilities of [[], "invalid", { "0": -0.1 }, { "0": NaN }, { "0": 1.1 }]) {
+    assert.equal(readAnswer({ q: { type: "score", score: 2, probabilities } }, "q", "score"), null);
+  }
+  assert.equal(readAnswer(Object.create({ q: { type: "noul", noul: 0.1 } }), "q", "noul"), null);
 });
 
 test("questions: a change subject is asked about the change, never about a message", () => {

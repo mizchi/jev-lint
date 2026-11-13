@@ -114,7 +114,8 @@ jobs:
         # `--fail-on error` is what makes the sentence above true: without
         # it the default is that ANY finding exits 1, and this job failed on
         # its first run for exactly that reason. No shipped rule carries
-        # `severity: error`, so with it the job annotates and never blocks.
+        # `severity: error`, so findings annotate; an incomplete run still
+        # exits 3 and fails this step.
         run: |
           if [ -z "$TYPESAFE_API_KEY" ]; then
             echo "::notice title=jev-lint::no API key available, skipping the review"

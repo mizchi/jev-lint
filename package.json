@@ -62,6 +62,7 @@
     "rules/**/rule.yml",
     "rules/README.md",
     "README.md",
+    "SECURITY.md",
     "RULES.md",
     "CHANGELOG.md",
     "docs/reference.md",

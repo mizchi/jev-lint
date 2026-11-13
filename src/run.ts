@@ -25,7 +25,7 @@ import { Cache, verdictKey, contextKey } from "./cache.ts";
 import { gate, collect } from "./gate.ts";
 import { touchesChange } from "./diff.ts";
 import { splitDirectives, type Directive } from "./directives.ts";
-import { ruleTextHash, cutoffFor, extensionsOf, undeclared as undeclaredLanguages } from "./rules.ts";
+import { ruleTextHash, cutoffFor, scaleOf, extensionsOf, undeclared as undeclaredLanguages } from "./rules.ts";
 import { parseIgnores, isIgnored, unknownIgnoredRules, type FileIgnores } from "./ignore.ts";
 import { excerptBudget, pairTests, type RelatedTest } from "./paired.ts";
 import { commitSubjects, squashSubjects, stagedSubjects } from "./commits.ts";
@@ -505,7 +505,7 @@ export async function run({
         // only while nothing ever reorders or filters `batch.subjects`, and
         // fails silently if anything does -- every id still well-formed, every
         // answer attributed to the wrong subject.
-        const answer = readAnswer(res.answers, s.id ?? questionId(0), s.rule.kind);
+        const answer = readAnswer(res.answers, s.id ?? questionId(0), s.rule.kind, scaleOf(s.rule));
         // One verdict answers for every subject that shared its key.
         //
         // `arm: batch.arm` is not redundant. The twins come from the
@@ -705,8 +705,9 @@ async function explainFindings(
     try {
       const res = await jev.askSplitting(batch.state, questions);
       for (const { subject, finding } of asked) {
-        const c = readChoice(res.answers, subject.id!);
+        const c = readChoice(res.answers, subject.id!, Object.keys(subject.rule.explain!));
         if (c) finding.explanation = { choice: c.choice, confidence: c.confidence };
+        else errors.push({ file: batch.file, subjects: 1, error: `explain: missing or unusable answer for ${subject.id}` });
       }
     } catch (err: unknown) {
       errors.push({
@@ -770,9 +771,9 @@ function buildDirectiveQuestion(directive: Directive, id: string): Question {
  * gate that cannot name which instruction it means is not one worth turning
  * an exit code over, so recall spent in the first pass buys precision here.
  *
- * A failed request leaves every finding of that batch exactly as the verdict
- * pass left it -- attributed to nothing and not retracted. A question that
- * could not be asked is not evidence the verdict was wrong.
+ * A failed request or an incomplete set of usable directive answers leaves
+ * the affected finding as the verdict pass left it, and reports an error.
+ * An unanswered question is not evidence the verdict was wrong.
  *
  * Question ids are `${subject.id}-a${i}`: a subject's own id is unique
  * within its batch (`makeBatch` numbers it), and no subject id is ever
@@ -830,9 +831,15 @@ async function attributeFindings(
       const res = await jev.askSplitting(batch.state, questions);
       for (const { subject, finding, directives } of asked) {
         const at = cutoffFor(subject.rule, cutoffs);
+        const answers = directives.map((_, i) => readAnswer(res.answers, `${subject.id}-a${i}`, "noul"));
+        const missing = answers.filter((a) => a === null).length;
+        if (missing > 0) {
+          errors.push({ file: batch.file, subjects: 1, error: `attribute: ${subject.id}: ${missing} missing or unusable answer(s); finding kept` });
+          continue;
+        }
         const violates: NonNullable<Finding["violates"]> = [];
         directives.forEach((directive, i) => {
-          const answer = readAnswer(res.answers, `${subject.id}-a${i}`, "noul");
+          const answer = answers[i];
           if (answer && answer.value >= at) {
             violates.push({ file: directive.file, line: directive.line, breadcrumb: directive.breadcrumb, body: directive.body, value: answer.value });
           }
@@ -962,6 +969,7 @@ export function buildRecord(
       kind: r.kind,
       ask: r.ask,
       note: r.note,
+      levels: r.levels,
       draft: ruleTextHash(r),
       at: r.at,
       state: r.state,
