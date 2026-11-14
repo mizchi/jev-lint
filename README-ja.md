@@ -223,6 +223,7 @@ jev-lint docs --replay .jev-lint/documents-baseline.json
 | [docs/self-check.md](docs/self-check.md) | 文書の意味・用語・翻訳の整合性と記録の再生 |
 | [docs/project-facts.md](docs/project-facts.md) | 現在のカタログ、動作環境、既定モデル、CI、配布内容の生成情報 |
 | [docs/glossary.md](docs/glossary.md) | 共通用語と日本語表記 |
+| [docs/releasing.md](docs/releasing.md) | バージョン整合性、配布パッケージの検証、タグ起点のOIDC公開 |
 | [docs/use-hooks.md](docs/use-hooks.md) | git hook と CI |
 | [SECURITY.md](SECURITY.md) | モデル判定のリスク、信頼境界、対策 |
 | [docs/writing-rules.md](docs/writing-rules.md) | ルールの書き方と、同梱する eval |

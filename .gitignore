@@ -28,3 +28,4 @@ experiments/relations/**/last.json
 experiments/adoption/last.json
 experiments/documents/last.json
 experiments/introspection/**/last.json
+/release/

@@ -1,6 +1,6 @@
 {
   "name": "jev-lint",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "A natural-language linter: ast-grep picks the code, a sentence you write is the rule, and Jev returns the verdict",
   "keywords": [
     "lint",
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/mizchi/jev-lint#readme",
   "type": "module",
+  "publishConfig": { "access": "public" },
   "engines": {
     "node": ">=24"
   },
@@ -112,8 +113,10 @@
     "arms": "node --experimental-strip-types tools/arms.ts --repeat 2",
     "grouping": "node --experimental-strip-types tools/grouping.ts --repeat 2",
     "dry": "node --experimental-strip-types src/cli.ts check --dry-run --cache none",
-    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay",
+    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay",
     "prepack": "npm run clean && npm run build",
+    "release:check": "node --experimental-strip-types tools/release.ts",
+    "test:package": "node --experimental-strip-types tools/check-package.ts",
     "parsers:moonbit": "node --experimental-strip-types tools/build-parser.ts moonbit",
     "docs:facts": "node --experimental-strip-types tools/docs-facts.ts",
     "docs:facts:check": "node --experimental-strip-types tools/docs-facts.ts --check",

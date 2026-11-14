@@ -98,6 +98,14 @@
     "shipped-guide": {
       "path": "skills/jev-lint/references/using-shipped-rules.md",
       "role": "document"
+    },
+    "release-guide": {
+      "path": "docs/releasing.md",
+      "role": "document"
+    },
+    "release-workflow": {
+      "path": ".github/workflows/release.yml",
+      "role": "reference"
     }
   },
   "comparisons": [
@@ -413,6 +421,18 @@
       "target": {
         "source": "readme-ja",
         "contains": "`init --introspect` は"
+      }
+    },
+    {
+      "id": "release-workflow-contract",
+      "topic": "Tag-only publishing, validation and package testing before OIDC, release permissions and dist-tags",
+      "mode": "semantic",
+      "reference": {
+        "source": "release-workflow"
+      },
+      "target": {
+        "source": "release-guide",
+        "heading": "Tag workflow"
       }
     }
   ]

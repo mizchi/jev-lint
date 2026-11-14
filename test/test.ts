@@ -74,6 +74,7 @@ const files = [
   "run",
   "text",
   "skills",
+  "release",
   "commits",
   "instructions",
   "policy-source",

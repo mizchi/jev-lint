@@ -53,6 +53,7 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - run: npm run release:check
       - run: npm run eval:replay
       - run: npm run eval:adoption
       - run: npm run docs:facts:check
@@ -78,6 +79,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:dist
+      - run: npm run test:package
 
   # jev-lint over its own diff.
   #

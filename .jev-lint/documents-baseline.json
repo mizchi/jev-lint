@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "754fbd41935b1ca86826defda807e627f3b86a5962215cd497c53d138ca31d60",
+  "snapshotDigest": "9c68cff8a0b2a87b1867b8643d31563c1d4b5df664c809343ef2c1b86c34358e",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -14,8 +14,8 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 5,
-        "endLine": 20,
+        "startLine": 9,
+        "endLine": 24,
         "quote": "## Rule catalog\n\nThe current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 2 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 1 rule\n- typescript: 23 rules\n- vibe: 2 rules",
         "contentHash": "12513cbac9c7bd0c87e3879e707e77965c27e6714ee15023a9c665f0c28e7343"
       },
@@ -28,16 +28,16 @@
         "contentHash": "cfcbfe315bb0f9392e8a8b9b3030a7d0ef21aaca78360a6faff5f5414d18ac50"
       },
       "context": [],
-      "candidateId": "a8cc440014275755cc37d093f7d175150332fc675c3f8450f53aee981988a0cc",
-      "contextHash": "7bcb680b55069b72228948a2d6faa13bce3f0c759930826915137b328cf36cc8",
+      "candidateId": "70627c50ead28d59a50caba27bb9f78827ecf3e108c19c5a127e47d4f11c2894",
+      "contextHash": "853b896c1c5a9f86b4d79633fe638da93bd040d084fb40b26dc3d6eb7de0d280",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.83,
+        "confidence": 0.89,
         "probabilities": {
-          "supports": 0.87,
-          "contradicts": 0.12,
+          "supports": 0.92,
+          "contradicts": 0.08,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -48,8 +48,8 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 5,
-        "endLine": 20,
+        "startLine": 9,
+        "endLine": 24,
         "quote": "## Rule catalog\n\nThe current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 2 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 1 rule\n- typescript: 23 rules\n- vibe: 2 rules",
         "contentHash": "12513cbac9c7bd0c87e3879e707e77965c27e6714ee15023a9c665f0c28e7343"
       },
@@ -62,14 +62,14 @@
         "contentHash": "0af78be93769af751b5f6f27b53f3ec0af69824095a06ebe548792f3f4829945"
       },
       "context": [],
-      "candidateId": "577e7a7bda62646302943e217f91947899a85c98aec5b24ac29ac2bd48a8bcff",
-      "contextHash": "539dbdcea44382afe080618e240fd355995a981c4396d4360a0ffaad8d0dde3c",
+      "candidateId": "8c48cb7c2a2ebdc196e1780483e7f89d8076a7942a2e0b9950a2cb2a7d41d8e8",
+      "contextHash": "70b4b4482f62ff02b86c9f9c00106819360f19947e8d20c741a07215ff09ff7d",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.89,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.12,
+          "supports": 0.92,
+          "contradicts": 0.08,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -82,8 +82,8 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 5,
-        "endLine": 20,
+        "startLine": 9,
+        "endLine": 24,
         "quote": "## Rule catalog\n\nThe current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 2 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 1 rule\n- typescript: 23 rules\n- vibe: 2 rules",
         "contentHash": "12513cbac9c7bd0c87e3879e707e77965c27e6714ee15023a9c665f0c28e7343"
       },
@@ -96,16 +96,16 @@
         "contentHash": "c2e1e75ff0ee2280c0917e99479efe9195114c4223bcdd7e0643eab6e3c447c3"
       },
       "context": [],
-      "candidateId": "a210462b67e3cb2c6197bb0c725c769edc6a7bf6a6a3437ab6a04d99674a009b",
-      "contextHash": "e552512f41d8eee42a16b75ee21544087939a394d9cfd9c68a3d87482badf186",
+      "candidateId": "7dea0d15065d3535a00b36f50bafd7cb47de41756cde14f6f41f758f42192070",
+      "contextHash": "d75044fea954d9d2fe42da9dd9cc82a3790978d5a5a253993cbb253b6286ab85",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.99,
+          "supports": 0.98,
           "contradicts": 0.01,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -116,8 +116,8 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 22,
-        "endLine": 24,
+        "startLine": 26,
+        "endLine": 28,
         "quote": "## Runtime\n\nThe package requires Node.js >=24. Its runtime dependencies are `@ast-grep/cli` and `yaml`.",
         "contentHash": "a0192bf181c0bfa44416bc2297196948426ac82aaae0d6aa6ccb6b776fe7ce14"
       },
@@ -130,14 +130,14 @@
         "contentHash": "84d00a6c616557b9bc90047b665298d0d1749da7cfde89543a9b0f0c14938251"
       },
       "context": [],
-      "candidateId": "2e91b01ba952c4f2dce0e755c8c48a18c3fe3d3bd0e21a4c9068e99179fe3188",
-      "contextHash": "98a42603570fe814d5627bdc1466fdeea758fb63d7bb48bf61078c39e449696e",
+      "candidateId": "ba399becdbf2012ac15c3cedc3ccf3748c9e1dd0dc4a84fd1a1b145a9fd6d027",
+      "contextHash": "b7e5d2e6c011686b8788851d499dd8f5ec328fcf58c5e828b1e4a4addd5e6744",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -150,8 +150,8 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 26,
-        "endLine": 28,
+        "startLine": 30,
+        "endLine": 32,
         "quote": "## Default model\n\nThe default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.",
         "contentHash": "5ffae703878d7067fdfd5286cc2f3063d1a10a03c47d9964b819457efcb98170"
       },
@@ -164,8 +164,8 @@
         "contentHash": "a27ede03f51047cab6f360be670940a5a8cda09146663d12dff1d6e324701e45"
       },
       "context": [],
-      "candidateId": "e87bd670723f3e6ecaf2f486fda0d31243e1a425a308e044372e89488abc0752",
-      "contextHash": "8ca536134a02e915b1889915d13a4208cd1df4ea8319951a4e196f618249da9a",
+      "candidateId": "e712096ad811f0b771bbc55d6c6935046181bcd328e9300441e1f5f45560768b",
+      "contextHash": "c6845f2ba09bc2789d1e3873929dd1d18bfe90ff576028d5639ad38c9cde8293",
       "judgment": {
         "choice": "supports",
         "confidence": 0.99,
@@ -184,8 +184,8 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 26,
-        "endLine": 28,
+        "startLine": 30,
+        "endLine": 32,
         "quote": "## Default model\n\nThe default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.",
         "contentHash": "5ffae703878d7067fdfd5286cc2f3063d1a10a03c47d9964b819457efcb98170"
       },
@@ -198,14 +198,14 @@
         "contentHash": "0db20de71a0abba4a2cdb28706648a7ec71b5e5d1e9f9e158a38b600647dac61"
       },
       "context": [],
-      "candidateId": "dbd247a165ec3e4bede162721dfc4fc8b5e8650e074dd7bb390db3c040e7923e",
-      "contextHash": "629ab8e14152cd79aa9e837128294b27af9bb34c1b5700f3d1c5309eecc5ef71",
+      "candidateId": "a1ce146df8d2bde3b7b9b245472132fc7066cce083c4c5ee102ec79df46e1b9d",
+      "contextHash": "0e7bf0f4ceb0c0a0544ea22fe24c5f58373b23a644b37fe5a0a73c8193937fe2",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.81,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.86,
-          "contradicts": 0.13,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -218,28 +218,28 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 36,
-        "endLine": 42,
-        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
-        "contentHash": "40dfb43ec00bbaae0a909b06ea7c8f5c81a491de5b4658f922d2fcd7f235f885"
+        "startLine": 40,
+        "endLine": 46,
+        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
+        "contentHash": "f42cff1d42d7c33fab6c0a8550e89fb7947776b3bb7cb89104c03e50c1a611c0"
       },
       "target": {
         "source": "architecture",
         "path": "docs/internal/architecture.md",
         "startLine": 398,
         "endLine": 421,
-        "quote": "## Build contract\n\n`\"type\": \"module\"`, so plain `.ts` files are ESM. Three settings keep one source\ntree runnable three ways — through `tsc` for the published build, through\n`node --experimental-strip-types` for development, and from `dist/` once\ninstalled:\n\n- `allowImportingTsExtensions` + `rewriteRelativeImportExtensions` — source\n  imports `./x.ts`, the emit rewrites to `./x.js`.\n- `erasableSyntaxOnly` — anything TypeScript cannot simply erase is a compile\n  error here, so the stripped-types run and the compiled run cannot diverge.\n\n`package.json` ships compiled `dist`, rule YAML files and public documentation.\nIt does not publish rule fixtures or accepted rule baselines; replaying those\nrequires a repository checkout. [Project facts](../project-facts.md#package-contents)\nis generated from the actual export map and publish allowlist.\n\n`npm run ci` checks the skill link, types, tests, build, rule baseline replay,\nadoption evaluation, generated documentation facts, document and introspection evaluation replay,\nand finally the committed documentation snapshot replay. None needs an API key.\nThe complete command is generated in [project facts](../project-facts.md#ci).\nRule replay fails when an accepted decision regresses or the rule question\nchanges. Document replay fails on contradictions, omissions or stale source,\nmanifest and question digests; a live refresh is required after input changes.",
-        "contentHash": "8b8269b9d73bd586aea22890a7b8f2fe22c94f37261e250995ee640afb6c9492"
+        "quote": "## Build contract\n\n`\"type\": \"module\"`, so plain `.ts` files are ESM. Three settings keep one source\ntree runnable three ways — through `tsc` for the published build, through\n`node --experimental-strip-types` for development, and from `dist/` once\ninstalled:\n\n- `allowImportingTsExtensions` + `rewriteRelativeImportExtensions` — source\n  imports `./x.ts`, the emit rewrites to `./x.js`.\n- `erasableSyntaxOnly` — anything TypeScript cannot simply erase is a compile\n  error here, so the stripped-types run and the compiled run cannot diverge.\n\n`package.json` ships compiled `dist`, rule YAML files and public documentation.\nIt does not publish rule fixtures or accepted rule baselines; replaying those\nrequires a repository checkout. [Project facts](../project-facts.md#package-contents)\nis generated from the actual export map and publish allowlist.\n\n`npm run ci` checks the skill link, types, tests, build, release metadata, rule baseline replay,\nadoption evaluation, generated documentation facts, document and introspection evaluation replay,\nand finally the committed documentation snapshot replay. None needs an API key.\nThe complete command is generated in [project facts](../project-facts.md#ci).\nRule replay fails when an accepted decision regresses or the rule question\nchanges. Document replay fails on contradictions, omissions or stale source,\nmanifest and question digests; a live refresh is required after input changes.",
+        "contentHash": "92de0ba0e84e3cb43368ed843d3adaa060d686fd66e6eecadf9f2249a0358823"
       },
       "context": [],
-      "candidateId": "659be54b1fc8ce59c572d850e73e11c878889a65051caebf523a382aec23dc80",
-      "contextHash": "62ac7cec15fa1e3f0884d85e1174631e873ec3b604ba1116faf3cbd808710bb9",
+      "candidateId": "db3d96a0d4e052586fa169e206eab8a4ccb0f07809133d34ae392a6fe020a7f9",
+      "contextHash": "84dbc1d19a647933595d9d2575837aab81b3e624616ef9179c47448ee7c47444",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.96,
+        "confidence": 0.93,
         "probabilities": {
-          "supports": 0.97,
-          "contradicts": 0.03,
+          "supports": 0.95,
+          "contradicts": 0.05,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -252,10 +252,10 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 36,
-        "endLine": 42,
-        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
-        "contentHash": "40dfb43ec00bbaae0a909b06ea7c8f5c81a491de5b4658f922d2fcd7f235f885"
+        "startLine": 40,
+        "endLine": 46,
+        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
+        "contentHash": "f42cff1d42d7c33fab6c0a8550e89fb7947776b3bb7cb89104c03e50c1a611c0"
       },
       "target": {
         "source": "maintainer-skill",
@@ -266,16 +266,16 @@
         "contentHash": "df996640ed0e8e755dd213409426b409cb54f913429327f0cc28dc78d55e9bfe"
       },
       "context": [],
-      "candidateId": "093f966a8faaa3bdf81b818e0740630162907ee34b578c97d4df04e04d51cb99",
-      "contextHash": "eb93e5978d90d37eb4db94e3f85e7a8f4aa2bf4e7328a774994f9d72241663e7",
+      "candidateId": "a684931b8d6c37573b0fa50e44f5edbb02f300c40cfb87e08ce567ad8b7253c8",
+      "contextHash": "3e19debae91c8df0c36380254d44ff6e7655321116758536556868d9bdd7a6ef",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.25,
+        "confidence": 0.21,
         "probabilities": {
-          "supports": 0.44,
-          "contradicts": 0.31,
-          "unrelated": 0.04,
-          "insufficient_context": 0.21
+          "supports": 0.41,
+          "contradicts": 0.37,
+          "unrelated": 0.03,
+          "insufficient_context": 0.19
         }
       }
     },
@@ -304,10 +304,10 @@
       "contextHash": "07495441926fa597e342fd615b9889328aeb9dd93abac75f85ac2db76d2eba83",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.95,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.05,
+          "supports": 0.96,
+          "contradicts": 0.04,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -372,10 +372,10 @@
       "contextHash": "20be37c4761b1a232b229382ea6f94401a9200d098b37d94cc616ebca8f6258f",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.81,
+        "confidence": 0.83,
         "probabilities": {
-          "supports": 0.86,
-          "contradicts": 0.12,
+          "supports": 0.87,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.02
         }
@@ -440,11 +440,11 @@
       "contextHash": "3628c049063fac0b6afa53242c8da086e07caf928b820457cb5836b29de24255",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.96,
         "probabilities": {
-          "supports": 0.98,
+          "supports": 0.97,
           "contradicts": 0.01,
-          "unrelated": 0,
+          "unrelated": 0.01,
           "insufficient_context": 0.01
         }
       }
@@ -474,10 +474,10 @@
       "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.69,
+        "confidence": 0.75,
         "probabilities": {
-          "supports": 0.77,
-          "contradicts": 0.22,
+          "supports": 0.81,
+          "contradicts": 0.18,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -508,10 +508,10 @@
       "contextHash": "8cecf2bfcf88789455d7eafa78a1b126bee955d21dc05f16fa0edb8326788196",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.93,
-          "contradicts": 0.07,
+          "supports": 0.89,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -542,12 +542,12 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.93,
         "probabilities": {
-          "supports": 0.93,
-          "contradicts": 0.05,
+          "supports": 0.95,
+          "contradicts": 0.04,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -610,10 +610,10 @@
       "contextHash": "7b67d93404c319f88696ab2fda3a5ab9586cca096735213d483c778af411c1be",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.96,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.97,
-          "contradicts": 0.02,
+          "supports": 0.98,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -644,10 +644,10 @@
       "contextHash": "48f725403631276de82a90382f44ec5012e57ea95c91a91dbbfa7e3db81df8e7",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.98,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -660,8 +660,8 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 30,
-        "endLine": 34,
+        "startLine": 34,
+        "endLine": 38,
         "quote": "## Initial rule selection\n\n`introspect` selects initial screening rules from metadata using Jev. Its current enable criterion is:\n\nONLY these exact rule IDs qualify for the core starter: fn-name-promises with eligible source files in any language; test-name-verifies-claim with .test/.spec/test_/_test behavior-test paths; agent-instruction-is-unclear or agent-instructions-conflict with AGENTS.md. Read the ID after the language slash. Every other rule ID is defer or skip, even if it mentions names or tests. Existing violations or source bodies are not required for these core rules.",
         "contentHash": "8bf3151cd19a5274bee7b091605581ad18cfd8bac498bbe6c0186cf1d398028a"
       },
@@ -674,14 +674,14 @@
         "contentHash": "50741869141d4e049bb840c2af7f871f9e7b079e4e36edcccf2dd8b31dce9906"
       },
       "context": [],
-      "candidateId": "2e011e128191183c7c22392315ccf6333f37a45ee7ea5bb2b6ced7db4902dfcc",
-      "contextHash": "ea4e0c655ea9f9f7a829d10db2eaa83101ab31c76b15a040677744456ffffeb3",
+      "candidateId": "ad853e13b993801709dea529162078647584c0be25a1ac79b3c8bd21db556c51",
+      "contextHash": "35839030f7dde62d95b10faf10a0b81c8ae5c13efa2c9cd97f722dfbbb0eb1aa",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.92,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.94,
-          "contradicts": 0.05,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -712,10 +712,10 @@
       "contextHash": "5b3e6e3d6e9313b46b5d867319a9d0ff3eca623aedd3906c8e3275fab0251ea8",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.83,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.87,
-          "contradicts": 0.12,
+          "supports": 0.89,
+          "contradicts": 0.1,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -730,8 +730,8 @@
         "path": "docs/internal/architecture.md",
         "startLine": 398,
         "endLine": 421,
-        "quote": "## Build contract\n\n`\"type\": \"module\"`, so plain `.ts` files are ESM. Three settings keep one source\ntree runnable three ways — through `tsc` for the published build, through\n`node --experimental-strip-types` for development, and from `dist/` once\ninstalled:\n\n- `allowImportingTsExtensions` + `rewriteRelativeImportExtensions` — source\n  imports `./x.ts`, the emit rewrites to `./x.js`.\n- `erasableSyntaxOnly` — anything TypeScript cannot simply erase is a compile\n  error here, so the stripped-types run and the compiled run cannot diverge.\n\n`package.json` ships compiled `dist`, rule YAML files and public documentation.\nIt does not publish rule fixtures or accepted rule baselines; replaying those\nrequires a repository checkout. [Project facts](../project-facts.md#package-contents)\nis generated from the actual export map and publish allowlist.\n\n`npm run ci` checks the skill link, types, tests, build, rule baseline replay,\nadoption evaluation, generated documentation facts, document and introspection evaluation replay,\nand finally the committed documentation snapshot replay. None needs an API key.\nThe complete command is generated in [project facts](../project-facts.md#ci).\nRule replay fails when an accepted decision regresses or the rule question\nchanges. Document replay fails on contradictions, omissions or stale source,\nmanifest and question digests; a live refresh is required after input changes.",
-        "contentHash": "8b8269b9d73bd586aea22890a7b8f2fe22c94f37261e250995ee640afb6c9492"
+        "quote": "## Build contract\n\n`\"type\": \"module\"`, so plain `.ts` files are ESM. Three settings keep one source\ntree runnable three ways — through `tsc` for the published build, through\n`node --experimental-strip-types` for development, and from `dist/` once\ninstalled:\n\n- `allowImportingTsExtensions` + `rewriteRelativeImportExtensions` — source\n  imports `./x.ts`, the emit rewrites to `./x.js`.\n- `erasableSyntaxOnly` — anything TypeScript cannot simply erase is a compile\n  error here, so the stripped-types run and the compiled run cannot diverge.\n\n`package.json` ships compiled `dist`, rule YAML files and public documentation.\nIt does not publish rule fixtures or accepted rule baselines; replaying those\nrequires a repository checkout. [Project facts](../project-facts.md#package-contents)\nis generated from the actual export map and publish allowlist.\n\n`npm run ci` checks the skill link, types, tests, build, release metadata, rule baseline replay,\nadoption evaluation, generated documentation facts, document and introspection evaluation replay,\nand finally the committed documentation snapshot replay. None needs an API key.\nThe complete command is generated in [project facts](../project-facts.md#ci).\nRule replay fails when an accepted decision regresses or the rule question\nchanges. Document replay fails on contradictions, omissions or stale source,\nmanifest and question digests; a live refresh is required after input changes.",
+        "contentHash": "92de0ba0e84e3cb43368ed843d3adaa060d686fd66e6eecadf9f2249a0358823"
       },
       "target": {
         "source": "shipped-guide",
@@ -742,14 +742,14 @@
         "contentHash": "c04a8bc049ad0c01567707fba5ae4bbd9a70bcae16965f49ac42c202aa6beb59"
       },
       "context": [],
-      "candidateId": "19fc1b5af04a565d3c0f729285364925ec928a8d8774e44b3d8f1cd108e4d5b4",
-      "contextHash": "df56134928ed5f54d0c771a2a01df665fc70323b055454495ab287749ff8a328",
+      "candidateId": "fc2c9edfd64cf1cc5e05c687139e335c03a9cc86a76c1fc0936fd279a9876cec",
+      "contextHash": "38c0e94fa369c5e957dc741b3766bef64a2de778ec94a57df7473f2c4770edea",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -780,12 +780,12 @@
       "contextHash": "2186cd8f8e963d27e4f6eae436a488676c25c3d022daf9d460a5a1f7e5c71598",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.88,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.91,
-          "contradicts": 0.09,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -822,12 +822,46 @@
           "insufficient_context": 0
         }
       }
+    },
+    {
+      "id": "release-workflow-contract",
+      "topic": "Tag-only publishing, validation and package testing before OIDC, release permissions and dist-tags",
+      "mode": "semantic",
+      "reference": {
+        "source": "release-workflow",
+        "path": ".github/workflows/release.yml",
+        "startLine": 1,
+        "endLine": 82,
+        "quote": "name: release\n\non:\n  push:\n    tags: ['v*']\n\npermissions:\n  contents: read\n\nconcurrency:\n  group: release-${{ github.ref }}\n  cancel-in-progress: false\n\njobs:\n  prepare:\n    runs-on: ubuntu-latest\n    outputs:\n      filename: ${{ steps.plan.outputs.filename }}\n      dist-tag: ${{ steps.plan.outputs.dist-tag }}\n      prerelease: ${{ steps.plan.outputs.prerelease }}\n    steps:\n      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n        with:\n          ref: ${{ github.sha }}\n          fetch-depth: 0\n          persist-credentials: false\n      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n        with:\n          node-version: 24\n          package-manager-cache: false\n      - name: Require a main-branch release with matching versions and notes\n        id: plan\n        run: |\n          git merge-base --is-ancestor \"$GITHUB_SHA\" origin/main\n          node --experimental-strip-types tools/release.ts \"$GITHUB_REF_NAME\" --out-dir release\n      - run: npm ci\n      - run: npm run ci\n      - run: npm run test:package -- --out-dir release\n      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2\n        with:\n          name: release-${{ github.sha }}\n          path: release/\n          if-no-files-found: error\n          retention-days: 7\n\n  publish:\n    needs: prepare\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\n      id-token: write\n    steps:\n      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n        with:\n          ref: ${{ github.sha }}\n          persist-credentials: false\n      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n        with:\n          node-version: 24\n          registry-url: https://registry.npmjs.org\n          package-manager-cache: false\n      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2\n        with:\n          name: release-${{ github.sha }}\n          path: release/\n      - run: npm install --global npm@11.19.1\n      - name: Publish the tested tarball through npm OIDC\n        env:\n          PACKAGE_FILE: ${{ needs.prepare.outputs.filename }}\n          DIST_TAG: ${{ needs.prepare.outputs.dist-tag }}\n        run: npm publish \"release/$PACKAGE_FILE\" --access public --tag \"$DIST_TAG\" --ignore-scripts\n      - name: Create the GitHub release from the same changelog notes\n        env:\n          GH_TOKEN: ${{ github.token }}\n          PACKAGE_FILE: ${{ needs.prepare.outputs.filename }}\n          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}\n        run: |\n          flags=()\n          if [ \"$PRERELEASE\" = true ]; then flags+=(--prerelease); fi\n          gh release create \"$GITHUB_REF_NAME\" \"release/$PACKAGE_FILE\" \\\n            --verify-tag --title \"$GITHUB_REF_NAME\" \\\n            --notes-file release/release-notes.md \"${flags[@]}\"",
+        "contentHash": "2a9abc29b706296b326857030f735bb41e47189a9f8aee01c312830dea4d7a06"
+      },
+      "target": {
+        "source": "release-guide",
+        "path": "docs/releasing.md",
+        "startLine": 58,
+        "endLine": 79,
+        "quote": "## Tag workflow\n\n```sh\ngit switch main\ngit pull --ff-only origin main\ngit tag -a v0.8.0 -m \"Release v0.8.0\"\ngit push origin v0.8.0\n```\n\nOnly a `v*` tag push triggers `.github/workflows/release.yml`. The `prepare`\njob has read-only repository access and checks that the tagged commit belongs\nto main, all versions match and release notes exist. It runs the complete\noffline CI and the installed-tarball check, then uploads the tested tarball and\nnotes as one artifact.\n\nThe dependent `publish` job alone receives `id-token: write` and\n`contents: write`. It uses Node 24 and npm 11.19.1, downloads that same artifact\nand runs `npm publish` with OIDC and `--ignore-scripts`; repository lifecycle\nscripts are not run with publishing permissions. Neither release job uses a\ndependency cache. Stable versions publish to `latest`; prereleases publish to\n`next`. GitHub Release notes come from the matching changelog section, and the\nsame tarball is attached to the release. Trusted publishing supplies provenance.",
+        "contentHash": "5f07a0d4ed0e79f469d7394ba1e7d1dea791d915e6d7417c6c00cafeffccb07b"
+      },
+      "context": [],
+      "candidateId": "4b70468cfffd3131aa7a379330c0d4fac715c0c2ba9adf22d66c5c9c53eb85c6",
+      "contextHash": "00e9b333ef25af47bab835bc64be9344de58c2db39aa07706f183d935188a62b",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.64,
+        "probabilities": {
+          "supports": 0.73,
+          "contradicts": 0.07,
+          "unrelated": 0,
+          "insufficient_context": 0.2
+        }
+      }
     }
   ],
   "coverage": {
-    "expected": 24,
-    "selected": 24,
-    "answered": 24,
+    "expected": 25,
+    "selected": 25,
+    "answered": 25,
     "missing": 0,
     "contradictions": 0,
     "unassessed": 0,
@@ -836,9 +870,9 @@
     "unboundDocuments": 0
   },
   "usage": {
-    "requests": 24,
-    "inputTokens": 33032,
-    "usd": 0.001387344
+    "requests": 25,
+    "inputTokens": 35132,
+    "usd": 0.0014755439999999999
   },
   "errors": []
 }

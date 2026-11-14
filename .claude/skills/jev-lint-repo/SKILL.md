@@ -68,6 +68,11 @@ and excludes `test/fixtures/`, which holds planted defects for the cookbook.
 
 ## Plugin
 
+For a release, follow `docs/releasing.md`: synchronize package/lock/plugin
+versions, update the changelog, run `just release-check` and `just package-check`,
+then refresh documentation records. A protected `v*` tag on main triggers OIDC
+publishing of the tested tarball after all offline gates pass.
+
 The repository root is a Claude Code plugin (`.claude-plugin/plugin.json`,
 `skills/`, `commands/`). Every YAML block in
 `skills/jev-lint/references/cookbook.md` must load and match
