@@ -23,7 +23,7 @@ try {
   const pkg = JSON.parse(readFileSync(join(consumer, "node_modules/jev-lint/package.json"), "utf8"));
   const modules = Object.keys(pkg.exports).filter((key) => key !== "./package.json").map((key) => key === "." ? pkg.name : `${pkg.name}/${key.slice(2)}`);
   writeFileSync(join(consumer, "types.ts"), modules.map((name, i) => `import * as exported${i} from ${JSON.stringify(name)}; void exported${i};`).join("\n"));
-  run(process.execPath, [join(cwd, "node_modules/typescript/bin/tsc"), "--noEmit", "--module", "NodeNext", "--moduleResolution", "NodeNext", "--target", "ES2023",
+  run(process.execPath, [join(cwd, "node_modules/typescript/bin/tsc"), "--noEmit", "--noImplicitAny", "--module", "NodeNext", "--moduleResolution", "NodeNext", "--target", "ES2023",
     "--types", "node", "--typeRoots", join(cwd, "node_modules/@types"), "types.ts"], consumer);
   mkdirSync(join(consumer, "src")); writeFileSync(join(consumer, "src/pricing.ts"), "export function addTax(amount: number) { return amount * 1.1; }\n");
   const ruleCount = pack.files.filter((f: { path: string }) => /^rules\/[^/]+\/[^/]+\/rule.yml$/.test(f.path)).length;
