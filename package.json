@@ -31,6 +31,18 @@
   "main": "./dist/run.js",
   "types": "./dist/run.d.ts",
   "exports": {
+    "./acceptance": { "types": "./dist/acceptance.d.ts", "default": "./dist/acceptance.js" },
+    "./review-artifact": { "types": "./dist/review-artifact.d.ts", "default": "./dist/review-artifact.js" },
+    "./sarif": { "types": "./dist/sarif.d.ts", "default": "./dist/sarif.js" },
+    "./scope": { "types": "./dist/scope.d.ts", "default": "./dist/scope.js" },
+    "./doctor": { "types": "./dist/doctor.d.ts", "default": "./dist/doctor.js" },
+    "./relations": { "types": "./dist/relations.d.ts", "default": "./dist/relations.js" },
+    "./relation-contract": { "types": "./dist/relation-contract.d.ts", "default": "./dist/relation-contract.js" },
+    "./audit": { "types": "./dist/audit-run.d.ts", "default": "./dist/audit-run.js" },
+    "./scan-contract": { "types": "./dist/scan-contract.d.ts", "default": "./dist/scan-contract.js" },
+    "./adversarial": { "types": "./dist/adversarial.d.ts", "default": "./dist/adversarial.js" },
+    "./client": { "types": "./dist/jev.d.ts", "default": "./dist/jev.js" },
+    "./request-control": { "types": "./dist/request-control.d.ts", "default": "./dist/request-control.js" },
     ".": {
       "types": "./dist/run.d.ts",
       "default": "./dist/run.js"
@@ -55,7 +67,9 @@
       "types": "./dist/report.d.ts",
       "default": "./dist/report.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./documents": { "types": "./dist/documents.d.ts", "default": "./dist/documents.js" },
+    "./introspection": { "types": "./dist/introspection.d.ts", "default": "./dist/introspection.js" }
   },
   "files": [
     "dist",
@@ -66,14 +80,24 @@
     "RULES.md",
     "CHANGELOG.md",
     "docs/reference.md",
-    "LICENSE"
+    "docs/audit-api.md",
+    "docs/relations-api.md",
+    "docs/relations-workflow.md",
+    "docs/adoption.md",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses",
+    "LICENSE",
+    "docs/self-check.md",
+    "docs/project-facts.md",
+    "docs/glossary.md",
+    "skills/jev-lint/references/initializing-project.md"
   ],
   "scripts": {
     "build": "tsc && node -e \"require('fs').chmodSync('dist/cli.js', 0o755)\"",
     "typecheck": "tsc -p tsconfig.check.json",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "test": "node --experimental-strip-types test/test.ts",
-    "test:dist": "npm run build && node dist/cli.js rules > /dev/null && node dist/cli.js check --dry-run --cache none > /dev/null && node dist/cli.js eval --replay > /dev/null && echo \"built cli ok\"",
+    "test:dist": "npm run build && node dist/cli.js rules > /dev/null && node dist/cli.js check --dry-run --cache none > /dev/null && node dist/cli.js eval --replay > /dev/null && node dist/cli.js introspect test/fixtures/cookbook --dry-run > /dev/null && echo \"built cli ok\"",
     "check": "node --experimental-strip-types src/cli.ts check",
     "review": "node --experimental-strip-types src/cli.ts review",
     "rules": "node --experimental-strip-types src/cli.ts rules",
@@ -83,13 +107,21 @@
     "skills:check": "node --experimental-strip-types tools/sync-skills.ts --check",
     "eval": "node --experimental-strip-types src/cli.ts eval --repeat 3",
     "eval:replay": "node --experimental-strip-types src/cli.ts eval --replay",
+    "eval:adoption": "node --experimental-strip-types tools/eval-adoption.ts",
     "eval:clef": "node --experimental-strip-types tools/compare-models.ts",
     "arms": "node --experimental-strip-types tools/arms.ts --repeat 2",
     "grouping": "node --experimental-strip-types tools/grouping.ts --repeat 2",
     "dry": "node --experimental-strip-types src/cli.ts check --dry-run --cache none",
-    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay",
+    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay",
     "prepack": "npm run clean && npm run build",
-    "parsers:moonbit": "node --experimental-strip-types tools/build-parser.ts moonbit"
+    "parsers:moonbit": "node --experimental-strip-types tools/build-parser.ts moonbit",
+    "docs:facts": "node --experimental-strip-types tools/docs-facts.ts",
+    "docs:facts:check": "node --experimental-strip-types tools/docs-facts.ts --check",
+    "docs:check": "node --experimental-strip-types src/cli.ts docs",
+    "docs:replay": "node --experimental-strip-types src/cli.ts docs --replay .jev-lint/documents-baseline.json",
+    "eval:documents": "node --experimental-strip-types tools/eval-documents.ts --replay experiments/documents/iteration-01.json",
+    "introspect": "node --experimental-strip-types src/cli.ts introspect",
+    "eval:introspection": "node --experimental-strip-types tools/eval-introspection.ts --corpus experiments/introspection/extended --replay experiments/introspection/extended/iteration-01.json"
   },
   "dependencies": {
     "@ast-grep/cli": "^0.45.3",

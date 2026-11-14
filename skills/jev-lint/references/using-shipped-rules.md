@@ -2,8 +2,9 @@
 
 jev-lint ships rules in the npm package's `rules/` directory, one
 directory per rule under its language (`rules/typescript/<id>/`,
-`rules/rust/<id>/`, …) with `rule.yml`, the `fixtures/` that prove it and
-`expect.yml`.
+`rules/rust/<id>/`, …) with `rule.yml`. Labelled fixtures, `expect.yml` and
+accepted baselines live in the repository checkout; the npm package publishes
+the rule YAML and generated `RULES.md`, without those evaluation files.
 They are the rules to start from: each one has a cutoff fitted to a labelled
 corpus, a `state` arm chosen by measurement, and a `criteria` block that took
 several rounds to get right. Write your own only for a convention they do not
@@ -66,8 +67,9 @@ logs in a function not named `safe*`/`try*`/`*OrNull`, `local`);
 **Config** — `script-name-does`: does a `package.json` script's name
 describe the command it runs? JSON, `bare`.
 
-Not asked, deliberately: style, redundancy, whether a comment should exist.
-One axis only — is the claim false.
+The code packs ask whether a claim is false, rather than whether a comment
+should exist. Markdown also has prose and agent-instruction rules; prose genre
+must fit the documents being inspected before enabling that family.
 
 The naming and comment rules each exist under `typescript/` (`TypeScript,
 Tsx, JavaScript, Jsx`), `rust/`, `python/` and `go/` where the port
@@ -100,6 +102,10 @@ is the config's decision, as ESLint's is:
 So the zero-configuration path is: install nothing, run `npx -y jev-lint
 check src`, get the packs. The configured path is `jev-lint init`, which
 writes `files:` and every shipped rule on, to prune.
+
+For a project-specific starter, follow [initializing-project.md](initializing-project.md).
+`jev-lint introspect --write` uses directory metadata and Jev to select a smaller
+set; it does not require another LLM or agent to generate configuration.
 
 ## Use them as they are
 

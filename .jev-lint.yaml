@@ -4,12 +4,10 @@
 # test/fixtures holds planted defects for the cookbook test, so it is
 # carved out of test/, which is otherwise the suite.
 #
-# `docs` and `AGENTS.md` are here so the markdown rules have something to
-# read: without them every run printed `no files for markdown (11 rules)`,
-# which is eleven rules carried and never once asked. AGENTS.md is also
-# what `commits` judges a change against, so it is the one file in this
-# repository that has to be true about the others.
-files: [src, tools, test, docs, AGENTS.md, package.json]
+# README translations, public docs and contributor instructions are checked
+# by the prose rules. Cross-document factual consistency is a separate
+# `docs` command, configured in .jev-lint/documents.json.
+files: [src, tools, test, docs, README.md, README-ja.md, AGENTS.md, package.json]
 #
 # docs/internal is the working shelf -- plans, specs, the findings
 # notebook, the architecture notes, a blog draft -- and it is excluded

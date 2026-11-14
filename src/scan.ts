@@ -379,7 +379,7 @@ export function emitRuleFile(rules: Rule[], languages: Language[]): string {
  * whatever happens to be on PATH so a scan cannot silently change behaviour
  * with the user's shell.
  */
-function astGrepBin(): string {
+export function astGrepBin(): string {
   if (process.env.JEV_LINT_AST_GREP) return process.env.JEV_LINT_AST_GREP;
 
   const candidates: string[] = [];

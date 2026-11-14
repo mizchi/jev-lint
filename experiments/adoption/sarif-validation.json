@@ -1,0 +1,13 @@
+{
+  "schema": "jev-lint-sarif-validation-1",
+  "passed": true,
+  "corpusDigest": "83c975b4e771d5c34ac15f271ed80e2cc8774f524a1ed4fb77ba897389b03feb",
+  "sarifVersion": "2.1.0",
+  "runs": 211,
+  "schemaSource": "https://github.com/oasis-tcs/sarif-spec/blob/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+  "schemaSha256": "c3b4bb2d6093897483348925aaa73af03b3e3f4bd4ca38cef26dcb4212a2682e",
+  "documentSha256": "5d2923882ec29e9d25b5a27b6e3c7120d337571411242a621139227538049837",
+  "validator": "jsonschema",
+  "validatorVersion": "4.26.0",
+  "formatChecks": true
+}

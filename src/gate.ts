@@ -88,11 +88,13 @@ export function decide(
       at,
       value: null,
       confidence: null,
+      ...(subject.matchStartByte === undefined ? {} : { matchStartByte: subject.matchStartByte, matchEndByte: subject.matchEndByte }),
     };
   }
 
   const base: Finding = {
     messageId: null,
+    ...(subject.matchStartByte === undefined ? {} : { matchStartByte: subject.matchStartByte, matchEndByte: subject.matchEndByte }),
     reported: false,
     rule: rule.id,
     ruleKey: rule.languageDir ? `${rule.languageDir}/${rule.id}` : rule.id,

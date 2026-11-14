@@ -112,6 +112,17 @@ await testAsync("commands: a client that fails leaves no verdict, and the run ex
   }
 });
 
+await testAsync("commands: an invalid policy ref is a configuration error before any model call", async () => {
+  const { dir, rules, src } = project();
+  try {
+    const client = fakeClient(judge);
+    const result = await cli(["check", src, "--no-config", "--cache", "none", "-R", rules, "--policy-ref", "missing-ref"], client);
+    assert.equal(result.code, 2);
+    assert.equal(client.spent.calls, 0);
+    assert.match(result.log, /policy/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 await testAsync("commands: replay validates scores against the recorded custom rubric", async () => {
   const { dir, rules, src } = project();
   try {

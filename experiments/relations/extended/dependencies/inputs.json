@@ -1,0 +1,260 @@
+{
+  "schema": "jev-lint-relation-corpus-1",
+  "cases": [
+    {
+      "id": "missing-expiry-helper",
+      "input": {
+        "schema": "jev-lint-relations-input-1",
+        "repository": "evaluation/service",
+        "sourceSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "runId": "sample",
+        "sources": [
+          {
+            "id": "specification",
+            "path": "docs/contract.md",
+            "ref": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "kind": "documentation",
+            "authority": "approved",
+            "content": "canUseSession compares nowMilliseconds with expiresAtSeconds converted into milliseconds and allows access strictly before expiry.",
+            "contentHash": "ec994cc75a8588e093c519527a4b47dd6176c6db72e14b7bcb24dc9a12296476",
+            "scope": [
+              "src",
+              "docs"
+            ],
+            "approval": {
+              "id": "approval-001",
+              "revision": 1,
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          },
+          {
+            "id": "target",
+            "path": "src/service.ts",
+            "ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "kind": "code",
+            "authority": "observed",
+            "content": "export function canUseSession(input) { return input.nowMilliseconds < normalizeExpiry(input.expiresAtSeconds); }",
+            "contentHash": "71f1eacee9e96694f6893a8c7398190d4149d56482b240350df54f523fae9062",
+            "scope": [],
+            "approval": null
+          }
+        ],
+        "claims": [
+          {
+            "id": "requirement",
+            "statement": "canUseSession compares nowMilliseconds with expiresAtSeconds converted into milliseconds and allows access strictly before expiry.",
+            "evidence": [
+              {
+                "sourceId": "specification",
+                "startLine": 1,
+                "endLine": 1,
+                "quote": "canUseSession compares nowMilliseconds with expiresAtSeconds converted into milliseconds and allows access strictly before expiry."
+              }
+            ]
+          }
+        ],
+        "expectedClaimIds": [
+          "requirement"
+        ],
+        "relations": [
+          {
+            "id": "comparison",
+            "subject": "relation",
+            "claimId": "requirement",
+            "targets": [
+              {
+                "sourceId": "target",
+                "startLine": 1,
+                "endLine": 1,
+                "quote": "export function canUseSession(input) { return input.nowMilliseconds < normalizeExpiry(input.expiresAtSeconds); }"
+              }
+            ],
+            "context": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "provided-expiry-helper",
+      "input": {
+        "schema": "jev-lint-relations-input-1",
+        "repository": "evaluation/service",
+        "sourceSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "runId": "sample",
+        "sources": [
+          {
+            "id": "specification",
+            "path": "docs/contract.md",
+            "ref": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "kind": "documentation",
+            "authority": "approved",
+            "content": "canUseSession compares nowMilliseconds with expiresAtSeconds converted into milliseconds and allows access strictly before expiry.",
+            "contentHash": "ec994cc75a8588e093c519527a4b47dd6176c6db72e14b7bcb24dc9a12296476",
+            "scope": [
+              "src",
+              "docs"
+            ],
+            "approval": {
+              "id": "approval-001",
+              "revision": 1,
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          },
+          {
+            "id": "target",
+            "path": "src/service.ts",
+            "ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "kind": "code",
+            "authority": "observed",
+            "content": "export function canUseSession(input) { return input.nowMilliseconds < normalizeExpiry(input.expiresAtSeconds); }",
+            "contentHash": "71f1eacee9e96694f6893a8c7398190d4149d56482b240350df54f523fae9062",
+            "scope": [],
+            "approval": null
+          },
+          {
+            "id": "helper",
+            "path": "src/helpers.ts",
+            "ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "kind": "code",
+            "authority": "observed",
+            "content": "export function normalizeExpiry(seconds) { return seconds * 1000; }",
+            "contentHash": "76f0d9c2f76c050850943041de8ba5f08df0d0fbd9db4967f151d823a3fded5e",
+            "scope": [],
+            "approval": null
+          }
+        ],
+        "claims": [
+          {
+            "id": "requirement",
+            "statement": "canUseSession compares nowMilliseconds with expiresAtSeconds converted into milliseconds and allows access strictly before expiry.",
+            "evidence": [
+              {
+                "sourceId": "specification",
+                "startLine": 1,
+                "endLine": 1,
+                "quote": "canUseSession compares nowMilliseconds with expiresAtSeconds converted into milliseconds and allows access strictly before expiry."
+              }
+            ]
+          }
+        ],
+        "expectedClaimIds": [
+          "requirement"
+        ],
+        "relations": [
+          {
+            "id": "comparison",
+            "subject": "relation",
+            "claimId": "requirement",
+            "targets": [
+              {
+                "sourceId": "target",
+                "startLine": 1,
+                "endLine": 1,
+                "quote": "export function canUseSession(input) { return input.nowMilliseconds < normalizeExpiry(input.expiresAtSeconds); }"
+              }
+            ],
+            "context": [
+              {
+                "sourceId": "helper",
+                "startLine": 1,
+                "endLine": 1,
+                "quote": "export function normalizeExpiry(seconds) { return seconds * 1000; }"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "misleading-expiry-helper",
+      "input": {
+        "schema": "jev-lint-relations-input-1",
+        "repository": "evaluation/service",
+        "sourceSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "runId": "sample",
+        "sources": [
+          {
+            "id": "specification",
+            "path": "docs/contract.md",
+            "ref": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "kind": "documentation",
+            "authority": "approved",
+            "content": "canUseSession compares nowMilliseconds with expiresAtSeconds converted into milliseconds and allows access strictly before expiry.",
+            "contentHash": "ec994cc75a8588e093c519527a4b47dd6176c6db72e14b7bcb24dc9a12296476",
+            "scope": [
+              "src",
+              "docs"
+            ],
+            "approval": {
+              "id": "approval-001",
+              "revision": 1,
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          },
+          {
+            "id": "target",
+            "path": "src/service.ts",
+            "ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "kind": "code",
+            "authority": "observed",
+            "content": "export function canUseSession(input) { return input.nowMilliseconds < normalizeExpiry(input.expiresAtSeconds); }",
+            "contentHash": "71f1eacee9e96694f6893a8c7398190d4149d56482b240350df54f523fae9062",
+            "scope": [],
+            "approval": null
+          },
+          {
+            "id": "helper",
+            "path": "src/helpers.ts",
+            "ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "kind": "code",
+            "authority": "observed",
+            "content": "export function normalizeExpiry(seconds) { return seconds; }",
+            "contentHash": "00c2564fab3fc97b7e90c2fda55d2824c0b2bc648a227f66871368b690da061c",
+            "scope": [],
+            "approval": null
+          }
+        ],
+        "claims": [
+          {
+            "id": "requirement",
+            "statement": "canUseSession compares nowMilliseconds with expiresAtSeconds converted into milliseconds and allows access strictly before expiry.",
+            "evidence": [
+              {
+                "sourceId": "specification",
+                "startLine": 1,
+                "endLine": 1,
+                "quote": "canUseSession compares nowMilliseconds with expiresAtSeconds converted into milliseconds and allows access strictly before expiry."
+              }
+            ]
+          }
+        ],
+        "expectedClaimIds": [
+          "requirement"
+        ],
+        "relations": [
+          {
+            "id": "comparison",
+            "subject": "relation",
+            "claimId": "requirement",
+            "targets": [
+              {
+                "sourceId": "target",
+                "startLine": 1,
+                "endLine": 1,
+                "quote": "export function canUseSession(input) { return input.nowMilliseconds < normalizeExpiry(input.expiresAtSeconds); }"
+              }
+            ],
+            "context": [
+              {
+                "sourceId": "helper",
+                "startLine": 1,
+                "endLine": 1,
+                "quote": "export function normalizeExpiry(seconds) { return seconds; }"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

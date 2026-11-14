@@ -145,6 +145,7 @@ export function commitSubjects(
   cwd: string = process.cwd(),
   /** What a finding calls the commit: the sha unless a suite names it by its patch file. */
   label: (sha: string) => string = (sha) => sha,
+  policyRef: string | null = null,
 ): CommitSubjects {
   const commitRules = rules.filter((r) => r.subject === "commit");
   const changeRules = rules.filter((r) => r.subject === "change");
@@ -192,7 +193,7 @@ export function commitSubjects(
     // has to be able to say *why* a change rule asked about nothing, rather
     // than call it a matcher that missed (it has none).
     if (changeRules.length > 0 && diff.stat.trim() !== "") {
-      const instructions = readInstructions(c.sha, cwd);
+      const instructions = readInstructions(policyRef ?? c.sha, cwd);
       if (instructions.docs.length === 0) {
         noInstructionDoc += 1;
       } else {
@@ -285,7 +286,8 @@ export function squashSubjects(rules: Rule[], range: string, message: string, cw
  * the change and `readInstructions(null, cwd)` is `git show :<file>` for
  * the instructions, both from the index, so a staged edit to `AGENTS.md`
  * is judged as part of the change it arrives with rather than leaving the
- * old document to judge the new code.
+ * old document to judge the new code. An explicit policyRef instead fixes the
+ * standard to an approved commit, independently of the index.
  *
  * Nothing staged is no subjects, not one subject over an empty change: a
  * commit that exists always gets judged, even an empty one (see
@@ -295,12 +297,12 @@ export function squashSubjects(rules: Rule[], range: string, message: string, cw
  * consistent with it rather than a second, differently-shaped answer to
  * the same question.
  */
-export function stagedSubjects(rules: Rule[], cwd: string = process.cwd()): CommitSubjects {
+export function stagedSubjects(rules: Rule[], cwd: string = process.cwd(), policyRef: string | null = null): CommitSubjects {
   const changeRules = rules.filter((r) => r.subject === "change");
   if (changeRules.length === 0) return { subjects: [], commits: 0, skippedMerges: 0, noInstructionDoc: 0 };
   const diff = stagedDiff(cwd);
   if (diff.stat.trim() === "") return { subjects: [], commits: 0, skippedMerges: 0, noInstructionDoc: 0 };
-  const instructions = readInstructions(null, cwd);
+  const instructions = readInstructions(policyRef, cwd);
   if (instructions.docs.length === 0) return { subjects: [], commits: 1, skippedMerges: 0, noInstructionDoc: 1 };
   return {
     subjects: changeRules.map((rule) => changeSubject(rule, "staged", diff, instructions)),

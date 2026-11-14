@@ -13,6 +13,7 @@ import type { Rule } from "../types.ts";
 import type { Log, Options } from "./args.ts";
 import { printDryRun } from "./dry-run.ts";
 import type { Targets } from "./targets.ts";
+import { formatSarif } from "../sarif.ts";
 
 export async function cmdCheck(
   rules: Rule[],
@@ -25,6 +26,7 @@ export async function cmdCheck(
 ): Promise<number> {
   const result = await run({
     rules,
+    policyRef: opts.policyRef,
     paths,
     arm: opts.arm,
     group: opts.group,
@@ -47,7 +49,8 @@ export async function cmdCheck(
     commits: commitsRange
       ? { range: commitsRange, ...(opts.squash ? { squash: opts.message! } : {}), ...(opts.staged ? { staged: true } : {}) }
       : null,
-  });
+  }).catch((error: unknown) => { log(`check: ${(error as Error).message}`); return null; });
+  if (!result) return 2;
 
 
   const runCache = result.cache as Cache | undefined;
@@ -56,7 +59,7 @@ export async function cmdCheck(
 
   if (result.schedule && (opts.explainSchedule || opts.dryRun)) {
     // Prose for a reader; under --json stdout is the document alone.
-    const say = opts.format === "json" ? log : out;
+    const say = opts.format === "json" || opts.format === "sarif" ? log : out;
     say(explain(result.schedule as Schedule));
     say("");
   }
@@ -72,7 +75,8 @@ export async function cmdCheck(
     log(`recorded ${result.all.length} answer(s) to ${opts.record}`);
   }
 
-  if (opts.format === "json") out(formatJson(result));
+  if (opts.format === "sarif") { try { out(formatSarif(result)); } catch (error) { log(`sarif: ${(error as Error).message}`); return 2; } }
+  else if (opts.format === "json") out(formatJson(result));
   else if (opts.format === "github") out(formatGithub(result));
   else out(formatPretty(result, { color: opts.color, showMissing: opts.showMissing, summary: opts.summary }));
 

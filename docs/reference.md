@@ -7,6 +7,44 @@ real code. [deepdive.md](deepdive.md) has the evidence behind the numbers;
 
 ## Commands and flags
 
+`scan` provides a separate versioned screening contract for audit pipelines.
+See [the audit API](audit-api.md) for its CLI flags, source snapshot requirements,
+pinned policy, cache isolation and outbound request controls.
+
+`baseline write|compare|prune` maintains an explicit accepted-findings ledger;
+`report --artifact <path> --sarif` exports existing scan/relation artifacts;
+`check|review --explain-scope [--json]` explains file eligibility without matching;
+`doctor [--json]` checks local prerequisites without contacting a provider.
+See [adoption and export](adoption.md) for their contracts, limits and flags.
+
+`introspect [directory]` asks Jev directly to select initial rules from a bounded
+file inventory, package names and catalog descriptions. It needs no separate LLM
+or coding agent. `--dry-run` shows the metadata without requests; `--write`
+creates a new config with only enabled recommendations. `--output <new.yaml>`
+selects a proposal path, `--record <path>` saves the evidence and answers, and
+`introspect --replay <path>` validates them offline from the same project directory.
+It supports text and JSON; a partial/failed recommendation or stale snapshot
+exits 3 and cannot write a config. Existing configs are never replaced, including
+with `--force`. `--config` is not read; explicit `-R` and `--exclude` choices apply.
+See the [initialization guide](../skills/jev-lint/references/initializing-project.md)
+for the starter policy, limits and conditional rule families.
+
+`init --introspect [directory]` initializes through the same path as
+`introspect --write`. `init --introspect --dry-run` only plans, without requests
+or writes. In this init mode, `--config <new.yaml>` is an output destination,
+equivalent to `--output`; combining both is an error. Hook installation flags
+are separate init modes and cannot be combined with `--introspect`.
+
+`docs [--document-manifest <path>]` compares declared documentation claims,
+translations and terminology. Its default manifest is `.jev-lint/documents.json`.
+`docs --dry-run` emits the plan without requests; `docs --record <path>` saves
+live answers; `docs --replay <path>` validates the current snapshot offline.
+It supports text and JSON, uses an independent manifest rather than the ordinary
+rule configuration, and rejects stale evidence. A contradiction exits 1,
+incomplete/stale evidence exits 3, and invalid arguments exit 2. The report
+always remains `UNREVIEWED`. See [document self-check](self-check.md) for the
+manifest schema, selector rules, bounds and evaluation.
+
 ```bash
 jev-lint check src                  # judge whole files
 jev-lint review --base main         # judge only what the diff touched
@@ -18,6 +56,7 @@ jev-lint rules                      # what loaded, and every validation error
 jev-lint replay run.json            # re-score a recorded run under new cutoffs, free
 jev-lint replay run.json --labels corpus/labels.json   # ...and re-fit them, free
 jev-lint init                       # write a .jev-lint.yaml to start from
+jev-lint init --introspect          # ask Jev to choose starter rules and create a new config
 
 jev-lint check src --dry-run        # plan and price it without asking anything
 ```
@@ -41,6 +80,9 @@ answers.
 
 | flag | |
 | --- | --- |
+| `--introspect` | `init`: use Jev's starter recommendations; `--dry-run` displays metadata without requests or writes |
+| `--write` | `introspect`: create a new configuration from complete recommendations; `--output` chooses a separate new path |
+| `--document-manifest <path>` | `docs`: explicit source registry and comparison selectors; see [document self-check](self-check.md) |
 | `-R, --rules <path>` | rule file or directory, repeatable, loaded in place of the packaged packs and `.jev-lint/rules/` for this run |
 | `-r, --retry <n>` | ask everything n times and decide on the mean (default 1) — see [Asking more than once](#asking-more-than-once) |
 | `-c, --cache <path>` | verdict cache (default `.jev-lint/baseline.json`, relative to the config's directory; `none` to disable) |
@@ -67,9 +109,9 @@ answers.
 | `--dry-run` | plan and price without asking anything |
 | `--show-missing` | list subjects that got no verdict |
 | `--show-subjects` | with `--dry-run`: list every subject with its line, node kind and captures |
-| `--format <fmt>` / `--json` | `pretty`, `json`, `github`; `--json` is `--format json`, and holds for every command |
+| `--format <fmt>` / `--json` / `--sarif` | `pretty`, `json`, `github`, `sarif`; `--json` is `--format json`. SARIF supports file-based check/review, scan, report and compatible replay results |
 | `--concurrency <n>` / `--batch-size <n>` | default 32 and 256; the client also paces its input tokens against the server's rate limit, see `JEV_LINT_TOKENS_PER_SECOND` |
-| `--model <id>` | Jev model |
+| `--model <id>` | Jev model (default: `jev-1.14.0`) |
 | `--quiet` / `--no-color` | |
 
 | `--config <path>` | config file (default: the nearest `.jev-lint.yaml`, searching upwards — any spelling of it is recognised: with or without the dot, with or without the hyphen, `.yaml` or `.yml`; two spellings in one directory are an error, exit 2, since jev-lint will not guess which is in force); `--no-config` ignores it |
@@ -570,7 +612,7 @@ baselines — is [RULES.md](../RULES.md), written by `tools/rules-md.ts`
 (`npm run rules:md`; `npm run rules:md:check` fails when it is stale, and
 so does `npm test`). What follows is the prose.
 
-99 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
+103 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
 grouped here by what they ask. Which languages each exists in:
 
 | rule | typescript | rust | python | go | other |
@@ -807,10 +849,13 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 On a one-language repository every other language's rules are idle, and
 the report says so in one line rather than listing them as silent.
 
-Of the 99, **79 reach precision 1.00 and recall 1.00 at their shipped cutoffs
-on their own fixtures** (`rules/*/*/baseline.json`, three passes each,
-decisions on the mean; `jev-lint eval --replay` re-derives every number below
-with no request). Read that with the positive counts beside them: per rule,
+The September 2026 boundary-round snapshot below had **79 of 99 rules at
+precision 1.00 and recall 1.00 on their own fixtures**, using three passes
+and decisions on the mean. These historical counts describe that experiment;
+[project facts](project-facts.md#rule-catalog) and [RULES.md](../RULES.md)
+are generated from the current catalog and accepted baselines.
+`jev-lint eval --replay` re-scores those current baselines without a request.
+Read the historical snapshot with its positive counts beside it: per rule,
 one to thirty-seven labelled defects — 707 in all, against 113 before the
 improvement round of 2026-09-20 and 644 before the boundary round of
 2026-09-22. The first added hard cases drawn from real code; the second aimed
@@ -1153,9 +1198,10 @@ required around consequential decisions.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **The cutoffs are fitted to small evals.** 497 labelled fixtures, 707
-  labelled defects and 1,135 labelled cleans across 99 rules, one to
-  thirty-seven defects per rule. Expect to refit; see
+- **The cutoffs are fitted to small evals.** The September 2026 snapshot
+  used 497 labelled fixtures, 707 defects and 1,135 cleans across 99 rules.
+  Current fixture totals are generated in [project facts](project-facts.md#rule-catalog).
+  Those totals remain fixture measurements, not production accuracy. Expect to refit; see
   [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.

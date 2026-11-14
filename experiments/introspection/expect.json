@@ -1,0 +1,101 @@
+{
+  "schema": "jev-lint-introspection-eval-expect-1",
+  "cases": [
+    {
+      "id": "typescript-starter",
+      "choice": "enable"
+    },
+    {
+      "id": "javascript-starter",
+      "choice": "enable"
+    },
+    {
+      "id": "rust-starter",
+      "choice": "enable"
+    },
+    {
+      "id": "python-starter",
+      "choice": "enable"
+    },
+    {
+      "id": "behavior-tests",
+      "choice": "enable"
+    },
+    {
+      "id": "test-helpers",
+      "choice": "defer"
+    },
+    {
+      "id": "no-test-evidence",
+      "choice": "defer"
+    },
+    {
+      "id": "comments-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "safe-promise-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "pure-promise-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "paired-relation-unverified",
+      "choice": "defer"
+    },
+    {
+      "id": "variable-convention-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "module-convention-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "technical-reference",
+      "choice": "skip"
+    },
+    {
+      "id": "historical-measurements",
+      "choice": "skip"
+    },
+    {
+      "id": "instruction-conflict",
+      "choice": "enable"
+    },
+    {
+      "id": "instruction-clarity",
+      "choice": "enable"
+    },
+    {
+      "id": "script-commands-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "log-claims-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "commit-workflow-unselected",
+      "choice": "defer"
+    },
+    {
+      "id": "instruction-workflow-unselected",
+      "choice": "defer"
+    },
+    {
+      "id": "overlapping-test-check",
+      "choice": "defer"
+    },
+    {
+      "id": "mock-assertions-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "snapshot-claims-unseen",
+      "choice": "defer"
+    }
+  ]
+}

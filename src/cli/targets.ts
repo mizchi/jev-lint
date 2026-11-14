@@ -33,7 +33,7 @@ export async function resolveTargets(
     // on the command line or in the config narrow WHICH changed files, they
     // do not widen the scan back to the tree.
     const files = changedFilesUnder(changedFiles(diffRanges), paths);
-    if (files.length === 0 && opts.format !== "json") {
+    if (files.length === 0 && opts.format !== "json" && opts.format !== "sarif") {
       if (!opts.quiet) out("no changed files");
       return { exit: 0 };
     }

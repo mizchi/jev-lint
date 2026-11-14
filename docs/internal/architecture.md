@@ -9,8 +9,9 @@ decisions here were bought with a measurement, and the file comments say which.
 
 ## The pipeline
 
-One pass, five stages, each handing a plain value to the next. Nothing is
-stateful except the cache.
+The rule-lint path passes plain values between the stages below. The model
+client tracks request budgets and spend; the verdict cache persists answers.
+The audit, relation and documentation paths have separate versioned contracts.
 
 ```
 paths + rules
@@ -43,7 +44,7 @@ paths + rules
                  formatGaps()
 ```
 
-`cli.ts` wires it and owns every flag. `calibrate.ts` is a separate offline
+`cli.ts` delegates to `cli/main.ts`; `cli/args.ts` parses the flags. `calibrate.ts` is a separate offline
 consumer of the same `Finding[]`: gap report, stability report, cutoff fit.
 
 **The stage boundary that matters most is `gate.ts`.** Verdicts cost money;
@@ -65,10 +66,18 @@ right.
 | `run.ts` | `collectSubjects`, `run`, `mergePasses`, `buildRecord` |
 | `state.ts` | the five state arms, subject resolution, the module outline |
 | `rules.ts` | rule schema, validation, defaults, `defaultRulePaths()`, `ruleTextHash()` |
-| `types.ts` | every shared type. Unions derive from `as const` arrays so the validator and the type cannot diverge. `Rule` is `RuleBase & RuleJudgment & RuleSource`: the fields a kind or a subject has, and the other's as null, narrow on `rule.kind` and `rule.subject`; `isMatcherRule` is the guard for the rules ast-grep runs. |
+| `types.ts` | shared rule-lint types; the audit, relation and document contract modules define their own wire types. Unions derive from `as const` arrays so the validator and the type cannot diverge. `Rule` is `RuleBase & RuleJudgment & RuleSource`: the fields a kind or a subject has, and the other's as null, narrow on `rule.kind` and `rule.subject`; `isMatcherRule` is the guard for the rules ast-grep runs. |
 | `batch.ts` | packing subjects into requests under two token budgets |
 | `calibrate.ts` | gap report, stability report, cutoff fit, label resolution |
-| `report.ts` | the three output formats and the two report tables |
+| `report.ts`, `sarif.ts` | text, JSON, GitHub annotations, SARIF, and report tables |
+| `audit-run.ts`, `scan-contract.ts` | versioned scan input, screening and coverage contracts |
+| `relations.ts`, `relation-contract.ts`, `relation-plan.ts` | pinned multi-source evidence, judgments and explicit comparison plans |
+| `relation-workflow.ts`, `relation-discovery.ts`, `relation-context.ts` | candidate discovery, bounded context retrieval and workflow replay |
+| `acceptance.ts`, `review-artifact.ts` | accepted finding identities, provenance and strict artifact validation |
+| `scope.ts`, `doctor.ts` | file eligibility and local diagnostics without model requests |
+| `document-contract.ts`, `document-input.ts`, `documents.ts` | manifest validation, working-tree excerpts, semantic document checks and strict replay |
+| `introspection-contract.ts`, `introspection.ts`, `cli/cmd-introspect.ts` | bounded metadata inventory, direct Jev starter selection, strict replay and exclusive config creation |
+| `cli/cmd-docs.ts` | documentation plans, live records and offline replay |
 | `schedule.ts` | the per-rule axis decision for `--group auto` |
 | `config.ts` | `.jev-lint.yaml`: discovery, validation, and the flag-beats-file merge |
 | `evals.ts` | per-rule evals: suite discovery, scoring at the shipped cutoff, baseline comparison, the record |
@@ -380,7 +389,7 @@ audit of the source found, listed so nobody rediscovers them the expensive way.
 - **`replay` reconstructs rules with empty matchers and nulled user-facing
   fields**, which is correct for re-gating recorded answers but means any new
   gate behaviour reading `rule.message` or `rule.unsureBelow` behaves
-  differently under replay. `npm run ci` ends in a replay, so a divergence
+  differently under replay. `npm run ci` includes rule replay, so a divergence
   surfaces as a confusing CI difference rather than a test failure.
 - **The estimator's constants are tested for direction, never for value.** A
   wrong ratio passes CI, and the same `estimateTokens` is what `--dry-run`
@@ -398,18 +407,18 @@ installed:
 - `erasableSyntaxOnly` — anything TypeScript cannot simply erase is a compile
   error here, so the stripped-types run and the compiled run cannot diverge.
 
-`package.json` ships `dist`, `rules`, `README.md` and `LICENSE`. **`rules` has
-to stay in that list**, or a fresh install has no packs to fall back to. It
-ships the evals with them — `rules/<id>/evals/` is under `rules/` — which is
-a few hundred kilobytes of cases and baselines a user can replay.
+`package.json` ships compiled `dist`, rule YAML files and public documentation.
+It does not publish rule fixtures or accepted rule baselines; replaying those
+requires a repository checkout. [Project facts](../project-facts.md#package-contents)
+is generated from the actual export map and publish allowlist.
 
-`npm run ci` is `typecheck && test && build && eval --replay`. The last step
-re-scores every rule's accepted baseline at the cutoffs as they are now,
-with no request, and fails on a case that was right when the baseline was
-accepted and is wrong now, or on a rule whose question changed since. It
-replaced a `replay` of one whole-corpus record, which had to accept exit 1
-because the corpus held deliberate violations; the eval gate compares
-decisions to decisions, so its exit code means what it says.
+`npm run ci` checks the skill link, types, tests, build, rule baseline replay,
+adoption evaluation, generated documentation facts, document and introspection evaluation replay,
+and finally the committed documentation snapshot replay. None needs an API key.
+The complete command is generated in [project facts](../project-facts.md#ci).
+Rule replay fails when an accepted decision regresses or the rule question
+changes. Document replay fails on contradictions, omissions or stale source,
+manifest and question digests; a live refresh is required after input changes.
 
 ## Testing
 
@@ -432,7 +441,7 @@ Two conventions to keep:
   names for promising more than the bodies checked.
 
 For anything involving verdicts, record and replay rather than mocking the API:
-a rule's `evals/baseline.json` is its regression record, `jev-lint eval
+a rule's `rules/<language>/<id>/baseline.json` is its regression record, `jev-lint eval
 --replay` re-scores it, and `run()` takes a `client` so a test can hand in a
 fake that answers without a network. The records in `docs/data/` are the
 measurements the docs quote, each replayable.

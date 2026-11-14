@@ -21,3 +21,10 @@ experiments/rule-candidates/*/*/last.json
 experiments/dogfood/viewer-labels.local.json
 # Provider comparisons are separate from accepted rule baselines.
 experiments/clef/
+experiments/adversarial/last.json
+experiments/relations/last.json
+experiments/relations/negative-controls/last.json
+experiments/relations/**/last.json
+experiments/adoption/last.json
+experiments/documents/last.json
+experiments/introspection/**/last.json

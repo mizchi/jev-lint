@@ -1,0 +1,1416 @@
+{
+  "schema": "jev-lint-adoption-eval-1",
+  "corpusDigest": "83c975b4e771d5c34ac15f271ed80e2cc8774f524a1ed4fb77ba897389b03feb",
+  "modelRequests": 0,
+  "dimensions": [
+    {
+      "id": "classification",
+      "passed": 20,
+      "expected": 20
+    },
+    {
+      "id": "mutation-safety",
+      "passed": 16,
+      "expected": 16
+    },
+    {
+      "id": "cli",
+      "passed": 16,
+      "expected": 16
+    },
+    {
+      "id": "scope",
+      "passed": 6,
+      "expected": 6
+    },
+    {
+      "id": "directives",
+      "passed": 4,
+      "expected": 4
+    },
+    {
+      "id": "sarif",
+      "passed": 4,
+      "expected": 4
+    },
+    {
+      "id": "recorded-relations",
+      "passed": 207,
+      "expected": 207
+    }
+  ],
+  "total": 100,
+  "gate": "pass",
+  "samples": [
+    {
+      "id": "same-input",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "same-input",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "same-input",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "line-movement",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "line-movement",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "line-movement",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "additional-copy",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "additional-copy",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "additional-copy",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "clean-copy-before-finding",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "clean-copy-before-finding",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "clean-copy-before-finding",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "clean-copy-after-finding",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "clean-copy-after-finding",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "clean-copy-after-finding",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "changed-context",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "changed-context",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "changed-context",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "changed-model",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "changed-model",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "changed-model",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "changed-policy",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "changed-policy",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "changed-policy",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "changed-cutoff",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "changed-cutoff",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "changed-cutoff",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "explicit-clean",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "explicit-clean",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "explicit-clean",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "clean-different-context",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "clean-different-context",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "clean-different-context",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "outside-observed-set",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "outside-observed-set",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "outside-observed-set",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "no-model-answer",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "no-model-answer",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "no-model-answer",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "omitted-output",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "omitted-output",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "omitted-output",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "partial-scan-with-finding",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "partial-scan-with-finding",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "partial-scan-with-finding",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "missing-revision",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "missing-revision",
+      "rubric": "mutation-safety",
+      "passed": true
+    },
+    {
+      "id": "missing-revision",
+      "rubric": "cli",
+      "passed": true
+    },
+    {
+      "id": "wrong-scope",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "forged-quote",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "contradictory-disposition",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "forged-completion",
+      "rubric": "classification",
+      "passed": true
+    },
+    {
+      "id": "eligibility",
+      "rubric": "scope",
+      "passed": true
+    },
+    {
+      "id": "changed-only",
+      "rubric": "scope",
+      "passed": true
+    },
+    {
+      "id": "gitignored",
+      "rubric": "scope",
+      "passed": true
+    },
+    {
+      "id": "missing-root",
+      "rubric": "scope",
+      "passed": true
+    },
+    {
+      "id": "unmapped-only",
+      "rubric": "scope",
+      "passed": true
+    },
+    {
+      "id": "entry-budget",
+      "rubric": "scope",
+      "passed": true
+    },
+    {
+      "id": "directive-typo",
+      "rubric": "directives",
+      "passed": true
+    },
+    {
+      "id": "directive-reason",
+      "rubric": "directives",
+      "passed": true
+    },
+    {
+      "id": "quoted-template",
+      "rubric": "directives",
+      "passed": true
+    },
+    {
+      "id": "inline-quoted-backtick",
+      "rubric": "directives",
+      "passed": true
+    },
+    {
+      "id": "empty-sarif",
+      "rubric": "sarif",
+      "passed": true
+    },
+    {
+      "id": "partial-sarif",
+      "rubric": "sarif",
+      "passed": true
+    },
+    {
+      "id": "missing-sarif",
+      "rubric": "sarif",
+      "passed": true
+    },
+    {
+      "id": "encoded-uri",
+      "rubric": "sarif",
+      "passed": true
+    },
+    {
+      "id": "billing-authority-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "billing-authority-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-isolation-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-isolation-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "paid-checkout-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "paid-checkout-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "event-idempotency-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "event-idempotency-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-cancellation-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-cancellation-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "documentation-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unapproved-policy:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unrelated-behavior:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "missing-definition:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "conflicting-approvals:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "claimed-approval-injection:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unused-retention-configuration:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "claim-summary-reverses-retention:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "claim-summary-drops-payment-condition:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-inclusive-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-inclusive-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-start-early-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-start-early-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-hours-days-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-hours-days-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-null-identity-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-null-identity-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-auth-source-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-auth-source-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-zero-balance-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-zero-balance-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-exact-balance-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-exact-balance-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-negative-request-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-negative-request-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-release-idempotency-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-release-idempotency-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-amount-floor-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-amount-floor-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-wrong-currency-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-wrong-currency-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "idempotency-delivery-id-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "idempotency-delivery-id-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "subscription-trial-access-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "subscription-trial-access-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "role-deny-overrides-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "role-deny-overrides-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "refund-terminal-state-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "refund-terminal-state-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "session-clock-units-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "session-clock-units-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "pagination-before-filter-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "pagination-before-filter-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "deleted-invoice-visible-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "deleted-invoice-visible-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-role-exclusion-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-role-exclusion-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-unpaid-credit-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-unpaid-credit-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-retention-units-drift:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-retention-units-control:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "summary-expiry-includes-boundary:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "summary-partial-payment-authorizes:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "summary-suspension-exception:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "missing-expiry-conversion:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unapproved-immediate-deletion:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "conflicting-paid-approval:1",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "billing-authority-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "billing-authority-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-isolation-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-isolation-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "paid-checkout-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "paid-checkout-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "event-idempotency-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "event-idempotency-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-cancellation-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-cancellation-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "documentation-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unapproved-policy:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unrelated-behavior:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "missing-definition:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "conflicting-approvals:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "claimed-approval-injection:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unused-retention-configuration:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "claim-summary-reverses-retention:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "claim-summary-drops-payment-condition:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-inclusive-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-inclusive-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-start-early-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-start-early-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-hours-days-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-hours-days-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-null-identity-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-null-identity-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-auth-source-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-auth-source-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-zero-balance-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-zero-balance-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-exact-balance-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-exact-balance-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-negative-request-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-negative-request-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-release-idempotency-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-release-idempotency-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-amount-floor-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-amount-floor-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-wrong-currency-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-wrong-currency-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "idempotency-delivery-id-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "idempotency-delivery-id-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "subscription-trial-access-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "subscription-trial-access-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "role-deny-overrides-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "role-deny-overrides-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "refund-terminal-state-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "refund-terminal-state-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "session-clock-units-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "session-clock-units-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "pagination-before-filter-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "pagination-before-filter-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "deleted-invoice-visible-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "deleted-invoice-visible-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-role-exclusion-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-role-exclusion-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-unpaid-credit-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-unpaid-credit-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-retention-units-drift:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-retention-units-control:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "summary-expiry-includes-boundary:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "summary-partial-payment-authorizes:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "summary-suspension-exception:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "missing-expiry-conversion:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unapproved-immediate-deletion:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "conflicting-paid-approval:2",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "billing-authority-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "billing-authority-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-isolation-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-isolation-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "paid-checkout-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "paid-checkout-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "event-idempotency-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "event-idempotency-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-cancellation-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-cancellation-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "documentation-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unapproved-policy:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unrelated-behavior:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "missing-definition:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "conflicting-approvals:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "claimed-approval-injection:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unused-retention-configuration:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "claim-summary-reverses-retention:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "claim-summary-drops-payment-condition:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-inclusive-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-end-inclusive-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-start-early-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "period-start-early-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-hours-days-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "retention-hours-days-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-null-identity-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-null-identity-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-auth-source-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "tenant-auth-source-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-zero-balance-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-zero-balance-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-exact-balance-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-exact-balance-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-negative-request-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-negative-request-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-release-idempotency-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "credit-release-idempotency-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-amount-floor-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-amount-floor-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-wrong-currency-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "payment-wrong-currency-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "idempotency-delivery-id-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "idempotency-delivery-id-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "subscription-trial-access-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "subscription-trial-access-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "role-deny-overrides-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "role-deny-overrides-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "refund-terminal-state-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "refund-terminal-state-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "session-clock-units-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "session-clock-units-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "pagination-before-filter-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "pagination-before-filter-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "deleted-invoice-visible-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "deleted-invoice-visible-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-role-exclusion-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-role-exclusion-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-unpaid-credit-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-unpaid-credit-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-retention-units-drift:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "guide-retention-units-control:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "summary-expiry-includes-boundary:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "summary-partial-payment-authorizes:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "summary-suspension-exception:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "missing-expiry-conversion:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "unapproved-immediate-deletion:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    },
+    {
+      "id": "conflicting-paid-approval:3",
+      "rubric": "recorded-relations",
+      "passed": true
+    }
+  ],
+  "comparison": {
+    "delta": 8.57142857142857,
+    "regressions": [],
+    "accepted": true
+  }
+}

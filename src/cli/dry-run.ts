@@ -88,6 +88,7 @@ export function printDryRun(result: RunResult, rules: Rule[], opts: Options, out
       `jev-lint-ignore comment(s) name a rule that does not exist: ${result.ignored.unknownRules.join(", ")}`,
     );
   }
+  for (const d of result.ignored?.invalidDirectives ?? []) log(`${d.path}:${d.line}: unknown suppression ${d.directive}${d.suggestion ? `; use ${d.suggestion}` : ""}`);
   if (result.unpaired && result.unpaired.subjects > 0) {
     out(
       `${result.unpaired.subjects} subject(s) on the paired arm would not be asked: no related test file for ` +

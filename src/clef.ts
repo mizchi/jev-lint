@@ -51,6 +51,9 @@ export class Clef extends Jev {
     return this.inputTokens / 1_000_000 * CLEF_USD_PER_MTOK[this.clefModel];
   }
 
+  protected override estimateUsd(tokens: number): number { return tokens / 1_000_000 * CLEF_USD_PER_MTOK[this.clefModel]; }
+  override get endpointIdentity(): string { return `https://api.cloudflare.com/client/v4/accounts/${encodeURIComponent(this.accountId)}/ai/run/@cf/cloudflare/${this.clefModel}`; }
+
   override async ask(state: unknown, questions: Record<string, Question>): Promise<SystemOneResponse> {
     if (Object.keys(questions).length === 0) return { answers: {}, usage: { input_tokens: 0, output_tokens: 0 } };
     if (!this.accountId || !this.apiKey) {

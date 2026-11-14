@@ -3,6 +3,18 @@ import { writeFileSync } from "node:fs";
 import { renamedRuleHint, parseIgnores, isIgnored, unknownIgnoredRules } from "../src/ignore.ts";
 import { test } from "./harness.ts";
 
+test("ignore: directive typos warn without suppressing, while quoted examples and reasons stay literal", () => {
+  const typo = parseIgnores("// jev-lint-ignore-nextline r\nconst value = 1;");
+  assert.equal(isIgnored(typo, 2, "r"), false);
+  assert.equal(typo.invalidDirectives?.[0].suggestion, "jev-lint-ignore-next-line");
+  const reason = parseIgnores("// jev-lint-ignore-next-line r -- accepted by the owner\nconst value = 1;");
+  assert.deepEqual(reason.lines.get(2), ["r"]);
+  const example = parseIgnores('const sample = `\n// jev-lint-ignore-nextline r\n// jev-lint-ignore-file\n`;\nconst value = 1;');
+  assert.equal(example.file, null); assert.equal(example.invalidDirectives?.length ?? 0, 0);
+  const backtick = parseIgnores('const marker = "`";\n// jev-lint-ignore-nextline r\nconst value = 1;');
+  assert.equal(backtick.invalidDirectives?.length, 1);
+});
+
 test("ignore: a suppression naming a pre-0.3 language-suffixed id is told the new name", () => {
   // `fn-name-promises-rust` became `rust/fn-name-promises`, and a comment
   // naming it now suppresses nothing. The unknown-rule line says so and

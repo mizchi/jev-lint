@@ -8,6 +8,27 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ## Unreleased
 
+### Changed
+
+- Pin the default model to `jev-1.14.0` instead of the moving `jev-latest`
+  alias. Explicit model, configuration and environment overrides still apply.
+
+### Audit integration
+
+- Add opt-in relation discovery, bounded definition/import context retrieval,
+  full workflow replay and a dependency-free relation validator export for
+  watchpoint. Record a 12-case repository workflow evaluation through the consumer.
+- Add `jev-lint/relations` for pinned specification sources, explicit relation
+  subjects, multi-source evidence, claim grounding, reverse diff planning and
+  per-claim coverage, without requiring generated patches or properties.
+- Add `scan` and the `jev-lint/audit` and `jev-lint/scan-contract` APIs for
+  versioned candidates, source/policy provenance, coverage and usage records.
+- Add `--policy-ref`, strict request-context caching with tenant/provider/model
+  isolation, and per-attempt async authorization, cancellation and budgets.
+- Add paired adversarial evaluation and a standalone contract export/check tool.
+- Reject scan artifacts with non-canonical source paths or dispositions that
+  contradict their recorded score and cutoff.
+
 ### Fixed
 
 - Reject unusable model verdicts, including non-finite or out-of-range values,
@@ -20,6 +41,12 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ### Added
 
+- Add an explicit accepted-findings ledger with multiset matching, context-bound
+  rechecks and conservative pruning; it does not reuse or suppress model answers.
+- Add file-eligibility explanations, local prerequisite checks, suppression typo
+  diagnostics/reasons and SARIF 2.1.0 export for file reviews and audit artifacts.
+- Record deterministic adoption-feature evaluation and upstream MIT attribution
+  without adding runtime dependencies or changing shipped rule questions.
 - Document model decision manipulation, trust boundaries, and independent
   safeguards in [SECURITY.md](SECURITY.md), following
   [#18](https://github.com/mizchi/jev-lint/issues/18). Structurally valid

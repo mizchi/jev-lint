@@ -1,0 +1,94 @@
+{
+  "schema": "jev-lint-workflow-cases-1",
+  "cases": [
+    {
+      "id": "billing-member",
+      "statement": "The canManageBilling function must return true only for the owner role, and false for every other role.",
+      "main": "export function canManageBilling(role) { return role === \"owner\" || role === \"member\"; }",
+      "helpers": {}
+    },
+    {
+      "id": "billing-owner",
+      "statement": "The canManageBilling function must return true only for the owner role, and false for every other role.",
+      "main": "export function canManageBilling(role) { return role === \"owner\"; }",
+      "helpers": {}
+    },
+    {
+      "id": "expiry-correct",
+      "statement": "The sessionIsValid function accepts current time in milliseconds and expiry in seconds. It must return true only before expiry, converting seconds to milliseconds, and false at or after expiry.",
+      "main": "import { convert as units } from \"./conversion.js\";\nexport function sessionIsValid(nowMs, expirySeconds) { return nowMs < units(expirySeconds); }",
+      "helpers": {
+        "src/conversion.ts": "export function convert(seconds) { return seconds * 1000; }"
+      }
+    },
+    {
+      "id": "expiry-units",
+      "statement": "The sessionIsValid function accepts current time in milliseconds and expiry in seconds. It must return true only before expiry, converting seconds to milliseconds, and false at or after expiry.",
+      "main": "import { convert as units } from \"./conversion.js\";\nexport function sessionIsValid(nowMs, expirySeconds) { return nowMs < units(expirySeconds); }",
+      "helpers": {
+        "src/conversion.ts": "export function convert(seconds) { return seconds; }"
+      }
+    },
+    {
+      "id": "expiry-unavailable",
+      "statement": "The sessionIsValid function accepts current time in milliseconds and expiry in seconds. It must return true only before expiry, converting seconds to milliseconds, and false at or after expiry.",
+      "main": "import { convert as units } from \"./conversion.js\";\nexport function sessionIsValid(nowMs, expirySeconds) { return nowMs < units(expirySeconds); }",
+      "helpers": {}
+    },
+    {
+      "id": "expiry-ambiguous",
+      "statement": "The sessionIsValid function accepts current time in milliseconds and expiry in seconds. It must return true only before expiry, converting seconds to milliseconds, and false at or after expiry.",
+      "main": "import { convert as units } from \"./conversion.js\";\nexport function sessionIsValid(nowMs, expirySeconds) { return nowMs < units(expirySeconds); }",
+      "helpers": {
+        "src/conversion.ts": "export function convert(seconds) { return seconds * 1000; }",
+        "src/conversion.js": "export function convert(seconds) { return seconds; }"
+      }
+    },
+    {
+      "id": "expiry-no-budget",
+      "statement": "The sessionIsValid function accepts current time in milliseconds and expiry in seconds. It must return true only before expiry, converting seconds to milliseconds, and false at or after expiry.",
+      "main": "import { convert as units } from \"./conversion.js\";\nexport function sessionIsValid(nowMs, expirySeconds) { return nowMs < units(expirySeconds); }",
+      "helpers": {
+        "src/conversion.ts": "export function convert(seconds) { return seconds * 1000; }"
+      },
+      "context": {
+        "maxAddedChars": 0
+      }
+    },
+    {
+      "id": "billing-chain",
+      "statement": "The canManageBilling function must return true only for the owner role, and false for every other role.",
+      "main": "import { permitted } from \"./access.js\";\nexport function canManageBilling(role) { return permitted(role); }",
+      "helpers": {
+        "src/access.ts": "import { allowed } from \"./permission.js\";\nexport function permitted(role) { return allowed(role); }",
+        "src/permission.ts": "export function allowed(role) { return role === \"owner\" || role === \"member\"; }"
+      }
+    },
+    {
+      "id": "retention-units",
+      "statement": "The retainRaw function takes age in days and must return true through age 30 days inclusive and false for greater ages.",
+      "main": "const HOURS_PER_DAY = 24;\nexport function retainRaw(ageDays) { return ageDays <= 30 * HOURS_PER_DAY; }",
+      "helpers": {}
+    },
+    {
+      "id": "billing-refactored",
+      "statement": "The canManageBilling function must return true only for the owner role, and false for every other role.",
+      "main": "export function canManageBilling(role) { return [\"owner\"].includes(role); }",
+      "helpers": {}
+    },
+    {
+      "id": "registry-missing",
+      "statement": "The canManageBilling function must return true only for the owner role, and false for every other role.",
+      "main": "export function canManageBilling(role) { return role === \"owner\"; }",
+      "helpers": {},
+      "missingClaim": true
+    },
+    {
+      "id": "registry-scope",
+      "statement": "The canManageBilling function must return true only for the owner role, and false for every other role.",
+      "main": "export function canManageBilling(role) { return role === \"owner\"; }",
+      "helpers": {},
+      "outsideScope": true
+    }
+  ]
+}

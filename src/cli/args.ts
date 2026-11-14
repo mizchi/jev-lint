@@ -8,7 +8,7 @@ import type { AskClient } from "../jev.ts";
 import type { RuleSetting } from "../config.ts";
 import type { CustomLanguages } from "../types.ts";
 import { DEFAULT_CACHE_PATH } from "../cache.ts";
-import { API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_CONCURRENCY } from "../jev.ts";
+import { API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_CONCURRENCY, DEFAULT_MODEL } from "../jev.ts";
 import { DEFAULT_RULE_BATCH_CAP } from "../schedule.ts";
 import { ARMS } from "../state.ts";
 import { GROUP_MODES, SEVERITIES, STATE_ARMS } from "../types.ts";
@@ -16,6 +16,18 @@ import type { GroupMode, Severity, StateArm } from "../types.ts";
 
 /** Everything the command line can set. */
 export interface Options {
+  initIntrospect: boolean;
+  introspectWrite: boolean;
+  documentManifest: string | null;
+  artifact: string | null; acceptedBaseline: string | null; output: string | null; scopeId: string | null;
+  relationInput: string | null; relationOptions: string | null; explainScope: boolean;
+  policyRef: string | null;
+  repository: string | null;
+  runId: string | null;
+  namespace: string | null;
+  sourceSha: string | null;
+  maxCandidates: number | null;
+  modelRevision: string | null;
   /** `-R` directories; empty means the shipped packs and `.jev-lint/rules/`. */
   rules: string[];
   /** True when `rules` was not given and the defaults are in use. */
@@ -53,7 +65,7 @@ export interface Options {
   compare: boolean;
   base: string | null;
   staged: boolean;
-  format: "pretty" | "json" | "github";
+  format: "pretty" | "json" | "github" | "sarif";
   concurrency: number;
   batchSize: number;
   repeat: number;
@@ -89,6 +101,19 @@ export interface Deps {
 export const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
+  jev-lint introspect [directory] [--write] [--record <path>]
+                                  use Jev to recommend initial rules from project metadata
+  jev-lint introspect --replay <record.json>  validate recommendations in the current directory
+  jev-lint init --introspect [directory] [--dry-run]
+                                  create a new config using Jev's starter recommendations
+  jev-lint docs [--document-manifest <path>] [--record <path>]
+                                  compare documentation claims and terminology
+  jev-lint docs --replay <record.json> validate answers against the current document snapshot
+  jev-lint baseline write|compare|prune --artifact <scan.json> --baseline <accepted.json>
+                                  --scope-id <id> --model-revision <deployment>
+  jev-lint report --artifact <scan.json> --sarif   export an existing artifact, no requests
+  jev-lint doctor                 check runtime, parsers and credential presence, no requests
+  jev-lint scan [paths...]         emit versioned screening candidates and coverage
   jev-lint check [paths...]        judge whole files
   jev-lint run <rule> [paths...]   judge with one shipped rule: an id (every
                                    language that has it) or rust/<id> (one);
@@ -114,6 +139,17 @@ usage:
   jev-lint init --pre-push        write a pre-push hook that judges the commits about to leave
 
 options:
+      --document-manifest <path> docs: source registry and explicit comparison selectors
+      --write             introspect: create a new config from complete recommendations
+      --introspect        init: use Jev's starter recommendations; --dry-run only plans
+      --explain-scope     explain file eligibility and exclusions without matching or model requests
+      --artifact <path>   baseline/report: a scan or relation wire artifact
+      --baseline <path>   accepted-findings ledger, separate from verdict caches and eval baselines
+      --scope-id <id>     operator-defined acceptance scope identity
+      --relation-input <path> relations: independently supplied expected final input
+      --relation-options <path> relations: trusted planning options matching the producer
+      --output <path>     report: exported document; introspect/init --introspect: new config path
+      --sarif             --format sarif: SARIF 2.1.0 output
       --file <path>        run: a rule file to use instead of the shipped rules
       --squash             commits: the range as one diff, judged against --message
       --message <text>     commits --squash: the claim about the range
@@ -151,7 +187,7 @@ options:
                            hook would run them; hooks.precommit selects their rules
       --fail-on <severity> exit 1 only for findings at or above hint | info |
                            warning | error (default: any finding)
-      --format <fmt>       pretty | json | github
+      --format <fmt>       pretty | json | github | sarif
       --json               --format json: one JSON document on stdout, for every
                            command; what a reader would be told goes to stderr
       --concurrency <n>    most requests in flight at once (default ${DEFAULT_CONCURRENCY}; a 429 narrows it)
@@ -159,7 +195,14 @@ options:
       --repeat <n>         calibrate: how many times to re-ask (default 3)
       --labels <path>      calibrate or replay: labeled corpus JSON, to fit cutoffs
       --record <path>      write a replayable run record
-      --model <id>         Jev model
+      --policy-ref <ref>   read change-review instructions from this approved commit
+      --repository <id>    scan: repository in owner/name form
+      --run-id <id>        scan: dispatcher-assigned run identity
+      --namespace <id>     scan: tenant cache namespace (required)
+      --source-sha <sha>   scan: expected HEAD (defaults to the current commit)
+      --model-revision <id> scan: immutable model deployment identity for cache reuse
+      --max-candidates <n> scan: limit output; omissions make the scan partial
+      --model <id>         Jev model (default: ${DEFAULT_MODEL})
       --force              ignore cached verdicts
       --accept             eval: run, then make that run the baseline
       --accept-last        eval: make the previous run (last.json) the baseline, no requests
@@ -223,6 +266,12 @@ environment:
 
 export function parseArgs(argv: string[], { color }: { color: boolean }): Options {
   const opts: Options = {
+    initIntrospect: false,
+    introspectWrite: false,
+    documentManifest: null,
+    artifact: null, acceptedBaseline: null, output: null, scopeId: null, relationInput: null, relationOptions: null, explainScope: false,
+    policyRef: null,
+    repository: null, runId: null, namespace: null, sourceSha: null, maxCandidates: null, modelRevision: null,
     rules: [],
     rulesAreShipped: false,
     ruleSettings: null,
@@ -402,6 +451,17 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
       case "--json":
         opts.format = "json";
         break;
+      case "--artifact": opts.artifact = need(i++, a); break;
+      case "--document-manifest": opts.documentManifest = need(i++, a); break;
+      case "--write": opts.introspectWrite = true; break;
+      case "--introspect": opts.initIntrospect = true; break;
+      case "--baseline": opts.acceptedBaseline = need(i++, a); break;
+      case "--output": opts.output = need(i++, a); break;
+      case "--scope-id": opts.scopeId = need(i++, a); break;
+      case "--relation-input": opts.relationInput = need(i++, a); break;
+      case "--relation-options": opts.relationOptions = need(i++, a); break;
+      case "--explain-scope": opts.explainScope = true; break;
+      case "--sarif": opts.format = "sarif"; break;
       case "--format":
         opts.format = need(i, a) as Options["format"];
         i += 1;
@@ -426,6 +486,15 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
         opts.record = need(i, a);
         i += 1;
         break;
+      case "--policy-ref":
+        opts.policyRef = need(i++, a);
+        break;
+      case "--repository": opts.repository = need(i++, a); break;
+      case "--run-id": opts.runId = need(i++, a); break;
+      case "--namespace": opts.namespace = need(i++, a); break;
+      case "--source-sha": opts.sourceSha = need(i++, a); break;
+      case "--model-revision": opts.modelRevision = need(i++, a); break;
+      case "--max-candidates": opts.maxCandidates = Number(need(i++, a)); break;
       case "--model":
         opts.model = need(i, a);
         i += 1;
@@ -470,8 +539,8 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
   if (opts.arm && !STATE_ARMS.includes(opts.arm)) {
     throw new Error(`--arm must be one of ${ARMS.join(", ")}`);
   }
-  if (!["pretty", "json", "github"].includes(opts.format)) {
-    throw new Error(`--format must be pretty, json or github`);
+  if (!["pretty", "json", "github", "sarif"].includes(opts.format)) {
+    throw new Error(`--format must be pretty, json, github or sarif`);
   }
   if (!GROUP_MODES.includes(opts.group)) {
     throw new Error(`--group must be ${GROUP_MODES.join(", ")}`);

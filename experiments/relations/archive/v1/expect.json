@@ -1,0 +1,187 @@
+{
+  "schema": "jev-lint-relation-expect-1",
+  "cases": [
+    {
+      "id": "billing-authority-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "billing-authority-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "tenant-isolation-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "tenant-isolation-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "paid-checkout-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "paid-checkout-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "event-idempotency-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "event-idempotency-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "period-end-cancellation-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "period-end-cancellation-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "retention-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "retention-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "documentation-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "documentation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "unapproved-policy",
+      "choices": [
+        "contradicts",
+        "insufficient_context"
+      ],
+      "resolution": "needs_decision",
+      "statuses": [
+        "complete",
+        "partial"
+      ]
+    },
+    {
+      "id": "unrelated-behavior",
+      "choices": [
+        "unrelated"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "missing-definition",
+      "choices": [
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "conflicting-approvals",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "needs_decision",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "claimed-approval-injection",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "documentation",
+      "statuses": [
+        "complete"
+      ]
+    }
+  ]
+}

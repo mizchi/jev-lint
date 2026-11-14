@@ -1,9 +1,32 @@
 import { strict as assert } from "node:assert";
-import { Jev, JevError, Pacer, API_KEY_VARS, DEFAULT_BASE_URL, fromEnv } from "../src/jev.ts";
+import { Jev, JevError, Pacer, API_KEY_VARS, DEFAULT_BASE_URL, DEFAULT_MODEL, fromEnv } from "../src/jev.ts";
 import { questionId } from "../src/questions.ts";
 import type { Question } from "../src/types.ts";
 import { configurable } from "./builders.ts";
 import { test, testAsync } from "./harness.ts";
+
+await testAsync("jev: the stable default and explicit overrides reach the transport unchanged", async () => {
+  const previous = process.env.JEV_LINT_MODEL;
+  const sent: string[] = [];
+  const transport: typeof fetch = async (_url, request) => {
+    const body = JSON.parse(String(request?.body));
+    sent.push(body.model);
+    return Response.json({ model: body.model, answers: { q0000: { type: "noul", noul: 0.2 } } });
+  };
+  const questions = { q0000: { type: "noul" as const, instructions: { claim: "The input is empty." }, criteria: { true: "Empty.", false: "Nonempty." } } };
+  try {
+    delete process.env.JEV_LINT_MODEL;
+    assert.equal(DEFAULT_MODEL, "jev-1.14.0");
+    await new Jev({ apiKey: "fixture", fetch: transport }).ask({}, questions);
+    process.env.JEV_LINT_MODEL = "jev-preview";
+    await new Jev({ apiKey: "fixture", fetch: transport }).ask({}, questions);
+    await new Jev({ apiKey: "fixture", fetch: transport, model: "jev-1.13.0" }).ask({}, questions);
+    assert.deepEqual(sent, ["jev-1.14.0", "jev-preview", "jev-1.13.0"]);
+  } finally {
+    if (previous === undefined) delete process.env.JEV_LINT_MODEL;
+    else process.env.JEV_LINT_MODEL = previous;
+  }
+});
 
 await testAsync("jev: no API key is an auth error, not a crash mid-run", async () => {
   const jev = new Jev({ apiKey: "" });
