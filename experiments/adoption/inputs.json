@@ -1,0 +1,267 @@
+{
+  "schema": "jev-lint-adoption-cases-1",
+  "baseScan": {
+    "schema": "jev-lint-scan-1",
+    "repository": "example/service",
+    "sourceSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "runId": "review-001",
+    "status": "complete",
+    "policy": null,
+    "engine": {
+      "questionSchema": "jev-lint-questions-1",
+      "servedModel": "fixture"
+    },
+    "usage": {
+      "requests": 1,
+      "inputTokens": 10,
+      "usd": 0
+    },
+    "coverage": {
+      "matched": 1,
+      "answered": 1,
+      "missing": 0,
+      "omittedCandidates": 0,
+      "outsideDiff": 0,
+      "excludedFiles": 0,
+      "suppressed": 0,
+      "unpaired": 0,
+      "undeclaredLanguages": [],
+      "degradedBatches": 0,
+      "cutSubjects": 0,
+      "noInstructionDoc": 0,
+      "dryRun": false
+    },
+    "errors": [],
+    "candidates": [
+      {
+        "id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "rule": {
+          "id": "typescript/name",
+          "digest": "cccccccccccc"
+        },
+        "claim": "The name describes behavior.",
+        "evidence": "export function value() { return 1; }",
+        "source": {
+          "path": "src/a.ts",
+          "startLine": 1,
+          "endLine": 1,
+          "contentHash": "5ac04f641d27bdf9053467917bd3a81cfa16b8a2154a1b30aa17cb6e1b61f71f"
+        },
+        "contextHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "disposition": "reported",
+        "judgment": {
+          "kind": "noul",
+          "value": 0.9,
+          "maximum": 1,
+          "confidence": null,
+          "threshold": 0.7
+        }
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "same-input",
+      "kind": "acceptance"
+    },
+    {
+      "id": "line-movement",
+      "kind": "acceptance",
+      "change": "line"
+    },
+    {
+      "id": "additional-copy",
+      "kind": "acceptance",
+      "change": "duplicate"
+    },
+    {
+      "id": "clean-copy-before-finding",
+      "kind": "acceptance",
+      "change": "clean-copy-first"
+    },
+    {
+      "id": "clean-copy-after-finding",
+      "kind": "acceptance",
+      "change": "clean-copy-last"
+    },
+    {
+      "id": "changed-context",
+      "kind": "acceptance",
+      "change": "context"
+    },
+    {
+      "id": "changed-model",
+      "kind": "acceptance",
+      "revision": "deployment-002"
+    },
+    {
+      "id": "changed-policy",
+      "kind": "acceptance",
+      "change": "policy"
+    },
+    {
+      "id": "changed-cutoff",
+      "kind": "acceptance",
+      "change": "cutoff"
+    },
+    {
+      "id": "explicit-clean",
+      "kind": "acceptance",
+      "change": "clean"
+    },
+    {
+      "id": "clean-different-context",
+      "kind": "acceptance",
+      "change": "changed-clean"
+    },
+    {
+      "id": "outside-observed-set",
+      "kind": "acceptance",
+      "change": "absent"
+    },
+    {
+      "id": "no-model-answer",
+      "kind": "acceptance",
+      "change": "missing"
+    },
+    {
+      "id": "omitted-output",
+      "kind": "acceptance",
+      "change": "omitted"
+    },
+    {
+      "id": "partial-scan-with-finding",
+      "kind": "acceptance",
+      "change": "partial"
+    },
+    {
+      "id": "missing-revision",
+      "kind": "acceptance",
+      "revision": null
+    },
+    {
+      "id": "wrong-scope",
+      "kind": "acceptance",
+      "scopeId": "another"
+    },
+    {
+      "id": "forged-quote",
+      "kind": "acceptance",
+      "change": "quote"
+    },
+    {
+      "id": "contradictory-disposition",
+      "kind": "acceptance",
+      "change": "false-clean"
+    },
+    {
+      "id": "forged-completion",
+      "kind": "acceptance",
+      "change": "false-complete"
+    },
+    {
+      "id": "eligibility",
+      "kind": "scope",
+      "files": {
+        "src/a.ts": "export const a = 1;",
+        "src/b.ts": "export const b = 2;",
+        "readme.txt": "Reference"
+      },
+      "exclude": [
+        "src/b.ts"
+      ]
+    },
+    {
+      "id": "changed-only",
+      "kind": "scope",
+      "files": {
+        "src/a.ts": "export const a = 1;",
+        "src/b.ts": "export const b = 2;",
+        "readme.txt": "Reference"
+      },
+      "changedPaths": [
+        "src/a.ts"
+      ]
+    },
+    {
+      "id": "gitignored",
+      "kind": "scope",
+      "files": {
+        "src/a.ts": "export const a = 1;",
+        "src/b.ts": "export const b = 2;",
+        "readme.txt": "Reference",
+        ".gitignore": "src/b.ts\n"
+      },
+      "git": true
+    },
+    {
+      "id": "missing-root",
+      "kind": "scope",
+      "files": {
+        "src/a.ts": "export const a = 1;",
+        "src/b.ts": "export const b = 2;",
+        "readme.txt": "Reference"
+      },
+      "paths": [
+        "absent"
+      ]
+    },
+    {
+      "id": "unmapped-only",
+      "kind": "scope",
+      "files": {
+        "main.unknown": "source"
+      }
+    },
+    {
+      "id": "entry-budget",
+      "kind": "scope",
+      "files": {
+        "src/a.ts": "export const a = 1;",
+        "src/b.ts": "export const b = 2;",
+        "readme.txt": "Reference"
+      },
+      "maxEntries": 1
+    },
+    {
+      "id": "directive-typo",
+      "kind": "directive",
+      "source": "// jev-lint-ignore-nextline r\nconst value = 1;"
+    },
+    {
+      "id": "directive-reason",
+      "kind": "directive",
+      "source": "// jev-lint-ignore-next-line r -- approved exception\nconst value = 1;"
+    },
+    {
+      "id": "quoted-template",
+      "kind": "directive",
+      "source": "const sample = `\n// jev-lint-ignore-file\n// jev-lint-ignore-nextline r\n`;\nconst value = 1;"
+    },
+    {
+      "id": "inline-quoted-backtick",
+      "kind": "directive",
+      "source": "const marker = \"`\";\n// jev-lint-ignore-nextline r\nconst value = 1;"
+    },
+    {
+      "id": "empty-sarif",
+      "kind": "sarif",
+      "change": "absent"
+    },
+    {
+      "id": "partial-sarif",
+      "kind": "sarif",
+      "change": "partial"
+    },
+    {
+      "id": "missing-sarif",
+      "kind": "sarif",
+      "change": "missing"
+    },
+    {
+      "id": "encoded-uri",
+      "kind": "sarif",
+      "path": "src/a #1.ts"
+    }
+  ]
+}

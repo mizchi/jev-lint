@@ -8,6 +8,7 @@ import { formatPretty, formatJson, formatGithub, formatGaps } from "../report.ts
 import type { Finding, Rule, Subject } from "../types.ts";
 import type { Options, Log } from "./args.ts";
 import { emitFits, mergeRuns } from "./cmd-calibrate.ts";
+import { formatSarif } from "../sarif.ts";
 
 export function cmdReplay(opts: Options, out: Log, log: Log): number {
   const path = opts.paths[0];
@@ -93,6 +94,7 @@ export function cmdReplay(opts: Options, out: Log, log: Log): number {
     ...(Object.keys(opts.at).length > 0 ? [`cutoffs overridden: ${Object.keys(opts.at).join(", ")}`] : []),
   ];
 
+  if (opts.format === "sarif") { try { out(formatSarif(result)); for (const line of trailer) log(line); return exit; } catch (error) { log(`sarif: ${(error as Error).message}`); return 2; } }
   if (opts.format === "json") {
     // One document on stdout, and nothing after it: the gap rows are in
     // it, and what a reader would want said goes to stderr. The tables

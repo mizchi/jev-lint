@@ -743,6 +743,7 @@ export interface GateStats {
 
 /** What suppression comments removed from a run, for reporting. */
 export interface IgnoreStats {
+  invalidDirectives?: Array<{ path: string; line: number; directive: string; suggestion?: string }>;
   /** Subjects never asked about because a suppression covered them. */
   subjects: number;
   /** Files suppressed whole. */

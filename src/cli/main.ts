@@ -16,7 +16,10 @@ import { cmdEval } from "./cmd-eval.ts";
 import { cmdInit } from "./cmd-init.ts";
 import { cmdReplay } from "./cmd-replay.ts";
 import { cmdRules } from "./cmd-rules.ts";
-import { selectForRun } from "./select.ts";
+import { selectForRun, loadOrDie } from "./select.ts";
+import { cmdArtifact } from "./cmd-artifact.ts";
+import { cmdScope } from "./cmd-scope.ts";
+import { doctor } from "../doctor.ts";
 import { resolveTargets } from "./targets.ts";
 
 export async function main(argv: string[], deps: Deps = {}): Promise<number> {
@@ -51,10 +54,19 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   if (opts.deprecatedAt) log("warning: --at is deprecated; use --threshold");
 
   if (command === "init") return cmdInit(opts, out, log);
+  if (command === "baseline" || command === "report") return cmdArtifact(command, opts, out, log);
+  if (opts.format === "sarif" && (opts.dryRun || !["check", "review", "run", "scan", "replay"].includes(command))) { log("SARIF supports check, review, scan and replay results; use JSON for plans"); return 2; }
 
   const context = resolveContext(opts, rest, log);
   if (!context) return 2;
   const { config, configPath, baseDir, argPaths, cachePath } = context;
+  if (command === "doctor") {
+    const selected = loadOrDie(opts, log, baseDir, configPath !== null); if (!selected) return 2;
+    const report = doctor({ rules: selected.rules, languages: opts.languages });
+    if (opts.format === "json") out(JSON.stringify(report, null, 2));
+    else for (const check of report.checks) out(`${check.id}: ${check.status}${check.remediation ? `; ${check.remediation}` : ""}`);
+    return report.status === "complete" ? 0 : 3;
+  }
 
   if (command === "rules") return cmdRules(opts, out, log, baseDir);
   if (command === "replay") return cmdReplay(opts, out, log);
@@ -69,6 +81,8 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   if (!selected) return 2;
   const { rules, rangeArg } = selected;
   command = selected.command;
+  if (opts.explainScope) return cmdScope(command, rules, opts, out, log);
+  if (opts.format === "sarif" && command === "commits") { log("commit subjects have no file locations; use JSON"); return 2; }
   if (command === "scan") return cmdScan(rules, opts, cachePath, out, log, client);
 
   if (command === "commits" && opts.staged && config.hooks?.precommit && !rules.some((rule) => rule.subject === "change")) {

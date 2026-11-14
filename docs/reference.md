@@ -11,6 +11,12 @@ real code. [deepdive.md](deepdive.md) has the evidence behind the numbers;
 See [the audit API](audit-api.md) for its CLI flags, source snapshot requirements,
 pinned policy, cache isolation and outbound request controls.
 
+`baseline write|compare|prune` maintains an explicit accepted-findings ledger;
+`report --artifact <path> --sarif` exports existing scan/relation artifacts;
+`check|review --explain-scope [--json]` explains file eligibility without matching;
+`doctor [--json]` checks local prerequisites without contacting a provider.
+See [adoption and export](adoption.md) for their contracts, limits and flags.
+
 ```bash
 jev-lint check src                  # judge whole files
 jev-lint review --base main         # judge only what the diff touched
@@ -71,7 +77,7 @@ answers.
 | `--dry-run` | plan and price without asking anything |
 | `--show-missing` | list subjects that got no verdict |
 | `--show-subjects` | with `--dry-run`: list every subject with its line, node kind and captures |
-| `--format <fmt>` / `--json` | `pretty`, `json`, `github`; `--json` is `--format json`, and holds for every command |
+| `--format <fmt>` / `--json` / `--sarif` | `pretty`, `json`, `github`, `sarif`; `--json` is `--format json`. SARIF supports file-based check/review, scan, report and compatible replay results |
 | `--concurrency <n>` / `--batch-size <n>` | default 32 and 256; the client also paces its input tokens against the server's rate limit, see `JEV_LINT_TOKENS_PER_SECOND` |
 | `--model <id>` | Jev model (default: `jev-1.14.0`) |
 | `--quiet` / `--no-color` | |

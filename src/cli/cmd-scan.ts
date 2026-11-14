@@ -6,6 +6,8 @@ import type { AskClient } from "../jev.ts";
 import type { Rule } from "../types.ts";
 import type { Options, Log } from "./args.ts";
 import { DEFAULT_CACHE_PATH } from "../cache.ts";
+import { reviewScan } from "../review-artifact.ts";
+import { artifactSarif } from "../sarif.ts";
 
 export async function cmdScan(rules: Rule[], opts: Options, cachePath: string | null, out: Log, log: Log, client: AskClient | null): Promise<number> {
   try {
@@ -20,7 +22,7 @@ export async function cmdScan(rules: Rule[], opts: Options, cachePath: string | 
       ...(opts.modelRevision === null ? {} : { modelRevision: opts.modelRevision }),
       ...(opts.maxCandidates === null ? {} : { maxCandidates: opts.maxCandidates }),
       dryRun: opts.dryRun, concurrency: opts.concurrency, batchSize: opts.batchSize, group: opts.group, exclude: opts.exclude, languages: opts.languages });
-    out(JSON.stringify(report, null, 2));
+    out(JSON.stringify(opts.format === "sarif" ? artifactSarif(reviewScan(report, { scopeId: opts.scopeId ?? "local" })) : report, null, 2));
     return report.status === "complete" ? 0 : 3;
   } catch (error) { log(`scan: ${(error as Error).message}`); return 2; }
 }

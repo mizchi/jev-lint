@@ -16,6 +16,8 @@ import type { GroupMode, Severity, StateArm } from "../types.ts";
 
 /** Everything the command line can set. */
 export interface Options {
+  artifact: string | null; acceptedBaseline: string | null; output: string | null; scopeId: string | null;
+  relationInput: string | null; relationOptions: string | null; explainScope: boolean;
   policyRef: string | null;
   repository: string | null;
   runId: string | null;
@@ -60,7 +62,7 @@ export interface Options {
   compare: boolean;
   base: string | null;
   staged: boolean;
-  format: "pretty" | "json" | "github";
+  format: "pretty" | "json" | "github" | "sarif";
   concurrency: number;
   batchSize: number;
   repeat: number;
@@ -96,6 +98,10 @@ export interface Deps {
 export const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
+  jev-lint baseline write|compare|prune --artifact <scan.json> --baseline <accepted.json>
+                                  --scope-id <id> --model-revision <deployment>
+  jev-lint report --artifact <scan.json> --sarif   export an existing artifact, no requests
+  jev-lint doctor                 check runtime, parsers and credential presence, no requests
   jev-lint scan [paths...]         emit versioned screening candidates and coverage
   jev-lint check [paths...]        judge whole files
   jev-lint run <rule> [paths...]   judge with one shipped rule: an id (every
@@ -122,6 +128,14 @@ usage:
   jev-lint init --pre-push        write a pre-push hook that judges the commits about to leave
 
 options:
+      --explain-scope     explain file eligibility and exclusions without matching or model requests
+      --artifact <path>   baseline/report: a scan or relation wire artifact
+      --baseline <path>   accepted-findings ledger, separate from verdict caches and eval baselines
+      --scope-id <id>     operator-defined acceptance scope identity
+      --relation-input <path> relations: independently supplied expected final input
+      --relation-options <path> relations: trusted planning options matching the producer
+      --output <path>     report: write the exported document to this file
+      --sarif             --format sarif: SARIF 2.1.0 output
       --file <path>        run: a rule file to use instead of the shipped rules
       --squash             commits: the range as one diff, judged against --message
       --message <text>     commits --squash: the claim about the range
@@ -159,7 +173,7 @@ options:
                            hook would run them; hooks.precommit selects their rules
       --fail-on <severity> exit 1 only for findings at or above hint | info |
                            warning | error (default: any finding)
-      --format <fmt>       pretty | json | github
+      --format <fmt>       pretty | json | github | sarif
       --json               --format json: one JSON document on stdout, for every
                            command; what a reader would be told goes to stderr
       --concurrency <n>    most requests in flight at once (default ${DEFAULT_CONCURRENCY}; a 429 narrows it)
@@ -238,6 +252,7 @@ environment:
 
 export function parseArgs(argv: string[], { color }: { color: boolean }): Options {
   const opts: Options = {
+    artifact: null, acceptedBaseline: null, output: null, scopeId: null, relationInput: null, relationOptions: null, explainScope: false,
     policyRef: null,
     repository: null, runId: null, namespace: null, sourceSha: null, maxCandidates: null, modelRevision: null,
     rules: [],
@@ -419,6 +434,14 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
       case "--json":
         opts.format = "json";
         break;
+      case "--artifact": opts.artifact = need(i++, a); break;
+      case "--baseline": opts.acceptedBaseline = need(i++, a); break;
+      case "--output": opts.output = need(i++, a); break;
+      case "--scope-id": opts.scopeId = need(i++, a); break;
+      case "--relation-input": opts.relationInput = need(i++, a); break;
+      case "--relation-options": opts.relationOptions = need(i++, a); break;
+      case "--explain-scope": opts.explainScope = true; break;
+      case "--sarif": opts.format = "sarif"; break;
       case "--format":
         opts.format = need(i, a) as Options["format"];
         i += 1;
@@ -496,8 +519,8 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
   if (opts.arm && !STATE_ARMS.includes(opts.arm)) {
     throw new Error(`--arm must be one of ${ARMS.join(", ")}`);
   }
-  if (!["pretty", "json", "github"].includes(opts.format)) {
-    throw new Error(`--format must be pretty, json or github`);
+  if (!["pretty", "json", "github", "sarif"].includes(opts.format)) {
+    throw new Error(`--format must be pretty, json, github or sarif`);
   }
   if (!GROUP_MODES.includes(opts.group)) {
     throw new Error(`--group must be ${GROUP_MODES.join(", ")}`);

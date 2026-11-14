@@ -188,6 +188,7 @@ npx skills add mizchi/jev-lint --skill jev-lint
 | [docs/audit-api.md](docs/audit-api.md) | 版付きスキャン結果、固定ポリシー、厳密なキャッシュ、送信制御、判定誘導の評価 |
 | [docs/relations-api.md](docs/relations-api.md) | 承認仕様の固定、複数出典の比較、主張の根拠確認、仕様ドリフトのカバレッジ |
 | [docs/relations-workflow.md](docs/relations-workflow.md) | 比較候補の発見、依存先の文脈補完、ワークフロー再検証、利用側との接続 |
+| [docs/adoption.md](docs/adoption.md) | 指摘の受入台帳、検査対象の説明、doctor、抑制コメントの診断、SARIF出力 |
 | [docs/use-hooks.md](docs/use-hooks.md) | git hook と CI |
 | [SECURITY.md](SECURITY.md) | モデル判定のリスク、信頼境界、対策 |
 | [docs/writing-rules.md](docs/writing-rules.md) | ルールの書き方と、同梱する eval |

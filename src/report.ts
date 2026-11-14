@@ -232,6 +232,7 @@ export function formatPretty(
     out.push(c.yellow("  Those suppress nothing, and the rule they meant keeps firing."));
     out.push("");
   }
+  for (const d of ignored?.invalidDirectives ?? []) out.push(c.yellow(`${d.path}:${d.line}: unknown suppression ${d.directive}${d.suggestion ? `; use ${d.suggestion}` : ""}`));
   const unpaired = result.unpaired;
   if (unpaired && unpaired.subjects > 0) {
     // Same reason: a subject the paired arm could not pair was never asked

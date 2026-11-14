@@ -41,6 +41,12 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ### Added
 
+- Add an explicit accepted-findings ledger with multiset matching, context-bound
+  rechecks and conservative pruning; it does not reuse or suppress model answers.
+- Add file-eligibility explanations, local prerequisite checks, suppression typo
+  diagnostics/reasons and SARIF 2.1.0 export for file reviews and audit artifacts.
+- Record deterministic adoption-feature evaluation and upstream MIT attribution
+  without adding runtime dependencies or changing shipped rule questions.
 - Document model decision manipulation, trust boundaries, and independent
   safeguards in [SECURITY.md](SECURITY.md), following
   [#18](https://github.com/mizchi/jev-lint/issues/18). Structurally valid

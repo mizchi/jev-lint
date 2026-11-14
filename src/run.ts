@@ -264,6 +264,7 @@ export async function collectSubjects({
     subjects: ignoredSubjects,
     files: [...ignoresFor.entries()].filter(([, ig]) => ig.file !== null).map(([f]) => f).sort(),
     unknownRules: unknownIgnoredRules(ignoresFor.values(), rules.map((r) => r.id)),
+    invalidDirectives: [...ignoresFor.entries()].flatMap(([path, ig]) => (ig.invalidDirectives ?? []).map((d) => ({ path, ...d }))),
   };
 
   return {

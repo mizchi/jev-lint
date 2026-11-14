@@ -7,6 +7,12 @@ skills-check:
 ci:
     pnpm run ci
 
+adoption-build:
+    node --experimental-strip-types tools/build-adoption-eval.ts
+
+adoption-eval *args:
+    node --experimental-strip-types tools/eval-adoption.ts {{args}}
+
 adversarial-eval *args:
     node --experimental-strip-types tools/eval-adversarial.ts {{args}}
 

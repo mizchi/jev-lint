@@ -40,8 +40,30 @@ const MARKER =
 /** A trailing block- or HTML-comment closer, which is not part of a rule id. */
 const CLOSER = /\s*(?:\*\/|-->)\s*$/;
 
+/** Track multiline literal examples without mistaking a quoted backtick for an opening delimiter. */
+function multilineLiteral(line: string, initial: string | null): string | null {
+  let literal = initial;
+  for (let i = 0; i < line.length;) {
+    if (line[i] === "\\") { i += 2; continue; }
+    if (literal) {
+      if (line.startsWith(literal, i)) { i += literal.length; literal = null; } else i++;
+      continue;
+    }
+    if (line.startsWith("//", i) || line[i] === "#") break;
+    if (line.startsWith("/*", i)) { const end = line.indexOf("*/", i + 2); if (end < 0) break; i = end + 2; continue; }
+    if (line.startsWith('"""', i) || line.startsWith("'''", i)) { literal = line.slice(i, i + 3); i += 3; continue; }
+    if (line[i] === "`") { literal = "`"; i++; continue; }
+    if (line[i] === '"' || line[i] === "'") {
+      const quote = line[i++];
+      while (i < line.length) { if (line[i] === "\\") { i += 2; continue; } if (line[i++] === quote) break; }
+    } else i++;
+  }
+  return literal;
+}
+
 /** What a file's suppression comments add up to. */
 export interface FileIgnores {
+  invalidDirectives?: Array<{ line: number; directive: string; suggestion?: string }>;
   /** Non-null when the whole file is suppressed; the rules it names, or [] for all. */
   file: IgnoreDirective | null;
   /** Target line (1-based) -> the rules suppressed there, or [] for all. */
@@ -69,12 +91,28 @@ export function parseIgnores(source: string): FileIgnores {
 
   let file: IgnoreDirective | null = null;
   const lines = new Map<number, IgnoreDirective>();
+  const invalidDirectives: NonNullable<FileIgnores["invalidDirectives"]> = [];
+  let literal: string | null = null;
   const src = source.split("\n");
   for (let i = 0; i < src.length; i += 1) {
+    const line = src[i]!;
+    // Multiline quoted examples are evidence, not suppression directives.
+    if (literal !== null) { literal = multilineLiteral(line, literal); continue; }
     const m = MARKER.exec(src[i]!);
-    if (!m) continue;
+    if (!m) {
+      const typo = /^[ \t]*(?:\/\/|#|\/\*|\*|--|<!--)[ \t]*jev-lint-ignore-([\w-]+)/.exec(line);
+      if (typo) {
+        const normalized = typo[1].replace(/[-_]/g, "").toLowerCase();
+        const scope = ["file", "next-line"].find((s) => s.replaceAll("-", "") === normalized);
+        invalidDirectives.push({ line: i + 1, directive: `jev-lint-ignore-${typo[1]}`, ...(scope ? { suggestion: `jev-lint-ignore-${scope}` } : {}) });
+      } else if (!/^[ \t]*(?:\/\/|#|\/\*|\*|--|<!--)/.test(line)) {
+        literal = multilineLiteral(line, null);
+      }
+      continue;
+    }
     const rules = (m[2] ?? "")
       .replace(CLOSER, "")
+      .split(/\s+--(?:\s|$)/, 1)[0]!
       .split(/[\s,]+/)
       .map((r) => r.trim())
       .filter((r) => r.length > 0);
@@ -92,7 +130,7 @@ export function parseIgnores(source: string): FileIgnores {
       else lines.set(target, [...new Set([...existing, ...rules])]);
     }
   }
-  return { file, lines };
+  return { file, lines, ...(invalidDirectives.length ? { invalidDirectives } : {}) };
 }
 
 /** Is this rule suppressed at this reported line? */

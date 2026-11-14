@@ -267,6 +267,7 @@ restore it. CI checks the link so a copied skill cannot drift silently.
 | [docs/audit-api.md](docs/audit-api.md) | versioned screening results, pinned policy, strict cache, request controls and adversarial evaluation |
 | [docs/relations-api.md](docs/relations-api.md) | approved specification sources, multi-source comparisons, claim grounding and drift coverage |
 | [docs/relations-workflow.md](docs/relations-workflow.md) | comparison discovery, bounded dependency context, workflow replay and consumer integration |
+| [docs/adoption.md](docs/adoption.md) | accepted findings, file eligibility, doctor, suppression diagnostics and SARIF export |
 | [docs/use-hooks.md](docs/use-hooks.md) | git hooks and CI |
 | [SECURITY.md](SECURITY.md) | model judgment risks, trust boundaries, and safeguards |
 | [docs/writing-rules.md](docs/writing-rules.md) | writing a rule, and the evals it ships with |

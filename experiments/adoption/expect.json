@@ -1,0 +1,309 @@
+{
+  "schema": "jev-lint-adoption-expect-1",
+  "cases": [
+    {
+      "id": "same-input",
+      "counts": {
+        "accepted": 1,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 0,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "line-movement",
+      "counts": {
+        "accepted": 1,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 0,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "additional-copy",
+      "counts": {
+        "accepted": 1,
+        "new": 1,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 1,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "clean-copy-before-finding",
+      "counts": {
+        "accepted": 1,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 0,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "clean-copy-after-finding",
+      "counts": {
+        "accepted": 1,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 0,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "changed-context",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 1,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 1,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "changed-model",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 1,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 1,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "changed-policy",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 1,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 1,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "changed-cutoff",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 1,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 1,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "explicit-clean",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 1,
+        "unassessed": 0
+      },
+      "exitCode": 0,
+      "writable": true,
+      "remaining": 0
+    },
+    {
+      "id": "clean-different-context",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 1
+      },
+      "exitCode": 0,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "outside-observed-set",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 1
+      },
+      "exitCode": 0,
+      "writable": true,
+      "remaining": 1
+    },
+    {
+      "id": "no-model-answer",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 1
+      },
+      "exitCode": 3,
+      "writable": false,
+      "remaining": 1
+    },
+    {
+      "id": "omitted-output",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 1
+      },
+      "exitCode": 3,
+      "writable": false,
+      "remaining": 1
+    },
+    {
+      "id": "partial-scan-with-finding",
+      "counts": {
+        "accepted": 1,
+        "new": 0,
+        "recheck": 0,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 3,
+      "writable": false,
+      "remaining": 1
+    },
+    {
+      "id": "missing-revision",
+      "counts": {
+        "accepted": 0,
+        "new": 0,
+        "recheck": 1,
+        "resolved": 0,
+        "unassessed": 0
+      },
+      "exitCode": 3,
+      "writable": false,
+      "remaining": 1
+    },
+    {
+      "id": "wrong-scope",
+      "invalid": true
+    },
+    {
+      "id": "forged-quote",
+      "invalid": true
+    },
+    {
+      "id": "contradictory-disposition",
+      "invalid": true
+    },
+    {
+      "id": "forged-completion",
+      "invalid": true
+    },
+    {
+      "id": "eligibility",
+      "eligible": 1,
+      "reason": {
+        "path": "src/b.ts",
+        "reason": "user-exclude"
+      }
+    },
+    {
+      "id": "changed-only",
+      "eligible": 1,
+      "reason": {
+        "path": "src/b.ts",
+        "reason": "outside-change"
+      }
+    },
+    {
+      "id": "gitignored",
+      "eligible": 1,
+      "reason": {
+        "path": "src/b.ts",
+        "reason": "gitignore"
+      }
+    },
+    {
+      "id": "missing-root",
+      "eligible": 0,
+      "status": "partial"
+    },
+    {
+      "id": "unmapped-only",
+      "eligible": 0,
+      "status": "partial"
+    },
+    {
+      "id": "entry-budget",
+      "eligible": 0,
+      "status": "partial"
+    },
+    {
+      "id": "directive-typo",
+      "suppressed": false,
+      "warnings": 1
+    },
+    {
+      "id": "directive-reason",
+      "suppressed": true,
+      "warnings": 0
+    },
+    {
+      "id": "quoted-template",
+      "suppressed": false,
+      "warnings": 0
+    },
+    {
+      "id": "inline-quoted-backtick",
+      "suppressed": false,
+      "warnings": 1
+    },
+    {
+      "id": "empty-sarif",
+      "results": 0,
+      "successful": true
+    },
+    {
+      "id": "partial-sarif",
+      "results": 1,
+      "successful": false
+    },
+    {
+      "id": "missing-sarif",
+      "results": 1,
+      "successful": false
+    },
+    {
+      "id": "encoded-uri",
+      "results": 1,
+      "successful": true,
+      "uri": "src/a%20%231.ts"
+    }
+  ]
+}

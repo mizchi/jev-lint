@@ -54,6 +54,7 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run eval:replay
+      - run: npm run eval:adoption
 
   # `engines` says node >=24, and the suite cannot check it: the suite runs
   # from source under --experimental-strip-types, so it never exercises the

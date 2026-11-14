@@ -31,6 +31,11 @@
   "main": "./dist/run.js",
   "types": "./dist/run.d.ts",
   "exports": {
+    "./acceptance": { "types": "./dist/acceptance.d.ts", "default": "./dist/acceptance.js" },
+    "./review-artifact": { "types": "./dist/review-artifact.d.ts", "default": "./dist/review-artifact.js" },
+    "./sarif": { "types": "./dist/sarif.d.ts", "default": "./dist/sarif.js" },
+    "./scope": { "types": "./dist/scope.d.ts", "default": "./dist/scope.js" },
+    "./doctor": { "types": "./dist/doctor.d.ts", "default": "./dist/doctor.js" },
     "./relations": { "types": "./dist/relations.d.ts", "default": "./dist/relations.js" },
     "./relation-contract": { "types": "./dist/relation-contract.d.ts", "default": "./dist/relation-contract.js" },
     "./audit": { "types": "./dist/audit-run.d.ts", "default": "./dist/audit-run.js" },
@@ -76,6 +81,9 @@
     "docs/audit-api.md",
     "docs/relations-api.md",
     "docs/relations-workflow.md",
+    "docs/adoption.md",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses",
     "LICENSE"
   ],
   "scripts": {
@@ -93,11 +101,12 @@
     "skills:check": "node --experimental-strip-types tools/sync-skills.ts --check",
     "eval": "node --experimental-strip-types src/cli.ts eval --repeat 3",
     "eval:replay": "node --experimental-strip-types src/cli.ts eval --replay",
+    "eval:adoption": "node --experimental-strip-types tools/eval-adoption.ts",
     "eval:clef": "node --experimental-strip-types tools/compare-models.ts",
     "arms": "node --experimental-strip-types tools/arms.ts --repeat 2",
     "grouping": "node --experimental-strip-types tools/grouping.ts --repeat 2",
     "dry": "node --experimental-strip-types src/cli.ts check --dry-run --cache none",
-    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay",
+    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption",
     "prepack": "npm run clean && npm run build",
     "parsers:moonbit": "node --experimental-strip-types tools/build-parser.ts moonbit"
   },

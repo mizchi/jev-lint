@@ -25,3 +25,4 @@ experiments/adversarial/last.json
 experiments/relations/last.json
 experiments/relations/negative-controls/last.json
 experiments/relations/**/last.json
+experiments/adoption/last.json
