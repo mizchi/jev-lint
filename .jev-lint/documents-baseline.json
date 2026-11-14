@@ -1,0 +1,674 @@
+{
+  "schema": "jev-lint-documents-1",
+  "snapshotDigest": "388b8e6ae912b0e7b940d9914f7cfca155c7a382c645052c31e8f9782e3911ec",
+  "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
+  "model": "jev-1.14.0",
+  "snapshotChanged": false,
+  "status": "complete",
+  "qualityVerdict": "UNREVIEWED",
+  "candidates": [
+    {
+      "id": "catalog-readme",
+      "topic": "Current total shipped rule count and per-language counts",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 5,
+        "endLine": 20,
+        "quote": "## Rule catalog\n\nThe current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 2 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 1 rule\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "12513cbac9c7bd0c87e3879e707e77965c27e6714ee15023a9c665f0c28e7343"
+      },
+      "target": {
+        "source": "readme",
+        "path": "README.md",
+        "startLine": 173,
+        "endLine": 197,
+        "quote": "## What ships\n\n103 rules under `rules/<language>/<id>/`, and the files you point it at decide\nwhich run. Nothing to select.\n\n| point it at | what runs |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 rules, first tier |\n| `.rs` | `rust/` — 9, first tier |\n| `.py` `.go` | `python/` — 14, `go/` — 9 |\n| `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |\n| `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |\n| `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |\n| `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |\n| `package.json`, sqlc `.sql` | `json/` — 1, `text/` — 1 |\n| commits | `git/` — 2 |\n\n`typescript` and `rust` are first tier: every rule under them carries\nfixtures, expectations and an accepted baseline. The rest are calibrated to\nthe same bar and not yet promised. [RULES.md](RULES.md) lists all 103 with\ntheir question, cutoff and score on their own fixtures.\n\nYour own rule can target any language ast-grep parses — Java, Kotlin, Swift,\nC, C++, C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, HTML,\nCSS, YAML — and any other grammar you compile.",
+        "contentHash": "cfcbfe315bb0f9392e8a8b9b3030a7d0ef21aaca78360a6faff5f5414d18ac50"
+      },
+      "context": [],
+      "candidateId": "77d8b5a6a0797da0fead812f3330138e1626e98d73a7846cca215501db7ebf0d",
+      "contextHash": "fd030015b682c8a9b7e6061df36c59d072fb604343b6081fc0d72392b1099539",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.73,
+        "probabilities": {
+          "supports": 0.8,
+          "contradicts": 0.19,
+          "unrelated": 0,
+          "insufficient_context": 0.01
+        }
+      }
+    },
+    {
+      "id": "catalog-readme-ja",
+      "topic": "Current total shipped rule count and per-language counts",
+      "mode": "translation",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 5,
+        "endLine": 20,
+        "quote": "## Rule catalog\n\nThe current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 2 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 1 rule\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "12513cbac9c7bd0c87e3879e707e77965c27e6714ee15023a9c665f0c28e7343"
+      },
+      "target": {
+        "source": "readme-ja",
+        "path": "README-ja.md",
+        "startLine": 122,
+        "endLine": 140,
+        "quote": "## 何が同梱されるか\n\n`rules/<language>/<id>/` の下に 103 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。\n\n| 渡すもの | 走るもの |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 ルール、第一級 |\n| `.rs` | `rust/` — 9、第一級 |\n| `.py` `.go` | `python/` — 14、`go/` — 9 |\n| `.mbt` | `moonbit/` — 20。[パーサを宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば走る |\n| `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |\n| `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |\n| `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |\n| `package.json`、sqlc の `.sql` | `json/` — 1、`text/` — 1 |\n| コミット | `git/` — 2 |\n\n`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 103 個全部の問い、cutoff、自分の fixtures での成績がある。\n\n自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。",
+        "contentHash": "0af78be93769af751b5f6f27b53f3ec0af69824095a06ebe548792f3f4829945"
+      },
+      "context": [],
+      "candidateId": "21185aca066bc1716cb7adafdd94057be6017ae357d04ad93c8a513723680a2f",
+      "contextHash": "2dbdeef038b9f3502b9c4cf94a6cf425f7e1d846ebe6ef714f050a9abf86dd2a",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.81,
+        "probabilities": {
+          "supports": 0.86,
+          "contradicts": 0.14,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "catalog-reference",
+      "topic": "Current total number of shipped rules",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 5,
+        "endLine": 20,
+        "quote": "## Rule catalog\n\nThe current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 2 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 1 rule\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "12513cbac9c7bd0c87e3879e707e77965c27e6714ee15023a9c665f0c28e7343"
+      },
+      "target": {
+        "source": "reference",
+        "path": "docs/reference.md",
+        "startLine": 594,
+        "endLine": 595,
+        "quote": "103 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,\ngrouped here by what they ask. Which languages each exists in:",
+        "contentHash": "c2e1e75ff0ee2280c0917e99479efe9195114c4223bcdd7e0643eab6e3c447c3"
+      },
+      "context": [],
+      "candidateId": "0fe31a444dcf0087bd361abd3fb16254b6082d7c0dcbd00acee7af70b8351316",
+      "contextHash": "e1aa07a0d3c3ee71cf5fd5a0886669ef599f067a3c5849a619cd9a46baac4c80",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.99,
+        "probabilities": {
+          "supports": 0.99,
+          "contradicts": 0.01,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "runtime-instructions",
+      "topic": "Minimum Node version and runtime dependencies",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 22,
+        "endLine": 24,
+        "quote": "## Runtime\n\nThe package requires Node.js >=24. Its runtime dependencies are `@ast-grep/cli` and `yaml`.",
+        "contentHash": "a0192bf181c0bfa44416bc2297196948426ac82aaae0d6aa6ccb6b776fe7ce14"
+      },
+      "target": {
+        "source": "instructions",
+        "path": "AGENTS.md",
+        "startLine": 68,
+        "endLine": 78,
+        "quote": "## Code\n\n- Node 24 or later, ESM (`\"type\": \"module\"`). This is a floor this package\n  chooses, above what Node still supports: 22 is alive until April 2027.\n  The suite's own floor is lower -- `--experimental-strip-types` arrived in\n  22.6 -- so a test passing says nothing about `engines`.\n- Two runtime dependencies, `yaml` and `@ast-grep/cli`, and adding a third\n  is a decision, not a detail: `src/` runs from source in CI and in the git\n  hooks, so anything installed here executes in the same process that holds\n  the API key.\n- `dist/` is built, never committed.",
+        "contentHash": "84d00a6c616557b9bc90047b665298d0d1749da7cfde89543a9b0f0c14938251"
+      },
+      "context": [],
+      "candidateId": "2e91b01ba952c4f2dce0e755c8c48a18c3fe3d3bd0e21a4c9068e99179fe3188",
+      "contextHash": "98a42603570fe814d5627bdc1466fdeea758fb63d7bb48bf61078c39e449696e",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.97,
+        "probabilities": {
+          "supports": 0.98,
+          "contradicts": 0.02,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "default-model-en",
+      "topic": "The current default model versus explicit model overrides",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 26,
+        "endLine": 28,
+        "quote": "## Default model\n\nThe default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.",
+        "contentHash": "5ffae703878d7067fdfd5286cc2f3063d1a10a03c47d9964b819457efcb98170"
+      },
+      "target": {
+        "source": "readme",
+        "path": "README.md",
+        "startLine": 110,
+        "endLine": 125,
+        "quote": "## Model recommendation\n\nThe default is pinned to `jev-1.14.0`, the\n[current stable release](https://docs.typesafe.ai/models), so a moving alias cannot\nsilently change answers at fitted cutoffs. Override it with `--model`, config's\n`model:`, or `JEV_LINT_MODEL`. `--model jev-latest` follows future stable releases.\n\nJev is the recommended model for normal linting. The shipped rules and cutoffs\nare calibrated for Jev, and it performed best at those cutoffs in the\n[81-suite fixture comparison](docs/clef-evaluation.md#live-results-2026-10-02).\n\nCloudflare Clef and Clef-flash are optional experimental models for comparison\nfrom a repository checkout. `just clef-plan` previews the requests and cost;\n`just clef-eval` runs the comparison with Cloudflare credentials. See the\n[evaluation guide](docs/clef-evaluation.md) for setup, recorded results and\nthe limits of fitting new cutoffs on the same fixtures.",
+        "contentHash": "a27ede03f51047cab6f360be670940a5a8cda09146663d12dff1d6e324701e45"
+      },
+      "context": [],
+      "candidateId": "e87bd670723f3e6ecaf2f486fda0d31243e1a425a308e044372e89488abc0752",
+      "contextHash": "8ca536134a02e915b1889915d13a4208cd1df4ea8319951a4e196f618249da9a",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.99,
+        "probabilities": {
+          "supports": 0.99,
+          "contradicts": 0.01,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "default-model-ja",
+      "topic": "The current default model versus explicit model overrides",
+      "mode": "translation",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 26,
+        "endLine": 28,
+        "quote": "## Default model\n\nThe default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.",
+        "contentHash": "5ffae703878d7067fdfd5286cc2f3063d1a10a03c47d9964b819457efcb98170"
+      },
+      "target": {
+        "source": "readme-ja",
+        "path": "README-ja.md",
+        "startLine": 66,
+        "endLine": 80,
+        "quote": "## 推奨モデル\n\n既定値は[現在の安定版](https://docs.typesafe.ai/models) `jev-1.14.0` に固定している。\nモデルのエイリアスが更新されても、較正した cutoff に対する回答が黙って変わらないようにするため。\n`--model`、config の `model:`、`JEV_LINT_MODEL` で変更できる。\n今後の安定版へ自動追従する場合は `--model jev-latest` を指定する。\n\n通常の lint には Jev を推奨する。同梱ルールと cutoff は Jev で較正されていて、\nその cutoff を使った [81 suite の fixture 比較](docs/clef-evaluation.md#live-results-2026-10-02)\nでも Jev が最も良い成績だった。\n\nCloudflare Clef と Clef-flash も、リポジトリを checkout して実験的に比較評価できる。\n`just clef-plan` でリクエストと費用を確認し、Cloudflare の認証情報を設定して\n`just clef-eval` で比較する。設定、記録済みの結果、同じ fixture で cutoff を\n合わせ直す場合の限界は[評価ガイド](docs/clef-evaluation.md)にある。",
+        "contentHash": "0db20de71a0abba4a2cdb28706648a7ec71b5e5d1e9f9e158a38b600647dac61"
+      },
+      "context": [],
+      "candidateId": "dbd247a165ec3e4bede162721dfc4fc8b5e8650e074dd7bb390db3c040e7923e",
+      "contextHash": "629ab8e14152cd79aa9e837128294b27af9bb34c1b5700f3d1c5309eecc5ef71",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.81,
+        "probabilities": {
+          "supports": 0.86,
+          "contradicts": 0.13,
+          "unrelated": 0,
+          "insufficient_context": 0.01
+        }
+      }
+    },
+    {
+      "id": "ci-architecture",
+      "topic": "The complete local CI pipeline and its final stage",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 30,
+        "endLine": 36,
+        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run docs:replay\n```",
+        "contentHash": "ec65be2d5d204c0523ac370942dab130dea813d8a2ea1134410914a81c3cd4f5"
+      },
+      "target": {
+        "source": "architecture",
+        "path": "docs/internal/architecture.md",
+        "startLine": 397,
+        "endLine": 420,
+        "quote": "## Build contract\n\n`\"type\": \"module\"`, so plain `.ts` files are ESM. Three settings keep one source\ntree runnable three ways — through `tsc` for the published build, through\n`node --experimental-strip-types` for development, and from `dist/` once\ninstalled:\n\n- `allowImportingTsExtensions` + `rewriteRelativeImportExtensions` — source\n  imports `./x.ts`, the emit rewrites to `./x.js`.\n- `erasableSyntaxOnly` — anything TypeScript cannot simply erase is a compile\n  error here, so the stripped-types run and the compiled run cannot diverge.\n\n`package.json` ships compiled `dist`, rule YAML files and public documentation.\nIt does not publish rule fixtures or accepted rule baselines; replaying those\nrequires a repository checkout. [Project facts](../project-facts.md#package-contents)\nis generated from the actual export map and publish allowlist.\n\n`npm run ci` checks the skill link, types, tests, build, rule baseline replay,\nadoption evaluation, generated documentation facts, document evaluation replay,\nand finally the committed documentation snapshot replay. None needs an API key.\nThe complete command is generated in [project facts](../project-facts.md#ci).\nRule replay fails when an accepted decision regresses or the rule question\nchanges. Document replay fails on contradictions, omissions or stale source,\nmanifest and question digests; a live refresh is required after input changes.",
+        "contentHash": "e4d248c166ad9b284497cc9ced8f1d64bf34af752965ed99871f686031b25bf6"
+      },
+      "context": [],
+      "candidateId": "5c0f41adc4320d098ed83b67ac41a0ac6c4ea8549ea4294b0590c2853259b820",
+      "contextHash": "ff2df336e66190fdc248712692f18f89e9a335343d7cc8a2ddc6af46c47c989b",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.96,
+        "probabilities": {
+          "supports": 0.97,
+          "contradicts": 0.03,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "ci-maintainer-skill",
+      "topic": "The complete local CI pipeline and its final stage",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 30,
+        "endLine": 36,
+        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run docs:replay\n```",
+        "contentHash": "ec65be2d5d204c0523ac370942dab130dea813d8a2ea1134410914a81c3cd4f5"
+      },
+      "target": {
+        "source": "maintainer-skill",
+        "path": ".claude/skills/jev-lint-repo/SKILL.md",
+        "startLine": 26,
+        "endLine": 63,
+        "quote": "## Rules and their evals\n\n- A rule is `rules/<language>/<id>/rule.yml` with `fixtures/`, `expect.yml`\n  (labelled defects and cleans), and an accepted `baseline.json` beside it.\n  `last.json` is untracked. `jev-lint eval rules/<language>/<id> --repeat 3`\n  runs it; `--accept` promotes the\n  run; `npm run ci` includes `jev-lint eval --replay`, which fails on a case\n  that was right when accepted and is wrong now, or on a rule whose question\n  changed since its baseline. The case files carry NO `// DEFECT` /\n  `// CLEAN` markers: those sat inside the file the model was shown, and the\n  fits they produced were better than the rules (six fell when they came\n  out). Editing a case file means shifting the labels below the edit; the\n  test suite fails on a label no subject sits on.\n- Each suite labels only its own rule. `tools/arms.ts` and\n  `tools/grouping.ts` run every rule over every suite's cases\n  (`evalCorpus`), where another rule's answer on a suite's file is clean by\n  default -- a defect for rule A in rule B's cases is B's false positive\n  until labelled.\n- A fixture file named for the rule it exercises carries\n  `// jev-lint-ignore-file module-name-describes-contents` on line 1, above\n  its imports, so the module rule does not judge a name that was never a\n  claim about the exports.\n- A new shipped rule needs its own fixtures with hard cleans, `gaps`,\n  repeated `eval`, a report with a verdict, and a pass over unseen code\n  before it enters `rules/<language>/<id>/` with an accepted baseline.\n- Any change to a shipped rule's `ask`, `criteria`, `note`, matcher,\n  `subject` or `state` is a new question: `jev-lint eval --replay` refuses\n  the old baseline until you run `jev-lint eval rules/<language>/<id> --repeat 3`,\n  read the result, and `--accept` it. Commit the baseline with the rule.\n- `tools/arms.ts` measures every arm per rule over every suite's cases\n  (five arms, two passes, about twenty cents). Re-run it after changing a matcher or splitting a rule; the\n  shipped `state:` choices are measurements, not preferences.\n- `just docs-facts` regenerates current catalog, runtime, model and CI facts.\n  `just docs-check --record .jev-lint/documents-baseline.json` refreshes the\n  semantic documentation comparisons; `just docs-replay` validates that record\n  offline. Refresh after changing a registered source or comparison selector.\n- Figures quoted in `README.md`, `docs/reference.md` and `docs/deepdive.md`\n  are measured. Change the measurement and the figure together, or neither.",
+        "contentHash": "226871be5830bbad76f8bd177b2b401a0f43bb472c539d5eaa00148ec2ab487c"
+      },
+      "context": [],
+      "candidateId": "a8f599561352382b20a2ed9e1f256e4083c562610987963e7c6a8ea03fa0ade1",
+      "contextHash": "0bea55b8006b18a6dbfd269bf812b63956316ca607280e9cdf8208a510bff490",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.27,
+        "probabilities": {
+          "supports": 0.45,
+          "contradicts": 0.28,
+          "unrelated": 0.04,
+          "insufficient_context": 0.23
+        }
+      }
+    },
+    {
+      "id": "rule-fixtures-contract",
+      "topic": "Whether a newly shipped rule requires labelled fixtures and an accepted baseline",
+      "mode": "semantic",
+      "reference": {
+        "source": "instructions",
+        "path": "AGENTS.md",
+        "startLine": 8,
+        "endLine": 26,
+        "quote": "## Rules\n\n- A rule lives at `rules/<lang>/<id>/rule.yml`, with `fixtures/` beside it,\n  an `expect.yml` labelling them, and the accepted `baseline.json`. A rule\n  file anywhere else has no fixtures and no tier, and that is a different\n  thing.\n- A rule ships with a cutoff that was fitted, and the `threshold:` carries a\n  comment naming the run it came from, what the defects answered, where the\n  cleans topped out, and the pass-to-pass spread. A guessed cutoff is\n  written `threshold: 0.7  # uncalibrated` and does not ship that way.\n- `baseline.json` is committed; `last.json` is not — `.gitignore` already\n  says so. A change to what a rule asks or matches needs a newly accepted\n  baseline. Renaming `at:` to `threshold:` without changing the number\n  preserves the normalized rule and its accepted answers.\n- The same `id` under two language directories carries the same `ask:`,\n  `criteria:` and `note:`. Change one and change the other, or say in\n  `divergent:` why that language's failure is shaped differently.\n- Never write a rule a compiler, type checker or conventional linter can\n  decide. Those belong to the existing tools.",
+        "contentHash": "e74a7478490d47236ed3f1f3a446efbf716b1c4483b3e7e3df968fc54214e87b"
+      },
+      "target": {
+        "source": "writing",
+        "path": "docs/writing-rules.md",
+        "startLine": 55,
+        "endLine": 111,
+        "quote": "### Evals: the cases a rule ships with\n\nA cutoff is fitted, not chosen, and a rule is only as good as the cases it\nis measured on. Each rule directory carries them, under its language:\n\n```\nrules/typescript/catch-hides-failure/\n  rule.yml                 one language; a Rust twin goes under rules/rust/\n  fixtures/handlers.ts     code that reads like real code -- no markers in it\n  expect.yml               fixtures/handlers.ts: [{ line: 12, label: bad, window: 0, reason: \"...\" }]\n  baseline.json            the accepted run: answers, cutoffs, the rule's draft hash\n```\n\nThe language directory admits only its own grammars (`typescript` admits\nthe ECMAScript four), so one language's matcher cannot land in another's\nfile. The same id under two languages is one rule in two languages: it\nshares the id in findings and `--threshold`, and the loader warns if the two\ncopies of the sentence drift. Every shipped rule, in every language, requires\nlabelled fixtures, an `expect.yml` and an accepted `baseline.json`.\n`typescript` and `rust` are first tier; the remaining language packs are\ncalibrated to the same standard without that support promise. Uncalibrated\nexperiments stay outside the shipped `rules/<language>/<id>/` catalog.\n\nExpectations live in `expect.yml` and never in the code: a `// DEFECT: named seconds,\nholds milliseconds` above a case is inside the file the model is shown, and\nthe fit then measures the label instead of the rule — which is how this\nrepository's own corpus once claimed 22 rules at 1.00/1.00 and had 17.\nPut in the hard clean cases, the ones a lazy rule would flag.\n\nAnd put them **near the cutoff**. A corpus of obvious defects and obvious\ncleans scores 1.00 on both axes and measures nothing: the rule could drift a\nquarter of the way across its scale and no number would move. `jev-lint eval`\nrefuses a suite in that state — and equally one whose nearest case sits closer\nto the cutoff than that case's own pass-to-pass spread, where the score is\ndecided by the run rather than by the rule. A rule for which this is a genuine\nproperty rather than a lazy corpus says so in `inconclusive:`, naming what was\ntried and what it answered; a declaration on a suite that does not need one is\nan error.\n\n```bash\njev-lint eval rules/typescript/catch-hides-failure --repeat 3   # ask 3 times, score at the shipped cutoff\njev-lint eval rules/typescript/catch-hides-failure --accept     # ...and make that run the baseline\njev-lint eval --replay                                 # every rule, no requests: the CI gate\n```\n\nThe score is at the rule's **shipped** cutoff on the mean of the passes —\ndoes the rule as it ships still get its cases right — with the fitted cutoff\nprinted beside it, not used. `--replay` re-scores every baseline at the\ncurrent cutoffs without a request and fails on a case that was right when\nthe baseline was accepted and is wrong now, or on a rule whose sentence,\ncriteria, matcher, subject or state changed since: those answers were to a\ndifferent question, and the eval has to be run and accepted again. This\nrepository's `npm run ci` includes it alongside adoption and documentation checks.\n\nEvery field, `score` versus `noul`, the state arms with their measurements,\nand sharing one sentence across grammars are in\n[reference.md](reference.md#rule-fields).",
+        "contentHash": "e2d43013f9ff20b7bdec6ce2f9a135b533e380b5968d36deb7a0c2a771b2361d"
+      },
+      "context": [],
+      "candidateId": "0b5365ff273a71d1f1b1c5bc744b13ed6314988a44d56ccc396618fa8fe6f533",
+      "contextHash": "07495441926fa597e342fd615b9889328aeb9dd93abac75f85ac2db76d2eba83",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.95,
+        "probabilities": {
+          "supports": 0.96,
+          "contradicts": 0.04,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "baseline-adoption",
+      "topic": "The distinction between accepted-findings baselines and verdict caches",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "path": "docs/glossary.md",
+        "startLine": 6,
+        "endLine": 29,
+        "quote": "## Baselines and caches\n\nA verdict cache stores reusable model answers. The ordinary CLI cache is\n`.jev-lint/baseline.json`; the strict audit cache also binds the entire request,\ntenant, repository, endpoint, model deployment and selected policy. Cache reuse\nis not an owner approval or a quality verdict. The relation API has no persistent\nverdict cache.\n\nA rule evaluation baseline is `rules/<language>/<id>/baseline.json`. It records\naccepted fixture answers and question identity for calibration/replay. It does\nnot accept findings in a user's project.\n\nAn accepted-findings baseline is a separate ledger, normally\n`.jev-lint/accepted-findings.json`. It records explicit acceptance and counts;\nchanged model, policy or context requires rechecking. Missing or unobserved\nsubjects are not evidence of resolution. Acceptance never skips a model request.\n\nThe documentation record `.jev-lint/documents-baseline.json` contains recorded\ncomparisons for a content-digested documentation snapshot. Replay validates the\ncurrent snapshot and question identity; it does not produce a fresh model answer.\n\nThe Japanese terms 回答キャッシュ, ルール評価のbaseline, 指摘の受入台帳 and 文書比較の記録\nname these respective concepts. Different translations are acceptable when the\nsame distinctions remain explicit.",
+        "contentHash": "dc3a671b77429c232bfcbdc40d90311fe9c9c2df31acebaaf0b0c8449d371b70"
+      },
+      "target": {
+        "source": "adoption",
+        "path": "docs/adoption.md",
+        "startLine": 7,
+        "endLine": 68,
+        "quote": "## Accepted findings\n\nProduce a [scan artifact](audit-api.md), then explicitly accept the current\nfindings with the operator's scope and immutable deployment identity:\n\n```sh\njev-lint baseline write --artifact scan.json \\\n  --baseline .jev-lint/accepted-findings.json \\\n  --scope-id billing-contract --model-revision deployment-001\n\njev-lint baseline compare --artifact next-scan.json \\\n  --baseline .jev-lint/accepted-findings.json \\\n  --scope-id billing-contract --model-revision deployment-001\n\njev-lint baseline prune --artifact next-scan.json \\\n  --baseline .jev-lint/accepted-findings.json \\\n  --scope-id billing-contract --model-revision deployment-001\n```\n\nThe ledger retains the accepting artifact digest, source SHA, run ID and\ndeployment identity. It stores fingerprints/counts rather than source quotes.\n`write` is an explicit acceptance operation: use the owner approval store in a\nhosted integration. Never let PR-controlled configuration accept its own findings.\n`compare` is read-only and does not skip any model requests upstream.\n\nContinuity keys track a scan's rule, path and exact subject text without line\nnumbers. Counts distinguish duplicate copies. Relation continuity uses the claim\nID, relation ID and target paths; callers should supply stable logical relation\nIDs. Automatically discovered IDs can change when source ranges change.\n\nAn independent fingerprint binds the whole judged context, rule/cutoff, policy,\nmodel and deployment identity. A matching finding is `accepted`; a new copy is\n`new`; changed judgment inputs under the same continuity key are `recheck`.\nLine movement alone does not change the continuity key, but a changed full request\ncontext still requires rechecking. This is deliberately stricter than a line-only\nsuppression. Significant whitespace inside evidence is never normalized away.\n\n`resolved` requires an explicit usable clean answer with the same acceptance\nfingerprint. Missing answers, absent subjects, changed-context clean answers and\ncomparisons outside the observed set remain `unassessed`. A rewritten or removed\nsubject is not automatically proof that its defect was fixed. Its old ledger\nentry remains until the operator replaces the accepted set. `prune` removes only\nexplicit resolutions, never adds entries, and refuses incomplete reviews.\n\nExact still-reported copies consume their allowance before clean duplicates, so\ninput order cannot accidentally prune a surviving finding. `write` and `prune`\nvalidate before an atomic file replacement; they refuse known verdict-cache and\nrule-baseline paths, and do not overwrite a file of another schema.\n\n`compare` exits 1 for new/recheck findings, 3 for incomplete processing, and 0 when\nthe assessed scope has no new/recheck findings. Unobserved old entries stay in the\noutput even when that selected-scope comparison exits 0. The output always keeps\n`qualityVerdict: \"UNREVIEWED\"`. Exit 2 is invalid input/configuration. A deployment\nidentity is required even for an offline CLI comparison; it is supplied by the\noperator, not inferred from a moving model alias.\n\nFor relations, pass `--relation-input final-input.json` from the trusted dispatcher.\nIf the producer used a diff or planning budget, also pass\n`--relation-options trusted-plan-options.json` with its `changedPaths`, `baseSha`,\n`maxRelations` and/or `maxContextChars`. The existing report validator checks the\nexpected input/plan, source quotations and coverage. Unresolved owner decisions\nremain unassessed and cannot be accepted as a complete review.",
+        "contentHash": "e490760ffd8cf75e2a2d5ce50c43685eb17ac7310c6210bc58ba4428acf4c3b8"
+      },
+      "context": [],
+      "candidateId": "9d38bd369c9f3e1fb49b367ff424c8c1489d45a3445adef97f0783f4699fc36c",
+      "contextHash": "3cad91cb720b9c9de6928d42af3f434477aea58378967cbc0484f5c147395a2c",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.97,
+        "probabilities": {
+          "supports": 0.98,
+          "contradicts": 0.02,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "cache-reference",
+      "topic": "The ordinary CLI verdict cache",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "path": "docs/glossary.md",
+        "startLine": 6,
+        "endLine": 29,
+        "quote": "## Baselines and caches\n\nA verdict cache stores reusable model answers. The ordinary CLI cache is\n`.jev-lint/baseline.json`; the strict audit cache also binds the entire request,\ntenant, repository, endpoint, model deployment and selected policy. Cache reuse\nis not an owner approval or a quality verdict. The relation API has no persistent\nverdict cache.\n\nA rule evaluation baseline is `rules/<language>/<id>/baseline.json`. It records\naccepted fixture answers and question identity for calibration/replay. It does\nnot accept findings in a user's project.\n\nAn accepted-findings baseline is a separate ledger, normally\n`.jev-lint/accepted-findings.json`. It records explicit acceptance and counts;\nchanged model, policy or context requires rechecking. Missing or unobserved\nsubjects are not evidence of resolution. Acceptance never skips a model request.\n\nThe documentation record `.jev-lint/documents-baseline.json` contains recorded\ncomparisons for a content-digested documentation snapshot. Replay validates the\ncurrent snapshot and question identity; it does not produce a fresh model answer.\n\nThe Japanese terms 回答キャッシュ, ルール評価のbaseline, 指摘の受入台帳 and 文書比較の記録\nname these respective concepts. Different translations are acceptable when the\nsame distinctions remain explicit.",
+        "contentHash": "dc3a671b77429c232bfcbdc40d90311fe9c9c2df31acebaaf0b0c8449d371b70"
+      },
+      "target": {
+        "source": "reference",
+        "path": "docs/reference.md",
+        "startLine": 1317,
+        "endLine": 1320,
+        "quote": "The verdict cache is `.jev-lint/baseline.json`, relative to the config's\ndirectory, and is meant to be committed: a run over the same commit answers\nfrom it, and CI lints from it with no API key. It is trusted input --\nanything that can edit it can silence a rule or invent a finding.",
+        "contentHash": "2ec008e52203e6a8d9065b94b64409e7daf70c16c05567df31214fccf10e671b"
+      },
+      "context": [],
+      "candidateId": "9802f1f0719630d2ce6030d795a97980104e8f0cdd48886c3cf83a9e4c3185fd",
+      "contextHash": "5b6116f2054b4ad6340f8b3e02aef4ca8f7f43ae5d8d48081c8ef4bc1a7a864e",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.87,
+        "probabilities": {
+          "supports": 0.9,
+          "contradicts": 0.09,
+          "unrelated": 0,
+          "insufficient_context": 0.01
+        }
+      }
+    },
+    {
+      "id": "cache-relations",
+      "topic": "Persistent caching in the relation API",
+      "mode": "semantic",
+      "reference": {
+        "source": "terms",
+        "path": "docs/glossary.md",
+        "startLine": 6,
+        "endLine": 29,
+        "quote": "## Baselines and caches\n\nA verdict cache stores reusable model answers. The ordinary CLI cache is\n`.jev-lint/baseline.json`; the strict audit cache also binds the entire request,\ntenant, repository, endpoint, model deployment and selected policy. Cache reuse\nis not an owner approval or a quality verdict. The relation API has no persistent\nverdict cache.\n\nA rule evaluation baseline is `rules/<language>/<id>/baseline.json`. It records\naccepted fixture answers and question identity for calibration/replay. It does\nnot accept findings in a user's project.\n\nAn accepted-findings baseline is a separate ledger, normally\n`.jev-lint/accepted-findings.json`. It records explicit acceptance and counts;\nchanged model, policy or context requires rechecking. Missing or unobserved\nsubjects are not evidence of resolution. Acceptance never skips a model request.\n\nThe documentation record `.jev-lint/documents-baseline.json` contains recorded\ncomparisons for a content-digested documentation snapshot. Replay validates the\ncurrent snapshot and question identity; it does not produce a fresh model answer.\n\nThe Japanese terms 回答キャッシュ, ルール評価のbaseline, 指摘の受入台帳 and 文書比較の記録\nname these respective concepts. Different translations are acceptable when the\nsame distinctions remain explicit.",
+        "contentHash": "dc3a671b77429c232bfcbdc40d90311fe9c9c2df31acebaaf0b0c8449d371b70"
+      },
+      "target": {
+        "source": "relations",
+        "path": "docs/relations-api.md",
+        "startLine": 115,
+        "endLine": 119,
+        "quote": "The integration supplies the variables and authorization callback. For a custom\n`AskClient`, the caller is responsible for its per-attempt authorization controls.\nThe API has no persistent verdict cache; request context and prompt digests are\nprovenance records, not tenant access controls or sufficient cache keys by\nthemselves. Reused clients share budgets, and scan-local usage is a delta.",
+        "contentHash": "3ef02f00554d1981d2681a2d11871fdb86e6e972a555d60d2cb0c50e8aacede6"
+      },
+      "context": [],
+      "candidateId": "763f52cfccba43ab04e31b65d8a3e1ea04e729d2c0780bab3d4471291ac78da6",
+      "contextHash": "9b927ce6ce3ccd0d034e8afee8439d0cbdd9186a35694ebff1c2b3e575e55efd",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.99,
+        "probabilities": {
+          "supports": 0.99,
+          "contradicts": 0.01,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "completion-scan",
+      "topic": "Scope completion is separate from quality approval",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "path": "docs/glossary.md",
+        "startLine": 31,
+        "endLine": 43,
+        "quote": "## Completion and quality\n\n`complete` describes processing of the declared scope. A completed relation or\ndocument comparison can contain contradictions. Zero candidates is not proof\nthat every possible defect was examined. Missing answers, relevant insufficient\ncontext and deferred work remain visible.\n\n`UNREVIEWED` means screening has not completed an independent quality review.\nA finding is a candidate for review, not permission to modify, approve or merge.\nSuccessful SARIF execution also does not imply quality PASS.\n\nIn Japanese, 処理完了 or 比較完了 can translate scope completion; 品質合格 means a\ndifferent assertion and cannot replace it.",
+        "contentHash": "8b65178366dd0cd9095e6753e9f9b0c9bb98c6b9c21d87c49d5628c5de201ded"
+      },
+      "target": {
+        "source": "audit",
+        "path": "docs/audit-api.md",
+        "startLine": 8,
+        "endLine": 33,
+        "quote": "## CLI\n\n```sh\njev-lint scan src --no-config --cache none \\\n  --repository owner/project --run-id run-00001 --namespace account-001 \\\n  --policy-ref <approved-commit-sha> > scan.json\n```\n\n`scan` writes one JSON document. Exit `0` means the selected scope was completely\nprocessed, including when it produced candidates. Exit `3` means partial or\nfailed processing; exit `2` is invalid configuration or source provenance.\nIt does not certify that a repository is correct or authorize a merge.\n\nThe default scan cache is disabled. An explicit cache path must be outside the\nsource checkout and requires `--model-revision <immutable-deployment-id>`.\n`--source-sha` defaults to HEAD; `--max-candidates` limits the output and records\nomissions as a partial scan. `--dry-run` also produces a partial scan, since no\nnew verdicts were obtained.\n\nThe source checkout must be clean, at the requested SHA, and owned by the trusted\ndispatcher. Make it read-only while a scan is running. The API checks the\ncheckout before and after processing; these checks are not a sandbox against\nanother process that can mutate and restore files between checks. Do not install\ndependencies, run lifecycle scripts, or load branch-controlled parser libraries\nin this runner. Supply trusted rules explicitly to the API. CLI users should\nalso supply trusted configuration or use `--no-config` with packaged rules.",
+        "contentHash": "13867c00dea1ccd34b0bc3842fd5852e644fbadb74e95a157b2e74a8e1608d2b"
+      },
+      "context": [],
+      "candidateId": "8bcfcc75451481c1e8dbaf6bfbbcce6bea77b961d3e2782568f2b3a050e421b0",
+      "contextHash": "3628c049063fac0b6afa53242c8da086e07caf928b820457cb5836b29de24255",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.99,
+        "probabilities": {
+          "supports": 0.99,
+          "contradicts": 0.01,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "completion-relations",
+      "topic": "Scope completion can include contradictions and is not quality PASS",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "path": "docs/glossary.md",
+        "startLine": 31,
+        "endLine": 43,
+        "quote": "## Completion and quality\n\n`complete` describes processing of the declared scope. A completed relation or\ndocument comparison can contain contradictions. Zero candidates is not proof\nthat every possible defect was examined. Missing answers, relevant insufficient\ncontext and deferred work remain visible.\n\n`UNREVIEWED` means screening has not completed an independent quality review.\nA finding is a candidate for review, not permission to modify, approve or merge.\nSuccessful SARIF execution also does not imply quality PASS.\n\nIn Japanese, 処理完了 or 比較完了 can translate scope completion; 品質合格 means a\ndifferent assertion and cannot replace it.",
+        "contentHash": "8b65178366dd0cd9095e6753e9f9b0c9bb98c6b9c21d87c49d5628c5de201ded"
+      },
+      "target": {
+        "source": "relations",
+        "path": "docs/relations-api.md",
+        "startLine": 81,
+        "endLine": 84,
+        "quote": "`complete` means the declared comparisons were answered with usable, grounded\njudgments. Contradictions may be complete. Missing answers, ungrounded claims,\ninsufficient context, unplanned claims and deferred work remain partial or failed.\nNeither complete nor zero candidates certifies quality PASS.",
+        "contentHash": "765eaafc914c3f220989b1c765113a07dad67fdab856163c531781b7cf3c4b98"
+      },
+      "context": [],
+      "candidateId": "a97b2ca263ec16c69c120a92712db9a47e27080f3562db3d2e49ef223996b4a8",
+      "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.73,
+        "probabilities": {
+          "supports": 0.8,
+          "contradicts": 0.19,
+          "unrelated": 0,
+          "insufficient_context": 0.01
+        }
+      }
+    },
+    {
+      "id": "completion-sarif",
+      "topic": "SARIF execution success is not a quality verdict",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "path": "docs/glossary.md",
+        "startLine": 31,
+        "endLine": 43,
+        "quote": "## Completion and quality\n\n`complete` describes processing of the declared scope. A completed relation or\ndocument comparison can contain contradictions. Zero candidates is not proof\nthat every possible defect was examined. Missing answers, relevant insufficient\ncontext and deferred work remain visible.\n\n`UNREVIEWED` means screening has not completed an independent quality review.\nA finding is a candidate for review, not permission to modify, approve or merge.\nSuccessful SARIF execution also does not imply quality PASS.\n\nIn Japanese, 処理完了 or 比較完了 can translate scope completion; 品質合格 means a\ndifferent assertion and cannot replace it.",
+        "contentHash": "8b65178366dd0cd9095e6753e9f9b0c9bb98c6b9c21d87c49d5628c5de201ded"
+      },
+      "target": {
+        "source": "adoption",
+        "path": "docs/adoption.md",
+        "startLine": 104,
+        "endLine": 134,
+        "quote": "## SARIF\n\n```sh\njev-lint check src --sarif > results.sarif\njev-lint review --base main --format sarif > results.sarif\njev-lint report --artifact scan.json --sarif --output results.sarif\njev-lint report --artifact relations.json --relation-input final-input.json \\\n  --relation-options trusted-plan-options.json --sarif --output relations.sarif\n```\n\nThe exporter emits SARIF 2.1.0 with encoded repository-relative URIs and positive\nline ranges. Incomplete reviews carry an unsuccessful execution and a fixed\nnotification instead of silently looking complete. No-verdict observations are\nnotes. The run's quality verdict remains UNREVIEWED even if execution succeeded.\n\nRelation exports retain pinned related locations. Historical revisions are logical\nlocations with their SHA, so their old line ranges are not presented as current\nhead locations. A historical-only comparison can have no physical primary\nlocation. Full source quotes are not embedded by the SARIF exporter, but finding\nmessages and file names can still be private; choose the destination accordingly.\nDo not treat SARIF as the authenticated audit artifact or the watchpoint gate.\n\nSARIF is available for check/review, scan and compatible replay results. Commit\nsubjects and plans require JSON because they are not current source locations.\nAll normalized review, acceptance, scope and SARIF APIs are also available through\nthe `jev-lint/review-artifact`, `/acceptance`, `/scope`, `/doctor`, and `/sarif`\npackage exports. Structural parsers do not authenticate the artifact's writer;\nthe integration must bind expected repository, snapshot, approval and access.\n\nSee the [evaluation record](../experiments/adoption/README.md) and\n[upstream attribution](../THIRD_PARTY_NOTICES.md).",
+        "contentHash": "5f95db234dfe91502350a55327ab27860fa528badbffd09756e5338e8d1d0b0d"
+      },
+      "context": [],
+      "candidateId": "b984537b7c220f0a4584013627b587473728806e655bfdb488327aa3c3119046",
+      "contextHash": "8cecf2bfcf88789455d7eafa78a1b126bee955d21dc05f16fa0edb8326788196",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.84,
+        "probabilities": {
+          "supports": 0.88,
+          "contradicts": 0.12,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "workflow-snapshots",
+      "topic": "Dependency context uses pinned quoted evidence without executing source",
+      "mode": "semantic",
+      "reference": {
+        "source": "terms",
+        "path": "docs/glossary.md",
+        "startLine": 52,
+        "endLine": 62,
+        "quote": "## Evidence and snapshots\n\nAudit scan and relation source revisions are immutable git commits. A context\nhash identifies the supplied request evidence; it is not a tenant access control\nor an authenticated writer identity. Approval metadata comes from the owner\nstore, not from claims embedded in reviewed text.\n\nDocumentation checking can read a working tree. Such a snapshot uses content\ndigests and exact quoted ranges; its digest is not represented as a git commit.\nAn old document's line range must retain its old revision rather than being\npresented as a current-head physical location.",
+        "contentHash": "0a14d7cc67c9d9b4e1143c41a2c99dab1f71c412c85857557a4ac1349bbeb630"
+      },
+      "target": {
+        "source": "workflow",
+        "path": "docs/relations-workflow.md",
+        "startLine": 31,
+        "endLine": 51,
+        "quote": "## Bounded context retrieval\n\nAfter a grounded comparison answers `insufficient_context`, the workflow searches\nthe catalog for same-file definitions and explicit relative named imports. It\nsupports import aliases and follows another dependency layer on the next round.\nThe import declaration itself is supplied with an imported body so the model can\nverify the alias binding. Every addition is an exact quote from a pinned source.\n\nAmbiguous module paths and duplicate same-name definitions are not guessed.\nDynamic imports, namespace/default imports, re-exports, computed dispatch and\nnon-JavaScript module resolution require caller-supplied context. The graph is\napproximate; only the model evaluates whether the supplied behavior satisfies a\nrequirement. Retrieval does not execute code or add files outside the supplied\nsource catalog. Include permitted helper sources in the dispatcher manifest.\n\nThe default budgets are two retrieval rounds after the initial scan, 24,000 added\ncharacters and 20 added excerpts across the workflow. There is also the relation\nAPI's 20-context-excerpt limit per relation and its planned context-size limit.\nNo budget silently truncates an excerpt. Unresolved comparisons remain partial;\ndeferred discovery or context also keeps the workflow partial. Each round scans\nthe selected set again, so unchanged comparisons can incur another request.",
+        "contentHash": "c42eae2e05362b047e10d1648aafd2d7e17f232a0667538a8c8e2b136dc27f06"
+      },
+      "context": [],
+      "candidateId": "4dd7ac7cc085e643e30080f04692b65bd3f4e1d6ead7a40208dd3a0f527301cd",
+      "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.93,
+        "probabilities": {
+          "supports": 0.95,
+          "contradicts": 0.03,
+          "unrelated": 0,
+          "insufficient_context": 0.02
+        }
+      }
+    },
+    {
+      "id": "hook-translation",
+      "topic": "Default hook behavior and when findings block a commit or push",
+      "mode": "translation",
+      "reference": {
+        "source": "hooks",
+        "path": "docs/use-hooks.md",
+        "startLine": 10,
+        "endLine": 12,
+        "quote": "Both print what they find. **Neither blocks**, until you decide one of your\nrules has earned it. That is the whole posture: a probabilistic reviewer\nthat can fail a build is a probabilistic reviewer that gets switched off.",
+        "contentHash": "35766b91396acaaac9429351e3e46469e8864e992846e83ff863f593cfadfe9e"
+      },
+      "target": {
+        "source": "readme-ja",
+        "path": "README-ja.md",
+        "startLine": 120,
+        "endLine": 120,
+        "quote": "**CI と git hook** — `review --base \"$GITHUB_BASE_REF\" --format github` が PR に注釈を付ける。`jev-lint init --pre-commit` と `--pre-push` が hook を書く。どちらもルールを `severity: error` に上げるまでブロックしないし、同梱ルールにそれを持つものは無い。[docs/use-hooks.md](docs/use-hooks.md) に詳細があり、オフラインだとコミットが止まる終了コードの話もそこにある。",
+        "contentHash": "620acfc54972986da99d8841c04cb79c14fbb3082ef9e444be968a1c249f742d"
+      },
+      "context": [],
+      "candidateId": "644b1b5f616603ca3411255908b3452a0abb7d9000ecacca0514903912b240d3",
+      "contextHash": "5b34f29deedd29ae1e6be2579e9869a25c181289e7cb3a925fc72e1399252950",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.88,
+        "probabilities": {
+          "supports": 0.91,
+          "contradicts": 0.07,
+          "unrelated": 0,
+          "insufficient_context": 0.02
+        }
+      }
+    },
+    {
+      "id": "working-docs-snapshot",
+      "topic": "Documentation snapshots use content digests rather than fake immutable git SHAs",
+      "mode": "semantic",
+      "reference": {
+        "source": "terms",
+        "path": "docs/glossary.md",
+        "startLine": 52,
+        "endLine": 62,
+        "quote": "## Evidence and snapshots\n\nAudit scan and relation source revisions are immutable git commits. A context\nhash identifies the supplied request evidence; it is not a tenant access control\nor an authenticated writer identity. Approval metadata comes from the owner\nstore, not from claims embedded in reviewed text.\n\nDocumentation checking can read a working tree. Such a snapshot uses content\ndigests and exact quoted ranges; its digest is not represented as a git commit.\nAn old document's line range must retain its old revision rather than being\npresented as a current-head physical location.",
+        "contentHash": "0a14d7cc67c9d9b4e1143c41a2c99dab1f71c412c85857557a4ac1349bbeb630"
+      },
+      "target": {
+        "source": "self-check",
+        "path": "docs/self-check.md",
+        "startLine": 34,
+        "endLine": 59,
+        "quote": "## Live and replay\n\nA live check reads regular files from the working tree, refuses symlink sources\nand records content digests. It does not execute checkout scripts or load parser\nlibraries. The transport checks snapshot freshness before sending and the runner\nchecks it again after evaluation. Supply a trusted manifest in a hosted service;\nrepository text is evidence and cannot approve itself. Credentials stay in the\nenvironment and are not document inputs.\n\n`--dry-run` prints the plan with zero model requests. `--record` writes all\nanswers, locations, question identity, usage and omissions. The default bounds\nare 100 comparisons, 64,000 characters per comparison, 256 kB per source file\nand two million characters of loaded source text. Actual requests also have\nclient-wide request, token, time and cost bounds.\n\nReplay validates recorded answers against the current manifest, source digests,\nselected excerpts and question. It makes no model requests. Any changed input\nrequires refreshing the record; stale evidence cannot certify the new snapshot.\nCI checks generated facts and replays the committed documentation record without\nan API key. A changed documentation binding therefore needs a new live record.\n\nExit 1 means a contradiction was found, 3 means incomplete/stale assessment,\nand 2 means invalid arguments or manifest. Exit 0 means the declared comparisons\nagreed; it does not certify all documentation or quality PASS. Snapshot changes\nduring a run take precedence over an old contradiction and yield exit 3.\nEvery report retains `qualityVerdict: \"UNREVIEWED\"`.",
+        "contentHash": "173c1ef729597bc2d352bd554e215aac09ebb6d3d86aaec89c87e4d531cfd49c"
+      },
+      "context": [],
+      "candidateId": "e78025fcf90d960f102275b534a2c38f2a3997d9c2aacf4ac17a6604dbce6596",
+      "contextHash": "7b67d93404c319f88696ab2fda3a5ab9586cca096735213d483c778af411c1be",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.99,
+        "probabilities": {
+          "supports": 0.99,
+          "contradicts": 0.01,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "documentation-translation",
+      "topic": "Documentation comparison commands, replay freshness and exit status",
+      "mode": "translation",
+      "reference": {
+        "source": "readme",
+        "path": "README.md",
+        "startLine": 261,
+        "endLine": 277,
+        "quote": "## Documentation consistency\n\n`jev-lint docs` compares explicit claims, glossary definitions and translations,\nretaining both source locations. This repository checks its own README pair,\nAPI guides and contributor instructions against generated project facts and\ncanonical terminology.\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\nThe manifest is `.jev-lint/documents.json`; `--document-manifest` selects another.\nReplay is offline and rejects changed sources or questions. Contradictions exit 1;\nincomplete or stale assessments exit 3. The report remains `UNREVIEWED`.\nSee the [self-check guide](docs/self-check.md) for scope, budgets and evaluation.",
+        "contentHash": "4572bdf2c1147215ec30ff85b80daba86bc0f9f8c6af36b6335e29b579538c05"
+      },
+      "target": {
+        "source": "readme-ja",
+        "path": "README-ja.md",
+        "startLine": 183,
+        "endLine": 198,
+        "quote": "## ドキュメントの整合性\n\n`jev-lint docs` は、明示した主張、用語の定義、翻訳の意味を比較し、両方の出典位置を残す。\nこのリポジトリでは日英README、APIガイド、開発者向け指示を、生成したプロジェクト情報と\n共通の用語定義に照らして検査する。\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\n定義ファイルは `.jev-lint/documents.json`。`--document-manifest` で別のものを指定できる。\n再生には通信が不要で、出典や質問が変わっていれば拒否する。不一致は終了コード1、\n未評価・古い記録は3になる。結果の品質判定は `UNREVIEWED` のまま。\n対象範囲、予算、評価方法は[自己検査ガイド](docs/self-check.md)にある。",
+        "contentHash": "9ebd4cd92ca951f5ebe6fb203083dcca7d387759c136dfd16cc566bdec8f6617"
+      },
+      "context": [],
+      "candidateId": "b36bec363f42051e0172a5a4f4e32891128f9745a9b429656374723f4aa0824e",
+      "contextHash": "9f2dc9b917e5850238515e98e23e05a80602412049f3f1695cebf7d27a09299a",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.99,
+        "probabilities": {
+          "supports": 0.99,
+          "contradicts": 0.01,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    }
+  ],
+  "coverage": {
+    "expected": 19,
+    "selected": 19,
+    "answered": 19,
+    "missing": 0,
+    "contradictions": 0,
+    "unassessed": 0,
+    "deferred": 0,
+    "issues": 0,
+    "unboundDocuments": 0
+  },
+  "usage": {
+    "requests": 19,
+    "inputTokens": 26343,
+    "usd": 0.001106406
+  },
+  "errors": []
+}

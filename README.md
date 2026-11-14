@@ -45,7 +45,7 @@ it, nothing is reported. Six findings over two files, for a tenth of a cent;
 
 ## What it catches
 
-Forty-eight questions ship, most of them asked in several languages -- 99
+Fifty distinct rule IDs ship, most of them asked in several languages -- 103
 rules in all. Roughly:
 
 - **A name against the thing it names.** A function, method, binding, type,
@@ -172,7 +172,7 @@ covers the exit code that will stop you committing while offline.
 
 ## What ships
 
-101 rules under `rules/<language>/<id>/`, and the files you point it at decide
+103 rules under `rules/<language>/<id>/`, and the files you point it at decide
 which run. Nothing to select.
 
 | point it at | what runs |
@@ -183,13 +183,13 @@ which run. Nothing to select.
 | `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |
 | `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |
 | `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |
-| `.md` `.mdx` | `markdown/` — 11 writing rules |
+| `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |
 | `package.json`, sqlc `.sql` | `json/` — 1, `text/` — 1 |
 | commits | `git/` — 2 |
 
 `typescript` and `rust` are first tier: every rule under them carries
 fixtures, expectations and an accepted baseline. The rest are calibrated to
-the same bar and not yet promised. [RULES.md](RULES.md) lists all 99 with
+the same bar and not yet promised. [RULES.md](RULES.md) lists all 103 with
 their question, cutoff and score on their own fixtures.
 
 Your own rule can target any language ast-grep parses — Java, Kotlin, Swift,
@@ -258,6 +258,24 @@ places immediately. `.claude/skills/jev-lint-repo` is a separate maintainer
 skill. Run `just skills-check` to verify the link or `just skills-sync` to
 restore it. CI checks the link so a copied skill cannot drift silently.
 
+## Documentation consistency
+
+`jev-lint docs` compares explicit claims, glossary definitions and translations,
+retaining both source locations. This repository checks its own README pair,
+API guides and contributor instructions against generated project facts and
+canonical terminology.
+
+```sh
+jev-lint docs --dry-run
+jev-lint docs --record .jev-lint/documents-baseline.json
+jev-lint docs --replay .jev-lint/documents-baseline.json
+```
+
+The manifest is `.jev-lint/documents.json`; `--document-manifest` selects another.
+Replay is offline and rejects changed sources or questions. Contradictions exit 1;
+incomplete or stale assessments exit 3. The report remains `UNREVIEWED`.
+See the [self-check guide](docs/self-check.md) for scope, budgets and evaluation.
+
 ## Documentation
 
 | | |
@@ -268,6 +286,9 @@ restore it. CI checks the link so a copied skill cannot drift silently.
 | [docs/relations-api.md](docs/relations-api.md) | approved specification sources, multi-source comparisons, claim grounding and drift coverage |
 | [docs/relations-workflow.md](docs/relations-workflow.md) | comparison discovery, bounded dependency context, workflow replay and consumer integration |
 | [docs/adoption.md](docs/adoption.md) | accepted findings, file eligibility, doctor, suppression diagnostics and SARIF export |
+| [docs/self-check.md](docs/self-check.md) | semantic consistency, terminology, translation and snapshot replay |
+| [docs/project-facts.md](docs/project-facts.md) | generated current catalog, runtime, default model, CI and package facts |
+| [docs/glossary.md](docs/glossary.md) | canonical terms and Japanese aliases |
 | [docs/use-hooks.md](docs/use-hooks.md) | git hooks and CI |
 | [SECURITY.md](SECURITY.md) | model judgment risks, trust boundaries, and safeguards |
 | [docs/writing-rules.md](docs/writing-rules.md) | writing a rule, and the evals it ships with |

@@ -35,7 +35,7 @@ examples/cart.ts
 
 ## 何を捕まえるか
 
-48 の問いが出荷されていて、その多くは複数言語で聞かれる（合わせて 99 ルール）。おおまかには:
+50 の異なるルールIDが出荷されていて、その多くは複数言語で聞かれる（合わせて 103 ルール）。おおまかには:
 
 - **名前と、その名前が指すもの。** 関数、メソッド、束縛、型、クラス、trait、モジュール。npm script とそれが走らせるコマンド。sqlc のクエリ名とその SQL。カートの保存もしてしまう `applyDiscount`、文字列が束縛された `isAdmin`。
 - **名前が含意する保証。** `safe*` は安全か、`pure*` は純粋か、冪等を名乗る関数は冪等か、Go の `MustX` は名前が約束する失敗で panic するか。
@@ -121,7 +121,7 @@ finding 一つ、またはファイル一つを黙らせるには、どのコメ
 
 ## 何が同梱されるか
 
-`rules/<language>/<id>/` の下に 99 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。
+`rules/<language>/<id>/` の下に 103 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。
 
 | 渡すもの | 走るもの |
 | --- | --- |
@@ -129,12 +129,13 @@ finding 一つ、またはファイル一つを黙らせるには、どのコメ
 | `.rs` | `rust/` — 9、第一級 |
 | `.py` `.go` | `python/` — 14、`go/` — 9 |
 | `.mbt` | `moonbit/` — 20。[パーサを宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば走る |
+| `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |
 | `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |
-| `.md` `.mdx` | `markdown/` — 11 の文章ルール |
+| `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |
 | `package.json`、sqlc の `.sql` | `json/` — 1、`text/` — 1 |
 | コミット | `git/` — 2 |
 
-`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 99 個全部の問い、cutoff、自分の fixtures での成績がある。
+`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 103 個全部の問い、cutoff、自分の fixtures での成績がある。
 
 自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。
 
@@ -179,6 +180,23 @@ npx skills add mizchi/jev-lint --skill jev-lint
 
 利用者向け skill の正本は `skills/jev-lint/` だけ。`.claude/skills/jev-lint` はそこを指す追跡済みの symlink なので、更新は両方に即時反映される。`.claude/skills/jev-lint-repo` は別のメンテナ向け skill。`just skills-check` でリンクを検証し、`just skills-sync` で復旧できる。CI でもコピーへの置き換えを検出する。
 
+## ドキュメントの整合性
+
+`jev-lint docs` は、明示した主張、用語の定義、翻訳の意味を比較し、両方の出典位置を残す。
+このリポジトリでは日英README、APIガイド、開発者向け指示を、生成したプロジェクト情報と
+共通の用語定義に照らして検査する。
+
+```sh
+jev-lint docs --dry-run
+jev-lint docs --record .jev-lint/documents-baseline.json
+jev-lint docs --replay .jev-lint/documents-baseline.json
+```
+
+定義ファイルは `.jev-lint/documents.json`。`--document-manifest` で別のものを指定できる。
+再生には通信が不要で、出典や質問が変わっていれば拒否する。不一致は終了コード1、
+未評価・古い記録は3になる。結果の品質判定は `UNREVIEWED` のまま。
+対象範囲、予算、評価方法は[自己検査ガイド](docs/self-check.md)にある。
+
 ## ドキュメント
 
 | | |
@@ -189,6 +207,9 @@ npx skills add mizchi/jev-lint --skill jev-lint
 | [docs/relations-api.md](docs/relations-api.md) | 承認仕様の固定、複数出典の比較、主張の根拠確認、仕様ドリフトのカバレッジ |
 | [docs/relations-workflow.md](docs/relations-workflow.md) | 比較候補の発見、依存先の文脈補完、ワークフロー再検証、利用側との接続 |
 | [docs/adoption.md](docs/adoption.md) | 指摘の受入台帳、検査対象の説明、doctor、抑制コメントの診断、SARIF出力 |
+| [docs/self-check.md](docs/self-check.md) | 文書の意味・用語・翻訳の整合性と記録の再生 |
+| [docs/project-facts.md](docs/project-facts.md) | 現在のカタログ、動作環境、既定モデル、CI、配布内容の生成情報 |
+| [docs/glossary.md](docs/glossary.md) | 共通用語と日本語表記 |
 | [docs/use-hooks.md](docs/use-hooks.md) | git hook と CI |
 | [SECURITY.md](SECURITY.md) | モデル判定のリスク、信頼境界、対策 |
 | [docs/writing-rules.md](docs/writing-rules.md) | ルールの書き方と、同梱する eval |

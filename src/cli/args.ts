@@ -16,6 +16,7 @@ import type { GroupMode, Severity, StateArm } from "../types.ts";
 
 /** Everything the command line can set. */
 export interface Options {
+  documentManifest: string | null;
   artifact: string | null; acceptedBaseline: string | null; output: string | null; scopeId: string | null;
   relationInput: string | null; relationOptions: string | null; explainScope: boolean;
   policyRef: string | null;
@@ -98,6 +99,9 @@ export interface Deps {
 export const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
+  jev-lint docs [--document-manifest <path>] [--record <path>]
+                                  compare documentation claims and terminology
+  jev-lint docs --replay <record.json> validate answers against the current document snapshot
   jev-lint baseline write|compare|prune --artifact <scan.json> --baseline <accepted.json>
                                   --scope-id <id> --model-revision <deployment>
   jev-lint report --artifact <scan.json> --sarif   export an existing artifact, no requests
@@ -128,6 +132,7 @@ usage:
   jev-lint init --pre-push        write a pre-push hook that judges the commits about to leave
 
 options:
+      --document-manifest <path> docs: source registry and explicit comparison selectors
       --explain-scope     explain file eligibility and exclusions without matching or model requests
       --artifact <path>   baseline/report: a scan or relation wire artifact
       --baseline <path>   accepted-findings ledger, separate from verdict caches and eval baselines
@@ -252,6 +257,7 @@ environment:
 
 export function parseArgs(argv: string[], { color }: { color: boolean }): Options {
   const opts: Options = {
+    documentManifest: null,
     artifact: null, acceptedBaseline: null, output: null, scopeId: null, relationInput: null, relationOptions: null, explainScope: false,
     policyRef: null,
     repository: null, runId: null, namespace: null, sourceSha: null, maxCandidates: null, modelRevision: null,
@@ -435,6 +441,7 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
         opts.format = "json";
         break;
       case "--artifact": opts.artifact = need(i++, a); break;
+      case "--document-manifest": opts.documentManifest = need(i++, a); break;
       case "--baseline": opts.acceptedBaseline = need(i++, a); break;
       case "--output": opts.output = need(i++, a); break;
       case "--scope-id": opts.scopeId = need(i++, a); break;

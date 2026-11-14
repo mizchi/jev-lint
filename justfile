@@ -7,6 +7,18 @@ skills-check:
 ci:
     pnpm run ci
 
+docs-facts *args:
+    node --experimental-strip-types tools/docs-facts.ts {{args}}
+
+docs-check *args:
+    node --experimental-strip-types src/cli.ts docs {{args}}
+
+docs-replay:
+    node --experimental-strip-types src/cli.ts docs --replay .jev-lint/documents-baseline.json
+
+docs-eval *args:
+    node --experimental-strip-types tools/eval-documents.ts {{args}}
+
 adoption-build:
     node --experimental-strip-types tools/build-adoption-eval.ts
 

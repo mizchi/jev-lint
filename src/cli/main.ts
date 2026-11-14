@@ -21,6 +21,7 @@ import { cmdArtifact } from "./cmd-artifact.ts";
 import { cmdScope } from "./cmd-scope.ts";
 import { doctor } from "../doctor.ts";
 import { resolveTargets } from "./targets.ts";
+import { cmdDocs } from "./cmd-docs.ts";
 
 export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   let command = argv[0] && !argv[0].startsWith("-") ? argv[0] : "check";
@@ -54,6 +55,7 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   if (opts.deprecatedAt) log("warning: --at is deprecated; use --threshold");
 
   if (command === "init") return cmdInit(opts, out, log);
+  if (command === "docs") return cmdDocs(opts, out, log, client);
   if (command === "baseline" || command === "report") return cmdArtifact(command, opts, out, log);
   if (opts.format === "sarif" && (opts.dryRun || !["check", "review", "run", "scan", "replay"].includes(command))) { log("SARIF supports check, review, scan and replay results; use JSON for plans"); return 2; }
 

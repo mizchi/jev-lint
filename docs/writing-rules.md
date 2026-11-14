@@ -69,10 +69,11 @@ The language directory admits only its own grammars (`typescript` admits
 the ECMAScript four), so one language's matcher cannot land in another's
 file. The same id under two languages is one rule in two languages: it
 shares the id in findings and `--threshold`, and the loader warns if the two
-copies of the sentence drift. Two languages are first tier — `typescript`
-and `rust` — and every shipped rule under them has fixtures, an expect
-file and an accepted baseline; a rule under any other language directory
-may ship without a baseline and is listed as uncalibrated.
+copies of the sentence drift. Every shipped rule, in every language, requires
+labelled fixtures, an `expect.yml` and an accepted `baseline.json`.
+`typescript` and `rust` are first tier; the remaining language packs are
+calibrated to the same standard without that support promise. Uncalibrated
+experiments stay outside the shipped `rules/<language>/<id>/` catalog.
 
 Expectations live in `expect.yml` and never in the code: a `// DEFECT: named seconds,
 holds milliseconds` above a case is inside the file the model is shown, and
@@ -103,8 +104,8 @@ current cutoffs without a request and fails on a case that was right when
 the baseline was accepted and is wrong now, or on a rule whose sentence,
 criteria, matcher, subject or state changed since: those answers were to a
 different question, and the eval has to be run and accepted again. This
-repository's `npm run ci` ends in it.
+repository's `npm run ci` includes it alongside adoption and documentation checks.
 
 Every field, `score` versus `noul`, the state arms with their measurements,
 and sharing one sentence across grammars are in
-[docs/reference.md](docs/reference.md#rule-fields).
+[reference.md](reference.md#rule-fields).

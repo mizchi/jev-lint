@@ -1,0 +1,342 @@
+{
+  "schema": "jev-lint-documents-manifest-1",
+  "roots": [
+    "README.md",
+    "README-ja.md",
+    "RULES.md",
+    "AGENTS.md",
+    "docs"
+  ],
+  "exclude": [
+    "docs/internal"
+  ],
+  "files": {
+    "facts": {
+      "path": "docs/project-facts.md",
+      "role": "reference"
+    },
+    "terms": {
+      "path": "docs/glossary.md",
+      "role": "reference"
+    },
+    "catalog": {
+      "path": "RULES.md",
+      "role": "reference"
+    },
+    "readme": {
+      "path": "README.md",
+      "role": "document"
+    },
+    "readme-ja": {
+      "path": "README-ja.md",
+      "role": "document"
+    },
+    "reference": {
+      "path": "docs/reference.md",
+      "role": "document"
+    },
+    "audit": {
+      "path": "docs/audit-api.md",
+      "role": "document"
+    },
+    "relations": {
+      "path": "docs/relations-api.md",
+      "role": "document"
+    },
+    "workflow": {
+      "path": "docs/relations-workflow.md",
+      "role": "document"
+    },
+    "adoption": {
+      "path": "docs/adoption.md",
+      "role": "document"
+    },
+    "writing": {
+      "path": "docs/writing-rules.md",
+      "role": "document"
+    },
+    "hooks": {
+      "path": "docs/use-hooks.md",
+      "role": "document"
+    },
+    "architecture": {
+      "path": "docs/internal/architecture.md",
+      "role": "document"
+    },
+    "instructions": {
+      "path": "AGENTS.md",
+      "role": "document"
+    },
+    "maintainer-skill": {
+      "path": ".claude/skills/jev-lint-repo/SKILL.md",
+      "role": "document"
+    },
+    "self-check": {
+      "path": "docs/self-check.md",
+      "role": "document"
+    },
+    "cost-history": {
+      "path": "docs/cost.md",
+      "role": "historical"
+    },
+    "deepdive-history": {
+      "path": "docs/deepdive.md",
+      "role": "historical"
+    },
+    "clef-history": {
+      "path": "docs/clef-evaluation.md",
+      "role": "historical"
+    }
+  },
+  "comparisons": [
+    {
+      "id": "catalog-readme",
+      "topic": "Current total shipped rule count and per-language counts",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "heading": "Rule catalog"
+      },
+      "target": {
+        "source": "readme",
+        "heading": "What ships"
+      }
+    },
+    {
+      "id": "catalog-readme-ja",
+      "topic": "Current total shipped rule count and per-language counts",
+      "mode": "translation",
+      "reference": {
+        "source": "facts",
+        "heading": "Rule catalog"
+      },
+      "target": {
+        "source": "readme-ja",
+        "heading": "何が同梱されるか"
+      }
+    },
+    {
+      "id": "catalog-reference",
+      "topic": "Current total number of shipped rules",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "heading": "Rule catalog"
+      },
+      "target": {
+        "source": "reference",
+        "heading": "The shipped packs",
+        "contains": "rules under `rules/<lang>/<id>/`"
+      }
+    },
+    {
+      "id": "runtime-instructions",
+      "topic": "Minimum Node version and runtime dependencies",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "heading": "Runtime"
+      },
+      "target": {
+        "source": "instructions",
+        "heading": "Code"
+      }
+    },
+    {
+      "id": "default-model-en",
+      "topic": "The current default model versus explicit model overrides",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "heading": "Default model"
+      },
+      "target": {
+        "source": "readme",
+        "heading": "Model recommendation"
+      }
+    },
+    {
+      "id": "default-model-ja",
+      "topic": "The current default model versus explicit model overrides",
+      "mode": "translation",
+      "reference": {
+        "source": "facts",
+        "heading": "Default model"
+      },
+      "target": {
+        "source": "readme-ja",
+        "heading": "推奨モデル"
+      }
+    },
+    {
+      "id": "ci-architecture",
+      "topic": "The complete local CI pipeline and its final stage",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "heading": "CI"
+      },
+      "target": {
+        "source": "architecture",
+        "heading": "Build contract"
+      }
+    },
+    {
+      "id": "ci-maintainer-skill",
+      "topic": "The complete local CI pipeline and its final stage",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "heading": "CI"
+      },
+      "target": {
+        "source": "maintainer-skill",
+        "heading": "Rules and their evals"
+      }
+    },
+    {
+      "id": "rule-fixtures-contract",
+      "topic": "Whether a newly shipped rule requires labelled fixtures and an accepted baseline",
+      "mode": "semantic",
+      "reference": {
+        "source": "instructions",
+        "heading": "Rules"
+      },
+      "target": {
+        "source": "writing",
+        "heading": "Evals: the cases a rule ships with"
+      }
+    },
+    {
+      "id": "baseline-adoption",
+      "topic": "The distinction between accepted-findings baselines and verdict caches",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "heading": "Baselines and caches"
+      },
+      "target": {
+        "source": "adoption",
+        "heading": "Accepted findings"
+      }
+    },
+    {
+      "id": "cache-reference",
+      "topic": "The ordinary CLI verdict cache",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "heading": "Baselines and caches"
+      },
+      "target": {
+        "source": "reference",
+        "heading": "The config",
+        "contains": "The verdict cache is"
+      }
+    },
+    {
+      "id": "cache-relations",
+      "topic": "Persistent caching in the relation API",
+      "mode": "semantic",
+      "reference": {
+        "source": "terms",
+        "heading": "Baselines and caches"
+      },
+      "target": {
+        "source": "relations",
+        "contains": "API has no persistent verdict cache"
+      }
+    },
+    {
+      "id": "completion-scan",
+      "topic": "Scope completion is separate from quality approval",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "heading": "Completion and quality"
+      },
+      "target": {
+        "source": "audit",
+        "heading": "CLI"
+      }
+    },
+    {
+      "id": "completion-relations",
+      "topic": "Scope completion can include contradictions and is not quality PASS",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "heading": "Completion and quality"
+      },
+      "target": {
+        "source": "relations",
+        "contains": "`complete` means"
+      }
+    },
+    {
+      "id": "completion-sarif",
+      "topic": "SARIF execution success is not a quality verdict",
+      "mode": "terminology",
+      "reference": {
+        "source": "terms",
+        "heading": "Completion and quality"
+      },
+      "target": {
+        "source": "adoption",
+        "heading": "SARIF"
+      }
+    },
+    {
+      "id": "workflow-snapshots",
+      "topic": "Dependency context uses pinned quoted evidence without executing source",
+      "mode": "semantic",
+      "reference": {
+        "source": "terms",
+        "heading": "Evidence and snapshots"
+      },
+      "target": {
+        "source": "workflow",
+        "heading": "Bounded context retrieval"
+      }
+    },
+    {
+      "id": "hook-translation",
+      "topic": "Default hook behavior and when findings block a commit or push",
+      "mode": "translation",
+      "reference": {
+        "source": "hooks",
+        "contains": "Neither blocks"
+      },
+      "target": {
+        "source": "readme-ja",
+        "contains": "**CI と git hook**"
+      }
+    },
+    {
+      "id": "working-docs-snapshot",
+      "topic": "Documentation snapshots use content digests rather than fake immutable git SHAs",
+      "mode": "semantic",
+      "reference": {
+        "source": "terms",
+        "heading": "Evidence and snapshots"
+      },
+      "target": {
+        "source": "self-check",
+        "heading": "Live and replay"
+      }
+    },
+    {
+      "id": "documentation-translation",
+      "topic": "Documentation comparison commands, replay freshness and exit status",
+      "mode": "translation",
+      "reference": {
+        "source": "readme",
+        "heading": "Documentation consistency"
+      },
+      "target": {
+        "source": "readme-ja",
+        "heading": "ドキュメントの整合性"
+      }
+    }
+  ]
+}

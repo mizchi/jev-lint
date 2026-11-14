@@ -17,6 +17,16 @@ pinned policy, cache isolation and outbound request controls.
 `doctor [--json]` checks local prerequisites without contacting a provider.
 See [adoption and export](adoption.md) for their contracts, limits and flags.
 
+`docs [--document-manifest <path>]` compares declared documentation claims,
+translations and terminology. Its default manifest is `.jev-lint/documents.json`.
+`docs --dry-run` emits the plan without requests; `docs --record <path>` saves
+live answers; `docs --replay <path>` validates the current snapshot offline.
+It supports text and JSON, uses an independent manifest rather than the ordinary
+rule configuration, and rejects stale evidence. A contradiction exits 1,
+incomplete/stale evidence exits 3, and invalid arguments exit 2. The report
+always remains `UNREVIEWED`. See [document self-check](self-check.md) for the
+manifest schema, selector rules, bounds and evaluation.
+
 ```bash
 jev-lint check src                  # judge whole files
 jev-lint review --base main         # judge only what the diff touched
@@ -51,6 +61,7 @@ answers.
 
 | flag | |
 | --- | --- |
+| `--document-manifest <path>` | `docs`: explicit source registry and comparison selectors; see [document self-check](self-check.md) |
 | `-R, --rules <path>` | rule file or directory, repeatable, loaded in place of the packaged packs and `.jev-lint/rules/` for this run |
 | `-r, --retry <n>` | ask everything n times and decide on the mean (default 1) — see [Asking more than once](#asking-more-than-once) |
 | `-c, --cache <path>` | verdict cache (default `.jev-lint/baseline.json`, relative to the config's directory; `none` to disable) |
@@ -580,7 +591,7 @@ baselines — is [RULES.md](../RULES.md), written by `tools/rules-md.ts`
 (`npm run rules:md`; `npm run rules:md:check` fails when it is stale, and
 so does `npm test`). What follows is the prose.
 
-99 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
+103 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
 grouped here by what they ask. Which languages each exists in:
 
 | rule | typescript | rust | python | go | other |
@@ -817,10 +828,13 @@ things about matching YAML and JSON in ast-grep that the skill now states.
 On a one-language repository every other language's rules are idle, and
 the report says so in one line rather than listing them as silent.
 
-Of the 99, **79 reach precision 1.00 and recall 1.00 at their shipped cutoffs
-on their own fixtures** (`rules/*/*/baseline.json`, three passes each,
-decisions on the mean; `jev-lint eval --replay` re-derives every number below
-with no request). Read that with the positive counts beside them: per rule,
+The September 2026 boundary-round snapshot below had **79 of 99 rules at
+precision 1.00 and recall 1.00 on their own fixtures**, using three passes
+and decisions on the mean. These historical counts describe that experiment;
+[project facts](project-facts.md#rule-catalog) and [RULES.md](../RULES.md)
+are generated from the current catalog and accepted baselines.
+`jev-lint eval --replay` re-scores those current baselines without a request.
+Read the historical snapshot with its positive counts beside it: per rule,
 one to thirty-seven labelled defects — 707 in all, against 113 before the
 improvement round of 2026-09-20 and 644 before the boundary round of
 2026-09-22. The first added hard cases drawn from real code; the second aimed
@@ -1163,9 +1177,10 @@ required around consequential decisions.
   It is only ever shown to the model, never used to decide anything.
 - **`severity: warning` by default, deliberately.** A probabilistic reviewer
   that can fail a build is a probabilistic reviewer that gets switched off.
-- **The cutoffs are fitted to small evals.** 497 labelled fixtures, 707
-  labelled defects and 1,135 labelled cleans across 99 rules, one to
-  thirty-seven defects per rule. Expect to refit; see
+- **The cutoffs are fitted to small evals.** The September 2026 snapshot
+  used 497 labelled fixtures, 707 defects and 1,135 cleans across 99 rules.
+  Current fixture totals are generated in [project facts](project-facts.md#rule-catalog).
+  Those totals remain fixture measurements, not production accuracy. Expect to refit; see
   [What to expect](#what-to-expect).
 - **No accuracy was ever measured on a large repository.** The tokio and vue
   figures above are planning cost only. Do not quote precision from them.

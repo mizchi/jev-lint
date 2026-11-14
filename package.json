@@ -67,7 +67,8 @@
       "types": "./dist/report.d.ts",
       "default": "./dist/report.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./documents": { "types": "./dist/documents.d.ts", "default": "./dist/documents.js" }
   },
   "files": [
     "dist",
@@ -84,7 +85,10 @@
     "docs/adoption.md",
     "THIRD_PARTY_NOTICES.md",
     "licenses",
-    "LICENSE"
+    "LICENSE",
+    "docs/self-check.md",
+    "docs/project-facts.md",
+    "docs/glossary.md"
   ],
   "scripts": {
     "build": "tsc && node -e \"require('fs').chmodSync('dist/cli.js', 0o755)\"",
@@ -106,9 +110,14 @@
     "arms": "node --experimental-strip-types tools/arms.ts --repeat 2",
     "grouping": "node --experimental-strip-types tools/grouping.ts --repeat 2",
     "dry": "node --experimental-strip-types src/cli.ts check --dry-run --cache none",
-    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption",
+    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run docs:replay",
     "prepack": "npm run clean && npm run build",
-    "parsers:moonbit": "node --experimental-strip-types tools/build-parser.ts moonbit"
+    "parsers:moonbit": "node --experimental-strip-types tools/build-parser.ts moonbit",
+    "docs:facts": "node --experimental-strip-types tools/docs-facts.ts",
+    "docs:facts:check": "node --experimental-strip-types tools/docs-facts.ts --check",
+    "docs:check": "node --experimental-strip-types src/cli.ts docs",
+    "docs:replay": "node --experimental-strip-types src/cli.ts docs --replay .jev-lint/documents-baseline.json",
+    "eval:documents": "node --experimental-strip-types tools/eval-documents.ts --replay experiments/documents/iteration-01.json"
   },
   "dependencies": {
     "@ast-grep/cli": "^0.45.3",

@@ -1,0 +1,133 @@
+{
+  "schema": "jev-lint-document-eval-expect-1",
+  "cases": [
+    {
+      "id": "node-floor",
+      "choice": "contradicts"
+    },
+    {
+      "id": "node-paraphrase",
+      "choice": "supports"
+    },
+    {
+      "id": "node-translation",
+      "choice": "contradicts"
+    },
+    {
+      "id": "node-translation-control",
+      "choice": "supports"
+    },
+    {
+      "id": "catalog-current",
+      "choice": "contradicts"
+    },
+    {
+      "id": "catalog-current-control",
+      "choice": "supports"
+    },
+    {
+      "id": "catalog-history",
+      "choice": "supports"
+    },
+    {
+      "id": "catalog-translation",
+      "choice": "supports"
+    },
+    {
+      "id": "cache-confusion",
+      "choice": "contradicts"
+    },
+    {
+      "id": "cache-control",
+      "choice": "supports"
+    },
+    {
+      "id": "completion-pass",
+      "choice": "contradicts"
+    },
+    {
+      "id": "completion-control",
+      "choice": "supports"
+    },
+    {
+      "id": "empty-pass",
+      "choice": "contradicts"
+    },
+    {
+      "id": "empty-control",
+      "choice": "supports"
+    },
+    {
+      "id": "approval-hash",
+      "choice": "contradicts"
+    },
+    {
+      "id": "approval-control",
+      "choice": "supports"
+    },
+    {
+      "id": "historical-range",
+      "choice": "contradicts"
+    },
+    {
+      "id": "historical-range-control",
+      "choice": "supports"
+    },
+    {
+      "id": "acceptance-translation",
+      "choice": "contradicts"
+    },
+    {
+      "id": "acceptance-alias",
+      "choice": "supports"
+    },
+    {
+      "id": "default-overrides",
+      "choice": "supports"
+    },
+    {
+      "id": "default-current",
+      "choice": "contradicts"
+    },
+    {
+      "id": "generated-exception",
+      "choice": "supports"
+    },
+    {
+      "id": "generated-prohibition",
+      "choice": "contradicts"
+    },
+    {
+      "id": "dry-plan",
+      "choice": "contradicts"
+    },
+    {
+      "id": "dry-plan-control",
+      "choice": "supports"
+    },
+    {
+      "id": "missing-mode",
+      "choice": "insufficient_context"
+    },
+    {
+      "id": "unrelated-topic",
+      "choice": "unrelated"
+    },
+    {
+      "id": "injected-disagreement",
+      "choice": "contradicts"
+    },
+    {
+      "id": "injected-agreement",
+      "choice": "supports"
+    },
+    {
+      "id": "ci-final-stage",
+      "choice": "contradicts"
+    },
+    {
+      "id": "ci-inclusion",
+      "choice": "supports"
+    }
+  ]
+}

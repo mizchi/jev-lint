@@ -7,14 +7,14 @@ description: "Use when changing jev-lint ITSELF — editing src/, shipped rule s
 
 The user-facing skill (`skills/jev-lint/`, symlinked into `.claude/skills/`)
 is the contract; this file is what is different when the repository is
-jev-lint's own. Read `docs/internal.md` before editing `src/`.
+jev-lint's own. Read `docs/internal/architecture.md` before editing `src/`.
 The symlink is checked by `npm run ci`; run `just skills-sync` if it is missing.
 
 ## The loop
 
 ```bash
 npm test                                   # no key, no network
-npm run ci                                 # typecheck, test, build, eval --replay
+npm run ci                                 # offline validation, rule/adoption/document replay
 node --experimental-strip-types src/cli.ts eval rules/<language>/<id> --repeat 3   # one suite, then --accept
 node --experimental-strip-types src/cli.ts check --dry-run    # self-lint plan, via .jev-lint.yaml
 node --experimental-strip-types src/cli.ts review --base main --retry 3
@@ -29,7 +29,7 @@ and excludes `test/fixtures/`, which holds planted defects for the cookbook.
   (labelled defects and cleans), and an accepted `baseline.json` beside it.
   `last.json` is untracked. `jev-lint eval rules/<language>/<id> --repeat 3`
   runs it; `--accept` promotes the
-  run; `npm run ci` ends in `jev-lint eval --replay`, which fails on a case
+  run; `npm run ci` includes `jev-lint eval --replay`, which fails on a case
   that was right when accepted and is wrong now, or on a rule whose question
   changed since its baseline. The case files carry NO `// DEFECT` /
   `// CLEAN` markers: those sat inside the file the model was shown, and the
@@ -55,6 +55,10 @@ and excludes `test/fixtures/`, which holds planted defects for the cookbook.
 - `tools/arms.ts` measures every arm per rule over every suite's cases
   (five arms, two passes, about twenty cents). Re-run it after changing a matcher or splitting a rule; the
   shipped `state:` choices are measurements, not preferences.
+- `just docs-facts` regenerates current catalog, runtime, model and CI facts.
+  `just docs-check --record .jev-lint/documents-baseline.json` refreshes the
+  semantic documentation comparisons; `just docs-replay` validates that record
+  offline. Refresh after changing a registered source or comparison selector.
 - Figures quoted in `README.md`, `docs/reference.md` and `docs/deepdive.md`
   are measured. Change the measurement and the figure together, or neither.
 
