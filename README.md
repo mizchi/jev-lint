@@ -109,6 +109,11 @@ a committed cache with no key at all.
 
 ## Model recommendation
 
+The default is pinned to `jev-1.14.0`, the
+[current stable release](https://docs.typesafe.ai/models), so a moving alias cannot
+silently change answers at fitted cutoffs. Override it with `--model`, config's
+`model:`, or `JEV_LINT_MODEL`. `--model jev-latest` follows future stable releases.
+
 Jev is the recommended model for normal linting. The shipped rules and cutoffs
 are calibrated for Jev, and it performed best at those cutoffs in the
 [81-suite fixture comparison](docs/clef-evaluation.md#live-results-2026-10-02).
@@ -259,6 +264,9 @@ restore it. CI checks the link so a copied skill cannot drift silently.
 | --- | --- |
 | [RULES.md](RULES.md) | every shipped rule, its cutoff and its fit |
 | [docs/reference.md](docs/reference.md) | every flag and field, calibration, batching, limits |
+| [docs/audit-api.md](docs/audit-api.md) | versioned screening results, pinned policy, strict cache, request controls and adversarial evaluation |
+| [docs/relations-api.md](docs/relations-api.md) | approved specification sources, multi-source comparisons, claim grounding and drift coverage |
+| [docs/relations-workflow.md](docs/relations-workflow.md) | comparison discovery, bounded dependency context, workflow replay and consumer integration |
 | [docs/use-hooks.md](docs/use-hooks.md) | git hooks and CI |
 | [SECURITY.md](SECURITY.md) | model judgment risks, trust boundaries, and safeguards |
 | [docs/writing-rules.md](docs/writing-rules.md) | writing a rule, and the evals it ships with |

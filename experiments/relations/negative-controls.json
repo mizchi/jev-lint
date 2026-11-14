@@ -1,0 +1,1234 @@
+{
+  "schema": "jev-lint-relation-negative-controls-1",
+  "contracts": [
+    {
+      "id": "billing-authority",
+      "broken": "billing-authority-drift",
+      "control": "billing-authority-control",
+      "exportName": "canManageBilling",
+      "failedTests": [
+        "member-denied"
+      ],
+      "tests": [
+        {
+          "id": "member-denied",
+          "args": [
+            "member"
+          ],
+          "expected": false
+        },
+        {
+          "id": "owner-allowed",
+          "args": [
+            "owner"
+          ],
+          "expected": true
+        },
+        {
+          "id": "viewer-denied",
+          "args": [
+            "viewer"
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "tenant-isolation",
+      "broken": "tenant-isolation-drift",
+      "control": "tenant-isolation-control",
+      "exportName": "lookupInvoice",
+      "failedTests": [
+        "foreign-invoice-denied"
+      ],
+      "tests": [
+        {
+          "id": "foreign-invoice-denied",
+          "args": [
+            {
+              "authenticatedAccountId": "account-a",
+              "invoiceId": "foreign",
+              "invoices": [
+                {
+                  "id": "foreign",
+                  "accountId": "account-b"
+                }
+              ]
+            }
+          ],
+          "expected": null
+        },
+        {
+          "id": "own-invoice-returned",
+          "args": [
+            {
+              "authenticatedAccountId": "account-a",
+              "invoiceId": "own",
+              "invoices": [
+                {
+                  "id": "own",
+                  "accountId": "account-a"
+                }
+              ]
+            }
+          ],
+          "expected": {
+            "id": "own",
+            "accountId": "account-a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "paid-checkout",
+      "broken": "paid-checkout-drift",
+      "control": "paid-checkout-control",
+      "exportName": "checkoutCredit",
+      "failedTests": [
+        "unpaid-completion-denied"
+      ],
+      "tests": [
+        {
+          "id": "unpaid-completion-denied",
+          "args": [
+            {
+              "status": "complete",
+              "paymentStatus": "unpaid"
+            }
+          ],
+          "expected": 0
+        },
+        {
+          "id": "paid-completion-granted",
+          "args": [
+            {
+              "status": "complete",
+              "paymentStatus": "paid"
+            }
+          ],
+          "expected": 1
+        },
+        {
+          "id": "incomplete-denied",
+          "args": [
+            {
+              "status": "open",
+              "paymentStatus": "paid"
+            }
+          ],
+          "expected": 0
+        }
+      ]
+    },
+    {
+      "id": "event-idempotency",
+      "broken": "event-idempotency-drift",
+      "control": "event-idempotency-control",
+      "exportName": "applyPayment",
+      "failedTests": [
+        "duplicate-credit-denied"
+      ],
+      "tests": [
+        {
+          "id": "duplicate-credit-denied",
+          "args": [
+            {
+              "credits": 7,
+              "seenEventIds": [
+                "paid-001"
+              ],
+              "eventId": "paid-001"
+            }
+          ],
+          "expected": {
+            "credits": 7,
+            "seenEventIds": [
+              "paid-001"
+            ]
+          }
+        },
+        {
+          "id": "new-credit-granted",
+          "args": [
+            {
+              "credits": 7,
+              "seenEventIds": [],
+              "eventId": "paid-002"
+            }
+          ],
+          "expected": {
+            "credits": 8,
+            "seenEventIds": [
+              "paid-002"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "period-end-cancellation",
+      "broken": "period-end-cancellation-drift",
+      "control": "period-end-cancellation-control",
+      "exportName": "canAudit",
+      "failedTests": [
+        "scheduled-cancellation-remains-active"
+      ],
+      "tests": [
+        {
+          "id": "scheduled-cancellation-remains-active",
+          "args": [
+            {
+              "status": "active",
+              "cancelAtPeriodEnd": true,
+              "now": 99,
+              "periodEnd": 100
+            }
+          ],
+          "expected": true
+        },
+        {
+          "id": "period-boundary-denied",
+          "args": [
+            {
+              "status": "active",
+              "cancelAtPeriodEnd": false,
+              "now": 100,
+              "periodEnd": 100
+            }
+          ],
+          "expected": false
+        },
+        {
+          "id": "canceled-denied",
+          "args": [
+            {
+              "status": "canceled",
+              "cancelAtPeriodEnd": false,
+              "now": 50,
+              "periodEnd": 100
+            }
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "retention",
+      "broken": "retention-drift",
+      "control": "retention-control",
+      "exportName": "retainRawPayload",
+      "failedTests": [
+        "over-thirty-days-denied"
+      ],
+      "tests": [
+        {
+          "id": "over-thirty-days-denied",
+          "args": [
+            {
+              "createdAtMs": 0
+            },
+            2678400000
+          ],
+          "expected": false
+        },
+        {
+          "id": "over-ninety-days-denied",
+          "args": [
+            {
+              "createdAtMs": 0
+            },
+            7862400000
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "period-end-inclusive",
+      "broken": "period-end-inclusive-drift",
+      "control": "period-end-inclusive-control",
+      "exportName": "canAudit",
+      "failedTests": [
+        "exact-end-denied"
+      ],
+      "tests": [
+        {
+          "id": "exact-end-denied",
+          "args": [
+            {
+              "status": "active",
+              "now": 100,
+              "periodEnd": 100
+            }
+          ],
+          "expected": false
+        },
+        {
+          "id": "before-end-allowed",
+          "args": [
+            {
+              "status": "active",
+              "now": 99,
+              "periodEnd": 100
+            }
+          ],
+          "expected": true
+        }
+      ]
+    },
+    {
+      "id": "period-start-early",
+      "broken": "period-start-early-drift",
+      "control": "period-start-early-control",
+      "exportName": "canAudit",
+      "failedTests": [
+        "before-start-denied"
+      ],
+      "tests": [
+        {
+          "id": "before-start-denied",
+          "args": [
+            {
+              "status": "active",
+              "now": 49,
+              "periodStart": 50,
+              "periodEnd": 100
+            }
+          ],
+          "expected": false
+        },
+        {
+          "id": "exact-start-allowed",
+          "args": [
+            {
+              "status": "active",
+              "now": 50,
+              "periodStart": 50,
+              "periodEnd": 100
+            }
+          ],
+          "expected": true
+        }
+      ]
+    },
+    {
+      "id": "retention-hours-days",
+      "broken": "retention-hours-days-drift",
+      "control": "retention-hours-days-control",
+      "exportName": "retainRawPayload",
+      "failedTests": [
+        "thirty-one-hours-retained"
+      ],
+      "tests": [
+        {
+          "id": "thirty-one-hours-retained",
+          "args": [
+            {
+              "ageHours": 31
+            }
+          ],
+          "expected": true
+        },
+        {
+          "id": "thirty-days-expired",
+          "args": [
+            {
+              "ageHours": 720
+            }
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "tenant-null-identity",
+      "broken": "tenant-null-identity-drift",
+      "control": "tenant-null-identity-control",
+      "exportName": "lookupInvoice",
+      "failedTests": [
+        "missing-auth-denied"
+      ],
+      "tests": [
+        {
+          "id": "missing-auth-denied",
+          "args": [
+            {
+              "invoiceId": "x",
+              "invoices": [
+                {
+                  "id": "x"
+                }
+              ]
+            }
+          ],
+          "expected": null
+        },
+        {
+          "id": "own-invoice-allowed",
+          "args": [
+            {
+              "authenticatedAccountId": "a",
+              "invoiceId": "x",
+              "invoices": [
+                {
+                  "id": "x",
+                  "accountId": "a"
+                }
+              ]
+            }
+          ],
+          "expected": {
+            "id": "x",
+            "accountId": "a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tenant-auth-source",
+      "broken": "tenant-auth-source-drift",
+      "control": "tenant-auth-source-control",
+      "exportName": "lookupInvoice",
+      "failedTests": [
+        "requested-account-not-authority"
+      ],
+      "tests": [
+        {
+          "id": "requested-account-not-authority",
+          "args": [
+            {
+              "authenticatedAccountId": "a",
+              "requestedAccountId": "b",
+              "invoiceId": "x",
+              "invoices": [
+                {
+                  "id": "x",
+                  "accountId": "b"
+                }
+              ]
+            }
+          ],
+          "expected": null
+        },
+        {
+          "id": "own-invoice-allowed",
+          "args": [
+            {
+              "authenticatedAccountId": "a",
+              "requestedAccountId": "a",
+              "invoiceId": "x",
+              "invoices": [
+                {
+                  "id": "x",
+                  "accountId": "a"
+                }
+              ]
+            }
+          ],
+          "expected": {
+            "id": "x",
+            "accountId": "a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "credit-zero-balance",
+      "broken": "credit-zero-balance-drift",
+      "control": "credit-zero-balance-control",
+      "exportName": "canReserve",
+      "failedTests": [
+        "zero-denied"
+      ],
+      "tests": [
+        {
+          "id": "zero-denied",
+          "args": [
+            {
+              "remaining": 0
+            }
+          ],
+          "expected": false
+        },
+        {
+          "id": "one-allowed",
+          "args": [
+            {
+              "remaining": 1
+            }
+          ],
+          "expected": true
+        }
+      ]
+    },
+    {
+      "id": "credit-exact-balance",
+      "broken": "credit-exact-balance-drift",
+      "control": "credit-exact-balance-control",
+      "exportName": "canReserve",
+      "failedTests": [
+        "exact-balance-allowed"
+      ],
+      "tests": [
+        {
+          "id": "exact-balance-allowed",
+          "args": [
+            {
+              "remaining": 1,
+              "requestedUnits": 1
+            }
+          ],
+          "expected": true
+        },
+        {
+          "id": "zero-request-denied",
+          "args": [
+            {
+              "remaining": 1,
+              "requestedUnits": 0
+            }
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "credit-negative-request",
+      "broken": "credit-negative-request-drift",
+      "control": "credit-negative-request-control",
+      "exportName": "reserveCredits",
+      "failedTests": [
+        "negative-denied",
+        "fraction-denied"
+      ],
+      "tests": [
+        {
+          "id": "negative-denied",
+          "args": [
+            {
+              "remaining": 5,
+              "requestedUnits": -2
+            }
+          ],
+          "expected": null
+        },
+        {
+          "id": "fraction-denied",
+          "args": [
+            {
+              "remaining": 5,
+              "requestedUnits": 0.5
+            }
+          ],
+          "expected": null
+        },
+        {
+          "id": "positive-reserved",
+          "args": [
+            {
+              "remaining": 5,
+              "requestedUnits": 2
+            }
+          ],
+          "expected": 3
+        }
+      ]
+    },
+    {
+      "id": "credit-release-idempotency",
+      "broken": "credit-release-idempotency-drift",
+      "control": "credit-release-idempotency-control",
+      "exportName": "releaseCredit",
+      "failedTests": [
+        "released-not-refunded-twice"
+      ],
+      "tests": [
+        {
+          "id": "released-not-refunded-twice",
+          "args": [
+            {
+              "state": "released",
+              "remaining": 5
+            }
+          ],
+          "expected": {
+            "state": "released",
+            "remaining": 5
+          }
+        },
+        {
+          "id": "reserved-refunded",
+          "args": [
+            {
+              "state": "reserved",
+              "remaining": 4
+            }
+          ],
+          "expected": {
+            "state": "released",
+            "remaining": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "payment-amount-floor",
+      "broken": "payment-amount-floor-drift",
+      "control": "payment-amount-floor-control",
+      "exportName": "checkoutCredit",
+      "failedTests": [
+        "partial-amount-denied"
+      ],
+      "tests": [
+        {
+          "id": "partial-amount-denied",
+          "args": [
+            {
+              "status": "complete",
+              "paymentStatus": "paid",
+              "amountReceived": 1,
+              "amountDue": 100
+            }
+          ],
+          "expected": 0
+        },
+        {
+          "id": "full-amount-granted",
+          "args": [
+            {
+              "status": "complete",
+              "paymentStatus": "paid",
+              "amountReceived": 100,
+              "amountDue": 100
+            }
+          ],
+          "expected": 1
+        }
+      ]
+    },
+    {
+      "id": "payment-wrong-currency",
+      "broken": "payment-wrong-currency-drift",
+      "control": "payment-wrong-currency-control",
+      "exportName": "checkoutCredit",
+      "failedTests": [
+        "foreign-currency-denied"
+      ],
+      "tests": [
+        {
+          "id": "foreign-currency-denied",
+          "args": [
+            {
+              "status": "complete",
+              "paymentStatus": "paid",
+              "currency": "EUR"
+            }
+          ],
+          "expected": 0
+        },
+        {
+          "id": "usd-granted",
+          "args": [
+            {
+              "status": "complete",
+              "paymentStatus": "paid",
+              "currency": "USD"
+            }
+          ],
+          "expected": 1
+        }
+      ]
+    },
+    {
+      "id": "idempotency-delivery-id",
+      "broken": "idempotency-delivery-id-drift",
+      "control": "idempotency-delivery-id-control",
+      "exportName": "applyPayment",
+      "failedTests": [
+        "redelivery-not-granted",
+        "new-event-records-stable-id"
+      ],
+      "tests": [
+        {
+          "id": "redelivery-not-granted",
+          "args": [
+            {
+              "credits": 1,
+              "seenEventIds": [
+                "e1"
+              ],
+              "eventId": "e1",
+              "deliveryId": "d2"
+            }
+          ],
+          "expected": {
+            "credits": 1,
+            "seenEventIds": [
+              "e1"
+            ],
+            "eventId": "e1",
+            "deliveryId": "d2"
+          }
+        },
+        {
+          "id": "new-event-records-stable-id",
+          "args": [
+            {
+              "credits": 1,
+              "seenEventIds": [],
+              "eventId": "e2",
+              "deliveryId": "d3"
+            }
+          ],
+          "expected": {
+            "credits": 2,
+            "seenEventIds": [
+              "e2"
+            ],
+            "eventId": "e2",
+            "deliveryId": "d3"
+          }
+        }
+      ]
+    },
+    {
+      "id": "subscription-trial-access",
+      "broken": "subscription-trial-access-drift",
+      "control": "subscription-trial-access-control",
+      "exportName": "canAudit",
+      "failedTests": [
+        "trial-allowed"
+      ],
+      "tests": [
+        {
+          "id": "trial-allowed",
+          "args": [
+            {
+              "status": "trialing",
+              "now": 1,
+              "periodEnd": 2
+            }
+          ],
+          "expected": true
+        },
+        {
+          "id": "paused-denied",
+          "args": [
+            {
+              "status": "paused",
+              "now": 1,
+              "periodEnd": 2
+            }
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "role-deny-overrides",
+      "broken": "role-deny-overrides-drift",
+      "control": "role-deny-overrides-control",
+      "exportName": "canManageBilling",
+      "failedTests": [
+        "suspended-owner-denied",
+        "member-denied"
+      ],
+      "tests": [
+        {
+          "id": "suspended-owner-denied",
+          "args": [
+            {
+              "role": "owner",
+              "suspended": true
+            }
+          ],
+          "expected": false
+        },
+        {
+          "id": "member-denied",
+          "args": [
+            {
+              "role": "member",
+              "suspended": false
+            }
+          ],
+          "expected": false
+        },
+        {
+          "id": "owner-allowed",
+          "args": [
+            {
+              "role": "owner",
+              "suspended": false
+            }
+          ],
+          "expected": true
+        }
+      ]
+    },
+    {
+      "id": "refund-terminal-state",
+      "broken": "refund-terminal-state-drift",
+      "control": "refund-terminal-state-control",
+      "exportName": "canUseCredit",
+      "failedTests": [
+        "refunded-denied"
+      ],
+      "tests": [
+        {
+          "id": "refunded-denied",
+          "args": [
+            {
+              "status": "refunded",
+              "creditActive": true
+            }
+          ],
+          "expected": false
+        },
+        {
+          "id": "paid-allowed",
+          "args": [
+            {
+              "status": "paid",
+              "creditActive": true
+            }
+          ],
+          "expected": true
+        }
+      ]
+    },
+    {
+      "id": "session-clock-units",
+      "broken": "session-clock-units-drift",
+      "control": "session-clock-units-control",
+      "exportName": "canUseSession",
+      "failedTests": [
+        "before-expiry-allowed"
+      ],
+      "tests": [
+        {
+          "id": "before-expiry-allowed",
+          "args": [
+            {
+              "nowMilliseconds": 99999,
+              "expiresAtSeconds": 100
+            }
+          ],
+          "expected": true
+        },
+        {
+          "id": "expiry-denied",
+          "args": [
+            {
+              "nowMilliseconds": 100000,
+              "expiresAtSeconds": 100
+            }
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "pagination-before-filter",
+      "broken": "pagination-before-filter-drift",
+      "control": "pagination-before-filter-control",
+      "exportName": "listInvoices",
+      "failedTests": [
+        "foreign-row-not-a-page-slot"
+      ],
+      "tests": [
+        {
+          "id": "foreign-row-not-a-page-slot",
+          "args": [
+            {
+              "authenticatedAccountId": "a",
+              "limit": 1,
+              "rows": [
+                {
+                  "id": "foreign",
+                  "accountId": "b"
+                },
+                {
+                  "id": "own",
+                  "accountId": "a"
+                }
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "id": "own",
+              "accountId": "a"
+            }
+          ]
+        },
+        {
+          "id": "empty-page",
+          "args": [
+            {
+              "authenticatedAccountId": "a",
+              "limit": 1,
+              "rows": []
+            }
+          ],
+          "expected": []
+        }
+      ]
+    },
+    {
+      "id": "deleted-invoice-visible",
+      "broken": "deleted-invoice-visible-drift",
+      "control": "deleted-invoice-visible-control",
+      "exportName": "lookupInvoice",
+      "failedTests": [
+        "deleted-denied"
+      ],
+      "tests": [
+        {
+          "id": "deleted-denied",
+          "args": [
+            {
+              "invoiceId": "x",
+              "authenticatedAccountId": "a",
+              "rows": [
+                {
+                  "id": "x",
+                  "accountId": "a",
+                  "deletedAt": 5
+                }
+              ]
+            }
+          ],
+          "expected": null
+        },
+        {
+          "id": "live-allowed",
+          "args": [
+            {
+              "invoiceId": "x",
+              "authenticatedAccountId": "a",
+              "rows": [
+                {
+                  "id": "x",
+                  "accountId": "a",
+                  "deletedAt": null
+                }
+              ]
+            }
+          ],
+          "expected": {
+            "id": "x",
+            "accountId": "a",
+            "deletedAt": null
+          }
+        }
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "id": "missed-implementation",
+      "caseId": "billing-authority-drift",
+      "mutation": "miss-defect",
+      "failedChecks": [
+        "semantic",
+        "direction"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "false-positive-control",
+      "caseId": "billing-authority-control",
+      "mutation": "false-positive",
+      "failedChecks": [
+        "semantic",
+        "direction"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "wrong-repair-target",
+      "caseId": "documentation-drift",
+      "mutation": "wrong-target",
+      "failedChecks": [
+        "direction"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "invented-evidence",
+      "caseId": "retention-drift",
+      "mutation": "fabricate-quote",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "missing-answer",
+      "caseId": "period-end-cancellation-drift",
+      "mutation": "missing-answer",
+      "failedChecks": [
+        "semantic",
+        "direction",
+        "coverage"
+      ],
+      "missing": 1
+    },
+    {
+      "id": "missing-grounding-answer",
+      "caseId": "retention-drift",
+      "mutation": "missing-grounding",
+      "failedChecks": [
+        "semantic",
+        "direction",
+        "coverage"
+      ],
+      "missing": 1
+    },
+    {
+      "id": "removed-grounding-field",
+      "caseId": "retention-drift",
+      "mutation": "delete-grounding",
+      "failedChecks": [
+        "semantic",
+        "direction",
+        "coverage"
+      ],
+      "missing": 1
+    },
+    {
+      "id": "omitted-required-sample",
+      "caseId": "tenant-isolation-drift",
+      "mutation": "omit-sample",
+      "failedChecks": [
+        "semantic",
+        "direction",
+        "evidence",
+        "coverage"
+      ],
+      "missing": 1
+    },
+    {
+      "id": "stale-source-head",
+      "caseId": "event-idempotency-drift",
+      "mutation": "stale-head",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "wrong-specification-ref",
+      "caseId": "retention-drift",
+      "mutation": "spec-ref",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "wrong-target-ref",
+      "caseId": "retention-drift",
+      "mutation": "target-ref",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "wrong-source-path",
+      "caseId": "retention-drift",
+      "mutation": "evidence-path",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "wrong-source-hash",
+      "caseId": "retention-drift",
+      "mutation": "evidence-hash",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "moved-source-range",
+      "caseId": "retention-drift",
+      "mutation": "evidence-range",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "swapped-evidence-role",
+      "caseId": "retention-drift",
+      "mutation": "evidence-role",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "missing-specification-citation",
+      "caseId": "retention-drift",
+      "mutation": "remove-spec-citation",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "unknown-claim-id",
+      "caseId": "retention-drift",
+      "mutation": "claim-id",
+      "failedChecks": [
+        "evidence",
+        "coverage"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "unknown-relation-id",
+      "caseId": "retention-drift",
+      "mutation": "relation-id",
+      "failedChecks": [
+        "evidence",
+        "coverage"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "different-repository",
+      "caseId": "retention-drift",
+      "mutation": "repository",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "different-run-id",
+      "caseId": "retention-drift",
+      "mutation": "run-id",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "false-input-digest",
+      "caseId": "retention-drift",
+      "mutation": "input-digest",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "forged-candidate-id",
+      "caseId": "retention-drift",
+      "mutation": "candidate-id",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "forged-context-hash",
+      "caseId": "retention-drift",
+      "mutation": "context-hash",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "wrong-prompt-revision",
+      "caseId": "retention-drift",
+      "mutation": "prompt-revision",
+      "failedChecks": [
+        "evidence"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "omitted-ledger-entry",
+      "caseId": "retention-drift",
+      "mutation": "remove-ledger",
+      "failedChecks": [
+        "coverage"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "fabricated-evaluated-id",
+      "caseId": "retention-drift",
+      "mutation": "ledger-evaluated-id",
+      "failedChecks": [
+        "coverage"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "forged-missing-counter",
+      "caseId": "retention-drift",
+      "mutation": "coverage-missing",
+      "failedChecks": [
+        "coverage"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "hidden-ungrounded-summary",
+      "caseId": "claim-summary-reverses-retention",
+      "mutation": "coverage-ungrounded",
+      "failedChecks": [
+        "coverage"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "empty-selected-plan",
+      "caseId": "retention-drift",
+      "mutation": "plan-selected",
+      "failedChecks": [
+        "coverage"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "contradictory-plan-exclusion",
+      "caseId": "retention-drift",
+      "mutation": "plan-excluded",
+      "failedChecks": [
+        "coverage"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "impossible-token-usage",
+      "caseId": "retention-drift",
+      "mutation": "negative-usage",
+      "failedChecks": [
+        "coverage"
+      ],
+      "missing": 0
+    },
+    {
+      "id": "invalid-probability-vector",
+      "caseId": "retention-drift",
+      "mutation": "negative-probability",
+      "failedChecks": [
+        "semantic",
+        "direction",
+        "coverage"
+      ],
+      "missing": 1
+    }
+  ],
+  "contractCorpus": "extended/inputs.json"
+}

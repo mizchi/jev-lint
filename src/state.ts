@@ -592,9 +592,11 @@ export function capturedMetavariables(match: AstGrepMatch): Record<string, strin
  */
 const RESERVED_CAPTURES = new Set(["JEVNAME", "secondary"]);
 
+export const TRUNCATION_MARKER = "\n/* … truncated … */";
+
 export function truncate(text: string): string {
   return text.length > SUBJECT_TEXT_LIMIT
-    ? `${text.slice(0, SUBJECT_TEXT_LIMIT)}\n/* … truncated … */`
+    ? `${text.slice(0, SUBJECT_TEXT_LIMIT)}${TRUNCATION_MARKER}`
     : text;
 }
 

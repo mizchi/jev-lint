@@ -25,6 +25,7 @@ export async function cmdCheck(
 ): Promise<number> {
   const result = await run({
     rules,
+    policyRef: opts.policyRef,
     paths,
     arm: opts.arm,
     group: opts.group,
@@ -47,7 +48,8 @@ export async function cmdCheck(
     commits: commitsRange
       ? { range: commitsRange, ...(opts.squash ? { squash: opts.message! } : {}), ...(opts.staged ? { staged: true } : {}) }
       : null,
-  });
+  }).catch((error: unknown) => { log(`check: ${(error as Error).message}`); return null; });
+  if (!result) return 2;
 
 
   const runCache = result.cache as Cache | undefined;

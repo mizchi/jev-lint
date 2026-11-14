@@ -1,0 +1,101 @@
+{
+  "schema": "jev-lint-workflow-expect-1",
+  "cases": [
+    {
+      "id": "billing-member",
+      "choice": "contradicts",
+      "resolution": "implementation",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "billing-owner",
+      "choice": "supports",
+      "resolution": "none",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "expiry-correct",
+      "choice": "supports",
+      "resolution": "none",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "expiry-units",
+      "choice": "contradicts",
+      "resolution": "implementation",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "expiry-unavailable",
+      "choice": "insufficient_context",
+      "resolution": "needs_context",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "expiry-ambiguous",
+      "choice": "insufficient_context",
+      "resolution": "needs_context",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "expiry-no-budget",
+      "choice": "insufficient_context",
+      "resolution": "needs_context",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "billing-chain",
+      "choice": "contradicts",
+      "resolution": "implementation",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "retention-units",
+      "choice": "contradicts",
+      "resolution": "implementation",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "billing-refactored",
+      "choice": "supports",
+      "resolution": "none",
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": false
+    },
+    {
+      "id": "registry-missing",
+      "choice": null,
+      "resolution": null,
+      "targetPath": "src/main.ts",
+      "missingClaim": true,
+      "outsideScope": false
+    },
+    {
+      "id": "registry-scope",
+      "choice": null,
+      "resolution": null,
+      "targetPath": "src/main.ts",
+      "missingClaim": false,
+      "outsideScope": true
+    }
+  ]
+}

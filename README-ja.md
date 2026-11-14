@@ -65,6 +65,11 @@ npx jev-lint check src --dry-run       # 何を聞くかと値段。リクエス
 
 ## 推奨モデル
 
+既定値は[現在の安定版](https://docs.typesafe.ai/models) `jev-1.14.0` に固定している。
+モデルのエイリアスが更新されても、較正した cutoff に対する回答が黙って変わらないようにするため。
+`--model`、config の `model:`、`JEV_LINT_MODEL` で変更できる。
+今後の安定版へ自動追従する場合は `--model jev-latest` を指定する。
+
 通常の lint には Jev を推奨する。同梱ルールと cutoff は Jev で較正されていて、
 その cutoff を使った [81 suite の fixture 比較](docs/clef-evaluation.md#live-results-2026-10-02)
 でも Jev が最も良い成績だった。
@@ -180,6 +185,9 @@ npx skills add mizchi/jev-lint --skill jev-lint
 | --- | --- |
 | [RULES.md](RULES.md) | 同梱ルール全部、cutoff と当てはめ |
 | [docs/reference.md](docs/reference.md) | 全フラグと全フィールド、calibrate、バッチ、限界 |
+| [docs/audit-api.md](docs/audit-api.md) | 版付きスキャン結果、固定ポリシー、厳密なキャッシュ、送信制御、判定誘導の評価 |
+| [docs/relations-api.md](docs/relations-api.md) | 承認仕様の固定、複数出典の比較、主張の根拠確認、仕様ドリフトのカバレッジ |
+| [docs/relations-workflow.md](docs/relations-workflow.md) | 比較候補の発見、依存先の文脈補完、ワークフロー再検証、利用側との接続 |
 | [docs/use-hooks.md](docs/use-hooks.md) | git hook と CI |
 | [SECURITY.md](SECURITY.md) | モデル判定のリスク、信頼境界、対策 |
 | [docs/writing-rules.md](docs/writing-rules.md) | ルールの書き方と、同梱する eval |

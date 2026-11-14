@@ -20,10 +20,11 @@
  * approximate.
  */
 import { estimateTokens } from "./batch.ts";
+import { RequestControl, type RequestControls } from "./request-control.ts";
 import type { Question, Spend, SystemOneResponse } from "./types.ts";
 
 export const DEFAULT_BASE_URL = "https://api.typesafe.ai";
-export const DEFAULT_MODEL = "jev-latest";
+export const DEFAULT_MODEL = "jev-1.14.0";
 
 /**
  * Where the key and the endpoint come from, in order.
@@ -67,7 +68,7 @@ export class JevError extends Error {
   }
 }
 
-export interface JevOptions {
+export interface JevOptions extends RequestControls {
   apiKey?: string | null;
   baseUrl?: string | null;
   model?: string | null;
@@ -184,15 +185,16 @@ export class Pacer {
   }
 
   /** Charge the bucket, waiting until it can pay. */
-  async take(tokens: number): Promise<void> {
+  async take(tokens: number, signal?: AbortSignal): Promise<void> {
     for (;;) {
+      signal?.throwIfAborted();
       const wait = this.delay(tokens);
       if (wait === 0) {
         this.level -= tokens;
         return;
       }
       this.waited = true;
-      await new Promise<void>((r) => setTimeout(r, wait));
+      await new RequestControl({ signal }).wait(wait);
     }
   }
 
@@ -244,6 +246,7 @@ export class Jev implements AskClient {
   rateLimitRetries: number;
   rateLimitWaitMs: number;
   private transport: typeof fetch;
+  private control: RequestControl;
   calls: number;
   inputTokens: number;
   outputTokens: number;
@@ -264,6 +267,9 @@ export class Jev implements AskClient {
     rateLimitRetries = DEFAULT_RATE_LIMIT_RETRIES,
     rateLimitWaitMs = DEFAULT_RATE_LIMIT_WAIT_MS,
     fetch: transport = globalThis.fetch,
+    signal,
+    budget,
+    beforeSend,
   }: JevOptions = {}) {
     this.apiKey = apiKey ?? fromEnv(API_KEY_VARS) ?? "";
     this.baseUrl = (baseUrl ?? fromEnv(BASE_URL_VARS) ?? DEFAULT_BASE_URL).replace(/\/+$/, "");
@@ -276,6 +282,7 @@ export class Jev implements AskClient {
     this.rateLimitRetries = rateLimitRetries;
     this.rateLimitWaitMs = rateLimitWaitMs;
     this.transport = transport;
+    this.control = new RequestControl({ signal, budget, beforeSend });
 
     this.calls = 0;
     this.inputTokens = 0;
@@ -331,6 +338,9 @@ export class Jev implements AskClient {
     return (this.inputTokens / 1_000_000) * USD_PER_MTOK;
   }
 
+  protected estimateUsd(tokens: number): number { return (tokens / 1_000_000) * USD_PER_MTOK; }
+  get endpointIdentity(): string { return this.baseUrl; }
+
   /** One request: one state, N questions, N answers. */
   async ask(state: unknown, questions: Record<string, Question>): Promise<SystemOneResponse> {
     if (!this.apiKey) {
@@ -352,7 +362,8 @@ export class Jev implements AskClient {
     let attempt = 0;
     let limited = 0;
     for (;;) {
-      await this.pacer.take(estimated);
+      await this.pacer.take(estimated, this.control.signal);
+      await this.control.authorize(estimated, this.estimateUsd(estimated));
       const started = Date.now();
       const ac = new AbortController();
       const timer = setTimeout(() => ac.abort(), this.timeoutMs);
@@ -365,15 +376,16 @@ export class Jev implements AskClient {
             "content-type": "application/json",
           },
           body,
-          signal: ac.signal,
+          signal: AbortSignal.any([ac.signal, this.control.signal]),
         });
       } catch (err: unknown) {
         clearTimeout(timer);
+        this.control.signal.throwIfAborted();
         last = new JevError(`network: ${String(err).slice(0, 200)}`, { kind: "transient" });
         if (attempt === this.retries) break;
         attempt += 1;
         this.retried += 1;
-        await backoff(attempt - 1);
+        await backoff(attempt - 1, null, this.control);
         continue;
       }
       clearTimeout(timer);
@@ -381,6 +393,13 @@ export class Jev implements AskClient {
       const text = await res.text();
       if (res.ok) {
         const parsed = JSON.parse(text);
+        if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) throw new JevError("invalid response envelope");
+        if (parsed.usage !== undefined) {
+          if (parsed.usage === null || typeof parsed.usage !== "object" || Array.isArray(parsed.usage)
+            || ["input_tokens", "output_tokens"].some((key) => Object.hasOwn(parsed.usage, key)
+              && (!Number.isSafeInteger(parsed.usage[key]) || parsed.usage[key] < 0))) throw new JevError("invalid token usage");
+        }
+        if (parsed.usage?.input_tokens !== undefined) this.control.settle(estimated, parsed.usage.input_tokens, this.estimateUsd(parsed.usage.input_tokens), this.estimateUsd(estimated));
         this.pacer.settle(estimated, parsed.usage?.input_tokens ?? estimated);
         this.pacer.succeeded();
         this.calls += 1;
@@ -401,7 +420,7 @@ export class Jev implements AskClient {
         this.rateLimited += 1;
         if (limited === this.rateLimitRetries) break;
         limited += 1;
-        await rateLimitWait(limited, this.rateLimitWaitMs, res.headers.get("retry-after"));
+        await rateLimitWait(limited, this.rateLimitWaitMs, res.headers.get("retry-after"), this.control);
         continue;
       }
       const transient = res.status >= 500;
@@ -409,7 +428,7 @@ export class Jev implements AskClient {
       last.kind = "transient";
       attempt += 1;
       this.retried += 1;
-      await backoff(attempt - 1, res.headers.get("retry-after"));
+      await backoff(attempt - 1, res.headers.get("retry-after"), this.control);
     }
     throw last;
   }
@@ -450,12 +469,12 @@ export class Jev implements AskClient {
  * growing by half per repeat, jittered so a burst of refused requests does
  * not come back as a burst, capped at 5 s.
  */
-function rateLimitWait(nth: number, baseMs: number, retryAfter?: string | null): Promise<void> {
+function rateLimitWait(nth: number, baseMs: number, retryAfter?: string | null, control = new RequestControl()): Promise<void> {
   const hinted = retryAfter ? Number.parseFloat(retryAfter) * 1000 : Number.NaN;
   const wait = Number.isFinite(hinted)
     ? hinted
     : Math.min(5_000, baseMs * 1.5 ** (nth - 1)) * (0.5 + Math.random());
-  return new Promise<void>((r) => setTimeout(r, wait));
+  return control.wait(wait);
 }
 
 /** The API answers in JSON; a body that opens with markup came from something in front of it. */
@@ -463,12 +482,12 @@ function isHtml(body: string): boolean {
   return /^\s*</.test(body);
 }
 
-function backoff(attempt: number, retryAfter?: string | null): Promise<void> {
+function backoff(attempt: number, retryAfter?: string | null, control = new RequestControl()): Promise<void> {
   const hinted = retryAfter ? Number.parseFloat(retryAfter) * 1000 : Number.NaN;
   const wait = Number.isFinite(hinted)
     ? hinted
     : Math.min(20_000, 500 * 2 ** attempt) * (0.5 + Math.random());
-  return new Promise<void>((r) => setTimeout(r, wait));
+  return control.wait(wait);
 }
 
 /** Bounded-concurrency map that preserves input order. */

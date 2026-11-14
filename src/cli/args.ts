@@ -8,7 +8,7 @@ import type { AskClient } from "../jev.ts";
 import type { RuleSetting } from "../config.ts";
 import type { CustomLanguages } from "../types.ts";
 import { DEFAULT_CACHE_PATH } from "../cache.ts";
-import { API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_CONCURRENCY } from "../jev.ts";
+import { API_KEY_VARS, BASE_URL_VARS, DEFAULT_BASE_URL, DEFAULT_CONCURRENCY, DEFAULT_MODEL } from "../jev.ts";
 import { DEFAULT_RULE_BATCH_CAP } from "../schedule.ts";
 import { ARMS } from "../state.ts";
 import { GROUP_MODES, SEVERITIES, STATE_ARMS } from "../types.ts";
@@ -16,6 +16,13 @@ import type { GroupMode, Severity, StateArm } from "../types.ts";
 
 /** Everything the command line can set. */
 export interface Options {
+  policyRef: string | null;
+  repository: string | null;
+  runId: string | null;
+  namespace: string | null;
+  sourceSha: string | null;
+  maxCandidates: number | null;
+  modelRevision: string | null;
   /** `-R` directories; empty means the shipped packs and `.jev-lint/rules/`. */
   rules: string[];
   /** True when `rules` was not given and the defaults are in use. */
@@ -89,6 +96,7 @@ export interface Deps {
 export const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
+  jev-lint scan [paths...]         emit versioned screening candidates and coverage
   jev-lint check [paths...]        judge whole files
   jev-lint run <rule> [paths...]   judge with one shipped rule: an id (every
                                    language that has it) or rust/<id> (one);
@@ -159,7 +167,14 @@ options:
       --repeat <n>         calibrate: how many times to re-ask (default 3)
       --labels <path>      calibrate or replay: labeled corpus JSON, to fit cutoffs
       --record <path>      write a replayable run record
-      --model <id>         Jev model
+      --policy-ref <ref>   read change-review instructions from this approved commit
+      --repository <id>    scan: repository in owner/name form
+      --run-id <id>        scan: dispatcher-assigned run identity
+      --namespace <id>     scan: tenant cache namespace (required)
+      --source-sha <sha>   scan: expected HEAD (defaults to the current commit)
+      --model-revision <id> scan: immutable model deployment identity for cache reuse
+      --max-candidates <n> scan: limit output; omissions make the scan partial
+      --model <id>         Jev model (default: ${DEFAULT_MODEL})
       --force              ignore cached verdicts
       --accept             eval: run, then make that run the baseline
       --accept-last        eval: make the previous run (last.json) the baseline, no requests
@@ -223,6 +238,8 @@ environment:
 
 export function parseArgs(argv: string[], { color }: { color: boolean }): Options {
   const opts: Options = {
+    policyRef: null,
+    repository: null, runId: null, namespace: null, sourceSha: null, maxCandidates: null, modelRevision: null,
     rules: [],
     rulesAreShipped: false,
     ruleSettings: null,
@@ -426,6 +443,15 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
         opts.record = need(i, a);
         i += 1;
         break;
+      case "--policy-ref":
+        opts.policyRef = need(i++, a);
+        break;
+      case "--repository": opts.repository = need(i++, a); break;
+      case "--run-id": opts.runId = need(i++, a); break;
+      case "--namespace": opts.namespace = need(i++, a); break;
+      case "--source-sha": opts.sourceSha = need(i++, a); break;
+      case "--model-revision": opts.modelRevision = need(i++, a); break;
+      case "--max-candidates": opts.maxCandidates = Number(need(i++, a)); break;
       case "--model":
         opts.model = need(i, a);
         i += 1;

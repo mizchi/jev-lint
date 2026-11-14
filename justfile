@@ -4,6 +4,36 @@ skills-sync:
 skills-check:
     npm run skills:check
 
+ci:
+    pnpm run ci
+
+adversarial-eval *args:
+    node --experimental-strip-types tools/eval-adversarial.ts {{args}}
+
+relations-eval *args:
+    node --experimental-strip-types tools/eval-relations.ts {{args}}
+
+relations-negative-check *args:
+    node --experimental-strip-types tools/check-relation-negatives.ts {{args}}
+
+relations-extended-build:
+    node --experimental-strip-types tools/build-relation-extended.ts
+
+relations-extended-eval *args:
+    node --experimental-strip-types tools/eval-relations.ts --corpus experiments/relations/extended {{args}}
+
+relations-workflow-build:
+    node --experimental-strip-types tools/build-relation-workflow.ts
+
+relations-workflow-eval *args:
+    node --experimental-strip-types tools/eval-relation-workflow.ts {{args}}
+
+export-scan-contract target *args:
+    node --experimental-strip-types tools/export-scan-contract.ts {{quote(target)}} {{args}}
+
+export-relation-contract target *args:
+    node --experimental-strip-types tools/export-relation-contract.ts {{quote(target)}} {{args}}
+
 clef-plan *args:
     pnpm run eval:clef --dry-run {{args}}
 

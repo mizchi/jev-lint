@@ -7,6 +7,10 @@ real code. [deepdive.md](deepdive.md) has the evidence behind the numbers;
 
 ## Commands and flags
 
+`scan` provides a separate versioned screening contract for audit pipelines.
+See [the audit API](audit-api.md) for its CLI flags, source snapshot requirements,
+pinned policy, cache isolation and outbound request controls.
+
 ```bash
 jev-lint check src                  # judge whole files
 jev-lint review --base main         # judge only what the diff touched
@@ -69,7 +73,7 @@ answers.
 | `--show-subjects` | with `--dry-run`: list every subject with its line, node kind and captures |
 | `--format <fmt>` / `--json` | `pretty`, `json`, `github`; `--json` is `--format json`, and holds for every command |
 | `--concurrency <n>` / `--batch-size <n>` | default 32 and 256; the client also paces its input tokens against the server's rate limit, see `JEV_LINT_TOKENS_PER_SECOND` |
-| `--model <id>` | Jev model |
+| `--model <id>` | Jev model (default: `jev-1.14.0`) |
 | `--quiet` / `--no-color` | |
 
 | `--config <path>` | config file (default: the nearest `.jev-lint.yaml`, searching upwards — any spelling of it is recognised: with or without the dot, with or without the hyphen, `.yaml` or `.yml`; two spellings in one directory are an error, exit 2, since jev-lint will not guess which is in force); `--no-config` ignores it |

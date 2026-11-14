@@ -10,6 +10,7 @@ import { precommitRules } from "../config.ts";
 import { parseArgs, USAGE, type Deps, type Log } from "./args.ts";
 import { cmdCalibrate, cmdGaps } from "./cmd-calibrate.ts";
 import { cmdCheck } from "./cmd-check.ts";
+import { cmdScan } from "./cmd-scan.ts";
 import { resolveContext } from "./context.ts";
 import { cmdEval } from "./cmd-eval.ts";
 import { cmdInit } from "./cmd-init.ts";
@@ -68,6 +69,7 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   if (!selected) return 2;
   const { rules, rangeArg } = selected;
   command = selected.command;
+  if (command === "scan") return cmdScan(rules, opts, cachePath, out, log, client);
 
   if (command === "commits" && opts.staged && config.hooks?.precommit && !rules.some((rule) => rule.subject === "change")) {
     if (!opts.quiet) log("hooks.precommit: no subject: change rule selected; skipping commits --staged");

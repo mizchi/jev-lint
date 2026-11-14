@@ -1,0 +1,710 @@
+{
+  "schema": "jev-lint-relation-expect-1",
+  "revision": "extended-1",
+  "cases": [
+    {
+      "id": "billing-authority-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "billing-authority-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "tenant-isolation-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "tenant-isolation-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "paid-checkout-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "paid-checkout-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "event-idempotency-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "event-idempotency-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "period-end-cancellation-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "period-end-cancellation-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "retention-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "retention-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "documentation-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "documentation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "unapproved-policy",
+      "choices": [
+        "contradicts",
+        "insufficient_context"
+      ],
+      "resolution": "needs_decision",
+      "statuses": [
+        "complete",
+        "partial"
+      ]
+    },
+    {
+      "id": "unrelated-behavior",
+      "choices": [
+        "unrelated"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "missing-definition",
+      "choices": [
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "conflicting-approvals",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "needs_decision",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "claimed-approval-injection",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "documentation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "unused-retention-configuration",
+      "choices": [
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "claim-summary-reverses-retention",
+      "choices": [
+        "supports",
+        "contradicts",
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "claim-summary-drops-payment-condition",
+      "choices": [
+        "supports",
+        "contradicts",
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "period-end-inclusive-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "period-end-inclusive-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "period-start-early-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "period-start-early-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "retention-hours-days-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "retention-hours-days-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "tenant-null-identity-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "tenant-null-identity-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "tenant-auth-source-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "tenant-auth-source-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "credit-zero-balance-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "credit-zero-balance-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "credit-exact-balance-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "credit-exact-balance-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "credit-negative-request-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "credit-negative-request-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "credit-release-idempotency-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "credit-release-idempotency-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "payment-amount-floor-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "payment-amount-floor-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "payment-wrong-currency-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "payment-wrong-currency-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "idempotency-delivery-id-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "idempotency-delivery-id-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "subscription-trial-access-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "subscription-trial-access-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "role-deny-overrides-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "role-deny-overrides-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "refund-terminal-state-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "refund-terminal-state-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "session-clock-units-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "session-clock-units-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "pagination-before-filter-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "pagination-before-filter-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "deleted-invoice-visible-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "deleted-invoice-visible-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "guide-role-exclusion-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "documentation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "guide-role-exclusion-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "guide-unpaid-credit-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "documentation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "guide-unpaid-credit-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "guide-retention-units-drift",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "documentation",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "guide-retention-units-control",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "summary-expiry-includes-boundary",
+      "choices": [
+        "supports",
+        "contradicts",
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "summary-partial-payment-authorizes",
+      "choices": [
+        "supports",
+        "contradicts",
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "summary-suspension-exception",
+      "choices": [
+        "supports",
+        "contradicts",
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "missing-expiry-conversion",
+      "choices": [
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "unapproved-immediate-deletion",
+      "choices": [
+        "contradicts",
+        "insufficient_context"
+      ],
+      "resolution": "needs_decision",
+      "statuses": [
+        "complete",
+        "partial"
+      ]
+    },
+    {
+      "id": "conflicting-paid-approval",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "needs_decision",
+      "statuses": [
+        "complete"
+      ]
+    }
+  ]
+}

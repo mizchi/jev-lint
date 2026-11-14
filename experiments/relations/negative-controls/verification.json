@@ -1,0 +1,377 @@
+{
+  "schema": "jev-lint-negative-controls-1",
+  "mode": "offline-negative-controls",
+  "passed": true,
+  "contracts": [
+    {
+      "id": "billing-authority",
+      "passed": true,
+      "red": {
+        "exitCode": 1,
+        "checks": [
+          {
+            "id": "member-denied",
+            "status": "assertion",
+            "actual": true,
+            "expected": false
+          },
+          {
+            "id": "owner-allowed",
+            "status": "pass"
+          },
+          {
+            "id": "viewer-denied",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      },
+      "green": {
+        "exitCode": 0,
+        "checks": [
+          {
+            "id": "member-denied",
+            "status": "pass"
+          },
+          {
+            "id": "owner-allowed",
+            "status": "pass"
+          },
+          {
+            "id": "viewer-denied",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "id": "tenant-isolation",
+      "passed": true,
+      "red": {
+        "exitCode": 1,
+        "checks": [
+          {
+            "id": "foreign-invoice-denied",
+            "status": "assertion",
+            "actual": {
+              "id": "foreign",
+              "accountId": "account-b"
+            },
+            "expected": null
+          },
+          {
+            "id": "own-invoice-returned",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      },
+      "green": {
+        "exitCode": 0,
+        "checks": [
+          {
+            "id": "foreign-invoice-denied",
+            "status": "pass"
+          },
+          {
+            "id": "own-invoice-returned",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "id": "paid-checkout",
+      "passed": true,
+      "red": {
+        "exitCode": 1,
+        "checks": [
+          {
+            "id": "unpaid-completion-denied",
+            "status": "assertion",
+            "actual": 1,
+            "expected": 0
+          },
+          {
+            "id": "paid-completion-granted",
+            "status": "pass"
+          },
+          {
+            "id": "incomplete-denied",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      },
+      "green": {
+        "exitCode": 0,
+        "checks": [
+          {
+            "id": "unpaid-completion-denied",
+            "status": "pass"
+          },
+          {
+            "id": "paid-completion-granted",
+            "status": "pass"
+          },
+          {
+            "id": "incomplete-denied",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "id": "event-idempotency",
+      "passed": true,
+      "red": {
+        "exitCode": 1,
+        "checks": [
+          {
+            "id": "duplicate-credit-denied",
+            "status": "assertion",
+            "actual": {
+              "credits": 8,
+              "seenEventIds": [
+                "paid-001",
+                "paid-001"
+              ]
+            },
+            "expected": {
+              "credits": 7,
+              "seenEventIds": [
+                "paid-001"
+              ]
+            }
+          },
+          {
+            "id": "new-credit-granted",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      },
+      "green": {
+        "exitCode": 0,
+        "checks": [
+          {
+            "id": "duplicate-credit-denied",
+            "status": "pass"
+          },
+          {
+            "id": "new-credit-granted",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "id": "period-end-cancellation",
+      "passed": true,
+      "red": {
+        "exitCode": 1,
+        "checks": [
+          {
+            "id": "scheduled-cancellation-remains-active",
+            "status": "assertion",
+            "actual": false,
+            "expected": true
+          },
+          {
+            "id": "period-boundary-denied",
+            "status": "pass"
+          },
+          {
+            "id": "canceled-denied",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      },
+      "green": {
+        "exitCode": 0,
+        "checks": [
+          {
+            "id": "scheduled-cancellation-remains-active",
+            "status": "pass"
+          },
+          {
+            "id": "period-boundary-denied",
+            "status": "pass"
+          },
+          {
+            "id": "canceled-denied",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "id": "retention",
+      "passed": true,
+      "red": {
+        "exitCode": 1,
+        "checks": [
+          {
+            "id": "over-thirty-days-denied",
+            "status": "assertion",
+            "actual": true,
+            "expected": false
+          },
+          {
+            "id": "over-ninety-days-denied",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      },
+      "green": {
+        "exitCode": 0,
+        "checks": [
+          {
+            "id": "over-thirty-days-denied",
+            "status": "pass"
+          },
+          {
+            "id": "over-ninety-days-denied",
+            "status": "pass"
+          }
+        ],
+        "error": null
+      }
+    }
+  ],
+  "gates": {
+    "pristine": {
+      "gate": "pass",
+      "total": 100,
+      "samples": 63
+    },
+    "results": [
+      {
+        "id": "missed-implementation",
+        "passed": true,
+        "gate": "fail",
+        "missing": 0,
+        "failedChecks": [
+          "direction",
+          "semantic"
+        ],
+        "exitCode": 1,
+        "stdout": "<repository>experiments/relations/last.json\nsemantic: 3.94/4 (62/63)\ndirection: 3.94/4 (62/63)\nevidence: 4.00/4 (63/63)\ncoverage: 4.00/4 (63/63)\ntotal 99.21/100; gate fail; missing 0; precision 1; recall 0.9583333333333334\nbilling-authority-drift:1 {\"checks\":{\"semantic\":false,\"direction\":false,\"evidence\":true,\"coverage\":true},\"choice\":\"supports\",\"resolution\":\"none\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "false-positive-control",
+        "passed": true,
+        "gate": "fail",
+        "missing": 0,
+        "failedChecks": [
+          "direction",
+          "semantic"
+        ],
+        "exitCode": 1,
+        "stdout": "<repository>experiments/relations/last.json\nsemantic: 3.94/4 (62/63)\ndirection: 3.94/4 (62/63)\nevidence: 4.00/4 (63/63)\ncoverage: 4.00/4 (63/63)\ntotal 99.21/100; gate fail; missing 0; precision 0.96; recall 1\nbilling-authority-control:1 {\"checks\":{\"semantic\":false,\"direction\":false,\"evidence\":true,\"coverage\":true},\"choice\":\"contradicts\",\"resolution\":\"implementation\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "wrong-repair-target",
+        "passed": true,
+        "gate": "fail",
+        "missing": 0,
+        "failedChecks": [
+          "direction"
+        ],
+        "exitCode": 1,
+        "stdout": "<repository>experiments/relations/last.json\nsemantic: 4.00/4 (63/63)\ndirection: 3.94/4 (62/63)\nevidence: 4.00/4 (63/63)\ncoverage: 4.00/4 (63/63)\ntotal 99.60/100; gate fail; missing 0; precision 1; recall 1\ndocumentation-drift:1 {\"checks\":{\"semantic\":true,\"direction\":false,\"evidence\":true,\"coverage\":true},\"choice\":\"contradicts\",\"resolution\":\"implementation\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "invented-evidence",
+        "passed": true,
+        "gate": "fail",
+        "missing": 0,
+        "failedChecks": [
+          "evidence"
+        ],
+        "exitCode": 1,
+        "stdout": "<repository>experiments/relations/last.json\nsemantic: 4.00/4 (63/63)\ndirection: 4.00/4 (63/63)\nevidence: 3.94/4 (62/63)\ncoverage: 4.00/4 (63/63)\ntotal 99.60/100; gate fail; missing 0; precision 1; recall 1\nretention-drift:1 {\"checks\":{\"semantic\":true,\"direction\":true,\"evidence\":false,\"coverage\":true},\"choice\":\"contradicts\",\"resolution\":\"implementation\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "missing-answer",
+        "passed": true,
+        "gate": "fail",
+        "missing": 1,
+        "failedChecks": [
+          "coverage",
+          "direction",
+          "semantic"
+        ],
+        "exitCode": 1,
+        "stdout": "<repository>experiments/relations/last.json\nsemantic: 3.94/4 (62/63)\ndirection: 3.94/4 (62/63)\nevidence: 4.00/4 (63/63)\ncoverage: 3.94/4 (62/63)\ntotal 98.81/100; gate fail; missing 1; precision 1; recall 0.9583333333333334\nperiod-end-cancellation-drift:1 {\"checks\":{\"semantic\":false,\"direction\":false,\"evidence\":true,\"coverage\":false},\"choice\":null,\"resolution\":\"implementation\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "missing-grounding-answer",
+        "passed": true,
+        "gate": "fail",
+        "missing": 1,
+        "failedChecks": [
+          "coverage",
+          "direction",
+          "semantic"
+        ],
+        "exitCode": 1,
+        "stdout": "<repository>experiments/relations/last.json\nsemantic: 3.94/4 (62/63)\ndirection: 3.94/4 (62/63)\nevidence: 4.00/4 (63/63)\ncoverage: 3.94/4 (62/63)\ntotal 98.81/100; gate fail; missing 1; precision 1; recall 0.9583333333333334\nretention-drift:1 {\"checks\":{\"semantic\":false,\"direction\":false,\"evidence\":true,\"coverage\":false},\"choice\":\"contradicts\",\"resolution\":\"implementation\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "removed-grounding-field",
+        "passed": true,
+        "gate": "fail",
+        "missing": 1,
+        "failedChecks": [
+          "coverage",
+          "direction",
+          "semantic"
+        ],
+        "exitCode": 1,
+        "stdout": "<repository>experiments/relations/last.json\nsemantic: 3.94/4 (62/63)\ndirection: 3.94/4 (62/63)\nevidence: 4.00/4 (63/63)\ncoverage: 3.94/4 (62/63)\ntotal 98.81/100; gate fail; missing 1; precision 1; recall 0.9583333333333334\nretention-drift:1 {\"checks\":{\"semantic\":false,\"direction\":false,\"evidence\":true,\"coverage\":false},\"choice\":\"contradicts\",\"resolution\":\"implementation\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "omitted-required-sample",
+        "passed": true,
+        "gate": "fail",
+        "missing": 1,
+        "failedChecks": [
+          "coverage",
+          "direction",
+          "evidence",
+          "semantic"
+        ],
+        "exitCode": 1,
+        "stdout": "<repository>experiments/relations/last.json\nsemantic: 3.94/4 (62/63)\ndirection: 3.94/4 (62/63)\nevidence: 3.94/4 (62/63)\ncoverage: 3.94/4 (62/63)\ntotal 98.41/100; gate fail; missing 1; precision 1; recall 0.9583333333333334\ntenant-isolation-drift:1 {\"checks\":{\"semantic\":false,\"direction\":false,\"evidence\":false,\"coverage\":false},\"choice\":null,\"resolution\":null}\n",
+        "stderr": ""
+      },
+      {
+        "id": "stale-source-head",
+        "passed": true,
+        "gate": "fail",
+        "missing": 0,
+        "failedChecks": [
+          "evidence"
+        ],
+        "exitCode": 1,
+        "stdout": "<repository>experiments/relations/last.json\nsemantic: 4.00/4 (63/63)\ndirection: 4.00/4 (63/63)\nevidence: 3.94/4 (62/63)\ncoverage: 4.00/4 (63/63)\ntotal 99.60/100; gate fail; missing 0; precision 1; recall 1\nevent-idempotency-drift:1 {\"checks\":{\"semantic\":true,\"direction\":true,\"evidence\":false,\"coverage\":true},\"choice\":\"contradicts\",\"resolution\":\"implementation\"}\n",
+        "stderr": ""
+      }
+    ]
+  }
+}

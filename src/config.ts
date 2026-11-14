@@ -24,7 +24,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import YAML from "yaml";
 import { GROUP_MODES, LANGUAGES, SEVERITIES, STATE_ARMS } from "./types.ts";
-import { API_KEY_VARS, BASE_URL_VARS, fromEnv } from "./jev.ts";
+import { API_KEY_VARS, BASE_URL_VARS, DEFAULT_MODEL, fromEnv } from "./jev.ts";
 import type { CustomLanguage, CustomLanguages, GroupMode, Severity, StateArm } from "./types.ts";
 
 /** The file names looked for, in order, walking up from the working directory. */
@@ -439,7 +439,7 @@ ${ruleKeys.map((key) => `  ${key}: on`).join("\n")}
 
 # The model, and the endpoint it is asked at. Point \`baseUrl\` at a proxy or a
 # self-hosted deployment to move the whole tool off the default service.
-# model: jev-latest
+# model: ${DEFAULT_MODEL}
 # baseUrl: https://api.typesafe.ai
 
 # Which environment variable holds the API key. The key itself must NEVER go in

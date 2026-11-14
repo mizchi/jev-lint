@@ -536,6 +536,8 @@ export interface ResolvedSubject {
 
 /** A resolved match, ready to be asked about. */
 export interface Subject extends ResolvedSubject {
+  matchStartByte?: number;
+  matchEndByte?: number;
   rule: Rule;
   file: string;
   language: string;
@@ -574,15 +576,11 @@ export interface NoulQuestion {
 }
 
 /**
- * The follow-up, not a verdict: which of a rule's labels best names why a
- * finding holds. A choice discards ordering, which is why it is never used
- * for the verdict itself; a set of unordered mechanisms is what it is for.
+ * Ordinary lint uses a choice for unordered follow-up labels, while its
+ * threshold verdict stays numeric. The separate relation API uses choices
+ * to classify agreement, contradiction, unrelated evidence and missing context.
  */
-export interface ChoiceQuestion {
-  type: "choice";
-  instructions: Record<string, unknown>;
-  criteria: Record<string, string>;
-}
+export type ChoiceQuestion = import("./relation-contract.ts").RelationQuestion;
 
 export type Question = ScoreQuestion | NoulQuestion | ChoiceQuestion;
 
@@ -673,6 +671,8 @@ export interface Batch {
 // ------------------------------------------------------------------ findings
 
 export interface Finding {
+  matchStartByte?: number;
+  matchEndByte?: number;
   /** null when the answer was below the cutoff and nothing is reported. */
   messageId: MessageId | null;
   reported: boolean;
@@ -824,6 +824,7 @@ export interface Sample {
 }
 
 export interface RunResult extends GateResult {
+  policy?: { ref: string; digest: string } | null;
   rules: Rule[];
   group?: GroupMode;
   subjects: Subject[];

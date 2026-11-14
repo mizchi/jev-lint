@@ -21,7 +21,9 @@ import { resolveSubject, widenCommentCapture } from "./state.ts";
 import { buildExplainQuestion, questionId, readAnswer, readChoice } from "./questions.ts";
 import { planBatches, DEFAULT_BATCH_SIZE } from "./batch.ts";
 import { schedule, planMixed, DEFAULT_RULE_BATCH_CAP, type Schedule } from "./schedule.ts";
-import { Cache, verdictKey, contextKey } from "./cache.ts";
+import { Cache, verdictKey, contextKey, strictVerdictKey, type StrictCacheScope } from "./cache.ts";
+import { isUsableAnswer } from "./questions.ts";
+import type { RequestControls } from "./request-control.ts";
 import { gate, collect } from "./gate.ts";
 import { touchesChange } from "./diff.ts";
 import { splitDirectives, type Directive } from "./directives.ts";
@@ -31,6 +33,7 @@ import { excerptBudget, pairTests, type RelatedTest } from "./paired.ts";
 import { commitSubjects, squashSubjects, stagedSubjects } from "./commits.ts";
 import { findTextFiles, textSubjects } from "./text.ts";
 import { FileIndex, isExcludedBy, tryReadFile } from "./files.ts";
+import { resolvePolicySource, type PolicySource } from "./policy-source.ts";
 import type {
   CustomLanguages,
   Answer,
@@ -57,6 +60,7 @@ import type { ChangedRanges } from "./diff.ts";
  * see exactly what would be asked without spending anything.
  */
 export interface CollectOptions {
+  honorSuppressions?: boolean;
   rules: Rule[];
   paths: string[];
   arm?: StateArm | null;
@@ -93,6 +97,7 @@ export async function collectSubjects({
   exclude = [],
   languages = {},
   cwd = process.cwd(),
+  honorSuppressions = true,
 }: CollectOptions): Promise<CollectResult> {
   const isExcluded = (file: string) => exclude.some((p) => isExcludedBy(file, p));
   let excluded = 0;
@@ -168,7 +173,7 @@ export async function collectSubjects({
       skippedByDiff += 1;
       continue;
     }
-    if (isIgnored(ignoresIn(m.file), resolved.line, rule.id)) {
+    if (honorSuppressions && isIgnored(ignoresIn(m.file), resolved.line, rule.id)) {
       ignoredSubjects += 1;
       continue;
     }
@@ -185,6 +190,8 @@ export async function collectSubjects({
       arm: arm ?? rule.state,
       ...resolved,
       captured,
+      matchStartByte: m.range.byteOffset.start,
+      matchEndByte: m.range.byteOffset.end,
     });
   }
 
@@ -201,7 +208,7 @@ export async function collectSubjects({
       skippedByDiff += 1;
       continue;
     }
-    if (isIgnored(ignoresIn(s.file), s.line, s.rule.id)) {
+    if (honorSuppressions && isIgnored(ignoresIn(s.file), s.line, s.rule.id)) {
       ignoredSubjects += 1;
       continue;
     }
@@ -283,6 +290,10 @@ export async function collectSubjects({
  * before spending anything on it.
  */
 export interface RunOptions {
+  honorSuppressions?: boolean;
+  policyRef?: string | null;
+  strictCache?: StrictCacheScope | null;
+  requestControls?: RequestControls;
   rules: Rule[];
   paths: string[];
   arm?: StateArm | null;
@@ -371,9 +382,16 @@ export async function run({
   explain = false,
   loose = null,
   commits = null,
+  policyRef = null,
+  strictCache = null,
+  requestControls = {},
+  honorSuppressions = true,
 }: RunOptions): Promise<RunResult> {
   const started = Date.now();
   const passes = Number.isInteger(retry) && retry > 0 ? retry : 1;
+  const policy = policyRef === null ? null : resolvePolicySource(cwd, policyRef);
+  if (strictCache && [strictCache.namespace, strictCache.repository, strictCache.endpoint, strictCache.model].some((v) => !v?.trim())) throw new Error("strict cache needs a tenant, repository, endpoint and model");
+  const scope = strictCache ? { ...strictCache, policyDigest: policy?.digest ?? strictCache.policyDigest ?? "" } : null;
   // A cached answer reproduces itself, so reproduction testing cannot use the
   // cache. Bypassed rather than merely ignored on read: writing one pass's
   // answer while deciding on the mean of several would leave the cache holding
@@ -381,8 +399,8 @@ export async function run({
   const persistTo = passes === 1 ? cachePath : null;
 
   const collected = commits
-    ? collectCommits(rules, commits.range, cwd, commits.label, commits.squash, commits.staged)
-    : await collectSubjects({ rules, paths, arm, diffRanges, exclude, languages, cwd });
+    ? collectCommits(rules, commits.range, cwd, commits.label, commits.squash, commits.staged, policy)
+    : await collectSubjects({ rules, paths, arm, diffRanges, exclude, languages, cwd, honorSuppressions });
   const { subjects, symbols, sources, tests, stderr, skippedByDiff, excluded, undeclared, duplicateGrammars, ignored, unpaired } = collected;
   const commitStats = commits && "commits" in collected ? (collected as { commits: RunResult["commits"] }).commits : undefined;
 
@@ -408,10 +426,10 @@ export async function run({
     s.arm === "paired" ? (tests?.get(s.file) ?? []).map((t) => `${t.path}\u0000${t.code}`).join("\u0001") : null;
   const keyed = subjects.map((s) => ({
     ...s,
-    key: verdictKey(
+    key: strictCache ? JSON.stringify([s.rule.languageDir, s.rule.id, s.file, s.line, s.endLine, s.text, s.captured]) : verdictKey(
       s.rule,
       s.arm,
-      s.commit ? `${s.text}\u0000${s.commit.diff}` : s.text,
+      s.commit ? policy ? JSON.stringify({ text: s.text, diff: s.commit.diff, policy: policy.digest }) : `${s.text}\u0000${s.commit.diff}` : s.text,
       effectiveAxis(s),
       s.promoted ? (s.matchText ?? null) : null,
       contextKey(s, s.arm, evidence(s)),
@@ -426,7 +444,7 @@ export async function run({
   const toAsk: Subject[] = [];
   const wanted = new Map<string, Subject[]>();
   for (const s of keyed) {
-    const hit = force || !persistTo ? null : cache.get(s.key, s.rule.kind);
+    const hit = strictCache || force || !persistTo ? null : cache.get(s.key, s.rule.kind);
     if (hit) {
       results.push({ subject: s, answer: hit, cached: true });
       continue;
@@ -452,6 +470,7 @@ export async function run({
   if (dryRun) {
     return {
       dryRun: true,
+      policy,
       rules,
       group,
       subjects: keyed,
@@ -474,7 +493,7 @@ export async function run({
     };
   }
 
-  const jev: AskClient = client ?? new Jev({ apiKey, model });
+  const jev: AskClient = client ?? new Jev({ apiKey, model, ...requestControls });
   const errors: RunError[] = [];
   // Set by the first error that no retry, split or later batch can fix. Once
   // it is, the remaining batches and passes are not sent: they would fail
@@ -497,6 +516,15 @@ export async function run({
   const askBatch = async (batch: Batch, out: Scored[]): Promise<void> => {
     try {
       if (refused) throw refused;
+      if (scope && persistTo && !force) {
+        const hits = batch.subjects.map((s) => cache.get(strictVerdictKey(batch, s, scope), s.rule.kind));
+        if (hits.every((answer, i) => isUsableAnswer(answer, batch.subjects[i].rule.kind, scaleOf(batch.subjects[i].rule)))) {
+          batch.subjects.forEach((s, i) => {
+            for (const twin of wanted.get(s.key!) ?? [s]) out.push({ subject: { ...twin, arm: batch.arm }, answer: hits[i], cached: true });
+          });
+          return;
+        }
+      }
       const res = await jev.askSplitting(batch.state, batch.questions);
       batch.subjects.forEach((s) => {
         // `s.id`, not the loop index: `makeBatch` assigned these ids and built
@@ -526,7 +554,7 @@ export async function run({
           // time the file was small enough not to degrade. A miss is the right
           // outcome there -- that question has never been asked.
           const storeKey =
-            batch.arm === s.arm
+            scope ? strictVerdictKey(batch, s, scope) : batch.arm === s.arm
               ? s.key!
               : verdictKey(s.rule, batch.arm, s.text, effectiveAxis(s), s.promoted ? (s.matchText ?? null) : null, contextKey(s, batch.arm, evidence(s)), s.captured);
           cache.set(storeKey, answer, {
@@ -598,6 +626,7 @@ export async function run({
 
   return {
     rules,
+    policy,
     group,
     subjects: keyed,
     batches,
@@ -645,12 +674,13 @@ function collectCommits(
   label?: (sha: string) => string,
   squash?: string,
   staged?: boolean,
+  policy: PolicySource | null = null,
 ): CollectResult & { commits: { range: string; total: number; skippedMerges: number; noInstructionDoc: number } } {
   const { subjects, commits, skippedMerges, noInstructionDoc } = staged
-    ? stagedSubjects(rules, cwd)
+    ? stagedSubjects(rules, cwd, policy?.ref)
     : squash !== undefined
       ? squashSubjects(rules, range, squash, cwd)
-      : commitSubjects(rules, range, cwd, label);
+      : commitSubjects(rules, range, cwd, label, policy?.ref);
   return {
     subjects,
     symbols: new Map(),
@@ -865,7 +895,7 @@ async function attributeFindings(
 
 /** Same identity as `identify`, for a `Finding` rather than a `Subject`. */
 function findingIdentity(f: Finding): string {
-  return `${f.ruleKey ?? f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}`;
+  return `${f.ruleKey ?? f.rule}\u0000${f.file}\u0000${f.line}\u0000${f.text ?? ""}\u0000${f.matchStartByte ?? ""}`;
 }
 
 /** One subject's verdict, plus how it behaved across `--retry` passes. */
@@ -879,7 +909,7 @@ export interface Scored {
 /** Identity for matching one subject across passes, and to its finding. */
 function identify(s: Subject): string {
   const ruleKey = s.rule.languageDir ? `${s.rule.languageDir}/${s.rule.id}` : s.rule.id;
-  return `${ruleKey}\u0000${s.file}\u0000${s.line}\u0000${s.text ?? ""}`;
+  return `${ruleKey}\u0000${s.file}\u0000${s.line}\u0000${s.text ?? ""}\u0000${s.matchStartByte ?? ""}`;
 }
 
 /**
@@ -958,6 +988,7 @@ export function buildRecord(
 ): Record<string, unknown> {
   return {
     schema: "jev-lint-run-1",
+    policy: result.policy ?? null,
     recorded: new Date().toISOString(),
     model: result.servedModel ?? null,
     arm,

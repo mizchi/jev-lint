@@ -31,6 +31,13 @@
   "main": "./dist/run.js",
   "types": "./dist/run.d.ts",
   "exports": {
+    "./relations": { "types": "./dist/relations.d.ts", "default": "./dist/relations.js" },
+    "./relation-contract": { "types": "./dist/relation-contract.d.ts", "default": "./dist/relation-contract.js" },
+    "./audit": { "types": "./dist/audit-run.d.ts", "default": "./dist/audit-run.js" },
+    "./scan-contract": { "types": "./dist/scan-contract.d.ts", "default": "./dist/scan-contract.js" },
+    "./adversarial": { "types": "./dist/adversarial.d.ts", "default": "./dist/adversarial.js" },
+    "./client": { "types": "./dist/jev.d.ts", "default": "./dist/jev.js" },
+    "./request-control": { "types": "./dist/request-control.d.ts", "default": "./dist/request-control.js" },
     ".": {
       "types": "./dist/run.d.ts",
       "default": "./dist/run.js"
@@ -66,6 +73,9 @@
     "RULES.md",
     "CHANGELOG.md",
     "docs/reference.md",
+    "docs/audit-api.md",
+    "docs/relations-api.md",
+    "docs/relations-workflow.md",
     "LICENSE"
   ],
   "scripts": {

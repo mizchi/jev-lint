@@ -42,7 +42,14 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, renameSync } from "node:fs";
 import { dirname } from "node:path";
 import { ruleTextHash } from "./rules.ts";
-import type { Answer, CacheEntry, Grouping, Rule, RuleKind, StateArm, Subject } from "./types.ts";
+import type { Answer, Batch, CacheEntry, Grouping, Rule, RuleKind, StateArm, Subject } from "./types.ts";
+
+export interface StrictCacheScope { namespace: string; repository: string; endpoint: string; model: string; policyDigest?: string }
+
+export function strictVerdictKey(batch: Batch, subject: Subject, scope: StrictCacheScope): string {
+  return createHash("sha256").update(JSON.stringify({ schema: "jev-lint-strict-1", questions: "jev-lint-questions-1", scope,
+    state: batch.state, payload: batch.questions, subject: subject.id })).digest("hex");
+}
 
 export const DEFAULT_CACHE_PATH = ".jev-lint/baseline.json";
 /** Where 0.4 kept it; found, it is named and not read. */

@@ -232,6 +232,7 @@ await testAsync("run: --explain asks a second question of the findings only, and
     rule: { kind: "function_declaration" },
     explain: { mutates: "It changes state", narrows: "It handles a narrower case" },
   });
+
   const seen: Array<Record<string, { type: string }>> = [];
   const client = {
     model: "fake",
@@ -803,4 +804,42 @@ await testAsync("run: two change rules over one commit share a batch but never a
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+await testAsync("run: strict cache keys cover the entire request, model, policy and tenant", async () => {
+  const { run } = await import("../src/run.ts");
+  const cwd = realpathSync(mkdtempSync(join(tmpdir(), "jev-strict-")));
+  try {
+    const path = join(cwd, "a.ts"), cachePath = join(cwd, "cache.json");
+    const rule = scoreRule({ rule: { kind: "function_declaration" }, state: "located" });
+    writeFileSync(path, "export function f() { return 1; }\nconst context = 'first';\n");
+    const client = fakeClient(() => 0.1);
+    const strictCache = { namespace: "account-one", repository: "example/project", endpoint: "test", model: "fake" };
+    const options = { rules: [rule], paths: ["a.ts"], cwd, cachePath, client, strictCache };
+    await run(options);
+    const warm = await run(options);
+    assert.equal(warm.cachedCount, 1);
+    assert.equal(client.spent.calls, 1);
+    writeFileSync(path, "export function f() { return 1; }\nconst context = 'second';\n");
+    assert.equal((await run(options)).cachedCount, 0, "unchanged subject with changed surrounding evidence is re-asked");
+    assert.equal((await run({ ...options, strictCache: { ...strictCache, namespace: "account-two" } })).cachedCount, 0);
+    assert.equal((await run({ ...options, strictCache: { ...strictCache, model: "other-model" } })).cachedCount, 0);
+    assert.equal((await run({ ...options, strictCache: { ...strictCache, endpoint: "other-endpoint" } })).cachedCount, 0);
+    assert.equal((await run({ ...options, strictCache: { ...strictCache, policyDigest: "another-policy" } })).cachedCount, 0);
+  } finally { rmSync(cwd, { recursive: true, force: true }); }
+});
+
+await testAsync("run: choosing a different approved policy retires legacy change verdicts too", async () => {
+  const { run } = await import("../src/run.ts");
+  const cwd = tempRepo([
+    { message: "First policy", files: { "AGENTS.md": "- Reject empty values.\n", "a.ts": "export const a = 1;\n" } },
+    { message: "Second policy", files: { "AGENTS.md": "- Accept empty values.\n" } },
+    { message: "Change", files: { "a.ts": "export const a = 2;\n" } },
+  ]);
+  try {
+    const options = { cwd, rules: [changeRule()], paths: [], commits: { range: "HEAD~1..HEAD" }, cachePath: join(cwd, "cache.json"), client: fakeClient(() => 0.1) };
+    await run({ ...options, policyRef: "HEAD~2" });
+    assert.equal((await run({ ...options, policyRef: "HEAD~2" })).cachedCount, 1);
+    assert.equal((await run({ ...options, policyRef: "HEAD~1" })).cachedCount, 0);
+  } finally { rmSync(cwd, { recursive: true, force: true }); }
 });

@@ -1,0 +1,35 @@
+{
+  "schema": "jev-lint-relation-expect-1",
+  "cases": [
+    {
+      "id": "missing-expiry-helper",
+      "choices": [
+        "insufficient_context"
+      ],
+      "resolution": "needs_context",
+      "statuses": [
+        "partial"
+      ]
+    },
+    {
+      "id": "provided-expiry-helper",
+      "choices": [
+        "supports"
+      ],
+      "resolution": "none",
+      "statuses": [
+        "complete"
+      ]
+    },
+    {
+      "id": "misleading-expiry-helper",
+      "choices": [
+        "contradicts"
+      ],
+      "resolution": "implementation",
+      "statuses": [
+        "complete"
+      ]
+    }
+  ]
+}
