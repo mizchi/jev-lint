@@ -8,6 +8,8 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ## Unreleased
 
+## 0.8.0 — 2026-11-15
+
 ### Changed
 
 - Pin the default model to `jev-1.14.0` instead of the moving `jev-latest`
@@ -31,6 +33,12 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ### Fixed
 
+- **Suppression comments apply to text blocks.** `jev-lint-ignore-file`
+  and `jev-lint-ignore-next-line` now silence Markdown document and section
+  rules as well as code rules. Suppressed blocks are omitted before asking
+  the model and counted in the ignore statistics.
+  ([#16](https://github.com/mizchi/jev-lint/pull/16))
+- Correct file eligibility for multi-language rules and Markdown filename constraints.
 - Reject unusable model verdicts, including non-finite or out-of-range values,
   and explanation labels outside the requested choices. Check cached and
   recorded verdicts against the rule's kind and scale too.
@@ -41,6 +49,17 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ### Added
 
+- Add direct Jev metadata introspection and `init --introspect` for conservative
+  starter configurations, with offline planning, strict replay and exclusive writes.
+- Add semantic documentation consistency checks, generated project facts, a
+  shared glossary and English/Japanese translation comparisons.
+- Add tag-triggered OIDC publishing of a tested npm tarball, synchronized package
+  and plugin version guards, changelog-based release notes and installed-package checks.
+- **Optional Clef evaluation in the repository.** `just clef-plan`,
+  `just clef-eval` and `just clef-replay` compare Clef and Clef-flash with
+  Jev on the existing labelled suites. Normal lint commands continue to
+  use Jev; the comparison procedure and results are documented in
+  [docs/clef-evaluation.md](docs/clef-evaluation.md).
 - Add an explicit accepted-findings ledger with multiset matching, context-bound
   rechecks and conservative pruning; it does not reuse or suppress model answers.
 - Add file-eligibility explanations, local prerequisite checks, suppression typo
@@ -51,24 +70,6 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
   safeguards in [SECURITY.md](SECURITY.md), following
   [#18](https://github.com/mizchi/jev-lint/issues/18). Structurally valid
   attacker-influenced judgments remain a limitation.
-
-## 0.7.1 — 2026-10-02
-
-### Added
-
-- **Optional Clef evaluation in the repository.** `just clef-plan`,
-  `just clef-eval` and `just clef-replay` compare Clef and Clef-flash with
-  Jev on the existing labelled suites. Normal lint commands continue to
-  use Jev; the comparison procedure and results are documented in
-  [docs/clef-evaluation.md](docs/clef-evaluation.md).
-
-### Fixed
-
-- **Suppression comments apply to text blocks.** `jev-lint-ignore-file`
-  and `jev-lint-ignore-next-line` now silence Markdown document and section
-  rules as well as code rules. Suppressed blocks are omitted before asking
-  the model and counted in the ignore statistics.
-  ([#16](https://github.com/mizchi/jev-lint/pull/16))
 
 ## 0.7.0 — 2026-09-24
 

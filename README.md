@@ -312,6 +312,7 @@ See the [self-check guide](docs/self-check.md) for scope, budgets and evaluation
 | [docs/internal/architecture.md](docs/internal/architecture.md) | how the code works, for changing it |
 | [docs/internal/findings.md](docs/internal/findings.md) | the notebook, in the order it happened, wrong turns included |
 | [CHANGELOG.md](CHANGELOG.md) | every release |
+| [docs/releasing.md](docs/releasing.md) | version checks, installed-package validation and tag-triggered OIDC publishing |
 
 ## Prior art
 

@@ -7,6 +7,12 @@ skills-check:
 ci:
     pnpm run ci
 
+release-check *args:
+    pnpm run release:check {{args}}
+
+package-check *args:
+    pnpm run test:package {{args}}
+
 introspect *args:
     node --experimental-strip-types src/cli.ts introspect {{args}}
 

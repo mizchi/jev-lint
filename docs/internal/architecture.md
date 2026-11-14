@@ -412,7 +412,7 @@ It does not publish rule fixtures or accepted rule baselines; replaying those
 requires a repository checkout. [Project facts](../project-facts.md#package-contents)
 is generated from the actual export map and publish allowlist.
 
-`npm run ci` checks the skill link, types, tests, build, rule baseline replay,
+`npm run ci` checks the skill link, types, tests, build, release metadata, rule baseline replay,
 adoption evaluation, generated documentation facts, document and introspection evaluation replay,
 and finally the committed documentation snapshot replay. None needs an API key.
 The complete command is generated in [project facts](../project-facts.md#ci).

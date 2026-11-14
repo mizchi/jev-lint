@@ -23,6 +23,14 @@ node --experimental-strip-types src/cli.ts review --base main --retry 3
 `.jev-lint.yaml` here points at source, tests, docs, and `package.json`,
 and excludes `test/fixtures/`, which holds planted defects for the cookbook.
 
+## CI
+
+`npm run ci` runs `skills:check`, `typecheck`, `npm test`, `build`,
+`release:check`, `eval:replay`, `eval:adoption`, `docs:facts:check`,
+`eval:documents`, `eval:introspection` and finally `docs:replay`, in that order.
+The final stage checks the committed documentation record against current
+sources and questions. All stages are offline and need no API key.
+
 ## Rules and their evals
 
 - A rule is `rules/<language>/<id>/rule.yml` with `fixtures/`, `expect.yml`
@@ -67,6 +75,11 @@ and excludes `test/fixtures/`, which holds planted defects for the cookbook.
   are measured. Change the measurement and the figure together, or neither.
 
 ## Plugin
+
+For a release, follow `docs/releasing.md`: synchronize package/lock/plugin
+versions, update the changelog, run `just release-check` and `just package-check`,
+then refresh documentation records. A protected `v*` tag on main triggers OIDC
+publishing of the tested tarball after all offline gates pass.
 
 The repository root is a Claude Code plugin (`.claude-plugin/plugin.json`,
 `skills/`, `commands/`). Every YAML block in
