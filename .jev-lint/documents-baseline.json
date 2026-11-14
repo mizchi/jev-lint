@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "9c68cff8a0b2a87b1867b8643d31563c1d4b5df664c809343ef2c1b86c34358e",
+  "snapshotDigest": "91705869ac5576164151858f1ab171e02d7eb997a2aa3c25a9908f8127b0fd8c",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -32,12 +32,12 @@
       "contextHash": "853b896c1c5a9f86b4d79633fe638da93bd040d084fb40b26dc3d6eb7de0d280",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.89,
+        "confidence": 0.75,
         "probabilities": {
-          "supports": 0.92,
-          "contradicts": 0.08,
+          "supports": 0.81,
+          "contradicts": 0.18,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -66,12 +66,12 @@
       "contextHash": "70b4b4482f62ff02b86c9f9c00106819360f19947e8d20c741a07215ff09ff7d",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.89,
+        "confidence": 0.77,
         "probabilities": {
-          "supports": 0.92,
-          "contradicts": 0.08,
+          "supports": 0.83,
+          "contradicts": 0.16,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -100,10 +100,10 @@
       "contextHash": "d75044fea954d9d2fe42da9dd9cc82a3790978d5a5a253993cbb253b6286ab85",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.96,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.01,
+          "supports": 0.97,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -134,10 +134,10 @@
       "contextHash": "b7e5d2e6c011686b8788851d499dd8f5ec328fcf58c5e828b1e4a4addd5e6744",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.98,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -202,10 +202,10 @@
       "contextHash": "0e7bf0f4ceb0c0a0544ea22fe24c5f58373b23a644b37fe5a0a73c8193937fe2",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.8,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.11,
+          "supports": 0.85,
+          "contradicts": 0.14,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -236,10 +236,10 @@
       "contextHash": "84dbc1d19a647933595d9d2575837aab81b3e624616ef9179c47448ee7c47444",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.95,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.05,
+          "supports": 0.96,
+          "contradicts": 0.04,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -261,21 +261,21 @@
         "source": "maintainer-skill",
         "path": ".claude/skills/jev-lint-repo/SKILL.md",
         "startLine": 26,
-        "endLine": 67,
-        "quote": "## Rules and their evals\n\n- A rule is `rules/<language>/<id>/rule.yml` with `fixtures/`, `expect.yml`\n  (labelled defects and cleans), and an accepted `baseline.json` beside it.\n  `last.json` is untracked. `jev-lint eval rules/<language>/<id> --repeat 3`\n  runs it; `--accept` promotes the\n  run; `npm run ci` includes `jev-lint eval --replay`, which fails on a case\n  that was right when accepted and is wrong now, or on a rule whose question\n  changed since its baseline. The case files carry NO `// DEFECT` /\n  `// CLEAN` markers: those sat inside the file the model was shown, and the\n  fits they produced were better than the rules (six fell when they came\n  out). Editing a case file means shifting the labels below the edit; the\n  test suite fails on a label no subject sits on.\n- Each suite labels only its own rule. `tools/arms.ts` and\n  `tools/grouping.ts` run every rule over every suite's cases\n  (`evalCorpus`), where another rule's answer on a suite's file is clean by\n  default -- a defect for rule A in rule B's cases is B's false positive\n  until labelled.\n- A fixture file named for the rule it exercises carries\n  `// jev-lint-ignore-file module-name-describes-contents` on line 1, above\n  its imports, so the module rule does not judge a name that was never a\n  claim about the exports.\n- A new shipped rule needs its own fixtures with hard cleans, `gaps`,\n  repeated `eval`, a report with a verdict, and a pass over unseen code\n  before it enters `rules/<language>/<id>/` with an accepted baseline.\n- Any change to a shipped rule's `ask`, `criteria`, `note`, matcher,\n  `subject` or `state` is a new question: `jev-lint eval --replay` refuses\n  the old baseline until you run `jev-lint eval rules/<language>/<id> --repeat 3`,\n  read the result, and `--accept` it. Commit the baseline with the rule.\n- `tools/arms.ts` measures every arm per rule over every suite's cases\n  (five arms, two passes, about twenty cents). Re-run it after changing a matcher or splitting a rule; the\n  shipped `state:` choices are measurements, not preferences.\n- `just docs-facts` regenerates current catalog, runtime, model and CI facts.\n  `just docs-check --record .jev-lint/documents-baseline.json` refreshes the\n  semantic documentation comparisons; `just docs-replay` validates that record\n  offline. Refresh after changing a registered source or comparison selector.\n- `just introspect --dry-run` inventories metadata without requests; `--write`\n  asks Jev to select starter rules and exclusively creates a new config.\n  `just introspection-eval` runs the frozen selection corpus. CI replays the\n  accepted extended run; a question or catalog change needs fresh evaluation.\n- Figures quoted in `README.md`, `docs/reference.md` and `docs/deepdive.md`\n  are measured. Change the measurement and the figure together, or neither.",
-        "contentHash": "df996640ed0e8e755dd213409426b409cb54f913429327f0cc28dc78d55e9bfe"
+        "endLine": 32,
+        "quote": "## CI\n\n`npm run ci` runs `skills:check`, `typecheck`, `npm test`, `build`,\n`release:check`, `eval:replay`, `eval:adoption`, `docs:facts:check`,\n`eval:documents`, `eval:introspection` and finally `docs:replay`, in that order.\nThe final stage checks the committed documentation record against current\nsources and questions. All stages are offline and need no API key.",
+        "contentHash": "3bfb795329e510c50c8fc27f2505e04643eaeda8f3c32721eeabc5897ebcfdcb"
       },
       "context": [],
-      "candidateId": "a684931b8d6c37573b0fa50e44f5edbb02f300c40cfb87e08ce567ad8b7253c8",
-      "contextHash": "3e19debae91c8df0c36380254d44ff6e7655321116758536556868d9bdd7a6ef",
+      "candidateId": "0baba979a67aa2a6a54319627c164b3efc1804abae64d4d34753abbb489caae6",
+      "contextHash": "e4e337ce4d70837e0c68c76b06c0310ff34f42f665f3a8500541482c30d605c7",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.21,
+        "confidence": 0.89,
         "probabilities": {
-          "supports": 0.41,
-          "contradicts": 0.37,
-          "unrelated": 0.03,
-          "insufficient_context": 0.19
+          "supports": 0.92,
+          "contradicts": 0.04,
+          "unrelated": 0,
+          "insufficient_context": 0.04
         }
       }
     },
@@ -304,10 +304,10 @@
       "contextHash": "07495441926fa597e342fd615b9889328aeb9dd93abac75f85ac2db76d2eba83",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.95,
+        "confidence": 0.96,
         "probabilities": {
-          "supports": 0.96,
-          "contradicts": 0.04,
+          "supports": 0.97,
+          "contradicts": 0.03,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -372,12 +372,12 @@
       "contextHash": "20be37c4761b1a232b229382ea6f94401a9200d098b37d94cc616ebca8f6258f",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.83,
+        "confidence": 0.88,
         "probabilities": {
-          "supports": 0.87,
-          "contradicts": 0.11,
+          "supports": 0.91,
+          "contradicts": 0.08,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -406,10 +406,10 @@
       "contextHash": "9b927ce6ce3ccd0d034e8afee8439d0cbdd9186a35694ebff1c2b3e575e55efd",
       "judgment": {
         "choice": "supports",
-        "confidence": 1,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 1,
-          "contradicts": 0,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -440,11 +440,11 @@
       "contextHash": "3628c049063fac0b6afa53242c8da086e07caf928b820457cb5836b29de24255",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.96,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.97,
+          "supports": 0.98,
           "contradicts": 0.01,
-          "unrelated": 0.01,
+          "unrelated": 0,
           "insufficient_context": 0.01
         }
       }
@@ -474,10 +474,10 @@
       "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.75,
+        "confidence": 0.76,
         "probabilities": {
-          "supports": 0.81,
-          "contradicts": 0.18,
+          "supports": 0.82,
+          "contradicts": 0.17,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -542,12 +542,12 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.92,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.04,
-          "unrelated": 0,
-          "insufficient_context": 0.01
+          "supports": 0.94,
+          "contradicts": 0.03,
+          "unrelated": 0.01,
+          "insufficient_context": 0.02
         }
       }
     },
@@ -576,10 +576,10 @@
       "contextHash": "d1acc67b489fffe17b2e80b045f35be0a9d3bd1660f156f7a6e52e3b975f27a6",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.04,
+          "supports": 0.93,
+          "contradicts": 0.06,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -644,10 +644,10 @@
       "contextHash": "48f725403631276de82a90382f44ec5012e57ea95c91a91dbbfa7e3db81df8e7",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -678,10 +678,10 @@
       "contextHash": "35839030f7dde62d95b10faf10a0b81c8ae5c13efa2c9cd97f722dfbbb0eb1aa",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.11,
+          "supports": 0.89,
+          "contradicts": 0.1,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -712,12 +712,12 @@
       "contextHash": "5b3e6e3d6e9313b46b5d867319a9d0ff3eca623aedd3906c8e3275fab0251ea8",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.85,
+        "confidence": 0.81,
         "probabilities": {
-          "supports": 0.89,
-          "contradicts": 0.1,
+          "supports": 0.86,
+          "contradicts": 0.12,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -780,12 +780,12 @@
       "contextHash": "2186cd8f8e963d27e4f6eae436a488676c25c3d022daf9d460a5a1f7e5c71598",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.11,
+          "supports": 0.93,
+          "contradicts": 0.07,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -831,29 +831,38 @@
         "source": "release-workflow",
         "path": ".github/workflows/release.yml",
         "startLine": 1,
-        "endLine": 82,
-        "quote": "name: release\n\non:\n  push:\n    tags: ['v*']\n\npermissions:\n  contents: read\n\nconcurrency:\n  group: release-${{ github.ref }}\n  cancel-in-progress: false\n\njobs:\n  prepare:\n    runs-on: ubuntu-latest\n    outputs:\n      filename: ${{ steps.plan.outputs.filename }}\n      dist-tag: ${{ steps.plan.outputs.dist-tag }}\n      prerelease: ${{ steps.plan.outputs.prerelease }}\n    steps:\n      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n        with:\n          ref: ${{ github.sha }}\n          fetch-depth: 0\n          persist-credentials: false\n      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n        with:\n          node-version: 24\n          package-manager-cache: false\n      - name: Require a main-branch release with matching versions and notes\n        id: plan\n        run: |\n          git merge-base --is-ancestor \"$GITHUB_SHA\" origin/main\n          node --experimental-strip-types tools/release.ts \"$GITHUB_REF_NAME\" --out-dir release\n      - run: npm ci\n      - run: npm run ci\n      - run: npm run test:package -- --out-dir release\n      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2\n        with:\n          name: release-${{ github.sha }}\n          path: release/\n          if-no-files-found: error\n          retention-days: 7\n\n  publish:\n    needs: prepare\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\n      id-token: write\n    steps:\n      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n        with:\n          ref: ${{ github.sha }}\n          persist-credentials: false\n      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n        with:\n          node-version: 24\n          registry-url: https://registry.npmjs.org\n          package-manager-cache: false\n      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2\n        with:\n          name: release-${{ github.sha }}\n          path: release/\n      - run: npm install --global npm@11.19.1\n      - name: Publish the tested tarball through npm OIDC\n        env:\n          PACKAGE_FILE: ${{ needs.prepare.outputs.filename }}\n          DIST_TAG: ${{ needs.prepare.outputs.dist-tag }}\n        run: npm publish \"release/$PACKAGE_FILE\" --access public --tag \"$DIST_TAG\" --ignore-scripts\n      - name: Create the GitHub release from the same changelog notes\n        env:\n          GH_TOKEN: ${{ github.token }}\n          PACKAGE_FILE: ${{ needs.prepare.outputs.filename }}\n          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}\n        run: |\n          flags=()\n          if [ \"$PRERELEASE\" = true ]; then flags+=(--prerelease); fi\n          gh release create \"$GITHUB_REF_NAME\" \"release/$PACKAGE_FILE\" \\\n            --verify-tag --title \"$GITHUB_REF_NAME\" \\\n            --notes-file release/release-notes.md \"${flags[@]}\"",
-        "contentHash": "2a9abc29b706296b326857030f735bb41e47189a9f8aee01c312830dea4d7a06"
+        "endLine": 101,
+        "quote": "name: release\n\non:\n  push:\n    tags: ['v*']\n\npermissions:\n  contents: read\n\nconcurrency:\n  group: release-${{ github.ref }}\n  cancel-in-progress: false\n\njobs:\n  prepare:\n    runs-on: ubuntu-latest\n    outputs:\n      filename: ${{ steps.plan.outputs.filename }}\n      dist-tag: ${{ steps.plan.outputs.dist-tag }}\n      prerelease: ${{ steps.plan.outputs.prerelease }}\n    steps:\n      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n        with:\n          ref: ${{ github.sha }}\n          fetch-depth: 0\n          persist-credentials: false\n      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n        with:\n          node-version: 24\n          package-manager-cache: false\n      - name: Require a main-branch release with matching versions and notes\n        id: plan\n        run: |\n          git merge-base --is-ancestor \"$GITHUB_SHA\" origin/main\n          node --experimental-strip-types tools/release.ts \"$GITHUB_REF_NAME\" --out-dir release\n      - run: npm ci\n      - run: npm run ci\n      - run: npm run test:package -- --out-dir release\n      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2\n        with:\n          name: release-${{ github.sha }}\n          path: release/\n          if-no-files-found: error\n          retention-days: 7\n\n  publish:\n    needs: prepare\n    runs-on: ubuntu-latest\n    concurrency:\n      group: npm-publication\n      cancel-in-progress: false\n    permissions:\n      contents: read\n      id-token: write\n    steps:\n      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n        with:\n          ref: ${{ github.sha }}\n          persist-credentials: false\n      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n        with:\n          node-version: 24\n          registry-url: https://registry.npmjs.org\n          package-manager-cache: false\n      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2\n        with:\n          name: release-${{ github.sha }}\n          path: release/\n      - run: npm install --global npm@11.19.1\n      - name: Reject a release that would move its channel backward\n        run: |\n          npm view jev-lint dist-tags --json > \"$RUNNER_TEMP/channels.json\"\n          node --experimental-strip-types tools/release.ts \"$GITHUB_REF_NAME\" --check-channel \"$RUNNER_TEMP/channels.json\"\n      - name: Publish the tested tarball through npm OIDC\n        env:\n          PACKAGE_FILE: ${{ needs.prepare.outputs.filename }}\n          DIST_TAG: ${{ needs.prepare.outputs.dist-tag }}\n        run: npm publish \"release/$PACKAGE_FILE\" --access public --tag \"$DIST_TAG\" --ignore-scripts\n\n  github-release:\n    needs: [prepare, publish]\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\n    steps:\n      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2\n        with:\n          name: release-${{ github.sha }}\n          path: release/\n      - name: Create the GitHub release from the same changelog notes\n        env:\n          GH_TOKEN: ${{ github.token }}\n          GH_REPO: ${{ github.repository }}\n          PACKAGE_FILE: ${{ needs.prepare.outputs.filename }}\n          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}\n        run: |\n          flags=()\n          if [ \"$PRERELEASE\" = true ]; then flags+=(--prerelease); fi\n          gh release create \"$GITHUB_REF_NAME\" \"release/$PACKAGE_FILE\" \\\n            --verify-tag --title \"$GITHUB_REF_NAME\" \\\n            --notes-file release/release-notes.md \"${flags[@]}\"",
+        "contentHash": "7420652d8ca60448cbe356e57c6b34443f85bf2961ccd4ca42bd2786e87626bf"
       },
       "target": {
         "source": "release-guide",
         "path": "docs/releasing.md",
         "startLine": 58,
-        "endLine": 79,
-        "quote": "## Tag workflow\n\n```sh\ngit switch main\ngit pull --ff-only origin main\ngit tag -a v0.8.0 -m \"Release v0.8.0\"\ngit push origin v0.8.0\n```\n\nOnly a `v*` tag push triggers `.github/workflows/release.yml`. The `prepare`\njob has read-only repository access and checks that the tagged commit belongs\nto main, all versions match and release notes exist. It runs the complete\noffline CI and the installed-tarball check, then uploads the tested tarball and\nnotes as one artifact.\n\nThe dependent `publish` job alone receives `id-token: write` and\n`contents: write`. It uses Node 24 and npm 11.19.1, downloads that same artifact\nand runs `npm publish` with OIDC and `--ignore-scripts`; repository lifecycle\nscripts are not run with publishing permissions. Neither release job uses a\ndependency cache. Stable versions publish to `latest`; prereleases publish to\n`next`. GitHub Release notes come from the matching changelog section, and the\nsame tarball is attached to the release. Trusted publishing supplies provenance.",
-        "contentHash": "5f07a0d4ed0e79f469d7394ba1e7d1dea791d915e6d7417c6c00cafeffccb07b"
+        "endLine": 84,
+        "quote": "## Tag workflow\n\n```sh\ngit switch main\ngit pull --ff-only origin main\ngit tag -a v0.8.0 -m \"Release v0.8.0\"\ngit push origin v0.8.0\n```\n\nOnly a `v*` tag push triggers `.github/workflows/release.yml`. The `prepare`\njob has read-only repository access and checks that the tagged commit belongs\nto main, all versions match and release notes exist. It runs the complete\noffline CI and the installed-tarball check, then uploads the tested tarball and\nnotes as one artifact.\n\nThe dependent `publish` job alone receives `id-token: write`. It uses Node 24\nand npm 11.19.1, downloads that same artifact\nand runs `npm publish` with OIDC and `--ignore-scripts`; repository lifecycle\nscripts are not run with publishing permissions. Publications are serialized\nacross tags, and a registry check rejects versions that would leave their\nchannel unchanged or move it backward. No release job uses a dependency cache.\nStable versions publish to `latest`; prereleases publish to `next`.\n\nThe separate `github-release` job alone receives `contents: write`. Its notes\ncome from the matching changelog section, and the same tarball is attached to\nthe release. If this job fails after npm succeeds, rerun the failed job without\nrepeating npm publication. Trusted publishing supplies provenance.",
+        "contentHash": "272eedb9e10f8f0e77b108514b38bcdad743a3c67baada3d2d1eea27755663ae"
       },
-      "context": [],
-      "candidateId": "4b70468cfffd3131aa7a379330c0d4fac715c0c2ba9adf22d66c5c9c53eb85c6",
-      "contextHash": "00e9b333ef25af47bab835bc64be9344de58c2db39aa07706f183d935188a62b",
+      "context": [
+        {
+          "source": "release-tool",
+          "path": "tools/release.ts",
+          "startLine": 1,
+          "endLine": 85,
+          "quote": "import { readFileSync, writeFileSync, mkdirSync, appendFileSync } from \"node:fs\";\nimport { resolve, join } from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\n\nexport interface ReleasePlan { version: string; tag: string; filename: string; distTag: \"latest\" | \"next\"; prerelease: boolean; notes: string }\ninterface ReleaseInput { tag: string; package: unknown; lock: unknown; plugin: unknown; marketplace: unknown; changelog: string }\nconst object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === \"object\" && !Array.isArray(v);\nconst identifier = \"(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)\";\nconst semver = new RegExp(`^(0|[1-9][0-9]*)\\\\.(0|[1-9][0-9]*)\\\\.(0|[1-9][0-9]*)(?:-${identifier}(?:\\\\.${identifier})*)?$`);\n\n/** Package and plugin identities must agree before a tag may publish either distribution. */\nexport function createReleasePlan(input: ReleaseInput): ReleasePlan {\n  const fail = (): never => { throw new Error(\"release tag, package, lockfile, plugin identities and changelog must agree\"); };\n  const pkg = input.package, lock = input.lock, plugin = input.plugin, marketplace = input.marketplace;\n  if (!object(pkg) || pkg.name !== \"jev-lint\" || typeof pkg.version !== \"string\" || !semver.test(pkg.version) || input.tag !== `v${pkg.version}`\n    || !object(pkg.repository) || pkg.repository.url !== \"git+https://github.com/mizchi/jev-lint.git\"\n    || !object(pkg.publishConfig) || pkg.publishConfig.access !== \"public\" || !object(lock) || lock.version !== pkg.version\n    || !object(lock.packages) || !object(lock.packages[\"\"]) || lock.packages[\"\"].version !== pkg.version\n    || !object(plugin) || plugin.version !== pkg.version || !object(marketplace) || !Array.isArray(marketplace.plugins)\n    || marketplace.plugins.length !== 1 || !object(marketplace.plugins[0]) || marketplace.plugins[0].name !== pkg.name || marketplace.plugins[0].version !== pkg.version\n    || typeof input.changelog !== \"string\") return fail();\n  const lines = input.changelog.split(\"\\n\");\n  const headings = lines.flatMap((line, i) => /^##\\s+/.test(line) ? [{ i, version: line.trim().split(/\\s+/)[1] }] : []);\n  const found = headings.filter((h) => h.version === pkg.version);\n  if (found.length !== 1) return fail();\n  const start = found[0].i + 1, end = headings.find((h) => h.i >= start)?.i ?? lines.length;\n  const notes = lines.slice(start, end).join(\"\\n\").trim();\n  if (!notes) return fail();\n  const prerelease = pkg.version.includes(\"-\");\n  return { version: pkg.version, tag: input.tag, filename: `jev-lint-${pkg.version}.tgz`, distTag: prerelease ? \"next\" : \"latest\", prerelease, notes };\n}\n\nfunction compareVersions(a: string, b: string): number {\n  const parts = (version: string) => {\n    const dash = version.indexOf(\"-\");\n    return { core: (dash < 0 ? version : version.slice(0, dash)).split(\".\").map(BigInt), pre: dash < 0 ? [] : version.slice(dash + 1).split(\".\") };\n  };\n  const left = parts(a), right = parts(b);\n  for (let i = 0; i < 3; i++) if (left.core[i] !== right.core[i]) return left.core[i] < right.core[i] ? -1 : 1;\n  if (!left.pre.length || !right.pre.length) return Number(!left.pre.length) - Number(!right.pre.length);\n  for (let i = 0; i < Math.max(left.pre.length, right.pre.length); i++) {\n    const x = left.pre[i], y = right.pre[i];\n    if (x === undefined) return -1;\n    if (y === undefined) return 1;\n    if (x === y) continue;\n    const xn = /^\\d+$/.test(x), yn = /^\\d+$/.test(y);\n    if (xn && yn) return BigInt(x) < BigInt(y) ? -1 : 1;\n    if (xn !== yn) return xn ? -1 : 1;\n    return x < y ? -1 : 1;\n  }\n  return 0;\n}\n\n/** A delayed tag must not replace a channel already advanced by another release. */\nexport function assertChannelAdvance(plan: Pick<ReleasePlan, \"version\" | \"distTag\">, channels: unknown): void {\n  if (!object(channels) || !semver.test(plan.version)) throw new Error(\"invalid release channel metadata\");\n  const current = channels[plan.distTag];\n  if (current === undefined) return;\n  if (typeof current !== \"string\" || !semver.test(current)) throw new Error(\"invalid release channel metadata\");\n  if (compareVersions(plan.version, current) <= 0) throw new Error(`${plan.version} must advance ${plan.distTag} beyond ${current}`);\n}\n\nif (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {\n  const args = process.argv.slice(2), cwd = process.cwd();\n  const read = (path: string) => JSON.parse(readFileSync(join(cwd, path), \"utf8\"));\n  const pkg = read(\"package.json\");\n  const tag = args[0] && !args[0].startsWith(\"--\") ? args.shift()! : `v${pkg.version}`;\n  let output: string | null = null, channels: string | null = null;\n  while (args.length) {\n    const flag = args.shift(), value = args.shift();\n    if (value && !value.startsWith(\"--\") && flag === \"--out-dir\" && !output) output = resolve(value);\n    else if (value && !value.startsWith(\"--\") && flag === \"--check-channel\" && !channels) channels = resolve(value);\n    else throw new Error(\"use release.ts [v<version>] [--out-dir <path>] [--check-channel <dist-tags.json>]\");\n  }\n  const plan = createReleasePlan({ tag, package: pkg, lock: read(\"package-lock.json\"), plugin: read(\".claude-plugin/plugin.json\"),\n    marketplace: read(\".claude-plugin/marketplace.json\"), changelog: readFileSync(join(cwd, \"CHANGELOG.md\"), \"utf8\") });\n  if (channels) assertChannelAdvance(plan, JSON.parse(readFileSync(channels, \"utf8\")));\n  if (output) {\n    mkdirSync(output, { recursive: true });\n    writeFileSync(join(output, \"release.json\"), JSON.stringify(plan, null, 2) + \"\\n\");\n    writeFileSync(join(output, \"release-notes.md\"), plan.notes + \"\\n\");\n  }\n  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `version=${plan.version}\\nfilename=${plan.filename}\\ndist-tag=${plan.distTag}\\nprerelease=${plan.prerelease}\\n`);\n  process.stdout.write(JSON.stringify({ ...plan, notes: undefined }, null, 2) + \"\\n\");\n}",
+          "contentHash": "335b81c6cbac809dfe2c559c955bd93df7e7b7c8542c94dc9d5fdeab5d0df6db"
+        }
+      ],
+      "candidateId": "5171f1c2c895dfaa6b9999b0ed7de72416fd7529c55da4cb1801aa43b57e3a60",
+      "contextHash": "cfe59ea7709fd4560a5925d69f76e89b5f3e028df406653fd73ca217fe86aab9",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.64,
+        "confidence": 0.63,
         "probabilities": {
-          "supports": 0.73,
-          "contradicts": 0.07,
+          "supports": 0.72,
+          "contradicts": 0.26,
           "unrelated": 0,
-          "insufficient_context": 0.2
+          "insufficient_context": 0.02
         }
       }
     }
@@ -871,8 +880,8 @@
   },
   "usage": {
     "requests": 25,
-    "inputTokens": 35132,
-    "usd": 0.0014755439999999999
+    "inputTokens": 36590,
+    "usd": 0.00153678
   },
   "errors": []
 }

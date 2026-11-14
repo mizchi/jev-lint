@@ -70,13 +70,18 @@ to main, all versions match and release notes exist. It runs the complete
 offline CI and the installed-tarball check, then uploads the tested tarball and
 notes as one artifact.
 
-The dependent `publish` job alone receives `id-token: write` and
-`contents: write`. It uses Node 24 and npm 11.19.1, downloads that same artifact
+The dependent `publish` job alone receives `id-token: write`. It uses Node 24
+and npm 11.19.1, downloads that same artifact
 and runs `npm publish` with OIDC and `--ignore-scripts`; repository lifecycle
-scripts are not run with publishing permissions. Neither release job uses a
-dependency cache. Stable versions publish to `latest`; prereleases publish to
-`next`. GitHub Release notes come from the matching changelog section, and the
-same tarball is attached to the release. Trusted publishing supplies provenance.
+scripts are not run with publishing permissions. Publications are serialized
+across tags, and a registry check rejects versions that would leave their
+channel unchanged or move it backward. No release job uses a dependency cache.
+Stable versions publish to `latest`; prereleases publish to `next`.
+
+The separate `github-release` job alone receives `contents: write`. Its notes
+come from the matching changelog section, and the same tarball is attached to
+the release. If this job fails after npm succeeds, rerun the failed job without
+repeating npm publication. Trusted publishing supplies provenance.
 
 ## Verify publication
 

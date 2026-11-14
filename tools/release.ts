@@ -30,15 +30,51 @@ export function createReleasePlan(input: ReleaseInput): ReleasePlan {
   return { version: pkg.version, tag: input.tag, filename: `jev-lint-${pkg.version}.tgz`, distTag: prerelease ? "next" : "latest", prerelease, notes };
 }
 
+function compareVersions(a: string, b: string): number {
+  const parts = (version: string) => {
+    const dash = version.indexOf("-");
+    return { core: (dash < 0 ? version : version.slice(0, dash)).split(".").map(BigInt), pre: dash < 0 ? [] : version.slice(dash + 1).split(".") };
+  };
+  const left = parts(a), right = parts(b);
+  for (let i = 0; i < 3; i++) if (left.core[i] !== right.core[i]) return left.core[i] < right.core[i] ? -1 : 1;
+  if (!left.pre.length || !right.pre.length) return Number(!left.pre.length) - Number(!right.pre.length);
+  for (let i = 0; i < Math.max(left.pre.length, right.pre.length); i++) {
+    const x = left.pre[i], y = right.pre[i];
+    if (x === undefined) return -1;
+    if (y === undefined) return 1;
+    if (x === y) continue;
+    const xn = /^\d+$/.test(x), yn = /^\d+$/.test(y);
+    if (xn && yn) return BigInt(x) < BigInt(y) ? -1 : 1;
+    if (xn !== yn) return xn ? -1 : 1;
+    return x < y ? -1 : 1;
+  }
+  return 0;
+}
+
+/** A delayed tag must not replace a channel already advanced by another release. */
+export function assertChannelAdvance(plan: Pick<ReleasePlan, "version" | "distTag">, channels: unknown): void {
+  if (!object(channels) || !semver.test(plan.version)) throw new Error("invalid release channel metadata");
+  const current = channels[plan.distTag];
+  if (current === undefined) return;
+  if (typeof current !== "string" || !semver.test(current)) throw new Error("invalid release channel metadata");
+  if (compareVersions(plan.version, current) <= 0) throw new Error(`${plan.version} must advance ${plan.distTag} beyond ${current}`);
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2), cwd = process.cwd();
   const read = (path: string) => JSON.parse(readFileSync(join(cwd, path), "utf8"));
   const pkg = read("package.json");
   const tag = args[0] && !args[0].startsWith("--") ? args.shift()! : `v${pkg.version}`;
-  let output: string | null = null;
-  if (args.length) { if (args.length !== 2 || args[0] !== "--out-dir" || !args[1]) throw new Error("use release.ts [v<version>] [--out-dir <path>]"); output = resolve(args[1]); }
+  let output: string | null = null, channels: string | null = null;
+  while (args.length) {
+    const flag = args.shift(), value = args.shift();
+    if (value && !value.startsWith("--") && flag === "--out-dir" && !output) output = resolve(value);
+    else if (value && !value.startsWith("--") && flag === "--check-channel" && !channels) channels = resolve(value);
+    else throw new Error("use release.ts [v<version>] [--out-dir <path>] [--check-channel <dist-tags.json>]");
+  }
   const plan = createReleasePlan({ tag, package: pkg, lock: read("package-lock.json"), plugin: read(".claude-plugin/plugin.json"),
     marketplace: read(".claude-plugin/marketplace.json"), changelog: readFileSync(join(cwd, "CHANGELOG.md"), "utf8") });
+  if (channels) assertChannelAdvance(plan, JSON.parse(readFileSync(channels, "utf8")));
   if (output) {
     mkdirSync(output, { recursive: true });
     writeFileSync(join(output, "release.json"), JSON.stringify(plan, null, 2) + "\n");

@@ -106,6 +106,10 @@
     "release-workflow": {
       "path": ".github/workflows/release.yml",
       "role": "reference"
+    },
+    "release-tool": {
+      "path": "tools/release.ts",
+      "role": "reference"
     }
   },
   "comparisons": [
@@ -211,7 +215,7 @@
       },
       "target": {
         "source": "maintainer-skill",
-        "heading": "Rules and their evals"
+        "heading": "CI"
       }
     },
     {
@@ -433,7 +437,8 @@
       "target": {
         "source": "release-guide",
         "heading": "Tag workflow"
-      }
+      },
+      "context": [{ "source": "release-tool" }]
     }
   ]
 }
