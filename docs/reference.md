@@ -17,6 +17,24 @@ pinned policy, cache isolation and outbound request controls.
 `doctor [--json]` checks local prerequisites without contacting a provider.
 See [adoption and export](adoption.md) for their contracts, limits and flags.
 
+`introspect [directory]` asks Jev directly to select initial rules from a bounded
+file inventory, package names and catalog descriptions. It needs no separate LLM
+or coding agent. `--dry-run` shows the metadata without requests; `--write`
+creates a new config with only enabled recommendations. `--output <new.yaml>`
+selects a proposal path, `--record <path>` saves the evidence and answers, and
+`introspect --replay <path>` validates them offline from the same project directory.
+It supports text and JSON; a partial/failed recommendation or stale snapshot
+exits 3 and cannot write a config. Existing configs are never replaced, including
+with `--force`. `--config` is not read; explicit `-R` and `--exclude` choices apply.
+See the [initialization guide](../skills/jev-lint/references/initializing-project.md)
+for the starter policy, limits and conditional rule families.
+
+`init --introspect [directory]` initializes through the same path as
+`introspect --write`. `init --introspect --dry-run` only plans, without requests
+or writes. In this init mode, `--config <new.yaml>` is an output destination,
+equivalent to `--output`; combining both is an error. Hook installation flags
+are separate init modes and cannot be combined with `--introspect`.
+
 `docs [--document-manifest <path>]` compares declared documentation claims,
 translations and terminology. Its default manifest is `.jev-lint/documents.json`.
 `docs --dry-run` emits the plan without requests; `docs --record <path>` saves
@@ -38,6 +56,7 @@ jev-lint rules                      # what loaded, and every validation error
 jev-lint replay run.json            # re-score a recorded run under new cutoffs, free
 jev-lint replay run.json --labels corpus/labels.json   # ...and re-fit them, free
 jev-lint init                       # write a .jev-lint.yaml to start from
+jev-lint init --introspect          # ask Jev to choose starter rules and create a new config
 
 jev-lint check src --dry-run        # plan and price it without asking anything
 ```
@@ -61,6 +80,8 @@ answers.
 
 | flag | |
 | --- | --- |
+| `--introspect` | `init`: use Jev's starter recommendations; `--dry-run` displays metadata without requests or writes |
+| `--write` | `introspect`: create a new configuration from complete recommendations; `--output` chooses a separate new path |
 | `--document-manifest <path>` | `docs`: explicit source registry and comparison selectors; see [document self-check](self-check.md) |
 | `-R, --rules <path>` | rule file or directory, repeatable, loaded in place of the packaged packs and `.jev-lint/rules/` for this run |
 | `-r, --retry <n>` | ask everything n times and decide on the mean (default 1) — see [Asking more than once](#asking-more-than-once) |

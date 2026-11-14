@@ -86,6 +86,18 @@
     "clef-history": {
       "path": "docs/clef-evaluation.md",
       "role": "historical"
+    },
+    "initialization": {
+      "path": "skills/jev-lint/references/initializing-project.md",
+      "role": "document"
+    },
+    "user-skill": {
+      "path": "skills/jev-lint/SKILL.md",
+      "role": "document"
+    },
+    "shipped-guide": {
+      "path": "skills/jev-lint/references/using-shipped-rules.md",
+      "role": "document"
     }
   },
   "comparisons": [
@@ -336,6 +348,71 @@
       "target": {
         "source": "readme-ja",
         "heading": "ドキュメントの整合性"
+      }
+    },
+    {
+      "id": "initial-rule-policy",
+      "topic": "Conservative initial rule families and conditional checks",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "heading": "Initial rule selection"
+      },
+      "target": {
+        "source": "initialization",
+        "heading": "Explain the proposal"
+      }
+    },
+    {
+      "id": "initialization-skill",
+      "topic": "Direct Jev initialization, all-rule init and preserving existing settings",
+      "mode": "semantic",
+      "reference": {
+        "source": "initialization",
+        "heading": "Inspect and recommend"
+      },
+      "target": {
+        "source": "user-skill",
+        "contains": "For initialization, follow"
+      }
+    },
+    {
+      "id": "published-rule-files",
+      "topic": "Npm rule YAML versus repository-only fixture and baseline files",
+      "mode": "semantic",
+      "reference": {
+        "source": "architecture",
+        "heading": "Build contract"
+      },
+      "target": {
+        "source": "shipped-guide",
+        "contains": "Labelled fixtures"
+      }
+    },
+    {
+      "id": "introspection-translation",
+      "topic": "Direct Jev metadata introspection and exclusive configuration creation",
+      "mode": "translation",
+      "reference": {
+        "source": "readme",
+        "contains": "`introspect --dry-run` shows"
+      },
+      "target": {
+        "source": "readme-ja",
+        "contains": "`introspect --dry-run` は"
+      }
+    },
+    {
+      "id": "init-introspection-translation",
+      "topic": "Jev-based init alias and its offline dry-run semantics",
+      "mode": "translation",
+      "reference": {
+        "source": "readme",
+        "contains": "`init --introspect` is equivalent"
+      },
+      "target": {
+        "source": "readme-ja",
+        "contains": "`init --introspect` は"
       }
     }
   ]

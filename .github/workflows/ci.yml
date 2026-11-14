@@ -57,6 +57,7 @@ jobs:
       - run: npm run eval:adoption
       - run: npm run docs:facts:check
       - run: npm run eval:documents
+      - run: npm run eval:introspection
       - run: npm run docs:replay
 
   # `engines` says node >=24, and the suite cannot check it: the suite runs

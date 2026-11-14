@@ -22,6 +22,7 @@ import { cmdScope } from "./cmd-scope.ts";
 import { doctor } from "../doctor.ts";
 import { resolveTargets } from "./targets.ts";
 import { cmdDocs } from "./cmd-docs.ts";
+import { cmdIntrospect } from "./cmd-introspect.ts";
 
 export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   let command = argv[0] && !argv[0].startsWith("-") ? argv[0] : "check";
@@ -54,8 +55,15 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   const client = deps.client ?? null;
   if (opts.deprecatedAt) log("warning: --at is deprecated; use --threshold");
 
+  if (opts.initIntrospect) {
+    if (command !== "init" || opts.preCommit || opts.prePush) { log("--introspect is an init mode and cannot be combined with hook installation"); return 2; }
+    const target = opts.config && opts.config !== "none" ? opts.config : null;
+    if (target && opts.output) { log("choose --config or --output for the new configuration path"); return 2; }
+    return cmdIntrospect({ ...opts, config: null, output: opts.output ?? target, introspectWrite: opts.introspectWrite || !opts.dryRun }, out, log, client);
+  }
   if (command === "init") return cmdInit(opts, out, log);
   if (command === "docs") return cmdDocs(opts, out, log, client);
+  if (command === "introspect") return cmdIntrospect(opts, out, log, client);
   if (command === "baseline" || command === "report") return cmdArtifact(command, opts, out, log);
   if (opts.format === "sarif" && (opts.dryRun || !["check", "review", "run", "scan", "replay"].includes(command))) { log("SARIF supports check, review, scan and replay results; use JSON for plans"); return 2; }
 

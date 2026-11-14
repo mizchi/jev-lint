@@ -7,6 +7,15 @@ skills-check:
 ci:
     pnpm run ci
 
+introspect *args:
+    node --experimental-strip-types src/cli.ts introspect {{args}}
+
+introspection-build:
+    node --experimental-strip-types tools/build-introspection-eval.ts
+
+introspection-eval *args:
+    node --experimental-strip-types tools/eval-introspection.ts {{args}}
+
 docs-facts *args:
     node --experimental-strip-types tools/docs-facts.ts {{args}}
 

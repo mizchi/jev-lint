@@ -76,6 +76,7 @@ right.
 | `acceptance.ts`, `review-artifact.ts` | accepted finding identities, provenance and strict artifact validation |
 | `scope.ts`, `doctor.ts` | file eligibility and local diagnostics without model requests |
 | `document-contract.ts`, `document-input.ts`, `documents.ts` | manifest validation, working-tree excerpts, semantic document checks and strict replay |
+| `introspection-contract.ts`, `introspection.ts`, `cli/cmd-introspect.ts` | bounded metadata inventory, direct Jev starter selection, strict replay and exclusive config creation |
 | `cli/cmd-docs.ts` | documentation plans, live records and offline replay |
 | `schedule.ts` | the per-rule axis decision for `--group auto` |
 | `config.ts` | `.jev-lint.yaml`: discovery, validation, and the flag-beats-file merge |
@@ -412,7 +413,7 @@ requires a repository checkout. [Project facts](../project-facts.md#package-cont
 is generated from the actual export map and publish allowlist.
 
 `npm run ci` checks the skill link, types, tests, build, rule baseline replay,
-adoption evaluation, generated documentation facts, document evaluation replay,
+adoption evaluation, generated documentation facts, document and introspection evaluation replay,
 and finally the committed documentation snapshot replay. None needs an API key.
 The complete command is generated in [project facts](../project-facts.md#ci).
 Rule replay fails when an accepted decision regresses or the rule question

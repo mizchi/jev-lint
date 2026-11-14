@@ -56,7 +56,7 @@ not a sentiment. Vague entries are worse than absent ones.
 
 ## Commits and branches
 
-- `npm run ci` — skill check, typecheck, tests, build, rule/adoption/document
+- `npm run ci` — skill check, typecheck, tests, build, rule/adoption/document/introspection
   evaluation replay, generated facts and documentation snapshot replay — passes before
   a push.
 - A commit message describes its diff, including the part the subject line

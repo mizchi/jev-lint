@@ -59,6 +59,10 @@ and excludes `test/fixtures/`, which holds planted defects for the cookbook.
   `just docs-check --record .jev-lint/documents-baseline.json` refreshes the
   semantic documentation comparisons; `just docs-replay` validates that record
   offline. Refresh after changing a registered source or comparison selector.
+- `just introspect --dry-run` inventories metadata without requests; `--write`
+  asks Jev to select starter rules and exclusively creates a new config.
+  `just introspection-eval` runs the frozen selection corpus. CI replays the
+  accepted extended run; a question or catalog change needs fresh evaluation.
 - Figures quoted in `README.md`, `docs/reference.md` and `docs/deepdive.md`
   are measured. Change the measurement and the figure together, or neither.
 

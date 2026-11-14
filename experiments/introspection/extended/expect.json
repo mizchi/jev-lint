@@ -1,0 +1,187 @@
+{
+  "schema": "jev-lint-introspection-eval-expect-1",
+  "cases": [
+    {
+      "id": "typescript-starter",
+      "choice": "enable"
+    },
+    {
+      "id": "javascript-starter",
+      "choice": "enable"
+    },
+    {
+      "id": "rust-starter",
+      "choice": "enable"
+    },
+    {
+      "id": "python-starter",
+      "choice": "enable"
+    },
+    {
+      "id": "behavior-tests",
+      "choice": "enable"
+    },
+    {
+      "id": "test-helpers",
+      "choice": "defer"
+    },
+    {
+      "id": "no-test-evidence",
+      "choice": "defer"
+    },
+    {
+      "id": "comments-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "safe-promise-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "pure-promise-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "paired-relation-unverified",
+      "choice": "defer"
+    },
+    {
+      "id": "variable-convention-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "module-convention-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "technical-reference",
+      "choice": "skip"
+    },
+    {
+      "id": "historical-measurements",
+      "choice": "skip"
+    },
+    {
+      "id": "instruction-conflict",
+      "choice": "enable"
+    },
+    {
+      "id": "instruction-clarity",
+      "choice": "enable"
+    },
+    {
+      "id": "script-commands-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "log-claims-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "commit-workflow-unselected",
+      "choice": "defer"
+    },
+    {
+      "id": "instruction-workflow-unselected",
+      "choice": "defer"
+    },
+    {
+      "id": "overlapping-test-check",
+      "choice": "defer"
+    },
+    {
+      "id": "mock-assertions-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "snapshot-claims-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "method-overlap",
+      "choice": "defer"
+    },
+    {
+      "id": "type-convention-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "describe-overlap",
+      "choice": "defer"
+    },
+    {
+      "id": "module-file-convention",
+      "choice": "defer"
+    },
+    {
+      "id": "error-contract-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "idempotent-promise-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "javascript-comment-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "shell-effects-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "query-body-unseen",
+      "choice": "defer"
+    },
+    {
+      "id": "filename-injection",
+      "choice": "defer"
+    },
+    {
+      "id": "script-name-injection",
+      "choice": "defer"
+    },
+    {
+      "id": "complete-catalog",
+      "choices": {
+        "json/script-name-does": "defer",
+        "markdown/agent-instruction-is-unclear": "enable",
+        "markdown/agent-instructions-conflict": "enable",
+        "markdown/document-abandons-a-question": "skip",
+        "markdown/document-is-filler": "skip",
+        "markdown/document-is-formulaic": "skip",
+        "markdown/document-is-generic": "skip",
+        "markdown/document-is-incoherent": "skip",
+        "markdown/document-is-padded": "skip",
+        "markdown/document-is-slop": "skip",
+        "markdown/document-is-vague": "skip",
+        "markdown/document-lacks-firsthand-evidence": "skip",
+        "markdown/section-ends-with-a-preview": "skip",
+        "markdown/section-opens-with-an-agenda": "skip",
+        "typescript/catch-hides-failure": "defer",
+        "typescript/class-shape-shows-its-role": "defer",
+        "typescript/comment-describes-block": "defer",
+        "typescript/comment-describes-declaration": "defer",
+        "typescript/describe-names-subject": "defer",
+        "typescript/doc-errors-match-body": "defer",
+        "typescript/error-message-matches-condition": "defer",
+        "typescript/fn-name-promises": "enable",
+        "typescript/idempotent-name": "defer",
+        "typescript/log-level-matches-event": "defer",
+        "typescript/log-message-matches-event": "defer",
+        "typescript/method-name-promises": "defer",
+        "typescript/module-name-describes-contents": "defer",
+        "typescript/module-naming-consistent": "defer",
+        "typescript/pure-name-is-pure": "defer",
+        "typescript/safe-name-is-safe": "defer",
+        "typescript/snapshot-only-behaviour-claim": "defer",
+        "typescript/test-mocks-subject": "defer",
+        "typescript/test-name-describes-code": "defer",
+        "typescript/test-name-verifies-claim": "enable",
+        "typescript/tests-cover-failure-paths": "defer",
+        "typescript/type-name-describes-shape": "defer",
+        "typescript/var-name-describes-value": "defer"
+      }
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { DEFAULT_MODEL } from "../src/jev.ts";
 import { collectRows } from "./rules-md.ts";
+import { INTROSPECTION_QUESTION } from "../src/introspection.ts";
 
 export function renderProjectFacts(cwd: string): string {
   const pkg = JSON.parse(readFileSync(resolve(cwd, "package.json"), "utf8"));
@@ -29,6 +30,12 @@ The package requires Node.js ${pkg.engines.node}. Its runtime dependencies are $
 ## Default model
 
 The default model is \`${DEFAULT_MODEL}\`. Explicit CLI, configuration and environment overrides still apply.
+
+## Initial rule selection
+
+\`introspect\` selects initial screening rules from metadata using Jev. Its current enable criterion is:
+
+${INTROSPECTION_QUESTION.criteria.enable}
 
 ## CI
 

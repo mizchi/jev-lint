@@ -89,6 +89,17 @@ Cloudflare Clef と Clef-flash も、リポジトリを checkout して実験的
 | `jev-lint commits --staged` | staged の変更をリポジトリの指示と照合。コミットメッセージはまだない |
 | `jev-lint run typescript/fn-name-promises src` | ルール一つ。自作なら `--file mine.yml` |
 | `jev-lint rules` | 読み込まれた全ルール。問い、cutoff、ファイル |
+| `jev-lint introspect --write` | ディレクトリ情報をJevに渡し、初期ルールを選んで設定ファイルを作る |
+| `jev-lint init --introspect` | 同じ推奨ルールで初期化する。`--dry-run` は計画の表示のみ |
+
+`introspect --dry-run` は送信する情報を通信なしで表示する。`introspect --write` は別のLLMや
+エージェントを使わずJevを直接呼び、推奨する初期ルールだけを含む設定を新規作成する。
+既存設定がある場合は `--write --output .jev-lint.proposed.yaml` で別の提案ファイルを作れる。
+有効化・保留・対象外のルールを代表ファイル付きで表示し、ソース本文、スクリプトの値、環境変数の値は送らない。
+詳しくは[初期設定ガイド](skills/jev-lint/references/initializing-project.md)にある。
+
+`init --introspect` は `introspect --write` と同じ動作になる。
+`init --introspect --dry-run` では通信も設定ファイルの作成も行わない。
 
 ルールを選ぶのは config で、ESLint と同じ形。`init` は同梱ルールを全部 on にして書き出すので、そこから削る:
 
@@ -164,6 +175,8 @@ ask: This catch block swallows a failure the caller needed to know about.
 ## コーディングエージェント向け
 
 リポジトリは skill を同梱している。jev-lint の走らせ方と同梱ルールの使い方に加え、各リポジトリでコード、独自 grammar、テキスト、Git のルールを作るための独立したガイドがある:
+
+[プロジェクトの初期設定とルール提案](skills/jev-lint/references/initializing-project.md)
 
 [プロジェクトごとのルール作成ガイド](skills/jev-lint/references/writing-project-rules.md)
 

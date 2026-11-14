@@ -27,3 +27,4 @@ experiments/relations/negative-controls/last.json
 experiments/relations/**/last.json
 experiments/adoption/last.json
 experiments/documents/last.json
+experiments/introspection/**/last.json

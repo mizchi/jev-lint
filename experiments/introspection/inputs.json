@@ -1,0 +1,205 @@
+{
+  "schema": "jev-lint-introspection-eval-input-1",
+  "cases": [
+    {
+      "id": "typescript-starter",
+      "rule": "typescript/fn-name-promises",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }"
+      },
+      "git": false
+    },
+    {
+      "id": "javascript-starter",
+      "rule": "typescript/fn-name-promises",
+      "files": {
+        "src/app.js": "export function app() {}"
+      },
+      "git": false
+    },
+    {
+      "id": "rust-starter",
+      "rule": "rust/fn-name-promises",
+      "files": {
+        "src/lib.rs": "pub fn price() {}"
+      },
+      "git": false
+    },
+    {
+      "id": "python-starter",
+      "rule": "python/fn-name-promises",
+      "files": {
+        "src/service.py": "def price(): pass"
+      },
+      "git": false
+    },
+    {
+      "id": "behavior-tests",
+      "rule": "typescript/test-name-verifies-claim",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }",
+        "test/pricing.test.ts": "test('returns the price', () => {});"
+      },
+      "git": false
+    },
+    {
+      "id": "test-helpers",
+      "rule": "typescript/test-name-verifies-claim",
+      "files": {
+        "src/test-utils.ts": "export function helper() {}"
+      },
+      "git": false
+    },
+    {
+      "id": "no-test-evidence",
+      "rule": "typescript/test-name-verifies-claim",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }"
+      },
+      "git": false
+    },
+    {
+      "id": "comments-unseen",
+      "rule": "typescript/comment-describes-declaration",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }"
+      },
+      "git": false
+    },
+    {
+      "id": "safe-promise-unseen",
+      "rule": "typescript/safe-name-is-safe",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }"
+      },
+      "git": false
+    },
+    {
+      "id": "pure-promise-unseen",
+      "rule": "typescript/pure-name-is-pure",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }"
+      },
+      "git": false
+    },
+    {
+      "id": "paired-relation-unverified",
+      "rule": "typescript/tests-cover-failure-paths",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }",
+        "test/pricing.test.ts": "test('returns the price', () => {});"
+      },
+      "git": false
+    },
+    {
+      "id": "variable-convention-unseen",
+      "rule": "typescript/var-name-describes-value",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }"
+      },
+      "git": false
+    },
+    {
+      "id": "module-convention-unseen",
+      "rule": "typescript/module-naming-consistent",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }"
+      },
+      "git": false
+    },
+    {
+      "id": "technical-reference",
+      "rule": "markdown/section-opens-with-an-agenda",
+      "files": {
+        "docs/reference.md": "# API reference"
+      },
+      "git": false
+    },
+    {
+      "id": "historical-measurements",
+      "rule": "markdown/document-lacks-firsthand-evidence",
+      "files": {
+        "docs/history/2025-measurements.md": "# Recorded measurements"
+      },
+      "git": false
+    },
+    {
+      "id": "instruction-conflict",
+      "rule": "markdown/agent-instructions-conflict",
+      "files": {
+        "AGENTS.md": "# Instructions"
+      },
+      "git": false
+    },
+    {
+      "id": "instruction-clarity",
+      "rule": "markdown/agent-instruction-is-unclear",
+      "files": {
+        "AGENTS.md": "# Instructions"
+      },
+      "git": false
+    },
+    {
+      "id": "script-commands-unseen",
+      "rule": "json/script-name-does",
+      "files": {
+        "package.json": "{\"scripts\":{\"test\":\"node test.js\"}}"
+      },
+      "git": false
+    },
+    {
+      "id": "log-claims-unseen",
+      "rule": "typescript/log-level-matches-event",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }"
+      },
+      "git": false
+    },
+    {
+      "id": "commit-workflow-unselected",
+      "rule": "git/commit-message-describes-diff",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }"
+      },
+      "git": true
+    },
+    {
+      "id": "instruction-workflow-unselected",
+      "rule": "git/diff-follows-instructions",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }",
+        "AGENTS.md": "# Instructions"
+      },
+      "git": true
+    },
+    {
+      "id": "overlapping-test-check",
+      "rule": "typescript/test-name-describes-code",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }",
+        "test/pricing.test.ts": "test('returns the price', () => {});"
+      },
+      "git": false
+    },
+    {
+      "id": "mock-assertions-unseen",
+      "rule": "typescript/test-mocks-subject",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }",
+        "test/pricing.test.ts": "test('returns the price', () => {});",
+        "package.json": "{\"devDependencies\":{\"vitest\":\"*\"}}"
+      },
+      "git": false
+    },
+    {
+      "id": "snapshot-claims-unseen",
+      "rule": "typescript/snapshot-only-behaviour-claim",
+      "files": {
+        "src/pricing.ts": "export function price() { return 1; }",
+        "test/pricing.test.ts": "test('returns the price', () => {});",
+        "test/__snapshots__/pricing.snap": "Snapshot"
+      },
+      "git": false
+    }
+  ]
+}

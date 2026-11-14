@@ -62,11 +62,12 @@ export function explainScope({ cwd = process.cwd(), paths, rules, exclude = [], 
     if (ignored.has(file.path)) { file.reason = "gitignore"; continue; }
     if (changedPaths && !changedPaths.includes(file.path)) { file.reason = "outside-change"; continue; }
     const extension = extname(file.path).slice(1).toLowerCase();
-    const applicable = rules.filter((rule) => rule.subject === "block" ? rule.extensions.includes(extension) || !!rule.filenames?.includes(basename(file.path))
-      : rule.subject !== "commit" && rule.subject !== "change" && (builtin[rule.language] ?? extensionsOf(rule.language, languages)).includes(extension));
+    const applicable = rules.filter((rule) => rule.subject === "block" ? rule.extensions.includes(extension) && (!rule.filenames || rule.filenames.includes(basename(file.path)))
+      : rule.subject !== "commit" && rule.subject !== "change" && rule.languages.some((language) => (builtin[language] ?? extensionsOf(language, languages)).includes(extension)));
     file.rules = applicable.map((rule) => rule.languageDir ? `${rule.languageDir}/${rule.id}` : rule.id).sort();
     if (!applicable.length) file.reason = Object.values(builtin).some((exts) => exts.includes(extension)) ? "no-rule" : "unsupported";
-    else if (applicable.every((rule) => rule.subject !== "block" && !builtin[rule.language] && (!languages[rule.language]?.libraryPath || !existsSync(resolve(cwd, languages[rule.language]!.libraryPath))))) file.reason = "missing-parser";
+    else if (applicable.every((rule) => rule.subject !== "block" && !rule.languages.some((language) => (builtin[language] ?? []).includes(extension)
+      || extensionsOf(language, languages).includes(extension) && !!languages[language]?.libraryPath && existsSync(resolve(cwd, languages[language]!.libraryPath))))) file.reason = "missing-parser";
   }
   const counts: ScopeExplanation["counts"] = { eligible: 0, "user-exclude": 0, gitignore: 0, "outside-change": 0, "no-rule": 0, unsupported: 0, "missing-parser": 0, symlink: 0, hidden: 0 };
   for (const file of files) counts[file.reason]++;

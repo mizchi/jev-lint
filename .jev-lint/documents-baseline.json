@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "388b8e6ae912b0e7b940d9914f7cfca155c7a382c645052c31e8f9782e3911ec",
+  "snapshotDigest": "754fbd41935b1ca86826defda807e627f3b86a5962215cd497c53d138ca31d60",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -22,20 +22,20 @@
       "target": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 173,
-        "endLine": 197,
+        "startLine": 186,
+        "endLine": 210,
         "quote": "## What ships\n\n103 rules under `rules/<language>/<id>/`, and the files you point it at decide\nwhich run. Nothing to select.\n\n| point it at | what runs |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 rules, first tier |\n| `.rs` | `rust/` — 9, first tier |\n| `.py` `.go` | `python/` — 14, `go/` — 9 |\n| `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |\n| `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |\n| `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |\n| `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |\n| `package.json`, sqlc `.sql` | `json/` — 1, `text/` — 1 |\n| commits | `git/` — 2 |\n\n`typescript` and `rust` are first tier: every rule under them carries\nfixtures, expectations and an accepted baseline. The rest are calibrated to\nthe same bar and not yet promised. [RULES.md](RULES.md) lists all 103 with\ntheir question, cutoff and score on their own fixtures.\n\nYour own rule can target any language ast-grep parses — Java, Kotlin, Swift,\nC, C++, C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, HTML,\nCSS, YAML — and any other grammar you compile.",
         "contentHash": "cfcbfe315bb0f9392e8a8b9b3030a7d0ef21aaca78360a6faff5f5414d18ac50"
       },
       "context": [],
-      "candidateId": "77d8b5a6a0797da0fead812f3330138e1626e98d73a7846cca215501db7ebf0d",
-      "contextHash": "fd030015b682c8a9b7e6061df36c59d072fb604343b6081fc0d72392b1099539",
+      "candidateId": "a8cc440014275755cc37d093f7d175150332fc675c3f8450f53aee981988a0cc",
+      "contextHash": "7bcb680b55069b72228948a2d6faa13bce3f0c759930826915137b328cf36cc8",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.73,
+        "confidence": 0.83,
         "probabilities": {
-          "supports": 0.8,
-          "contradicts": 0.19,
+          "supports": 0.87,
+          "contradicts": 0.12,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -56,20 +56,20 @@
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 122,
-        "endLine": 140,
+        "startLine": 133,
+        "endLine": 151,
         "quote": "## 何が同梱されるか\n\n`rules/<language>/<id>/` の下に 103 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。\n\n| 渡すもの | 走るもの |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 ルール、第一級 |\n| `.rs` | `rust/` — 9、第一級 |\n| `.py` `.go` | `python/` — 14、`go/` — 9 |\n| `.mbt` | `moonbit/` — 20。[パーサを宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば走る |\n| `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |\n| `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |\n| `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |\n| `package.json`、sqlc の `.sql` | `json/` — 1、`text/` — 1 |\n| コミット | `git/` — 2 |\n\n`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 103 個全部の問い、cutoff、自分の fixtures での成績がある。\n\n自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。",
         "contentHash": "0af78be93769af751b5f6f27b53f3ec0af69824095a06ebe548792f3f4829945"
       },
       "context": [],
-      "candidateId": "21185aca066bc1716cb7adafdd94057be6017ae357d04ad93c8a513723680a2f",
-      "contextHash": "2dbdeef038b9f3502b9c4cf94a6cf425f7e1d846ebe6ef714f050a9abf86dd2a",
+      "candidateId": "577e7a7bda62646302943e217f91947899a85c98aec5b24ac29ac2bd48a8bcff",
+      "contextHash": "539dbdcea44382afe080618e240fd355995a981c4396d4360a0ffaad8d0dde3c",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.81,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.86,
-          "contradicts": 0.14,
+          "supports": 0.88,
+          "contradicts": 0.12,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -90,14 +90,14 @@
       "target": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 594,
-        "endLine": 595,
+        "startLine": 615,
+        "endLine": 616,
         "quote": "103 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,\ngrouped here by what they ask. Which languages each exists in:",
         "contentHash": "c2e1e75ff0ee2280c0917e99479efe9195114c4223bcdd7e0643eab6e3c447c3"
       },
       "context": [],
-      "candidateId": "0fe31a444dcf0087bd361abd3fb16254b6082d7c0dcbd00acee7af70b8351316",
-      "contextHash": "e1aa07a0d3c3ee71cf5fd5a0886669ef599f067a3c5849a619cd9a46baac4c80",
+      "candidateId": "a210462b67e3cb2c6197bb0c725c769edc6a7bf6a6a3437ab6a04d99674a009b",
+      "contextHash": "e552512f41d8eee42a16b75ee21544087939a394d9cfd9c68a3d87482badf186",
       "judgment": {
         "choice": "supports",
         "confidence": 0.99,
@@ -218,22 +218,22 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 30,
-        "endLine": 36,
-        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run docs:replay\n```",
-        "contentHash": "ec65be2d5d204c0523ac370942dab130dea813d8a2ea1134410914a81c3cd4f5"
+        "startLine": 36,
+        "endLine": 42,
+        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
+        "contentHash": "40dfb43ec00bbaae0a909b06ea7c8f5c81a491de5b4658f922d2fcd7f235f885"
       },
       "target": {
         "source": "architecture",
         "path": "docs/internal/architecture.md",
-        "startLine": 397,
-        "endLine": 420,
-        "quote": "## Build contract\n\n`\"type\": \"module\"`, so plain `.ts` files are ESM. Three settings keep one source\ntree runnable three ways — through `tsc` for the published build, through\n`node --experimental-strip-types` for development, and from `dist/` once\ninstalled:\n\n- `allowImportingTsExtensions` + `rewriteRelativeImportExtensions` — source\n  imports `./x.ts`, the emit rewrites to `./x.js`.\n- `erasableSyntaxOnly` — anything TypeScript cannot simply erase is a compile\n  error here, so the stripped-types run and the compiled run cannot diverge.\n\n`package.json` ships compiled `dist`, rule YAML files and public documentation.\nIt does not publish rule fixtures or accepted rule baselines; replaying those\nrequires a repository checkout. [Project facts](../project-facts.md#package-contents)\nis generated from the actual export map and publish allowlist.\n\n`npm run ci` checks the skill link, types, tests, build, rule baseline replay,\nadoption evaluation, generated documentation facts, document evaluation replay,\nand finally the committed documentation snapshot replay. None needs an API key.\nThe complete command is generated in [project facts](../project-facts.md#ci).\nRule replay fails when an accepted decision regresses or the rule question\nchanges. Document replay fails on contradictions, omissions or stale source,\nmanifest and question digests; a live refresh is required after input changes.",
-        "contentHash": "e4d248c166ad9b284497cc9ced8f1d64bf34af752965ed99871f686031b25bf6"
+        "startLine": 398,
+        "endLine": 421,
+        "quote": "## Build contract\n\n`\"type\": \"module\"`, so plain `.ts` files are ESM. Three settings keep one source\ntree runnable three ways — through `tsc` for the published build, through\n`node --experimental-strip-types` for development, and from `dist/` once\ninstalled:\n\n- `allowImportingTsExtensions` + `rewriteRelativeImportExtensions` — source\n  imports `./x.ts`, the emit rewrites to `./x.js`.\n- `erasableSyntaxOnly` — anything TypeScript cannot simply erase is a compile\n  error here, so the stripped-types run and the compiled run cannot diverge.\n\n`package.json` ships compiled `dist`, rule YAML files and public documentation.\nIt does not publish rule fixtures or accepted rule baselines; replaying those\nrequires a repository checkout. [Project facts](../project-facts.md#package-contents)\nis generated from the actual export map and publish allowlist.\n\n`npm run ci` checks the skill link, types, tests, build, rule baseline replay,\nadoption evaluation, generated documentation facts, document and introspection evaluation replay,\nand finally the committed documentation snapshot replay. None needs an API key.\nThe complete command is generated in [project facts](../project-facts.md#ci).\nRule replay fails when an accepted decision regresses or the rule question\nchanges. Document replay fails on contradictions, omissions or stale source,\nmanifest and question digests; a live refresh is required after input changes.",
+        "contentHash": "8b8269b9d73bd586aea22890a7b8f2fe22c94f37261e250995ee640afb6c9492"
       },
       "context": [],
-      "candidateId": "5c0f41adc4320d098ed83b67ac41a0ac6c4ea8549ea4294b0590c2853259b820",
-      "contextHash": "ff2df336e66190fdc248712692f18f89e9a335343d7cc8a2ddc6af46c47c989b",
+      "candidateId": "659be54b1fc8ce59c572d850e73e11c878889a65051caebf523a382aec23dc80",
+      "contextHash": "62ac7cec15fa1e3f0884d85e1174631e873ec3b604ba1116faf3cbd808710bb9",
       "judgment": {
         "choice": "supports",
         "confidence": 0.96,
@@ -252,30 +252,30 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 30,
-        "endLine": 36,
-        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run docs:replay\n```",
-        "contentHash": "ec65be2d5d204c0523ac370942dab130dea813d8a2ea1134410914a81c3cd4f5"
+        "startLine": 36,
+        "endLine": 42,
+        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
+        "contentHash": "40dfb43ec00bbaae0a909b06ea7c8f5c81a491de5b4658f922d2fcd7f235f885"
       },
       "target": {
         "source": "maintainer-skill",
         "path": ".claude/skills/jev-lint-repo/SKILL.md",
         "startLine": 26,
-        "endLine": 63,
-        "quote": "## Rules and their evals\n\n- A rule is `rules/<language>/<id>/rule.yml` with `fixtures/`, `expect.yml`\n  (labelled defects and cleans), and an accepted `baseline.json` beside it.\n  `last.json` is untracked. `jev-lint eval rules/<language>/<id> --repeat 3`\n  runs it; `--accept` promotes the\n  run; `npm run ci` includes `jev-lint eval --replay`, which fails on a case\n  that was right when accepted and is wrong now, or on a rule whose question\n  changed since its baseline. The case files carry NO `// DEFECT` /\n  `// CLEAN` markers: those sat inside the file the model was shown, and the\n  fits they produced were better than the rules (six fell when they came\n  out). Editing a case file means shifting the labels below the edit; the\n  test suite fails on a label no subject sits on.\n- Each suite labels only its own rule. `tools/arms.ts` and\n  `tools/grouping.ts` run every rule over every suite's cases\n  (`evalCorpus`), where another rule's answer on a suite's file is clean by\n  default -- a defect for rule A in rule B's cases is B's false positive\n  until labelled.\n- A fixture file named for the rule it exercises carries\n  `// jev-lint-ignore-file module-name-describes-contents` on line 1, above\n  its imports, so the module rule does not judge a name that was never a\n  claim about the exports.\n- A new shipped rule needs its own fixtures with hard cleans, `gaps`,\n  repeated `eval`, a report with a verdict, and a pass over unseen code\n  before it enters `rules/<language>/<id>/` with an accepted baseline.\n- Any change to a shipped rule's `ask`, `criteria`, `note`, matcher,\n  `subject` or `state` is a new question: `jev-lint eval --replay` refuses\n  the old baseline until you run `jev-lint eval rules/<language>/<id> --repeat 3`,\n  read the result, and `--accept` it. Commit the baseline with the rule.\n- `tools/arms.ts` measures every arm per rule over every suite's cases\n  (five arms, two passes, about twenty cents). Re-run it after changing a matcher or splitting a rule; the\n  shipped `state:` choices are measurements, not preferences.\n- `just docs-facts` regenerates current catalog, runtime, model and CI facts.\n  `just docs-check --record .jev-lint/documents-baseline.json` refreshes the\n  semantic documentation comparisons; `just docs-replay` validates that record\n  offline. Refresh after changing a registered source or comparison selector.\n- Figures quoted in `README.md`, `docs/reference.md` and `docs/deepdive.md`\n  are measured. Change the measurement and the figure together, or neither.",
-        "contentHash": "226871be5830bbad76f8bd177b2b401a0f43bb472c539d5eaa00148ec2ab487c"
+        "endLine": 67,
+        "quote": "## Rules and their evals\n\n- A rule is `rules/<language>/<id>/rule.yml` with `fixtures/`, `expect.yml`\n  (labelled defects and cleans), and an accepted `baseline.json` beside it.\n  `last.json` is untracked. `jev-lint eval rules/<language>/<id> --repeat 3`\n  runs it; `--accept` promotes the\n  run; `npm run ci` includes `jev-lint eval --replay`, which fails on a case\n  that was right when accepted and is wrong now, or on a rule whose question\n  changed since its baseline. The case files carry NO `// DEFECT` /\n  `// CLEAN` markers: those sat inside the file the model was shown, and the\n  fits they produced were better than the rules (six fell when they came\n  out). Editing a case file means shifting the labels below the edit; the\n  test suite fails on a label no subject sits on.\n- Each suite labels only its own rule. `tools/arms.ts` and\n  `tools/grouping.ts` run every rule over every suite's cases\n  (`evalCorpus`), where another rule's answer on a suite's file is clean by\n  default -- a defect for rule A in rule B's cases is B's false positive\n  until labelled.\n- A fixture file named for the rule it exercises carries\n  `// jev-lint-ignore-file module-name-describes-contents` on line 1, above\n  its imports, so the module rule does not judge a name that was never a\n  claim about the exports.\n- A new shipped rule needs its own fixtures with hard cleans, `gaps`,\n  repeated `eval`, a report with a verdict, and a pass over unseen code\n  before it enters `rules/<language>/<id>/` with an accepted baseline.\n- Any change to a shipped rule's `ask`, `criteria`, `note`, matcher,\n  `subject` or `state` is a new question: `jev-lint eval --replay` refuses\n  the old baseline until you run `jev-lint eval rules/<language>/<id> --repeat 3`,\n  read the result, and `--accept` it. Commit the baseline with the rule.\n- `tools/arms.ts` measures every arm per rule over every suite's cases\n  (five arms, two passes, about twenty cents). Re-run it after changing a matcher or splitting a rule; the\n  shipped `state:` choices are measurements, not preferences.\n- `just docs-facts` regenerates current catalog, runtime, model and CI facts.\n  `just docs-check --record .jev-lint/documents-baseline.json` refreshes the\n  semantic documentation comparisons; `just docs-replay` validates that record\n  offline. Refresh after changing a registered source or comparison selector.\n- `just introspect --dry-run` inventories metadata without requests; `--write`\n  asks Jev to select starter rules and exclusively creates a new config.\n  `just introspection-eval` runs the frozen selection corpus. CI replays the\n  accepted extended run; a question or catalog change needs fresh evaluation.\n- Figures quoted in `README.md`, `docs/reference.md` and `docs/deepdive.md`\n  are measured. Change the measurement and the figure together, or neither.",
+        "contentHash": "df996640ed0e8e755dd213409426b409cb54f913429327f0cc28dc78d55e9bfe"
       },
       "context": [],
-      "candidateId": "a8f599561352382b20a2ed9e1f256e4083c562610987963e7c6a8ea03fa0ade1",
-      "contextHash": "0bea55b8006b18a6dbfd269bf812b63956316ca607280e9cdf8208a510bff490",
+      "candidateId": "093f966a8faaa3bdf81b818e0740630162907ee34b578c97d4df04e04d51cb99",
+      "contextHash": "eb93e5978d90d37eb4db94e3f85e7a8f4aa2bf4e7328a774994f9d72241663e7",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.27,
+        "confidence": 0.25,
         "probabilities": {
-          "supports": 0.45,
-          "contradicts": 0.28,
+          "supports": 0.44,
+          "contradicts": 0.31,
           "unrelated": 0.04,
-          "insufficient_context": 0.23
+          "insufficient_context": 0.21
         }
       }
     },
@@ -304,10 +304,10 @@
       "contextHash": "07495441926fa597e342fd615b9889328aeb9dd93abac75f85ac2db76d2eba83",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.95,
+        "confidence": 0.93,
         "probabilities": {
-          "supports": 0.96,
-          "contradicts": 0.04,
+          "supports": 0.95,
+          "contradicts": 0.05,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -338,10 +338,10 @@
       "contextHash": "3cad91cb720b9c9de6928d42af3f434477aea58378967cbc0484f5c147395a2c",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -362,22 +362,22 @@
       "target": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 1317,
-        "endLine": 1320,
+        "startLine": 1338,
+        "endLine": 1341,
         "quote": "The verdict cache is `.jev-lint/baseline.json`, relative to the config's\ndirectory, and is meant to be committed: a run over the same commit answers\nfrom it, and CI lints from it with no API key. It is trusted input --\nanything that can edit it can silence a rule or invent a finding.",
         "contentHash": "2ec008e52203e6a8d9065b94b64409e7daf70c16c05567df31214fccf10e671b"
       },
       "context": [],
-      "candidateId": "9802f1f0719630d2ce6030d795a97980104e8f0cdd48886c3cf83a9e4c3185fd",
-      "contextHash": "5b6116f2054b4ad6340f8b3e02aef4ca8f7f43ae5d8d48081c8ef4bc1a7a864e",
+      "candidateId": "e774667599813ff1fd3e8cc33ede41a35a896d4f8bec312ef00f5614f4c0cae6",
+      "contextHash": "20be37c4761b1a232b229382ea6f94401a9200d098b37d94cc616ebca8f6258f",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.87,
+        "confidence": 0.81,
         "probabilities": {
-          "supports": 0.9,
-          "contradicts": 0.09,
+          "supports": 0.86,
+          "contradicts": 0.12,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -406,10 +406,10 @@
       "contextHash": "9b927ce6ce3ccd0d034e8afee8439d0cbdd9186a35694ebff1c2b3e575e55efd",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 1,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 1,
+          "contradicts": 0,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -440,12 +440,12 @@
       "contextHash": "3628c049063fac0b6afa53242c8da086e07caf928b820457cb5836b29de24255",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.99,
+          "supports": 0.98,
           "contradicts": 0.01,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -474,10 +474,10 @@
       "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.73,
+        "confidence": 0.69,
         "probabilities": {
-          "supports": 0.8,
-          "contradicts": 0.19,
+          "supports": 0.77,
+          "contradicts": 0.22,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -508,10 +508,10 @@
       "contextHash": "8cecf2bfcf88789455d7eafa78a1b126bee955d21dc05f16fa0edb8326788196",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.12,
+          "supports": 0.93,
+          "contradicts": 0.07,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -542,10 +542,10 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.03,
+          "supports": 0.93,
+          "contradicts": 0.05,
           "unrelated": 0,
           "insufficient_context": 0.02
         }
@@ -566,22 +566,22 @@
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 120,
-        "endLine": 120,
+        "startLine": 131,
+        "endLine": 131,
         "quote": "**CI と git hook** — `review --base \"$GITHUB_BASE_REF\" --format github` が PR に注釈を付ける。`jev-lint init --pre-commit` と `--pre-push` が hook を書く。どちらもルールを `severity: error` に上げるまでブロックしないし、同梱ルールにそれを持つものは無い。[docs/use-hooks.md](docs/use-hooks.md) に詳細があり、オフラインだとコミットが止まる終了コードの話もそこにある。",
         "contentHash": "620acfc54972986da99d8841c04cb79c14fbb3082ef9e444be968a1c249f742d"
       },
       "context": [],
-      "candidateId": "644b1b5f616603ca3411255908b3452a0abb7d9000ecacca0514903912b240d3",
-      "contextHash": "5b34f29deedd29ae1e6be2579e9869a25c181289e7cb3a925fc72e1399252950",
+      "candidateId": "211076f6d3b1fa391d5040be8ad561d7b1c9dc1a9a2571cfa91b2f9ea89bc2ab",
+      "contextHash": "d1acc67b489fffe17b2e80b045f35be0a9d3bd1660f156f7a6e52e3b975f27a6",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.88,
+        "confidence": 0.93,
         "probabilities": {
-          "supports": 0.91,
-          "contradicts": 0.07,
+          "supports": 0.95,
+          "contradicts": 0.04,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -610,12 +610,12 @@
       "contextHash": "7b67d93404c319f88696ab2fda3a5ab9586cca096735213d483c778af411c1be",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.96,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.97,
+          "contradicts": 0.02,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -626,22 +626,22 @@
       "reference": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 261,
-        "endLine": 277,
+        "startLine": 276,
+        "endLine": 292,
         "quote": "## Documentation consistency\n\n`jev-lint docs` compares explicit claims, glossary definitions and translations,\nretaining both source locations. This repository checks its own README pair,\nAPI guides and contributor instructions against generated project facts and\ncanonical terminology.\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\nThe manifest is `.jev-lint/documents.json`; `--document-manifest` selects another.\nReplay is offline and rejects changed sources or questions. Contradictions exit 1;\nincomplete or stale assessments exit 3. The report remains `UNREVIEWED`.\nSee the [self-check guide](docs/self-check.md) for scope, budgets and evaluation.",
         "contentHash": "4572bdf2c1147215ec30ff85b80daba86bc0f9f8c6af36b6335e29b579538c05"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 183,
-        "endLine": 198,
+        "startLine": 196,
+        "endLine": 211,
         "quote": "## ドキュメントの整合性\n\n`jev-lint docs` は、明示した主張、用語の定義、翻訳の意味を比較し、両方の出典位置を残す。\nこのリポジトリでは日英README、APIガイド、開発者向け指示を、生成したプロジェクト情報と\n共通の用語定義に照らして検査する。\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\n定義ファイルは `.jev-lint/documents.json`。`--document-manifest` で別のものを指定できる。\n再生には通信が不要で、出典や質問が変わっていれば拒否する。不一致は終了コード1、\n未評価・古い記録は3になる。結果の品質判定は `UNREVIEWED` のまま。\n対象範囲、予算、評価方法は[自己検査ガイド](docs/self-check.md)にある。",
         "contentHash": "9ebd4cd92ca951f5ebe6fb203083dcca7d387759c136dfd16cc566bdec8f6617"
       },
       "context": [],
-      "candidateId": "b36bec363f42051e0172a5a4f4e32891128f9745a9b429656374723f4aa0824e",
-      "contextHash": "9f2dc9b917e5850238515e98e23e05a80602412049f3f1695cebf7d27a09299a",
+      "candidateId": "522b98cf3dfb689e1ec55877ff0c83ffd68bedd81c78e7c626fce3e34d0eddbd",
+      "contextHash": "48f725403631276de82a90382f44ec5012e57ea95c91a91dbbfa7e3db81df8e7",
       "judgment": {
         "choice": "supports",
         "confidence": 0.99,
@@ -652,12 +652,182 @@
           "insufficient_context": 0
         }
       }
+    },
+    {
+      "id": "initial-rule-policy",
+      "topic": "Conservative initial rule families and conditional checks",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 30,
+        "endLine": 34,
+        "quote": "## Initial rule selection\n\n`introspect` selects initial screening rules from metadata using Jev. Its current enable criterion is:\n\nONLY these exact rule IDs qualify for the core starter: fn-name-promises with eligible source files in any language; test-name-verifies-claim with .test/.spec/test_/_test behavior-test paths; agent-instruction-is-unclear or agent-instructions-conflict with AGENTS.md. Read the ID after the language slash. Every other rule ID is defer or skip, even if it mentions names or tests. Existing violations or source bodies are not required for these core rules.",
+        "contentHash": "8bf3151cd19a5274bee7b091605581ad18cfd8bac498bbe6c0186cf1d398028a"
+      },
+      "target": {
+        "source": "initialization",
+        "path": "skills/jev-lint/references/initializing-project.md",
+        "startLine": 52,
+        "endLine": 82,
+        "quote": "## Explain the proposal\n\nDistinguish these decisions and show representative file paths for each rule:\n\n| decision | meaning |\n| --- | --- |\n| `enable` | belongs in the conservative starter given the visible metadata |\n| `defer` | potentially useful after inspecting claims, conventions or workflow |\n| `skip` | the observed scope or document genre makes it unsuitable |\n| `insufficient_context` | missing information prevents a usable recommendation |\n\nThe current core consists of `fn-name-promises` for observed source languages,\n`test-name-verifies-claim` for behavior-test paths, and the two agent-instruction\nrules for `AGENTS.md`. Check the installed catalog rather than assuming a variant\nexists in every language. Both a JavaScript file and a TypeScript file can use\nthe ECMAScript variants under `typescript/`.\n\nExplain conditional candidates by the evidence still needed:\n\n| family | evidence before adding it |\n| --- | --- |\n| comments, safe/pure/idempotent names, logs and errors | actual source claims and behavior |\n| mocks, snapshots and paired failure paths | assertions and verified test relationships; a test directory alone is insufficient |\n| variable/module naming | the project's naming conventions and a reviewed sample |\n| prose rules | an appropriate editorial genre; technical references, instruction manuals and historical measurements are controls |\n| npm script names | commands behind the script names |\n| Git rules | the intended commit/change review workflow and applicable instructions |\n\nAvoid duplicate initial test-name checks: prefer `test-name-verifies-claim` and\ndefer `test-name-describes-code`. Preserve shipped severities and cutoffs; model\npreferences do not calibrate new cutoffs or justify making findings blocking.",
+        "contentHash": "50741869141d4e049bb840c2af7f871f9e7b079e4e36edcccf2dd8b31dce9906"
+      },
+      "context": [],
+      "candidateId": "2e011e128191183c7c22392315ccf6333f37a45ee7ea5bb2b6ced7db4902dfcc",
+      "contextHash": "ea4e0c655ea9f9f7a829d10db2eaa83101ab31c76b15a040677744456ffffeb3",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.92,
+        "probabilities": {
+          "supports": 0.94,
+          "contradicts": 0.05,
+          "unrelated": 0,
+          "insufficient_context": 0.01
+        }
+      }
+    },
+    {
+      "id": "initialization-skill",
+      "topic": "Direct Jev initialization, all-rule init and preserving existing settings",
+      "mode": "semantic",
+      "reference": {
+        "source": "initialization",
+        "path": "skills/jev-lint/references/initializing-project.md",
+        "startLine": 9,
+        "endLine": 50,
+        "quote": "## Inspect and recommend\n\n```sh\njev-lint introspect --dry-run\njev-lint introspect --record .jev-lint/introspection.json\njev-lint init --introspect --record .jev-lint/introspection.json\njev-lint check --dry-run --show-subjects --cache none\n```\n\n`introspect [directory]` accepts a project directory, defaulting to the current\ndirectory. Without `--write` it prints recommendations and a proposed config.\n`--write` creates a new `.jev-lint.yaml` in that project. `--json` emits the\nversioned report instead of text. Plain `init` still enables all shipped rules;\nit does not perform introspection.\n\n`init --introspect [directory]` is the initialization form of `introspect --write`;\nit creates the recommended config without a separate `--write` flag.\n`init --introspect --dry-run` only displays the metadata plan, with no requests\nor writes. Its `--config <new.yaml>` selects a new output file, as `--output`\ndoes; neither loads existing settings. Choose one output flag. Hook installation\n(`--pre-commit` or `--pre-push`) is a separate init mode.\n\nFor an existing config, generate a separate proposal:\n\n```sh\njev-lint introspect --write --output .jev-lint.proposed.yaml\n# Equivalent initialization form:\njev-lint init --introspect --config .jev-lint.proposed.yaml\n```\n\nThe command refuses to replace an existing config, even with `--force`.\nPreserve explicit rule choices, calibrated cutoffs, exclusions, custom parser\ndeclarations and hook settings when applying a proposal. A recommendation-only\nrequest calls for the proposal, while a setup request authorizes creating the\nnew config. Install hooks or change CI when that is part of the requested setup.\n\nThe model receives eligible file paths, package script/dependency names and\ncatalog descriptions. Source bodies, script commands, dependency versions,\nenvironment values and hidden-file contents are not sent. It does not execute\nproject scripts or load custom parser libraries. Rule YAML and explicit rule\ncontext are read as policy data by the normal loader. `-R` can select a trusted\nalternative catalog; ordinary `.jev-lint.yaml` settings are not loaded.",
+        "contentHash": "b937fab26ec09231a93e97d8dd420f221860f308928a998cff5194bd96aa0bc5"
+      },
+      "target": {
+        "source": "user-skill",
+        "path": "skills/jev-lint/SKILL.md",
+        "startLine": 75,
+        "endLine": 80,
+        "quote": "For initialization, follow [initializing-project.md](references/initializing-project.md)\nto propose enabled, deferred and unsuitable rules with file evidence. `introspect`\nuses Jev directly; it needs no separate coding-agent model. Plain `init` still\nenables every shipped rule; `init --introspect` creates the recommended starter\nwithout needing `--write`. Preserve existing settings and calibrated cutoffs;\nuse a separate proposal path when a config already exists.",
+        "contentHash": "1d2d1793c68cf3c0ac186f30ea58aeaccb462c129caf98b52b98afffa54a8bb7"
+      },
+      "context": [],
+      "candidateId": "e95641efea73c9d2c60fe43da8717cc79973600e8888560e89405fe1ec520097",
+      "contextHash": "5b3e6e3d6e9313b46b5d867319a9d0ff3eca623aedd3906c8e3275fab0251ea8",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.83,
+        "probabilities": {
+          "supports": 0.87,
+          "contradicts": 0.12,
+          "unrelated": 0,
+          "insufficient_context": 0.01
+        }
+      }
+    },
+    {
+      "id": "published-rule-files",
+      "topic": "Npm rule YAML versus repository-only fixture and baseline files",
+      "mode": "semantic",
+      "reference": {
+        "source": "architecture",
+        "path": "docs/internal/architecture.md",
+        "startLine": 398,
+        "endLine": 421,
+        "quote": "## Build contract\n\n`\"type\": \"module\"`, so plain `.ts` files are ESM. Three settings keep one source\ntree runnable three ways — through `tsc` for the published build, through\n`node --experimental-strip-types` for development, and from `dist/` once\ninstalled:\n\n- `allowImportingTsExtensions` + `rewriteRelativeImportExtensions` — source\n  imports `./x.ts`, the emit rewrites to `./x.js`.\n- `erasableSyntaxOnly` — anything TypeScript cannot simply erase is a compile\n  error here, so the stripped-types run and the compiled run cannot diverge.\n\n`package.json` ships compiled `dist`, rule YAML files and public documentation.\nIt does not publish rule fixtures or accepted rule baselines; replaying those\nrequires a repository checkout. [Project facts](../project-facts.md#package-contents)\nis generated from the actual export map and publish allowlist.\n\n`npm run ci` checks the skill link, types, tests, build, rule baseline replay,\nadoption evaluation, generated documentation facts, document and introspection evaluation replay,\nand finally the committed documentation snapshot replay. None needs an API key.\nThe complete command is generated in [project facts](../project-facts.md#ci).\nRule replay fails when an accepted decision regresses or the rule question\nchanges. Document replay fails on contradictions, omissions or stale source,\nmanifest and question digests; a live refresh is required after input changes.",
+        "contentHash": "8b8269b9d73bd586aea22890a7b8f2fe22c94f37261e250995ee640afb6c9492"
+      },
+      "target": {
+        "source": "shipped-guide",
+        "path": "skills/jev-lint/references/using-shipped-rules.md",
+        "startLine": 3,
+        "endLine": 11,
+        "quote": "jev-lint ships rules in the npm package's `rules/` directory, one\ndirectory per rule under its language (`rules/typescript/<id>/`,\n`rules/rust/<id>/`, …) with `rule.yml`. Labelled fixtures, `expect.yml` and\naccepted baselines live in the repository checkout; the npm package publishes\nthe rule YAML and generated `RULES.md`, without those evaluation files.\nThey are the rules to start from: each one has a cutoff fitted to a labelled\ncorpus, a `state` arm chosen by measurement, and a `criteria` block that took\nseveral rounds to get right. Write your own only for a convention they do not\ncover — see [writing-project-rules.md](writing-project-rules.md).",
+        "contentHash": "c04a8bc049ad0c01567707fba5ae4bbd9a70bcae16965f49ac42c202aa6beb59"
+      },
+      "context": [],
+      "candidateId": "19fc1b5af04a565d3c0f729285364925ec928a8d8774e44b3d8f1cd108e4d5b4",
+      "contextHash": "df56134928ed5f54d0c771a2a01df665fc70323b055454495ab287749ff8a328",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.97,
+        "probabilities": {
+          "supports": 0.98,
+          "contradicts": 0.02,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "introspection-translation",
+      "topic": "Direct Jev metadata introspection and exclusive configuration creation",
+      "mode": "translation",
+      "reference": {
+        "source": "readme",
+        "path": "README.md",
+        "startLine": 140,
+        "endLine": 146,
+        "quote": "`introspect --dry-run` shows the metadata without requests. `introspect --write`\nuses Jev directly, with no separate LLM or agent, and creates a config containing\nonly recommended starter rules. Existing configs are preserved; use\n`--write --output .jev-lint.proposed.yaml` for a separate proposal.\nThe report lists enabled, deferred and unsuitable rules with representative paths.\nSource bodies, script commands and environment values are not sent.\nSee the [initialization guide](skills/jev-lint/references/initializing-project.md).",
+        "contentHash": "7487bb2af604df3354d2fd57e61272a9683ab311a5691f79e8924352ee3ed458"
+      },
+      "target": {
+        "source": "readme-ja",
+        "path": "README-ja.md",
+        "startLine": 95,
+        "endLine": 99,
+        "quote": "`introspect --dry-run` は送信する情報を通信なしで表示する。`introspect --write` は別のLLMや\nエージェントを使わずJevを直接呼び、推奨する初期ルールだけを含む設定を新規作成する。\n既存設定がある場合は `--write --output .jev-lint.proposed.yaml` で別の提案ファイルを作れる。\n有効化・保留・対象外のルールを代表ファイル付きで表示し、ソース本文、スクリプトの値、環境変数の値は送らない。\n詳しくは[初期設定ガイド](skills/jev-lint/references/initializing-project.md)にある。",
+        "contentHash": "e392f19314dde344299145afe957a508a35cb872b948ad0f63344970c02a7b1c"
+      },
+      "context": [],
+      "candidateId": "d6ed2f4cfc309099201ae898733704bc1e91f8b1c2b1f19f110900fb8eb8b2ee",
+      "contextHash": "2186cd8f8e963d27e4f6eae436a488676c25c3d022daf9d460a5a1f7e5c71598",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.88,
+        "probabilities": {
+          "supports": 0.91,
+          "contradicts": 0.09,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
+      "id": "init-introspection-translation",
+      "topic": "Jev-based init alias and its offline dry-run semantics",
+      "mode": "translation",
+      "reference": {
+        "source": "readme",
+        "path": "README.md",
+        "startLine": 148,
+        "endLine": 149,
+        "quote": "`init --introspect` is equivalent to `introspect --write`.\n`init --introspect --dry-run` makes no requests and writes no configuration.",
+        "contentHash": "f81d58b40fa3c88ed755bf4c8366e75922909d93235ff40eab13488bca2b2364"
+      },
+      "target": {
+        "source": "readme-ja",
+        "path": "README-ja.md",
+        "startLine": 101,
+        "endLine": 102,
+        "quote": "`init --introspect` は `introspect --write` と同じ動作になる。\n`init --introspect --dry-run` では通信も設定ファイルの作成も行わない。",
+        "contentHash": "f11d4cacf084f1f4b62dcb577f5d757fb5fa073299db4cb194eaa732abc80d0c"
+      },
+      "context": [],
+      "candidateId": "fd67a943fbdd8cff2f8fdbc51f498600984c6bf5258a319b373bb2f44c487316",
+      "contextHash": "be3bcc819696158a30648b1aae4ce6aef734bcd4855f4da07b164525bdb8c356",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 1,
+        "probabilities": {
+          "supports": 1,
+          "contradicts": 0,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
     }
   ],
   "coverage": {
-    "expected": 19,
-    "selected": 19,
-    "answered": 19,
+    "expected": 24,
+    "selected": 24,
+    "answered": 24,
     "missing": 0,
     "contradictions": 0,
     "unassessed": 0,
@@ -666,9 +836,9 @@
     "unboundDocuments": 0
   },
   "usage": {
-    "requests": 19,
-    "inputTokens": 26343,
-    "usd": 0.001106406
+    "requests": 24,
+    "inputTokens": 33032,
+    "usd": 0.001387344
   },
   "errors": []
 }

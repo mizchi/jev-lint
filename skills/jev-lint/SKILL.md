@@ -1,6 +1,6 @@
 ---
 name: jev-lint
-description: "Use when running jev-lint, adding it to a repository or its CI, choosing which of its shipped rule packs to use, writing a new jev-lint rule (an ast-grep matcher plus one sentence a model judges), or calibrating a rule's cutoff. Triggers: `jev-lint`, `.jev-lint.yaml`, a `.jev-lint/rules/*.yml` or `rules/*.yml` file with `ask:` in it, questions like 'lint whether function names match their bodies' or 'find comments that are no longer true', and any request to check code for something a conventional linter cannot decide. Also use it before claiming a jev-lint rule 'works' — this skill defines what that requires."
+description: "Use when running jev-lint, initializing it with project-specific rule recommendations, adding it to a repository or its CI, choosing shipped rule packs, writing a new jev-lint rule (an ast-grep matcher plus one sentence a model judges), or calibrating a rule's cutoff. Triggers: `jev-lint`, `.jev-lint.yaml`, a `.jev-lint/rules/*.yml` or `rules/*.yml` file with `ask:` in it, questions like 'lint whether function names match their bodies' or 'find comments that are no longer true', and any request to check code for something a conventional linter cannot decide. Also use it before claiming a jev-lint rule 'works' — this skill defines what that requires."
 ---
 
 # jev-lint
@@ -45,6 +45,7 @@ Knowing which half you are working on is most of the job.
 | you want to | read |
 | --- | --- |
 | run it, add it to CI, tune output | this file, next section |
+| initialize a project, suggest initial rules from its directory structure, create a focused config | [references/initializing-project.md](references/initializing-project.md) |
 | use the rules that ship with it, pick some, adjust a cutoff | [references/using-shipped-rules.md](references/using-shipped-rules.md) |
 | write a rule in your own TypeScript, custom-grammar, Text, or Git repository | [references/writing-project-rules.md](references/writing-project-rules.md), then [references/cookbook.md](references/cookbook.md) |
 | know what every field means, `score` vs `noul`, the `state` arms | [references/rule-fields.md](references/rule-fields.md) |
@@ -65,10 +66,20 @@ npx -y jev-lint commits --base main    # judge each commit's message against its
                                        #   and each change against AGENTS.md (CLAUDE.md fallback)
 npx -y jev-lint commits --staged       # the same, on what is about to be committed
 npx -y jev-lint init                   # write .jev-lint.yaml: files, and every shipped rule on
+npx -y jev-lint init --introspect      # ask Jev and create a config with starter rules
+npx -y jev-lint introspect --dry-run   # metadata plan, no model requests
+npx -y jev-lint introspect --write     # ask Jev for starter rules and create a new config
 npx -y jev-lint rules                  # what loaded, and every validation error
 ```
 
-Run `--dry-run` first, always: it prints subject count, request count and the
+For initialization, follow [initializing-project.md](references/initializing-project.md)
+to propose enabled, deferred and unsuitable rules with file evidence. `introspect`
+uses Jev directly; it needs no separate coding-agent model. Plain `init` still
+enables every shipped rule; `init --introspect` creates the recommended starter
+without needing `--write`. Preserve existing settings and calibrated cutoffs;
+use a separate proposal path when a config already exists.
+
+Run `check --dry-run` first: it prints subject count, request count and the
 price without spending anything. Then `review`, not `check`, for anything
 routine — review mode keeps only matches whose subject overlaps a changed line,
 which is where findings concentrate and costs a fraction of a cent.
@@ -124,8 +135,8 @@ section, staged runs use top-level `rules:`. See
 **Two output lines that are never noise:**
 
 - **`N rules matched nothing`** — the only place a dead matcher is visible.
-  On a TypeScript-only repository the seven Rust variants land here; anything
-  else there is a matcher to look at.
+  Other-language rules are reported as idle. Inspect unmatched rules of the
+  active languages rather than treating zero matches as successful coverage.
 - **`N without a verdict`** — requests failed. A run with failures never reads
   as a clean repository.
 

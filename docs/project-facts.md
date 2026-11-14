@@ -27,12 +27,18 @@ The package requires Node.js >=24. Its runtime dependencies are `@ast-grep/cli` 
 
 The default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.
 
+## Initial rule selection
+
+`introspect` selects initial screening rules from metadata using Jev. Its current enable criterion is:
+
+ONLY these exact rule IDs qualify for the core starter: fn-name-promises with eligible source files in any language; test-name-verifies-claim with .test/.spec/test_/_test behavior-test paths; agent-instruction-is-unclear or agent-instructions-conflict with AGENTS.md. Read the ID after the language slash. Every other rule ID is defer or skip, even if it mentions names or tests. Existing violations or source bodies are not required for these core rules.
+
 ## CI
 
 The local CI command is `npm run ci`. Its complete package script is:
 
 ```sh
-npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run docs:replay
+npm run skills:check && npm run typecheck && npm test && npm run build && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay
 ```
 
 ## Package contents
@@ -59,6 +65,7 @@ The package exports are:
 - `./report`
 - `./package.json`
 - `./documents`
+- `./introspection`
 
 The published files include:
 
@@ -80,3 +87,4 @@ The published files include:
 - `docs/self-check.md`
 - `docs/project-facts.md`
 - `docs/glossary.md`
+- `skills/jev-lint/references/initializing-project.md`

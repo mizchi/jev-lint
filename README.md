@@ -134,6 +134,19 @@ the limits of fitting new cutoffs on the same fixtures.
 | `jev-lint commits --staged` | the staged change against repository instructions; there is no commit message yet |
 | `jev-lint run typescript/fn-name-promises src` | one rule; `--file mine.yml` for one of your own |
 | `jev-lint rules` | every loaded rule: its question, cutoff and file |
+| `jev-lint introspect --write` | ask Jev to select starter rules from directory metadata and create a new config |
+| `jev-lint init --introspect` | initialize with the same recommended starter; `--dry-run` only plans |
+
+`introspect --dry-run` shows the metadata without requests. `introspect --write`
+uses Jev directly, with no separate LLM or agent, and creates a config containing
+only recommended starter rules. Existing configs are preserved; use
+`--write --output .jev-lint.proposed.yaml` for a separate proposal.
+The report lists enabled, deferred and unsuitable rules with representative paths.
+Source bodies, script commands and environment values are not sent.
+See the [initialization guide](skills/jev-lint/references/initializing-project.md).
+
+`init --introspect` is equivalent to `introspect --write`.
+`init --introspect --dry-run` makes no requests and writes no configuration.
 
 The config picks the rules, as ESLint's does. `init` writes every shipped
 rule turned on, as a catalogue to prune:
@@ -235,6 +248,8 @@ the fixtures and the fitted cutoff a rule ships with.
 The repository ships a skill — how to run jev-lint and use its packs, plus a
 separate guide to writing rules in your own repository for code, custom
 grammars, text files, and Git changes:
+
+[Project initialization and rule recommendations](skills/jev-lint/references/initializing-project.md)
 
 [Project rule authoring guide](skills/jev-lint/references/writing-project-rules.md)
 

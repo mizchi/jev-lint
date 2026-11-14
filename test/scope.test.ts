@@ -6,6 +6,7 @@ import { explainScope } from "../src/scope.ts";
 import { scoreRule } from "./builders.ts";
 import { test } from "./harness.ts";
 import { execFileSync } from "node:child_process";
+import { loadRules, shippedRulesPath } from "../src/rules.ts";
 
 test("scope: exclusions and pruned directories are explicit without claiming to have counted their files", () => {
   const cwd = mkdtempSync(join(tmpdir(), "jev-scope-"));
@@ -33,5 +34,17 @@ test("scope: an empty git repository is an empty inventory rather than an ignore
     execFileSync("git", ["init", "-q"], { cwd });
     const report = explainScope({ cwd, paths: ["."], rules: [scoreRule()] });
     assert.deepEqual(report.issues, []); assert.equal(report.files.length, 0); assert.equal(report.qualityVerdict, "UNREVIEWED");
+  } finally { rmSync(cwd, { recursive: true, force: true }); }
+});
+
+test("scope: multi-language rules include JavaScript and filename constraints exclude other Markdown", () => {
+  const cwd = mkdtempSync(join(tmpdir(), "jev-scope-languages-"));
+  try {
+    for (const path of ["app.js", "README.md", "AGENTS.md"]) writeFileSync(join(cwd, path), "Example.");
+    const rules = loadRules([shippedRulesPath()!]).rules;
+    const report = explainScope({ cwd, paths: ["."], rules });
+    assert.ok(report.files.find((f) => f.path === "app.js")!.rules.includes("typescript/fn-name-promises"));
+    assert.ok(report.files.find((f) => f.path === "AGENTS.md")!.rules.includes("markdown/agent-instructions-conflict"));
+    assert.ok(!report.files.find((f) => f.path === "README.md")!.rules.includes("markdown/agent-instructions-conflict"));
   } finally { rmSync(cwd, { recursive: true, force: true }); }
 });
