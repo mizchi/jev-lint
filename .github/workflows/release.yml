@@ -75,7 +75,7 @@ jobs:
         env:
           PACKAGE_FILE: ${{ needs.prepare.outputs.filename }}
           DIST_TAG: ${{ needs.prepare.outputs.dist-tag }}
-        run: npm publish "release/$PACKAGE_FILE" --access public --tag "$DIST_TAG" --ignore-scripts
+        run: npm publish "./release/$PACKAGE_FILE" --access public --tag "$DIST_TAG" --ignore-scripts
 
   github-release:
     needs: [prepare, publish]

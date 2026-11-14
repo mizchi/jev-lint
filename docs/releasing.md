@@ -54,6 +54,7 @@ temporary consumer and checks all public JavaScript exports and TypeScript
 declarations. It also loads every packaged rule, matches real source with
 ast-grep, checks keyless initialization, and exercises offline documentation
 and introspection plans. Fixture evaluations remain repository-only.
+It also dry-runs the exact npm publish command from the release workflow.
 
 ## Tag workflow
 

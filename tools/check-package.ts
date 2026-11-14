@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync, copyFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve, join } from "node:path";
 import { parse } from "yaml";
@@ -17,6 +17,13 @@ try {
   assert.equal(pack.name, "jev-lint");
   assert.ok(pack.files.find((f: { path: string; mode: number }) => f.path === "dist/cli.js" && f.mode & 0o111), "the packaged CLI must be executable");
   assert.ok(!pack.files.some((f: { path: string }) => /^(?:src|test|experiments)\//.test(f.path)), "source tests and evaluation artifacts must not enter the runtime package");
+  const publisher = join(scratch, "publisher"); mkdirSync(join(publisher, "release"), { recursive: true });
+  copyFileSync(join(output, pack.filename), join(publisher, "release", pack.filename));
+  const workflow = parse(readFileSync(join(cwd, ".github/workflows/release.yml"), "utf8"));
+  const publish = workflow.jobs.publish.steps.find((step: { name?: string }) => step.name === "Publish the tested tarball through npm OIDC");
+  assert.equal(typeof publish?.run, "string", "the release workflow must publish the tested tarball");
+  execFileSync("bash", ["-e", "-c", `${publish.run} --dry-run`], { cwd: publisher, encoding: "utf8", timeout: 30000,
+    env: { ...env, PACKAGE_FILE: pack.filename, DIST_TAG: "latest", NPM_CONFIG_DRY_RUN: "true", NPM_CONFIG_IGNORE_SCRIPTS: "true" }, stdio: ["ignore", "pipe", "pipe"] });
   const consumer = join(scratch, "consumer"); mkdirSync(consumer);
   writeFileSync(join(consumer, "package.json"), JSON.stringify({ name: "jev-lint-consumer", private: true, type: "module" }));
   run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", join(output, pack.filename)], consumer);
@@ -56,5 +63,5 @@ console.log(JSON.stringify({exports:${modules.length},rules:${ruleCount},matched
 `);
   const { configuration, ...result } = JSON.parse(run(process.execPath, ["smoke.mjs"], consumer));
   assert.equal(Object.keys(parse(configuration).rules).length, ruleCount);
-  process.stdout.write(JSON.stringify({ ...result, package: pack.filename, bytes: pack.size, unpackedBytes: pack.unpackedSize }, null, 2) + "\n");
+  process.stdout.write(JSON.stringify({ ...result, publishDryRun: true, package: pack.filename, bytes: pack.size, unpackedBytes: pack.unpackedSize }, null, 2) + "\n");
 } finally { rmSync(scratch, { recursive: true, force: true }); }
