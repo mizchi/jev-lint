@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Preview
+Use open and mapPixels from canvas to preview the editable buffer. Committing is optional and outside this read-only preview.
+
+Reviewed import paths and their exports (other paths were not inspected):
+canvas: mapPixels, open
+canvas/filters: blur, commit

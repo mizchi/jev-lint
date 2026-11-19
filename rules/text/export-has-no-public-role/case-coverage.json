@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/cursor.apibinding",
+      "kind": "false-negative-risk",
+      "reason": "An in-tree-only cursor has no supported external role."
+    },
+    {
+      "file": "fixtures/testkit.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "Plugin authors use this public clock in their own tests."
+    },
+    {
+      "file": "fixtures/generic.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "Ambiguous purpose alone cannot establish that the export is internal."
+    },
+    {
+      "file": "fixtures/guided.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The public guide supplies an external schema installation use."
+    },
+    {
+      "file": "fixtures/units.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "A unit conversion is an identifiable caller task."
+    },
+    {
+      "file": "fixtures/map.apibinding",
+      "kind": "false-negative-risk",
+      "reason": "The live table is explicitly an unsupported test-only path."
+    },
+    {
+      "file": "fixtures/opaque.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "Missing prose provides no evidence of internal status."
+    },
+    {
+      "file": "fixtures/migration.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "A compatibility alias serves existing clients."
+    },
+    {
+      "file": "fixtures/flush.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "A vague method may have legitimate consumers."
+    },
+    {
+      "file": "fixtures/cursor-variant.apibinding",
+      "kind": "unrelated",
+      "reason": "Unrelated naming advice leaves the internal-only role unchanged."
+    },
+    {
+      "file": "fixtures/scheduler-drain.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The docs recommend a default for applications but do not say the lower-level path is unsupported."
+    },
+    {
+      "file": "fixtures/scheduler-internal.apibinding",
+      "kind": "false-negative-risk",
+      "reason": "The queue drain backs the scheduler and is outside the supported client contract."
+    },
+    {
+      "file": "fixtures/migration-gate.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "Draining outstanding writes during a migration is a distinct external use."
+    },
+    {
+      "file": "fixtures/resolve-adapter-specified.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The supported adapter ABI gives downstream clients a role."
+    },
+    {
+      "file": "fixtures/resolve-adapter-unspecified.apibinding",
+      "kind": "unrelated",
+      "reason": "The supported adapter ABI gives downstream clients a role. Changing only the outcome description preserves the audience."
+    },
+    {
+      "file": "fixtures/resolve-internal-specified.apibinding",
+      "kind": "false-negative-risk",
+      "reason": "The guide explicitly excludes external callers."
+    },
+    {
+      "file": "fixtures/resolve-internal-unspecified.apibinding",
+      "kind": "unrelated",
+      "reason": "The guide explicitly excludes external callers. Changing only the outcome description preserves the audience."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/cursor.apibinding",
+      "variant": "fixtures/cursor-variant.apibinding"
+    },
+    {
+      "base": "fixtures/resolve-adapter-specified.apibinding",
+      "variant": "fixtures/resolve-adapter-unspecified.apibinding"
+    },
+    {
+      "base": "fixtures/resolve-internal-specified.apibinding",
+      "variant": "fixtures/resolve-internal-unspecified.apibinding"
+    }
+  ]
+}

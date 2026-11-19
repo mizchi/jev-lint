@@ -1,0 +1,7 @@
+Surface: Go package codec
+Public names: 5
+func DecodeCSV(input []byte) (Record, error)
+func DecodeJSON(input []byte) (Record, error)
+func EncodeCSV(record Record, output io.Writer) error
+func EncodeJSON(record Record, output io.Writer) error
+type Record struct { Key string }

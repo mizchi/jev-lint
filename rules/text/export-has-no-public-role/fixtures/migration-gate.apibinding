@@ -1,0 +1,5 @@
+Surface: Go package store
+Public binding: DrainQueue
+Signature: func DrainQueue(gate Gate) error
+Declaration documentation:
+Kept for migration from v1. Pass the old gate here to drain outstanding writes before switching to flush().

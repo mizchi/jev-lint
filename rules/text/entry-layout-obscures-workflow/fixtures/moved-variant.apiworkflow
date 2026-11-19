@@ -1,0 +1,20 @@
+Guide: guide.md:1-9
+# Edit a frame
+Open the frame, edit its pixels and commit the result. All three operations come from canvas.
+
+```ts
+import { open, mapPixels, commit } from "canvas";
+commit(mapPixels(open(bytes)));
+```
+
+The example uses a two-pixel frame.
+
+Reviewed import paths and their exports (other paths were not inspected):
+canvas: mapPixels, open
+canvas/filters: blur, commit
+
+Import lookup for the documented example:
+Named imports missing at their documented entries: commit from canvas.
+open from canvas: exported here
+mapPixels from canvas: exported here
+commit from canvas: absent here; exported by canvas/filters

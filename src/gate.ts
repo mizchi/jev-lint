@@ -147,6 +147,7 @@ export function decide(
     const nearest = Math.max(0, Math.min(top, Math.round(answer.value)));
     // The shared scale's levels have names; a rule's own are numbered.
     base.level = rule.levels ? `level-${nearest}` : SCORE_LEVEL_NAMES[nearest];
+    if (rule.levels) base.levelDescription = rule.levels[nearest];
     base.scale = top;
     const threshold = typeof rule.unsureBelow === "number"
       ? rule.unsureBelow

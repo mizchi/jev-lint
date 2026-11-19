@@ -1,0 +1,19 @@
+id: export-has-no-public-role
+language: Text
+extensions: [apibinding]
+subject: block
+state: bare
+kind: noul
+category: advisory
+severity: info
+threshold: 0.34  # Three-pass fit: defects 0.51–0.96, clean max 0.17, max spread 0.04.
+ask: Does the public contract positively identify this binding as implementation-only, with no supported external role?
+criteria:
+  "true": The named binding is explicitly reserved for internal bookkeeping or in-tree tests, or documented as an unsupported way to manipulate the backing representation behind a supported operation.
+  "false": Lack of documentation or known consumers is insufficient. Keep documented external integration, testkit, extension, migration and interoperability roles. An alternative import spelling or a low-level type alone gives no evidence for withdrawal.
+note: >-
+  Distinguish a recommendation from an exclusion. "Most applications should use A" leaves room for supported uses of B.
+  "Only A is covered by the client contract" excludes B when B is identified as a backing operation.
+  The name of the component that uses B is insufficient on its own.
+message: Check whether this binding belongs in the public API.
+nextCheck: Find a downstream import or public example of this name. Try the supported operation in that caller's test. Before withdrawing the name, verify compatibility promises and which caller behavior would be lost.

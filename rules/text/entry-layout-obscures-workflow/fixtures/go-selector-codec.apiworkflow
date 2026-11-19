@@ -1,0 +1,16 @@
+Guide: guide.md:1-7
+# Decode a record
+Construct the decoder and read the record.
+
+~~~go
+decoder := codec.NewDecoder()
+decoder.Read()
+~~~
+
+Reviewed import paths and their exports (other paths were not inspected):
+example.org/codec: Decoder, Decoder.Read
+example.org/codec/wire: NewDecoder
+
+Go package selector lookup:
+Selectors absent from the documented package and exported by a different reviewed package: codec.NewDecoder.
+codec.NewDecoder from example.org/codec (matched package name): absent here; exported by example.org/codec/wire

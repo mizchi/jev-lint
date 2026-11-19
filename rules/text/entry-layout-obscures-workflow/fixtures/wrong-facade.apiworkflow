@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Round trip
+The archive entry is the facade for round trips. Import pack and unpack there to encode a record and recover it.
+
+Reviewed import paths and their exports (other paths were not inspected):
+archive: pack
+archive/compat: unpack

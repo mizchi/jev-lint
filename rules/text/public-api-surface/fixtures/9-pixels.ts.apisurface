@@ -1,0 +1,4 @@
+Surface: TypeScript entry pixels.ts
+Public names: 2
+copyPixels — () => Uint8Array — Returns a detached copy of the frame's RGBA bytes.
+mapPixels — () => Uint8Array — Zero-copy editing API for external filter plugins. Writes update the frame; the view expires at the next render.

@@ -45,7 +45,7 @@ it, nothing is reported. Six findings over two files, for a tenth of a cent;
 
 ## What it catches
 
-Sixty-four distinct rule IDs ship, most of them asked in several languages -- 117
+Sixty-eight distinct rule IDs ship, most of them asked in several languages -- 121
 rules in all. Roughly:
 
 - **A name against the thing it names.** A function, method, binding, type,
@@ -185,7 +185,7 @@ covers the exit code that will stop you committing while offline.
 
 ## What ships
 
-117 rules under `rules/<language>/<id>/`, and the files you point it at decide
+121 rules under `rules/<language>/<id>/`, and the files you point it at decide
 which run. Nothing to select.
 
 | point it at | what runs |
@@ -198,12 +198,14 @@ which run. Nothing to select.
 | `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |
 | `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |
 | `package.json` | `json/` — 1 |
-| sqlc queries and prepared architecture evidence | `text/` — 13 total, including 12 [design advisories](docs/advisories.md) |
+| sqlc queries and prepared architecture evidence | `text/` — 17 total, including 16 [design advisories](docs/advisories.md) |
 | commits | `git/` — 4 including 2 metric advisories |
+
+Public API review uses three units: an exported name, the signatures at one entry point, and one documented workflow across import paths. [Rule selection and layout example](docs/advisories.md#public-api-review).
 
 `typescript` and `rust` are first tier: every rule under them carries
 fixtures, expectations and an accepted baseline. The rest are calibrated to
-the same bar and not yet promised. [RULES.md](RULES.md) lists all 117 with
+the same bar and not yet promised. [RULES.md](RULES.md) lists all 121 with
 their question, cutoff and score on their own fixtures.
 
 Your own rule can target any language ast-grep parses — Java, Kotlin, Swift,

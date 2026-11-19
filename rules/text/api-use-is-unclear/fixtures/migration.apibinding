@@ -1,0 +1,6 @@
+Surface: TypeScript entry index.ts
+Public binding: oldRead
+Signature: oldRead — alias of readBytes
+Target: readBytes — (path: string) => Promise<Uint8Array>
+Declaration documentation:
+Reads file bytes. Kept for downstream clients during migration.

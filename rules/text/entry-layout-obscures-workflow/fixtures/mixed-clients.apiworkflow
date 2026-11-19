@@ -1,0 +1,45 @@
+Guide: docs/using-models.md:31-61
+## TS / Rust から同じモデルを使う
+
+```ts
+import { readFile } from "node:fs/promises";
+import {
+  createPortableWasm,
+  checkFiniteHistories,
+  decodePortableTrace,
+} from "@mizchi/idealis/portable";
+import { parseFiniteModel } from "@mizchi/idealis/finite";
+
+const core = await createPortableWasm(
+  await readFile(new URL(import.meta.resolve("@mizchi/idealis/core.wasm"))),
+);
+const model = parseFiniteModel(
+  JSON.parse(await readFile("model.json", "utf8")),
+);
+const history = decodePortableTrace(await readFile("history.json", "utf8"));
+console.log(checkFiniteHistories(core, model, [history]));
+```
+
+`checkFiniteHistories` は実観測の履歴をモデルと照合する。実装を操作するには `checkFiniteConformance` に portable value を受け返す Driver を渡す。モデル遷移は Rust の内部で計算し、JS のモデル関数を呼ばない。複数履歴は1 batch にまとめられる。既存の TS モデルを直接使う `checkPortableConformance` も残る。
+
+Rust は `FiniteModel` を deserialize / normalize し、`check_history(trace)` を呼ぶ。入力・出力は Node CLI と同じ契約で、モデル言語のランタイムを必要としない。raw JSON の接続には `Engine::dispatch(bytes)` を使える。
+
+```sh
+idealis check model.json history.json
+idealis model model.json
+```
+
+終了コードは matched / complete が0、mismatch / violation が1、invalid / bounded / empty が2。schema や I/O の例外も失敗として終了する。
+
+Reviewed import paths and their exports (other paths were not inspected):
+@mizchi/idealis: TraceFormatError, checkConformance, checkDifferential, checkModel, checkTrace, composeModels, decodeTrace, encodeTrace, equalValues, type Comparison, type CompositionOptions, type ConformanceResult, type Driver, type ExplorationBounds, type ExplorationResult, type Model, type ProductAction, type ProductObservation, type ProductState, type Trace, type TraceGuards, type Transition
+@mizchi/idealis/finite: checkFiniteHistory, compileFiniteModel, createFiniteModel, parseFiniteModel, type FiniteCompilation, type FiniteModel
+@mizchi/idealis/portable: PortableCoreError, checkConcurrentHistory, checkFiniteConformance, checkFiniteHistories, checkFiniteHistory, checkPortableConformance, checkPortableTrace, checkSafety, checkTlaSource, compileFiniteModel, compileTlaSource, coreDeletionCandidates, createFiniteModel, createHistoryRecorder, createPortableWasm, decodePortableTrace, deletionCandidates, encodePortableTrace, fromPortableValue, loadFiniteModel, normalizePortableValue, parseConcurrentHistory, parseFiniteModel, shrinkCounterexample, toPortableTrace, toPortableValue, type ConcurrentHistory, type ConcurrentResult, type DeletionRange, type FiniteModel, type HistoryEvent, type HistoryRecorder, type HostTape, type LoadedFiniteModel, type PortableCommand, type PortableCore, type PortableEffect, type PortableEncoding, type PortableOutput, type PortableResponse, type PortableResult, type PortableTrace, type PortableValue, type SafetyBounds, type SafetyProgram, type SafetyResult, type ShrinkResult, type ShrinkVerdict, verifyHostTape
+@mizchi/idealis/host: HostReplayError, createSimulationHost, type HostMessage, type HostTape, type SimulationHost
+
+Import lookup for the documented example:
+Every checked named import is listed at its documented entry.
+createPortableWasm from @mizchi/idealis/portable: exported here
+checkFiniteHistories from @mizchi/idealis/portable: exported here
+decodePortableTrace from @mizchi/idealis/portable: exported here
+parseFiniteModel from @mizchi/idealis/finite: exported here

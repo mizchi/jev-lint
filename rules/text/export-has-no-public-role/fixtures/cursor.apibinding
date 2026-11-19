@@ -1,0 +1,5 @@
+Surface: TypeScript entry index.ts
+Public binding: forceCursor
+Signature: forceCursor — (position: number) => void
+Declaration documentation:
+Rewinds the process-wide append cursor. Unsupported outside in-tree ledger tests.

@@ -192,13 +192,7 @@ left out. The flag replaces the config's list rather than adding to it.
 
 ### Reading a long report: `--summary`
 
-`--summary` adds two lines after the findings: the count by rule, and by
-file with the subjects judged there, densest first. On a whole tree the
-list reads by its clusters -- eight `catch-hides-failure` findings that
-were one idiom in six modules, sixteen `tests-cover-failure-paths` that
-were one test file too big to excerpt -- and the two lines are where they
-show. `--format json` carries the same as `stats.byRule` and
-`stats.byFile`.
+With `--summary`, each rule shows findings over answered subjects, including rules with zero findings. A separate unanswered count identifies gaps. The file summary shows files with findings, ordered by findings per subject. JSON exposes finding counts in `stats.byRule` and per-file subject and finding counts in `stats.byFile`. For a reported score with a custom rubric, the terminal and JSON also include the nearest level's description.
 
 ### Silencing a finding
 
@@ -614,7 +608,7 @@ baselines — is [RULES.md](../RULES.md), written by `tools/rules-md.ts`
 (`npm run rules:md`; `npm run rules:md:check` fails when it is stale, and
 so does `npm test`). What follows is the prose.
 
-117 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
+121 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
 grouped here by what they ask. Which languages each exists in:
 
 | rule | typescript | rust | python | go | other |

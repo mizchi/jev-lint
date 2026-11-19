@@ -1,0 +1,4 @@
+Surface: TypeScript entry pixels.ts
+Public names: 2
+copyPixels — () => Uint8Array — Returns a detached copy of the frame's RGBA bytes.
+mapPixels — () => Uint8Array — Unsupported renderer test hook exposing the live scratch buffer. Writes bypass frame validation.

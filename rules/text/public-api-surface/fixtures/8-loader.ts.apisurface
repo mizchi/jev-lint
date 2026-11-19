@@ -1,0 +1,5 @@
+Surface: TypeScript entry loader.ts
+Public names: 3
+Image — Image { readonly width: number; readonly height: number }
+default — alias of loadImage
+loadImage — (bytes: Uint8Array) => Promise<Image>

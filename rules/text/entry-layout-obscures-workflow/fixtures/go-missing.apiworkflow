@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Decode
+Use example.org/codec alone to construct a decoder with codec.NewDecoder, then call Read on it.
+
+Reviewed import paths and their exports (other paths were not inspected):
+example.org/codec: Decoder, Decoder.Read
+example.org/codec/wire: NewDecoder

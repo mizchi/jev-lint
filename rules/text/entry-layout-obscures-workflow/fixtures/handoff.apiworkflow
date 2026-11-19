@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Edit a frame
+Open and map pixels from canvas. To finish editing, import commit from canvas/filters and pass it the edited frame.
+
+Reviewed import paths and their exports (other paths were not inspected):
+canvas: mapPixels, open
+canvas/filters: blur, commit

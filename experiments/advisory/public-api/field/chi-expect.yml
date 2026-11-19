@@ -1,0 +1,5 @@
+default: clean
+fixtures/original.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "The guide imports chi and middleware explicitly. RequestID comes from middleware and Use is a router method."}
+fixtures/wrong.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The edited handler reference requests RequestID from chi. Only the reviewed middleware entry exports it."}

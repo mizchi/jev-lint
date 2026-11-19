@@ -82,6 +82,7 @@ export function formatPretty(
       out.push(
         `         ${c.dim(`${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  arm ${f.arm}${repro}`)}`,
       );
+      if (f.levelDescription) out.push(`         Nearest rubric level: ${f.levelDescription}`);
       if (f.nextCheck) out.push(`         Next check: ${f.nextCheck}`);
       if (f.explanation) {
         out.push(`         ${c.dim(`why: ${f.explanation.choice} (${f.explanation.confidence.toFixed(2)})`)}`);
@@ -125,13 +126,23 @@ export function formatPretty(
   // tree the list is read by its clusters -- one idiom repeated across
   // modules, one file too big for its reviewer -- and this is where they
   // show. Files with nothing reported are left out.
-  if (summary && findings.length > 0) {
-    const rules = Object.entries(stats.byRule).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-    out.push(c.bold("by rule:  ") + rules.map(([r, n]) => `${r} ${n}`).join(" · "));
+  if (summary && result.all.length > 0) {
+    const counts = new Map<string, { flagged: number; answered: number; missing: number }>();
+    for (const row of result.all) {
+      const key = row.ruleKey ?? row.rule;
+      const count = counts.get(key) ?? { flagged: 0, answered: 0, missing: 0 };
+      if (row.value === null) count.missing += 1;
+      else count.answered += 1;
+      if (row.reported) count.flagged += 1;
+      counts.set(key, count);
+    }
+    const rules = [...counts].sort(([a, x], [b, y]) => y.flagged - x.flagged || a.localeCompare(b));
+    out.push(c.bold("by rule (flagged/answered):  ") + rules.map(([key, n]) =>
+      `${key} ${n.flagged}/${n.answered}${n.missing ? ` (${n.missing} unanswered)` : ""}`).join(" · "));
     const files = Object.entries(stats.byFile ?? {})
       .filter(([, n]) => n.findings > 0)
       .sort((a, b) => b[1].findings / b[1].subjects - a[1].findings / a[1].subjects || b[1].findings - a[1].findings || a[0].localeCompare(b[0]));
-    out.push(c.bold("by file:  ") + files.map(([f, n]) => `${f} ${n.findings}/${n.subjects}`).join(" · "));
+    if (files.length) out.push(c.bold("by file:  ") + files.map(([f, n]) => `${f} ${n.findings}/${n.subjects}`).join(" · "));
     out.push("");
   }
 
@@ -398,6 +409,7 @@ export function formatJson(result: ReportInput): string {
     margin: round(f.margin),
     kind: f.kind,
     level: f.level ?? null,
+    levelDescription: f.levelDescription,
     arm: f.arm,
     passes: f.passes ?? null,
     message: f.message ?? f.ask,

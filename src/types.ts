@@ -701,6 +701,7 @@ export interface Finding {
   text?: string;
   captured?: Record<string, string> | null;
   arm?: StateArm;
+  levelDescription?: string;
   level?: string;
   /**
    * Present when `--retry` asked more than once: how many passes put this

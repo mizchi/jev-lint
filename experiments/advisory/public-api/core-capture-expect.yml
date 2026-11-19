@@ -1,0 +1,9 @@
+default: clean
+fixtures/core-guide.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "diffPng is absent from all four reviewed entries. VrtDiff and decodePng resolve at the documented entries. There is no cross-entry fix here."}
+fixtures/core-wrong-import.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The PNG utility entry cannot supply the explicitly imported VrtDiff type. The barrel exports it. The separate stale diffPng name has no reviewed provider."}
+fixtures/capture-guide.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "The capture barrel supplies the two required operations. The guide identifies the optional capturer entry explicitly."}
+fixtures/capture-wrong-import.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "Viewport discovery and route resolution are imported from core, which lacks both. The capture barrel supplies them."}

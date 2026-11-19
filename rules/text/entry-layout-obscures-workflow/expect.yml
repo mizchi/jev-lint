@@ -1,0 +1,43 @@
+default: clean
+fixtures/root.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "All three editing operations are exported by the promised root."}
+fixtures/moved.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "Commit moved to the filters entry while the guide still promises the root for the whole edit."}
+fixtures/handoff.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The caller can complete the workflow using the explicitly documented handoff."}
+fixtures/optional.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The preview can finish without committing."}
+fixtures/wrong-facade.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The inverse operation lives on compat with no documented handoff."}
+fixtures/go-split.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The documented constructor package and receiver method work together."}
+fixtures/go-missing.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The constructor required from the main package is available only under wire."}
+fixtures/type-only.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The documented entry exports only the type and the constructor is on runtime."}
+fixtures/unlisted.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The selected map gives no evidence about the plugins entry."}
+fixtures/client-step.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The guide explicitly assigns rendering to the application."}
+fixtures/implicit-handoff.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The guide starts the caller at the root and omits the separate import needed for the required final step."}
+fixtures/moved-variant.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "Changing frame size leaves the documented entry mismatch intact."}
+fixtures/migration-index.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The handoff is in the guide\u2019s entry reference rather than its prose."}
+fixtures/migration-overview.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "Mentioning a compatibility package does not correct the explicit instruction to import unpack from the facade."}
+fixtures/mixed-clients.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The guide imports the TypeScript functions from valid entries. The adjacent Rust and CLI examples describe other clients."}
+fixtures/mixed-clients-wrong-entry.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The required parseFiniteModel import now points to host, which does not export it."}
+fixtures/facade-reexport.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Both entries export unpack, so the documented facade suffices for the whole round trip."}
+fixtures/round-trip-explicit-source.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The guide directs the reader to the correct entry for each required operation."}
+fixtures/corsa-separate-tasks.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The second Corsa entry supplies a separate documented operation; each name is associated with its actual provider."}
+fixtures/go-selector-wire.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "wire supplies the named constructor and Read is a method on its result."}
+fixtures/go-selector-codec.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The example requests NewDecoder from codec, while only the reviewed wire package supplies it."}
