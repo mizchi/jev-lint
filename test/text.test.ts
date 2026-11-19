@@ -43,3 +43,11 @@ test("text: a block rule restricted by filename skips other Markdown files", () 
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("text: an oversized first line respects the block budget", () => {
+  const { rule } = normalizeRule({ id: "long-line", language: "Text", subject: "block", extensions: ["md"], ask: "Review it." });
+  const source = "x".repeat(60_000) + "\nshort";
+  const [subject] = textSubjects([rule!], ["README.md"], process.cwd(), () => source);
+  assert.equal(subject.text.length, 48_000);
+  assert.equal(subject.textCut?.of, source.length);
+});

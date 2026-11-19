@@ -113,7 +113,8 @@ export function textSubjects(
       }
       for (const b of splitBlocks(source, header)) {
         const cut = b.text.length > MAX_BLOCK_CHARS;
-        const text = cut ? b.text.slice(0, b.text.lastIndexOf("\n", MAX_BLOCK_CHARS)) : b.text;
+        const boundary = cut ? b.text.lastIndexOf("\n", MAX_BLOCK_CHARS) : -1;
+        const text = cut ? b.text.slice(0, boundary > 0 ? boundary : MAX_BLOCK_CHARS) : b.text;
         out.push({
           rule,
           file,
