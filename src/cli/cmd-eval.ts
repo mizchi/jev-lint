@@ -6,8 +6,9 @@ import { writeFileSync } from "node:fs";
 import { relative } from "node:path";
 import { compareEvals, discoverEvals, draftsChanged, loadSuite, planEval, readEvalRecord, recordedAts, runEval, scoreEval, unanswered } from "../evals.ts";
 import type { CaseScore, EvalDiff, EvalRecord, EvalScore, EvalSuite } from "../evals.ts";
-import { USD_PER_MTOK, type AskClient } from "../jev.ts";
+import type { AskClient } from "../jev.ts";
 import { ruleSources } from "../rules.ts";
+import { createModelClient, modelSpec } from "../model.ts";
 import type { Options, Log } from "./args.ts";
 
 /**
@@ -62,8 +63,9 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
       // Plan and price, ask nothing: the same promise `check --dry-run` makes.
       try {
         const plan = await planEval(suite, opts.repeat, opts.languages);
-        if (opts.format === "json") results.push({ suite: suite.name, dir: suite.dir, plan: { ...plan, usd: (plan.tokens / 1e6) * USD_PER_MTOK, repeat: opts.repeat } });
-        else out(`${suite.name}: ${plan.subjects} subject(s), ${plan.requests} request(s) over ${opts.repeat} pass(es), ~${plan.tokens.toLocaleString()} input tokens, ~$${((plan.tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
+        const price = modelSpec(opts.model).inputUsdPerMillion;
+        if (opts.format === "json") results.push({ suite: suite.name, dir: suite.dir, plan: { ...plan, usd: (plan.tokens / 1e6) * price, repeat: opts.repeat } });
+        else out(`${suite.name}: ${plan.subjects} subject(s), ${plan.requests} request(s) over ${opts.repeat} pass(es), ~${plan.tokens.toLocaleString()} input tokens, ~$${((plan.tokens / 1e6) * price).toFixed(5)}`);
       } catch (err: unknown) {
         log(`${suite.name}: ${String((err as Error)?.message ?? err).slice(0, 240)}`);
         failed += 1;
@@ -77,7 +79,7 @@ export async function cmdEval(opts: Options, out: Log, log: Log, client: AskClie
           cutoffs: opts.at,
           concurrency: opts.concurrency,
           model: opts.model,
-          client,
+          client: client ?? createModelClient({ model: opts.model, baseUrl: opts.baseUrl }),
           languages: opts.languages,
           log: (line) => {
             if (!opts.quiet) log(line);

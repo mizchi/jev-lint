@@ -29,6 +29,12 @@ test("cli: a bare config rule warns while a qualified rule selects quietly", () 
   assert.ok(!qualified.said.some((message) => message.includes("config warning")));
 });
 
+test("cli: auto confirmation is opt-out only through explicit --yes or -y flags", () => {
+  assert.equal(parseArgs([], { color: false }).yes, false);
+  assert.equal(parseArgs(["--yes"], { color: false }).yes, true);
+  assert.equal(parseArgs(["-y"], { color: false }).yes, true);
+});
+
 test("cli: --threshold replaces --at, while --at remains a warned alias", () => {
   const preferred = parseArgs(["--threshold", "typescript/fn-name-promises=0.8"], { color: false });
   assert.deepEqual(preferred.at, { "typescript/fn-name-promises": 0.8 });

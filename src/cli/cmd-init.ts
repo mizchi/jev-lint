@@ -33,15 +33,15 @@ export function cmdInit(opts: Options, out: Log, log: Log): number {
     return 2;
   }
 
+  const keyVariable = ["OPENROUTER_API_KEY", ...API_KEY_VARS].find((name) => fromEnv([name]));
   if (opts.format === "json") {
-    out(JSON.stringify({ wrote: target, keySet: fromEnv(API_KEY_VARS) !== null }, null, 2));
+    out(JSON.stringify({ wrote: target, keySet: !!keyVariable }, null, 2));
     return 0;
   }
   out(`wrote ${target}`);
   out("");
-  const key = fromEnv(API_KEY_VARS);
-  if (key) {
-    out(`${API_KEY_VARS[0]} is set. Next:`);
+  if (keyVariable) {
+    out(`${keyVariable} is set. Next:`);
   } else {
     out(`Set your API key, then run:`);
     out(`  export ${API_KEY_VARS[0]}=...`);

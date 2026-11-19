@@ -4,12 +4,13 @@
  * and everything the matcher side of a run can say without a request.
  */
 import { costByRule, formatCostByRule } from "../cost.ts";
-import { USD_PER_MTOK } from "../jev.ts";
+import { modelSpec } from "../model.ts";
 import { idleLanguages, silentRules } from "../report.ts";
 import type { Rule, RunResult } from "../types.ts";
 import type { Log, Options } from "./args.ts";
 
 export function printDryRun(result: RunResult, rules: Rule[], opts: Options, out: Log, log: Log): number {
+  const price = modelSpec(opts.model).inputUsdPerMillion;
   if (opts.format === "json") {
     out(JSON.stringify(dryRunDocument(result, rules, opts), null, 2));
     if (result.ignored?.unknownRules.length) {
@@ -27,12 +28,13 @@ export function printDryRun(result: RunResult, rules: Rule[], opts: Options, out
     );
   }
   if (result.batches.length > 40) out(`  … and ${result.batches.length - 40} more`);
-  out(`~${tokens.toLocaleString()} input tokens, ~$${((tokens / 1e6) * USD_PER_MTOK).toFixed(5)}`);
+  out(`~${tokens.toLocaleString()} input tokens, ~$${((tokens / 1e6) * price).toFixed(5)}`);
+  if (modelSpec(opts.model).provider === "openrouter") out("Estimate uses the Jev token estimator before provider splitting; repeated state can add input. Live cost comes from usage.cost.");
   // Per rule, dearest first: which rule to drop, or run alone, is a
   // decision the total cannot inform.
   if (rules.length > 1 && result.batches.length > 0) {
     out("");
-    out(formatCostByRule(costByRule(result.batches, rules)));
+    out(formatCostByRule(costByRule(result.batches, rules, price)));
   }
   // A count says the matcher fired; it does not say on what. Listing the
   // subjects is how a rule author checks that a matcher found the four
@@ -126,7 +128,8 @@ export function dryRunDocument(result: RunResult, rules: Rule[], opts: Options):
     cached: result.cachedCount ?? 0,
     requests: result.batches.length,
     tokens,
-    usd: (tokens / 1e6) * USD_PER_MTOK,
+    usd: (tokens / 1e6) * modelSpec(opts.model).inputUsdPerMillion,
+    ...(modelSpec(opts.model).provider === "openrouter" ? { estimateNote: "Jev token estimator before provider splitting; repeated state can add input. Live cost uses usage.cost." } : {}),
     retry: result.retry ?? 1,
     batches: result.batches.map((b) => ({
       file: b.file,
@@ -136,7 +139,7 @@ export function dryRunDocument(result: RunResult, rules: Rule[], opts: Options):
       tokens: b.estimatedTokens,
       degraded: b.degraded ? { from: b.degraded.from, to: b.degraded.to, reason: b.degraded.reason } : null,
     })),
-    byRule: costByRule(result.batches, rules),
+    byRule: costByRule(result.batches, rules, modelSpec(opts.model).inputUsdPerMillion),
     commits: result.commits
       ? {
           ...result.commits,

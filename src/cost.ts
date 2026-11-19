@@ -23,7 +23,7 @@ export interface RuleCost {
 }
 
 /** Every rule's cost, dearest first; a rule with no subject is a row at zero. */
-export function costByRule(batches: Batch[], rules: Rule[]): RuleCost[] {
+export function costByRule(batches: Batch[], rules: Rule[], inputUsdPerMillion = USD_PER_MTOK): RuleCost[] {
   const rows = new Map<string, RuleCost>(
     rules.map((r) => [r.id, { rule: r.id, subjects: 0, requests: 0, tokens: 0, usd: 0, share: 0 }]),
   );
@@ -52,7 +52,7 @@ export function costByRule(batches: Batch[], rules: Rule[]): RuleCost[] {
   }
   for (const r of rows.values()) {
     r.tokens = Math.round(r.tokens);
-    r.usd = (r.tokens / 1e6) * USD_PER_MTOK;
+    r.usd = (r.tokens / 1e6) * inputUsdPerMillion;
     r.share = total > 0 ? r.tokens / total : 0;
   }
   return [...rows.values()].sort((a, b) => b.tokens - a.tokens || a.rule.localeCompare(b.rule));

@@ -23,9 +23,12 @@ import { doctor } from "../doctor.ts";
 import { resolveTargets } from "./targets.ts";
 import { cmdDocs } from "./cmd-docs.ts";
 import { cmdIntrospect } from "./cmd-introspect.ts";
+import { cmdAuto } from "./cmd-auto.ts";
+import { confirmExecution } from "./confirm.ts";
+import { modelSpec } from "../model.ts";
 
 export async function main(argv: string[], deps: Deps = {}): Promise<number> {
-  let command = argv[0] && !argv[0].startsWith("-") ? argv[0] : "check";
+  let command = argv[0] && !argv[0].startsWith("-") ? argv[0] : "auto";
   const rest = argv[0] && !argv[0].startsWith("-") ? argv.slice(1) : argv;
   let opts;
   try {
@@ -59,7 +62,7 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
     if (command !== "init" || opts.preCommit || opts.prePush) { log("--introspect is an init mode and cannot be combined with hook installation"); return 2; }
     const target = opts.config && opts.config !== "none" ? opts.config : null;
     if (target && opts.output) { log("choose --config or --output for the new configuration path"); return 2; }
-    return cmdIntrospect({ ...opts, config: null, output: opts.output ?? target, introspectWrite: opts.introspectWrite || !opts.dryRun }, out, log, client);
+    return cmdIntrospect({ ...opts, config: opts.config === "none" ? "none" : null, output: opts.output ?? target, introspectWrite: opts.introspectWrite || !opts.dryRun }, out, log, client, deps.confirm);
   }
   if (opts.workflowsOnly && (command !== "public-api-inputs" || !opts.apiLayout || opts.apiDoc)) {
     log("--workflows-only requires public-api-inputs --api-layout and cannot take --api-doc");
@@ -97,17 +100,19 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
     }
   }
   if (command === "init") return cmdInit(opts, out, log);
-  if (command === "docs") return cmdDocs(opts, out, log, client);
-  if (command === "introspect") return cmdIntrospect(opts, out, log, client);
+  if (command === "docs") return cmdDocs(opts, out, log, client, deps.confirm);
+  if (command === "introspect") return cmdIntrospect(opts, out, log, client, deps.confirm);
   if (command === "baseline" || command === "report") return cmdArtifact(command, opts, out, log);
-  if (opts.format === "sarif" && (opts.dryRun || !["check", "review", "run", "scan", "replay"].includes(command))) { log("SARIF supports check, review, scan and replay results; use JSON for plans"); return 2; }
+  if (opts.format === "sarif" && (opts.dryRun || !["auto", "check", "review", "run", "scan", "replay"].includes(command))) { log("SARIF supports auto, check, review, scan and replay results; use JSON for plans"); return 2; }
 
   const context = resolveContext(opts, rest, log);
   if (!context) return 2;
   const { config, configPath, baseDir, argPaths, cachePath } = context;
+  if (command === "auto") return cmdAuto(opts, context, out, log, client, deps.confirm);
   if (command === "doctor") {
     const selected = loadOrDie(opts, log, baseDir, configPath !== null); if (!selected) return 2;
-    const report = doctor({ rules: selected.rules, languages: opts.languages });
+    const spec = modelSpec(opts.model);
+    const report = doctor({ rules: selected.rules, languages: opts.languages, apiKeyAvailable: spec.keyAvailable, apiKeySetup: spec.setup });
     if (opts.format === "json") out(JSON.stringify(report, null, 2));
     else for (const check of report.checks) out(`${check.id}: ${check.status}${check.remediation ? `; ${check.remediation}` : ""}`);
     return report.status === "complete" ? 0 : 3;
@@ -115,7 +120,14 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
 
   if (command === "rules") return cmdRules(opts, out, log, baseDir);
   if (command === "replay") return cmdReplay(opts, out, log);
-  if (command === "eval") return cmdEval({ ...opts, paths: argPaths }, out, log, client, baseDir);
+  const withProvider = async (run: () => Promise<number>, offline: boolean) => {
+    const stopped = offline ? null : await confirmExecution(opts, client, out, log, deps.confirm);
+    return stopped ?? run();
+  };
+  if (command === "eval") return withProvider(
+    () => cmdEval({ ...opts, paths: argPaths }, out, log, client, baseDir),
+    opts.dryRun || opts.compare || opts.replay || (opts.accept && opts.acceptLast),
+  );
 
   if (opts.staged && (command === "review" || command === "commits") && config.hooks?.precommit) {
     opts.ruleSettings = precommitRules(config);
@@ -128,7 +140,7 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   command = selected.command;
   if (opts.explainScope) return cmdScope(command, rules, opts, out, log);
   if (opts.format === "sarif" && command === "commits") { log("commit subjects have no file locations; use JSON"); return 2; }
-  if (command === "scan") return cmdScan(rules, opts, cachePath, out, log, client);
+  if (command === "scan") return withProvider(() => cmdScan(rules, opts, cachePath, out, log, client), opts.dryRun);
 
   if (command === "commits" && opts.staged && config.hooks?.precommit && !rules.some((rule) => rule.subject === "change")) {
     if (!opts.quiet) log("hooks.precommit: no subject: change rule selected; skipping commits --staged");
@@ -139,12 +151,13 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   if ("exit" in targets) return targets.exit;
   const { paths, diffRanges } = targets;
 
-  if (command === "gaps") return cmdGaps({ rules, paths, diffRanges, opts, cachePath, client, out, log });
-  if (command === "calibrate") return cmdCalibrate({ rules, paths, diffRanges, opts, cachePath, client, out, log });
+  const args = { rules, paths, diffRanges, opts, cachePath, client, out, log };
+  if (command === "gaps") return withProvider(() => cmdGaps(args), opts.dryRun);
+  if (command === "calibrate") return withProvider(() => cmdCalibrate(args), false);
   if (command !== "check" && command !== "review" && command !== "commits") {
     log(`unknown command \`${command}\``);
     process.stderr.write(USAGE);
     return 2;
   }
-  return cmdCheck(rules, targets, opts, cachePath, out, log, client);
+  return withProvider(() => cmdCheck(rules, targets, opts, cachePath, out, log, client), opts.dryRun);
 }

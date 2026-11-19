@@ -4,7 +4,22 @@ Use this workflow when initializing jev-lint or recommending which rules to
 enable. Ground the proposal in actual project files and the installed catalog.
 The CLI can do the initial selection using Jev directly, without a separate
 LLM, agent runtime or hand-written YAML generation. Live requests need
-`TYPESAFE_API_KEY` or `TYPESAFEAI_API_KEY` in the environment.
+`OPENROUTER_API_KEY`, `TYPESAFE_API_KEY` or `TYPESAFEAI_API_KEY` in the environment.
+
+For a one-time run, `npx -y jev-lint` confirms before any API request, then
+uses existing settings or performs the
+same metadata selection and immediately checks with only enabled file rules.
+`npx -y jev-lint auto src test` narrows both phases. It creates no config;
+`--cache none` also disables the normal verdict cache. An unconfigured
+`--dry-run` shows metadata without selecting rules or contacting a model.
+Incomplete/stale selection or no starter exits 3 before checking. The selection
+phase does not send source bodies; the subsequent check sends ordinary source
+evidence. `--json` retains both phases; `--record` saves the replayable lint run.
+Enter, EOF or Ctrl-C cancels before requests. Noninteractive startup needs
+`npx -y jev-lint --yes`; npm's first `-y` does not confirm jev-lint itself.
+When OpenRouter is inferred from the key, live commands also require provider consent. In CI, select `openrouter:typesafe/jev-1.14` in config, `--model` or `JEV_LINT_MODEL`.
+
+For a free trial with `OPENROUTER_API_KEY`, run `npx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free`. Both phases use the free Decider. Selection uses up to 64 tracked filenames, and prints starter YAML before checking up to three files. For regular use and CI, prefer Jev with `TYPESAFE_API_KEY`.
 
 ## Inspect and recommend
 

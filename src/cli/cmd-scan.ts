@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { resolve, sep } from "node:path";
 import { scan } from "../audit-run.ts";
 import { Jev } from "../jev.ts";
+import { createModelClient } from "../model.ts";
 import type { AskClient } from "../jev.ts";
 import type { Rule } from "../types.ts";
 import type { Options, Log } from "./args.ts";
@@ -18,7 +19,7 @@ export async function cmdScan(rules: Rule[], opts: Options, cachePath: string | 
     const sourceSha = opts.sourceSha ?? execFileSync("git", ["rev-parse", "HEAD"], { cwd, encoding: "utf8" }).trim();
     const report = await scan({ cwd, rules, paths: opts.paths, policyRef: opts.policyRef,
       identity: { runId: opts.runId, repository: opts.repository, sourceSha }, namespace: opts.namespace, cachePath: cache,
-      client: client ?? new Jev({ model: opts.model, baseUrl: opts.baseUrl }), endpointIdentity: client instanceof Jev ? client.endpointIdentity : client ? `injected:${client.model}` : undefined,
+      client: client ?? createModelClient({ model: opts.model, baseUrl: opts.baseUrl }), endpointIdentity: client instanceof Jev ? client.endpointIdentity : client ? `injected:${client.model}` : undefined,
       ...(opts.modelRevision === null ? {} : { modelRevision: opts.modelRevision }),
       ...(opts.maxCandidates === null ? {} : { maxCandidates: opts.maxCandidates }),
       dryRun: opts.dryRun, concurrency: opts.concurrency, batchSize: opts.batchSize, group: opts.group, exclude: opts.exclude, languages: opts.languages });

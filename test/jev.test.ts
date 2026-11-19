@@ -38,6 +38,8 @@ await testAsync("jev: no API key is an auth error, not a crash mid-run", async (
     (err: unknown) => {
       assert.ok(err instanceof JevError);
       assert.equal((err as JevError).kind, "auth");
+      assert.match(err.message, /https:\/\/console\.typesafe\.ai\/keys/);
+      assert.match(err.message, /export TYPESAFE_API_KEY=/);
       return true;
     },
   );

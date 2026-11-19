@@ -7,6 +7,37 @@ real code. [deepdive.md](deepdive.md) has the evidence behind the numbers;
 
 ## Commands and flags
 
+Before any automatic API request, commandless startup and `auto` ask once
+in an interactive terminal, defaulting to No. `--yes` / `-y` skips this
+confirmation; a noninteractive invocation without it exits 2 with no model
+request. A decline, EOF or Ctrl-C cancels without requests or record/cache
+writes. Under JSON, cancellation returns `status: cancelled` (exit 0), and
+missing confirmation returns `status: confirmation-required` (exit 2); both
+have null `introspection` and `check`. Confirmation is on stderr. `--quiet`
+does not imply consent. Dry runs and scope explanations do not prompt. A live command that infers OpenRouter
+from the key asks for provider consent, including with `--yes`. In CI, choose
+`model: openrouter:typesafe/jev-1.14` in the config or pass the equivalent `--model`. For default Jev, the config can also select
+OpenRouter with `apiKeyEnv: OPENROUTER_API_KEY`. npm's `npx -y` is separate from jev-lint's final `--yes`.
+
+With no command, `jev-lint` uses the existing configuration or performs
+introspection of a sample from `git ls-files`, prints the starter YAML, and checks up to three tracked files with the enabled rules. The inventory is limited to 64 filenames and 8 KiB of paths. Starter selection asks about up to 12 applicable rules, prioritizing rules with more eligible files. Lint inputs are limited to 16 KiB per file and 32 KiB combined. The selection client allows eight requests and 32,000 estimated input tokens; the lint client allows four and 8,192. Both limits include retries. With no credentials, the CLI suggests the free Decider one-liner and TypeSafe Jev for regular use.
+`auto [paths...]` names this workflow explicitly; paths and exclusions bound
+both phases. No configuration is created. Existing configurations retain their
+files, rule choices, cutoffs and exclusions; `--no-config` explicitly bypasses
+them. Git rules are not automatic file-check candidates. Incomplete inventory,
+failed/stale selection or no enabled rule exits 3 without a check or fallback.
+
+Without a configuration, `auto --dry-run` emits a
+`jev-lint-auto-plan-1` metadata inventory with `modelRequests: 0`; checking and
+its price require rule selection first. Configured dry runs use the ordinary
+check plan. Unconfigured `auto --json` emits one `jev-lint-auto-1` document
+with `status`, `introspection` and `check`; completed trials also include `starterConfig` and `sample.lintFiles`; `check` is null when selection
+prevents execution. The two phases report their own usage. `--record` saves
+the ordinary lint record for `replay`; capture JSON output to retain selection
+evidence as well. The usual verdict cache applies and can be disabled with
+`--cache none`. `introspect --write` remains the way to persist recommendations.
+Explicit `check` continues to use every loaded rule when no config is present.
+
 `scan` provides a separate versioned screening contract for audit pipelines.
 See [the audit API](audit-api.md) for its CLI flags, source snapshot requirements,
 pinned policy, cache isolation and outbound request controls.
@@ -81,6 +112,7 @@ answers.
 | flag | |
 | --- | --- |
 | `--introspect` | `init`: use Jev's starter recommendations; `--dry-run` displays metadata without requests or writes |
+| `-y, --yes` | commandless startup / `auto`: skip the startup confirmation; required without an interactive terminal |
 | `--write` | `introspect`: create a new configuration from complete recommendations; `--output` chooses a separate new path |
 | `--document-manifest <path>` | `docs`: explicit source registry and comparison selectors; see [document self-check](self-check.md) |
 | `-R, --rules <path>` | rule file or directory, repeatable, loaded in place of the packaged packs and `.jev-lint/rules/` for this run |
@@ -111,7 +143,7 @@ answers.
 | `--show-subjects` | with `--dry-run`: list every subject with its line, node kind and captures |
 | `--format <fmt>` / `--json` / `--sarif` | `pretty`, `json`, `github`, `sarif`; `--json` is `--format json`. SARIF supports file-based check/review, scan, report and compatible replay results |
 | `--concurrency <n>` / `--batch-size <n>` | default 32 and 256; the client also paces its input tokens against the server's rate limit, see `JEV_LINT_TOKENS_PER_SECOND` |
-| `--model <id>` | Jev model (default: `jev-1.14.0`) |
+| `--model <id>` | Jev model (default: `jev-1.14.0`), offered through OpenRouter when `OPENROUTER_API_KEY` is set, or `openrouter:<id>` for a specific OpenRouter decision model; see [model selection](model-comparison-2026-11.md#selecting-a-model) |
 | `--quiet` / `--no-color` | |
 
 | `--config <path>` | config file (default: the nearest `.jev-lint.yaml`, searching upwards — any spelling of it is recognised: with or without the dot, with or without the hyphen, `.yaml` or `.yml`; two spellings in one directory are an error, exit 2, since jev-lint will not guess which is in force); `--no-config` ignores it |
@@ -1232,7 +1264,8 @@ for that language. Values are `on`, `off`, a severity (`hint`, `info`, `warning`
 mapping of `severity`, `threshold` and `loose`. A name that matches no loaded rule
 is an error, exit 2 -- a misspelt id that ran nothing would look like a
 clean rule. A config with no `rules:` runs nothing and says what to write;
-with no config at all, every loaded rule runs and the run says so.
+with no config at all, explicit `check` runs every loaded rule and says so.
+The commandless startup and `auto` instead select starter rules first.
 
 `hooks.precommit` selects rules for `review --staged` and `commits --staged`,
 including the two calls made by the generated pre-commit hook. Its `extends`
@@ -1350,9 +1383,12 @@ TYPESAFE_BASE_URL=http://127.0.0.1:8797 \
 JEV_LINT_CACHE=.jev-lint/local-backend.json jev-lint check src
 ```
 
-Cache keys do not include the endpoint or model, so use a separate path for
-each backend/model combination. `eval` and `calibrate` bypass the verdict
-cache regardless of this setting.
+Jev cache keys do not include the endpoint or model, so use a separate path for
+each Jev backend/model combination. Native `openrouter:<id>` models automatically
+insert `.openrouter-<hash>` before the selected cache filename's extension.
+That hash includes the fixed native endpoint and requested model, and separates
+them from Jev caches. It does not attest to an immutable provider revision.
+`eval` and `calibrate` bypass the verdict cache regardless of this setting.
 
 ## Upgrading from 0.4
 

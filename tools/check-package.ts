@@ -9,7 +9,7 @@ const cwd = process.cwd(), args = process.argv.slice(2);
 if (args.length && (args.length !== 2 || args[0] !== "--out-dir" || !args[1])) throw new Error("use check-package.ts [--out-dir <path>]");
 const scratch = mkdtempSync(join(tmpdir(), "jev-package-")), output = args.length ? resolve(args[1]) : scratch;
 const env = { ...process.env };
-for (const name of Object.keys(env)) if (/^(?:TYPESAFE|TYPESAFEAI|JEV_LINT)_/.test(name) || ["NPM_TOKEN", "NODE_AUTH_TOKEN", "NODE_PATH", "NODE_OPTIONS"].includes(name)) delete env[name];
+for (const name of Object.keys(env)) if (/^(?:OPENROUTER|TYPESAFE|TYPESAFEAI|JEV_LINT)_/.test(name) || ["NPM_TOKEN", "NODE_AUTH_TOKEN", "NODE_PATH", "NODE_OPTIONS"].includes(name)) delete env[name];
 const run = (command: string, argv: string[], directory: string) => execFileSync(command, argv, { cwd: directory, env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], timeout: 180000 });
 try {
   mkdirSync(output, { recursive: true });
@@ -45,6 +45,9 @@ const cli = (args, status = 0, env = process.env) => {
   assert.equal(result.status, status, result.stderr.slice(0, 1600));
   return JSON.parse(result.stdout);
 };
+const trial = cli(['--no-config', '--json'], 3);
+assert.equal(trial.status, 'setup-required');
+assert.ok(trial.freeCommand.includes('openrouter:perplexity/pplx-decider-v1.3:free'));
 const rules = cli(['rules', '--no-config', '--json']);
 assert.deepEqual(rules.errors, []); assert.equal(rules.rules.length, ${ruleCount});
 const advisories = rules.rules.filter(r => r.category === 'advisory');

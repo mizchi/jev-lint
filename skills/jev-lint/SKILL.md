@@ -57,6 +57,10 @@ Knowing which half you are working on is most of the job.
 
 ```bash
 export TYPESAFE_API_KEY=...            # or TYPESAFEAI_API_KEY
+npx -y jev-lint                       # confirm, then use config or select starter rules and check
+npx -y jev-lint --yes                 # skip the startup confirmation, including without a terminal
+npx -y jev-lint auto src test         # select and check only these paths; no config created
+npx -y jev-lint --dry-run             # no config: metadata only, no requests
 npx -y jev-lint check src --dry-run    # plan and price. Makes NO request.
 npx -y jev-lint check src              # judge whole files
 npx -y jev-lint run fn-name-promises src        # one shipped rule; rust/<id> for one language
@@ -79,7 +83,28 @@ enables every shipped rule; `init --introspect` creates the recommended starter
 without needing `--write`. Preserve existing settings and calibrated cutoffs;
 use a separate proposal path when a config already exists.
 
-Run `check --dry-run` first: it prints subject count, request count and the
+Commandless startup and `auto` confirm once before any API request, defaulting
+to No. Use `--yes` for an already authorized noninteractive run; `npx -y`
+alone only approves npm's package download. A decline makes no requests or
+record/cache writes. Dry runs and scope explanations do not prompt. Noninteractive auto without `--yes` exits 2; JSON cancellation
+is `cancelled`, and missing confirmation is `confirmation-required`.
+
+Commandless startup and `auto` preserve existing settings. Without a config,
+they select rules from tracked filenames, print starter YAML, then check up to three sampled files.
+Incomplete selection or no starter exits 3 before checking; no all-rule fallback
+runs. No config is created. `auto --dry-run` without config only shows metadata;
+its subsequent check sends source evidence through the normal runner. JSON has
+`introspection` and `check` fields, and `--record` saves the usual lint record.
+Use `init --introspect` to save recommendations instead.
+
+For experimental alternatives, use `--model openrouter:<id>` with
+`OPENROUTER_API_KEY`: `liquid/d1.2-ultra`, `liquid/d1.2`, `baseten/mammoth-1`,
+or `perplexity/pplx-decider-v1.3:free`. Keep Jev as the default: existing
+cutoffs are fitted for it. Native models have separate cache filenames;
+compare fresh with `--cache none` and labelled cases before adopting one.
+Detecting `OPENROUTER_API_KEY` prompts for consent before using OpenRouter, even with `--yes` or a TypeSafe key. For an authorized noninteractive run, explicitly select `openrouter:typesafe/jev-1.14` via config, `--model` or `JEV_LINT_MODEL`. The free Decider trial uses the same model for selection and lint. Other OpenRouter checking models use Jev for selection. For routine use, prefer Jev with `TYPESAFE_API_KEY`.
+
+Run `check --dry-run` first for a configured or explicit-rule check: it prints subject count, request count and the
 price without spending anything. Then `review`, not `check`, for anything
 routine — review mode keeps only matches whose subject overlaps a changed line,
 which is where findings concentrate and costs a fraction of a cent.

@@ -23,6 +23,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import YAML from "yaml";
+import { OPENROUTER_JEV } from "./openrouter.ts";
 import { GROUP_MODES, LANGUAGES, SEVERITIES, STATE_ARMS } from "./types.ts";
 import { API_KEY_VARS, BASE_URL_VARS, DEFAULT_MODEL, fromEnv } from "./jev.ts";
 import type { CustomLanguage, CustomLanguages, GroupMode, Severity, StateArm } from "./types.ts";
@@ -95,6 +96,13 @@ export interface LoadedConfig {
   /** Everything wrong with it. A config that does not parse is not obeyed. */
   errors: string[];
   warnings: string[];
+}
+
+export function modelWithKeyEnv(model: string | null, apiKeyEnv?: string): string | null {
+  if (apiKeyEnv === "OPENROUTER_API_KEY" && (model ?? process.env.JEV_LINT_MODEL ?? DEFAULT_MODEL) === DEFAULT_MODEL) {
+    return `openrouter:${OPENROUTER_JEV}`;
+  }
+  return model;
 }
 
 /** Walk up from `from` until a config file turns up, or the root does. */
@@ -522,6 +530,7 @@ export function applyConfig(
     opts.cache = config.cache === null ? "none" : config.cache;
   }
   if (config.model && unset("--model")) opts.model = config.model;
+  opts.model = modelWithKeyEnv(opts.model, config.apiKeyEnv);
   if (config.baseUrl && unset("--base-url")) opts.baseUrl = config.baseUrl;
   if (config.group && unset("--group")) opts.group = config.group;
   if (config.arm !== undefined && unset("--arm")) opts.arm = config.arm;
@@ -534,7 +543,7 @@ export function applyConfig(
   }
   // Not a jev-lint variable, so it is set rather than read: the client reads
   // the environment itself, and `apiKeyEnv` names where the key lives.
-  if (config.apiKeyEnv) {
+  if (config.apiKeyEnv && config.apiKeyEnv !== "OPENROUTER_API_KEY") {
     const key = fromEnv([config.apiKeyEnv]);
     if (key) process.env[API_KEY_VARS[0]] = key;
   }
@@ -600,7 +609,7 @@ export function initialHook(): string {
 # the commit only on a rule with \`severity: error\`. Skip it once with
 # \`git commit --no-verify\`. A partially staged file is judged as it is on
 # disk, since the matcher reads files, not the index.
-if [ -z "$TYPESAFE_API_KEY" ] && [ -z "$TYPESAFEAI_API_KEY" ]; then
+if [ -z "$TYPESAFE_API_KEY" ] && [ -z "$TYPESAFEAI_API_KEY" ] && [ -z "$OPENROUTER_API_KEY" ]; then
   echo "jev-lint: no API key in the environment, skipping the review" >&2
   exit 0
 fi
@@ -639,7 +648,7 @@ export function initialPushHook(): string {
 # Judges the commits not yet on the upstream -- does each message describe
 # its diff -- prints every finding, and blocks the push only on a rule with
 # \`severity: error\`. Skip it once with \`git push --no-verify\`.
-if [ -z "$TYPESAFE_API_KEY" ] && [ -z "$TYPESAFEAI_API_KEY" ]; then
+if [ -z "$TYPESAFE_API_KEY" ] && [ -z "$TYPESAFEAI_API_KEY" ] && [ -z "$OPENROUTER_API_KEY" ]; then
   echo "jev-lint: no API key in the environment, skipping the commit review" >&2
   exit 0
 fi

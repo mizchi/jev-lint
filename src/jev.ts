@@ -35,6 +35,7 @@ export const DEFAULT_MODEL = "jev-1.14.0";
  * the older name set is not a configuration error.
  */
 export const API_KEY_VARS = ["TYPESAFE_API_KEY", "TYPESAFEAI_API_KEY"] as const;
+export const API_KEY_SETUP = "Get an API key at https://console.typesafe.ai/keys, then run: export TYPESAFE_API_KEY='<your-api-key>' (TYPESAFEAI_API_KEY is also supported)";
 export const BASE_URL_VARS = ["TYPESAFE_BASE_URL", "TYPESAFEAI_BASE_URL"] as const;
 
 /** First of these variables that is set and non-empty. */
@@ -339,12 +340,15 @@ export class Jev implements AskClient {
   }
 
   protected estimateUsd(tokens: number): number { return (tokens / 1_000_000) * USD_PER_MTOK; }
+  protected measuredUsd(tokens: number, _usage: unknown): number { return this.estimateUsd(tokens); }
+  protected waitForRequest(ms: number): Promise<void> { return this.control.wait(ms); }
+  protected async beforeRequest(): Promise<void> {}
   get endpointIdentity(): string { return this.baseUrl; }
 
   /** One request: one state, N questions, N answers. */
   async ask(state: unknown, questions: Record<string, Question>): Promise<SystemOneResponse> {
     if (!this.apiKey) {
-      throw new JevError(`no API key; set ${API_KEY_VARS[0]}`, { kind: "auth" });
+      throw new JevError(`no API key; ${API_KEY_SETUP}`, { kind: "auth" });
     }
     const names = Object.keys(questions);
     if (names.length === 0) return { answers: {}, usage: { input_tokens: 0 } };
@@ -362,6 +366,7 @@ export class Jev implements AskClient {
     let attempt = 0;
     let limited = 0;
     for (;;) {
+      await this.beforeRequest();
       await this.pacer.take(estimated, this.control.signal);
       await this.control.authorize(estimated, this.estimateUsd(estimated));
       const started = Date.now();
@@ -399,7 +404,7 @@ export class Jev implements AskClient {
             || ["input_tokens", "output_tokens"].some((key) => Object.hasOwn(parsed.usage, key)
               && (!Number.isSafeInteger(parsed.usage[key]) || parsed.usage[key] < 0))) throw new JevError("invalid token usage");
         }
-        if (parsed.usage?.input_tokens !== undefined) this.control.settle(estimated, parsed.usage.input_tokens, this.estimateUsd(parsed.usage.input_tokens), this.estimateUsd(estimated));
+        if (parsed.usage?.input_tokens !== undefined) this.control.settle(estimated, parsed.usage.input_tokens, this.measuredUsd(parsed.usage.input_tokens, parsed.usage), this.estimateUsd(estimated));
         this.pacer.settle(estimated, parsed.usage?.input_tokens ?? estimated);
         this.pacer.succeeded();
         this.calls += 1;

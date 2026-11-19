@@ -6,6 +6,7 @@ test("doctor: missing credentials and executables are reported without contactin
   const report = doctor({ apiKeyAvailable: false, binaryPath: "/missing/ast-grep", nodeVersion: "24.22.2" });
   assert.equal(report.status, "partial"); assert.equal(report.modelRequests, 0);
   assert.ok(report.checks.some((c) => c.id === "api-key" && c.status === "missing"));
+  assert.match(report.checks.find((c) => c.id === "api-key")!.remediation!, /https:\/\/console\.typesafe\.ai\/keys/);
   assert.ok(report.checks.some((c) => c.id === "ast-grep" && c.status === "missing"));
   assert.equal(doctor({ apiKeyAvailable: true, binaryPath: process.execPath, nodeVersion: "22.6.0" }).status, "partial");
 });

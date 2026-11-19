@@ -14,6 +14,7 @@ import type { Log, Options } from "./args.ts";
 import { printDryRun } from "./dry-run.ts";
 import type { Targets } from "./targets.ts";
 import { formatSarif } from "../sarif.ts";
+import { createModelClient } from "../model.ts";
 
 export async function cmdCheck(
   rules: Rule[],
@@ -45,7 +46,7 @@ export async function cmdCheck(
     loose: opts.loose,
     model: opts.model,
     languages: opts.languages,
-    client,
+    client: client ?? createModelClient({ model: opts.model, baseUrl: opts.baseUrl }),
     commits: commitsRange
       ? { range: commitsRange, ...(opts.squash ? { squash: opts.message! } : {}), ...(opts.staged ? { staged: true } : {}) }
       : null,

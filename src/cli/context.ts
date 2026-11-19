@@ -8,8 +8,9 @@
 import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { DEFAULT_CACHE_PATH, OLD_CACHE_PATH } from "../cache.ts";
-import { applyConfig, findConfig, loadConfig, type Config } from "../config.ts";
+import { applyConfig, findConfig, loadConfig, modelWithKeyEnv, type Config } from "../config.ts";
 import type { Log, Options } from "./args.ts";
+import { modelCachePath, modelSpec } from "../model.ts";
 
 export interface Context {
   config: Config;
@@ -61,6 +62,21 @@ export function resolveContext(opts: Options, rest: string[], log: Log): Context
   if (existsSync(join(baseDir, OLD_CACHE_PATH)) && !opts.quiet) {
     log(`${OLD_CACHE_PATH} is 0.4's cache; since 0.5 it is ${DEFAULT_CACHE_PATH}, so delete the old file`);
   }
-  const cachePath = opts.cache === "none" ? null : resolve(baseDir, opts.cache);
+  let cachePath: string | null;
+  try { modelSpec(opts.model, opts.baseUrl); cachePath = modelCachePath(opts.cache === "none" ? null : resolve(baseDir, opts.cache), opts.model); }
+  catch (error) { log(`model error: ${(error as Error).message}`); return null; }
   return { config, configPath, baseDir, argPaths, cachePath };
+}
+
+/** Docs and introspection have their own inputs, but use the project's model selection. */
+export function standaloneModel(opts: Options, directory: string): string | null {
+  if (opts.config === "none") return opts.model;
+  const { config, errors } = loadConfig(opts.config ?? findConfig(directory));
+  if (errors.length) {
+    if (opts.config) throw new Error(errors.join("\n"));
+    // Introspection can propose a replacement for a malformed project config.
+    // Only a valid project config can authorize its provider.
+    return opts.model;
+  }
+  return modelWithKeyEnv(opts.model ?? config.model ?? null, config.apiKeyEnv);
 }

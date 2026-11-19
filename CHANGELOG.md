@@ -8,6 +8,12 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ## Unreleased
 
+## 0.9.0 — 2026-11-19
+
+- Commandless startup and `auto` now ask for confirmation. In an unconfigured Git project, they select starter rules from up to 64 tracked filenames, print the proposed YAML, then lint up to three files within a 32 KiB source budget. Use `check` to run a full check directly.
+- Add a free trial via `--model openrouter:perplexity/pplx-decider-v1.3:free` for both rule selection and lint. Jev with `TYPESAFE_API_KEY` remains the recommended model for regular use and CI.
+- Add OpenRouter decision models with provider-specific credentials, pricing and caches. Using a provider inferred from an environment key requires approval. Noninteractive runs can select the provider explicitly.
+
 ## 0.8.1 — 2026-11-19
 
 - Add advisory rules for library design and public API review, with hints about what to inspect next. Public API reviews cover TypeScript, Go and Rust and can focus on documented workflows across entry points.

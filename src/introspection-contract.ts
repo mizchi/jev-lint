@@ -13,6 +13,7 @@ export interface IntrospectionInput {
   schema: "jev-lint-introspection-input-1"; snapshotDigest: string; catalogDigest: string;
   files: Array<{ path: string; eligibility: "eligible" | "no-rule" | "unsupported" | "missing-parser" }>;
   manifests: Array<{ path: string; scripts: string[]; dependencies: string[] }>;
+  omittedTrackedFiles?: number;
   git: boolean; exclude: string[]; candidates: IntrospectionCandidate[];
   issues: Array<{ path: string; code: string }>;
 }
@@ -34,9 +35,10 @@ export const introspectionDigest = (input: Omit<IntrospectionInput, "snapshotDig
 
 export function parseIntrospectionInput(raw: unknown): IntrospectionInput {
   const fail = (): never => { throw new Error("invalid introspection input"); };
-  if (!fields(raw, ["schema", "snapshotDigest", "catalogDigest", "files", "manifests", "git", "exclude", "candidates", "issues"])) return fail();
+  if (!fields(raw, ["schema", "snapshotDigest", "catalogDigest", "files", "manifests", "git", "exclude", "candidates", "issues", "omittedTrackedFiles"])) return fail();
   const input = raw as IntrospectionInput;
   if (input.schema !== "jev-lint-introspection-input-1" || !hash(input.snapshotDigest) || !hash(input.catalogDigest) || typeof input.git !== "boolean"
+    || (input.omittedTrackedFiles !== undefined && (!Number.isSafeInteger(input.omittedTrackedFiles) || input.omittedTrackedFiles < 0))
     || !Array.isArray(input.files) || input.files.length > 500 || !Array.isArray(input.manifests) || input.manifests.length > 10
     || !Array.isArray(input.candidates) || input.candidates.length > 128 || !Array.isArray(input.issues)
     || !Array.isArray(input.exclude) || !input.exclude.every((p) => p === "." || relationPath(p))) return fail();

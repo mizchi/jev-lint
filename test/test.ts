@@ -19,6 +19,9 @@
  */
 import { report } from "./harness.ts";
 
+// Provider-selection tests install their own credentials; never inherit live service keys.
+for (const key of ["OPENROUTER_API_KEY", "TYPESAFE_API_KEY", "TYPESAFEAI_API_KEY"]) delete process.env[key];
+
 const files = [
   "harness",
   "rules",
@@ -43,6 +46,9 @@ const files = [
   "introspection-contract",
   "introspection",
   "cmd-introspect",
+  "starter-sample",
+  "cmd-auto",
+  "confirm",
   "doctor",
   "document-contract",
   "document-input",
@@ -76,6 +82,9 @@ const files = [
   "calibrate",
   "scan",
   "jev",
+  "openrouter",
+  "model",
+  "cmd-model",
   "request-control",
   "clef",
   "model-eval",

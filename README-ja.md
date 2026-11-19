@@ -4,6 +4,20 @@
 
 [Jev](https://typesafe.ai/) — 自然言語の問いに、テキストではなく較正された確率を返す高速な分類器 — を使って、パーサには決められないことを決める lint ツール。
 
+## Git の追跡ファイルで試す
+
+Node 24+ があれば、Git リポジトリで試せる。`OPENROUTER_API_KEY` に [OpenRouter のキー](https://openrouter.ai/keys)を設定して、次の1行を実行する。
+
+```sh
+npx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free
+```
+
+設定がなければ、CLI は最初に一度だけ確認する。承認すると、`git ls-files` で取得した追跡ファイル名から初期ルールを選び、設定案を YAML で表示して、そのまま少量の lint を実行する。ルール選択も lint も無料の Decider を使う。選択に使うのは最大64件、パス名の合計は8 KiB。lint の対象は最大3ファイル、1ファイル16 KiB、合計32 KiB まで。設定の保存は任意。`npx -y jev-lint --dry-run` ならキーなしで対象を確認できる。
+
+**継続利用や CI には、`TYPESAFE_API_KEY` を設定して Jev を使うことを強く推奨する。** 同梱ルールの判定閾値は Jev で較正している。[TypeSafe のキー](https://console.typesafe.ai/keys)を設定すれば、`npx -y jev-lint` で実行できる。両方のキーがある場合は、`OPENROUTER_API_KEY` を環境から外すと TypeSafe に直接接続する。既存の設定があれば、そこに指定したファイルとルールを使う。
+
+## 検出例
+
 この関数は間違っている。そして、手元のどのツールもそれを言わない。
 
 ```ts
@@ -53,7 +67,7 @@ examples/cart.ts
 
 ## 導入
 
-試すだけならインストールは要らない。Node 24+ と `npx` があればいい。プロジェクトに入れるなら:
+プロジェクトの依存に追加するなら:
 
 ```bash
 npm install --save-dev jev-lint
@@ -61,7 +75,7 @@ npx jev-lint init                      # .jev-lint.yaml を書く
 npx jev-lint check src --dry-run       # 何を聞くかと値段。リクエストは飛ばない
 ```
 
-キーを読み込むのは環境変数からだけで (`TYPESAFE_API_KEY` か `TYPESAFEAI_API_KEY`)、config ファイルからは読まない。config はバージョン管理に入るものであり、キーはそうではないから。モデルに聞かない操作はキー無しで動く。`--dry-run` は値段を出し、`jev-lint rules` は何が走るかを並べ、`jev-lint replay` は記録済みの実行を採点し直し、CI はコミット済みキャッシュからキー無しで lint できる。
+キーを読み込むのは環境変数からだけで (`OPENROUTER_API_KEY`、`TYPESAFE_API_KEY`、`TYPESAFEAI_API_KEY` のいずれか)、config ファイルからは読まない。config はバージョン管理に入るものであり、キーはそうではないから。モデルに聞かない操作はキー無しで動く。`--dry-run` は値段を出し、`jev-lint rules` は何が走るかを並べ、`jev-lint replay` は記録済みの実行を採点し直し、CI はコミット済みキャッシュからキー無しで lint できる。
 
 ## 推奨モデル
 
@@ -74,6 +88,32 @@ npx jev-lint check src --dry-run       # 何を聞くかと値段。リクエス
 その cutoff を使った [81 suite の fixture 比較](docs/clef-evaluation.md#live-results-2026-10-02)
 でも Jev が最も良い成績だった。
 
+`OPENROUTER_API_KEY` を検出すると、CLI は OpenRouter の `typesafe/jev-1.14` にデータを送ってよいか確認する。
+TypeSafe のキーが同時にある場合も同じで、Enter で中止する。
+CI では `.jev-lint.yaml` に `model: openrouter:typesafe/jev-1.14` を書くか、
+`--model openrouter:typesafe/jev-1.14` または `JEV_LINT_MODEL=openrouter:typesafe/jev-1.14` で明示する。
+既定の Jev を使う場合は、設定に `apiKeyEnv: OPENROUTER_API_KEY` と書いてもよい。
+明示せずに非対話で実行すると終了コード 2 で停止する。
+TypeSafe に直接接続するには OpenRouter のキーを環境から外す。
+
+OpenRouter の判断モデルを `--model openrouter:<id>` と `OPENROUTER_API_KEY` で
+実験的に選択できる。対応する ID は `liquid/d1.2-ultra`、`liquid/d1.2`、
+`baseten/mammoth-1`、`perplexity/pplx-decider-v1.3:free`。
+[11月の比較](docs/model-comparison-2026-11.md)では、Perplexity無料版は命名系146件で
+Jevと同じ集計成績だったが、初期ルールを過剰に選んだ。
+無料体験では初期ルールの候補を基本ルールに絞る。それ以外の OpenRouter モデルを検査に指定した場合、ルール選択には Jev を使う。
+
+```bash
+export OPENROUTER_API_KEY='<your-api-key>'
+npx jev-lint run typescript/fn-name-promises src \
+  --model openrouter:perplexity/pplx-decider-v1.3:free
+```
+
+同梱のcutoffを使う任意の実験機能であり、全ルールの代替として検証されたものではない。
+OpenRouterの実費は `usage.cost` から取得する。
+無料版のリクエストは3.2秒間隔に制限し、別途日次上限がある。
+モデルごとに検査キャッシュのファイルを分ける。新鮮な比較には `--cache none` を使う。
+
 Cloudflare Clef と Clef-flash も、リポジトリを checkout して実験的に比較評価できる。
 `just clef-plan` でリクエストと費用を確認し、Cloudflare の認証情報を設定して
 `just clef-eval` で比較する。設定、記録済みの結果、同じ fixture で cutoff を
@@ -83,6 +123,7 @@ Cloudflare Clef と Clef-flash も、リポジトリを checkout して実験的
 
 | | |
 | --- | --- |
+| `jev-lint` / `jev-lint auto src` | 確認後に既存設定を使うか、初期ルールを選んで検査する。`--yes` で起動確認を省略 |
 | `jev-lint check src` | ファイル全体を裁く |
 | `jev-lint review --base main` | diff が触れた行だけ。finding が集中する場所を、ごく安く |
 | `jev-lint commits --base main` | 各コミットのメッセージを diff に、各変更をリポジトリ自身の `AGENTS.md` に照らす |

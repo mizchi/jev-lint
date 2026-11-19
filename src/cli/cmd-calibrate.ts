@@ -9,6 +9,7 @@ import type { AskClient } from "../jev.ts";
 import { printDryRun } from "./dry-run.ts";
 import { formatGaps, formatStability } from "../report.ts";
 import { run, buildRecord } from "../run.ts";
+import { createModelClient } from "../model.ts";
 import type { Finding, Labels, Rule, RunResult } from "../types.ts";
 import type { Options, Log } from "./args.ts";
 
@@ -39,7 +40,7 @@ export async function cmdGaps({ rules, paths, diffRanges, opts, cachePath, clien
     batchSize: opts.batchSize,
     model: opts.model,
     languages: opts.languages,
-    client,
+    client: client ?? createModelClient({ model: opts.model, baseUrl: opts.baseUrl }),
     dryRun: opts.dryRun,
   });
   const gapsCache = result.cache as Cache | undefined;
@@ -91,7 +92,7 @@ export async function cmdCalibrate({ rules, paths, diffRanges, opts, client = nu
       batchSize: opts.batchSize,
       model: opts.model,
       languages: opts.languages,
-      client,
+      client: client ?? createModelClient({ model: opts.model, baseUrl: opts.baseUrl }),
     });
     runs.push(r.all);
     last = r;

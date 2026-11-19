@@ -3,16 +3,20 @@ import { resolve, dirname, relative, sep } from "node:path";
 import { randomUUID } from "node:crypto";
 import { CONFIG_NAMES } from "../config.ts";
 import { loadRules, ruleSources } from "../rules.ts";
-import { Jev, type AskClient } from "../jev.ts";
+import type { AskClient } from "../jev.ts";
+import { OPENROUTER_JEV } from "../openrouter.ts";
+import { createModelClient, modelSpec } from "../model.ts";
 import { prepareIntrospection, introspect, parseIntrospectionReport, introspectionConfig, INTROSPECTION_DEFAULT_EXCLUDES, type IntrospectionReport } from "../introspection.ts";
 import { isExcludedBy } from "../files.ts";
+import { standaloneModel } from "./context.ts";
+import { confirmExecution, type Confirm } from "./confirm.ts";
 import type { Options, Log } from "./args.ts";
 
-export async function cmdIntrospect(opts: Options, out: Log, log: Log, client: AskClient | null): Promise<number> {
+export async function cmdIntrospect(opts: Options, out: Log, log: Log, client: AskClient | null, confirm?: Confirm): Promise<number> {
   try {
     if (!["pretty", "json"].includes(opts.format) || opts.paths.length > 1 || opts.replay && opts.paths.length !== 1
       || opts.replay && (opts.dryRun || opts.record) || opts.dryRun && (opts.record || opts.introspectWrite)
-      || opts.output && !opts.introspectWrite && !opts.dryRun || opts.force || opts.config) throw new Error("use introspect [directory] [--write --output <new.yaml>], --dry-run, or --replay <record.json> in the project directory");
+      || opts.output && !opts.introspectWrite && !opts.dryRun || opts.force || (opts.config && opts.config !== "none")) throw new Error("use introspect [directory] [--write --output <new.yaml>], --dry-run, or --replay <record.json> in the project directory");
     const cwd = resolve(opts.replay ? "." : opts.paths[0] ?? ".");
     if (!lstatSync(cwd).isDirectory() || lstatSync(cwd).isSymbolicLink()) throw new Error("introspect requires a regular project directory");
     const target = opts.output ? resolve(opts.output) : resolve(cwd, CONFIG_NAMES[0]);
@@ -45,8 +49,16 @@ export async function cmdIntrospect(opts: Options, out: Log, log: Log, client: A
       try { report = parseIntrospectionReport(JSON.parse(readFileSync(record!, "utf8")), input); }
       catch { log("introspection record is invalid or stale; run introspect --record again"); return 3; }
     } else {
+      const requested = standaloneModel(opts, cwd);
+      const spec = modelSpec(requested, opts.baseUrl);
+      if (spec.provider === "openrouter" && spec.model !== OPENROUTER_JEV) {
+        if (opts.model !== null || requested === null) throw new Error("experimental OpenRouter models are available for lint verdicts; starter selection remains on Jev");
+        opts.model = `openrouter:${OPENROUTER_JEV}`;
+      } else opts.model = requested;
+      const stopped = await confirmExecution(opts, client, out, log, confirm);
+      if (stopped !== null) return stopped;
       const unchanged = () => prepare().snapshotDigest === input.snapshotDigest;
-      report = await introspect(input, { client: client ?? new Jev({ model: opts.model, baseUrl: opts.baseUrl,
+      report = await introspect(input, { client: client ?? createModelClient({ model: opts.model, baseUrl: opts.baseUrl,
         budget: { maxRequests: 32, maxInputTokens: 400000, maxUsd: 0.05, maxMs: 300000 },
         beforeSend: async () => { if (!unchanged()) throw new Error("project inventory or rule catalog changed"); },
       }), snapshotCheck: unchanged });

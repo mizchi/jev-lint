@@ -6,6 +6,20 @@ A lint tool that uses [Jev](https://typesafe.ai/) -- a fast classifier that
 answers a natural-language question with a calibrated probability instead of
 writing text -- to decide what a parser cannot.
 
+## Try it on tracked files
+
+Try it in a Git working tree with Node 24+. Set `OPENROUTER_API_KEY` to your [OpenRouter key](https://openrouter.ai/keys), then run:
+
+```sh
+npx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free
+```
+
+Without a config, the CLI asks once, selects starter rules from `git ls-files`, prints the proposed YAML, then lints a small sample. Both rule selection and lint use the free Decider. Selection sees up to 64 tracked filenames (8 KiB of paths). The check reads up to three eligible files, at most 16 KiB each and 32 KiB combined. It leaves saving the YAML to you. Run `npx -y jev-lint --dry-run` to inspect the inventory without a key.
+
+**For ongoing use and CI, we strongly recommend Jev with `TYPESAFE_API_KEY`.** The shipped thresholds are calibrated on Jev. Set your [TypeSafe key](https://console.typesafe.ai/keys) and run `npx -y jev-lint`. If both keys are exported, unset `OPENROUTER_API_KEY` to use TypeSafe directly. An existing config uses its normal file and rule selection.
+
+## Example finding
+
 This function is wrong, and nothing in your toolchain will say so:
 
 ```ts
@@ -92,7 +106,7 @@ Keep your existing tools for those.
 
 ## Install
 
-Nothing to install to try it; Node 24+ and `npx` are enough. For a project:
+For a project dependency:
 
 ```bash
 npm install --save-dev jev-lint
@@ -100,7 +114,7 @@ npx jev-lint init                      # writes .jev-lint.yaml
 npx jev-lint check src --dry-run       # what it would ask, and the price. No request.
 ```
 
-The key is read from the environment only — `TYPESAFE_API_KEY`, or
+The key is read from the environment only — `OPENROUTER_API_KEY`, `TYPESAFE_API_KEY`, or
 `TYPESAFEAI_API_KEY` — and never from the config file, which belongs in
 version control and a key does not. Everything that does not ask the model
 works without one: `--dry-run` prices a run, `jev-lint rules` lists what
@@ -118,6 +132,32 @@ Jev is the recommended model for normal linting. The shipped rules and cutoffs
 are calibrated for Jev, and it performed best at those cutoffs in the
 [81-suite fixture comparison](docs/clef-evaluation.md#live-results-2026-10-02).
 
+When the CLI detects `OPENROUTER_API_KEY`, it asks before sending data to OpenRouter for
+`typesafe/jev-1.14`, even if a TypeSafe key is also present. Enter cancels the run.
+For CI, set `model: openrouter:typesafe/jev-1.14` in `.jev-lint.yaml`, pass
+`--model openrouter:typesafe/jev-1.14`, or set `JEV_LINT_MODEL=openrouter:typesafe/jev-1.14`.
+For default Jev, `apiKeyEnv: OPENROUTER_API_KEY` in the config also selects OpenRouter.
+Without an explicit selection, a noninteractive run exits 2. Unset the OpenRouter key to use TypeSafe directly.
+
+Experimental OpenRouter decision models are selectable with
+`--model openrouter:<id>` and `OPENROUTER_API_KEY`. Supported IDs are
+`liquid/d1.2-ultra`, `liquid/d1.2`, `baseten/mammoth-1`, and
+`perplexity/pplx-decider-v1.3:free`. In the
+[November comparison](docs/model-comparison-2026-11.md), Perplexity's free model
+matched Jev's aggregate results on 146 naming cases, but selected too many
+starter rules. The free trial therefore offers the model a shortlist of core rules. Other OpenRouter checking models use Jev for starter selection.
+
+```bash
+export OPENROUTER_API_KEY='<your-api-key>'
+npx jev-lint run typescript/fn-name-promises src \
+  --model openrouter:perplexity/pplx-decider-v1.3:free
+```
+
+These are opt-in experiments with existing cutoffs, not replacements validated
+across the catalog. Live OpenRouter cost comes from billed `usage.cost`;
+free requests are paced at 3.2-second intervals and remain subject to daily limits.
+Native models get separate verdict-cache files; use `--cache none` for fresh comparisons.
+
 Cloudflare Clef and Clef-flash are optional experimental models for comparison
 from a repository checkout. `just clef-plan` previews the requests and cost;
 `just clef-eval` runs the comparison with Cloudflare credentials. See the
@@ -128,6 +168,7 @@ the limits of fitting new cutoffs on the same fixtures.
 
 | | |
 | --- | --- |
+| `jev-lint` / `jev-lint auto src` | confirm, then use existing settings or select starter rules and check; `--yes` skips the startup prompt |
 | `jev-lint check src` | judge whole files |
 | `jev-lint review --base main` | only the lines a diff touched — where findings concentrate, at a fraction of the cost |
 | `jev-lint commits --base main` | each commit's message against its diff, and each change against the `AGENTS.md` the repository wrote for itself |

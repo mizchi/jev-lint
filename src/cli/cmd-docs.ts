@@ -1,12 +1,14 @@
 import { readFileSync, writeFileSync, mkdirSync, renameSync, rmSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { randomUUID } from "node:crypto";
-import { Jev } from "../jev.ts";
+import { createModelClient } from "../model.ts";
 import type { AskClient } from "../jev.ts";
 import { prepareDocuments, scanDocuments, parseDocumentManifest, parseDocumentReport, documentExitCode, type DocumentReport } from "../documents.ts";
+import { standaloneModel } from "./context.ts";
+import { confirmExecution, type Confirm } from "./confirm.ts";
 import type { Options, Log } from "./args.ts";
 
-export async function cmdDocs(opts: Options, out: Log, log: Log, client: AskClient | null): Promise<number> {
+export async function cmdDocs(opts: Options, out: Log, log: Log, client: AskClient | null, confirm?: Confirm): Promise<number> {
   try {
     if (opts.format === "sarif" || opts.format === "github") throw new Error("documents support text or JSON output");
     if (opts.paths.length !== (opts.replay ? 1 : 0) || opts.replay && (opts.dryRun || opts.record)) throw new Error("use docs --replay <record.json>, or docs [--dry-run] [--record <path>]");
@@ -25,8 +27,11 @@ export async function cmdDocs(opts: Options, out: Log, log: Log, client: AskClie
       try { report = parseDocumentReport(raw, input); }
       catch { out(JSON.stringify({ schema: "jev-lint-documents-stale-1", status: "stale", snapshotDigest: input.snapshotDigest, qualityVerdict: "UNREVIEWED" })); log("documentation record is invalid or stale; run docs --record with the current sources"); return 3; }
     } else {
+      opts.model = standaloneModel(opts, process.cwd());
+      const stopped = await confirmExecution(opts, client, out, log, confirm);
+      if (stopped !== null) return stopped;
       const unchanged = () => prepareDocuments(loadManifest()).snapshotDigest === input.snapshotDigest;
-      report = await scanDocuments(input, { client: client ?? new Jev({ model: opts.model, baseUrl: opts.baseUrl,
+      report = await scanDocuments(input, { client: client ?? createModelClient({ model: opts.model, baseUrl: opts.baseUrl,
         beforeSend: async () => { if (!unchanged()) throw new Error("documentation snapshot changed"); },
         budget: { maxRequests: 200, maxInputTokens: 400000, maxUsd: 0.05, maxMs: 300000 },
       }), snapshotCheck: unchanged });

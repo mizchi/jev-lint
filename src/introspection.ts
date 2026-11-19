@@ -13,11 +13,11 @@ export * from "./introspection-contract.ts";
 export const INTROSPECTION_DEFAULT_EXCLUDES = Object.freeze(["**/.*", ...[...SKIPPED_DIRECTORIES].map((dir) => `**/${dir}/**`)]);
 
 /** Metadata only: parser libraries, package scripts and source bodies are never executed or sent. */
-export function prepareIntrospection({ cwd = process.cwd(), rules, exclude = [], languages = {}, maxEntries = 10000 }: {
-  cwd?: string; rules: Rule[]; exclude?: string[]; languages?: CustomLanguages; maxEntries?: number;
+export function prepareIntrospection({ cwd = process.cwd(), paths = ["."], rules, exclude = [], languages = {}, omittedTrackedFiles, maxEntries = 10000 }: {
+  cwd?: string; paths?: string[]; rules: Rule[]; exclude?: string[]; languages?: CustomLanguages; omittedTrackedFiles?: number; maxEntries?: number;
 }): IntrospectionInput {
   const exclusions = [...new Set([...INTROSPECTION_DEFAULT_EXCLUDES, ...exclude])].sort();
-  const scope = explainScope({ cwd, paths: ["."], rules, exclude: exclusions, languages, maxEntries });
+  const scope = explainScope({ cwd, paths, rules, exclude: exclusions, languages, maxEntries });
   const issues: IntrospectionInput["issues"] = scope.issues.map((issue) => ({ ...issue }));
   let size = 0;
   const files: IntrospectionInput["files"] = [];
@@ -29,7 +29,7 @@ export function prepareIntrospection({ cwd = process.cwd(), rules, exclude = [],
     if (file.reason === "missing-parser") issues.push({ path: file.path, code: "missing-parser" });
   }
   const manifests: IntrospectionInput["manifests"] = [];
-  for (const file of files.filter((f) => basename(f.path) === "package.json")) {
+  for (const file of files.filter((f) => omittedTrackedFiles === undefined && basename(f.path) === "package.json")) {
     try {
       if (manifests.length >= 10 || lstatSync(resolve(cwd, file.path)).size > 64000) throw new Error();
       const pkg = JSON.parse(readFileSync(resolve(cwd, file.path), "utf8"));
@@ -42,8 +42,10 @@ export function prepareIntrospection({ cwd = process.cwd(), rules, exclude = [],
   while (manifests.length && JSON.stringify({ files, manifests }).length > 59000) {
     const omitted = manifests.pop()!; issues.push({ path: omitted.path, code: "metadata-budget" });
   }
-  let git = false;
-  try { git = !lstatSync(resolve(cwd, ".git")).isSymbolicLink(); } catch { /* A non-git project can still use file rules. */ }
+  let git = omittedTrackedFiles !== undefined;
+  if (!git) {
+    try { git = !lstatSync(resolve(cwd, ".git")).isSymbolicLink(); } catch { /* A non-git project can still use file rules. */ }
+  }
   const visible = new Set(files.filter((f) => f.eligibility === "eligible").map((f) => f.path));
   const candidates: IntrospectionInput["candidates"] = [];
   const catalog = rules.map((rule) => ({ rule, key: rule.languageDir ? `${rule.languageDir}/${rule.id}` : rule.id })).sort((a, b) => a.key.localeCompare(b.key));
@@ -56,8 +58,12 @@ export function prepareIntrospection({ cwd = process.cwd(), rules, exclude = [],
       subject: rule.subject, state: rule.state, severity: rule.severity, eligibleFiles: paths.length, examples: paths.slice(0, 5), command: isGit ? "commits" : "check" });
   }
   if (!candidates.length) issues.push({ path: ".", code: "no-candidates" });
+  if (omittedTrackedFiles !== undefined && candidates.length > 12) {
+    candidates.sort((a, b) => b.eligibleFiles - a.eligibleFiles || a.key.localeCompare(b.key));
+    candidates.length = 12;
+  }
   const body: Omit<IntrospectionInput, "snapshotDigest"> = { schema: "jev-lint-introspection-input-1", catalogDigest: relationDigest(catalog.map(({ rule, key }) => ({ key, hash: ruleTextHash(rule), cutoff: cutoffFor(rule), severity: rule.severity }))),
-    files, manifests, git, exclude: exclusions, candidates, issues };
+    files, manifests, git, exclude: exclusions, candidates, issues, ...(omittedTrackedFiles === undefined ? {} : { omittedTrackedFiles }) };
   return parseIntrospectionInput({ ...body, snapshotDigest: introspectionDigest(body) });
 }
 
@@ -93,7 +99,7 @@ export async function introspect(raw: IntrospectionInput, { client, clientOption
   const before = { ...client.spent }, prepared = questions(input, question);
   let answers: Record<string, unknown> = {}, requestFailed = false;
   if (input.candidates.length) try {
-    const metadata = { files: input.files, manifests: input.manifests, git: input.git, inventoryComplete: !input.issues.length };
+    const metadata = { files: input.files, manifests: input.manifests, git: input.git, inventoryComplete: !input.issues.length && !input.omittedTrackedFiles };
     answers = (await client.askSplitting(metadata, prepared)).answers ?? {};
   } catch { requestFailed = true; }
   const decisions = input.candidates.map((candidate, i) => ({ key: candidate.key, judgment: readIntrospectionJudgment(answers[`q${String(i).padStart(4, "0")}`]) }));
@@ -121,9 +127,9 @@ export function parseIntrospectionReport(raw: unknown, input: IntrospectionInput
   if (!isDeepStrictEqual(r, rebuilt)) return fail();
   return structuredClone(rebuilt);
 }
-export function introspectionConfig(raw: IntrospectionReport, input: IntrospectionInput, options: { question?: ChoiceQuestion } = {}): string {
+export function introspectionConfig(raw: IntrospectionReport, input: IntrospectionInput, options: { question?: ChoiceQuestion; paths?: string[] } = {}): string {
   const report = parseIntrospectionReport(raw, input, options);
   if (report.status !== "complete" || !report.coverage.enabled) throw new Error("a starter requires a complete current recommendation with enabled rules");
-  return "# Suggested by jev-lint introspect; shipped cutoffs and severities are preserved.\n" + stringify({ files: ["."], exclude: input.exclude,
+  return "# Suggested by jev-lint introspect; shipped cutoffs and severities are preserved.\n" + stringify({ files: options.paths ?? ["."], exclude: input.exclude,
     rules: Object.fromEntries(report.decisions.filter((d) => d.judgment?.choice === "enable").map((d) => [d.key, "on"])) });
 }

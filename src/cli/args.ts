@@ -13,9 +13,11 @@ import { DEFAULT_RULE_BATCH_CAP } from "../schedule.ts";
 import { ARMS } from "../state.ts";
 import { GROUP_MODES, SEVERITIES, STATE_ARMS } from "../types.ts";
 import type { GroupMode, Severity, StateArm } from "../types.ts";
+import type { Confirm } from "./confirm.ts";
 
 /** Everything the command line can set. */
 export interface Options {
+  yes: boolean;
   initIntrospect: boolean;
   introspectWrite: boolean;
   documentManifest: string | null;
@@ -97,6 +99,7 @@ export type Log = (s: string) => void;
  */
 export interface Deps {
   client?: AskClient | null;
+  confirm?: Confirm;
   out?: Log;
   log?: Log;
 }
@@ -104,6 +107,8 @@ export interface Deps {
 export const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
+  jev-lint [options]              use the existing config, or print starter YAML and lint a small Git sample
+  jev-lint auto [paths...]        with no config, select rules from git ls-files and lint up to three files
   jev-lint public-api-inputs <new-directory> --api-layout layout.json [--workflows-only | --api-doc binding-guide.md]
   jev-lint public-api-inputs <new-directory> <entry.ts|go-package|Cargo.toml|rustdoc/index.html>... [--api-doc guide.md]
                                   extract public names and signatures for the surface score
@@ -147,6 +152,7 @@ usage:
   jev-lint init --pre-push        write a pre-push hook that judges the commits about to leave
 
 options:
+  -y, --yes               auto: skip startup confirmation (implicit OpenRouter use still requires consent)
       --document-manifest <path> docs: source registry and explicit comparison selectors
       --write             introspect: create a new config from complete recommendations
       --introspect        init: use Jev's starter recommendations; --dry-run only plans
@@ -210,13 +216,14 @@ options:
       --source-sha <sha>   scan: expected HEAD (defaults to the current commit)
       --model-revision <id> scan: immutable model deployment identity for cache reuse
       --max-candidates <n> scan: limit output; omissions make the scan partial
-      --model <id>         Jev model (default: ${DEFAULT_MODEL})
+      --model <id>         Jev model (default: ${DEFAULT_MODEL}), or openrouter:<decision-model-id>
       --force              ignore cached verdicts
       --accept             eval: run, then make that run the baseline
       --accept-last        eval: make the previous run (last.json) the baseline, no requests
       --replay             eval: re-score each baseline at the current cutoffs, no requests
       --compare            eval: the two positional records, scored at their own cutoffs
-      --dry-run            plan and price the run without asking anything
+      --dry-run            plan and price the run without asking anything;
+                           auto without config shows metadata before rule selection
       --show-missing       list subjects that got no verdict
       --summary            the findings counted by rule, and by file densest first
       --exclude <path>     a path under the roots whose files are never judged, or a
@@ -260,11 +267,12 @@ batching:
   scheduler will not overrule. Pin any rule whose cutoff you calibrated.
 
 environment:
-  ${API_KEY_VARS[0]}         required for anything that asks
+  ${API_KEY_VARS[0]}         key for the direct TypeSafe API
   ${API_KEY_VARS[1]}       accepted as a fallback
   ${BASE_URL_VARS[0]}        override the API endpoint
   JEV_LINT_CACHE           verdict cache path ("none" to disable; --cache takes precedence)
   JEV_LINT_MODEL           override the model
+  OPENROUTER_API_KEY       offer OpenRouter for default Jev; select openrouter:<id> explicitly in CI
   JEV_LINT_AST_GREP        path to an ast-grep binary
 
   A flag beats .jev-lint.yaml, and the file beats these defaults. The API key
@@ -274,6 +282,7 @@ environment:
 
 export function parseArgs(argv: string[], { color }: { color: boolean }): Options {
   const opts: Options = {
+    yes: false,
     initIntrospect: false,
     introspectWrite: false,
     documentManifest: null,
@@ -512,6 +521,10 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
       case "--model":
         opts.model = need(i, a);
         i += 1;
+        break;
+      case "-y":
+      case "--yes":
+        opts.yes = true;
         break;
       case "--force":
         opts.force = true;

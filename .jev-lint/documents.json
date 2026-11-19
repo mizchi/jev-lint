@@ -11,6 +11,7 @@
     "docs/internal"
   ],
   "files": {
+    "models": { "path": "docs/model-comparison-2026-11.md", "role": "document" },
     "advisories": { "path": "docs/advisories.md", "role": "document" },
     "facts": {
       "path": "docs/project-facts.md",
@@ -114,6 +115,9 @@
     }
   },
   "comparisons": [
+    {"id": "native-model-selection-contract", "topic": "OpenRouter key precedence, billed usage and Jev starter selection for OpenRouter checks", "mode": "semantic", "reference": {"source": "facts", "heading": "Default model"}, "target": {"source": "models", "heading": "Selecting a model"}},
+    {"id": "automatic-startup-contract", "topic": "Free trial routing, tracked filename selection, starter YAML before bounded lint, and TypeSafe Jev for regular use", "mode": "semantic", "reference": {"source": "facts", "heading": "Initial rule selection"}, "target": {"source": "readme", "heading": "Try it on tracked files"}},
+    {"id": "automatic-startup-translation", "topic": "Free trial command, tracked input limits, starter YAML, and the recommendation for regular use", "mode": "translation", "reference": {"source": "readme", "heading": "Try it on tracked files"}, "target": {"source": "readme-ja", "heading": "Git の追跡ファイルで試す"}},
     {
       "id": "advisory-reporting-contract",
       "topic": "Advisory findings remain visible without blocking CI",

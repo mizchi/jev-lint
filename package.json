@@ -1,6 +1,6 @@
 {
   "name": "jev-lint",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "A natural-language linter: ast-grep picks the code, a sentence you write is the rule, and Jev returns the verdict",
   "keywords": [
     "lint",
@@ -79,6 +79,8 @@
     "docs/advisories.md",
     "rules/README.md",
     "README.md",
+    "README-ja.md",
+    "docs/model-comparison-2026-11.md",
     "SECURITY.md",
     "RULES.md",
     "CHANGELOG.md",

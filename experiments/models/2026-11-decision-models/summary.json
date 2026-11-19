@@ -1,0 +1,371 @@
+{
+  "schema": "jev-native-model-summary-1",
+  "knownEvalUsd": 0.21820058399999998,
+  "costScope": "Three eval stages, including fresh Jev controls once per suite. Excludes probes and CLI/doc checks; unknown 504 charges may be additional.",
+  "rows": [
+    {
+      "stage": "stage-1",
+      "suite": "typescript/fn-name-promises",
+      "role": "control",
+      "model": "jev-1.14.0",
+      "spent": {
+        "calls": 12,
+        "inputTokens": 66354,
+        "usd": 0.002786868,
+        "ms": 705
+      },
+      "subjects": 35
+    },
+    {
+      "stage": "stage-1",
+      "suite": "typescript/fn-name-promises",
+      "role": "candidate",
+      "requested": "liquid/d1.2-ultra",
+      "reported": "liquid/d1.2-ultra-20261116",
+      "pairedSubjects": 35,
+      "expectedSubjects": 35,
+      "complete": true,
+      "tp": 11,
+      "fp": 0,
+      "fn": 0,
+      "tn": 24,
+      "regressions": 0,
+      "improvements": 0,
+      "spent": {
+        "calls": 12,
+        "inputTokens": 61992,
+        "usd": 0.0026036639999999995,
+        "ms": 5019
+      }
+    },
+    {
+      "stage": "stage-1",
+      "suite": "typescript/fn-name-promises",
+      "role": "candidate",
+      "requested": "liquid/d1.2",
+      "reported": "liquid/d1.2-20261116",
+      "pairedSubjects": 35,
+      "expectedSubjects": 35,
+      "complete": true,
+      "tp": 8,
+      "fp": 0,
+      "fn": 3,
+      "tn": 24,
+      "regressions": 3,
+      "improvements": 0,
+      "spent": {
+        "calls": 12,
+        "inputTokens": 61992,
+        "usd": 0.00123984,
+        "ms": 1825
+      }
+    },
+    {
+      "stage": "stage-1",
+      "suite": "typescript/fn-name-promises",
+      "role": "candidate",
+      "requested": "baseten/mammoth-1",
+      "reported": "baseten/mammoth-1-20261021",
+      "pairedSubjects": 35,
+      "expectedSubjects": 35,
+      "complete": true,
+      "tp": 11,
+      "fp": 0,
+      "fn": 0,
+      "tn": 24,
+      "regressions": 0,
+      "improvements": 0,
+      "spent": {
+        "calls": 27,
+        "inputTokens": 85374,
+        "usd": 0.0085374,
+        "ms": 4547
+      }
+    },
+    {
+      "stage": "stage-1",
+      "suite": "typescript/fn-name-promises",
+      "role": "candidate",
+      "requested": "perplexity/pplx-decider-v1.3:free",
+      "reported": "perplexity/pplx-decider-v1.3-20261112",
+      "pairedSubjects": 35,
+      "expectedSubjects": 35,
+      "complete": true,
+      "tp": 11,
+      "fp": 0,
+      "fn": 0,
+      "tn": 24,
+      "regressions": 0,
+      "improvements": 0,
+      "spent": {
+        "calls": 12,
+        "inputTokens": 58167,
+        "usd": 0,
+        "ms": 35750
+      }
+    },
+    {
+      "stage": "stage-2",
+      "suite": "common/comment-is-redundant",
+      "role": "control",
+      "model": "jev-1.14.0",
+      "spent": {
+        "calls": 396,
+        "inputTokens": 591252,
+        "usd": 0.024832584,
+        "ms": 17622
+      },
+      "subjects": 157
+    },
+    {
+      "stage": "stage-2",
+      "suite": "common/comment-is-redundant",
+      "role": "candidate",
+      "requested": "liquid/d1.2-ultra",
+      "reported": "liquid/d1.2-ultra-20261116",
+      "pairedSubjects": 156,
+      "expectedSubjects": 157,
+      "complete": false,
+      "tp": 64,
+      "fp": 0,
+      "fn": 6,
+      "tn": 86,
+      "regressions": 3,
+      "improvements": 0,
+      "spent": {
+        "calls": 395,
+        "inputTokens": 489737,
+        "usd": 0.020568953999999993,
+        "ms": 117333
+      }
+    },
+    {
+      "stage": "stage-2",
+      "suite": "common/comment-is-redundant",
+      "role": "candidate",
+      "requested": "baseten/mammoth-1",
+      "reported": "baseten/mammoth-1-20261021",
+      "pairedSubjects": 157,
+      "expectedSubjects": 157,
+      "complete": true,
+      "tp": 66,
+      "fp": 0,
+      "fn": 5,
+      "tn": 86,
+      "regressions": 3,
+      "improvements": 1,
+      "spent": {
+        "calls": 399,
+        "inputTokens": 498549,
+        "usd": 0.04985490000000001,
+        "ms": 47224
+      }
+    },
+    {
+      "stage": "stage-2",
+      "suite": "rust/fn-name-promises",
+      "role": "control",
+      "model": "jev-1.14.0",
+      "spent": {
+        "calls": 12,
+        "inputTokens": 72663,
+        "usd": 0.0030518460000000004,
+        "ms": 691
+      },
+      "subjects": 39
+    },
+    {
+      "stage": "stage-2",
+      "suite": "rust/fn-name-promises",
+      "role": "candidate",
+      "requested": "liquid/d1.2-ultra",
+      "reported": "liquid/d1.2-ultra-20261116",
+      "pairedSubjects": 39,
+      "expectedSubjects": 39,
+      "complete": true,
+      "tp": 10,
+      "fp": 0,
+      "fn": 0,
+      "tn": 29,
+      "regressions": 0,
+      "improvements": 1,
+      "spent": {
+        "calls": 12,
+        "inputTokens": 68700,
+        "usd": 0.0028853999999999998,
+        "ms": 2001
+      }
+    },
+    {
+      "stage": "stage-2",
+      "suite": "rust/fn-name-promises",
+      "role": "candidate",
+      "requested": "baseten/mammoth-1",
+      "reported": "baseten/mammoth-1-20261021",
+      "pairedSubjects": 39,
+      "expectedSubjects": 39,
+      "complete": true,
+      "tp": 10,
+      "fp": 1,
+      "fn": 0,
+      "tn": 28,
+      "regressions": 1,
+      "improvements": 1,
+      "spent": {
+        "calls": 30,
+        "inputTokens": 95403,
+        "usd": 0.009540299999999998,
+        "ms": 5228
+      }
+    },
+    {
+      "stage": "stage-2",
+      "suite": "text/rule-cases-test-the-claim",
+      "role": "control",
+      "model": "jev-1.14.0",
+      "spent": {
+        "calls": 33,
+        "inputTokens": 42045,
+        "usd": 0.00176589,
+        "ms": 1678
+      },
+      "subjects": 11
+    },
+    {
+      "stage": "stage-2",
+      "suite": "text/rule-cases-test-the-claim",
+      "role": "candidate",
+      "requested": "liquid/d1.2-ultra",
+      "reported": "liquid/d1.2-ultra-20261116",
+      "pairedSubjects": 11,
+      "expectedSubjects": 11,
+      "complete": true,
+      "tp": 5,
+      "fp": 0,
+      "fn": 0,
+      "tn": 6,
+      "regressions": 0,
+      "improvements": 1,
+      "spent": {
+        "calls": 33,
+        "inputTokens": 35091,
+        "usd": 0.0014738219999999998,
+        "ms": 4524
+      }
+    },
+    {
+      "stage": "stage-2",
+      "suite": "text/rule-cases-test-the-claim",
+      "role": "candidate",
+      "requested": "baseten/mammoth-1",
+      "reported": "baseten/mammoth-1-20261021",
+      "pairedSubjects": 11,
+      "expectedSubjects": 11,
+      "complete": true,
+      "tp": 5,
+      "fp": 0,
+      "fn": 0,
+      "tn": 6,
+      "regressions": 0,
+      "improvements": 1,
+      "spent": {
+        "calls": 33,
+        "inputTokens": 35706,
+        "usd": 0.0035706,
+        "ms": 4057
+      }
+    },
+    {
+      "stage": "stage-2",
+      "suite": "typescript/test-name-verifies-claim",
+      "role": "control",
+      "model": "jev-1.14.0",
+      "spent": {
+        "calls": 30,
+        "inputTokens": 291321,
+        "usd": 0.012235482,
+        "ms": 1505
+      },
+      "subjects": 111
+    },
+    {
+      "stage": "stage-2",
+      "suite": "typescript/test-name-verifies-claim",
+      "role": "candidate",
+      "requested": "liquid/d1.2-ultra",
+      "reported": "liquid/d1.2-ultra-20261116",
+      "pairedSubjects": 111,
+      "expectedSubjects": 111,
+      "complete": true,
+      "tp": 42,
+      "fp": 1,
+      "fn": 1,
+      "tn": 67,
+      "regressions": 1,
+      "improvements": 0,
+      "spent": {
+        "calls": 33,
+        "inputTokens": 288906,
+        "usd": 0.012134052,
+        "ms": 6952
+      }
+    },
+    {
+      "stage": "stage-2",
+      "suite": "typescript/test-name-verifies-claim",
+      "role": "candidate",
+      "requested": "baseten/mammoth-1",
+      "reported": "baseten/mammoth-1-20261021",
+      "pairedSubjects": 111,
+      "expectedSubjects": 111,
+      "complete": true,
+      "tp": 42,
+      "fp": 0,
+      "fn": 1,
+      "tn": 68,
+      "regressions": 0,
+      "improvements": 0,
+      "spent": {
+        "calls": 138,
+        "inputTokens": 488835,
+        "usd": 0.048883499999999996,
+        "ms": 22242
+      }
+    },
+    {
+      "stage": "stage-3-free",
+      "suite": "typescript/test-name-verifies-claim",
+      "role": "control",
+      "model": "jev-1.14.0",
+      "spent": {
+        "calls": 30,
+        "inputTokens": 291321,
+        "usd": 0.012235482,
+        "ms": 1682
+      },
+      "subjects": 111
+    },
+    {
+      "stage": "stage-3-free",
+      "suite": "typescript/test-name-verifies-claim",
+      "role": "candidate",
+      "requested": "perplexity/pplx-decider-v1.3:free",
+      "reported": "perplexity/pplx-decider-v1.3-20261112",
+      "pairedSubjects": 111,
+      "expectedSubjects": 111,
+      "complete": true,
+      "tp": 41,
+      "fp": 0,
+      "fn": 2,
+      "tn": 68,
+      "regressions": 1,
+      "improvements": 1,
+      "spent": {
+        "calls": 30,
+        "inputTokens": 258939,
+        "usd": 0,
+        "ms": 93327
+      }
+    }
+  ]
+}
