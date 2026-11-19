@@ -10,3 +10,9 @@ commit(mapPixels(open(bytes)));
 Reviewed import paths and their exports (other paths were not inspected):
 canvas: commit, mapPixels, open
 canvas/filters: blur
+
+Import lookup for the documented example:
+Every checked named import is listed at its documented entry.
+open from canvas: exported here
+mapPixels from canvas: exported here
+commit from canvas: exported here

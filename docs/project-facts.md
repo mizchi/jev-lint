@@ -8,7 +8,7 @@ The package is `jev-lint` at version `0.8.0`.
 
 ## Rule catalog
 
-The current catalog contains 121 rules across 12 language directories, with 68 distinct rule IDs. 101 rules reach precision and recall 1.00 on their own accepted fixtures. There are 765 labelled defects and 1229 labelled cleans. These are fixture measurements, not production accuracy.
+The current catalog contains 121 rules across 12 language directories, with 68 distinct rule IDs. 101 rules reach precision and recall 1.00 on their own accepted fixtures. There are 766 labelled defects and 1230 labelled cleans. These are fixture measurements, not production accuracy.
 
 - git: 4 rules
 - go: 9 rules

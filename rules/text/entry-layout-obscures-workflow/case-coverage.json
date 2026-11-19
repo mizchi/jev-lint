@@ -70,6 +70,16 @@
       "file": "fixtures/migration-overview.apiworkflow",
       "kind": "false-negative-risk",
       "reason": "Mentioning a compatibility package does not correct the explicit instruction to import unpack from the facade."
+    },
+    {
+      "file": "fixtures/mixed-clients.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The guide imports the TypeScript functions from valid entries. The adjacent Rust and CLI examples describe other clients."
+    },
+    {
+      "file": "fixtures/mixed-clients-wrong-entry.apiworkflow",
+      "kind": "false-negative-risk",
+      "reason": "The required parseFiniteModel import now points to host, which does not export it."
     }
   ],
   "independencePairs": [

@@ -8,6 +8,7 @@ interface Inventory {
 }
 
 interface Surface {
+  language: "go" | "typescript";
   inventory: Inventory;
   entries: { name: string; row: string; signature: string; doc: string; typeOnly?: boolean; alias?: string }[];
   label: string;

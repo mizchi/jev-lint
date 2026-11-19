@@ -1,0 +1,5 @@
+default: clean
+fixtures/markup-guide.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "The named library operations are exported by the markup barrel shown in the guide."}
+fixtures/markup-wrong-import.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The design-token entry cannot supply the required introspection and verification operations. The library barrel can."}

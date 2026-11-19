@@ -42,10 +42,17 @@ export async function publicApiLayoutInputs(out: string, manifest: string, binar
       (binding.alias ? " (alias of " + binding.alias + ")" : "")).sort();
     return `${entries[i].publicPath}: ${names.join(", ") || "(no exported names)"}`;
   }).join("\n");
+  const tsEntries = new Map<string, Map<string, boolean>>();
+  for (const [i, surface] of surfaces.entries()) {
+    if (surface.language === "typescript") {
+      tsEntries.set(entries[i].publicPath, new Map(surface.entries.map(binding => [binding.name, !!binding.typeOnly])));
+    }
+  }
+  const lookup = tsEntries.size ? (await import("./guide-imports.ts")).guideImportLookup : undefined;
   const workflows = guides.map(({ guide, heading, startLine, endLine, quote }, index) => {
     const title = Array.from(heading ?? basename(guide)).slice(0, 48).join("").replace(/[^\p{L}\p{N}_-]+/gu, "-");
     const file = `workflow-${index + 1}-${title}.apiworkflow`;
-    const text = `Guide: ${guide}:${startLine}-${endLine}\n${quote}\n\nReviewed import paths and their exports (other paths were not inspected):\n${entryMap}\n`;
+    const text = `Guide: ${guide}:${startLine}-${endLine}\n${quote}\n\nReviewed import paths and their exports (other paths were not inspected):\n${entryMap}\n` + (lookup?.(quote, tsEntries) ?? "");
     // A missing export is meaningful only when the model receives the entire selected map.
     if (text.length > MAX_BLOCK_CHARS) throw new Error(`${file} exceeds the text budget; narrow the guide section or selected entry map`);
     return { file, guide, heading, startLine, endLine, text };

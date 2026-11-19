@@ -27,3 +27,7 @@ fixtures/migration-index.apiworkflow:
   - {"line": 1, "window": 0, "label": "clean", "reason": "The handoff is in the guide\u2019s entry reference rather than its prose."}
 fixtures/migration-overview.apiworkflow:
   - {"line": 1, "window": 0, "label": "bad", "reason": "Mentioning a compatibility package does not correct the explicit instruction to import unpack from the facade."}
+fixtures/mixed-clients.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The guide imports the TypeScript functions from valid entries. The adjacent Rust and CLI examples describe other clients."}
+fixtures/mixed-clients-wrong-entry.apiworkflow:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The required parseFiniteModel import now points to host, which does not export it."}

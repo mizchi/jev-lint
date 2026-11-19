@@ -50,7 +50,7 @@ export JEV_LINT_MODEL=jev-1.14.0 TYPESAFE_BASE_URL=https://api.typesafe.ai
 
 ## Follow-up instructions
 
-The two reported crater surfaces, two surface fixtures, one defect fixture for each binding rule and the workflow with an undocumented import change received the shipped next check and a generic review instruction. Across three passes of the existing actionability rubric, mean scores were 0.85–0.95 for the specific instruction and 0.02–0.05 for the generic control. These judgments measure the instruction's specificity. A consumer test is still needed to determine whether narrowing the API preserves its contract.
+The two reported crater surfaces, two surface fixtures, one defect fixture for each binding rule and the workflow with an undocumented import change received the shipped next check and a generic review instruction. Across three passes of the existing actionability rubric, mean scores were 0.85–0.95 for the specific instruction and 0.03–0.05 for the generic control. These judgments measure the instruction's specificity. A consumer test is still needed to determine whether narrowing the API preserves its contract.
 
 ```sh
 node experiments/advisory/public-api/hints.mjs "$out/surfaces" "$out/hints"
@@ -78,9 +78,21 @@ node src/cli.ts replay experiments/advisory/public-api/binding-scores.json --sum
 
 ## Entry layout and guide workflows
 
-The workflow baseline has fourteen labelled guides. Its five fresh passes classified all seven misplaced operations and all seven controls correctly at the fitted cutoff of 0.39. The collector test reproduces the root and moved fixtures from two actual TypeScript barrels. It also reproduces the Go receiver-method control. Other cases cover a type-only export, a destination provided in a migration table, optional steps and an unreviewed subpath.
+The original rule misclassified the pinned idealis TS/Rust guide at a 0.39 cutoff. Across five fresh passes on the original evidence, the correct guide averaged 0.44, while a copy importing `parseFiniteModel` from the wrong entry averaged 0.47. Their observed ranges overlapped. The original guide and that one-line mutation now accompany the fourteen earlier fixtures.
 
-A separate run used three sections of idealis's guide and four published TS import paths at revision `d147550c80d814e23f5d76f8ded25e30bf190da4`. The mixed TS/Rust section was flagged on three of five passes (mean 0.392). Inspection found that the three portable functions and the finite-model parser are exported at the precise paths shown, and the Wasm asset has its own package export. This is a false positive for the documented TypeScript import route. The model-artifact and host sections stayed below the cutoff.
+The collector supplies named-import lookups from the TypeScript entry inventory. The rule asks for a required operation with another reviewed provider. A nine-pass fit on sixteen labelled guides placed the cutoff at 0.68. Across those passes clean scores topped out at 0.60 and defects ranged from 0.76 to 0.98. A fresh seven-pass baseline classified all eight defects and eight controls correctly on every pass. The idealis pair is part of calibration; the three original guide sections also stayed below cutoff in a separate seven-pass run.
+
+The first external check used the core and capture guides in vlmkit. It revealed that the core README's `diffPng` was missing from **all four** reviewed entries. Manual inspection corrected the initial assumption that the barrel supplied it. The guide has a stale import, but a switch to another reviewed entry cannot fix it. Its other named imports resolve. Making the missing supplier explicit in the lookup lowered this guide's mean from 0.70 to 0.59. The unchanged guide and its mutation differ only in the import source; the mutation also misplaces `VrtDiff`, a type exported by the barrel.
+
+| vlmkit guide | Original mean | Changed import mean | Role |
+| --- | ---: | ---: | --- |
+| Core, Usage | 0.586 | 0.760 | Regression after inspecting the first external run |
+| Capture, Usage | 0.231 | 0.920 | Regression from the same run |
+| Markup, As a library | 0.033 | 0.973 | Reserved until after the collector and cutoff were fixed |
+
+Each result represents seven fresh passes. All 42 final decisions matched the labels. Only the last pair remained held out. The wrong imports are controlled mutations, and this small sample cannot estimate precision on other libraries. The historical passes used for the before/after comparison and cutoff are in `workflow-iterations.json`.
+
+Reproduce the idealis input from its pinned checkout:
 
 ```sh
 tool=$PWD
@@ -92,3 +104,23 @@ node src/cli.ts public-api-inputs "$out/review" --api-layout "$out/source/layout
 (cd "$out/review" && shasum -a 256 -c "$tool/experiments/advisory/public-api/workflows.sha256")
 node src/cli.ts replay experiments/advisory/public-api/workflow-scores.json --no-config --summary
 ```
+
+To regenerate the vlmkit inputs from a pinned snapshot, verify their digests and replay the recorded verdicts without an API call:
+
+```sh
+tool=$PWD
+out=$(mktemp -d)
+mkdir "$out/source"
+git -C ../vlmkit archive 468888c59ff07097892993b1e304882271a4a861 packages/vlmkit-core packages/vlmkit-capture packages/vlmkit-markup tsconfig.json | tar -x -C "$out/source"
+for group in core-capture markup; do
+  record=vlmkit
+  if [ "$group" = markup ]; then record=markup; fi
+  data="$tool/experiments/advisory/public-api"
+  node "$data/vlmkit-workflows.mjs" "$out/source" "$out/$group" "$group"
+  (cd "$out/$group/suite/fixtures" && shasum -a 256 -c "$data/$record-workflows.sha256")
+  cp "$data/$record-workflow-scores.json" "$out/$group/suite/baseline.json"
+  (cd "$out/$group" && node "$tool/src/cli.ts" eval suite --replay)
+done
+```
+
+For fresh judgments run `node "$tool/src/cli.ts" eval suite --repeat 7` from either generated group directory with `TYPESAFE_API_KEY` set and `JEV_LINT_MODEL=jev-1.14.0`.

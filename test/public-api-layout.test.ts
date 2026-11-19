@@ -80,7 +80,11 @@ await testAsync("public-api-layout distinguishes runtime constructors from type-
     writeFileSync(join(dir, "runtime.ts"), "export class Session {}");
     writeFileSync(join(dir, "index.ts"), "export type {Session} from './runtime.js';");
     writeFileSync(join(dir, "star.ts"), "export type * from './runtime.js';");
-    writeFileSync(join(dir, "guide.md"), "Instantiate Session from store.");
+    writeFileSync(join(dir, "guide.md"), [
+      "Instantiate Session from store.", "~~~~md", "```ts", 'import { fake } from "store";', "```", "~~~~",
+      "~~~ts", 'import { Session as Local, missing } from "store";', 'import type { Session } from "store/runtime";',
+      'import { external } from "elsewhere";', "~~~",
+    ].join("\n"));
     const manifest = join(dir, "layout.json");
     writeFileSync(manifest, JSON.stringify({entries:{store:"index.ts", "store/star":"star.ts", "store/runtime":"runtime.ts"}, workflows:[{guide:"guide.md"}]}));
     const out = join(dir, "out");
@@ -90,6 +94,11 @@ await testAsync("public-api-layout distinguishes runtime constructors from type-
     assert.match(body, /^store: type Session$/m);
     assert.match(body, /^store\/star: type Session$/m);
     assert.match(body, /^store\/runtime: Session$/m);
+    const lookup = body.split("Import lookup for the documented example:")[1] ?? "";
+    assert.match(lookup, /Session from store: exported here as type only/);
+    assert.match(lookup, /missing from store: absent from all reviewed entries/);
+    assert.match(lookup, /Session from store\/runtime: exported here/);
+    assert.doesNotMatch(lookup, /fake|external|Local/);
   } finally { rmSync(dir, {recursive:true, force:true}); }
 });
 

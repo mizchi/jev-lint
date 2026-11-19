@@ -29,6 +29,7 @@ const files = [
   "scan-contract",
   "public-api",
   "public-api-layout",
+  "guide-imports",
   "review-artifact",
   "acceptance",
   "sarif",

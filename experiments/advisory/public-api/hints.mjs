@@ -1,5 +1,6 @@
 // Pair the reported investigation with a generic control on the same evidence.
 import assert from 'node:assert/strict'
+import { parse } from 'yaml'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { loadRules, ruleTextHash } from '../../../src/rules.ts'
@@ -50,6 +51,25 @@ for (const row of workflows.answers) {
 }
 cases.push([workflow.id, join(workflowDir, 'fixtures/moved.apiworkflow'), workflow])
 if (surfaces === '--verify') {
+  for (const [group, prefix] of [['core-capture', 'vlmkit'], ['markup', 'markup']]) {
+    const record = JSON.parse(readFileSync(join(here, prefix + '-workflow-scores.json'), 'utf8'))
+    assert.equal(record.rules[0].draft, ruleTextHash(workflow))
+    assert.equal(record.rules[0].at, workflow.at)
+    const { default: defaultLabel, ...labels } = parse(readFileSync(join(here, group + '-expect.yml'), 'utf8'))
+    assert.equal(defaultLabel, 'clean')
+    const files = Object.keys(labels).sort()
+    const digests = readFileSync(join(here, prefix + '-workflows.sha256'), 'utf8').trim().split('\n')
+    assert.deepEqual(digests.map(line => 'fixtures/' + line.slice(66)).sort(), files)
+    assert.equal(record.passes.length, 7)
+    for (const pass of record.passes) {
+      assert.deepEqual(pass.map(a => a.file).sort(), files.map(file => 'suite/' + file))
+      for (const answer of pass) {
+        assert.equal(answer.rule, workflow.id)
+        assert.ok(Number.isFinite(answer.value))
+        assert.equal(answer.value >= workflow.at, labels[answer.file.slice('suite/'.length)][0].label === 'bad', answer.file)
+      }
+    }
+  }
   const hints = JSON.parse(readFileSync(join(here, 'hint-scores.json'), 'utf8'))
   const [judge] = loadRules(join(here, '../hint-review.yml')).rules
   assert.equal(hints.rules[0].draft, ruleTextHash(judge))

@@ -34,7 +34,8 @@ export async function collectPublicApi(targets, binary) {
   for (const target of targets) {
     const path = resolve(target)
     let surface
-    if (statSync(path).isDirectory()) {
+    const isGo = statSync(path).isDirectory()
+    if (isGo) {
       // go list selects the active platform and build tags without loading dependencies.
       const list = spawnSync('go', ['list', '-find', '-json', '.'], {
         cwd: path, encoding: 'utf8', env: { ...process.env, GO111MODULE: 'off', GOWORK: 'off', GOTOOLCHAIN: 'local' },
@@ -58,7 +59,7 @@ export async function collectPublicApi(targets, binary) {
       aliases: entries.filter(e => e.alias).length, documented: entries.filter(e => !e.alias && e.doc).length,
       bindings: join('bindings', stem),
     }
-    outputs.push({ inventory, entries, label: surface.label, packageDoc: surface.packageDoc, body })
+    outputs.push({ inventory, entries, language: isGo ? 'go' : 'typescript', label: surface.label, packageDoc: surface.packageDoc, body })
   }
   return outputs
 }
