@@ -1,0 +1,162 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T08:46:40.004Z",
+  "model": "jev-1.14.0",
+  "suite": "doctests",
+  "rules": [
+    {
+      "id": "entry-layout-obscures-workflow",
+      "draft": "fa510dace70d",
+      "at": 0.68
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 33,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/aho_corasick-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 39,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 14,
+    "inputTokens": 17199,
+    "usd": 0.000722358,
+    "ms": 264
+  }
+}

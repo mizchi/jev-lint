@@ -1,0 +1,540 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T08:46:40.524Z",
+  "model": "jev-1.14.0",
+  "suite": "doctests",
+  "rules": [
+    {
+      "id": "entry-layout-obscures-workflow",
+      "draft": "fa510dace70d",
+      "at": 0.68
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-original-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 25,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/base64-wrong-tagged.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/memchr-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 56,
+    "inputTokens": 62440,
+    "usd": 0.0026224800000000004,
+    "ms": 402
+  }
+}

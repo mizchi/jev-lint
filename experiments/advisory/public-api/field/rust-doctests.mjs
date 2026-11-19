@@ -7,10 +7,14 @@ import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const [cache, output, format = 'rustdoc', group = 'diagnosis'] = process.argv.slice(2)
-if (!cache || !output || !['rustdoc', 'markdown'].includes(format) || !['diagnosis', 'holdout'].includes(group)) throw new Error('usage: node rust-doctests.mjs <directory of .crate archives> <new directory> [rustdoc|markdown] [diagnosis|holdout]')
+if (!cache || !output || !['rustdoc', 'markdown'].includes(format) || !['diagnosis', 'holdout', 'grouped'].includes(group)) throw new Error('usage: node rust-doctests.mjs <directory of .crate archives> <new directory> [rustdoc|markdown] [diagnosis|holdout|grouped]')
 const out = resolve(output)
 const tool = fileURLToPath(new URL('../../../../', import.meta.url))
-const cases = group === 'holdout' ? [
+const cases = group === 'grouped' ? [
+  { name: 'aho_corasick', error: 'E0603', archive: 'aho-corasick', version: '1.1.3', edition: '2021', sha: '8e60d3430d3a69478ad0993f19238d2df97c507009a52b3c10addcd7f6bcb916',
+    start: '# Example: basic searching', end: '# Example: case insensitivity',
+    modules: ['', 'dfa'], before: 'use aho_corasick::{AhoCorasick, PatternID};', after: 'use aho_corasick::{AhoCorasick, dfa::PatternID};' },
+] : group === 'holdout' ? [
   { name: 'crossbeam_utils', archive: 'crossbeam-utils', version: '0.8.21', edition: '2021', sha: 'd0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28',
     error: 'E0603', guide: 'src/sync/wait_group.rs', start: '/// # Examples', end: 'pub struct WaitGroup',
     modules: ['sync', 'thread'], before: 'use crossbeam_utils::sync::WaitGroup;', after: 'use crossbeam_utils::thread::WaitGroup;' },
@@ -59,7 +63,7 @@ for (const c of cases) {
       assert.notEqual(result.status, 0)
       assert.ok(result.stderr.includes('error[' + (c.error ?? 'E0432') + ']'), result.stderr)
     }
-    for (const fence of group === 'holdout' ? ['implicit'] : ['implicit', 'tagged']) {
+    for (const fence of group === 'diagnosis' ? ['implicit', 'tagged'] : ['implicit']) {
       const key = [c.name, side, fence].join('-')
       const dir = join(out, key)
       mkdirSync(dir)

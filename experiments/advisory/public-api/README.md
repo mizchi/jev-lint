@@ -201,7 +201,7 @@ A full review of the original two Rust modules produced two surfaces, 15 binding
 
 The shipped suite separately pairs a working Rust decoder call with the same call imported from the wrong module. All 23 labelled fixtures (13 clean, ten defects) matched their labels on all seven passes. The model, rubric and cutoff are unchanged.
 
-To reproduce the field pair, start from the jev-lint checkout with the published `bytes-1.12.1.crate` archive. The script verifies the archive digest and uses stable rustdoc. Use rustdoc 1.98.0 to reproduce the original toolchain.
+To reproduce this historical field pair, start from the jev-lint checkout at `2210d60` with the published `bytes-1.12.1.crate` archive. The script verifies the archive digest and uses stable rustdoc. Use rustdoc 1.98.0 to reproduce the original toolchain.
 
 ```sh
 tool=$PWD
@@ -230,7 +230,7 @@ Two new published examples use untagged code fences, the normal Rust default in 
 
 All originals scored below cutoff in every condition. Adding the explicit workflow format fixes the untagged evidence gap. After freezing that change, we tried the original untagged WaitGroup example from crossbeam-utils 0.8.21 and changed `sync::WaitGroup` to `thread::WaitGroup`. The latter name exists privately, so rustc rejects the consumer import with E0603. Rustdoc mode scored the original 0.05 in all seven passes and flagged the edit in all seven (0.88–0.93). This is one independent pair. The memchr and base64 pairs were used to diagnose the collector. [Markdown judgments](field/rust-repeat/markdown-scores.json) · [Rustdoc judgments](field/rust-repeat/rustdoc-scores.json) · [Independent pair](field/rust-repeat/holdout-scores.json)
 
-For reproduction, use Rust 1.98.0 and a directory containing the published archives named `memchr-2.7.6.crate`, `base64-0.22.1.crate` and `crossbeam-utils-0.8.21.crate`. The generator checks each archive digest and the compiler result for each label before creating the evaluation inputs.
+To replay this fence comparison, use jev-lint at `2210d60`, Rust 1.98.0 and a directory containing the published archives named `memchr-2.7.6.crate`, `base64-0.22.1.crate` and `crossbeam-utils-0.8.21.crate`. The generator checks each archive digest and the compiler result for each label before creating the evaluation inputs.
 
 ```sh
 tool=$PWD
@@ -248,3 +248,36 @@ done
 ```
 
 The Markdown record reproduces the two misses. For the bytes batches, use the existing bytes reproduction above, substituting each `rust-repeat/bytes-{1,2,3}.json` record for the baseline.
+
+#### Grouped Rust imports
+
+The previous bytes runs occasionally missed a misplaced import inside a group. We kept the rule, model (`jev-1.14.0`) and cutoff (0.68) fixed. Before tuning, we set a stopping condition for this pair. Three consecutive batches of seven had to classify both inputs correctly on every pass, with every score at least 0.10 from the cutoff. That condition measures repeatability on this example. The number of independent guide examples is much smaller than the number of judgments.
+
+The first implemented variant retained all successful sibling lookups. It classified the pair correctly on 21 passes but the edited example went as low as 0.72. The final collector quotes the grouped declaration, expands the misplaced member to a standalone import, and shows where rustdoc lists that name. It omits redundant success rows in the affected group. The clean bytes input kept its previous digest. [Development variants and scores](field/rust-convergence/development.json)
+
+| Published example | Passes per version | Original scores | One-path edit scores |
+| --- | ---: | ---: | ---: |
+| bytes 1.12.1, batch 1 | 7 | 0.06–0.07 | 0.79–0.84 |
+| bytes 1.12.1, batch 2 | 7 | 0.06–0.08 | 0.79–0.84 |
+| bytes 1.12.1, batch 3 | 7 | 0.07–0.08 | 0.82–0.86 |
+| aho-corasick 1.1.3, held out | 7 | 0.03–0.04 | 0.92–0.95 |
+
+We selected aho-corasick’s basic searching example before tuning and scored it after freezing the collector. The published import brings `PatternID` in from the crate root. Moving it to `dfa::PatternID` makes rustc report E0603. We also regenerated the memchr, base64 and crossbeam-utils inputs and reran the shipped 23-case suite. Every individual judgment matched its label. [Recorded judgments and fixture digests](field/rust-convergence)
+
+To reproduce with Rust 1.98.0, set `archives` to a directory containing the five pinned crate archives named above. The doctest generator verifies the archives and compiler labels. Each eval baseline contains the raw scores from all seven passes. The check below reads each individual score and enforces the bytes margin. The general eval replay also checks sensitivity to small threshold changes and reports the memchr/base64 diagnosis corpus as blind because both classes are far from the cutoff. To obtain new judgments, run `jev-lint eval bytes --repeat 7` or `jev-lint eval doctests --repeat 7` from the generated suite’s parent and pass its `last.json` to the same check.
+
+```sh
+tool=$PWD
+data="$tool/experiments/advisory/public-api/field"
+records="$data/rust-convergence"
+out=$(mktemp -d)
+bash "$data/bytes.sh" "$archives/bytes-1.12.1.crate" "$out/pair"
+(cd "$out/pair" && shasum -a 256 -c "$records/bytes.sha256")
+node "$records/check.mjs" "$out/pair/bytes" "$records"/bytes-*.json
+for group in grouped diagnosis holdout; do
+  node "$data/rust-doctests.mjs" "$archives" "$out/$group" rustdoc "$group"
+  (cd "$out/$group" && shasum -a 256 -c "$records/$group.sha256")
+  node "$records/check.mjs" "$out/$group/doctests" "$records/$group-scores.json"
+done
+node "$records/check.mjs" "$tool/rules/text/entry-layout-obscures-workflow" "$records/shipped-scores.json"
+```

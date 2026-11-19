@@ -1,0 +1,227 @@
+[
+  {
+    "name": "pilot",
+    "recorded": "2026-11-19T08:41:29.758Z",
+    "evidence": "Declaration checked: `use bytes::{Bytes, buf::BytesMut, Buf, BufMut};`\nResolution of this setup step: 3 names resolve at the documented paths; 1 named import does not. A Rust use tree requires every named import to resolve, even when another member of the same declaration is available.\nTo reproduce this use declaration against the reviewed modules, the caller must change the import for BytesMut from bytes::buf to bytes. Documented: `use bytes::buf::BytesMut;`. Available: `use bytes::BytesMut;`.\nRust resolves every named use import before compiling the example, including imports of structs and traits. Availability is scoped to the supplied rustdoc build.\nBytes from bytes: exported here\nBytesMut from bytes::buf: absent here; exported by bytes\nBuf from bytes: exported here\nBufMut from bytes: exported here\n",
+    "scores": {
+      "original": [
+        0.06,
+        0.06,
+        0.07,
+        0.06,
+        0.06,
+        0.06,
+        0.06
+      ],
+      "wrong": [
+        0.61,
+        0.65,
+        0.62,
+        0.66,
+        0.68,
+        0.6,
+        0.66
+      ]
+    }
+  },
+  {
+    "name": "minimal",
+    "recorded": "2026-11-19T08:41:54.717Z",
+    "evidence": "To reproduce this use declaration against the reviewed modules, the caller must change the import for BytesMut from bytes::buf to bytes. Documented: `use bytes::buf::BytesMut;`. Available: `use bytes::BytesMut;`.\nRust resolves every named use import before compiling the example, including imports of structs and traits. Availability is scoped to the supplied rustdoc build.\nBytes from bytes: exported here\nBytesMut from bytes::buf: absent here; exported by bytes\nBuf from bytes: exported here\nBufMut from bytes: exported here\n\nMinimal edit to the published guide required by the selected API:\n- use bytes::{Bytes, buf::BytesMut, Buf, BufMut};\n+ use bytes::{Bytes, BytesMut, Buf, BufMut};\n",
+    "scores": {
+      "original": [
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.07,
+        0.06
+      ],
+      "wrong": [
+        0.74,
+        0.71,
+        0.71,
+        0.66,
+        0.64,
+        0.67,
+        0.7
+      ]
+    }
+  },
+  {
+    "name": "trace",
+    "recorded": "2026-11-19T08:42:33.688Z",
+    "evidence": "Public import resolution for the caller's setup statement, in source order:\n1. `use bytes::Bytes;` resolves.\n2. `use bytes::buf::BytesMut;` cannot resolve in the documented API: bytes::buf has no BytesMut. This stops setup before the caller can use the library.\n3. `use bytes::Buf;` resolves.\n4. `use bytes::BufMut;` resolves.\nRequired path change at step 2: bytes::buf \u2192 bytes.\n",
+    "scores": {
+      "original": [
+        0.07,
+        0.07,
+        0.06,
+        0.07,
+        0.06,
+        0.07,
+        0.07
+      ],
+      "wrong": [
+        0.79,
+        0.78,
+        0.73,
+        0.81,
+        0.75,
+        0.77,
+        0.8
+      ]
+    }
+  },
+  {
+    "name": "steps",
+    "recorded": "2026-11-19T08:41:54.384Z",
+    "evidence": "To reproduce this use declaration against the reviewed modules, the caller must change the import for BytesMut from bytes::buf to bytes. Documented: `use bytes::buf::BytesMut;`. Available: `use bytes::BytesMut;`.\nRust resolves every named use import before compiling the example, including imports of structs and traits. Availability is scoped to the supplied rustdoc build.\nBytes from bytes: exported here\nBytesMut from bytes::buf: absent here; exported by bytes\nBuf from bytes: exported here\nBufMut from bytes: exported here\n\nPublic import resolution for the caller's setup statement, in source order:\n1. `use bytes::Bytes;` resolves.\n2. `use bytes::buf::BytesMut;` cannot resolve in the documented API: bytes::buf has no BytesMut. This stops setup before the caller can use the library.\n3. `use bytes::Buf;` resolves.\n4. `use bytes::BufMut;` resolves.\nRequired path change at step 2: bytes::buf \u2192 bytes.\n",
+    "scores": {
+      "original": [
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.07,
+        0.06
+      ],
+      "wrong": [
+        0.85,
+        0.88,
+        0.84,
+        0.89,
+        0.83,
+        0.89,
+        0.91
+      ]
+    }
+  },
+  {
+    "name": "witness",
+    "recorded": "2026-11-19T08:41:54.001Z",
+    "evidence": "The guide tells the caller to add `use bytes::{Bytes, buf::BytesMut, Buf, BufMut};`.\nFirst failing setup step: import BytesMut from bytes::buf.\nActual provider: bytes.\nSmallest caller reproducer (expanded from the guide):\n```rust\nuse bytes::buf::BytesMut;\n```\nPublic API resolution: bytes::buf has no documented BytesMut. The caller would have to replace this statement with `use bytes::BytesMut;` to finish the guide's setup.\n",
+    "scores": {
+      "original": [
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.05,
+        0.06
+      ],
+      "wrong": [
+        0.86,
+        0.84,
+        0.81,
+        0.82,
+        0.8,
+        0.86,
+        0.83
+      ]
+    }
+  },
+  {
+    "name": "compact",
+    "recorded": "2026-11-19T08:42:33.242Z",
+    "evidence": "The guide tells the caller to add `use bytes::{Bytes, buf::BytesMut, Buf, BufMut};`.\nFirst failing setup step: import BytesMut from bytes::buf.\nActual provider: bytes.\nSmallest caller reproducer (expanded from the guide):\n```rust\nuse bytes::buf::BytesMut;\n```\nPublic API resolution: bytes::buf has no documented BytesMut. The caller would have to replace this statement with `use bytes::BytesMut;` to finish the guide's setup.\nBytesMut from bytes::buf: absent here; exported by bytes\n",
+    "scores": {
+      "original": [
+        0.06,
+        0.07,
+        0.07,
+        0.07,
+        0.07,
+        0.06,
+        0.06
+      ],
+      "wrong": [
+        0.86,
+        0.89,
+        0.84,
+        0.86,
+        0.87,
+        0.89,
+        0.86
+      ]
+    }
+  },
+  {
+    "name": "candidate-1",
+    "recorded": "2026-11-19T08:45:10.652Z",
+    "evidence": "The guide tells the caller to add `use bytes::{Bytes, buf::BytesMut, Buf, BufMut};`.\nFailing setup step: import BytesMut from bytes::buf.\nDocumented provider: bytes.\nSmallest caller reproducer (expanded from the guide):\n```rust\nuse bytes::buf::BytesMut;\n```\nPublic API resolution: bytes::buf has no documented BytesMut. The caller would have to replace this statement with `use bytes::BytesMut;` to finish the guide's setup.\nRust resolves every named use import before compiling the example, including imports of structs and traits. Availability is scoped to the supplied rustdoc build.\nBytes from bytes: exported here\nBytesMut from bytes::buf: absent here; exported by bytes\nBuf from bytes: exported here\nBufMut from bytes: exported here\n",
+    "scores": {
+      "original": [
+        0.07,
+        0.07,
+        0.07,
+        0.07,
+        0.07,
+        0.09,
+        0.06
+      ],
+      "wrong": [
+        0.78,
+        0.77,
+        0.75,
+        0.78,
+        0.81,
+        0.78,
+        0.74
+      ]
+    }
+  },
+  {
+    "name": "candidate-2",
+    "recorded": "2026-11-19T08:45:11.055Z",
+    "evidence": "The guide tells the caller to add `use bytes::{Bytes, buf::BytesMut, Buf, BufMut};`.\nFailing setup step: import BytesMut from bytes::buf.\nDocumented provider: bytes.\nSmallest caller reproducer (expanded from the guide):\n```rust\nuse bytes::buf::BytesMut;\n```\nPublic API resolution: bytes::buf has no documented BytesMut. The caller would have to replace this statement with `use bytes::BytesMut;` to finish the guide's setup.\nRust resolves every named use import before compiling the example, including imports of structs and traits. Availability is scoped to the supplied rustdoc build.\nBytes from bytes: exported here\nBytesMut from bytes::buf: absent here; exported by bytes\nBuf from bytes: exported here\nBufMut from bytes: exported here\n",
+    "scores": {
+      "original": [
+        0.05,
+        0.06,
+        0.07,
+        0.07,
+        0.07,
+        0.07,
+        0.08
+      ],
+      "wrong": [
+        0.78,
+        0.74,
+        0.72,
+        0.81,
+        0.78,
+        0.77,
+        0.75
+      ]
+    }
+  },
+  {
+    "name": "candidate-3",
+    "recorded": "2026-11-19T08:45:11.510Z",
+    "evidence": "The guide tells the caller to add `use bytes::{Bytes, buf::BytesMut, Buf, BufMut};`.\nFailing setup step: import BytesMut from bytes::buf.\nDocumented provider: bytes.\nSmallest caller reproducer (expanded from the guide):\n```rust\nuse bytes::buf::BytesMut;\n```\nPublic API resolution: bytes::buf has no documented BytesMut. The caller would have to replace this statement with `use bytes::BytesMut;` to finish the guide's setup.\nRust resolves every named use import before compiling the example, including imports of structs and traits. Availability is scoped to the supplied rustdoc build.\nBytes from bytes: exported here\nBytesMut from bytes::buf: absent here; exported by bytes\nBuf from bytes: exported here\nBufMut from bytes: exported here\n",
+    "scores": {
+      "original": [
+        0.07,
+        0.07,
+        0.07,
+        0.05,
+        0.06,
+        0.08,
+        0.07
+      ],
+      "wrong": [
+        0.78,
+        0.79,
+        0.73,
+        0.78,
+        0.8,
+        0.75,
+        0.81
+      ]
+    }
+  }
+]
