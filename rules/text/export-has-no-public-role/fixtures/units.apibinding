@@ -1,0 +1,5 @@
+Surface: TypeScript entry index.ts
+Public binding: toMeters
+Signature: toMeters — (length: Length) => number
+Declaration documentation:
+(none supplied)

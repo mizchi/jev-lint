@@ -1,0 +1,27 @@
+default: clean
+fixtures/cursor.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "An in-tree-only cursor has no supported external role."}
+fixtures/testkit.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Plugin authors use this public clock in their own tests."}
+fixtures/generic.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Ambiguous purpose alone cannot establish that the export is internal."}
+fixtures/guided.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The public guide supplies an external schema installation use."}
+fixtures/units.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "A unit conversion is an identifiable caller task."}
+fixtures/map.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The live table is explicitly an unsupported test-only path."}
+fixtures/opaque.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Missing prose provides no evidence of internal status."}
+fixtures/migration.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "A compatibility alias serves existing clients."}
+fixtures/flush.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "A vague method may have legitimate consumers."}
+fixtures/cursor-variant.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "Unrelated naming advice leaves the internal-only role unchanged."}
+fixtures/scheduler-drain.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The docs recommend a default for applications but do not say the lower-level path is unsupported."}
+fixtures/scheduler-internal.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The queue drain backs the scheduler and is outside the supported client contract."}
+fixtures/migration-gate.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Draining outstanding writes during a migration is a distinct external use."}

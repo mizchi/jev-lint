@@ -1,1 +1,1 @@
-export function publicApiInputs(out: string, targets: string[], binary: string): Promise<{target: string; file: string; count: number}[]>;
+export function publicApiInputs(out: string, targets: string[], binary: string, guide?: string | null): Promise<{target: string; file: string; count: number; documented: number; aliases: number; bindings: string}[]>;

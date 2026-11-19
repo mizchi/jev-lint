@@ -34,11 +34,21 @@ Run the module configuration on `.surface` files containing the module's public 
 Use one public TypeScript entry point or one Go package as the unit of comparison. Select entry points from the library's published exports, including public subpaths you want to assess. The collector accepts source TypeScript, TSX and declaration files. For Go, supply the importable package directory.
 
 ```sh
-jev-lint public-api-inputs api-review src/index.ts src/codec.ts adapters/go
-jev-lint run text/public-api-surface api-review --no-config --record api-scores.json
+jev-lint public-api-inputs api-review src/index.ts --api-doc docs/client-guide.md
+jev-lint check api-review --config ./node_modules/jev-lint/advisory/public-api.yml --summary --record api-scores.json
 ```
 
-The first command writes to a new directory, reports the input path for every inventory and needs no API key. The second scores each inventory on a 0–4 scale. High scores indicate overlapping caller choices or exposed implementation details. The inventories contain counts and signatures. The run record includes scores below the advisory cutoff. Compare two candidate names at a consumer call site before changing either one.
+Start with the two binding-level questions. Both report the export name in the evidence filename and include a check that can dismiss the concern.
+
+| Question | What counts as a finding | What to verify |
+| --- | --- | --- |
+| Does this export have a supported external role? (`export-has-no-public-role`) | The contract reserves the name for internal tests or unsupported access to backing state. | Find a downstream import or example. Try the supported operation and check the compatibility promise. An external testkit or migration alias can serve a real caller. |
+| Can a caller predict a use and its effect? (`api-use-is-unclear`) | The signature and supplied docs leave materially different tasks or outcomes open. | Write one example with an input and an observable result, then compare it with the contract test. A self-explanatory unit conversion can pass without prose. |
+| How much avoidable choice does the whole surface expose? (`public-api-surface`) | The 0–4 score reaches its fitted cutoff of 2.37. | Read the closest rubric level alongside the score. Level 0 describes distinct caller tasks, 2 describes ambiguous overlap, and 4 describes pervasive overlap or representation exposure. |
+
+The collector returns the public name count, alias count and number of primary bindings with declaration or member documentation. The documentation denominator is `count - aliases`. Supplied guide text is evaluated for meaning and does not increment this count. Use the counts to interpret the sample. The report's `--summary` gives flagged/answered separately for each question and counts unanswered subjects separately. Findings remain advisory.
+
+Pass a guide that applies to the selected entries. An invocation can share one guide across its targets. The optional `--api-doc` text, JSDoc or Go doc, package documentation and up to six related public signatures accompany each binding in `bindings/`. Related signatures are selected by identifier matches within the same entry. A sparse doc count is a prompt to read the contract. For example, the rule fixture `Apply(data []byte) bool` with a tautological comment raises a clarity finding. The same signature passes when the guide explains that it installs a replacement schema and a false return preserves the previous one.
 
 The TypeScript extractor uses ast-grep export statements and the classic TypeScript checker from the tooling installation to resolve the selected entry's exports, including star re-exports and aliases. Install the dependencies needed to resolve that entry. The count includes types and values, counts an overloaded name once and identifies aliases. For Go, the Go toolchain selects files for the active build environment and ast-grep extracts package-level declarations and exported methods on exported receivers. Struct fields and interface methods provide context within their type. Promoted methods, methods on private result types and the full transitive API of returned objects are outside this inventory. The counts use each language's visibility conventions.
 

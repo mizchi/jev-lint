@@ -15,6 +15,17 @@ function targetOf(checker, binding) {
   return binding.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(binding) : binding
 }
 
+function reExportDocs(binding) {
+  const docs = []
+  for (const declaration of binding.declarations ?? []) {
+    for (let node = declaration; node && !ts.isSourceFile(node); node = node.parent) {
+      if (!ts.isExportDeclaration(node) && !ts.isExportAssignment(node) && !ts.isExportSpecifier(node)) continue
+      for (const comment of node.jsDoc ?? []) docs.push(comment.getText())
+    }
+  }
+  return docs.join('\n')
+}
+
 function describe(checker, binding, source) {
   const symbol = targetOf(checker, binding)
   if (!symbol.declarations?.length) throw new Error('unresolved export ' + binding.name + ' in ' + source.fileName)
@@ -22,11 +33,14 @@ function describe(checker, binding, source) {
   const type = symbol.flags & ts.SymbolFlags.Type ? checker.getDeclaredTypeOfSymbol(symbol) : checker.getTypeOfSymbolAtLocation(symbol, decl)
   let shape = checker.typeToString(type, decl, ts.isTypeAliasDeclaration(decl) ? ts.TypeFormatFlags.InTypeAlias : undefined)
   const memberNames = []
+  const memberDocs = []
   function membersOf(t, prefix = '') {
     return checker.getPropertiesOfType(t).filter(p => p.name !== 'prototype' && p.declarations?.every(d =>
       !(ts.getCombinedModifierFlags(d) & (ts.ModifierFlags.Private | ts.ModifierFlags.Protected)) &&
       !(d.name && ts.isPrivateIdentifier(d.name)))).map(p => {
         memberNames.push(prefix + p.name)
+        const comment = ts.displayPartsToString(p.getDocumentationComment(checker))
+        if (comment) memberDocs.push(prefix + p.name + ' — ' + comment)
         const flags = ts.getCombinedModifierFlags(p.valueDeclaration ?? p.declarations[0])
         return (flags & ts.ModifierFlags.Readonly ? 'readonly ' : '') + p.name +
           (p.flags & ts.SymbolFlags.Optional ? '?' : '') + ': ' + checker.typeToString(checker.getTypeOfSymbolAtLocation(p, decl), decl)
@@ -50,8 +64,16 @@ function describe(checker, binding, source) {
     memberNames.push(...checker.getExportsOfModule(symbol).map(s => s.name).sort())
     shape = 'namespace { ' + memberNames.join(', ') + ' }'
   }
-  const doc = ts.displayPartsToString(symbol.getDocumentationComment(checker)).replace(/\s+/g, ' ')
-  return binding.name + ' — ' + clipped(shape.replace(/\s+/g, ' '), 340) + (shape.length > 340 && memberNames.length ? ' | members: ' + memberNames.join(', ') : '') + (doc ? ' — ' + clipped(doc, 160) : '')
+  const doc = ts.displayPartsToString(symbol.getDocumentationComment(checker))
+  const tags = symbol.getJsDocTags(checker).map(t => '@' + t.name + ' ' + ts.displayPartsToString(t.text))
+  const singleLine = shape.replace(/\s+/g, ' ')
+  const summary = binding.name + ' — ' + clipped(singleLine, 340) +
+    (shape.length > 340 && memberNames.length ? ' | members: ' + memberNames.join(', ') : '')
+  return {
+    name: binding.name, signature: binding.name + ' — ' + singleLine,
+    row: summary + (doc ? ' — ' + clipped(doc.replace(/\s+/g, ' '), 160) : ''),
+    doc: [doc, ...tags, ...memberDocs].filter(Boolean).join('\n'),
+  }
 }
 
 export function typescriptSurface(entry, scan) {
@@ -106,11 +128,19 @@ export function typescriptSurface(entry, scan) {
     if (missing) throw new Error('cannot account for export ' + missing.name + ' in ' + file.fileName)
     return exports.filter(s => names.has(s.name))
   }
-  const rows = []
+  const bindingsByName = []
   for (const [symbol, bindings] of Map.groupBy(exportedNames(source), s => targetOf(checker, s))) {
     const primary = bindings.find(s => s.name === symbol.name) ?? bindings.find(s => s.name !== 'default') ?? bindings[0]
-    rows.push(describe(checker, primary, source))
-    for (const alias of bindings) if (alias !== primary) rows.push(alias.name + ' — alias of ' + primary.name)
+    const binding = describe(checker, primary, source)
+    bindingsByName.push({ ...binding, doc: [reExportDocs(primary), binding.doc].filter(Boolean).join('\n') })
+    for (const alias of bindings) {
+      if (alias === primary) continue
+      const row = alias.name + ' — alias of ' + primary.name
+      bindingsByName.push({ name: alias.name, alias: primary.name, row, signature: row + '\nTarget: ' + binding.signature, doc: [reExportDocs(alias), binding.doc].filter(Boolean).join('\n') })
+    }
   }
-  return { label: 'TypeScript entry ' + basename(entry), rows }
+  const leading = ts.getLeadingCommentRanges(source.text, 0) ?? []
+  const packageDoc = leading.map(r => source.text.slice(r.pos, r.end))
+    .filter(comment => comment.startsWith('/**') && /@packageDocumentation\b/.test(comment)).join('\n')
+  return { label: 'TypeScript entry ' + basename(entry), bindings: bindingsByName, packageDoc }
 }

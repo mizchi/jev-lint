@@ -86,7 +86,7 @@ await testAsync("public-api fixture scores use the exact inventories generated b
     const out = join(dir, "out");
     const messages: string[] = [];
     assert.equal(await main(["public-api-inputs", out, ...targets.map(t => root + t)], { out: () => {}, log: s => messages.push(s) }), 0, messages.join("\n"));
-    for (const file of readdirSync(out)) {
+    for (const file of readdirSync(out).filter(f => f.endsWith(".apisurface"))) {
       assert.equal(readFileSync(join(out, file), "utf8"), readFileSync(join("rules/text/public-api-surface/fixtures", file), "utf8"));
     }
   } finally { rmSync(dir, { recursive: true, force: true }); }
@@ -105,4 +105,61 @@ await testAsync("public-api includes declared Go embeddings and distinguishes al
     assert.match(body, /type Channel interface \{ .*io.Reader/);
     assert.doesNotMatch(body, /private/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+await testAsync("public-api explains individual exports using caller-visible docs in both languages", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-api-docs-"));
+  try {
+    const entry = join(dir, "store.ts");
+    writeFileSync(entry, "/** Open the store.\n * @example open('cache')\n */\nexport declare function open(name:string):void;\nexport default open;");
+    const pkg = join(dir, "store");
+    mkdirSync(pkg);
+    writeFileSync(join(pkg, "store.go"), "// Package store retains the session index.\npackage store\n// Open reads the persisted index.\nfunc Open() {}\n// private implementation detail\nfunc hidden() {}\nfunc Reset() {}");
+    const guide = join(dir, "guide.md");
+    writeFileSync(guide, "Use the store when resuming a session.");
+    const out = join(dir, "out");
+    let inventory = "";
+    const errors: string[] = [];
+    assert.equal(await main(["public-api-inputs", out, entry, pkg, "--api-doc", guide], {out: s => { inventory = s; }, log: s => errors.push(s)}), 0, errors.join("\n"));
+    const [ts, go] = JSON.parse(inventory);
+    assert.deepEqual([ts.count, ts.aliases, ts.documented, go.count, go.documented], [2, 1, 1, 2, 1]);
+    const read = (folder: string, name: string) => readFileSync(join(out, folder, readdirSync(join(out, folder)).find(f => f.endsWith("-" + name + ".apibinding"))!), "utf8");
+    assert.match(read(ts.bindings, "open"), /@example open\('cache'\)/);
+    assert.match(read(ts.bindings, "default"), /alias of open/);
+    assert.match(read(go.bindings, "Open"), /Open reads the persisted index/);
+    assert.match(read(go.bindings, "Reset"), /Package store retains the session index/);
+    assert.match(read(go.bindings, "Open"), /Use the store when resuming/);
+    assert.doesNotMatch(read(go.bindings, "Reset"), /private implementation detail|reads the persisted/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+await testAsync("public-api supplies the caller of a DTO and its public member documentation", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-api-context-"));
+  try {
+    const entry = join(dir, "index.ts");
+    writeFileSync(entry, "export interface Ticket {\n/** Valid until the upload is committed. */\nkey: string;\n}\nexport declare function beginUpload(): Ticket;");
+    const out = join(dir, "out");
+    let inventory = "";
+    assert.equal(await main(["public-api-inputs", out, entry], {out: s => { inventory = s; }}), 0);
+    const folder = join(out, JSON.parse(inventory)[0].bindings);
+    const body = readFileSync(join(folder, readdirSync(folder).find(f => f.endsWith("-Ticket.apibinding"))!), "utf8");
+    assert.match(body, /beginUpload.*Ticket/);
+    assert.match(body, /key.*Valid until the upload is committed/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+await testAsync("public-api preserves documentation attached to a barrel re-export", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-api-reexport-"));
+  try {
+    writeFileSync(join(dir, "impl.ts"), "export declare function reset(): void;");
+    const entry = join(dir, "index.ts");
+    writeFileSync(entry, "/** @internal Only the in-tree harness may reset the clock. */\nexport {reset as rewindClock} from './impl.js';");
+    const out = join(dir, "out");
+    let inventory = "";
+    assert.equal(await main(["public-api-inputs", out, entry], { out: s => { inventory = s; } }), 0);
+    const [row] = JSON.parse(inventory);
+    const path = join(out, row.bindings, readdirSync(join(out, row.bindings))[0]);
+    assert.match(readFileSync(path, "utf8"), /in-tree harness/);
+    assert.equal(row.documented, 1);
+  } finally { rmSync(dir, {recursive:true, force:true}); }
 });

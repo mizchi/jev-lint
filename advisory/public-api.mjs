@@ -3,7 +3,23 @@ import { mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { basename, extname, join, resolve } from 'node:path'
 import { goSurface } from './public-api-go.mjs'
 
-export async function publicApiInputs(out, targets, binary) {
+// This is lexical context for a reader. A name match is not a usage count.
+function relatedSignatures(entries) {
+  const byName = new Map(entries.map(entry => [entry.name, entry]))
+  const peers = new Map(entries.map(entry => [entry, new Set()]))
+  for (const entry of entries) {
+    for (const token of entry.signature.match(/[\p{ID_Start}$_][\p{ID_Continue}$_]*/gu) ?? []) {
+      const other = byName.get(token)
+      if (other && other !== entry) {
+        peers.get(entry).add(other)
+        peers.get(other).add(entry)
+      }
+    }
+  }
+  return peers
+}
+
+export async function publicApiInputs(out, targets, binary, guide) {
   // Scan stdin so a target repository cannot supply ast-grep configuration.
   function scan(language, source, rules) {
     const spec = Object.entries(rules).map(([id, rule]) => JSON.stringify({ id, language, rule })).join('\n---\n')
@@ -14,6 +30,7 @@ export async function publicApiInputs(out, targets, binary) {
     return JSON.parse(result.stdout)
   }
 
+  const guideText = guide ? readFileSync(guide, 'utf8') : ''
   const outputs = []
   for (const target of targets) {
     const path = resolve(target)
@@ -33,11 +50,37 @@ export async function publicApiInputs(out, targets, binary) {
     } else {
       throw new Error('expected a TypeScript entry point or a Go package directory: ' + target)
     }
-    const rows = surface.rows.sort()
+    const entries = surface.bindings
+    const rows = entries.map(entry => entry.row).sort()
     const body = ['Surface: ' + surface.label, 'Public names: ' + rows.length, ...rows].join('\n') + '\n'
-    outputs.push({ target, file: (outputs.length + 1) + '-' + basename(path) + '.apisurface', count: rows.length, body })
+    const stem = (outputs.length + 1) + '-' + basename(path)
+    const inventory = {
+      target, file: stem + '.apisurface', count: entries.length,
+      aliases: entries.filter(e => e.alias).length, documented: entries.filter(e => !e.alias && e.doc).length,
+      bindings: join('bindings', stem),
+    }
+    outputs.push({ inventory, entries, label: surface.label, packageDoc: surface.packageDoc, body })
   }
   mkdirSync(out)
-  for (const {file, body} of outputs) writeFileSync(join(out, file), body)
-  return outputs.map(({body, ...inventory}) => inventory)
+  for (const {inventory, entries, label, packageDoc, body} of outputs) {
+    writeFileSync(join(out, inventory.file), body)
+    const dir = join(out, inventory.bindings)
+    mkdirSync(dir, {recursive: true})
+    const related = relatedSignatures(entries)
+    entries.forEach((entry, index) => {
+      const heading = ['Surface: ' + label, 'Public binding: ' + entry.name, 'Signature: ' + entry.signature,
+        'Declaration documentation:', entry.doc || '(none supplied)']
+      const peers = [...related.get(entry)]
+      if (peers.length) {
+        heading.push('Related public signatures (' + Math.min(6, peers.length) + ' of ' + peers.length + '):')
+        for (const peer of peers.slice(0, 6)) heading.push(peer.signature.length <= 400 ? peer.signature : peer.signature.slice(0, 399) + '…')
+      }
+      if (packageDoc) heading.push('Package documentation:', packageDoc)
+      if (guide) heading.push('Public guide (' + basename(guide) + '):', guideText)
+      // The ordinal keeps identifiers distinct on case-insensitive filesystems.
+      const name = (index + 1) + '-' + encodeURIComponent(entry.name).slice(0, 120) + '.apibinding'
+      writeFileSync(join(dir, name), heading.join('\n') + '\n')
+    })
+  }
+  return outputs.map(o => o.inventory)
 }

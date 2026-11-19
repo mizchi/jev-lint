@@ -35,7 +35,7 @@ examples/cart.ts
 
 ## 何を捕まえるか
 
-65 の異なるルールIDが出荷されていて、その多くは複数言語で聞かれる（合わせて 118 ルール）。おおまかには:
+67 の異なるルールIDが出荷されていて、その多くは複数言語で聞かれる（合わせて 120 ルール）。おおまかには:
 
 - **名前と、その名前が指すもの。** 関数、メソッド、束縛、型、クラス、trait、モジュール。npm script とそれが走らせるコマンド。sqlc のクエリ名とその SQL。カートの保存もしてしまう `applyDiscount`、文字列が束縛された `isAdmin`。
 - **名前が含意する保証。** `safe*` は安全か、`pure*` は純粋か、冪等を名乗る関数は冪等か、Go の `MustX` は名前が約束する失敗で panic するか。
@@ -132,7 +132,7 @@ finding 一つ、またはファイル一つを黙らせるには、どのコメ
 
 ## 何が同梱されるか
 
-`rules/<language>/<id>/` の下に 118 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。
+`rules/<language>/<id>/` の下に 120 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。
 
 | 渡すもの | 走るもの |
 | --- | --- |
@@ -144,10 +144,10 @@ finding 一つ、またはファイル一つを黙らせるには、どのコメ
 | `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |
 | `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |
 | `package.json` | `json/` — 1個 |
-| sqlc クエリ、モジュール・設計の検査用入力 | `text/` — 計14個。うち13個が[設計アドバイザリー](docs/advisories.md) |
+| sqlc クエリ、モジュール・設計の検査用入力 | `text/` — 計16個。うち15個が[設計アドバイザリー](docs/advisories.md) |
 | コミット | `git/` — 4個。うち2個は指標のアドバイザリー |
 
-`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 118 個全部の問い、cutoff、自分の fixtures での成績がある。
+`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 120 個全部の問い、cutoff、自分の fixtures での成績がある。
 
 自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。
 

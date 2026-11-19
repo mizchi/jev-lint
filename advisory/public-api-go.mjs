@@ -8,6 +8,7 @@ const either = (...kinds) => ({ any: kinds.map(kind => ({ kind })) })
 const types = either('type_spec', 'type_alias')
 const directStruct = { kind: 'field_declaration_list', inside: { kind: 'struct_type', inside: types } }
 const rules = {
+  comment: { kind: 'comment' },
   package: { kind: 'package_identifier', inside: { kind: 'package_clause' } },
   type: { all: [{ kind: 'type_spec' }, top, named('name'), named('type')] },
   alias: { all: [{ kind: 'type_alias' }, top, named('name'), named('type')] },
@@ -30,20 +31,47 @@ const compact = text => text.replace(/\s+/g, ' ').trim()
 const clipped = text => text.length <= 220 ? text : text.slice(0, 219) + '…'
 
 export function goSurface(sources, scan) {
-  const rows = new Set()
+  const bindings = new Map()
   const packages = new Set()
+  const packageDocs = new Set()
   for (const source of sources) {
     const hits = Map.groupBy(scan('Go', source, rules), hit => hit.ruleId)
+    const lines = source.split('\n')
+    const comments = new Map((hits.get('comment') ?? [])
+      .filter(c => /^\s*(?:\/\/|\/\*)/.test(lines[c.range.start.line]))
+      .map(c => [c.range.end.line, c]))
+    function documentation(hit) {
+      const group = []
+      let line = hit.range.start.line - 1
+      while (comments.has(line)) {
+        const c = comments.get(line)
+        if (!/^\/\/(?:go:|line )/.test(c.text)) group.unshift(c.text.replace(/^\/\/ ?|^\/\*|\*\/$/g, '').trim())
+        line = c.range.start.line - 1
+      }
+      return group.join('\n')
+    }
+    function add(name, signature, hit, row = signature, memberDocs = []) {
+      const doc = [documentation(hit), ...memberDocs].filter(Boolean).join('\n')
+      bindings.set(name, { name, signature, row, doc })
+    }
     if (hits.has('error')) throw new Error('Go syntax error: ' + hits.get('error')[0].text.slice(0, 80))
-    for (const pkg of hits.get('package') ?? []) packages.add(pkg.text)
+    for (const pkg of hits.get('package') ?? []) {
+      packages.add(pkg.text)
+      const doc = documentation(pkg)
+      if (doc) packageDocs.add(doc)
+    }
     for (const t of [...hits.get('type') ?? [], ...hits.get('alias') ?? []]) {
       const { NAME, TYPE } = t.metaVariables.single
       if (!isPublic(NAME.text)) continue
+      const memberDocs = []
       let shape = compact(TYPE.text)
       if (/^(?:struct|interface)\s*\{/.test(shape)) {
         const members = []
         for (const field of hits.get('field') ?? []) {
-          if (encloses(TYPE, field) && isPublic(field.text)) members.push(field.text + ' ' + compact(field.metaVariables.single.TYPE.text))
+          if (!encloses(TYPE, field) || !isPublic(field.text)) continue
+          members.push(field.text + ' ' + compact(field.metaVariables.single.TYPE.text))
+          const doc = documentation(field)
+          if (doc) memberDocs.push(field.text + ' — ' + doc)
         }
         for (const field of hits.get('embedded') ?? []) {
           const name = field.text.split(/[\s\[`]/)[0].split('.').at(-1).replace(/^\*/, '')
@@ -53,18 +81,22 @@ export function goSurface(sources, scan) {
           if (encloses(TYPE, item)) members.push(compact(item.text))
         }
         for (const method of hits.get('iface') ?? []) {
-          if (encloses(TYPE, method) && isPublic(method.metaVariables.single.NAME.text)) members.push(compact(method.text))
+          const name = method.metaVariables.single.NAME.text
+          if (!encloses(TYPE, method) || !isPublic(name)) continue
+          members.push(compact(method.text))
+          const doc = documentation(method)
+          if (doc) memberDocs.push(name + ' — ' + doc)
         }
         shape = shape.slice(0, shape.indexOf('{')).trim() + ' { ' + members.join('; ') + ' }'
       }
-      rows.add('type ' + NAME.text + (t.ruleId === 'alias' ? ' = ' : ' ') + shape)
+      add(NAME.text, 'type ' + NAME.text + (t.ruleId === 'alias' ? ' = ' : ' ') + shape, t, undefined, memberDocs)
     }
     for (const kind of ['var', 'const']) {
       for (const hit of hits.get(kind) ?? []) {
         if (!isPublic(hit.text)) continue
         const annotation = (hits.get('annotation') ?? []).find(spec => encloses(spec, hit))
         const type = annotation?.metaVariables.single.TYPE.text
-        rows.add(kind + ' ' + hit.text + (type ? ' ' + clipped(compact(type)) : ''))
+        add(hit.text, kind + ' ' + hit.text + (type ? ' ' + clipped(compact(type)) : ''), hit)
       }
     }
     const bytes = Buffer.from(source)
@@ -75,9 +107,10 @@ export function goSurface(sources, scan) {
       if (RECEIVER && (!receiver || !isPublic(receiver))) continue
       const body = (hits.get('body') ?? []).find(block => encloses(hit, block))
       const signature = bytes.subarray(offset(NAME).end, body ? offset(body).start : offset(hit).end).toString()
-      rows.add('func ' + (receiver ? receiver + '.' : '') + NAME.text + clipped(compact(signature)))
+      const name = (receiver ? receiver + '.' : '') + NAME.text
+      add(name, 'func ' + name + compact(signature), hit, 'func ' + name + clipped(compact(signature)))
     }
   }
   if (packages.size !== 1 || packages.has('main')) throw new Error('expected one importable Go package')
-  return { label: 'Go package ' + [...packages][0], rows: [...rows] }
+  return { label: 'Go package ' + [...packages][0], bindings: [...bindings.values()], packageDoc: [...packageDocs].join('\n') }
 }

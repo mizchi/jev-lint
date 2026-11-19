@@ -66,7 +66,7 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
     try {
       const { publicApiInputs } = await import("../../advisory/public-api.mjs");
       const { astGrepBin } = await import("../scan.ts");
-      out(JSON.stringify(await publicApiInputs(opts.paths[0], opts.paths.slice(1), astGrepBin())));
+      out(JSON.stringify(await publicApiInputs(opts.paths[0], opts.paths.slice(1), astGrepBin(), opts.apiDoc)));
       return 0;
     } catch (err) {
       log(`public-api-inputs: ${err instanceof Error ? err.message : String(err)}`);

@@ -48,12 +48,15 @@ const cli = (args, status = 0) => {
 const rules = cli(['rules', '--no-config', '--json']);
 assert.deepEqual(rules.errors, []); assert.equal(rules.rules.length, ${ruleCount});
 const advisories = rules.rules.filter(r => r.category === 'advisory');
-assert.equal(advisories.length, 15); assert.ok(advisories.every(r => r.nextCheck?.trim()));
+assert.equal(advisories.length, 17); assert.ok(advisories.every(r => r.nextCheck?.trim()));
 assert.ok(existsSync('node_modules/jev-lint/advisory/idealis.json'));
 mkdirSync('codec');
 writeFileSync('codec/api.go', 'package codec\\nfunc Encode() {}');
 const [surface] = cli(['public-api-inputs', 'api-review', 'codec']);
 assert.equal(surface.count, 1);
+assert.equal(surface.aliases, 0);
+assert.equal(surface.documented, 0);
+assert.equal(cli(['check', 'api-review', '--config', 'node_modules/jev-lint/advisory/public-api.yml', '--dry-run', '--json']).subjects, 3);
 assert.match(readFileSync('api-review/' + surface.file, 'utf8'), /func Encode/);
 assert.equal(cli(['run', 'text/public-api-surface', 'api-review', '--no-config', '--dry-run', '--json']).subjects, 1);
 const plan = cli(['check', 'src', '--no-config', '--cache', 'none', '-R', 'node_modules/jev-lint/rules/typescript/fn-name-promises', '--dry-run', '--json']);

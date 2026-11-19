@@ -37,10 +37,28 @@ export JEV_LINT_MODEL=jev-1.14.0 TYPESAFE_BASE_URL=https://api.typesafe.ai
 
 ## Follow-up instructions
 
-The two reported crater surfaces and the ledger and queue defect fixtures each received the shipped next check and a generic review instruction. Across three passes of the existing actionability rubric, mean scores were 0.91–0.95 for the specific instruction and 0.03–0.04 for the generic control. These judgments measure the instruction's specificity. A consumer test is still needed to determine whether narrowing the API preserves its contract.
+The two reported crater surfaces, two surface fixtures and one defect fixture for each binding rule received the shipped next check and a generic review instruction. Across three passes of the existing actionability rubric, mean scores were 0.84–0.95 for the specific instruction and 0.02–0.05 for the generic control. These judgments measure the instruction's specificity. A consumer test is still needed to determine whether narrowing the API preserves its contract.
 
 ```sh
 node experiments/advisory/public-api/hints.mjs "$out/surfaces" "$out/hints"
 (cd "$out/hints" && node "$tool/src/cli.ts" run --file "$tool/experiments/advisory/hint-review.yml" . --retry 3 --no-config --cache none --fail-on error --record ../hint-scores.json)
 node experiments/advisory/public-api/hints.mjs --verify
+```
+
+## Predicting caller behavior
+
+The export-role advisory was fitted on thirteen labelled inputs, including a recommended alternative versus an explicitly exclusive client contract. The caller-clarity advisory used ten labelled inputs. The same Go signature and declaration comment appear in the `generic` and `guided` fixtures. Adding a guide that explains the caller task and both boolean outcomes moved the unclear-use verdict from 0.94 to 0.11–0.14 across the three accepted passes. Neither variant was flagged for withdrawing the export.
+
+The pinned crater Wasm entry and idealis Go adapter supplied 36 bindings. Each package's own README was attached. The three-pass record reported five unclear-use candidates, all in idealis, and zero internal-only exports. One candidate was `Core.Canonicalize(ctx, value) (Value, error)`. A reader can identify the input and return type. A before/after value and an error case would specify which canonical form the caller receives. These are review candidates without human defect labels.
+
+To regenerate from the two clean checkouts at the revisions in [collect.sh](collect.sh), run the following from the jev-lint checkout.
+
+```sh
+tool=$PWD
+out=$(mktemp -d)
+(cd ../crater && node "$tool/src/cli.ts" public-api-inputs "$out/crater" js/wasm.d.ts --api-doc js/README.md)
+(cd ../idealis && node "$tool/src/cli.ts" public-api-inputs "$out/idealis" adapters/go --api-doc adapters/go/README.md)
+(cd "$out" && shasum -a 256 -c "$tool/experiments/advisory/public-api/bindings.sha256")
+(cd "$out" && node "$tool/src/cli.ts" check . --config "$tool/advisory/public-api.yml" --cache none --retry 3 --record run.json --summary)
+node src/cli.ts replay experiments/advisory/public-api/binding-scores.json --summary
 ```

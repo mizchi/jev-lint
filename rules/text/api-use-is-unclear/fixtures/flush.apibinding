@@ -1,0 +1,5 @@
+Surface: TypeScript entry index.ts
+Public binding: flush
+Signature: flush — (items: Batch) => boolean
+Declaration documentation:
+Handles pending items in the usual way.

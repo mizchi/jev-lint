@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "179ad47502a26772f009865acd2aa7f8dbe1c06fda4f8dd97f852ef9eb161af0",
+  "snapshotDigest": "38d29a965fb44a86a9dd06e4b7bd584209f3b97351decd16f89d198f91722e93",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -14,8 +14,8 @@
       "reference": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 278,
-        "endLine": 300,
+        "startLine": 272,
+        "endLine": 294,
         "quote": "| field | | |\n| --- | --- | --- |\n| `rule` | required | the ast-grep matcher. **Write it to over-match.** |\n| `ask` | required | the predicate, one sentence |\n| `language` / `languages` | required | one grammar, or several |\n| `kind` | `score` (default) or `noul` | see below |\n| `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |\n| `threshold` | cutoff | 0–3 for `score`, 0–1 for `noul`; an answer **at or above** it is a finding. `at` remains an alias but warns; do not set both |\n| `loose` | | floor of the `--loose` band, strictly under `threshold`. Default: half of `threshold`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |\n| `subject` | `node` (default), `enclosing`, `file`, `commit`, `block` | what code is judged. `commit` and `block` have no matcher: `commit` is `language: Git`, its subjects the commits `jev-lint commits` lists, the message judged and the diff the state; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |\n| `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\\w+)`) are the captures. A block runs from its header to the line before the next. Left out, the whole file is one block — a document judged as a whole — cut at 48,000 characters with the cut declared |\n| `extensions` | `block` only | the files the rule reads, by extension (`[sql]`); no grammar claims them, so the rule has to say |\n| `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |\n| `note` | | context for the model only |\n| `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |\n| `category` | optional `advisory` | findings are reported and excluded from the CI gate |\n| `nextCheck` | optional nonempty string | follow-up for a reported finding, preserved on replay |\n| `severity` | `hint`, `info`, `warning` (default), `error` | `error` fails a build; earn it first |\n| `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `threshold` then runs 0..levels-1 and a finding's level is numbered. The `rules/markdown/` rules are five-level rubrics from JevSlop |\n| `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |\n| `extends` | | another rule's id -- `<lang>/<id>`, or a bare id when the file's `languages` pick one language -- to build this rule from. The base comes from the rules loaded beside it, then from the shipped packs (read for the lookup, never run because of it). Every field the file gives replaces the base's; `criteria` may give one branch alone, and `note: { append: ... }` keeps the base's note and adds to it. The rule needs its own id. A file that changes what is asked (`ask`, `note`, `criteria`, `rule`, `state`, `context`, ...) but not `threshold` is warned: the inherited cutoff was fitted to the base's question |\n| `context` | | a list of documents, by path relative to the rule file, that the model reads in the state beside the code: the project's own conventions the rule is judged against. Read at load time; their text is part of the draft, so an edited document retires the verdicts given against the old one. Up to 40,000 characters in all; a missing or empty document is a load error. Rules with different documents never share a request |\n| `inconclusive` | | why this rule's own eval corpus cannot speak reliably about the rule drifting (see Calibrating): blind, unstable, or both. A non-empty reason suppresses `eval`'s failure for whichever applies and is shown in its place. Validated against the suite's own margins and spreads at eval time — a reason on a suite that is neither blind nor unstable is an error |",
         "contentHash": "cffdd1f41374c421a6d1eec7bd4e9859b3e8342fd82bf7959021a0f8cd64ae22"
       },
@@ -23,13 +23,13 @@
         "source": "advisories",
         "path": "docs/advisories.md",
         "startLine": 1,
-        "endLine": 71,
-        "quote": "# Architecture advisories\n\nA rule with `category: advisory` reports a match at its own cutoff. A match is a review lead. It contributes to the reported count and never makes a successful check exit 1, even under `--fail-on hint` or a rule-level severity override. Ordinary findings still gate the same run. A missing verdict or failed request can still make it exit 3. GitHub renders advisories as notices and SARIF renders them as notes. Comparing a scan with an acceptance baseline keeps a new advisory visible without requiring acceptance.\n\nAny rule can supply `nextCheck`, a nonempty instruction for the reviewer. Reported matches carry it in the terminal, JSON, GitHub and SARIF. A missing answer or a score below the cutoff produces no instruction. Run records preserve the wording seen at the time. The instruction is display metadata, so it adds no model calls and can be edited without invalidating cached judgments. The advisory evaluation separately checks changes to its wording.\n\n## Shipped rules\n\n| Rule in the text pack | Evidence | Next investigation |\n| --- | --- | --- |\n| `liskov-substitution` | Shared contract, alternative implementations and a caller | Exercise the same allowed input and compare the promised result or error. |\n| `interface-segregation` | Required members, actual calls and a provider stub | Narrow the interface to the role and identify any real caller that loses a required operation. |\n| `parnas-information-hiding` | Representation and a consuming expression | Look up the public type. A field with a promised name and meaning can dismiss the warning. |\n| `common-closure` | Patches on both sides of a package boundary from different commits | Check which behavior would diverge if one side were reverted in each commit. |\n| `acyclic-dependencies` | Directed package cycle, import kinds, definitions and uses | Trace the return edge and whether a responsibility move actually removes the dependency. |\n\nEight advisories use module evidence or a Git range. Their shipped configurations are `advisory/modules.yml` and `advisory/history.yml`.\n\n| Rule | Next investigation |\n| --- | --- |\n| `text/single-responsibility` | Find the callers and independent changes for both policies. |\n| `text/least-privilege` | Restrict the collaborator to the operations it uses and exercise its documented job. |\n| `text/least-surprise` | Repeat the operation and compare the result and state with its public promise. |\n| `text/hyrum` | Import the hook through a public path, exercise it, and see whether an ordinary caller can observe its effects. |\n| `text/parkinson` | Check whether lifetimes, performance requirements or formats justify maintaining two implementations. |\n| `text/kernighan` | Trigger each failure and see whether traces or tests distinguish the cause. |\n| `git/goodhart` | Compare the measured improvement and the caller's actual result for identical requests. |\n| `git/campbell` | Apply both denominators to the same raw events and inspect the omitted cases. |\n\nRun the module configuration on `.surface` files containing the module's public bindings and source, and `.impl` files for internal modules. The evidence format used in the experiment is shown in the shipped Text fixtures. Run the Git configuration directly in a checkout, for example `jev-lint commits HEAD~20..HEAD --config \"$tool/advisory/history.yml\"`.\n\n## Public API surface score\n\nUse one public TypeScript entry point or one Go package as the unit of comparison. Select entry points from the library's published exports, including public subpaths you want to assess. The collector accepts source TypeScript, TSX and declaration files. For Go, supply the importable package directory.\n\n```sh\njev-lint public-api-inputs api-review src/index.ts src/codec.ts adapters/go\njev-lint run text/public-api-surface api-review --no-config --record api-scores.json\n```\n\nThe first command writes to a new directory, reports the input path for every inventory and needs no API key. The second scores each inventory on a 0–4 scale. High scores indicate overlapping caller choices or exposed implementation details. The inventories contain counts and signatures. The run record includes scores below the advisory cutoff. Compare two candidate names at a consumer call site before changing either one.\n\nThe TypeScript extractor uses ast-grep export statements and the classic TypeScript checker from the tooling installation to resolve the selected entry's exports, including star re-exports and aliases. Install the dependencies needed to resolve that entry. The count includes types and values, counts an overloaded name once and identifies aliases. For Go, the Go toolchain selects files for the active build environment and ast-grep extracts package-level declarations and exported methods on exported receivers. Struct fields and interface methods provide context within their type. Promoted methods, methods on private result types and the full transitive API of returned objects are outside this inventory. The counts use each language's visibility conventions.\n\nLong signatures are abbreviated. TypeScript class and interface member names are retained when their signatures are abbreviated. The text runner marks inputs exceeding its 48,000-character limit as truncated. Review the full inventory alongside a score from a truncated input. Fixture calibration and the checks on crater, vlmkit and idealis are recorded in [the public API evaluation](../experiments/advisory/public-api/README.md).\n\n## Visited state keys\n\n`text/state-key-preserves-behavior` examines a visited-set guard alongside implementations of the same TypeScript interface. The collector follows a key stored in a local constant, a conditional early return or continue on `.has(key)`, and a subsequent `.add(key)` or `.set(key, ...)` on the same receiver. Providers, key projections, callback types and consumer statements are extracted from the pinned source. Scoped AGENTS.md lines mentioning the qualified interface member supply extra contract context when present.\n\nUse the collection command below with `advisory/idealis.json` and the idealis checkout, then run `jev-lint run text/state-key-preserves-behavior . --no-config` in the generated directory. The included manifest needs no hand-selected source ranges. The current collector covers directly typed providers and this local pruning pattern. The diagnostic asks the reviewer to reverse two equal-key states and compare outcomes using a distinguishing key. The small calibration suite and the idealis reproduction are in `experiments/advisory/state-key`.\n\n## Collect and check\n\nThe optional collector needs the classic TypeScript compiler API. For the pinned example, install `typescript@5.9.3` in the tooling directory from which you invoke the CLI. The collector reads source from Git objects. A bare clone works if it contains the revisions and history named in the manifest.\n\n```sh\ntool=$(node -p \"require('node:path').dirname(require.resolve('jev-lint/package.json'))\")\nwork=$(mktemp -d)\njev-lint advisory-inputs /path/to/vlmkit \"$tool/advisory/vlmkit.json\" \"$work/evidence\"\ncd \"$work/evidence\"\njev-lint check . --config \"$tool/advisory/review.yml\" --dry-run\njev-lint check . --config \"$tool/advisory/review.yml\" --record \"$work/run.json\"\njev-lint replay \"$work/run.json\" --no-config\n```\n\nUse `jev-lint run text/liskov-substitution . --no-config` in the evidence directory to run one rule. The bundled rules select revision-headed blocks in `.lsp`, `.isp`, `.parnas`, `.ccp` `.adp` and `.statekey` files. The generator's inventory maps evidence filenames to revisions and source identities and lists insufficient contracts separately. Names in an ordinary source tree do not supply this evidence by themselves.\n\nCopy `advisory/vlmkit.json` for another repository. Set the pinned Git SHA, package directory patterns, per-package source roots and history depth. Optional `cases` link specific contract, implementation and consumer excerpts by revision and line range. Automatic discovery uses TypeScript interfaces, call sites, static import paths and repeated first-parent non-merge changes. Unresolved dynamic imports, undocumented contracts and omitted patch context limit what it can see. The scan covers the declared roots and history window.\n\nThe repository's `pnpm run eval:advisories` verifies the recorded hint evaluation offline. The experiment pairs each of the original 13 rules with a defect fixture and includes four repository examples, among them a historical distribution failure and a reviewed false alarm. Each is paired with a generic instruction. Three repeated judgments measure whether the instruction identifies a specific check and an observation that can confirm or dismiss the concern.",
-        "contentHash": "20f95b9166695e88053b69213710cb2993a4d02107557313491a32830e761e22"
+        "endLine": 81,
+        "quote": "# Architecture advisories\n\nA rule with `category: advisory` reports a match at its own cutoff. A match is a review lead. It contributes to the reported count and never makes a successful check exit 1, even under `--fail-on hint` or a rule-level severity override. Ordinary findings still gate the same run. A missing verdict or failed request can still make it exit 3. GitHub renders advisories as notices and SARIF renders them as notes. Comparing a scan with an acceptance baseline keeps a new advisory visible without requiring acceptance.\n\nAny rule can supply `nextCheck`, a nonempty instruction for the reviewer. Reported matches carry it in the terminal, JSON, GitHub and SARIF. A missing answer or a score below the cutoff produces no instruction. Run records preserve the wording seen at the time. The instruction is display metadata, so it adds no model calls and can be edited without invalidating cached judgments. The advisory evaluation separately checks changes to its wording.\n\n## Shipped rules\n\n| Rule in the text pack | Evidence | Next investigation |\n| --- | --- | --- |\n| `liskov-substitution` | Shared contract, alternative implementations and a caller | Exercise the same allowed input and compare the promised result or error. |\n| `interface-segregation` | Required members, actual calls and a provider stub | Narrow the interface to the role and identify any real caller that loses a required operation. |\n| `parnas-information-hiding` | Representation and a consuming expression | Look up the public type. A field with a promised name and meaning can dismiss the warning. |\n| `common-closure` | Patches on both sides of a package boundary from different commits | Check which behavior would diverge if one side were reverted in each commit. |\n| `acyclic-dependencies` | Directed package cycle, import kinds, definitions and uses | Trace the return edge and whether a responsibility move actually removes the dependency. |\n\nEight advisories use module evidence or a Git range. Their shipped configurations are `advisory/modules.yml` and `advisory/history.yml`.\n\n| Rule | Next investigation |\n| --- | --- |\n| `text/single-responsibility` | Find the callers and independent changes for both policies. |\n| `text/least-privilege` | Restrict the collaborator to the operations it uses and exercise its documented job. |\n| `text/least-surprise` | Repeat the operation and compare the result and state with its public promise. |\n| `text/hyrum` | Import the hook through a public path, exercise it, and see whether an ordinary caller can observe its effects. |\n| `text/parkinson` | Check whether lifetimes, performance requirements or formats justify maintaining two implementations. |\n| `text/kernighan` | Trigger each failure and see whether traces or tests distinguish the cause. |\n| `git/goodhart` | Compare the measured improvement and the caller's actual result for identical requests. |\n| `git/campbell` | Apply both denominators to the same raw events and inspect the omitted cases. |\n\nRun the module configuration on `.surface` files containing the module's public bindings and source, and `.impl` files for internal modules. The evidence format used in the experiment is shown in the shipped Text fixtures. Run the Git configuration directly in a checkout, for example `jev-lint commits HEAD~20..HEAD --config \"$tool/advisory/history.yml\"`.\n\n## Public API surface score\n\nUse one public TypeScript entry point or one Go package as the unit of comparison. Select entry points from the library's published exports, including public subpaths you want to assess. The collector accepts source TypeScript, TSX and declaration files. For Go, supply the importable package directory.\n\n```sh\njev-lint public-api-inputs api-review src/index.ts --api-doc docs/client-guide.md\njev-lint check api-review --config ./node_modules/jev-lint/advisory/public-api.yml --summary --record api-scores.json\n```\n\nStart with the two binding-level questions. Both report the export name in the evidence filename and include a check that can dismiss the concern.\n\n| Question | What counts as a finding | What to verify |\n| --- | --- | --- |\n| Does this export have a supported external role? (`export-has-no-public-role`) | The contract reserves the name for internal tests or unsupported access to backing state. | Find a downstream import or example. Try the supported operation and check the compatibility promise. An external testkit or migration alias can serve a real caller. |\n| Can a caller predict a use and its effect? (`api-use-is-unclear`) | The signature and supplied docs leave materially different tasks or outcomes open. | Write one example with an input and an observable result, then compare it with the contract test. A self-explanatory unit conversion can pass without prose. |\n| How much avoidable choice does the whole surface expose? (`public-api-surface`) | The 0–4 score reaches its fitted cutoff of 2.37. | Read the closest rubric level alongside the score. Level 0 describes distinct caller tasks, 2 describes ambiguous overlap, and 4 describes pervasive overlap or representation exposure. |\n\nThe collector returns the public name count, alias count and number of primary bindings with declaration or member documentation. The documentation denominator is `count - aliases`. Supplied guide text is evaluated for meaning and does not increment this count. Use the counts to interpret the sample. The report's `--summary` gives flagged/answered separately for each question and counts unanswered subjects separately. Findings remain advisory.\n\nPass a guide that applies to the selected entries. An invocation can share one guide across its targets. The optional `--api-doc` text, JSDoc or Go doc, package documentation and up to six related public signatures accompany each binding in `bindings/`. Related signatures are selected by identifier matches within the same entry. A sparse doc count is a prompt to read the contract. For example, the rule fixture `Apply(data []byte) bool` with a tautological comment raises a clarity finding. The same signature passes when the guide explains that it installs a replacement schema and a false return preserves the previous one.\n\nThe TypeScript extractor uses ast-grep export statements and the classic TypeScript checker from the tooling installation to resolve the selected entry's exports, including star re-exports and aliases. Install the dependencies needed to resolve that entry. The count includes types and values, counts an overloaded name once and identifies aliases. For Go, the Go toolchain selects files for the active build environment and ast-grep extracts package-level declarations and exported methods on exported receivers. Struct fields and interface methods provide context within their type. Promoted methods, methods on private result types and the full transitive API of returned objects are outside this inventory. The counts use each language's visibility conventions.\n\nLong signatures are abbreviated. TypeScript class and interface member names are retained when their signatures are abbreviated. The text runner marks inputs exceeding its 48,000-character limit as truncated. Review the full inventory alongside a score from a truncated input. Fixture calibration and the checks on crater, vlmkit and idealis are recorded in [the public API evaluation](../experiments/advisory/public-api/README.md).\n\n## Visited state keys\n\n`text/state-key-preserves-behavior` examines a visited-set guard alongside implementations of the same TypeScript interface. The collector follows a key stored in a local constant, a conditional early return or continue on `.has(key)`, and a subsequent `.add(key)` or `.set(key, ...)` on the same receiver. Providers, key projections, callback types and consumer statements are extracted from the pinned source. Scoped AGENTS.md lines mentioning the qualified interface member supply extra contract context when present.\n\nUse the collection command below with `advisory/idealis.json` and the idealis checkout, then run `jev-lint run text/state-key-preserves-behavior . --no-config` in the generated directory. The included manifest needs no hand-selected source ranges. The current collector covers directly typed providers and this local pruning pattern. The diagnostic asks the reviewer to reverse two equal-key states and compare outcomes using a distinguishing key. The small calibration suite and the idealis reproduction are in `experiments/advisory/state-key`.\n\n## Collect and check\n\nThe optional collector needs the classic TypeScript compiler API. For the pinned example, install `typescript@5.9.3` in the tooling directory from which you invoke the CLI. The collector reads source from Git objects. A bare clone works if it contains the revisions and history named in the manifest.\n\n```sh\ntool=$(node -p \"require('node:path').dirname(require.resolve('jev-lint/package.json'))\")\nwork=$(mktemp -d)\njev-lint advisory-inputs /path/to/vlmkit \"$tool/advisory/vlmkit.json\" \"$work/evidence\"\ncd \"$work/evidence\"\njev-lint check . --config \"$tool/advisory/review.yml\" --dry-run\njev-lint check . --config \"$tool/advisory/review.yml\" --record \"$work/run.json\"\njev-lint replay \"$work/run.json\" --no-config\n```\n\nUse `jev-lint run text/liskov-substitution . --no-config` in the evidence directory to run one rule. The bundled rules select revision-headed blocks in `.lsp`, `.isp`, `.parnas`, `.ccp` `.adp` and `.statekey` files. The generator's inventory maps evidence filenames to revisions and source identities and lists insufficient contracts separately. Names in an ordinary source tree do not supply this evidence by themselves.\n\nCopy `advisory/vlmkit.json` for another repository. Set the pinned Git SHA, package directory patterns, per-package source roots and history depth. Optional `cases` link specific contract, implementation and consumer excerpts by revision and line range. Automatic discovery uses TypeScript interfaces, call sites, static import paths and repeated first-parent non-merge changes. Unresolved dynamic imports, undocumented contracts and omitted patch context limit what it can see. The scan covers the declared roots and history window.\n\nThe repository's `pnpm run eval:advisories` verifies the recorded hint evaluation offline. The experiment pairs each of the original 13 rules with a defect fixture and includes four repository examples, among them a historical distribution failure and a reviewed false alarm. Each is paired with a generic instruction. Three repeated judgments measure whether the instruction identifies a specific check and an observation that can confirm or dismiss the concern.",
+        "contentHash": "2d4fc432ac441df167f6af9858f70b61ee683d192329b57ec0197b530588b362"
       },
       "context": [],
-      "candidateId": "67341c46c45ab2a2d6302530910c285ec9f5f3c105fe0c09d6b57adbd865a559",
-      "contextHash": "069af3404b020b85f7bdd13f5bc558c5acb2853fe37b4c8d40a0a9a64f4b8912",
+      "candidateId": "ca45c00a5006dc592c3e4777def713508fcc423a359b679c5db18761d3031ce8",
+      "contextHash": "183dfc197d484142afeda96ea3a00d73cf6fb1d849544b364057b651dc6b9887",
       "judgment": {
         "choice": "supports",
         "confidence": 0.99,
@@ -50,26 +50,26 @@
         "path": "docs/project-facts.md",
         "startLine": 9,
         "endLine": 24,
-        "quote": "## Rule catalog\n\nThe current catalog contains 118 rules across 12 language directories, with 65 distinct rule IDs. 98 rules reach precision and recall 1.00 on their own accepted fixtures. There are 746 labelled defects and 1201 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 14 rules\n- typescript: 23 rules\n- vibe: 2 rules",
-        "contentHash": "ff850bb3093f036ba70c5ce006af373c26ae37d64dcbf0779a9887796325670b"
+        "quote": "## Rule catalog\n\nThe current catalog contains 120 rules across 12 language directories, with 67 distinct rule IDs. 100 rules reach precision and recall 1.00 on their own accepted fixtures. There are 753 labelled defects and 1217 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 16 rules\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "8182f80b969c88899f191826ce15abeaae111f7c29f7b79729ae0b574390cf8b"
       },
       "target": {
         "source": "readme",
         "path": "README.md",
         "startLine": 186,
         "endLine": 211,
-        "quote": "## What ships\n\n118 rules under `rules/<language>/<id>/`, and the files you point it at decide\nwhich run. Nothing to select.\n\n| point it at | what runs |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 rules, first tier |\n| `.rs` | `rust/` — 9, first tier |\n| `.py` `.go` | `python/` — 14, `go/` — 9 |\n| `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |\n| `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |\n| `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |\n| `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |\n| `package.json` | `json/` — 1 |\n| sqlc queries and prepared architecture evidence | `text/` — 14 total, including 13 [design advisories](docs/advisories.md) |\n| commits | `git/` — 4 including 2 metric advisories |\n\n`typescript` and `rust` are first tier: every rule under them carries\nfixtures, expectations and an accepted baseline. The rest are calibrated to\nthe same bar and not yet promised. [RULES.md](RULES.md) lists all 118 with\ntheir question, cutoff and score on their own fixtures.\n\nYour own rule can target any language ast-grep parses — Java, Kotlin, Swift,\nC, C++, C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, HTML,\nCSS, YAML — and any other grammar you compile.",
-        "contentHash": "8cf9efe83be4edb04f42a66adf6413bf808a01f7e87ec50609736c8e7485234c"
+        "quote": "## What ships\n\n120 rules under `rules/<language>/<id>/`, and the files you point it at decide\nwhich run. Nothing to select.\n\n| point it at | what runs |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 rules, first tier |\n| `.rs` | `rust/` — 9, first tier |\n| `.py` `.go` | `python/` — 14, `go/` — 9 |\n| `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |\n| `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |\n| `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |\n| `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |\n| `package.json` | `json/` — 1 |\n| sqlc queries and prepared architecture evidence | `text/` — 16 total, including 15 [design advisories](docs/advisories.md) |\n| commits | `git/` — 4 including 2 metric advisories |\n\n`typescript` and `rust` are first tier: every rule under them carries\nfixtures, expectations and an accepted baseline. The rest are calibrated to\nthe same bar and not yet promised. [RULES.md](RULES.md) lists all 120 with\ntheir question, cutoff and score on their own fixtures.\n\nYour own rule can target any language ast-grep parses — Java, Kotlin, Swift,\nC, C++, C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, HTML,\nCSS, YAML — and any other grammar you compile.",
+        "contentHash": "f697a1eb1fb8b120924c6d022d6bb6c92ef15d63bbe3a8e5c6446b3eceae73d2"
       },
       "context": [],
-      "candidateId": "7d3d7d5ee6327cfdd8ec261e06db0436b88a7add02463b675b739f633927984b",
-      "contextHash": "0b55356250403a4e661940d7962e51ca10a7f4272b21904f78000a47311f6349",
+      "candidateId": "9841cd3d7e4407adae044da5f54a0aacda2d6d022c1b16c15f60701a1edb6f67",
+      "contextHash": "f9b6d69bc0e1c928a1f78093347578626175733e95fb11c7282926e1e3a8aa1e",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.8,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.85,
-          "contradicts": 0.14,
+          "supports": 0.89,
+          "contradicts": 0.1,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -84,28 +84,28 @@
         "path": "docs/project-facts.md",
         "startLine": 9,
         "endLine": 24,
-        "quote": "## Rule catalog\n\nThe current catalog contains 118 rules across 12 language directories, with 65 distinct rule IDs. 98 rules reach precision and recall 1.00 on their own accepted fixtures. There are 746 labelled defects and 1201 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 14 rules\n- typescript: 23 rules\n- vibe: 2 rules",
-        "contentHash": "ff850bb3093f036ba70c5ce006af373c26ae37d64dcbf0779a9887796325670b"
+        "quote": "## Rule catalog\n\nThe current catalog contains 120 rules across 12 language directories, with 67 distinct rule IDs. 100 rules reach precision and recall 1.00 on their own accepted fixtures. There are 753 labelled defects and 1217 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 16 rules\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "8182f80b969c88899f191826ce15abeaae111f7c29f7b79729ae0b574390cf8b"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
         "startLine": 133,
         "endLine": 152,
-        "quote": "## 何が同梱されるか\n\n`rules/<language>/<id>/` の下に 118 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。\n\n| 渡すもの | 走るもの |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 ルール、第一級 |\n| `.rs` | `rust/` — 9、第一級 |\n| `.py` `.go` | `python/` — 14、`go/` — 9 |\n| `.mbt` | `moonbit/` — 20。[パーサを宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば走る |\n| `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |\n| `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |\n| `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |\n| `package.json` | `json/` — 1個 |\n| sqlc クエリ、モジュール・設計の検査用入力 | `text/` — 計14個。うち13個が[設計アドバイザリー](docs/advisories.md) |\n| コミット | `git/` — 4個。うち2個は指標のアドバイザリー |\n\n`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 118 個全部の問い、cutoff、自分の fixtures での成績がある。\n\n自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。",
-        "contentHash": "90d5350e2d6766d62f5124f32071bb9d39c2d097ddec5e64332681d348f0d6e0"
+        "quote": "## 何が同梱されるか\n\n`rules/<language>/<id>/` の下に 120 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。\n\n| 渡すもの | 走るもの |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 ルール、第一級 |\n| `.rs` | `rust/` — 9、第一級 |\n| `.py` `.go` | `python/` — 14、`go/` — 9 |\n| `.mbt` | `moonbit/` — 20。[パーサを宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば走る |\n| `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |\n| `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |\n| `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |\n| `package.json` | `json/` — 1個 |\n| sqlc クエリ、モジュール・設計の検査用入力 | `text/` — 計16個。うち15個が[設計アドバイザリー](docs/advisories.md) |\n| コミット | `git/` — 4個。うち2個は指標のアドバイザリー |\n\n`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 120 個全部の問い、cutoff、自分の fixtures での成績がある。\n\n自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。",
+        "contentHash": "99a3d16af4ec708da75f54e8169bb0f4ee8c740cd5cb115a47c030461ad8d6af"
       },
       "context": [],
-      "candidateId": "10a24176ffea5ab61f4b3b8b858b8263b92c2cc05f9f2e3ca396e7cd4b3b608e",
-      "contextHash": "59978da3dec894bd7b76858a15182740b152469325ae1e859fd1f2b009d576ed",
+      "candidateId": "83d0144277aa472432136e781dfd648adb879edbb2b6679431bf412dfbee6ba6",
+      "contextHash": "acca23e7c021ecc01d874d354b80556077ea98611218ddadba44daf24d209316",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.69,
+        "confidence": 0.87,
         "probabilities": {
-          "supports": 0.77,
-          "contradicts": 0.22,
+          "supports": 0.9,
+          "contradicts": 0.1,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -118,28 +118,28 @@
         "path": "docs/project-facts.md",
         "startLine": 9,
         "endLine": 24,
-        "quote": "## Rule catalog\n\nThe current catalog contains 118 rules across 12 language directories, with 65 distinct rule IDs. 98 rules reach precision and recall 1.00 on their own accepted fixtures. There are 746 labelled defects and 1201 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 14 rules\n- typescript: 23 rules\n- vibe: 2 rules",
-        "contentHash": "ff850bb3093f036ba70c5ce006af373c26ae37d64dcbf0779a9887796325670b"
+        "quote": "## Rule catalog\n\nThe current catalog contains 120 rules across 12 language directories, with 67 distinct rule IDs. 100 rules reach precision and recall 1.00 on their own accepted fixtures. There are 753 labelled defects and 1217 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 16 rules\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "8182f80b969c88899f191826ce15abeaae111f7c29f7b79729ae0b574390cf8b"
       },
       "target": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 617,
-        "endLine": 618,
-        "quote": "118 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,\ngrouped here by what they ask. Which languages each exists in:",
-        "contentHash": "d4ffd694dde034fac9e31d23eb31b3a88e59d74e04d355d6b3a8092af635c905"
+        "startLine": 611,
+        "endLine": 612,
+        "quote": "120 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,\ngrouped here by what they ask. Which languages each exists in:",
+        "contentHash": "89c7e9c9592524443e286f8b1fdcd91b3cd1b0f9a9ce9c37bc37a95cc0cb6c07"
       },
       "context": [],
-      "candidateId": "b212dbd40f91c6155fe8e76fef7bda4873b2e8962956c98a7c0e38ef8ccb283f",
-      "contextHash": "71c884f726d223abcab28ae148de47485266ed2d6f865c734ba760e66ebf8f1c",
+      "candidateId": "81648f5febffcce6ef4c84dda16eef84e343b7dcc95ed05a14cda5eb25c7f3c6",
+      "contextHash": "67bd5c0cae6f4eb425bd5631dda66685beea90f79f1357351bcc097169d857a7",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.92,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.94,
-          "contradicts": 0.03,
+          "supports": 0.98,
+          "contradicts": 0.01,
           "unrelated": 0,
-          "insufficient_context": 0.03
+          "insufficient_context": 0.01
         }
       }
     },
@@ -168,10 +168,10 @@
       "contextHash": "b7e5d2e6c011686b8788851d499dd8f5ec328fcf58c5e828b1e4a4addd5e6744",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -236,10 +236,10 @@
       "contextHash": "0e7bf0f4ceb0c0a0544ea22fe24c5f58373b23a644b37fe5a0a73c8193937fe2",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.79,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.84,
-          "contradicts": 0.15,
+          "supports": 0.89,
+          "contradicts": 0.1,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -270,10 +270,10 @@
       "contextHash": "c00d588e7806bbb50ce017b80fc9ce9f45ed56bca3c6b89d1fb9304e5a9a0c30",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.87,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.9,
-          "contradicts": 0.1,
+          "supports": 0.88,
+          "contradicts": 0.12,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -304,12 +304,12 @@
       "contextHash": "e5941a0a8d9cf3e6f201cea332d78057f31639194346cf3f731cd5cac803e924",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.92,
         "probabilities": {
-          "supports": 0.93,
-          "contradicts": 0.05,
+          "supports": 0.94,
+          "contradicts": 0.03,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.03
         }
       }
     },
@@ -396,14 +396,14 @@
       "target": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 1340,
-        "endLine": 1343,
+        "startLine": 1334,
+        "endLine": 1337,
         "quote": "The verdict cache is `.jev-lint/baseline.json`, relative to the config's\ndirectory, and is meant to be committed: a run over the same commit answers\nfrom it, and CI lints from it with no API key. It is trusted input --\nanything that can edit it can silence a rule or invent a finding.",
         "contentHash": "2ec008e52203e6a8d9065b94b64409e7daf70c16c05567df31214fccf10e671b"
       },
       "context": [],
-      "candidateId": "3d895979acc74dee30cd0c4e8861188456d7ca914e7c43ab864f20a582684093",
-      "contextHash": "313836463dfd5ba417600d9279abc55cf626d6e8430214bd1858632120aaf654",
+      "candidateId": "a3376cc46044bbdc4c15fe905ed6bbda31030a057da687d7e1d0b25663e9e6ec",
+      "contextHash": "34895e1a2c71125e06f90bca2e8118061c10ff361383334dde808e5b04cc7760",
       "judgment": {
         "choice": "supports",
         "confidence": 0.84,
@@ -508,10 +508,10 @@
       "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.72,
+        "confidence": 0.73,
         "probabilities": {
-          "supports": 0.79,
-          "contradicts": 0.2,
+          "supports": 0.8,
+          "contradicts": 0.19,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -542,10 +542,10 @@
       "contextHash": "8cecf2bfcf88789455d7eafa78a1b126bee955d21dc05f16fa0edb8326788196",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.87,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.12,
+          "supports": 0.9,
+          "contradicts": 0.1,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -576,12 +576,12 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.89,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.04,
-          "unrelated": 0,
-          "insufficient_context": 0.01
+          "supports": 0.92,
+          "contradicts": 0.05,
+          "unrelated": 0.01,
+          "insufficient_context": 0.02
         }
       }
     },
@@ -610,12 +610,12 @@
       "contextHash": "d1acc67b489fffe17b2e80b045f35be0a9d3bd1660f156f7a6e52e3b975f27a6",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.88,
+        "confidence": 0.92,
         "probabilities": {
-          "supports": 0.91,
-          "contradicts": 0.07,
+          "supports": 0.94,
+          "contradicts": 0.05,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -678,10 +678,10 @@
       "contextHash": "f8a057afbd5308786c75c59b9ac3c80d354e8a3e420781e67859e6433bd6ecb6",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -712,10 +712,10 @@
       "contextHash": "35839030f7dde62d95b10faf10a0b81c8ae5c13efa2c9cd97f722dfbbb0eb1aa",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.89,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.92,
-          "contradicts": 0.07,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -746,10 +746,10 @@
       "contextHash": "5b3e6e3d6e9313b46b5d867319a9d0ff3eca623aedd3906c8e3275fab0251ea8",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.83,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.87,
-          "contradicts": 0.12,
+          "supports": 0.89,
+          "contradicts": 0.1,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -891,10 +891,10 @@
       "contextHash": "604fcb8a9c1e317a8a6d49fc2439cd2b3f5c68d1e8a8bf26c48cb3203d30fff9",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.52,
+        "confidence": 0.48,
         "probabilities": {
-          "supports": 0.64,
-          "contradicts": 0.35,
+          "supports": 0.61,
+          "contradicts": 0.38,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -914,8 +914,8 @@
   },
   "usage": {
     "requests": 26,
-    "inputTokens": 40583,
-    "usd": 0.001704486
+    "inputTokens": 40968,
+    "usd": 0.001720656
   },
   "errors": []
 }

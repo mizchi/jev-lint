@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/cursor.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The role is explicitly restricted to implementation tests."
+    },
+    {
+      "file": "fixtures/testkit.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The caller and observable clock change are both explicit."
+    },
+    {
+      "file": "fixtures/generic.apibinding",
+      "kind": "false-negative-risk",
+      "reason": "The signature and tautology leave the operation and boolean unexplained."
+    },
+    {
+      "file": "fixtures/guided.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The guide distinguishes success from rejection and specifies the effect."
+    },
+    {
+      "file": "fixtures/units.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The direction and unit of the conversion are clear from its signature."
+    },
+    {
+      "file": "fixtures/map.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The mutation and its effect on lookup are explicit."
+    },
+    {
+      "file": "fixtures/opaque.apibinding",
+      "kind": "false-negative-risk",
+      "reason": "The integer input and output give no way to predict what Step accomplishes."
+    },
+    {
+      "file": "fixtures/migration.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The target signature and docs state the effect."
+    },
+    {
+      "file": "fixtures/flush.apibinding",
+      "kind": "false-negative-risk",
+      "reason": "It is unclear whether flush sends, drops, or persists items or what the boolean means."
+    },
+    {
+      "file": "fixtures/cursor-variant.apibinding",
+      "kind": "unrelated",
+      "reason": "Unrelated naming advice leaves the observable effect unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/cursor.apibinding",
+      "variant": "fixtures/cursor-variant.apibinding"
+    }
+  ]
+}

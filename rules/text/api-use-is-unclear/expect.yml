@@ -1,0 +1,21 @@
+default: clean
+fixtures/cursor.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The role is explicitly restricted to implementation tests."}
+fixtures/testkit.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The caller and observable clock change are both explicit."}
+fixtures/generic.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The signature and tautology leave the operation and boolean unexplained."}
+fixtures/guided.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The guide distinguishes success from rejection and specifies the effect."}
+fixtures/units.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The direction and unit of the conversion are clear from its signature."}
+fixtures/map.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The mutation and its effect on lookup are explicit."}
+fixtures/opaque.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The integer input and output give no way to predict what Step accomplishes."}
+fixtures/migration.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The target signature and docs state the effect."}
+fixtures/flush.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "It is unclear whether flush sends, drops, or persists items or what the boolean means."}
+fixtures/cursor-variant.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Unrelated naming advice leaves the observable effect unchanged."}

@@ -45,7 +45,7 @@ it, nothing is reported. Six findings over two files, for a tenth of a cent;
 
 ## What it catches
 
-Sixty-five distinct rule IDs ship, most of them asked in several languages -- 118
+Sixty-seven distinct rule IDs ship, most of them asked in several languages -- 120
 rules in all. Roughly:
 
 - **A name against the thing it names.** A function, method, binding, type,
@@ -185,7 +185,7 @@ covers the exit code that will stop you committing while offline.
 
 ## What ships
 
-118 rules under `rules/<language>/<id>/`, and the files you point it at decide
+120 rules under `rules/<language>/<id>/`, and the files you point it at decide
 which run. Nothing to select.
 
 | point it at | what runs |
@@ -198,12 +198,12 @@ which run. Nothing to select.
 | `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |
 | `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |
 | `package.json` | `json/` — 1 |
-| sqlc queries and prepared architecture evidence | `text/` — 14 total, including 13 [design advisories](docs/advisories.md) |
+| sqlc queries and prepared architecture evidence | `text/` — 16 total, including 15 [design advisories](docs/advisories.md) |
 | commits | `git/` — 4 including 2 metric advisories |
 
 `typescript` and `rust` are first tier: every rule under them carries
 fixtures, expectations and an accepted baseline. The rest are calibrated to
-the same bar and not yet promised. [RULES.md](RULES.md) lists all 118 with
+the same bar and not yet promised. [RULES.md](RULES.md) lists all 120 with
 their question, cutoff and score on their own fixtures.
 
 Your own rule can target any language ast-grep parses — Java, Kotlin, Swift,
