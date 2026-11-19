@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import { collectPublicApi, writePublicApiInputs } from "../advisory/public-api.mjs";
 import { selectDocumentExcerpt } from "./document-input.ts";
+import { goGuideLookups } from "./go-guide-imports.ts";
 import { MAX_BLOCK_CHARS } from "./text.ts";
 
 function object(value: unknown): value is Record<string, unknown> {
@@ -49,10 +50,14 @@ export async function publicApiLayoutInputs(out: string, manifest: string, binar
     }
   }
   const lookup = tsEntries.size ? (await import("./guide-imports.ts")).guideImportLookup : undefined;
+  const goPackages = surfaces.flatMap((surface, i) => surface.packageName
+    ? [{ path: entries[i].publicPath, name: surface.packageName, exports: new Set(surface.entries.map(entry => entry.name)) }]
+    : []);
+  const goLookups = goGuideLookups(guides.map(guide => guide.quote), goPackages);
   const workflows = guides.map(({ guide, heading, startLine, endLine, quote }, index) => {
     const title = Array.from(heading ?? basename(guide)).slice(0, 48).join("").replace(/[^\p{L}\p{N}_-]+/gu, "-");
     const file = `workflow-${index + 1}-${title}.apiworkflow`;
-    const text = `Guide: ${guide}:${startLine}-${endLine}\n${quote}\n\nReviewed import paths and their exports (other paths were not inspected):\n${entryMap}\n` + (lookup?.(quote, tsEntries) ?? "");
+    const text = `Guide: ${guide}:${startLine}-${endLine}\n${quote}\n\nReviewed import paths and their exports (other paths were not inspected):\n${entryMap}\n` + (lookup?.(quote, tsEntries) ?? "") + (goLookups[index] ?? "");
     // A missing export is meaningful only when the model receives the entire selected map.
     if (text.length > MAX_BLOCK_CHARS) throw new Error(`${file} exceeds the text budget; narrow the guide section or selected entry map`);
     return { file, guide, heading, startLine, endLine, text };

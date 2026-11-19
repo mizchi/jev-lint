@@ -59,7 +59,7 @@ export async function collectPublicApi(targets, binary) {
       aliases: entries.filter(e => e.alias).length, documented: entries.filter(e => !e.alias && e.doc).length,
       bindings: join('bindings', stem),
     }
-    outputs.push({ inventory, entries, language: isGo ? 'go' : 'typescript', label: surface.label, packageDoc: surface.packageDoc, body })
+    outputs.push({ inventory, entries, packageName: surface.packageName, language: isGo ? 'go' : 'typescript', label: surface.label, packageDoc: surface.packageDoc, body })
   }
   return outputs
 }

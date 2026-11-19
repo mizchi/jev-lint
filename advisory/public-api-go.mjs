@@ -112,5 +112,6 @@ export function goSurface(sources, scan) {
     }
   }
   if (packages.size !== 1 || packages.has('main')) throw new Error('expected one importable Go package')
-  return { label: 'Go package ' + [...packages][0], bindings: [...bindings.values()], packageDoc: [...packageDocs].join('\n') }
+  const [packageName] = packages
+  return { packageName, label: 'Go package ' + packageName, bindings: [...bindings.values()], packageDoc: [...packageDocs].join('\n') }
 }

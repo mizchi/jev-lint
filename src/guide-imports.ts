@@ -1,32 +1,21 @@
+import { guideBlocks } from "./guide-blocks.ts";
 import ts from "../advisory/compiler.mjs";
 
 const scriptExtensions = new Map(Object.entries({ ts: "ts", typescript: "ts", tsx: "tsx", js: "js", javascript: "js", jsx: "jsx" }));
 
 function* guideReferences(markdown: string) {
-  let fence: { marker: string; extension?: string } | undefined;
-  let lines: string[] = [];
-  for (const line of markdown.split(/\r?\n/)) {
-    const marker = /^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);
-    if (!fence) {
-      if (marker) {
-        const language = marker[2].trim().split(/\s+/)[0];
-        fence = { marker: marker[1], extension: scriptExtensions.get(language.toLowerCase()) };
-      } else if (line.includes("from")) {
-        // Skip longer code spans: the apparent provider inside one is quoted code.
-        const prose = line.replace(/(?<!`)(`{2,})(?!`).*?(?<!`)\1(?!`)/g, "…");
-        for (const match of prose.matchAll(/(?<![\\`])`([$_\p{ID_Start}][$_\u200C\u200D\p{ID_Continue}]*)`[ \t]+from[ \t]+`([^`\s]+)`(?!`)/gu)) {
-          yield { name: match[1], path: match[2], prose: true };
-        }
+  for (const { language, text } of guideBlocks(markdown)) {
+    if (language !== null) {
+      const extension = scriptExtensions.get(language);
+      if (extension) yield* namedImports(extension, text);
+    } else if (text.includes("from")) {
+      // Skip longer code spans: the apparent provider inside one is quoted code.
+      const prose = text.replace(/(?<!`)(`{2,})(?!`).*?(?<!`)\1(?!`)/g, "…");
+      for (const match of prose.matchAll(/(?<![\\`])`([$_\p{ID_Start}][$_\u200C\u200D\p{ID_Continue}]*)`[ \t]+from[ \t]+`([^`\s]+)`(?!`)/gu)) {
+        yield { name: match[1], path: match[2], prose: true };
       }
-    } else if (marker && marker[1].startsWith(fence.marker) && !marker[2].trim()) {
-      if (fence.extension) yield* namedImports(fence.extension, lines.join("\n"));
-      fence = undefined;
-      lines = [];
-    } else if (fence.extension) {
-      lines.push(line);
     }
   }
-  if (fence?.extension) yield* namedImports(fence.extension, lines.join("\n"));
 }
 
 function* namedImports(extension: string, code: string) {

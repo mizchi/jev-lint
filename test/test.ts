@@ -30,6 +30,8 @@ const files = [
   "public-api",
   "public-api-layout",
   "guide-imports",
+  "guide-blocks",
+  "go-guide-imports",
   "review-artifact",
   "acceptance",
   "sarif",

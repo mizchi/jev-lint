@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-11-19T07:35:30.753Z",
+  "recorded": "2026-11-19T07:50:16.589Z",
   "model": "jev-1.14.0",
   "suite": "text/entry-layout-obscures-workflow",
   "rules": [
@@ -15,29 +15,11 @@
     [
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-wire.apiworkflow",
         "line": 1,
-        "endLine": 7,
+        "endLine": 16,
         "kind": "noul",
-        "value": 0.91,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/root.apiworkflow",
-        "line": 1,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.02,
+        "value": 0.34,
         "confidence": null
       },
       {
@@ -46,189 +28,7 @@
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.2,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/type-only.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.91,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.93,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/wrong-facade.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.86,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
-        "line": 1,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.23,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.47,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.83,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.82,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
-        "line": 1,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.98,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
-        "line": 1,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
-        "line": 1,
-        "endLine": 13,
-        "kind": "noul",
         "value": 0.08,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.21,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
-        "line": 1,
-        "endLine": 13,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.92,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.09,
         "confidence": null
       },
       {
@@ -242,11 +42,47 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
         "line": 1,
-        "endLine": 20,
+        "endLine": 13,
         "kind": "noul",
-        "value": 0.98,
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.48,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -260,47 +96,38 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.84,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.45,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.84,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
         "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
         "line": 1,
         "endLine": 18,
         "kind": "noul",
-        "value": 0.98,
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
         "confidence": null
       },
       {
@@ -310,143 +137,6 @@
         "endLine": 18,
         "kind": "noul",
         "value": 0.02,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/type-only.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/wrong-facade.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.83,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.82,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.93,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.25,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.91,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
-        "line": 1,
-        "endLine": 13,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
         "confidence": null
       },
       {
@@ -460,56 +150,11 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.86,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
-        "line": 1,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.27,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/root.apiworkflow",
-        "line": 1,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.02,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
-        "line": 1,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
         "file": "rules/text/entry-layout-obscures-workflow/fixtures/wrong-facade.apiworkflow",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.85,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.44,
+        "value": 0.82,
         "confidence": null
       },
       {
@@ -518,20 +163,74 @@
         "line": 1,
         "endLine": 7,
         "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.15,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-codec.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
         "value": 0.93,
         "confidence": null
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.11,
+        "value": 0.81,
         "confidence": null
-      }
-    ],
-    [
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-wire.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
       {
         "rule": "entry-layout-obscures-workflow",
         "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
@@ -543,20 +242,20 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.17,
+        "value": 0.11,
         "confidence": null
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.12,
         "confidence": null
       },
       {
@@ -570,11 +269,11 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
         "line": 1,
-        "endLine": 7,
+        "endLine": 11,
         "kind": "noul",
-        "value": 0.9,
+        "value": 0.35,
         "confidence": null
       },
       {
@@ -583,12 +282,21 @@
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.07,
         "confidence": null
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-codec.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
@@ -597,65 +305,11 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/wrong-facade.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
         "line": 1,
-        "endLine": 7,
+        "endLine": 45,
         "kind": "noul",
-        "value": 0.82,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/type-only.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
-        "line": 1,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.82,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.11,
+        "value": 0.84,
         "confidence": null
       },
       {
@@ -678,20 +332,20 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
         "line": 1,
-        "endLine": 45,
+        "endLine": 7,
         "kind": "noul",
-        "value": 0.82,
+        "value": 0.07,
         "confidence": null
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
         "line": 1,
-        "endLine": 11,
+        "endLine": 7,
         "kind": "noul",
-        "value": 0.24,
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -702,9 +356,144 @@
         "kind": "noul",
         "value": 0.02,
         "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/wrong-facade.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/type-only.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
       }
     ],
     [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
+        "line": 1,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-wire.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-codec.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
       {
         "rule": "entry-layout-obscures-workflow",
         "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
@@ -716,11 +505,11 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
         "line": 1,
-        "endLine": 11,
+        "endLine": 7,
         "kind": "noul",
-        "value": 0.26,
+        "value": 0.06,
         "confidence": null
       },
       {
@@ -734,20 +523,11 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
         "line": 1,
-        "endLine": 13,
+        "endLine": 18,
         "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
+        "value": 0.98,
         "confidence": null
       },
       {
@@ -765,34 +545,7 @@
         "line": 1,
         "endLine": 45,
         "kind": "noul",
-        "value": 0.81,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/root.apiworkflow",
-        "line": 1,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.02,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
-        "line": 1,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.98,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.8,
+        "value": 0.83,
         "confidence": null
       },
       {
@@ -801,16 +554,7 @@
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.83,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.89,
+        "value": 0.87,
         "confidence": null
       },
       {
@@ -819,34 +563,7 @@
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.39,
+        "value": 0.1,
         "confidence": null
       },
       {
@@ -860,20 +577,11 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/root.apiworkflow",
         "line": 1,
-        "endLine": 7,
+        "endLine": 18,
         "kind": "noul",
-        "value": 0.23,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
-        "line": 1,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.97,
+        "value": 0.02,
         "confidence": null
       }
     ],
@@ -884,16 +592,34 @@
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.2,
+        "value": 0.25,
         "confidence": null
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
+        "line": 1,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-wire.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.92,
+        "value": 0.09,
         "confidence": null
       },
       {
@@ -907,101 +633,11 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
-        "line": 1,
-        "endLine": 13,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.06,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/wrong-facade.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.85,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.89,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
         "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
         "line": 1,
         "endLine": 11,
         "kind": "noul",
-        "value": 0.32,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
-        "line": 1,
-        "endLine": 20,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.37,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.85,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/type-only.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.93,
+        "value": 0.29,
         "confidence": null
       },
       {
@@ -1015,7 +651,25 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
@@ -1024,58 +678,11 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/root.apiworkflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-codec.apiworkflow",
         "line": 1,
-        "endLine": 18,
+        "endLine": 16,
         "kind": "noul",
-        "value": 0.02,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
-        "line": 1,
-        "endLine": 18,
-        "kind": "noul",
-        "value": 0.97,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.07,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
-        "line": 1,
-        "endLine": 13,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.21,
+        "value": 0.85,
         "confidence": null
       },
       {
@@ -1089,60 +696,6 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.09,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.05,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.81,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
-        "line": 1,
-        "endLine": 11,
-        "kind": "noul",
-        "value": 0.18,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.8,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.88,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
         "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
         "line": 1,
         "endLine": 18,
@@ -1152,11 +705,47 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
         "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.06,
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/type-only.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/wrong-facade.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.81,
         "confidence": null
       },
       {
@@ -1170,6 +759,170 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
+        "line": 1,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-wire.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-codec.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.46,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/root.apiworkflow",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
         "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
         "line": 1,
         "endLine": 20,
@@ -1179,29 +932,11 @@
       },
       {
         "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
-        "line": 1,
-        "endLine": 45,
-        "kind": "noul",
-        "value": 0.43,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
-        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.08,
-        "confidence": null
-      },
-      {
-        "rule": "entry-layout-obscures-workflow",
         "file": "rules/text/entry-layout-obscures-workflow/fixtures/type-only.apiworkflow",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
-        "value": 0.93,
+        "value": 0.94,
         "confidence": null
       },
       {
@@ -1219,15 +954,406 @@
         "line": 1,
         "endLine": 7,
         "kind": "noul",
+        "value": 0.82,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/wrong-facade.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
+        "line": 1,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-wire.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.46,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/type-only.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/root.apiworkflow",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-codec.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.41,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/client-step.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/corsa-separate-tasks.apiworkflow",
+        "line": 1,
+        "endLine": 13,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-missing.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-wire.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/facade-reexport.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-selector-codec.apiworkflow",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
         "value": 0.83,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/go-split.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-overview.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/optional.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/implicit-handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/handoff.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.43,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/root.apiworkflow",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/round-trip-explicit-source.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved.apiworkflow",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/moved-variant.apiworkflow",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/type-only.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/wrong-facade.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.81,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/mixed-clients-wrong-entry.apiworkflow",
+        "line": 1,
+        "endLine": 45,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/unlisted.apiworkflow",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "rules/text/entry-layout-obscures-workflow/fixtures/migration-index.apiworkflow",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.33,
         "confidence": null
       }
     ]
   ],
   "spent": {
-    "calls": 133,
-    "inputTokens": 130263,
-    "usd": 0.005471046,
-    "ms": 879
+    "calls": 147,
+    "inputTokens": 142828,
+    "usd": 0.005998776000000001,
+    "ms": 971
   }
 }

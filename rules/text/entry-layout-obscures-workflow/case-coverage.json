@@ -95,6 +95,16 @@
       "file": "fixtures/corsa-separate-tasks.apiworkflow",
       "kind": "false-positive-risk",
       "reason": "The second Corsa entry supplies a separate documented operation; each name is associated with its actual provider."
+    },
+    {
+      "file": "fixtures/go-selector-wire.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "wire supplies the named constructor and Read is a method on its result."
+    },
+    {
+      "file": "fixtures/go-selector-codec.apiworkflow",
+      "kind": "false-negative-risk",
+      "reason": "The example requests NewDecoder from codec, while only the reviewed wire package supplies it."
     }
   ],
   "independencePairs": [

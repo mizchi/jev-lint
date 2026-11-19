@@ -40,8 +40,8 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 for (const name of ${JSON.stringify(modules)}) await import(name);
-const cli = (args, status = 0) => {
-  const result = spawnSync(process.execPath, ['node_modules/jev-lint/dist/cli.js', ...args], { encoding: 'utf8' });
+const cli = (args, status = 0, env = process.env) => {
+  const result = spawnSync(process.execPath, ['node_modules/jev-lint/dist/cli.js', ...args], { encoding: 'utf8', env });
   assert.equal(result.status, status, result.stderr.slice(0, 1600));
   return JSON.parse(result.stdout);
 };
@@ -52,10 +52,11 @@ assert.equal(advisories.length, 18); assert.ok(advisories.every(r => r.nextCheck
 assert.ok(existsSync('node_modules/jev-lint/advisory/idealis.json'));
 mkdirSync('codec');
 writeFileSync('codec/api.go', 'package codec\\nfunc Encode() {}');
-writeFileSync('workflow.md', 'Use codec.Encode for the byte stream.');
+writeFileSync('workflow.md', '~~~go\\ncodec.Encode()\\n~~~');
 writeFileSync('layout.json', JSON.stringify({ entries: { 'example.org/codec': 'codec' }, workflows: [{ guide: 'workflow.md' }] }));
-const layout = cli(['public-api-inputs', 'layout-review', '--api-layout', 'layout.json']);
+const layout = cli(['public-api-inputs', 'layout-review', '--api-layout', 'layout.json'], 0, { ...process.env, GOOS: 'js', GOARCH: 'wasm' });
 assert.equal(layout.workflows.length, 1);
+assert.ok(readFileSync('layout-review/' + layout.workflows[0].file, 'utf8').includes('codec.Encode from example.org/codec (matched package name): exported here'));
 assert.equal(cli(['check', 'layout-review', '--config', 'node_modules/jev-lint/advisory/public-api.yml', '--dry-run', '--json']).subjects, 4);
 const [surface] = cli(['public-api-inputs', 'api-review', 'codec']);
 assert.equal(surface.count, 1);

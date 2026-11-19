@@ -134,3 +134,40 @@ await testAsync("public-api-layout never judges a truncated entry map", async ()
     assert.equal(existsSync(out), false);
   } finally { rmSync(dir, {recursive:true, force:true}); }
 });
+
+await testAsync("public-api-layout resolves Go package selectors without guessing receivers", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-api-go-guide-"));
+  try {
+    for (const [subdir, source] of Object.entries({
+      git: "package git\ntype Repo struct{}\nfunc Clone() Repo { return Repo{} }\nfunc (Repo) Head() {}",
+      memory: "package store\nfunc NewStorage() {}",
+      other: "package store\nfunc Open() {}",
+    })) {
+      mkdirSync(join(dir, subdir));
+      writeFileSync(join(dir, subdir, "api.go"), source);
+    }
+    const examples = [
+      ["Inferred", "r := git.Clone()", "r.Head()", "git.NewStorage()", "store.Open()", '// git.InComment()', '_ = "git.InString()"'],
+      ["Aliased", 'import ( repo "example/git/v6"; mem "example/memory" )', "r := repo.Clone()", "r.Head()", "mem.NewStorage()", "{ mem := r; mem.Head() }"],
+      ["Unknown", 'import git "other/pkg"', "git.NewStorage()"],
+    ];
+    const workflows = examples.map(([heading, ...code]) => {
+      const guide = heading + ".md";
+      writeFileSync(join(dir, guide), ["# " + heading, "~~~go", ...code, "~~~"].join("\n"));
+      return { guide };
+    });
+    const manifest = join(dir, "layout.json");
+    writeFileSync(manifest, JSON.stringify({entries:{"example/git/v6":"git","example/memory":"memory","example/other":"other"}, workflows}));
+    let json = "";
+    const out = join(dir, "out");
+    assert.equal(await main(["public-api-inputs", out, "--api-layout", manifest], {out: s => { json = s; }}), 0);
+    const [inferred, aliased, unknown] = JSON.parse(json).workflows.map(({file}: {file: string}) =>
+      readFileSync(join(out, file), "utf8").split("Go package selector lookup:")[1] ?? "");
+    assert.match(inferred, /git\.NewStorage.*example\/git\/v6.*absent here.*example\/memory/);
+    assert.match(inferred, /git\.Clone.*exported here/);
+    assert.doesNotMatch(inferred, /Head|store\.Open|InComment|InString/);
+    assert.match(aliased, /mem\.NewStorage.*example\/memory.*exported here/);
+    assert.doesNotMatch(aliased, /Head/);
+    assert.equal(unknown, "");
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});

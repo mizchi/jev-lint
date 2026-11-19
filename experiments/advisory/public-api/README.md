@@ -157,33 +157,38 @@ For fresh judgments, run `node "$tool/src/cli.ts" eval suite --repeat 7` from th
 
 ### Historical correction and Go guide
 
-We froze the collector after the uneffect fix and used `jev-1.14.0` and the shipped cutoff of 0.68 for both evaluations.
+All three pairs use `jev-1.14.0` with the shipped cutoff of 0.68. The Drizzle inputs and scores predate the Go selector lookup and their digests still match.
 
 | Evidence | Seven-pass range | Expected | Flagged passes |
 | --- | ---: | --- | ---: |
 | Drizzle, original guide | 0.97–0.97 | Wrong provider | 7/7 |
 | Drizzle, corrected guide | 0.03–0.04 | Valid | 0/7 |
-| go-git, original README | 0.26–0.38 | Valid | 0/7 |
-| go-git, changed constructor qualifier | 0.36–0.53 | Wrong provider | 0/7 |
+| go-git, original README | 0.11–0.15 | Valid | 0/7 |
+| go-git, changed constructor qualifier | 0.89–0.91 | Wrong provider | 7/7 |
+| chi, original README | 0.08–0.11 | Valid | 0/7 |
+| chi, changed middleware qualifier | 0.83–0.86 | Wrong provider | 7/7 |
 
 **Drizzle.** The “integer” section imported both `int` and `singlestoreTable` from `drizzle-orm/mysql-core`. The latter requires the SingleStore entry. The maintainers changed the import path in March 2025. We used the exact guide from the parent and corrected commits with the same npm distribution, 0.41.0, the latest stable release at the time. Full signature extraction from these declarations exceeded the default Node heap. For this name-level test the collector takes declaration inventories projected from the published type entry points, with runtime value availability checked against the companion ESM modules. The script verifies the tarball digest before loading it in an environment without the API key. The projected entries carry names and type/value distinctions only. [Maintainer correction](https://github.com/drizzle-team/drizzle-orm-docs/commit/676a70890402bdbcab311ae0e57e193303b97cbf) · [Recorded scores](field/drizzle-scores.json)
 
-**Go.** The “In-memory example” passes `memory.NewStorage()` to `git.Clone`, then calls `r.Head()` and `r.Log()` on the returned repository. We reviewed the root, storage/memory and plumbing/object packages. The control changes only `memory.NewStorage()` to `git.NewStorage()`. The real guide uses package qualifiers without an import block. Both versions received low scores despite the constructor appearing only in the storage package. This is a false negative on a controlled edit. [Pinned README](https://github.com/go-git/go-git/blob/75f3ca83333c62fa9603b8b4f6b339bd3e9ec9f4/README.md#in-memory-example) · [Recorded scores](field/go-scores.json)
+**go-git.** The “In-memory example” passes `memory.NewStorage()` to `git.Clone`, then calls `r.Head()` and `r.Log()` on the returned repository. We reviewed the root, storage/memory and plumbing/object packages. The control changes only `memory.NewStorage()` to `git.NewStorage()`. The real guide uses package qualifiers without an import block. Before selector lookup, every pass missed the control (0.36–0.53). The revised input resolves the declared package names, lists storage/memory as the provider of the misplaced constructor and omits calls on the local receiver. [Previous scores](https://github.com/mizchi/jev-lint/blob/a8829ca/experiments/advisory/public-api/field/go-scores.json) · [Pinned README](https://github.com/go-git/go-git/blob/75f3ca83333c62fa9603b8b4f6b339bd3e9ec9f4/README.md#in-memory-example) · [Recorded scores](field/go-scores.json)
 
-To recreate the inputs, start in this checkout with local clones of `drizzle-team/drizzle-orm-docs` and `go-git/go-git` containing the pinned commits:
+**chi.** After implementing the go-git fix, we evaluated the “Examples” section from chi with the same collector and rule. The example imports the v5 router and its middleware package and calls methods on a local router. The control changes `r.Use(middleware.RequestID)` to `r.Use(chi.RequestID)` while retaining both imports. Both Go defects are controlled edits to valid guides. These two pairs test provider resolution in distinct import styles and give no estimate of defect prevalence in other repositories. [Pinned README](https://github.com/go-chi/chi/blob/c64ed7d6635f33a8b2feaff7dcfa55677023ac7d/README.md#examples) · [Recorded scores](field/chi-scores.json)
+
+To recreate the inputs, start in this checkout with local clones of `drizzle-team/drizzle-orm-docs`, `go-git/go-git` and `go-chi/chi` containing the pinned commits:
 
 ```sh
 tool=$PWD
 data="$tool/experiments/advisory/public-api/field"
 tmp=$(mktemp -d)
 npm pack drizzle-orm@0.41.0 --ignore-scripts --pack-destination "$tmp"
-bash "$data/collect.sh" "$HOME/ghq/github.com/drizzle-team/drizzle-orm-docs" "$HOME/ghq/github.com/go-git/go-git" "$tmp/drizzle-orm-0.41.0.tgz" "$tmp/review"
+bash "$data/collect.sh" "$HOME/ghq/github.com/drizzle-team/drizzle-orm-docs" "$HOME/ghq/github.com/go-git/go-git" "$tmp/drizzle-orm-0.41.0.tgz" "$tmp/review" "$HOME/ghq/github.com/go-chi/chi"
 cd "$tmp/review"
 shasum -a 256 -c "$data/inputs.sha256"
-for group in drizzle go; do
+shasum -a 256 -c "$data/chi-inputs.sha256"
+for group in drizzle go chi; do
   cp "$data/$group-scores.json" "$group/baseline.json"
   node "$tool/src/cli.ts" eval "$group" --replay
 done
 ```
 
-A live evaluation uses `eval "$group" --repeat 7`. The Go defect retains its positive label so the missed case remains visible.
+A live evaluation uses `eval "$group" --repeat 7`. The shipped workflow suite also pairs a misplaced Go constructor with a valid guide that names its provider. All 21 cases (12 clean and nine defects) matched their labels on every one of seven passes.
