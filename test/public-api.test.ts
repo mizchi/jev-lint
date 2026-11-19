@@ -82,7 +82,7 @@ await testAsync("public-api fixture scores use the exact inventories generated b
   const dir = mkdtempSync(join(tmpdir(), "jev-api-calibration-"));
   try {
     const root = "experiments/advisory/public-api/";
-    const targets = ["ledger.ts", "units.ts", "read.ts", "codec", "queue", "catalog.ts", "variant/read.ts", "loader.ts"];
+    const targets = ["ledger.ts", "units.ts", "read.ts", "codec", "queue", "catalog.ts", "variant/read.ts", "loader.ts", "pixels.ts", "variant/pixels.ts"];
     const out = join(dir, "out");
     const messages: string[] = [];
     assert.equal(await main(["public-api-inputs", out, ...targets.map(t => root + t)], { out: () => {}, log: s => messages.push(s) }), 0, messages.join("\n"));
@@ -162,4 +162,39 @@ await testAsync("public-api preserves documentation attached to a barrel re-expo
     assert.match(readFileSync(path, "utf8"), /in-tree harness/);
     assert.equal(row.documented, 1);
   } finally { rmSync(dir, {recursive:true, force:true}); }
+});
+
+await testAsync("public-api counterexamples vary support and behavior independently for the same Go export", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-api-contract-grid-"));
+  try {
+    const pkg = join(dir, "lease");
+    mkdirSync(pkg);
+    writeFileSync(join(pkg, "lease.go"), "package lease\nfunc Resolve(id string) bool\n");
+    const guide = join(dir, "guide.md");
+    const audiences = {
+      adapter: "Resolve is a supported entry point for third-party queue adapters recovering interrupted leases.",
+      internal: "Resolve is reserved for the in-tree lease reconciler. Calls from outside the package are unsupported.",
+    };
+    const outcomes = {
+      specified: "It deletes the lease identified by id. True means it was deleted; false means it was already absent.",
+      unspecified: "Resolution follows the current processing mode. The returned status reflects the outcome of processing.",
+    };
+    for (const [audience, role] of Object.entries(audiences)) {
+      for (const [outcome, behavior] of Object.entries(outcomes)) {
+        const variant = `resolve-${audience}-${outcome}`;
+        writeFileSync(guide, role + "\n" + behavior);
+        const out = join(dir, variant);
+        let inventory = "";
+        assert.equal(await main(["public-api-inputs", out, pkg, "--api-doc", guide], { out: s => { inventory = s; } }), 0);
+        const [surface] = JSON.parse(inventory);
+        const bindings = join(out, surface.bindings);
+        assert.equal(readdirSync(bindings).length, 1);
+        const evidence = readFileSync(join(bindings, readdirSync(bindings)[0]), "utf8");
+        for (const rule of ["export-has-no-public-role", "api-use-is-unclear"]) {
+          const fixture = join("rules/text", rule, "fixtures", variant + ".apibinding");
+          assert.equal(evidence, readFileSync(fixture, "utf8"), fixture);
+        }
+      }
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });

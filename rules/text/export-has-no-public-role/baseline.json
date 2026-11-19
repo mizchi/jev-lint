@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-eval-1",
-  "recorded": "2026-11-19T06:34:16.950Z",
+  "recorded": "2026-11-19T06:41:00.811Z",
   "model": "jev-1.14.0",
   "suite": "text/export-has-no-public-role",
   "rules": [
@@ -15,11 +15,20 @@
     [
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/migration-gate.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/cursor-variant.apibinding",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-drain.apibinding",
         "line": 1,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.09,
+        "value": 0.15,
         "confidence": null
       },
       {
@@ -33,38 +42,20 @@
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/generic.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/migration.apibinding",
         "line": 1,
-        "endLine": 5,
+        "endLine": 6,
         "kind": "noul",
         "value": 0.03,
         "confidence": null
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/map.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-adapter-unspecified.apibinding",
         "line": 1,
-        "endLine": 5,
+        "endLine": 8,
         "kind": "noul",
-        "value": 0.94,
-        "confidence": null
-      },
-      {
-        "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/testkit.apibinding",
-        "line": 1,
-        "endLine": 5,
-        "kind": "noul",
-        "value": 0.16,
-        "confidence": null
-      },
-      {
-        "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/cursor.apibinding",
-        "line": 1,
-        "endLine": 5,
-        "kind": "noul",
-        "value": 0.95,
+        "value": 0.02,
         "confidence": null
       },
       {
@@ -78,6 +69,24 @@
       },
       {
         "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/cursor.apibinding",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/generic.apibinding",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
         "file": "rules/text/export-has-no-public-role/fixtures/flush.apibinding",
         "line": 1,
         "endLine": 5,
@@ -87,29 +96,29 @@
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-internal.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/testkit.apibinding",
         "line": 1,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.46,
+        "value": 0.13,
         "confidence": null
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/migration.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-internal-specified.apibinding",
         "line": 1,
-        "endLine": 6,
+        "endLine": 8,
         "kind": "noul",
-        "value": 0.03,
+        "value": 0.96,
         "confidence": null
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-drain.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-adapter-specified.apibinding",
         "line": 1,
-        "endLine": 5,
+        "endLine": 8,
         "kind": "noul",
-        "value": 0.11,
+        "value": 0.02,
         "confidence": null
       },
       {
@@ -123,22 +132,11 @@
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/cursor-variant.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-internal.apibinding",
         "line": 1,
-        "endLine": 7,
+        "endLine": 5,
         "kind": "noul",
-        "value": 0.95,
-        "confidence": null
-      }
-    ],
-    [
-      {
-        "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/cursor-variant.apibinding",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.95,
+        "value": 0.45,
         "confidence": null
       },
       {
@@ -152,16 +150,126 @@
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-internal.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/map.apibinding",
         "line": 1,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.47,
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-internal-unspecified.apibinding",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/migration.apibinding",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/cursor.apibinding",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/guided.apibinding",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-adapter-specified.apibinding",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.02,
         "confidence": null
       },
       {
         "rule": "export-has-no-public-role",
         "file": "rules/text/export-has-no-public-role/fixtures/flush.apibinding",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-internal-unspecified.apibinding",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-internal.apibinding",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.56,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-drain.apibinding",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-internal-specified.apibinding",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/generic.apibinding",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-adapter-unspecified.apibinding",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/opaque.apibinding",
         "line": 1,
         "endLine": 5,
         "kind": "noul",
@@ -179,47 +287,11 @@
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/migration.apibinding",
-        "line": 1,
-        "endLine": 6,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/guided.apibinding",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-drain.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/migration-gate.apibinding",
         "line": 1,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.1,
-        "confidence": null
-      },
-      {
-        "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/cursor.apibinding",
-        "line": 1,
-        "endLine": 5,
-        "kind": "noul",
-        "value": 0.96,
-        "confidence": null
-      },
-      {
-        "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/generic.apibinding",
-        "line": 1,
-        "endLine": 5,
-        "kind": "noul",
-        "value": 0.03,
+        "value": 0.07,
         "confidence": null
       },
       {
@@ -233,11 +305,11 @@
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/opaque.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/cursor-variant.apibinding",
         "line": 1,
-        "endLine": 5,
+        "endLine": 7,
         "kind": "noul",
-        "value": 0.02,
+        "value": 0.95,
         "confidence": null
       },
       {
@@ -257,7 +329,7 @@
         "line": 1,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.02,
+        "value": 0.03,
         "confidence": null
       },
       {
@@ -271,29 +343,11 @@
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/guided.apibinding",
-        "line": 1,
-        "endLine": 7,
-        "kind": "noul",
-        "value": 0.04,
-        "confidence": null
-      },
-      {
-        "rule": "export-has-no-public-role",
         "file": "rules/text/export-has-no-public-role/fixtures/cursor-variant.apibinding",
         "line": 1,
         "endLine": 7,
         "kind": "noul",
         "value": 0.95,
-        "confidence": null
-      },
-      {
-        "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/flush.apibinding",
-        "line": 1,
-        "endLine": 5,
-        "kind": "noul",
-        "value": 0.02,
         "confidence": null
       },
       {
@@ -307,20 +361,65 @@
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-drain.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-adapter-specified.apibinding",
         "line": 1,
-        "endLine": 5,
+        "endLine": 8,
         "kind": "noul",
-        "value": 0.14,
+        "value": 0.02,
         "confidence": null
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-internal.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/opaque.apibinding",
         "line": 1,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.47,
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/migration.apibinding",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/flush.apibinding",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-adapter-unspecified.apibinding",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-internal-unspecified.apibinding",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/guided.apibinding",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.04,
         "confidence": null
       },
       {
@@ -329,7 +428,25 @@
         "line": 1,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.08,
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/resolve-internal-specified.apibinding",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "export-has-no-public-role",
+        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-drain.apibinding",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.12,
         "confidence": null
       },
       {
@@ -347,33 +464,24 @@
         "line": 1,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.15,
+        "value": 0.12,
         "confidence": null
       },
       {
         "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/migration.apibinding",
-        "line": 1,
-        "endLine": 6,
-        "kind": "noul",
-        "value": 0.03,
-        "confidence": null
-      },
-      {
-        "rule": "export-has-no-public-role",
-        "file": "rules/text/export-has-no-public-role/fixtures/opaque.apibinding",
+        "file": "rules/text/export-has-no-public-role/fixtures/scheduler-internal.apibinding",
         "line": 1,
         "endLine": 5,
         "kind": "noul",
-        "value": 0.02,
+        "value": 0.51,
         "confidence": null
       }
     ]
   ],
   "spent": {
-    "calls": 39,
-    "inputTokens": 26187,
-    "usd": 0.001099854,
-    "ms": 345
+    "calls": 51,
+    "inputTokens": 34533,
+    "usd": 0.0014503860000000001,
+    "ms": 318
   }
 }

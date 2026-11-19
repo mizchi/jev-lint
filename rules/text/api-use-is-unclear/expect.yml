@@ -19,3 +19,11 @@ fixtures/flush.apibinding:
   - {"line": 1, "window": 0, "label": "bad", "reason": "It is unclear whether flush sends, drops, or persists items or what the boolean means."}
 fixtures/cursor-variant.apibinding:
   - {"line": 1, "window": 0, "label": "clean", "reason": "Unrelated naming advice leaves the observable effect unchanged."}
+fixtures/resolve-adapter-specified.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The lease deletion and both return values determine a caller example."}
+fixtures/resolve-adapter-unspecified.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The guide names an audience but leaves the effect and the boolean undefined."}
+fixtures/resolve-internal-specified.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The lease deletion and both return values determine a caller example."}
+fixtures/resolve-internal-unspecified.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The guide names an audience but leaves the effect and the boolean undefined."}

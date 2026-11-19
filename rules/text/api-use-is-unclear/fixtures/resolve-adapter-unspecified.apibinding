@@ -1,0 +1,8 @@
+Surface: Go package lease
+Public binding: Resolve
+Signature: func Resolve(id string) bool
+Declaration documentation:
+(none supplied)
+Public guide (guide.md):
+Resolve is a supported entry point for third-party queue adapters recovering interrupted leases.
+Resolution follows the current processing mode. The returned status reflects the outcome of processing.

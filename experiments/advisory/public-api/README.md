@@ -1,8 +1,21 @@
 # Public API surface evaluation
 
-The accepted fixture set has eight surfaces generated from the TypeScript and Go sources in this directory. Three illustrate avoidable surface area. The five clean cases include fifteen unit conversions and types, buffered versus streaming reads, distinct wire formats, a private-helper edit, and a default export of the same named loader. The fixture extraction test checks the exact text sent to Jev. The labels and three-pass answers are in [the rule suite](../../../rules/text/public-api-surface).
+The initial calibration set had eight surfaces generated from the TypeScript and Go sources in this directory. Three illustrate avoidable surface area. The five clean cases include fifteen unit conversions and types, buffered versus streaming reads, distinct wire formats, a private-helper edit, and a default export of the same named loader. The fixture extraction test checks the exact text sent to Jev. The labels and three-pass answers are in [the rule suite](../../../rules/text/public-api-surface).
 
 The first seven cases separated at 1.75. A named/default loader in crater motivated checking alias identity and retaining late member names on long TypeScript types. Adding a clean dual-export loader exposed a false positive at the old cutoff. The revised three-pass fit gave 2.37. A separate three-pass run at 2.37 classified all eight fixtures correctly. These cases measure the rubric on the labelled examples.
+
+## Counterexamples at the shipped cutoffs
+
+The TypeScript pair exports the same two zero-argument functions returning `Uint8Array`. Changing only the contract of `mapPixels` changes the three-pass mean from 1.13 (a scoped, write-through view for filter plugins) to 2.98 (an unsupported scratch-buffer hook). The surface cutoff is 2.37.
+
+The Go cases share one declaration, `func Resolve(id string) bool`. The guide varies the supported audience and the description of its effect independently. Each cell gives the expected and observed advisory findings across all three passes.
+
+| Audience in the guide | Deletion and both boolean outcomes specified | Effect and boolean outcomes unspecified |
+| --- | --- | --- |
+| Third-party queue adapters | Neither finding | Unclear use |
+| In-tree reconciler only | Internal-only export | Both findings |
+
+The collector regression test regenerates the evidence for both languages. The three rule suites now contain 10 surface cases, 17 export-role cases and 14 clarity cases. To reproduce their classifications without a model request, run `node src/cli.ts eval rules/text/public-api-surface rules/text/export-has-no-public-role rules/text/api-use-is-unclear --no-config --replay`.
 
 ## Pinned repositories
 
@@ -47,7 +60,7 @@ node experiments/advisory/public-api/hints.mjs --verify
 
 ## Predicting caller behavior
 
-The export-role advisory was fitted on thirteen labelled inputs, including a recommended alternative versus an explicitly exclusive client contract. The caller-clarity advisory used ten labelled inputs. The same Go signature and declaration comment appear in the `generic` and `guided` fixtures. Adding a guide that explains the caller task and both boolean outcomes moved the unclear-use verdict from 0.94 to 0.11–0.14 across the three accepted passes. Neither variant was flagged for withdrawing the export.
+The export-role advisory was fitted on thirteen labelled inputs, including a recommended alternative versus an explicitly exclusive client contract. The caller-clarity advisory used ten labelled inputs. The same Go signature and declaration comment appear in the `generic` and `guided` fixtures. Adding a guide that explains the caller task and both boolean outcomes moved the unclear-use verdict from 0.95 to 0.11–0.13 across the three current baseline passes. Neither variant was flagged for withdrawing the export.
 
 The pinned crater Wasm entry and idealis Go adapter supplied 36 bindings. Each package's own README was attached. The three-pass record reported five unclear-use candidates, all in idealis, and zero internal-only exports. One candidate was `Core.Canonicalize(ctx, value) (Value, error)`. A reader can identify the input and return type. A before/after value and an error case would specify which canonical form the caller receives. These are review candidates without human defect labels.
 

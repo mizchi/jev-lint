@@ -25,3 +25,11 @@ fixtures/scheduler-internal.apibinding:
   - {"line": 1, "window": 0, "label": "bad", "reason": "The queue drain backs the scheduler and is outside the supported client contract."}
 fixtures/migration-gate.apibinding:
   - {"line": 1, "window": 0, "label": "clean", "reason": "Draining outstanding writes during a migration is a distinct external use."}
+fixtures/resolve-adapter-specified.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The supported adapter ABI gives downstream clients a role."}
+fixtures/resolve-adapter-unspecified.apibinding:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The supported adapter ABI gives downstream clients a role."}
+fixtures/resolve-internal-specified.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The guide explicitly excludes external callers."}
+fixtures/resolve-internal-unspecified.apibinding:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The guide explicitly excludes external callers."}

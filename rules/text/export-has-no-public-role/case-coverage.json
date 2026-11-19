@@ -65,12 +65,40 @@
       "file": "fixtures/migration-gate.apibinding",
       "kind": "false-positive-risk",
       "reason": "Draining outstanding writes during a migration is a distinct external use."
+    },
+    {
+      "file": "fixtures/resolve-adapter-specified.apibinding",
+      "kind": "false-positive-risk",
+      "reason": "The supported adapter ABI gives downstream clients a role."
+    },
+    {
+      "file": "fixtures/resolve-adapter-unspecified.apibinding",
+      "kind": "unrelated",
+      "reason": "The supported adapter ABI gives downstream clients a role. Changing only the outcome description preserves the audience."
+    },
+    {
+      "file": "fixtures/resolve-internal-specified.apibinding",
+      "kind": "false-negative-risk",
+      "reason": "The guide explicitly excludes external callers."
+    },
+    {
+      "file": "fixtures/resolve-internal-unspecified.apibinding",
+      "kind": "unrelated",
+      "reason": "The guide explicitly excludes external callers. Changing only the outcome description preserves the audience."
     }
   ],
   "independencePairs": [
     {
       "base": "fixtures/cursor.apibinding",
       "variant": "fixtures/cursor-variant.apibinding"
+    },
+    {
+      "base": "fixtures/resolve-adapter-specified.apibinding",
+      "variant": "fixtures/resolve-adapter-unspecified.apibinding"
+    },
+    {
+      "base": "fixtures/resolve-internal-specified.apibinding",
+      "variant": "fixtures/resolve-internal-unspecified.apibinding"
     }
   ]
 }

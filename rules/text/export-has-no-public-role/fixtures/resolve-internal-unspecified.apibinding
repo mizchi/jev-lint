@@ -1,0 +1,8 @@
+Surface: Go package lease
+Public binding: Resolve
+Signature: func Resolve(id string) bool
+Declaration documentation:
+(none supplied)
+Public guide (guide.md):
+Resolve is reserved for the in-tree lease reconciler. Calls from outside the package are unsupported.
+Resolution follows the current processing mode. The returned status reflects the outcome of processing.

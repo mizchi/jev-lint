@@ -40,6 +40,16 @@
       "file": "fixtures/8-loader.ts.apisurface",
       "kind": "false-positive-risk",
       "reason": "The default and named loader refer to the same declaration."
+    },
+    {
+      "file": "fixtures/9-pixels.ts.apisurface",
+      "kind": "false-positive-risk",
+      "reason": "A detached copy and a scoped write-through view support different plugin needs."
+    },
+    {
+      "file": "fixtures/10-pixels.ts.apisurface",
+      "kind": "false-negative-risk",
+      "reason": "The second binding exposes an unsupported renderer scratch buffer behind the snapshot API."
     }
   ],
   "independencePairs": [
