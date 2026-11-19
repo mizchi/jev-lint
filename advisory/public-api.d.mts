@@ -21,7 +21,7 @@ interface Surface extends NameSurface {
   packageDoc?: string;
 }
 
-export function scanPublicSource(binary: string, language: string, source: string, rules: Record<string, unknown>): { text: string; ruleId: string }[];
+export function scanPublicSource(binary: string, language: string, source: string, rules: Record<string, unknown>): { text: string; ruleId: string; range: { start: { line: number }; end: { line: number } } }[];
 export function collectPublicNames(targets: string[], binary: string): Promise<NameSurface[]>;
 export function collectPublicApi(targets: string[], binary: string): Promise<Surface[]>;
 export function writePublicApiInputs(out: string, surfaces: Surface[], guide?: string | null, workflows?: {file: string; text: string}[]): Inventory[];

@@ -79,6 +79,8 @@ A library manifest or crate root (`src/lib.rs`) selects its prebuilt module inde
 
 In fenced Rust snippets, ast-grep selects explicit `use` declarations. The collector expands nested use trees, checks the original name before an alias, and identifies other reviewed modules documenting a misplaced import. Glob imports and calls on local values supply no named import. Unqualified paths shadowed by a local module or imported alias in that fence are skipped.
 
+For Markdown extracted from rustdoc, set `"guideFormat": "rustdoc"` on the workflow alongside `guide` and the optional `heading`. This enables import lookup in untagged fences and runnable Rust examples with attributes such as `no_run`. Hidden setup lines participate in name resolution but supply no visible import evidence. The lookup skips `ignore`, `compile_fail` and other-language examples. Ordinary Markdown workflows continue to require a Rust language tag.
+
 For example, an editing guide might promise `open`, `mapPixels` and `commit` at the root. Moving `commit` to `canvas/filters` leaves its individual contract intact but breaks the documented route. An explicit handoff to `canvas/filters` makes the split usable. The workflow finding asks the reviewer to try the published imports before choosing between a documentation change and a re-export.
 
 The collector returns the public name count, alias count and number of primary bindings with declaration or member documentation. The documentation denominator is `count - aliases`. Supplied guide text is evaluated for meaning and does not increment this count. Use the counts to interpret the sample. The report's `--summary` gives flagged/answered separately for each question and counts unanswered subjects separately. Findings remain advisory.

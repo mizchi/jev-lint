@@ -26,14 +26,16 @@ export async function publicApiLayoutInputs(out: string, manifest: string, binar
     return { publicPath, source };
   });
   const guides = layout.workflows.map((item: unknown) => {
-    if (!object(item) || Object.keys(item).some(k => k !== "guide" && k !== "heading") || !nonempty(item.guide) ||
+    if (!object(item) || Object.keys(item).some(k => k !== "guide" && k !== "heading" && k !== "guideFormat") || !nonempty(item.guide) ||
         (item.heading !== undefined && !nonempty(item.heading))) {
       throw new Error("each workflow needs a guide path and an optional heading");
     }
+    const format = item.guideFormat;
+    if (format !== undefined && format !== "markdown" && format !== "rustdoc") throw new Error("guideFormat must be markdown or rustdoc");
     const content = readFileSync(resolve(root, item.guide), "utf8");
     const heading = item.heading;
     try {
-      return { guide: item.guide, heading, ...selectDocumentExcerpt(content, { heading }) };
+      return { guide: item.guide, heading, format, ...selectDocumentExcerpt(content, { heading }) } as const;
     } catch (error) {
       throw new Error(`${item.guide}${heading ? " / " + heading : ""}: ${(error as Error).message}`);
     }
@@ -59,14 +61,14 @@ export async function publicApiLayoutInputs(out: string, manifest: string, binar
     ? [{ path: entries[i].publicPath, name: surface.packageName, exports: new Set(surface.entries.map(entry => entry.name)) }]
     : []);
   const goLookups = goGuideLookups(guides.map(guide => guide.quote), goPackages);
-  const workflows = guides.map(({ guide, heading, startLine, endLine, quote }, index) => {
+  const workflows = guides.map(({ guide, heading, startLine, endLine, quote, format }, index) => {
     const title = Array.from(heading ?? basename(guide)).slice(0, 48).join("").replace(/[^\p{L}\p{N}_-]+/gu, "-");
     const file = `workflow-${index + 1}-${title}.apiworkflow`;
     const text = `Guide: ${guide}:${startLine}-${endLine}\n${quote}\n\nReviewed import paths and their exports (other paths were not inspected):\n${entryMap}\n` + (lookup?.(quote, tsEntries) ?? "") + (goLookups[index] ?? "") +
-      (rustEntries.size ? rustGuideLookup(quote, rustEntries, binary) : "");
+      (rustEntries.size ? rustGuideLookup(quote, rustEntries, binary, format) : "");
     // A missing export is meaningful only when the model receives the entire selected map.
     if (text.length > MAX_BLOCK_CHARS) throw new Error(`${file} exceeds the text budget; narrow the guide section or selected entry map`);
-    return { file, guide, heading, startLine, endLine, text };
+    return { file, guide, heading, ...(format && { guideFormat: format }), startLine, endLine, text };
   });
   const inventories = writePublicApiInputs(out, detailed ?? [], bindingGuide, workflows);
   const records = entries.map(({ source, publicPath }, i) => ({

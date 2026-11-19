@@ -1,0 +1,162 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T08:35:44.706Z",
+  "model": "jev-1.14.0",
+  "suite": "doctests",
+  "rules": [
+    {
+      "id": "entry-layout-obscures-workflow",
+      "draft": "fa510dace70d",
+      "at": 0.68
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-wrong-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "doctests/fixtures/crossbeam_utils-original-implicit.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 14,
+    "inputTokens": 15855,
+    "usd": 0.0006659100000000001,
+    "ms": 219
+  }
+}

@@ -17,12 +17,12 @@ await testAsync("public-api-rust uses documented module boundaries and checks ex
     ].join("\n"));
     writeFileSync(join(dir, "Cargo.toml"), '[package]\nname="codec"\nversion="0.0.1"\nedition="2021"\n[lib]\npath="lib.rs"\n');
     execFileSync("cargo", ["doc", "--no-deps", "--offline"], { cwd: dir, env: { ...process.env, CARGO_TARGET_DIR: join(dir, "target") }, stdio: "pipe" });
-    const guide = ["~~~rust", "use codec::{open as start, wire::{decode}};", "use codec::decode as wrong;",
+    const guide = ["~~~", "use codec::{open as start, wire::{decode}};", "use codec::decode as wrong;",
       '// use codec::bogus;', 'let s = "use codec::bogus;";', "~~~"].join("\n");
     writeFileSync(join(dir, "guide.md"), guide);
     const layout = join(dir, "layout.json");
     writeFileSync(layout, JSON.stringify({ entries: { codec: "Cargo.toml", "codec::wire": "target/doc/codec/wire/index.html" },
-      workflows: [{ guide: "guide.md" }] }));
+      workflows: [{ guide: "guide.md", guideFormat: "rustdoc" }, { guide: "guide.md" }] }));
     let crateJson = "";
     assert.equal(await main(["public-api-inputs", join(dir, "crate"), src], { out: s => { crateJson = s; } }), 0);
     assert.equal(JSON.parse(crateJson)[0].count, 4);
@@ -34,6 +34,8 @@ await testAsync("public-api-rust uses documented module boundaries and checks ex
       if (mode === "names") args.push("--workflows-only");
       assert.equal(await main(args, { out: s => { json = s; } }), 0);
       const { entries, workflows } = JSON.parse(json);
+      assert.equal(workflows[0].guideFormat, "rustdoc");
+      assert.doesNotMatch(readFileSync(join(out, workflows[1].file), "utf8"), /Rust use lookup/);
       const evidence = readFileSync(join(out, workflows[0].file), "utf8");
       assert.match(evidence, /^codec: Decoder, open, unpack \(alias of wire::decode\), wire$/m);
       assert.match(evidence, /^codec::wire: decode$/m);
@@ -47,6 +49,12 @@ await testAsync("public-api-rust uses documented module boundaries and checks ex
       }
       assert.equal(existsSync(join(out, "bindings")), mode === "full");
     }
+    writeFileSync(layout, JSON.stringify({ entries: { codec: "Cargo.toml" }, workflows: [{ guide: "guide.md", guideFormat: "typo" }] }));
+    const logs: string[] = [];
+    const bad = join(dir, "invalid");
+    assert.equal(await main(["public-api-inputs", bad, "--api-layout", layout], { log: s => logs.push(s) }), 2);
+    assert.match(logs.join("\n"), /guideFormat must be/);
+    assert.equal(existsSync(bad), false);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 

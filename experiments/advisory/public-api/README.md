@@ -216,3 +216,35 @@ node "$tool/src/cli.ts" public-api-inputs full --api-layout original/layout.json
 (cd full && shasum -a 256 -c "$data/bytes-full.sha256")
 node "$tool/src/cli.ts" replay "$data/bytes-full-scores.json" --no-config --summary
 ```
+
+#### Rustdoc fence comparison and independent check
+
+At the unchanged 0.68 cutoff and model `jev-1.14.0`, three fresh batches of seven on the existing bytes inputs flagged the edit 7/7 in each batch (0.69–0.79 overall) and the original 0/7 in each batch (0.05–0.09). The first two batches each had a positive score just 0.01 above cutoff. The earlier three misses on the same edit still matter. [Batch 1](field/rust-repeat/bytes-1.json) · [Batch 2](field/rust-repeat/bytes-2.json) · [Batch 3](field/rust-repeat/bytes-3.json)
+
+Two new published examples use untagged code fences, the normal Rust default in rustdoc. We froze the examples, changed one import path per example and type-checked both versions against the pinned libraries. Both originals compiled; both edits yielded E0432. We ran the collector on each pair with the original fences and with only the opening language tag made explicit. Counts are flagged passes out of seven.
+
+| Edited path | Ordinary Markdown, untagged | Ordinary Markdown, tagged Rust | Rustdoc mode, untagged | Rustdoc mode, tagged Rust |
+| --- | ---: | ---: | ---: | ---: |
+| memchr 2.7.6, move `memchr3_iter` from root to `memmem` | 0/7 | 7/7 | 7/7 | 7/7 |
+| base64 0.22.1, move `DecoderReader` from `read` to `write` | 0/7 | 7/7 | 7/7 | 7/7 |
+
+All originals scored below cutoff in every condition. Adding the explicit workflow format fixes the untagged evidence gap. After freezing that change, we tried the original untagged WaitGroup example from crossbeam-utils 0.8.21 and changed `sync::WaitGroup` to `thread::WaitGroup`. The latter name exists privately, so rustc rejects the consumer import with E0603. Rustdoc mode scored the original 0.05 in all seven passes and flagged the edit in all seven (0.88–0.93). This is one independent pair. The memchr and base64 pairs were used to diagnose the collector. [Markdown judgments](field/rust-repeat/markdown-scores.json) · [Rustdoc judgments](field/rust-repeat/rustdoc-scores.json) · [Independent pair](field/rust-repeat/holdout-scores.json)
+
+For reproduction, use Rust 1.98.0 and a directory containing the published archives named `memchr-2.7.6.crate`, `base64-0.22.1.crate` and `crossbeam-utils-0.8.21.crate`. The generator checks each archive digest and the compiler result for each label before creating the evaluation inputs.
+
+```sh
+tool=$PWD
+data="$tool/experiments/advisory/public-api/field"
+out=$(mktemp -d)
+for run in markdown rustdoc holdout; do
+  format=$run
+  group=diagnosis
+  if [ "$run" = holdout ]; then format=rustdoc; group=holdout; fi
+  node "$data/rust-doctests.mjs" /path/to/archives "$out/$run" "$format" "$group"
+  (cd "$out/$run" && shasum -a 256 -c "$data/rust-repeat/$run.sha256" &&
+    cp "$data/rust-repeat/$run-scores.json" doctests/baseline.json &&
+    node "$tool/src/cli.ts" eval doctests --replay)
+done
+```
+
+The Markdown record reproduces the two misses. For the bytes batches, use the existing bytes reproduction above, substituting each `rust-repeat/bytes-{1,2,3}.json` record for the baseline.
