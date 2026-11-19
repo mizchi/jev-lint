@@ -8,15 +8,25 @@ writing text -- to decide what a parser cannot.
 
 ## Try it on tracked files
 
-Try it in a Git working tree with Node 24+. Set `OPENROUTER_API_KEY` to your [OpenRouter key](https://openrouter.ai/keys), then run:
+To run your first lint check, you need Node.js 24+, a Git working tree, and **either `OPENROUTER_API_KEY` or `TYPESAFE_API_KEY`**. Choose one of the following commands.
+
+**Free trial with OpenRouter.** The free Decider model requires an OpenRouter account and API key. [Get an OpenRouter key](https://openrouter.ai/keys).
 
 ```sh
+export OPENROUTER_API_KEY='<your-openrouter-key>'
 npx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free
 ```
 
-Without a config, the CLI asks once, selects starter rules from `git ls-files`, prints the proposed YAML, then lints a small sample. Both rule selection and lint use the free Decider. Selection sees up to 64 tracked filenames (8 KiB of paths). The check reads up to three eligible files, at most 16 KiB each and 32 KiB combined. It leaves saving the YAML to you. Run `npx -y jev-lint --dry-run` to inspect the inventory without a key.
+**TypeSafe Jev.** We recommend Jev for regular use and CI because the shipped thresholds are calibrated on it. If both keys are exported, unset `OPENROUTER_API_KEY` to connect to TypeSafe directly. [Get a TypeSafe key](https://console.typesafe.ai/keys).
 
-**For ongoing use and CI, we strongly recommend Jev with `TYPESAFE_API_KEY`.** The shipped thresholds are calibrated on Jev. Set your [TypeSafe key](https://console.typesafe.ai/keys) and run `npx -y jev-lint`. If both keys are exported, unset `OPENROUTER_API_KEY` to use TypeSafe directly. An existing config uses its normal file and rule selection.
+```sh
+export TYPESAFE_API_KEY='<your-typesafe-key>'
+npx -y jev-lint
+```
+
+With no API key, run `npx -y jev-lint --dry-run` to preview the files and candidate rules offline.
+
+Without a config, the CLI asks once, selects starter rules from up to 64 tracked filenames (8 KiB of paths), prints the proposed YAML, then lints up to three files (16 KiB each, 32 KiB total). The OpenRouter trial uses the free Decider for both selection and lint. Saving the YAML is optional. An existing config uses its own files and rules.
 
 ## Example finding
 

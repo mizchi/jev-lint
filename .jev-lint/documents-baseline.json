@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "dc0d6e1166db9b6ff1670a56555f6d595893f01bb248c60a2cbc39dae17f1e73",
+  "snapshotDigest": "fe11cd5dec6e23315cae12e47d0ec6bda9c214c59b177a39b0ce53e295a8c845",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -32,12 +32,12 @@
       "contextHash": "7f6b85ff7878f43be4a210f5ca0c40a99de683d90f043fc71af17606661e4527",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.59,
+        "confidence": 0.6,
         "probabilities": {
-          "supports": 0.69,
+          "supports": 0.7,
           "contradicts": 0.25,
           "unrelated": 0,
-          "insufficient_context": 0.06
+          "insufficient_context": 0.05
         }
       }
     },
@@ -57,21 +57,21 @@
         "source": "readme",
         "path": "README.md",
         "startLine": 9,
-        "endLine": 19,
-        "quote": "## Try it on tracked files\n\nTry it in a Git working tree with Node 24+. Set `OPENROUTER_API_KEY` to your [OpenRouter key](https://openrouter.ai/keys), then run:\n\n```sh\nnpx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\nWithout a config, the CLI asks once, selects starter rules from `git ls-files`, prints the proposed YAML, then lints a small sample. Both rule selection and lint use the free Decider. Selection sees up to 64 tracked filenames (8 KiB of paths). The check reads up to three eligible files, at most 16 KiB each and 32 KiB combined. It leaves saving the YAML to you. Run `npx -y jev-lint --dry-run` to inspect the inventory without a key.\n\n**For ongoing use and CI, we strongly recommend Jev with `TYPESAFE_API_KEY`.** The shipped thresholds are calibrated on Jev. Set your [TypeSafe key](https://console.typesafe.ai/keys) and run `npx -y jev-lint`. If both keys are exported, unset `OPENROUTER_API_KEY` to use TypeSafe directly. An existing config uses its normal file and rule selection.",
-        "contentHash": "c0935a055b2c5a2f5c67aa3c57146686cef85f224e4ec594d0af105261daaff4"
+        "endLine": 29,
+        "quote": "## Try it on tracked files\n\nTo run your first lint check, you need Node.js 24+, a Git working tree, and **either `OPENROUTER_API_KEY` or `TYPESAFE_API_KEY`**. Choose one of the following commands.\n\n**Free trial with OpenRouter.** The free Decider model requires an OpenRouter account and API key. [Get an OpenRouter key](https://openrouter.ai/keys).\n\n```sh\nexport OPENROUTER_API_KEY='<your-openrouter-key>'\nnpx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\n**TypeSafe Jev.** We recommend Jev for regular use and CI because the shipped thresholds are calibrated on it. If both keys are exported, unset `OPENROUTER_API_KEY` to connect to TypeSafe directly. [Get a TypeSafe key](https://console.typesafe.ai/keys).\n\n```sh\nexport TYPESAFE_API_KEY='<your-typesafe-key>'\nnpx -y jev-lint\n```\n\nWith no API key, run `npx -y jev-lint --dry-run` to preview the files and candidate rules offline.\n\nWithout a config, the CLI asks once, selects starter rules from up to 64 tracked filenames (8 KiB of paths), prints the proposed YAML, then lints up to three files (16 KiB each, 32 KiB total). The OpenRouter trial uses the free Decider for both selection and lint. Saving the YAML is optional. An existing config uses its own files and rules.",
+        "contentHash": "6e48526c6b9dee47fd715bff787285df7bbcf652ef6e14ad6d7d9a225de01a0f"
       },
       "context": [],
-      "candidateId": "f703d5b01e4b189241926bcc61daa897da83ba9b154c46522e1c71a3fa1c732d",
-      "contextHash": "c7094897bf0a1fd0a88e6a980d435e6e01bde088efdd3fafadf8946597556124",
+      "candidateId": "dbeaa41d2683ce02d24c10b12cf9957ecddba1b8b49a933b1c05ede861338755",
+      "contextHash": "8d089aa698344fa6defef7c83fa3514a69cd0281affad3b2607afcf098165648",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.48,
+        "confidence": 0.49,
         "probabilities": {
-          "supports": 0.61,
-          "contradicts": 0.37,
-          "unrelated": 0,
-          "insufficient_context": 0.02
+          "supports": 0.62,
+          "contradicts": 0.34,
+          "unrelated": 0.01,
+          "insufficient_context": 0.03
         }
       }
     },
@@ -83,27 +83,27 @@
         "source": "readme",
         "path": "README.md",
         "startLine": 9,
-        "endLine": 19,
-        "quote": "## Try it on tracked files\n\nTry it in a Git working tree with Node 24+. Set `OPENROUTER_API_KEY` to your [OpenRouter key](https://openrouter.ai/keys), then run:\n\n```sh\nnpx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\nWithout a config, the CLI asks once, selects starter rules from `git ls-files`, prints the proposed YAML, then lints a small sample. Both rule selection and lint use the free Decider. Selection sees up to 64 tracked filenames (8 KiB of paths). The check reads up to three eligible files, at most 16 KiB each and 32 KiB combined. It leaves saving the YAML to you. Run `npx -y jev-lint --dry-run` to inspect the inventory without a key.\n\n**For ongoing use and CI, we strongly recommend Jev with `TYPESAFE_API_KEY`.** The shipped thresholds are calibrated on Jev. Set your [TypeSafe key](https://console.typesafe.ai/keys) and run `npx -y jev-lint`. If both keys are exported, unset `OPENROUTER_API_KEY` to use TypeSafe directly. An existing config uses its normal file and rule selection.",
-        "contentHash": "c0935a055b2c5a2f5c67aa3c57146686cef85f224e4ec594d0af105261daaff4"
+        "endLine": 29,
+        "quote": "## Try it on tracked files\n\nTo run your first lint check, you need Node.js 24+, a Git working tree, and **either `OPENROUTER_API_KEY` or `TYPESAFE_API_KEY`**. Choose one of the following commands.\n\n**Free trial with OpenRouter.** The free Decider model requires an OpenRouter account and API key. [Get an OpenRouter key](https://openrouter.ai/keys).\n\n```sh\nexport OPENROUTER_API_KEY='<your-openrouter-key>'\nnpx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\n**TypeSafe Jev.** We recommend Jev for regular use and CI because the shipped thresholds are calibrated on it. If both keys are exported, unset `OPENROUTER_API_KEY` to connect to TypeSafe directly. [Get a TypeSafe key](https://console.typesafe.ai/keys).\n\n```sh\nexport TYPESAFE_API_KEY='<your-typesafe-key>'\nnpx -y jev-lint\n```\n\nWith no API key, run `npx -y jev-lint --dry-run` to preview the files and candidate rules offline.\n\nWithout a config, the CLI asks once, selects starter rules from up to 64 tracked filenames (8 KiB of paths), prints the proposed YAML, then lints up to three files (16 KiB each, 32 KiB total). The OpenRouter trial uses the free Decider for both selection and lint. Saving the YAML is optional. An existing config uses its own files and rules.",
+        "contentHash": "6e48526c6b9dee47fd715bff787285df7bbcf652ef6e14ad6d7d9a225de01a0f"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
         "startLine": 7,
-        "endLine": 17,
-        "quote": "## Git の追跡ファイルで試す\n\nNode 24+ があれば、Git リポジトリで試せる。`OPENROUTER_API_KEY` に [OpenRouter のキー](https://openrouter.ai/keys)を設定して、次の1行を実行する。\n\n```sh\nnpx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\n設定がなければ、CLI は最初に一度だけ確認する。承認すると、`git ls-files` で取得した追跡ファイル名から初期ルールを選び、設定案を YAML で表示して、そのまま少量の lint を実行する。ルール選択も lint も無料の Decider を使う。選択に使うのは最大64件、パス名の合計は8 KiB。lint の対象は最大3ファイル、1ファイル16 KiB、合計32 KiB まで。設定の保存は任意。`npx -y jev-lint --dry-run` ならキーなしで対象を確認できる。\n\n**継続利用や CI には、`TYPESAFE_API_KEY` を設定して Jev を使うことを強く推奨する。** 同梱ルールの判定閾値は Jev で較正している。[TypeSafe のキー](https://console.typesafe.ai/keys)を設定すれば、`npx -y jev-lint` で実行できる。両方のキーがある場合は、`OPENROUTER_API_KEY` を環境から外すと TypeSafe に直接接続する。既存の設定があれば、そこに指定したファイルとルールを使う。",
-        "contentHash": "48f9045052098a5540366c043129dffeb12c1cf9d770af6538f6f2948b768c4d"
+        "endLine": 27,
+        "quote": "## Git の追跡ファイルで試す\n\n最初の lint を実行するには、Node.js 24 以上、Git の作業ツリー、**`OPENROUTER_API_KEY` または `TYPESAFE_API_KEY` のどちらか一方**が必要です。使うサービスに合わせて、次のどちらかを実行してください。\n\n**OpenRouter の無料モデルで試す場合**　無料の Decider を使う場合も、OpenRouter のアカウントと API キーが必要です。[OpenRouter のキーを発行する](https://openrouter.ai/keys)\n\n```sh\nexport OPENROUTER_API_KEY='<your-openrouter-key>'\nnpx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\n**TypeSafe の Jev で試す場合**　同梱ルールの閾値は Jev で較正しているため、継続利用や CI にはこちらを推奨します。両方のキーを設定済みの場合は、`unset OPENROUTER_API_KEY` で TypeSafe に直接接続できます。[TypeSafe のキーを発行する](https://console.typesafe.ai/keys)\n\n```sh\nexport TYPESAFE_API_KEY='<your-typesafe-key>'\nnpx -y jev-lint\n```\n\nキーがなくても、`npx -y jev-lint --dry-run` で対象ファイルとルール候補をオフラインで確認できます。\n\n設定ファイルがなければ、CLI は最初に一度だけ確認します。承認すると、最大64件の追跡ファイル名（パスの合計8 KiB）から初期ルールを選び、設定案を YAML で表示して、最大3ファイル（各16 KiB、合計32 KiB）を lint します。OpenRouter の無料モデルを選んだ場合は、ルール選択にも lint にも Decider を使います。YAML の保存は任意です。既存の設定があれば、そこに指定したファイルとルールを使います。",
+        "contentHash": "397ffe4dd6a7fbbe38a020ace74a84e7f246c2047538b1129dc7c4cf4b670d31"
       },
       "context": [],
-      "candidateId": "072fe482c8abf5a644cf8213800ce260fe0fbdfa496f293cba3afa7b602aae15",
-      "contextHash": "9ce60b04ee368915f33ee76f075dd73416bebe1510052270dde75e449e5abf73",
+      "candidateId": "7dcace05edfd3f29020331dde15836901726482a3b28029dc2bd05275b9b63fa",
+      "contextHash": "b27c14c11c65f3c405be75818336e4a8e8cd581733d3690c9a2e7bc081253fdb",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.95,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.96,
-          "contradicts": 0.04,
+          "supports": 0.98,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -134,12 +134,12 @@
       "contextHash": "0501a820a69b7f5f459ee537fa7f1b1158edeb3ee83976ff21511ce63362ab77",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.96,
         "probabilities": {
-          "supports": 0.98,
+          "supports": 0.97,
           "contradicts": 0.02,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -158,20 +158,20 @@
       "target": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 227,
-        "endLine": 254,
+        "startLine": 237,
+        "endLine": 264,
         "quote": "## What ships\n\n121 rules under `rules/<language>/<id>/`, and the files you point it at decide\nwhich run. Nothing to select.\n\n| point it at | what runs |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 rules, first tier |\n| `.rs` | `rust/` — 9, first tier |\n| `.py` `.go` | `python/` — 14, `go/` — 9 |\n| `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |\n| `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |\n| `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |\n| `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |\n| `package.json` | `json/` — 1 |\n| sqlc queries and prepared architecture evidence | `text/` — 17 total, including 16 [design advisories](docs/advisories.md) |\n| commits | `git/` — 4 including 2 metric advisories |\n\nPublic API review uses three units: an exported name, the signatures at one entry point, and one documented workflow across import paths. [Rule selection and layout example](docs/advisories.md#public-api-review).\n\n`typescript` and `rust` are first tier: every rule under them carries\nfixtures, expectations and an accepted baseline. The rest are calibrated to\nthe same bar and not yet promised. [RULES.md](RULES.md) lists all 121 with\ntheir question, cutoff and score on their own fixtures.\n\nYour own rule can target any language ast-grep parses — Java, Kotlin, Swift,\nC, C++, C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, HTML,\nCSS, YAML — and any other grammar you compile.",
         "contentHash": "63bd03ba4ec8b9529092055787dc32fd9611d56d77d49a099b08e1f938962df0"
       },
       "context": [],
-      "candidateId": "d7409a9747d983bdc2aa88c4f2e8480e88a988d63f1219bb335a8b73e320583d",
-      "contextHash": "19bb1c66fd61a7eef09e036523713a59956ac926a4420de77b9858b4b4796a62",
+      "candidateId": "20c26235ebe75f2fb5e9b80b4241495733482d122135661006e6bc963ac8f725",
+      "contextHash": "845ba7fbf54551737722a04be0392461664c8dd47d77ae6c8f7baf3fd26f4eb7",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.8,
+        "confidence": 0.83,
         "probabilities": {
-          "supports": 0.85,
-          "contradicts": 0.14,
+          "supports": 0.87,
+          "contradicts": 0.12,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -192,20 +192,20 @@
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 174,
-        "endLine": 195,
+        "startLine": 184,
+        "endLine": 205,
         "quote": "## 何が同梱されるか\n\n`rules/<language>/<id>/` の下に 121 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。\n\n| 渡すもの | 走るもの |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 ルール、第一級 |\n| `.rs` | `rust/` — 9、第一級 |\n| `.py` `.go` | `python/` — 14、`go/` — 9 |\n| `.mbt` | `moonbit/` — 20。[パーサを宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば走る |\n| `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |\n| `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |\n| `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |\n| `package.json` | `json/` — 1個 |\n| sqlc クエリ、モジュール・設計の検査用入力 | `text/` — 計17個。うち16個が[設計アドバイザリー](docs/advisories.md) |\n| コミット | `git/` — 4個。うち2個は指標のアドバイザリー |\n\n公開 API は、個々の export、1 つの入口の署名一覧、複数の入口を使うガイドの利用例の 3 単位で評価する。[ルールの使い分けと設定例](docs/advisories.md#public-api-review)。\n\n`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 121 個全部の問い、cutoff、自分の fixtures での成績がある。\n\n自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。",
         "contentHash": "ae7e8e31383e318a5f9a1e193a03a4082c421aeeb22e41048f91cc6827a8ccd7"
       },
       "context": [],
-      "candidateId": "941063936694e22093fe02e899bbb6dbfe053cae86089b4bdf6a3442a95f8cf8",
-      "contextHash": "b6113d4c04eae46a306c4459b916d5ec09d89b3b6c8df5436eca4f6629de1525",
+      "candidateId": "80a46bfe13da0fd7f3741882295ec74253b036710eb2002c7daff77936235de2",
+      "contextHash": "521ab183c2daaf71a43d679e57eed4b8e7596e3683ea74bd891a94bb54e6d28b",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.72,
+        "confidence": 0.67,
         "probabilities": {
-          "supports": 0.79,
-          "contradicts": 0.2,
+          "supports": 0.75,
+          "contradicts": 0.24,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -236,12 +236,12 @@
       "contextHash": "944fad0ae761ad59604c0c9a77c9ce6f6343d34bcb4bbb1e991e1579b523b29e",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.95,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.96,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0
         }
       }
     },
@@ -294,20 +294,20 @@
       "target": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 124,
-        "endLine": 165,
+        "startLine": 134,
+        "endLine": 175,
         "quote": "## Model recommendation\n\nThe default is pinned to `jev-1.14.0`, the\n[current stable release](https://docs.typesafe.ai/models), so a moving alias cannot\nsilently change answers at fitted cutoffs. Override it with `--model`, config's\n`model:`, or `JEV_LINT_MODEL`. `--model jev-latest` follows future stable releases.\n\nJev is the recommended model for normal linting. The shipped rules and cutoffs\nare calibrated for Jev, and it performed best at those cutoffs in the\n[81-suite fixture comparison](docs/clef-evaluation.md#live-results-2026-10-02).\n\nWhen the CLI detects `OPENROUTER_API_KEY`, it asks before sending data to OpenRouter for\n`typesafe/jev-1.14`, even if a TypeSafe key is also present. Enter cancels the run.\nFor CI, set `model: openrouter:typesafe/jev-1.14` in `.jev-lint.yaml`, pass\n`--model openrouter:typesafe/jev-1.14`, or set `JEV_LINT_MODEL=openrouter:typesafe/jev-1.14`.\nFor default Jev, `apiKeyEnv: OPENROUTER_API_KEY` in the config also selects OpenRouter.\nWithout an explicit selection, a noninteractive run exits 2. Unset the OpenRouter key to use TypeSafe directly.\n\nExperimental OpenRouter decision models are selectable with\n`--model openrouter:<id>` and `OPENROUTER_API_KEY`. Supported IDs are\n`liquid/d1.2-ultra`, `liquid/d1.2`, `baseten/mammoth-1`, and\n`perplexity/pplx-decider-v1.3:free`. In the\n[November comparison](docs/model-comparison-2026-11.md), Perplexity's free model\nmatched Jev's aggregate results on 146 naming cases, but selected too many\nstarter rules. The free trial therefore offers the model a shortlist of core rules. Other OpenRouter checking models use Jev for starter selection.\n\n```bash\nexport OPENROUTER_API_KEY='<your-api-key>'\nnpx jev-lint run typescript/fn-name-promises src \\\n  --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\nThese are opt-in experiments with existing cutoffs, not replacements validated\nacross the catalog. Live OpenRouter cost comes from billed `usage.cost`;\nfree requests are paced at 3.2-second intervals and remain subject to daily limits.\nNative models get separate verdict-cache files; use `--cache none` for fresh comparisons.\n\nCloudflare Clef and Clef-flash are optional experimental models for comparison\nfrom a repository checkout. `just clef-plan` previews the requests and cost;\n`just clef-eval` runs the comparison with Cloudflare credentials. See the\n[evaluation guide](docs/clef-evaluation.md) for setup, recorded results and\nthe limits of fitting new cutoffs on the same fixtures.",
         "contentHash": "53dc4259aecd830ce92372e398f76d52169bd5cd843c23a3f3291960b51b8220"
       },
       "context": [],
-      "candidateId": "21dfc2f7756eb5e3d9474aae2b9ab793356ab7776736a8b5348aa3f45891bfe0",
-      "contextHash": "9b064c58ae9c255ec3d82da5e38fdb35e582523eb3177a506389ee269a737d1c",
+      "candidateId": "de37d2e2cc9b3c86c19ce2a0518a7de028d6367339b597ec4e161dc77fbeb4e3",
+      "contextHash": "acb144a3ca4c703d901ac8dc9e29f50286328cce42ec66072c163d0912d9cf25",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.81,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.11,
+          "supports": 0.86,
+          "contradicts": 0.13,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -328,20 +328,20 @@
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 80,
-        "endLine": 120,
+        "startLine": 90,
+        "endLine": 130,
         "quote": "## 推奨モデル\n\n既定値は[現在の安定版](https://docs.typesafe.ai/models) `jev-1.14.0` に固定している。\nモデルのエイリアスが更新されても、較正した cutoff に対する回答が黙って変わらないようにするため。\n`--model`、config の `model:`、`JEV_LINT_MODEL` で変更できる。\n今後の安定版へ自動追従する場合は `--model jev-latest` を指定する。\n\n通常の lint には Jev を推奨する。同梱ルールと cutoff は Jev で較正されていて、\nその cutoff を使った [81 suite の fixture 比較](docs/clef-evaluation.md#live-results-2026-10-02)\nでも Jev が最も良い成績だった。\n\n`OPENROUTER_API_KEY` を検出すると、CLI は OpenRouter の `typesafe/jev-1.14` にデータを送ってよいか確認する。\nTypeSafe のキーが同時にある場合も同じで、Enter で中止する。\nCI では `.jev-lint.yaml` に `model: openrouter:typesafe/jev-1.14` を書くか、\n`--model openrouter:typesafe/jev-1.14` または `JEV_LINT_MODEL=openrouter:typesafe/jev-1.14` で明示する。\n既定の Jev を使う場合は、設定に `apiKeyEnv: OPENROUTER_API_KEY` と書いてもよい。\n明示せずに非対話で実行すると終了コード 2 で停止する。\nTypeSafe に直接接続するには OpenRouter のキーを環境から外す。\n\nOpenRouter の判断モデルを `--model openrouter:<id>` と `OPENROUTER_API_KEY` で\n実験的に選択できる。対応する ID は `liquid/d1.2-ultra`、`liquid/d1.2`、\n`baseten/mammoth-1`、`perplexity/pplx-decider-v1.3:free`。\n[11月の比較](docs/model-comparison-2026-11.md)では、Perplexity無料版は命名系146件で\nJevと同じ集計成績だったが、初期ルールを過剰に選んだ。\n無料体験では初期ルールの候補を基本ルールに絞る。それ以外の OpenRouter モデルを検査に指定した場合、ルール選択には Jev を使う。\n\n```bash\nexport OPENROUTER_API_KEY='<your-api-key>'\nnpx jev-lint run typescript/fn-name-promises src \\\n  --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\n同梱のcutoffを使う任意の実験機能であり、全ルールの代替として検証されたものではない。\nOpenRouterの実費は `usage.cost` から取得する。\n無料版のリクエストは3.2秒間隔に制限し、別途日次上限がある。\nモデルごとに検査キャッシュのファイルを分ける。新鮮な比較には `--cache none` を使う。\n\nCloudflare Clef と Clef-flash も、リポジトリを checkout して実験的に比較評価できる。\n`just clef-plan` でリクエストと費用を確認し、Cloudflare の認証情報を設定して\n`just clef-eval` で比較する。設定、記録済みの結果、同じ fixture で cutoff を\n合わせ直す場合の限界は[評価ガイド](docs/clef-evaluation.md)にある。",
         "contentHash": "a5d691b1dd26d991fdebb79423334bd2a6c0771a6982796f4605eac1675c380c"
       },
       "context": [],
-      "candidateId": "d50b6ab35d06e6c5a7083185d534369f93a78e7d5fbe08b4e867b262eb07260b",
-      "contextHash": "dab8fac3f325064ed0c004ba4deb09cc44a1122f3fcf6393b6fd929008e96e2a",
+      "candidateId": "a024f2d48018a31f2200bf15f2a2c20746c319edc916fb044519e6f1a2ccb0c5",
+      "contextHash": "c21ebfd45b9bb5400abec0f801a9c0d678f34da83876ba5396e608f1de54ed63",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.81,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.11,
+          "supports": 0.86,
+          "contradicts": 0.13,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -372,10 +372,10 @@
       "contextHash": "3e41357edf900b8121e9593115b44043e8ce99220a0da7b447fb6442a5e619d1",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.92,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.94,
-          "contradicts": 0.06,
+          "supports": 0.89,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -406,12 +406,12 @@
       "contextHash": "01de7408893be79dee3d5075e1546cf6676bb74d814b694f803d3ccb62374996",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.89,
         "probabilities": {
-          "supports": 0.93,
-          "contradicts": 0.04,
+          "supports": 0.92,
+          "contradicts": 0.06,
           "unrelated": 0,
-          "insufficient_context": 0.03
+          "insufficient_context": 0.02
         }
       }
     },
@@ -474,10 +474,10 @@
       "contextHash": "3cad91cb720b9c9de6928d42af3f434477aea58378967cbc0484f5c147395a2c",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.96,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.97,
-          "contradicts": 0.03,
+          "supports": 0.98,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -508,12 +508,12 @@
       "contextHash": "acb0f4b2c5e83eba862a08ebcd873812a4e709d158acf8210f02ee9bd2b68656",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.88,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.91,
-          "contradicts": 0.08,
+          "supports": 0.88,
+          "contradicts": 0.1,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -542,10 +542,10 @@
       "contextHash": "9b927ce6ce3ccd0d034e8afee8439d0cbdd9186a35694ebff1c2b3e575e55efd",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 1,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 1,
+          "contradicts": 0,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -610,10 +610,10 @@
       "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.79,
+        "confidence": 0.75,
         "probabilities": {
-          "supports": 0.84,
-          "contradicts": 0.15,
+          "supports": 0.81,
+          "contradicts": 0.18,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -644,10 +644,10 @@
       "contextHash": "8cecf2bfcf88789455d7eafa78a1b126bee955d21dc05f16fa0edb8326788196",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.87,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.12,
+          "supports": 0.9,
+          "contradicts": 0.1,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -678,12 +678,12 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.03,
+          "supports": 0.93,
+          "contradicts": 0.04,
           "unrelated": 0.01,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -702,20 +702,20 @@
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 172,
-        "endLine": 172,
+        "startLine": 182,
+        "endLine": 182,
         "quote": "**CI と git hook** — `review --base \"$GITHUB_BASE_REF\" --format github` が PR に注釈を付ける。`jev-lint init --pre-commit` と `--pre-push` が hook を書く。どちらもルールを `severity: error` に上げるまでブロックしないし、同梱ルールにそれを持つものは無い。[docs/use-hooks.md](docs/use-hooks.md) に詳細があり、オフラインだとコミットが止まる終了コードの話もそこにある。",
         "contentHash": "620acfc54972986da99d8841c04cb79c14fbb3082ef9e444be968a1c249f742d"
       },
       "context": [],
-      "candidateId": "f8a3afe61af4614f4700dd3f74875907034ce006aa9661b44edc6a65a7ced0d3",
-      "contextHash": "b74acdde4e39b1631b4df6e03e37ee8c2b57529530351d19f4215b2a3c48e3b5",
+      "candidateId": "afdf372a4185914749d2b2e708e0a12450a144008c72d8dd4ba7663b0e795b20",
+      "contextHash": "94d5944ac0ef1cb94df950fc2189ff35ae70d1dfbb3ab9959b6d2bf457fb6952",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.89,
         "probabilities": {
-          "supports": 0.93,
-          "contradicts": 0.05,
+          "supports": 0.92,
+          "contradicts": 0.06,
           "unrelated": 0,
           "insufficient_context": 0.02
         }
@@ -762,22 +762,22 @@
       "reference": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 320,
-        "endLine": 336,
+        "startLine": 330,
+        "endLine": 346,
         "quote": "## Documentation consistency\n\n`jev-lint docs` compares explicit claims, glossary definitions and translations,\nretaining both source locations. This repository checks its own README pair,\nAPI guides and contributor instructions against generated project facts and\ncanonical terminology.\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\nThe manifest is `.jev-lint/documents.json`; `--document-manifest` selects another.\nReplay is offline and rejects changed sources or questions. Contradictions exit 1;\nincomplete or stale assessments exit 3. The report remains `UNREVIEWED`.\nSee the [self-check guide](docs/self-check.md) for scope, budgets and evaluation.",
         "contentHash": "4572bdf2c1147215ec30ff85b80daba86bc0f9f8c6af36b6335e29b579538c05"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 240,
-        "endLine": 255,
+        "startLine": 250,
+        "endLine": 265,
         "quote": "## ドキュメントの整合性\n\n`jev-lint docs` は、明示した主張、用語の定義、翻訳の意味を比較し、両方の出典位置を残す。\nこのリポジトリでは日英README、APIガイド、開発者向け指示を、生成したプロジェクト情報と\n共通の用語定義に照らして検査する。\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\n定義ファイルは `.jev-lint/documents.json`。`--document-manifest` で別のものを指定できる。\n再生には通信が不要で、出典や質問が変わっていれば拒否する。不一致は終了コード1、\n未評価・古い記録は3になる。結果の品質判定は `UNREVIEWED` のまま。\n対象範囲、予算、評価方法は[自己検査ガイド](docs/self-check.md)にある。",
         "contentHash": "9ebd4cd92ca951f5ebe6fb203083dcca7d387759c136dfd16cc566bdec8f6617"
       },
       "context": [],
-      "candidateId": "977559f1bb76bf6a8c43c381bcdbc714a99fa0e58e280a8966fc477b34eb13e9",
-      "contextHash": "050232e152c3555938a817c3bf51ff37d5049450e53ce84c6c3e03db3c86eddd",
+      "candidateId": "fea41910a0ba9a4da8268167ebb29d553597a3b441fac9c04cc0cee8a8e3716f",
+      "contextHash": "d91445b8125c0d0de2231a88afc932e34653e0d83d63bd97334cedfde050257b",
       "judgment": {
         "choice": "supports",
         "confidence": 0.99,
@@ -814,12 +814,12 @@
       "contextHash": "45bf78a4a381d3300f945212600737f169ce1dab6fc4a8342ab8c9d4a2769f2d",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.95,
+        "confidence": 0.92,
         "probabilities": {
-          "supports": 0.96,
-          "contradicts": 0.04,
+          "supports": 0.94,
+          "contradicts": 0.05,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -848,10 +848,10 @@
       "contextHash": "df6f5c3bc024f553d1c2e2838f60e67b6b462fa19ed6d5d0f4f1a4d459724422",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.93,
-          "contradicts": 0.06,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -882,10 +882,10 @@
       "contextHash": "38c0e94fa369c5e957dc741b3766bef64a2de778ec94a57df7473f2c4770edea",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -898,30 +898,30 @@
       "reference": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 181,
-        "endLine": 187,
+        "startLine": 191,
+        "endLine": 197,
         "quote": "`introspect --dry-run` shows the metadata without requests. `introspect --write`\nuses Jev directly, with no separate LLM or agent, and creates a config containing\nonly recommended starter rules. Existing configs are preserved; use\n`--write --output .jev-lint.proposed.yaml` for a separate proposal.\nThe report lists enabled, deferred and unsuitable rules with representative paths.\nSource bodies, script commands and environment values are not sent.\nSee the [initialization guide](skills/jev-lint/references/initializing-project.md).",
         "contentHash": "7487bb2af604df3354d2fd57e61272a9683ab311a5691f79e8924352ee3ed458"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 136,
-        "endLine": 140,
+        "startLine": 146,
+        "endLine": 150,
         "quote": "`introspect --dry-run` は送信する情報を通信なしで表示する。`introspect --write` は別のLLMや\nエージェントを使わずJevを直接呼び、推奨する初期ルールだけを含む設定を新規作成する。\n既存設定がある場合は `--write --output .jev-lint.proposed.yaml` で別の提案ファイルを作れる。\n有効化・保留・対象外のルールを代表ファイル付きで表示し、ソース本文、スクリプトの値、環境変数の値は送らない。\n詳しくは[初期設定ガイド](skills/jev-lint/references/initializing-project.md)にある。",
         "contentHash": "e392f19314dde344299145afe957a508a35cb872b948ad0f63344970c02a7b1c"
       },
       "context": [],
-      "candidateId": "b99dbc3d310d616b7ccaf5909ace06faaaeb94219cc1928edbfadeaf6893f063",
-      "contextHash": "a099ee62e4b16b6b032e4ddbd95289e5c1ca882252151d04a591bea5e96541a1",
+      "candidateId": "a303b18bda237f24e2da4af5ce501bd89606c514b71b50b17c59501d702cc948",
+      "contextHash": "0840370d871abc6871572c39033c2cfddfe0b591d7e4151dcd3a0261de7d75e7",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.93,
-          "contradicts": 0.07,
+          "supports": 0.89,
+          "contradicts": 0.1,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -932,22 +932,22 @@
       "reference": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 189,
-        "endLine": 190,
+        "startLine": 199,
+        "endLine": 200,
         "quote": "`init --introspect` is equivalent to `introspect --write`.\n`init --introspect --dry-run` makes no requests and writes no configuration.",
         "contentHash": "f81d58b40fa3c88ed755bf4c8366e75922909d93235ff40eab13488bca2b2364"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 142,
-        "endLine": 143,
+        "startLine": 152,
+        "endLine": 153,
         "quote": "`init --introspect` は `introspect --write` と同じ動作になる。\n`init --introspect --dry-run` では通信も設定ファイルの作成も行わない。",
         "contentHash": "f11d4cacf084f1f4b62dcb577f5d757fb5fa073299db4cb194eaa732abc80d0c"
       },
       "context": [],
-      "candidateId": "1e6ceb8113a1463f825a4af19ba89106d72ffa487be3c16229a6124850b4a8a5",
-      "contextHash": "fefead391f2e37393cbc3ccc7b77bad9a857fb6a01b2d9d8804de4be31b0972f",
+      "candidateId": "2a5ac5e85fe73fc66e1957461499c8017560cba887d7fc2ec600f35b3d041d10",
+      "contextHash": "dd44dacd41da2e9fed08a1d27638dd9dce65402bad607fb6efa88b93e092e03b",
       "judgment": {
         "choice": "supports",
         "confidence": 1,
@@ -993,10 +993,10 @@
       "contextHash": "604fcb8a9c1e317a8a6d49fc2439cd2b3f5c68d1e8a8bf26c48cb3203d30fff9",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.52,
+        "confidence": 0.48,
         "probabilities": {
-          "supports": 0.64,
-          "contradicts": 0.35,
+          "supports": 0.61,
+          "contradicts": 0.38,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -1016,8 +1016,8 @@
   },
   "usage": {
     "requests": 29,
-    "inputTokens": 49292,
-    "usd": 0.002070264
+    "inputTokens": 49553,
+    "usd": 0.0020812260000000003
   },
   "errors": []
 }
