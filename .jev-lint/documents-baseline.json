@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "233dcc4d7333526265698cf5d18aeaa6fb61a59237dd5cdcf87b9b79e1578c15",
+  "snapshotDigest": "888f26b2a3bd2e9361b854ca8096d75a6122686d56be19f3b26c88a67c5c1d7e",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -8,14 +8,116 @@
   "qualityVerdict": "UNREVIEWED",
   "candidates": [
     {
+      "id": "native-model-selection-contract",
+      "topic": "OpenRouter key precedence, billed usage and Jev starter selection for OpenRouter checks",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 30,
+        "endLine": 44,
+        "quote": "## Default model\n\nThe default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.\n\nExperimental native decision models use `--model openrouter:<id>` and `OPENROUTER_API_KEY`:\n\n| ID | Listed input USD/M tokens | Normal request interval (ms) |\n| --- | ---: | ---: |\n| `typesafe/jev-1.14` | 0.042 | 0 |\n| `liquid/d1.2-ultra` | 0.042 | 0 |\n| `liquid/d1.2` | 0.02 | 0 |\n| `baseten/mammoth-1` | 0.1 | 0 |\n| `perplexity/pplx-decider-v1.3:free` | 0 | 3200 |\n\nThese are explicit experiments, not catalog-wide replacements. Live cost uses provider `usage.cost`; dry runs use estimated input at the listed rate, before native splitting. Native cache filenames include a hash of the endpoint and requested model, separate from legacy Jev cache filenames.",
+        "contentHash": "33ecfbfe6a9e0ca84d3f1d0899a47d84f1769af8d8324cb1a6472d048ee56b5c"
+      },
+      "target": {
+        "source": "models",
+        "path": "docs/model-comparison-2026-11.md",
+        "startLine": 8,
+        "endLine": 43,
+        "quote": "## Selecting a model\n\nUse the existing `--model`, configuration `model:`, or `JEV_LINT_MODEL` with an\nexplicit `openrouter:` prefix. Supported native IDs are:\n\n| Model ID after `openrouter:` | Listed input USD/M tokens | Evaluation outcome |\n| --- | ---: | --- |\n| `typesafe/jev-1.14` | 0.042 | Default Jev when an OpenRouter key is set |\n| `liquid/d1.2-ultra` | 0.042 | Strong on naming and case review; more comment misses, a test-name false positive and one HTTP 504 |\n| `liquid/d1.2` | 0.020 | Three misses on the initial 35-case function screen; stopped there |\n| `baseten/mammoth-1` | 0.100 | Some improvements, but extra misses or false positives and higher measured cost |\n| `perplexity/pplx-decider-v1.3:free` | 0 | Same aggregate results as Jev on 146 naming cases; failed the conservative starter-selection policy |\n\nRates and availability are a **2026-11-18 snapshot**, not a future price promise.\nThe listed models had free output in the public catalog. Live cost uses the response's\nactual `usage.cost`, including a legitimate zero, rather than multiplying tokens\nby a guessed price. Jev's existing accounting remains unchanged.\n\n```bash\nexport OPENROUTER_API_KEY='<your-api-key>'\nnpx jev-lint run typescript/fn-name-promises src \\\n  --model openrouter:perplexity/pplx-decider-v1.3:free --cache none\n```\n\nWhen the CLI detects `OPENROUTER_API_KEY`, it asks before using Jev 1.14 through OpenRouter, even with a TypeSafe key present. To select the route in CI, set `model: openrouter:typesafe/jev-1.14` in the config or pass that model with `--model`. The free trial uses the Decider for both starter selection and lint. Other OpenRouter models use Jev for selection and the requested model for checking. The OpenRouter\nkey covers both phases. Standalone introspection supports Jev on either provider.\n\nThe fixed native endpoint is `https://openrouter.ai/api/alpha/decisions`.\n`--base-url` cannot redirect native credentials. Unknown native model IDs are\nerrors; there is no fallback to another provider or chat-completion endpoint.\n\nPerplexity free requests are spaced 3.2 seconds apart per client. OpenRouter\ndocuments 20 free requests/minute and daily limits of 50, or 1,000 after at least\n$10 in lifetime purchased credits. Daily exhaustion stays a failed request, not\na clean result. Queuing does not consume each request's network timeout;\noverall cancellation and time budgets still apply.",
+        "contentHash": "ba72633f99c77cce4b1958123bec2c650fdf0523b475f56826326539e3432c0d"
+      },
+      "context": [],
+      "candidateId": "3c7db6dd08a50cf8da900248ab7112599ced2db0eed168d296ffcbcc6a06cc80",
+      "contextHash": "7f6b85ff7878f43be4a210f5ca0c40a99de683d90f043fc71af17606661e4527",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.55,
+        "probabilities": {
+          "supports": 0.66,
+          "contradicts": 0.29,
+          "unrelated": 0,
+          "insufficient_context": 0.05
+        }
+      }
+    },
+    {
+      "id": "automatic-startup-contract",
+      "topic": "Free trial routing, tracked filename selection, starter YAML before bounded lint, and TypeSafe Jev for regular use",
+      "mode": "semantic",
+      "reference": {
+        "source": "facts",
+        "path": "docs/project-facts.md",
+        "startLine": 46,
+        "endLine": 56,
+        "quote": "## Initial rule selection\n\nCommandless startup and `auto` confirm once before any automatic API request, defaulting to No. `--yes` / `-y` skips this; noninteractive startup without it exits 2 with no requests. A decline cancels with no requests or record/cache writes. Offline plans do not prompt. Live checks ask for consent when the OpenRouter route is inferred. npm's `npx -y` is a separate approval.\n\nCommandless startup and `auto` use existing configuration when present. Without a config, they select rules from up to 64 Git-tracked filenames, print the starter YAML, and check up to three tracked files after confirmation. They create no config. Incomplete/stale selection or no starter exits 3 without checking or an all-rule fallback. An unconfigured `--dry-run` shows metadata without requests; a configured dry run prices its check. Explicit `check` without config still runs every loaded rule.\n\nWhen the CLI detects OPENROUTER_API_KEY, it asks before sending data to OpenRouter for default Jev, even with a TypeSafe key or --yes. Noninteractive runs can select an openrouter:<id> model in config, --model or JEV_LINT_MODEL. For default Jev, apiKeyEnv: OPENROUTER_API_KEY in the config also selects OpenRouter. The free Perplexity trial uses the same free Decider for selection and checking. Other OpenRouter checking models use Jev on OpenRouter for selection. Regular use with TypeSafe Jev is strongly recommended.\n\n`introspect` selects initial screening rules from metadata using Jev. Its current enable criterion is:\n\nONLY these exact rule IDs qualify for the core starter: fn-name-promises with eligible source files in any language; test-name-verifies-claim with .test/.spec/test_/_test behavior-test paths; agent-instruction-is-unclear or agent-instructions-conflict with AGENTS.md. Read the ID after the language slash. Every other rule ID is defer or skip, even if it mentions names or tests. Existing violations or source bodies are not required for these core rules.",
+        "contentHash": "c2bfb6381851fc1d958e5df9af7606c16aa11fe8c1337c6b65896d214be1bf05"
+      },
+      "target": {
+        "source": "readme",
+        "path": "README.md",
+        "startLine": 9,
+        "endLine": 19,
+        "quote": "## Try it on tracked files\n\nTry it in a Git working tree with Node 24+. Set `OPENROUTER_API_KEY` to your [OpenRouter key](https://openrouter.ai/keys), then run:\n\n```sh\nnpx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\nWithout a config, the CLI asks once, selects starter rules from `git ls-files`, prints the proposed YAML, then lints a small sample. Both rule selection and lint use the free Decider. Selection sees up to 64 tracked filenames (8 KiB of paths). The check reads up to three eligible files, at most 16 KiB each and 32 KiB combined. It leaves saving the YAML to you. Run `npx -y jev-lint --dry-run` to inspect the inventory without a key.\n\n**For ongoing use and CI, we strongly recommend Jev with `TYPESAFE_API_KEY`.** The shipped thresholds are calibrated on Jev. Set your [TypeSafe key](https://console.typesafe.ai/keys) and run `npx -y jev-lint`. If both keys are exported, unset `OPENROUTER_API_KEY` to use TypeSafe directly. An existing config uses its normal file and rule selection.",
+        "contentHash": "c0935a055b2c5a2f5c67aa3c57146686cef85f224e4ec594d0af105261daaff4"
+      },
+      "context": [],
+      "candidateId": "f703d5b01e4b189241926bcc61daa897da83ba9b154c46522e1c71a3fa1c732d",
+      "contextHash": "c7094897bf0a1fd0a88e6a980d435e6e01bde088efdd3fafadf8946597556124",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.53,
+        "probabilities": {
+          "supports": 0.65,
+          "contradicts": 0.33,
+          "unrelated": 0,
+          "insufficient_context": 0.02
+        }
+      }
+    },
+    {
+      "id": "automatic-startup-translation",
+      "topic": "Free trial command, tracked input limits, starter YAML, and the recommendation for regular use",
+      "mode": "translation",
+      "reference": {
+        "source": "readme",
+        "path": "README.md",
+        "startLine": 9,
+        "endLine": 19,
+        "quote": "## Try it on tracked files\n\nTry it in a Git working tree with Node 24+. Set `OPENROUTER_API_KEY` to your [OpenRouter key](https://openrouter.ai/keys), then run:\n\n```sh\nnpx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\nWithout a config, the CLI asks once, selects starter rules from `git ls-files`, prints the proposed YAML, then lints a small sample. Both rule selection and lint use the free Decider. Selection sees up to 64 tracked filenames (8 KiB of paths). The check reads up to three eligible files, at most 16 KiB each and 32 KiB combined. It leaves saving the YAML to you. Run `npx -y jev-lint --dry-run` to inspect the inventory without a key.\n\n**For ongoing use and CI, we strongly recommend Jev with `TYPESAFE_API_KEY`.** The shipped thresholds are calibrated on Jev. Set your [TypeSafe key](https://console.typesafe.ai/keys) and run `npx -y jev-lint`. If both keys are exported, unset `OPENROUTER_API_KEY` to use TypeSafe directly. An existing config uses its normal file and rule selection.",
+        "contentHash": "c0935a055b2c5a2f5c67aa3c57146686cef85f224e4ec594d0af105261daaff4"
+      },
+      "target": {
+        "source": "readme-ja",
+        "path": "README-ja.md",
+        "startLine": 7,
+        "endLine": 17,
+        "quote": "## Git の追跡ファイルで試す\n\nNode 24+ があれば、Git リポジトリで試せる。`OPENROUTER_API_KEY` に [OpenRouter のキー](https://openrouter.ai/keys)を設定して、次の1行を実行する。\n\n```sh\nnpx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\n設定がなければ、CLI は最初に一度だけ確認する。承認すると、`git ls-files` で取得した追跡ファイル名から初期ルールを選び、設定案を YAML で表示して、そのまま少量の lint を実行する。ルール選択も lint も無料の Decider を使う。選択に使うのは最大64件、パス名の合計は8 KiB。lint の対象は最大3ファイル、1ファイル16 KiB、合計32 KiB まで。設定の保存は任意。`npx -y jev-lint --dry-run` ならキーなしで対象を確認できる。\n\n**継続利用や CI には、`TYPESAFE_API_KEY` を設定して Jev を使うことを強く推奨する。** 同梱ルールの判定閾値は Jev で較正している。[TypeSafe のキー](https://console.typesafe.ai/keys)を設定すれば、`npx -y jev-lint` で実行できる。両方のキーがある場合は、`OPENROUTER_API_KEY` を環境から外すと TypeSafe に直接接続する。既存の設定があれば、そこに指定したファイルとルールを使う。",
+        "contentHash": "48f9045052098a5540366c043129dffeb12c1cf9d770af6538f6f2948b768c4d"
+      },
+      "context": [],
+      "candidateId": "072fe482c8abf5a644cf8213800ce260fe0fbdfa496f293cba3afa7b602aae15",
+      "contextHash": "9ce60b04ee368915f33ee76f075dd73416bebe1510052270dde75e449e5abf73",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.97,
+        "probabilities": {
+          "supports": 0.98,
+          "contradicts": 0.02,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    },
+    {
       "id": "advisory-reporting-contract",
       "topic": "Advisory findings remain visible without blocking CI",
       "mode": "semantic",
       "reference": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 272,
-        "endLine": 294,
+        "startLine": 304,
+        "endLine": 326,
         "quote": "| field | | |\n| --- | --- | --- |\n| `rule` | required | the ast-grep matcher. **Write it to over-match.** |\n| `ask` | required | the predicate, one sentence |\n| `language` / `languages` | required | one grammar, or several |\n| `kind` | `score` (default) or `noul` | see below |\n| `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |\n| `threshold` | cutoff | 0–3 for `score`, 0–1 for `noul`; an answer **at or above** it is a finding. `at` remains an alias but warns; do not set both |\n| `loose` | | floor of the `--loose` band, strictly under `threshold`. Default: half of `threshold`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |\n| `subject` | `node` (default), `enclosing`, `file`, `commit`, `block` | what code is judged. `commit` and `block` have no matcher: `commit` is `language: Git`, its subjects the commits `jev-lint commits` lists, the message judged and the diff the state; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |\n| `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\\w+)`) are the captures. A block runs from its header to the line before the next. Left out, the whole file is one block — a document judged as a whole — cut at 48,000 characters with the cut declared |\n| `extensions` | `block` only | the files the rule reads, by extension (`[sql]`); no grammar claims them, so the rule has to say |\n| `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |\n| `note` | | context for the model only |\n| `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |\n| `category` | optional `advisory` | findings are reported and excluded from the CI gate |\n| `nextCheck` | optional nonempty string | follow-up for a reported finding, preserved on replay |\n| `severity` | `hint`, `info`, `warning` (default), `error` | `error` fails a build; earn it first |\n| `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `threshold` then runs 0..levels-1 and a finding's level is numbered. The `rules/markdown/` rules are five-level rubrics from JevSlop |\n| `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |\n| `extends` | | another rule's id -- `<lang>/<id>`, or a bare id when the file's `languages` pick one language -- to build this rule from. The base comes from the rules loaded beside it, then from the shipped packs (read for the lookup, never run because of it). Every field the file gives replaces the base's; `criteria` may give one branch alone, and `note: { append: ... }` keeps the base's note and adds to it. The rule needs its own id. A file that changes what is asked (`ask`, `note`, `criteria`, `rule`, `state`, `context`, ...) but not `threshold` is warned: the inherited cutoff was fitted to the base's question |\n| `context` | | a list of documents, by path relative to the rule file, that the model reads in the state beside the code: the project's own conventions the rule is judged against. Read at load time; their text is part of the draft, so an edited document retires the verdicts given against the old one. Up to 40,000 characters in all; a missing or empty document is a load error. Rules with different documents never share a request |\n| `inconclusive` | | why this rule's own eval corpus cannot speak reliably about the rule drifting (see Calibrating): blind, unstable, or both. A non-empty reason suppresses `eval`'s failure for whichever applies and is shown in its place. Validated against the suite's own margins and spreads at eval time — a reason on a suite that is neither blind nor unstable is an error |",
         "contentHash": "cffdd1f41374c421a6d1eec7bd4e9859b3e8342fd82bf7959021a0f8cd64ae22"
       },
@@ -28,8 +130,8 @@
         "contentHash": "6b3ababb64d2d64b17379d9bd954165608d03aea1c69398722529166c1e61c84"
       },
       "context": [],
-      "candidateId": "4a01b2cdf6eb5a6ebe3e5441c2530ba5b4d7736668c41adc6efa94b1141d2dce",
-      "contextHash": "8541b78214bc19b2b274649f7f98ae121eca5ed67e09969af12ab437ff54e53a",
+      "candidateId": "bb007aa8aa0821d36d9c2904b1baabf86e5aab5403eab9963c183dcd8c4ed635",
+      "contextHash": "0501a820a69b7f5f459ee537fa7f1b1158edeb3ee83976ff21511ce63362ab77",
       "judgment": {
         "choice": "supports",
         "confidence": 0.99,
@@ -56,22 +158,22 @@
       "target": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 186,
-        "endLine": 213,
+        "startLine": 227,
+        "endLine": 254,
         "quote": "## What ships\n\n121 rules under `rules/<language>/<id>/`, and the files you point it at decide\nwhich run. Nothing to select.\n\n| point it at | what runs |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 rules, first tier |\n| `.rs` | `rust/` — 9, first tier |\n| `.py` `.go` | `python/` — 14, `go/` — 9 |\n| `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |\n| `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |\n| `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |\n| `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |\n| `package.json` | `json/` — 1 |\n| sqlc queries and prepared architecture evidence | `text/` — 17 total, including 16 [design advisories](docs/advisories.md) |\n| commits | `git/` — 4 including 2 metric advisories |\n\nPublic API review uses three units: an exported name, the signatures at one entry point, and one documented workflow across import paths. [Rule selection and layout example](docs/advisories.md#public-api-review).\n\n`typescript` and `rust` are first tier: every rule under them carries\nfixtures, expectations and an accepted baseline. The rest are calibrated to\nthe same bar and not yet promised. [RULES.md](RULES.md) lists all 121 with\ntheir question, cutoff and score on their own fixtures.\n\nYour own rule can target any language ast-grep parses — Java, Kotlin, Swift,\nC, C++, C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, HTML,\nCSS, YAML — and any other grammar you compile.",
         "contentHash": "63bd03ba4ec8b9529092055787dc32fd9611d56d77d49a099b08e1f938962df0"
       },
       "context": [],
-      "candidateId": "1808780b36d39939e9acd2ca93728dd511a56bc30d5910020fcf2464527f21e8",
-      "contextHash": "23a7e04e577f02389fa87c48dfca7d85cfcce5acb3d03a36b15c65198d48f181",
+      "candidateId": "d7409a9747d983bdc2aa88c4f2e8480e88a988d63f1219bb335a8b73e320583d",
+      "contextHash": "19bb1c66fd61a7eef09e036523713a59956ac926a4420de77b9858b4b4796a62",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.72,
+        "confidence": 0.83,
         "probabilities": {
-          "supports": 0.79,
-          "contradicts": 0.18,
+          "supports": 0.87,
+          "contradicts": 0.12,
           "unrelated": 0,
-          "insufficient_context": 0.03
+          "insufficient_context": 0.01
         }
       }
     },
@@ -90,20 +192,20 @@
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 133,
-        "endLine": 154,
+        "startLine": 174,
+        "endLine": 195,
         "quote": "## 何が同梱されるか\n\n`rules/<language>/<id>/` の下に 121 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。\n\n| 渡すもの | 走るもの |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 ルール、第一級 |\n| `.rs` | `rust/` — 9、第一級 |\n| `.py` `.go` | `python/` — 14、`go/` — 9 |\n| `.mbt` | `moonbit/` — 20。[パーサを宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば走る |\n| `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |\n| `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |\n| `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |\n| `package.json` | `json/` — 1個 |\n| sqlc クエリ、モジュール・設計の検査用入力 | `text/` — 計17個。うち16個が[設計アドバイザリー](docs/advisories.md) |\n| コミット | `git/` — 4個。うち2個は指標のアドバイザリー |\n\n公開 API は、個々の export、1 つの入口の署名一覧、複数の入口を使うガイドの利用例の 3 単位で評価する。[ルールの使い分けと設定例](docs/advisories.md#public-api-review)。\n\n`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 121 個全部の問い、cutoff、自分の fixtures での成績がある。\n\n自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。",
         "contentHash": "ae7e8e31383e318a5f9a1e193a03a4082c421aeeb22e41048f91cc6827a8ccd7"
       },
       "context": [],
-      "candidateId": "6c2e172846769153e9801639150cb2d1ab0b72177f55447007f2475d3923944c",
-      "contextHash": "53afe11352e1ef9acdd938505376aa8731bf4d693acdb99b141ad910a80997bc",
+      "candidateId": "941063936694e22093fe02e899bbb6dbfe053cae86089b4bdf6a3442a95f8cf8",
+      "contextHash": "b6113d4c04eae46a306c4459b916d5ec09d89b3b6c8df5436eca4f6629de1525",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.76,
+        "confidence": 0.69,
         "probabilities": {
-          "supports": 0.82,
-          "contradicts": 0.17,
+          "supports": 0.77,
+          "contradicts": 0.22,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -124,22 +226,22 @@
       "target": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 611,
-        "endLine": 612,
+        "startLine": 643,
+        "endLine": 644,
         "quote": "121 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,\ngrouped here by what they ask. Which languages each exists in:",
         "contentHash": "ab635e279461b0e24fedfe2412fec984b7910f585ecc2471cde16178887488be"
       },
       "context": [],
-      "candidateId": "5a253edbfc61487888a521caf5c9f7d675fca1330aebf23bc4ba39dd7ace2dc1",
-      "contextHash": "6e98a8f3106eaf7bbc692642d5016acb1ced5634b5aec8a40c6dd1a5b90a0acc",
+      "candidateId": "6dc8139fff3f94c368f90a1a297211e313f7c3aadeb1fb403f9bfce3205dafc2",
+      "contextHash": "944fad0ae761ad59604c0c9a77c9ce6f6343d34bcb4bbb1e991e1579b523b29e",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
+          "supports": 0.99,
           "contradicts": 0.01,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -168,10 +270,10 @@
       "contextHash": "b7e5d2e6c011686b8788851d499dd8f5ec328fcf58c5e828b1e4a4addd5e6744",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.98,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -185,29 +287,29 @@
         "source": "facts",
         "path": "docs/project-facts.md",
         "startLine": 30,
-        "endLine": 32,
-        "quote": "## Default model\n\nThe default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.",
-        "contentHash": "5ffae703878d7067fdfd5286cc2f3063d1a10a03c47d9964b819457efcb98170"
+        "endLine": 44,
+        "quote": "## Default model\n\nThe default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.\n\nExperimental native decision models use `--model openrouter:<id>` and `OPENROUTER_API_KEY`:\n\n| ID | Listed input USD/M tokens | Normal request interval (ms) |\n| --- | ---: | ---: |\n| `typesafe/jev-1.14` | 0.042 | 0 |\n| `liquid/d1.2-ultra` | 0.042 | 0 |\n| `liquid/d1.2` | 0.02 | 0 |\n| `baseten/mammoth-1` | 0.1 | 0 |\n| `perplexity/pplx-decider-v1.3:free` | 0 | 3200 |\n\nThese are explicit experiments, not catalog-wide replacements. Live cost uses provider `usage.cost`; dry runs use estimated input at the listed rate, before native splitting. Native cache filenames include a hash of the endpoint and requested model, separate from legacy Jev cache filenames.",
+        "contentHash": "33ecfbfe6a9e0ca84d3f1d0899a47d84f1769af8d8324cb1a6472d048ee56b5c"
       },
       "target": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 110,
-        "endLine": 125,
-        "quote": "## Model recommendation\n\nThe default is pinned to `jev-1.14.0`, the\n[current stable release](https://docs.typesafe.ai/models), so a moving alias cannot\nsilently change answers at fitted cutoffs. Override it with `--model`, config's\n`model:`, or `JEV_LINT_MODEL`. `--model jev-latest` follows future stable releases.\n\nJev is the recommended model for normal linting. The shipped rules and cutoffs\nare calibrated for Jev, and it performed best at those cutoffs in the\n[81-suite fixture comparison](docs/clef-evaluation.md#live-results-2026-10-02).\n\nCloudflare Clef and Clef-flash are optional experimental models for comparison\nfrom a repository checkout. `just clef-plan` previews the requests and cost;\n`just clef-eval` runs the comparison with Cloudflare credentials. See the\n[evaluation guide](docs/clef-evaluation.md) for setup, recorded results and\nthe limits of fitting new cutoffs on the same fixtures.",
-        "contentHash": "a27ede03f51047cab6f360be670940a5a8cda09146663d12dff1d6e324701e45"
+        "startLine": 124,
+        "endLine": 165,
+        "quote": "## Model recommendation\n\nThe default is pinned to `jev-1.14.0`, the\n[current stable release](https://docs.typesafe.ai/models), so a moving alias cannot\nsilently change answers at fitted cutoffs. Override it with `--model`, config's\n`model:`, or `JEV_LINT_MODEL`. `--model jev-latest` follows future stable releases.\n\nJev is the recommended model for normal linting. The shipped rules and cutoffs\nare calibrated for Jev, and it performed best at those cutoffs in the\n[81-suite fixture comparison](docs/clef-evaluation.md#live-results-2026-10-02).\n\nWhen the CLI detects `OPENROUTER_API_KEY`, it asks before sending data to OpenRouter for\n`typesafe/jev-1.14`, even if a TypeSafe key is also present. Enter cancels the run.\nFor CI, set `model: openrouter:typesafe/jev-1.14` in `.jev-lint.yaml`, pass\n`--model openrouter:typesafe/jev-1.14`, or set `JEV_LINT_MODEL=openrouter:typesafe/jev-1.14`.\nFor default Jev, `apiKeyEnv: OPENROUTER_API_KEY` in the config also selects OpenRouter.\nWithout an explicit selection, a noninteractive run exits 2. Unset the OpenRouter key to use TypeSafe directly.\n\nExperimental OpenRouter decision models are selectable with\n`--model openrouter:<id>` and `OPENROUTER_API_KEY`. Supported IDs are\n`liquid/d1.2-ultra`, `liquid/d1.2`, `baseten/mammoth-1`, and\n`perplexity/pplx-decider-v1.3:free`. In the\n[November comparison](docs/model-comparison-2026-11.md), Perplexity's free model\nmatched Jev's aggregate results on 146 naming cases, but selected too many\nstarter rules. The free trial therefore offers the model a shortlist of core rules. Other OpenRouter checking models use Jev for starter selection.\n\n```bash\nexport OPENROUTER_API_KEY='<your-api-key>'\nnpx jev-lint run typescript/fn-name-promises src \\\n  --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\nThese are opt-in experiments with existing cutoffs, not replacements validated\nacross the catalog. Live OpenRouter cost comes from billed `usage.cost`;\nfree requests are paced at 3.2-second intervals and remain subject to daily limits.\nNative models get separate verdict-cache files; use `--cache none` for fresh comparisons.\n\nCloudflare Clef and Clef-flash are optional experimental models for comparison\nfrom a repository checkout. `just clef-plan` previews the requests and cost;\n`just clef-eval` runs the comparison with Cloudflare credentials. See the\n[evaluation guide](docs/clef-evaluation.md) for setup, recorded results and\nthe limits of fitting new cutoffs on the same fixtures.",
+        "contentHash": "53dc4259aecd830ce92372e398f76d52169bd5cd843c23a3f3291960b51b8220"
       },
       "context": [],
-      "candidateId": "e712096ad811f0b771bbc55d6c6935046181bcd328e9300441e1f5f45560768b",
-      "contextHash": "c6845f2ba09bc2789d1e3873929dd1d18bfe90ff576028d5639ad38c9cde8293",
+      "candidateId": "21dfc2f7756eb5e3d9474aae2b9ab793356ab7776736a8b5348aa3f45891bfe0",
+      "contextHash": "9b064c58ae9c255ec3d82da5e38fdb35e582523eb3177a506389ee269a737d1c",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.73,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.8,
+          "contradicts": 0.19,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -219,27 +321,27 @@
         "source": "facts",
         "path": "docs/project-facts.md",
         "startLine": 30,
-        "endLine": 32,
-        "quote": "## Default model\n\nThe default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.",
-        "contentHash": "5ffae703878d7067fdfd5286cc2f3063d1a10a03c47d9964b819457efcb98170"
+        "endLine": 44,
+        "quote": "## Default model\n\nThe default model is `jev-1.14.0`. Explicit CLI, configuration and environment overrides still apply.\n\nExperimental native decision models use `--model openrouter:<id>` and `OPENROUTER_API_KEY`:\n\n| ID | Listed input USD/M tokens | Normal request interval (ms) |\n| --- | ---: | ---: |\n| `typesafe/jev-1.14` | 0.042 | 0 |\n| `liquid/d1.2-ultra` | 0.042 | 0 |\n| `liquid/d1.2` | 0.02 | 0 |\n| `baseten/mammoth-1` | 0.1 | 0 |\n| `perplexity/pplx-decider-v1.3:free` | 0 | 3200 |\n\nThese are explicit experiments, not catalog-wide replacements. Live cost uses provider `usage.cost`; dry runs use estimated input at the listed rate, before native splitting. Native cache filenames include a hash of the endpoint and requested model, separate from legacy Jev cache filenames.",
+        "contentHash": "33ecfbfe6a9e0ca84d3f1d0899a47d84f1769af8d8324cb1a6472d048ee56b5c"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 66,
-        "endLine": 80,
-        "quote": "## 推奨モデル\n\n既定値は[現在の安定版](https://docs.typesafe.ai/models) `jev-1.14.0` に固定している。\nモデルのエイリアスが更新されても、較正した cutoff に対する回答が黙って変わらないようにするため。\n`--model`、config の `model:`、`JEV_LINT_MODEL` で変更できる。\n今後の安定版へ自動追従する場合は `--model jev-latest` を指定する。\n\n通常の lint には Jev を推奨する。同梱ルールと cutoff は Jev で較正されていて、\nその cutoff を使った [81 suite の fixture 比較](docs/clef-evaluation.md#live-results-2026-10-02)\nでも Jev が最も良い成績だった。\n\nCloudflare Clef と Clef-flash も、リポジトリを checkout して実験的に比較評価できる。\n`just clef-plan` でリクエストと費用を確認し、Cloudflare の認証情報を設定して\n`just clef-eval` で比較する。設定、記録済みの結果、同じ fixture で cutoff を\n合わせ直す場合の限界は[評価ガイド](docs/clef-evaluation.md)にある。",
-        "contentHash": "0db20de71a0abba4a2cdb28706648a7ec71b5e5d1e9f9e158a38b600647dac61"
+        "startLine": 80,
+        "endLine": 120,
+        "quote": "## 推奨モデル\n\n既定値は[現在の安定版](https://docs.typesafe.ai/models) `jev-1.14.0` に固定している。\nモデルのエイリアスが更新されても、較正した cutoff に対する回答が黙って変わらないようにするため。\n`--model`、config の `model:`、`JEV_LINT_MODEL` で変更できる。\n今後の安定版へ自動追従する場合は `--model jev-latest` を指定する。\n\n通常の lint には Jev を推奨する。同梱ルールと cutoff は Jev で較正されていて、\nその cutoff を使った [81 suite の fixture 比較](docs/clef-evaluation.md#live-results-2026-10-02)\nでも Jev が最も良い成績だった。\n\n`OPENROUTER_API_KEY` を検出すると、CLI は OpenRouter の `typesafe/jev-1.14` にデータを送ってよいか確認する。\nTypeSafe のキーが同時にある場合も同じで、Enter で中止する。\nCI では `.jev-lint.yaml` に `model: openrouter:typesafe/jev-1.14` を書くか、\n`--model openrouter:typesafe/jev-1.14` または `JEV_LINT_MODEL=openrouter:typesafe/jev-1.14` で明示する。\n既定の Jev を使う場合は、設定に `apiKeyEnv: OPENROUTER_API_KEY` と書いてもよい。\n明示せずに非対話で実行すると終了コード 2 で停止する。\nTypeSafe に直接接続するには OpenRouter のキーを環境から外す。\n\nOpenRouter の判断モデルを `--model openrouter:<id>` と `OPENROUTER_API_KEY` で\n実験的に選択できる。対応する ID は `liquid/d1.2-ultra`、`liquid/d1.2`、\n`baseten/mammoth-1`、`perplexity/pplx-decider-v1.3:free`。\n[11月の比較](docs/model-comparison-2026-11.md)では、Perplexity無料版は命名系146件で\nJevと同じ集計成績だったが、初期ルールを過剰に選んだ。\n無料体験では初期ルールの候補を基本ルールに絞る。それ以外の OpenRouter モデルを検査に指定した場合、ルール選択には Jev を使う。\n\n```bash\nexport OPENROUTER_API_KEY='<your-api-key>'\nnpx jev-lint run typescript/fn-name-promises src \\\n  --model openrouter:perplexity/pplx-decider-v1.3:free\n```\n\n同梱のcutoffを使う任意の実験機能であり、全ルールの代替として検証されたものではない。\nOpenRouterの実費は `usage.cost` から取得する。\n無料版のリクエストは3.2秒間隔に制限し、別途日次上限がある。\nモデルごとに検査キャッシュのファイルを分ける。新鮮な比較には `--cache none` を使う。\n\nCloudflare Clef と Clef-flash も、リポジトリを checkout して実験的に比較評価できる。\n`just clef-plan` でリクエストと費用を確認し、Cloudflare の認証情報を設定して\n`just clef-eval` で比較する。設定、記録済みの結果、同じ fixture で cutoff を\n合わせ直す場合の限界は[評価ガイド](docs/clef-evaluation.md)にある。",
+        "contentHash": "a5d691b1dd26d991fdebb79423334bd2a6c0771a6982796f4605eac1675c380c"
       },
       "context": [],
-      "candidateId": "a1ce146df8d2bde3b7b9b245472132fc7066cce083c4c5ee102ec79df46e1b9d",
-      "contextHash": "0e7bf0f4ceb0c0a0544ea22fe24c5f58373b23a644b37fe5a0a73c8193937fe2",
+      "candidateId": "d50b6ab35d06e6c5a7083185d534369f93a78e7d5fbe08b4e867b262eb07260b",
+      "contextHash": "dab8fac3f325064ed0c004ba4deb09cc44a1122f3fcf6393b6fd929008e96e2a",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.81,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.11,
+          "supports": 0.86,
+          "contradicts": 0.13,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -252,8 +354,8 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 40,
-        "endLine": 46,
+        "startLine": 58,
+        "endLine": 64,
         "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:advisories && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
         "contentHash": "378c0271a9f334ff789eaddc2cdecfe47401d0ab0c6d8873b159ea8343ce9a59"
       },
@@ -266,16 +368,16 @@
         "contentHash": "92de0ba0e84e3cb43368ed843d3adaa060d686fd66e6eecadf9f2249a0358823"
       },
       "context": [],
-      "candidateId": "ecf553ce5eaf88019e47913bfca4df08e725c3797aa23725a7cb03b196dc0760",
-      "contextHash": "c00d588e7806bbb50ce017b80fc9ce9f45ed56bca3c6b89d1fb9304e5a9a0c30",
+      "candidateId": "ae43b1538615cf743f775498351b03ea5ef98d094533d517e269ddc998d6c04d",
+      "contextHash": "3e41357edf900b8121e9593115b44043e8ce99220a0da7b447fb6442a5e619d1",
       "judgment": {
         "choice": "supports",
         "confidence": 0.85,
         "probabilities": {
           "supports": 0.89,
-          "contradicts": 0.11,
+          "contradicts": 0.1,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -286,8 +388,8 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 40,
-        "endLine": 46,
+        "startLine": 58,
+        "endLine": 64,
         "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:advisories && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
         "contentHash": "378c0271a9f334ff789eaddc2cdecfe47401d0ab0c6d8873b159ea8343ce9a59"
       },
@@ -300,16 +402,16 @@
         "contentHash": "f5db8be93d0b665e6799c56d55faa0ccb1fa26097531c7fbd6f039e22716a356"
       },
       "context": [],
-      "candidateId": "87c244bec06582f259882e1dd59307feb3e113e2fabac9f0e2bbacdab2d08efb",
-      "contextHash": "e5941a0a8d9cf3e6f201cea332d78057f31639194346cf3f731cd5cac803e924",
+      "candidateId": "ae659ea8fd57a37e0b72a2d19e877ed6a68579ac2b6161b78cbe1529e4382e0c",
+      "contextHash": "01de7408893be79dee3d5075e1546cf6676bb74d814b694f803d3ccb62374996",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.92,
+        "confidence": 0.89,
         "probabilities": {
-          "supports": 0.94,
-          "contradicts": 0.03,
+          "supports": 0.92,
+          "contradicts": 0.06,
           "unrelated": 0,
-          "insufficient_context": 0.03
+          "insufficient_context": 0.02
         }
       }
     },
@@ -396,22 +498,22 @@
       "target": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 1334,
-        "endLine": 1337,
+        "startLine": 1367,
+        "endLine": 1370,
         "quote": "The verdict cache is `.jev-lint/baseline.json`, relative to the config's\ndirectory, and is meant to be committed: a run over the same commit answers\nfrom it, and CI lints from it with no API key. It is trusted input --\nanything that can edit it can silence a rule or invent a finding.",
         "contentHash": "2ec008e52203e6a8d9065b94b64409e7daf70c16c05567df31214fccf10e671b"
       },
       "context": [],
-      "candidateId": "a3376cc46044bbdc4c15fe905ed6bbda31030a057da687d7e1d0b25663e9e6ec",
-      "contextHash": "34895e1a2c71125e06f90bca2e8118061c10ff361383334dde808e5b04cc7760",
+      "candidateId": "bcf23a17121225730c293d1375d0fdc9096dea21083357406ce9f5f5c43d9884",
+      "contextHash": "acb0f4b2c5e83eba862a08ebcd873812a4e709d158acf8210f02ee9bd2b68656",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.87,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.9,
-          "contradicts": 0.09,
+          "supports": 0.88,
+          "contradicts": 0.1,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -440,10 +542,10 @@
       "contextHash": "9b927ce6ce3ccd0d034e8afee8439d0cbdd9186a35694ebff1c2b3e575e55efd",
       "judgment": {
         "choice": "supports",
-        "confidence": 1,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 1,
-          "contradicts": 0,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -508,10 +610,10 @@
       "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.69,
+        "confidence": 0.79,
         "probabilities": {
-          "supports": 0.77,
-          "contradicts": 0.22,
+          "supports": 0.84,
+          "contradicts": 0.15,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -542,10 +644,10 @@
       "contextHash": "8cecf2bfcf88789455d7eafa78a1b126bee955d21dc05f16fa0edb8326788196",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.83,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.87,
-          "contradicts": 0.13,
+          "supports": 0.88,
+          "contradicts": 0.12,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -576,11 +678,11 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.03,
-          "unrelated": 0,
+          "supports": 0.93,
+          "contradicts": 0.04,
+          "unrelated": 0.01,
           "insufficient_context": 0.02
         }
       }
@@ -600,14 +702,14 @@
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 131,
-        "endLine": 131,
+        "startLine": 172,
+        "endLine": 172,
         "quote": "**CI と git hook** — `review --base \"$GITHUB_BASE_REF\" --format github` が PR に注釈を付ける。`jev-lint init --pre-commit` と `--pre-push` が hook を書く。どちらもルールを `severity: error` に上げるまでブロックしないし、同梱ルールにそれを持つものは無い。[docs/use-hooks.md](docs/use-hooks.md) に詳細があり、オフラインだとコミットが止まる終了コードの話もそこにある。",
         "contentHash": "620acfc54972986da99d8841c04cb79c14fbb3082ef9e444be968a1c249f742d"
       },
       "context": [],
-      "candidateId": "211076f6d3b1fa391d5040be8ad561d7b1c9dc1a9a2571cfa91b2f9ea89bc2ab",
-      "contextHash": "d1acc67b489fffe17b2e80b045f35be0a9d3bd1660f156f7a6e52e3b975f27a6",
+      "candidateId": "f8a3afe61af4614f4700dd3f74875907034ce006aa9661b44edc6a65a7ced0d3",
+      "contextHash": "b74acdde4e39b1631b4df6e03e37ee8c2b57529530351d19f4215b2a3c48e3b5",
       "judgment": {
         "choice": "supports",
         "confidence": 0.91,
@@ -660,22 +762,22 @@
       "reference": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 279,
-        "endLine": 295,
+        "startLine": 320,
+        "endLine": 336,
         "quote": "## Documentation consistency\n\n`jev-lint docs` compares explicit claims, glossary definitions and translations,\nretaining both source locations. This repository checks its own README pair,\nAPI guides and contributor instructions against generated project facts and\ncanonical terminology.\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\nThe manifest is `.jev-lint/documents.json`; `--document-manifest` selects another.\nReplay is offline and rejects changed sources or questions. Contradictions exit 1;\nincomplete or stale assessments exit 3. The report remains `UNREVIEWED`.\nSee the [self-check guide](docs/self-check.md) for scope, budgets and evaluation.",
         "contentHash": "4572bdf2c1147215ec30ff85b80daba86bc0f9f8c6af36b6335e29b579538c05"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 199,
-        "endLine": 214,
+        "startLine": 240,
+        "endLine": 255,
         "quote": "## ドキュメントの整合性\n\n`jev-lint docs` は、明示した主張、用語の定義、翻訳の意味を比較し、両方の出典位置を残す。\nこのリポジトリでは日英README、APIガイド、開発者向け指示を、生成したプロジェクト情報と\n共通の用語定義に照らして検査する。\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\n定義ファイルは `.jev-lint/documents.json`。`--document-manifest` で別のものを指定できる。\n再生には通信が不要で、出典や質問が変わっていれば拒否する。不一致は終了コード1、\n未評価・古い記録は3になる。結果の品質判定は `UNREVIEWED` のまま。\n対象範囲、予算、評価方法は[自己検査ガイド](docs/self-check.md)にある。",
         "contentHash": "9ebd4cd92ca951f5ebe6fb203083dcca7d387759c136dfd16cc566bdec8f6617"
       },
       "context": [],
-      "candidateId": "217d922bcf06d0e96f5be284d65c35d65ce5e900d9541e1a5742e5d1dd6ec0dd",
-      "contextHash": "421b7f0960b0465e21a81363657bbf6e9bf3aa9e62c02fd268f1f0dd89bfc653",
+      "candidateId": "977559f1bb76bf6a8c43c381bcdbc714a99fa0e58e280a8966fc477b34eb13e9",
+      "contextHash": "050232e152c3555938a817c3bf51ff37d5049450e53ce84c6c3e03db3c86eddd",
       "judgment": {
         "choice": "supports",
         "confidence": 0.99,
@@ -694,28 +796,28 @@
       "reference": {
         "source": "facts",
         "path": "docs/project-facts.md",
-        "startLine": 34,
-        "endLine": 38,
-        "quote": "## Initial rule selection\n\n`introspect` selects initial screening rules from metadata using Jev. Its current enable criterion is:\n\nONLY these exact rule IDs qualify for the core starter: fn-name-promises with eligible source files in any language; test-name-verifies-claim with .test/.spec/test_/_test behavior-test paths; agent-instruction-is-unclear or agent-instructions-conflict with AGENTS.md. Read the ID after the language slash. Every other rule ID is defer or skip, even if it mentions names or tests. Existing violations or source bodies are not required for these core rules.",
-        "contentHash": "8bf3151cd19a5274bee7b091605581ad18cfd8bac498bbe6c0186cf1d398028a"
+        "startLine": 46,
+        "endLine": 56,
+        "quote": "## Initial rule selection\n\nCommandless startup and `auto` confirm once before any automatic API request, defaulting to No. `--yes` / `-y` skips this; noninteractive startup without it exits 2 with no requests. A decline cancels with no requests or record/cache writes. Offline plans do not prompt. Live checks ask for consent when the OpenRouter route is inferred. npm's `npx -y` is a separate approval.\n\nCommandless startup and `auto` use existing configuration when present. Without a config, they select rules from up to 64 Git-tracked filenames, print the starter YAML, and check up to three tracked files after confirmation. They create no config. Incomplete/stale selection or no starter exits 3 without checking or an all-rule fallback. An unconfigured `--dry-run` shows metadata without requests; a configured dry run prices its check. Explicit `check` without config still runs every loaded rule.\n\nWhen the CLI detects OPENROUTER_API_KEY, it asks before sending data to OpenRouter for default Jev, even with a TypeSafe key or --yes. Noninteractive runs can select an openrouter:<id> model in config, --model or JEV_LINT_MODEL. For default Jev, apiKeyEnv: OPENROUTER_API_KEY in the config also selects OpenRouter. The free Perplexity trial uses the same free Decider for selection and checking. Other OpenRouter checking models use Jev on OpenRouter for selection. Regular use with TypeSafe Jev is strongly recommended.\n\n`introspect` selects initial screening rules from metadata using Jev. Its current enable criterion is:\n\nONLY these exact rule IDs qualify for the core starter: fn-name-promises with eligible source files in any language; test-name-verifies-claim with .test/.spec/test_/_test behavior-test paths; agent-instruction-is-unclear or agent-instructions-conflict with AGENTS.md. Read the ID after the language slash. Every other rule ID is defer or skip, even if it mentions names or tests. Existing violations or source bodies are not required for these core rules.",
+        "contentHash": "c2bfb6381851fc1d958e5df9af7606c16aa11fe8c1337c6b65896d214be1bf05"
       },
       "target": {
         "source": "initialization",
         "path": "skills/jev-lint/references/initializing-project.md",
-        "startLine": 52,
-        "endLine": 82,
+        "startLine": 67,
+        "endLine": 97,
         "quote": "## Explain the proposal\n\nDistinguish these decisions and show representative file paths for each rule:\n\n| decision | meaning |\n| --- | --- |\n| `enable` | belongs in the conservative starter given the visible metadata |\n| `defer` | potentially useful after inspecting claims, conventions or workflow |\n| `skip` | the observed scope or document genre makes it unsuitable |\n| `insufficient_context` | missing information prevents a usable recommendation |\n\nThe current core consists of `fn-name-promises` for observed source languages,\n`test-name-verifies-claim` for behavior-test paths, and the two agent-instruction\nrules for `AGENTS.md`. Check the installed catalog rather than assuming a variant\nexists in every language. Both a JavaScript file and a TypeScript file can use\nthe ECMAScript variants under `typescript/`.\n\nExplain conditional candidates by the evidence still needed:\n\n| family | evidence before adding it |\n| --- | --- |\n| comments, safe/pure/idempotent names, logs and errors | actual source claims and behavior |\n| mocks, snapshots and paired failure paths | assertions and verified test relationships; a test directory alone is insufficient |\n| variable/module naming | the project's naming conventions and a reviewed sample |\n| prose rules | an appropriate editorial genre; technical references, instruction manuals and historical measurements are controls |\n| npm script names | commands behind the script names |\n| Git rules | the intended commit/change review workflow and applicable instructions |\n\nAvoid duplicate initial test-name checks: prefer `test-name-verifies-claim` and\ndefer `test-name-describes-code`. Preserve shipped severities and cutoffs; model\npreferences do not calibrate new cutoffs or justify making findings blocking.",
         "contentHash": "50741869141d4e049bb840c2af7f871f9e7b079e4e36edcccf2dd8b31dce9906"
       },
       "context": [],
-      "candidateId": "ad853e13b993801709dea529162078647584c0be25a1ac79b3c8bd21db556c51",
-      "contextHash": "35839030f7dde62d95b10faf10a0b81c8ae5c13efa2c9cd97f722dfbbb0eb1aa",
+      "candidateId": "3e78e5764874a61e65045a3ac784da3860ffbe712a0a067e26a38e7496b7db11",
+      "contextHash": "45bf78a4a381d3300f945212600737f169ce1dab6fc4a8342ab8c9d4a2769f2d",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.89,
+        "confidence": 0.93,
         "probabilities": {
-          "supports": 0.92,
-          "contradicts": 0.07,
+          "supports": 0.95,
+          "contradicts": 0.04,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -728,28 +830,28 @@
       "reference": {
         "source": "initialization",
         "path": "skills/jev-lint/references/initializing-project.md",
-        "startLine": 9,
-        "endLine": 50,
+        "startLine": 24,
+        "endLine": 65,
         "quote": "## Inspect and recommend\n\n```sh\njev-lint introspect --dry-run\njev-lint introspect --record .jev-lint/introspection.json\njev-lint init --introspect --record .jev-lint/introspection.json\njev-lint check --dry-run --show-subjects --cache none\n```\n\n`introspect [directory]` accepts a project directory, defaulting to the current\ndirectory. Without `--write` it prints recommendations and a proposed config.\n`--write` creates a new `.jev-lint.yaml` in that project. `--json` emits the\nversioned report instead of text. Plain `init` still enables all shipped rules;\nit does not perform introspection.\n\n`init --introspect [directory]` is the initialization form of `introspect --write`;\nit creates the recommended config without a separate `--write` flag.\n`init --introspect --dry-run` only displays the metadata plan, with no requests\nor writes. Its `--config <new.yaml>` selects a new output file, as `--output`\ndoes; neither loads existing settings. Choose one output flag. Hook installation\n(`--pre-commit` or `--pre-push`) is a separate init mode.\n\nFor an existing config, generate a separate proposal:\n\n```sh\njev-lint introspect --write --output .jev-lint.proposed.yaml\n# Equivalent initialization form:\njev-lint init --introspect --config .jev-lint.proposed.yaml\n```\n\nThe command refuses to replace an existing config, even with `--force`.\nPreserve explicit rule choices, calibrated cutoffs, exclusions, custom parser\ndeclarations and hook settings when applying a proposal. A recommendation-only\nrequest calls for the proposal, while a setup request authorizes creating the\nnew config. Install hooks or change CI when that is part of the requested setup.\n\nThe model receives eligible file paths, package script/dependency names and\ncatalog descriptions. Source bodies, script commands, dependency versions,\nenvironment values and hidden-file contents are not sent. It does not execute\nproject scripts or load custom parser libraries. Rule YAML and explicit rule\ncontext are read as policy data by the normal loader. `-R` can select a trusted\nalternative catalog; ordinary `.jev-lint.yaml` settings are not loaded.",
         "contentHash": "b937fab26ec09231a93e97d8dd420f221860f308928a998cff5194bd96aa0bc5"
       },
       "target": {
         "source": "user-skill",
         "path": "skills/jev-lint/SKILL.md",
-        "startLine": 75,
-        "endLine": 80,
+        "startLine": 79,
+        "endLine": 84,
         "quote": "For initialization, follow [initializing-project.md](references/initializing-project.md)\nto propose enabled, deferred and unsuitable rules with file evidence. `introspect`\nuses Jev directly; it needs no separate coding-agent model. Plain `init` still\nenables every shipped rule; `init --introspect` creates the recommended starter\nwithout needing `--write`. Preserve existing settings and calibrated cutoffs;\nuse a separate proposal path when a config already exists.",
         "contentHash": "1d2d1793c68cf3c0ac186f30ea58aeaccb462c129caf98b52b98afffa54a8bb7"
       },
       "context": [],
-      "candidateId": "e95641efea73c9d2c60fe43da8717cc79973600e8888560e89405fe1ec520097",
-      "contextHash": "5b3e6e3d6e9313b46b5d867319a9d0ff3eca623aedd3906c8e3275fab0251ea8",
+      "candidateId": "8ee30342850867a1ba2006419554792818a476abd24678267d9b3925d756503a",
+      "contextHash": "df6f5c3bc024f553d1c2e2838f60e67b6b462fa19ed6d5d0f4f1a4d459724422",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.87,
+        "confidence": 0.83,
         "probabilities": {
-          "supports": 0.9,
-          "contradicts": 0.09,
+          "supports": 0.87,
+          "contradicts": 0.12,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -796,30 +898,30 @@
       "reference": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 140,
-        "endLine": 146,
+        "startLine": 181,
+        "endLine": 187,
         "quote": "`introspect --dry-run` shows the metadata without requests. `introspect --write`\nuses Jev directly, with no separate LLM or agent, and creates a config containing\nonly recommended starter rules. Existing configs are preserved; use\n`--write --output .jev-lint.proposed.yaml` for a separate proposal.\nThe report lists enabled, deferred and unsuitable rules with representative paths.\nSource bodies, script commands and environment values are not sent.\nSee the [initialization guide](skills/jev-lint/references/initializing-project.md).",
         "contentHash": "7487bb2af604df3354d2fd57e61272a9683ab311a5691f79e8924352ee3ed458"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 95,
-        "endLine": 99,
+        "startLine": 136,
+        "endLine": 140,
         "quote": "`introspect --dry-run` は送信する情報を通信なしで表示する。`introspect --write` は別のLLMや\nエージェントを使わずJevを直接呼び、推奨する初期ルールだけを含む設定を新規作成する。\n既存設定がある場合は `--write --output .jev-lint.proposed.yaml` で別の提案ファイルを作れる。\n有効化・保留・対象外のルールを代表ファイル付きで表示し、ソース本文、スクリプトの値、環境変数の値は送らない。\n詳しくは[初期設定ガイド](skills/jev-lint/references/initializing-project.md)にある。",
         "contentHash": "e392f19314dde344299145afe957a508a35cb872b948ad0f63344970c02a7b1c"
       },
       "context": [],
-      "candidateId": "d6ed2f4cfc309099201ae898733704bc1e91f8b1c2b1f19f110900fb8eb8b2ee",
-      "contextHash": "2186cd8f8e963d27e4f6eae436a488676c25c3d022daf9d460a5a1f7e5c71598",
+      "candidateId": "b99dbc3d310d616b7ccaf5909ace06faaaeb94219cc1928edbfadeaf6893f063",
+      "contextHash": "a099ee62e4b16b6b032e4ddbd95289e5c1ca882252151d04a591bea5e96541a1",
       "judgment": {
         "choice": "supports",
         "confidence": 0.88,
         "probabilities": {
           "supports": 0.91,
-          "contradicts": 0.09,
+          "contradicts": 0.08,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -830,22 +932,22 @@
       "reference": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 148,
-        "endLine": 149,
+        "startLine": 189,
+        "endLine": 190,
         "quote": "`init --introspect` is equivalent to `introspect --write`.\n`init --introspect --dry-run` makes no requests and writes no configuration.",
         "contentHash": "f81d58b40fa3c88ed755bf4c8366e75922909d93235ff40eab13488bca2b2364"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 101,
-        "endLine": 102,
+        "startLine": 142,
+        "endLine": 143,
         "quote": "`init --introspect` は `introspect --write` と同じ動作になる。\n`init --introspect --dry-run` では通信も設定ファイルの作成も行わない。",
         "contentHash": "f11d4cacf084f1f4b62dcb577f5d757fb5fa073299db4cb194eaa732abc80d0c"
       },
       "context": [],
-      "candidateId": "fd67a943fbdd8cff2f8fdbc51f498600984c6bf5258a319b373bb2f44c487316",
-      "contextHash": "be3bcc819696158a30648b1aae4ce6aef734bcd4855f4da07b164525bdb8c356",
+      "candidateId": "1e6ceb8113a1463f825a4af19ba89106d72ffa487be3c16229a6124850b4a8a5",
+      "contextHash": "fefead391f2e37393cbc3ccc7b77bad9a857fb6a01b2d9d8804de4be31b0972f",
       "judgment": {
         "choice": "supports",
         "confidence": 1,
@@ -891,10 +993,10 @@
       "contextHash": "604fcb8a9c1e317a8a6d49fc2439cd2b3f5c68d1e8a8bf26c48cb3203d30fff9",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.57,
+        "confidence": 0.51,
         "probabilities": {
-          "supports": 0.68,
-          "contradicts": 0.31,
+          "supports": 0.63,
+          "contradicts": 0.36,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -902,9 +1004,9 @@
     }
   ],
   "coverage": {
-    "expected": 26,
-    "selected": 26,
-    "answered": 26,
+    "expected": 29,
+    "selected": 29,
+    "answered": 29,
     "missing": 0,
     "contradictions": 0,
     "unassessed": 0,
@@ -913,9 +1015,9 @@
     "unboundDocuments": 0
   },
   "usage": {
-    "requests": 26,
-    "inputTokens": 42105,
-    "usd": 0.00176841
+    "requests": 29,
+    "inputTokens": 49292,
+    "usd": 0.002070264
   },
   "errors": []
 }
