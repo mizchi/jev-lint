@@ -1,0 +1,16 @@
+default: clean
+fixtures/batches-a.lsp:
+  - line: 1
+    window: 0
+    label: bad
+    reason: Both sinks implement save but an empty flush now throws.
+fixtures/batches-b.lsp:
+  - line: 1
+    window: 0
+    label: clean
+    reason: Both results satisfy the stated ordering contract.
+fixtures/batches-c.lsp:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A logging prefix leaves the contract and the relationships unchanged.

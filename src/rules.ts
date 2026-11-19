@@ -328,6 +328,13 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     axis = raw.axis as Grouping;
   }
 
+  if (raw.category !== undefined && raw.category !== "advisory") {
+    return { error: `${id}: category must be advisory when specified` };
+  }
+  if (raw.nextCheck !== undefined && (typeof raw.nextCheck !== "string" || !raw.nextCheck.trim())) {
+    return { error: `${id}: nextCheck must be a nonempty review instruction` };
+  }
+
   const severity = raw.severity === undefined ? "warning" : raw.severity;
   if (!["hint", "info", "warning", "error"].includes(severity)) {
     return { error: `${id}: \`severity\` must be hint, info, warning or error` };
@@ -397,7 +404,7 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
   const known = new Set([
     "id", "language", "languages", "rule", "constraints", "utils", "ask",
     "note", "kind", "criteria", "threshold", "at", "subject", "state", "axis", "severity",
-    "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions", "filenames", "levels",
+    "category", "nextCheck", "message", "unsureBelow", "docs", "tags", "explain", "loose", "split", "extensions", "filenames", "levels",
     "divergent", "inconclusive", "context",
   ]);
   const unknown = Object.keys(raw).filter((k) => !known.has(k));
@@ -416,6 +423,8 @@ export function normalizeRule(raw: any, where = "rule", custom: CustomLanguages 
     state,
     axis,
     severity,
+    ...(raw.category ? { category: raw.category } : {}),
+    ...(raw.nextCheck ? { nextCheck: raw.nextCheck.trim() } : {}),
     unsureBelow,
     divergent,
     inconclusive,
@@ -1191,6 +1200,8 @@ function ruleToRaw(rule: Rule): Record<string, unknown> {
     loose: rule.loose,
     axis: rule.axis,
     message: rule.message,
+    category: rule.category,
+    nextCheck: rule.nextCheck,
     unsureBelow: rule.unsureBelow,
     docs: rule.docs,
     explain: rule.explain,

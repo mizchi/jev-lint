@@ -1,0 +1,16 @@
+default: clean
+fixtures/1:
+  - line: 1
+    window: 0
+    label: bad
+    reason: Timed-out cases vanish from the availability denominator.
+fixtures/2:
+  - line: 1
+    window: 0
+    label: clean
+    reason: The completed-jobs measure gets its own name and the original remains.
+fixtures/3:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A license comment leaves the behavior and evidence for this rule unchanged.

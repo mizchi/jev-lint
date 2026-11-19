@@ -1,0 +1,163 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T04:36:22.037Z",
+  "model": "jev-1.14.0",
+  "suite": "text/state-key-preserves-behavior",
+  "rules": [
+    {
+      "id": "state-key-preserves-behavior",
+      "draft": "d81212440d14",
+      "at": 0.84
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/folded.statekey",
+        "line": 1,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/audit-log.statekey",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.51,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/audit-prefix.statekey",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/queue.statekey",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/delayed.statekey",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/audit-log.statekey",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/queue.statekey",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/delayed.statekey",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/folded.statekey",
+        "line": 1,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/audit-prefix.statekey",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.56,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/audit-prefix.statekey",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/folded.statekey",
+        "line": 1,
+        "endLine": 4,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/audit-log.statekey",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.47,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/delayed.statekey",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "state-key-preserves-behavior",
+        "file": "rules/text/state-key-preserves-behavior/fixtures/queue.statekey",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 15,
+    "inputTokens": 11139,
+    "usd": 0.000467838,
+    "ms": 280
+  }
+}

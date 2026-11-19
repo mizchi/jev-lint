@@ -1,0 +1,7 @@
+rules:
+  text/single-responsibility: on
+  text/least-privilege: on
+  text/least-surprise: on
+  text/hyrum: on
+  text/parkinson: on
+  text/kernighan: on

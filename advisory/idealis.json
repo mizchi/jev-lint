@@ -1,0 +1,7 @@
+{
+  "repository": "mizchi/idealis",
+  "revision": "d147550c80d814e23f5d76f8ded25e30bf190da4",
+  "packages": ["."],
+  "sourceDirs": ["src", "cli"],
+  "historyDepth": 20
+}

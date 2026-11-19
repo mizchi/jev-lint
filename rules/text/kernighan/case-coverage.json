@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/1.surface",
+      "kind": "false-negative-risk",
+      "reason": "A generic error loses which of the two operations failed and its cause."
+    },
+    {
+      "file": "fixtures/2.surface",
+      "kind": "false-positive-risk",
+      "reason": "The wrapper preserves the failing operation as the error cause."
+    },
+    {
+      "file": "fixtures/3.surface",
+      "kind": "unrelated",
+      "reason": "A license comment leaves the behavior and evidence for this rule unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/2.surface",
+      "variant": "fixtures/3.surface"
+    }
+  ]
+}

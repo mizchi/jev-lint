@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/1.surface",
+      "kind": "false-negative-risk",
+      "reason": "Two identical Sets are maintained in lockstep."
+    },
+    {
+      "file": "fixtures/2.surface",
+      "kind": "false-positive-risk",
+      "reason": "The two sets have different owners and lifetimes."
+    },
+    {
+      "file": "fixtures/3.surface",
+      "kind": "unrelated",
+      "reason": "A license comment leaves the behavior and evidence for this rule unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/2.surface",
+      "variant": "fixtures/3.surface"
+    }
+  ]
+}

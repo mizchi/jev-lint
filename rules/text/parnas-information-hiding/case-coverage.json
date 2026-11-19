@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/slots-a.parnas",
+      "kind": "false-negative-risk",
+      "reason": "The panel encodes the owner's private stride and offset."
+    },
+    {
+      "file": "fixtures/slots-b.parnas",
+      "kind": "false-positive-risk",
+      "reason": "The consumer knows only the operation."
+    },
+    {
+      "file": "fixtures/slots-c.parnas",
+      "kind": "unrelated",
+      "reason": "A logging prefix leaves the contract and the relationships unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/slots-b.parnas",
+      "variant": "fixtures/slots-c.parnas"
+    }
+  ]
+}

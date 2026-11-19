@@ -855,6 +855,7 @@ async function attributeFindings(
       for (const { finding } of asked) {
         finding.messageId = "review";
         finding.reported = false;
+        delete finding.nextCheck;
       }
       return;
     }
@@ -881,6 +882,7 @@ async function attributeFindings(
         } else {
           finding.messageId = "review";
           finding.reported = false;
+          delete finding.nextCheck;
         }
       }
     } catch (err: unknown) {
@@ -1007,6 +1009,8 @@ export function buildRecord(
       state: r.state,
       subject: r.subject,
       severity: r.severity,
+      category: r.category,
+      nextCheck: r.nextCheck,
       language: r.language,
       languageDir: r.languageDir,
     })),

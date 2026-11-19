@@ -139,6 +139,9 @@ export function decide(
     return { ...base, messageId: review ? "review" : null, reported: false };
   }
 
+  if (rule.category) base.category = rule.category;
+  if (rule.nextCheck) base.nextCheck = rule.nextCheck;
+
   if (answer.kind === "score") {
     const top = scaleOf(rule);
     const nearest = Math.max(0, Math.min(top, Math.round(answer.value)));
@@ -182,6 +185,7 @@ export function collect(all: Finding[], options: GateOptions = {}): GateResult {
   // The band, ranked the same way -- margin is value over cutoff, so under
   // the cutoff it ranks by how close -- and capped at what was asked for.
   // Over the cap, the ones dropped are the ones furthest from a cutoff.
+  const advisories = findings.filter((f) => f.category === "advisory").length;
   const cap = options.loose ?? 0;
   const review = all.filter((f) => f.messageId === "review").sort(byMargin).slice(0, Math.max(0, cap));
   return {
@@ -191,6 +195,7 @@ export function collect(all: Finding[], options: GateOptions = {}): GateResult {
     stats: {
       subjects: all.length,
       reported: findings.length,
+      ...(advisories ? { advisories } : {}),
       missing: all.filter((f) => f.messageId === "missing").length,
       unsure: all.filter((f) => f.messageId === "unsure").length,
       review: review.length,
@@ -239,7 +244,7 @@ export function describe(finding: Finding): string {
   const confidenceNote =
     typeof finding.confidence === "number" ? `, confidence ${finding.confidence.toFixed(2)}` : "";
   const cutoffNote = `cutoff ${finding.at.toFixed(2)}`;
-  const what = finding.message ?? finding.ask;
+  const what = (finding.message ?? finding.ask ?? finding.rule) + (finding.reported && finding.nextCheck ? ` — Next check: ${finding.nextCheck}` : "");
 
   switch (finding.messageId) {
     case "violation":
@@ -258,7 +263,7 @@ export function describe(finding: Finding): string {
 /**
  * Does this set of findings turn the exit code?
  *
- * By default any finding does, which is what `check` in CI wants. A pre-commit
+ * By default any non-advisory finding does, which is what `check` in CI wants. A pre-commit
  * hook wants something narrower: a probabilistic reviewer that can refuse a
  * commit on a `warning` is one that gets uninstalled, so `--fail-on error`
  * lets the hook print everything and block only on what a rule has earned.
@@ -266,7 +271,7 @@ export function describe(finding: Finding): string {
 export function blocks(findings: Finding[], failOn: Severity | null): boolean {
   // A `review` row from the loose band handed here by mistake must not turn
   // a build, whatever list it came in.
-  const counted = findings.filter((f) => f.messageId !== "review");
+  const counted = findings.filter((f) => f.messageId !== "review" && f.category !== "advisory");
   if (failOn === null) return counted.length > 0;
   const floor = SEVERITIES.indexOf(failOn);
   return counted.some((f) => SEVERITIES.indexOf(f.severity) >= floor);

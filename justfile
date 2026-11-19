@@ -75,3 +75,9 @@ clef-eval *args:
 
 clef-replay *args:
     pnpm run eval:clef --replay {{args}}
+
+advisory-replay:
+    pnpm run eval:advisories
+
+advisory-teacher output:
+    node experiments/advisory/teacher.mjs {{quote(output)}}

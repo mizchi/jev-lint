@@ -1,12 +1,46 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "315abce96786aba303385b413c26ba2668682287f248ee3cf42f110b005d47c0",
+  "snapshotDigest": "ad2dcf06d7a597ab24c5671e518584cf6ca7b4c3d5debba595aebdda5153ffef",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
   "status": "complete",
   "qualityVerdict": "UNREVIEWED",
   "candidates": [
+    {
+      "id": "advisory-reporting-contract",
+      "topic": "Advisory findings remain visible without blocking CI",
+      "mode": "semantic",
+      "reference": {
+        "source": "reference",
+        "path": "docs/reference.md",
+        "startLine": 278,
+        "endLine": 300,
+        "quote": "| field | | |\n| --- | --- | --- |\n| `rule` | required | the ast-grep matcher. **Write it to over-match.** |\n| `ask` | required | the predicate, one sentence |\n| `language` / `languages` | required | one grammar, or several |\n| `kind` | `score` (default) or `noul` | see below |\n| `criteria` | `noul` only | `{true: ..., false: ...}`, nested under `criteria`. Each branch is a sentence, or a mapping `{what, examples?, not_for?}` — see below |\n| `threshold` | cutoff | 0–3 for `score`, 0–1 for `noul`; an answer **at or above** it is a finding. `at` remains an alias but warns; do not set both |\n| `loose` | | floor of the `--loose` band, strictly under `threshold`. Default: half of `threshold`. `jev-lint eval` prints each rule's `cleanTop`, the highest a labelled-clean subject reached; a floor just above it lists only what the rule has never seen clean |\n| `subject` | `node` (default), `enclosing`, `file`, `commit`, `block` | what code is judged. `commit` and `block` have no matcher: `commit` is `language: Git`, its subjects the commits `jev-lint commits` lists, the message judged and the diff the state; `block` is `language: Text`, its subjects the blocks of a text file split at every line matching `split:` |\n| `split` | `block` only | a regex matched at the start of each line; its named groups (`(?<NAME>\\w+)`) are the captures. A block runs from its header to the line before the next. Left out, the whole file is one block — a document judged as a whole — cut at 48,000 characters with the cut declared |\n| `extensions` | `block` only | the files the rule reads, by extension (`[sql]`); no grammar claims them, so the rule has to say |\n| `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |\n| `note` | | context for the model only |\n| `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |\n| `category` | optional `advisory` | findings are reported and excluded from the CI gate |\n| `nextCheck` | optional nonempty string | follow-up for a reported finding, preserved on replay |\n| `severity` | `hint`, `info`, `warning` (default), `error` | `error` fails a build; earn it first |\n| `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `threshold` then runs 0..levels-1 and a finding's level is numbered. The `rules/markdown/` rules are five-level rubrics from JevSlop |\n| `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |\n| `extends` | | another rule's id -- `<lang>/<id>`, or a bare id when the file's `languages` pick one language -- to build this rule from. The base comes from the rules loaded beside it, then from the shipped packs (read for the lookup, never run because of it). Every field the file gives replaces the base's; `criteria` may give one branch alone, and `note: { append: ... }` keeps the base's note and adds to it. The rule needs its own id. A file that changes what is asked (`ask`, `note`, `criteria`, `rule`, `state`, `context`, ...) but not `threshold` is warned: the inherited cutoff was fitted to the base's question |\n| `context` | | a list of documents, by path relative to the rule file, that the model reads in the state beside the code: the project's own conventions the rule is judged against. Read at load time; their text is part of the draft, so an edited document retires the verdicts given against the old one. Up to 40,000 characters in all; a missing or empty document is a load error. Rules with different documents never share a request |\n| `inconclusive` | | why this rule's own eval corpus cannot speak reliably about the rule drifting (see Calibrating): blind, unstable, or both. A non-empty reason suppresses `eval`'s failure for whichever applies and is shown in its place. Validated against the suite's own margins and spreads at eval time — a reason on a suite that is neither blind nor unstable is an error |",
+        "contentHash": "cffdd1f41374c421a6d1eec7bd4e9859b3e8342fd82bf7959021a0f8cd64ae22"
+      },
+      "target": {
+        "source": "advisories",
+        "path": "docs/advisories.md",
+        "startLine": 1,
+        "endLine": 56,
+        "quote": "# Architecture advisories\n\nA rule with `category: advisory` reports a match at its own cutoff. A match is a review lead. It contributes to the reported count and never makes a successful check exit 1, even under `--fail-on hint` or a rule-level severity override. Ordinary findings still gate the same run. A missing verdict or failed request can still make it exit 3. GitHub renders advisories as notices and SARIF renders them as notes. Comparing a scan with an acceptance baseline keeps a new advisory visible without requiring acceptance.\n\nAny rule can supply `nextCheck`, a nonempty instruction for the reviewer. Reported matches carry it in the terminal, JSON, GitHub and SARIF. A missing answer or a score below the cutoff produces no instruction. Run records preserve the wording seen at the time. The instruction is display metadata, so it adds no model calls and can be edited without invalidating cached judgments. The advisory evaluation separately checks changes to its wording.\n\n## Shipped rules\n\n| Rule in the text pack | Evidence | Next investigation |\n| --- | --- | --- |\n| `liskov-substitution` | Shared contract, alternative implementations and a caller | Exercise the same allowed input and compare the promised result or error. |\n| `interface-segregation` | Required members, actual calls and a provider stub | Narrow the interface to the role and identify any real caller that loses a required operation. |\n| `parnas-information-hiding` | Representation and a consuming expression | Look up the public type. A field with a promised name and meaning can dismiss the warning. |\n| `common-closure` | Patches on both sides of a package boundary from different commits | Check which behavior would diverge if one side were reverted in each commit. |\n| `acyclic-dependencies` | Directed package cycle, import kinds, definitions and uses | Trace the return edge and whether a responsibility move actually removes the dependency. |\n\nThe other eight advisories use module evidence or a Git range. Their shipped configurations are `advisory/modules.yml` and `advisory/history.yml`.\n\n| Rule | Next investigation |\n| --- | --- |\n| `text/single-responsibility` | Find the callers and independent changes for both policies. |\n| `text/least-privilege` | Restrict the collaborator to the operations it uses and exercise its documented job. |\n| `text/least-surprise` | Repeat the operation and compare the result and state with its public promise. |\n| `text/hyrum` | Import the hook through a public path, exercise it, and see whether an ordinary caller can observe its effects. |\n| `text/parkinson` | Check whether lifetimes, performance requirements or formats justify maintaining two implementations. |\n| `text/kernighan` | Trigger each failure and see whether traces or tests distinguish the cause. |\n| `git/goodhart` | Compare the measured improvement and the caller's actual result for identical requests. |\n| `git/campbell` | Apply both denominators to the same raw events and inspect the omitted cases. |\n\nRun the module configuration on `.surface` files containing the module's public bindings and source, and `.impl` files for internal modules. The evidence format used in the experiment is shown in the shipped Text fixtures. Run the Git configuration directly in a checkout, for example `jev-lint commits HEAD~20..HEAD --config \"$tool/advisory/history.yml\"`.\n\n## Visited state keys\n\n`text/state-key-preserves-behavior` examines a visited-set guard alongside implementations of the same TypeScript interface. The collector follows a key stored in a local constant, a conditional early return or continue on `.has(key)`, and a subsequent `.add(key)` or `.set(key, ...)` on the same receiver. Providers, key projections, callback types and consumer statements are extracted from the pinned source. Scoped AGENTS.md lines mentioning the qualified interface member supply extra contract context when present.\n\nUse the collection command below with `advisory/idealis.json` and the idealis checkout, then run `jev-lint run text/state-key-preserves-behavior . --no-config` in the generated directory. The included manifest needs no hand-selected source ranges. The current collector covers directly typed providers and this local pruning pattern. The diagnostic asks the reviewer to reverse two equal-key states and compare outcomes using a distinguishing key. The small calibration suite and the idealis reproduction are in `experiments/advisory/state-key`.\n\n## Collect and check\n\nThe optional collector needs the classic TypeScript compiler API. For the pinned example, install `typescript@5.9.3` in the tooling directory from which you invoke the CLI. The collector reads source from Git objects. A bare clone works if it contains the revisions and history named in the manifest.\n\n```sh\ntool=$(node -p \"require('node:path').dirname(require.resolve('jev-lint/package.json'))\")\nwork=$(mktemp -d)\njev-lint advisory-inputs /path/to/vlmkit \"$tool/advisory/vlmkit.json\" \"$work/evidence\"\ncd \"$work/evidence\"\njev-lint check . --config \"$tool/advisory/review.yml\" --dry-run\njev-lint check . --config \"$tool/advisory/review.yml\" --record \"$work/run.json\"\njev-lint replay \"$work/run.json\" --no-config\n```\n\nUse `jev-lint run text/liskov-substitution . --no-config` in the evidence directory to run one rule. The bundled rules select revision-headed blocks in `.lsp`, `.isp`, `.parnas`, `.ccp` `.adp` and `.statekey` files. The generator's inventory maps evidence filenames to revisions and source identities and lists insufficient contracts separately. Names in an ordinary source tree do not supply this evidence by themselves.\n\nCopy `advisory/vlmkit.json` for another repository. Set the pinned Git SHA, package directory patterns, per-package source roots and history depth. Optional `cases` link specific contract, implementation and consumer excerpts by revision and line range. Automatic discovery uses TypeScript interfaces, call sites, static import paths and repeated first-parent non-merge changes. Unresolved dynamic imports, undocumented contracts and omitted patch context limit what it can see. The scan covers the declared roots and history window.\n\nThe repository's `pnpm run eval:advisories` verifies the recorded hint evaluation offline. The experiment pairs each of the original 13 rules with a defect fixture and includes four repository examples, among them a historical distribution failure and a reviewed false alarm. Each is paired with a generic instruction. Three repeated judgments measure whether the instruction identifies a specific check and an observation that can confirm or dismiss the concern.",
+        "contentHash": "28785f5a56301c3555ee41c2ae2d6e505a4a7096ac5676b6bc0b1989f192bfcc"
+      },
+      "context": [],
+      "candidateId": "12e9f9cf8d3646b5944e2d06d33d42015e21090bf06ebe61885de6673edef2e5",
+      "contextHash": "44c6c86aae9f34d0e64124b8b0a3c771c68a17ff120697a4499b98994f28f08d",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.96,
+        "probabilities": {
+          "supports": 0.97,
+          "contradicts": 0.02,
+          "unrelated": 0,
+          "insufficient_context": 0.01
+        }
+      }
+    },
     {
       "id": "catalog-readme",
       "topic": "Current total shipped rule count and per-language counts",
@@ -16,28 +50,28 @@
         "path": "docs/project-facts.md",
         "startLine": 9,
         "endLine": 24,
-        "quote": "## Rule catalog\n\nThe current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 2 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 1 rule\n- typescript: 23 rules\n- vibe: 2 rules",
-        "contentHash": "12513cbac9c7bd0c87e3879e707e77965c27e6714ee15023a9c665f0c28e7343"
+        "quote": "## Rule catalog\n\nThe current catalog contains 117 rules across 12 language directories, with 64 distinct rule IDs. 97 rules reach precision and recall 1.00 on their own accepted fixtures. There are 743 labelled defects and 1196 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 13 rules\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "9e32fd0825899eed69bd8206bce3bde3565f469eb5b10ccafda454e448cc0a66"
       },
       "target": {
         "source": "readme",
         "path": "README.md",
         "startLine": 186,
-        "endLine": 210,
-        "quote": "## What ships\n\n103 rules under `rules/<language>/<id>/`, and the files you point it at decide\nwhich run. Nothing to select.\n\n| point it at | what runs |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 rules, first tier |\n| `.rs` | `rust/` — 9, first tier |\n| `.py` `.go` | `python/` — 14, `go/` — 9 |\n| `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |\n| `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |\n| `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |\n| `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |\n| `package.json`, sqlc `.sql` | `json/` — 1, `text/` — 1 |\n| commits | `git/` — 2 |\n\n`typescript` and `rust` are first tier: every rule under them carries\nfixtures, expectations and an accepted baseline. The rest are calibrated to\nthe same bar and not yet promised. [RULES.md](RULES.md) lists all 103 with\ntheir question, cutoff and score on their own fixtures.\n\nYour own rule can target any language ast-grep parses — Java, Kotlin, Swift,\nC, C++, C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, HTML,\nCSS, YAML — and any other grammar you compile.",
-        "contentHash": "cfcbfe315bb0f9392e8a8b9b3030a7d0ef21aaca78360a6faff5f5414d18ac50"
+        "endLine": 211,
+        "quote": "## What ships\n\n117 rules under `rules/<language>/<id>/`, and the files you point it at decide\nwhich run. Nothing to select.\n\n| point it at | what runs |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 rules, first tier |\n| `.rs` | `rust/` — 9, first tier |\n| `.py` `.go` | `python/` — 14, `go/` — 9 |\n| `.mbt` | `moonbit/` — 20, once [the parser is declared](docs/reference.md#a-language-ast-grep-does-not-have-built-in) |\n| `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |\n| `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |\n| `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |\n| `package.json` | `json/` — 1 |\n| sqlc queries and prepared architecture evidence | `text/` — 13 total, including 12 [design advisories](docs/advisories.md) |\n| commits | `git/` — 4 including 2 metric advisories |\n\n`typescript` and `rust` are first tier: every rule under them carries\nfixtures, expectations and an accepted baseline. The rest are calibrated to\nthe same bar and not yet promised. [RULES.md](RULES.md) lists all 117 with\ntheir question, cutoff and score on their own fixtures.\n\nYour own rule can target any language ast-grep parses — Java, Kotlin, Swift,\nC, C++, C#, Ruby, PHP, Lua, Dart, Scala, Elixir, Haskell, Solidity, HTML,\nCSS, YAML — and any other grammar you compile.",
+        "contentHash": "a055560fa8ae31c9a8fa2a4686b05e2356306cd7e81a98171ff9f355e3d5d957"
       },
       "context": [],
-      "candidateId": "70627c50ead28d59a50caba27bb9f78827ecf3e108c19c5a127e47d4f11c2894",
-      "contextHash": "853b896c1c5a9f86b4d79633fe638da93bd040d084fb40b26dc3d6eb7de0d280",
+      "candidateId": "90a08798bd73c0ab78f2a500799c46d96c784e062630d603f87011e8416657a2",
+      "contextHash": "0f18632e957b16db67aff52197dbdea7af20ba3f86e471855e739e28f5930c77",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.77,
+        "confidence": 0.72,
         "probabilities": {
-          "supports": 0.83,
-          "contradicts": 0.16,
+          "supports": 0.79,
+          "contradicts": 0.19,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -50,28 +84,28 @@
         "path": "docs/project-facts.md",
         "startLine": 9,
         "endLine": 24,
-        "quote": "## Rule catalog\n\nThe current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 2 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 1 rule\n- typescript: 23 rules\n- vibe: 2 rules",
-        "contentHash": "12513cbac9c7bd0c87e3879e707e77965c27e6714ee15023a9c665f0c28e7343"
+        "quote": "## Rule catalog\n\nThe current catalog contains 117 rules across 12 language directories, with 64 distinct rule IDs. 97 rules reach precision and recall 1.00 on their own accepted fixtures. There are 743 labelled defects and 1196 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 13 rules\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "9e32fd0825899eed69bd8206bce3bde3565f469eb5b10ccafda454e448cc0a66"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
         "startLine": 133,
-        "endLine": 151,
-        "quote": "## 何が同梱されるか\n\n`rules/<language>/<id>/` の下に 103 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。\n\n| 渡すもの | 走るもの |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 ルール、第一級 |\n| `.rs` | `rust/` — 9、第一級 |\n| `.py` `.go` | `python/` — 14、`go/` — 9 |\n| `.mbt` | `moonbit/` — 20。[パーサを宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば走る |\n| `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |\n| `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |\n| `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |\n| `package.json`、sqlc の `.sql` | `json/` — 1、`text/` — 1 |\n| コミット | `git/` — 2 |\n\n`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 103 個全部の問い、cutoff、自分の fixtures での成績がある。\n\n自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。",
-        "contentHash": "0af78be93769af751b5f6f27b53f3ec0af69824095a06ebe548792f3f4829945"
+        "endLine": 152,
+        "quote": "## 何が同梱されるか\n\n`rules/<language>/<id>/` の下に 117 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。\n\n| 渡すもの | 走るもの |\n| --- | --- |\n| `.ts` `.tsx` `.js` `.jsx` | `typescript/` — 23 ルール、第一級 |\n| `.rs` | `rust/` — 9、第一級 |\n| `.py` `.go` | `python/` — 14、`go/` — 9 |\n| `.mbt` | `moonbit/` — 20。[パーサを宣言](docs/reference.md#a-language-ast-grep-does-not-have-built-in)すれば走る |\n| `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |\n| `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |\n| `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |\n| `package.json` | `json/` — 1個 |\n| sqlc クエリ、モジュール・設計の検査用入力 | `text/` — 計13個。うち12個が[設計アドバイザリー](docs/advisories.md) |\n| コミット | `git/` — 4個。うち2個は指標のアドバイザリー |\n\n`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 117 個全部の問い、cutoff、自分の fixtures での成績がある。\n\n自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。",
+        "contentHash": "02d4a846c2d836501bb8c198da0314148a3486f34bbe2a5a665cc1f105d45001"
       },
       "context": [],
-      "candidateId": "8c48cb7c2a2ebdc196e1780483e7f89d8076a7942a2e0b9950a2cb2a7d41d8e8",
-      "contextHash": "70b4b4482f62ff02b86c9f9c00106819360f19947e8d20c741a07215ff09ff7d",
+      "candidateId": "0d5707a3e71c36bc2514fcf324f7b5339d0f13ee17c2020e9917dabbf5eb554f",
+      "contextHash": "a8c0860563ba399420de2a0f750bb23091a8c2f7bfecf3f938a7c387de58f0a6",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.8,
+        "confidence": 0.71,
         "probabilities": {
-          "supports": 0.85,
-          "contradicts": 0.15,
+          "supports": 0.78,
+          "contradicts": 0.21,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -84,20 +118,20 @@
         "path": "docs/project-facts.md",
         "startLine": 9,
         "endLine": 24,
-        "quote": "## Rule catalog\n\nThe current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 2 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 1 rule\n- typescript: 23 rules\n- vibe: 2 rules",
-        "contentHash": "12513cbac9c7bd0c87e3879e707e77965c27e6714ee15023a9c665f0c28e7343"
+        "quote": "## Rule catalog\n\nThe current catalog contains 117 rules across 12 language directories, with 64 distinct rule IDs. 97 rules reach precision and recall 1.00 on their own accepted fixtures. There are 743 labelled defects and 1196 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 13 rules\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "9e32fd0825899eed69bd8206bce3bde3565f469eb5b10ccafda454e448cc0a66"
       },
       "target": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 615,
-        "endLine": 616,
-        "quote": "103 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,\ngrouped here by what they ask. Which languages each exists in:",
-        "contentHash": "c2e1e75ff0ee2280c0917e99479efe9195114c4223bcdd7e0643eab6e3c447c3"
+        "startLine": 617,
+        "endLine": 618,
+        "quote": "117 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,\ngrouped here by what they ask. Which languages each exists in:",
+        "contentHash": "33052ed2508040792026a78fc5932724ddd7eb46f0f0d55a888c53da7f441365"
       },
       "context": [],
-      "candidateId": "7dea0d15065d3535a00b36f50bafd7cb47de41756cde14f6f41f758f42192070",
-      "contextHash": "d75044fea954d9d2fe42da9dd9cc82a3790978d5a5a253993cbb253b6286ab85",
+      "candidateId": "b2348f4f74d9318cc8c507b5d304fc59001bf7fe3cfb9e2e2d2917a9c0d2264a",
+      "contextHash": "5200ba151773f9a395e9c3a0f6a9964c55802383d23e5c5e11d81c0c21f823b0",
       "judgment": {
         "choice": "supports",
         "confidence": 0.99,
@@ -202,10 +236,10 @@
       "contextHash": "0e7bf0f4ceb0c0a0544ea22fe24c5f58373b23a644b37fe5a0a73c8193937fe2",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.85,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.89,
-          "contradicts": 0.1,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -220,8 +254,8 @@
         "path": "docs/project-facts.md",
         "startLine": 40,
         "endLine": 46,
-        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
-        "contentHash": "f42cff1d42d7c33fab6c0a8550e89fb7947776b3bb7cb89104c03e50c1a611c0"
+        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:advisories && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
+        "contentHash": "378c0271a9f334ff789eaddc2cdecfe47401d0ab0c6d8873b159ea8343ce9a59"
       },
       "target": {
         "source": "architecture",
@@ -232,14 +266,14 @@
         "contentHash": "92de0ba0e84e3cb43368ed843d3adaa060d686fd66e6eecadf9f2249a0358823"
       },
       "context": [],
-      "candidateId": "db3d96a0d4e052586fa169e206eab8a4ccb0f07809133d34ae392a6fe020a7f9",
-      "contextHash": "84dbc1d19a647933595d9d2575837aab81b3e624616ef9179c47448ee7c47444",
+      "candidateId": "ecf553ce5eaf88019e47913bfca4df08e725c3797aa23725a7cb03b196dc0760",
+      "contextHash": "c00d588e7806bbb50ce017b80fc9ce9f45ed56bca3c6b89d1fb9304e5a9a0c30",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.89,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.05,
+          "supports": 0.92,
+          "contradicts": 0.08,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -254,28 +288,28 @@
         "path": "docs/project-facts.md",
         "startLine": 40,
         "endLine": 46,
-        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
-        "contentHash": "f42cff1d42d7c33fab6c0a8550e89fb7947776b3bb7cb89104c03e50c1a611c0"
+        "quote": "## CI\n\nThe local CI command is `npm run ci`. Its complete package script is:\n\n```sh\nnpm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:advisories && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay\n```",
+        "contentHash": "378c0271a9f334ff789eaddc2cdecfe47401d0ab0c6d8873b159ea8343ce9a59"
       },
       "target": {
         "source": "maintainer-skill",
         "path": ".claude/skills/jev-lint-repo/SKILL.md",
         "startLine": 26,
         "endLine": 32,
-        "quote": "## CI\n\n`npm run ci` runs `skills:check`, `typecheck`, `npm test`, `build`,\n`release:check`, `eval:replay`, `eval:adoption`, `docs:facts:check`,\n`eval:documents`, `eval:introspection` and finally `docs:replay`, in that order.\nThe final stage checks the committed documentation record against current\nsources and questions. All stages are offline and need no API key.",
-        "contentHash": "3bfb795329e510c50c8fc27f2505e04643eaeda8f3c32721eeabc5897ebcfdcb"
+        "quote": "## CI\n\n`npm run ci` runs `skills:check`, `typecheck`, `npm test`, `build`,\n`release:check`, `eval:replay`, `eval:advisories`, `eval:adoption`, `docs:facts:check`,\n`eval:documents`, `eval:introspection` and finally `docs:replay`, in that order.\nThe final stage checks the committed documentation record against current\nsources and questions. All stages are offline and need no API key.",
+        "contentHash": "f5db8be93d0b665e6799c56d55faa0ccb1fa26097531c7fbd6f039e22716a356"
       },
       "context": [],
-      "candidateId": "0baba979a67aa2a6a54319627c164b3efc1804abae64d4d34753abbb489caae6",
-      "contextHash": "e4e337ce4d70837e0c68c76b06c0310ff34f42f665f3a8500541482c30d605c7",
+      "candidateId": "87c244bec06582f259882e1dd59307feb3e113e2fabac9f0e2bbacdab2d08efb",
+      "contextHash": "e5941a0a8d9cf3e6f201cea332d78057f31639194346cf3f731cd5cac803e924",
       "judgment": {
         "choice": "supports",
         "confidence": 0.91,
         "probabilities": {
           "supports": 0.93,
-          "contradicts": 0.04,
+          "contradicts": 0.05,
           "unrelated": 0,
-          "insufficient_context": 0.03
+          "insufficient_context": 0.02
         }
       }
     },
@@ -362,20 +396,20 @@
       "target": {
         "source": "reference",
         "path": "docs/reference.md",
-        "startLine": 1338,
-        "endLine": 1341,
+        "startLine": 1340,
+        "endLine": 1343,
         "quote": "The verdict cache is `.jev-lint/baseline.json`, relative to the config's\ndirectory, and is meant to be committed: a run over the same commit answers\nfrom it, and CI lints from it with no API key. It is trusted input --\nanything that can edit it can silence a rule or invent a finding.",
         "contentHash": "2ec008e52203e6a8d9065b94b64409e7daf70c16c05567df31214fccf10e671b"
       },
       "context": [],
-      "candidateId": "e774667599813ff1fd3e8cc33ede41a35a896d4f8bec312ef00f5614f4c0cae6",
-      "contextHash": "20be37c4761b1a232b229382ea6f94401a9200d098b37d94cc616ebca8f6258f",
+      "candidateId": "3d895979acc74dee30cd0c4e8861188456d7ca914e7c43ab864f20a582684093",
+      "contextHash": "313836463dfd5ba417600d9279abc55cf626d6e8430214bd1858632120aaf654",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.85,
+        "confidence": 0.88,
         "probabilities": {
-          "supports": 0.89,
-          "contradicts": 0.1,
+          "supports": 0.91,
+          "contradicts": 0.08,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -474,10 +508,10 @@
       "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.73,
+        "confidence": 0.8,
         "probabilities": {
-          "supports": 0.8,
-          "contradicts": 0.19,
+          "supports": 0.85,
+          "contradicts": 0.14,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -542,10 +576,10 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.92,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.94,
-          "contradicts": 0.03,
+          "supports": 0.93,
+          "contradicts": 0.04,
           "unrelated": 0.01,
           "insufficient_context": 0.02
         }
@@ -576,12 +610,12 @@
       "contextHash": "d1acc67b489fffe17b2e80b045f35be0a9d3bd1660f156f7a6e52e3b975f27a6",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.87,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.9,
-          "contradicts": 0.08,
+          "supports": 0.93,
+          "contradicts": 0.06,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -626,22 +660,22 @@
       "reference": {
         "source": "readme",
         "path": "README.md",
-        "startLine": 276,
-        "endLine": 292,
+        "startLine": 277,
+        "endLine": 293,
         "quote": "## Documentation consistency\n\n`jev-lint docs` compares explicit claims, glossary definitions and translations,\nretaining both source locations. This repository checks its own README pair,\nAPI guides and contributor instructions against generated project facts and\ncanonical terminology.\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\nThe manifest is `.jev-lint/documents.json`; `--document-manifest` selects another.\nReplay is offline and rejects changed sources or questions. Contradictions exit 1;\nincomplete or stale assessments exit 3. The report remains `UNREVIEWED`.\nSee the [self-check guide](docs/self-check.md) for scope, budgets and evaluation.",
         "contentHash": "4572bdf2c1147215ec30ff85b80daba86bc0f9f8c6af36b6335e29b579538c05"
       },
       "target": {
         "source": "readme-ja",
         "path": "README-ja.md",
-        "startLine": 196,
-        "endLine": 211,
+        "startLine": 197,
+        "endLine": 212,
         "quote": "## ドキュメントの整合性\n\n`jev-lint docs` は、明示した主張、用語の定義、翻訳の意味を比較し、両方の出典位置を残す。\nこのリポジトリでは日英README、APIガイド、開発者向け指示を、生成したプロジェクト情報と\n共通の用語定義に照らして検査する。\n\n```sh\njev-lint docs --dry-run\njev-lint docs --record .jev-lint/documents-baseline.json\njev-lint docs --replay .jev-lint/documents-baseline.json\n```\n\n定義ファイルは `.jev-lint/documents.json`。`--document-manifest` で別のものを指定できる。\n再生には通信が不要で、出典や質問が変わっていれば拒否する。不一致は終了コード1、\n未評価・古い記録は3になる。結果の品質判定は `UNREVIEWED` のまま。\n対象範囲、予算、評価方法は[自己検査ガイド](docs/self-check.md)にある。",
         "contentHash": "9ebd4cd92ca951f5ebe6fb203083dcca7d387759c136dfd16cc566bdec8f6617"
       },
       "context": [],
-      "candidateId": "522b98cf3dfb689e1ec55877ff0c83ffd68bedd81c78e7c626fce3e34d0eddbd",
-      "contextHash": "48f725403631276de82a90382f44ec5012e57ea95c91a91dbbfa7e3db81df8e7",
+      "candidateId": "582cee6212a1a3e5266b8f7128b96065d8b34abab255e24b109fa62cbdbd4373",
+      "contextHash": "f8a057afbd5308786c75c59b9ac3c80d354e8a3e420781e67859e6433bd6ecb6",
       "judgment": {
         "choice": "supports",
         "confidence": 0.97,
@@ -678,10 +712,10 @@
       "contextHash": "35839030f7dde62d95b10faf10a0b81c8ae5c13efa2c9cd97f722dfbbb0eb1aa",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.88,
+        "confidence": 0.87,
         "probabilities": {
-          "supports": 0.91,
-          "contradicts": 0.08,
+          "supports": 0.9,
+          "contradicts": 0.09,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -712,10 +746,10 @@
       "contextHash": "5b3e6e3d6e9313b46b5d867319a9d0ff3eca623aedd3906c8e3275fab0251ea8",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.81,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.11,
+          "supports": 0.86,
+          "contradicts": 0.13,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -746,10 +780,10 @@
       "contextHash": "38c0e94fa369c5e957dc741b3766bef64a2de778ec94a57df7473f2c4770edea",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -857,20 +891,20 @@
       "contextHash": "604fcb8a9c1e317a8a6d49fc2439cd2b3f5c68d1e8a8bf26c48cb3203d30fff9",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.57,
+        "confidence": 0.61,
         "probabilities": {
-          "supports": 0.68,
-          "contradicts": 0.31,
+          "supports": 0.71,
+          "contradicts": 0.27,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     }
   ],
   "coverage": {
-    "expected": 25,
-    "selected": 25,
-    "answered": 25,
+    "expected": 26,
+    "selected": 26,
+    "answered": 26,
     "missing": 0,
     "contradictions": 0,
     "unassessed": 0,
@@ -879,9 +913,9 @@
     "unboundDocuments": 0
   },
   "usage": {
-    "requests": 25,
-    "inputTokens": 36592,
-    "usd": 0.001536864
+    "requests": 26,
+    "inputTokens": 40145,
+    "usd": 0.0016860900000000001
   },
   "errors": []
 }

@@ -261,6 +261,8 @@ export interface RuleBase {
    */
   axis: Grouping | null;
   severity: Severity;
+  category?: "advisory";
+  nextCheck?: string;
   unsureBelow: number | null;
   message: string | null;
   docs: string | null;
@@ -680,6 +682,8 @@ export interface Finding {
   /** Stable identity for records when different language packs share an id. */
   ruleKey?: string;
   severity: Severity;
+  category?: "advisory";
+  nextCheck?: string;
   file: string;
   line: number;
   endLine: number;
@@ -730,6 +734,7 @@ export interface Finding {
 }
 
 export interface GateStats {
+  advisories?: number;
   subjects: number;
   reported: number;
   missing: number;

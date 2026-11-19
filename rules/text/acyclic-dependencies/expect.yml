@@ -1,0 +1,16 @@
+default: clean
+fixtures/currency-a.adp:
+  - line: 1
+    window: 0
+    label: bad
+    reason: The leaf currency definition is the sole payments-to-orders dependency.
+fixtures/currency-b.adp:
+  - line: 1
+    window: 0
+    label: clean
+    reason: The return edge exercises the consumer in an integration test.
+fixtures/currency-c.adp:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A logging prefix leaves the contract and the relationships unchanged.

@@ -28,6 +28,8 @@ export function buildScanResult(result: RunResult, identity: ScanIdentity, { max
     return {
       id: digest({ repository: identity.repository, rule, source, captures: subject.captured }), rule, source,
       claim: subject.rule.ask, evidence: subject.text,
+      ...(finding.reported && finding.category ? { category: finding.category } : {}),
+      ...(finding.reported && finding.nextCheck ? { nextCheck: finding.nextCheck } : {}),
       disposition: finding.messageId === "missing" ? "missing" : finding.reported ? "reported" : finding.value !== null && finding.value >= finding.at ? "retracted" : "below-threshold",
       judgment: finding.value === null ? null : { kind: subject.rule.kind, value: finding.value, confidence: finding.confidence,
         maximum: subject.rule.kind === "noul" ? 1 : (subject.rule.levels?.length ?? 4) - 1, threshold: finding.at },

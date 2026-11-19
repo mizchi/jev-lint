@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T04:07:40.924Z",
+  "model": "jev-1.14.0",
+  "suite": "text/parkinson",
+  "rules": [
+    {
+      "id": "parkinson",
+      "draft": "1b002b7430c2",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "parkinson",
+        "file": "rules/text/parkinson/fixtures/3.surface",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "parkinson",
+        "file": "rules/text/parkinson/fixtures/1.surface",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "parkinson",
+        "file": "rules/text/parkinson/fixtures/2.surface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "parkinson",
+        "file": "rules/text/parkinson/fixtures/1.surface",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "parkinson",
+        "file": "rules/text/parkinson/fixtures/3.surface",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "parkinson",
+        "file": "rules/text/parkinson/fixtures/2.surface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "parkinson",
+        "file": "rules/text/parkinson/fixtures/1.surface",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "parkinson",
+        "file": "rules/text/parkinson/fixtures/3.surface",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "parkinson",
+        "file": "rules/text/parkinson/fixtures/2.surface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 5637,
+    "usd": 0.000236754,
+    "ms": 161
+  }
+}

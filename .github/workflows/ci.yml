@@ -55,6 +55,7 @@ jobs:
       - run: npm run build
       - run: npm run release:check
       - run: npm run eval:replay
+      - run: npm run eval:advisories
       - run: npm run eval:adoption
       - run: npm run docs:facts:check
       - run: npm run eval:documents

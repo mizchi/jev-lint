@@ -1,0 +1,16 @@
+default: clean
+fixtures/1.surface:
+  - line: 1
+    window: 0
+    label: bad
+    reason: Invoice taxation and session retention change under separate policies.
+fixtures/2.surface:
+  - line: 1
+    window: 0
+    label: clean
+    reason: Membership updates and queries share one responsibility.
+fixtures/3.surface:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A license comment leaves the behavior and evidence for this rule unchanged.

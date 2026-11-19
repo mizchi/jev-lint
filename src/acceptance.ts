@@ -9,7 +9,7 @@ export interface AcceptedFindings {
 export interface AcceptedComparison {
   schema: "jev-lint-accepted-comparison-1"; qualityVerdict: "UNREVIEWED";
   counts: { accepted: number; new: number; recheck: number; resolved: number; unassessed: number };
-  observations: Array<{ id: string; disposition: "accepted" | "new" | "recheck" | "resolved" | "unassessed" | "clean" }>;
+  observations: Array<{ id: string; disposition: "accepted" | "new" | "recheck" | "resolved" | "unassessed" | "clean" | "advisory" }>;
   resolved: AcceptedFindings["entries"]; exitCode: 0 | 1 | 3;
 }
 
@@ -38,7 +38,7 @@ function complete(review: ReviewArtifact): void {
 export function acceptFindings(raw: ReviewArtifact): AcceptedFindings {
   const review = parseReviewArtifact(raw); complete(review);
   const entries = new Map<string, AcceptedFindings["entries"][number]>();
-  for (const o of review.observations.filter((o) => o.state === "finding")) {
+  for (const o of review.observations.filter((o) => o.state === "finding" && o.category !== "advisory")) {
     const id = digest([o.key, o.fingerprint]), existing = entries.get(id);
     if (existing) existing.count++; else entries.set(id, { key: o.key, fingerprint: o.fingerprint!, count: 1 });
   }
@@ -58,6 +58,10 @@ export function compareAcceptedFindings(raw: ReviewArtifact, rawBaseline: Accept
     - Number(!remaining.some((e) => e.key === b.key && e.fingerprint === b.fingerprint))
     || Number(a.state !== "finding") - Number(b.state !== "finding") || a.id.localeCompare(b.id));
   for (const o of ordered) {
+    if (o.state === "finding" && o.category === "advisory") {
+      observations.push({ id: o.id, disposition: "advisory" });
+      continue;
+    }
     const exact = remaining.find((e) => e.count > 0 && e.key === o.key && e.fingerprint === o.fingerprint);
     const entry = exact ?? remaining.find((e) => e.count > 0 && e.key === o.key);
     let disposition: AcceptedComparison["observations"][number]["disposition"];

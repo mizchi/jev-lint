@@ -1,0 +1,16 @@
+default: clean
+fixtures/1.surface:
+  - line: 1
+    window: 0
+    label: bad
+    reason: The test reset's live backing map is publicly reachable.
+fixtures/2.surface:
+  - line: 1
+    window: 0
+    label: clean
+    reason: Changing a snapshot cannot alter the backing table.
+fixtures/3.surface:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A license comment leaves the behavior and evidence for this rule unchanged.

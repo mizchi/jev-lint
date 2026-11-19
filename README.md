@@ -45,7 +45,7 @@ it, nothing is reported. Six findings over two files, for a tenth of a cent;
 
 ## What it catches
 
-Fifty distinct rule IDs ship, most of them asked in several languages -- 103
+Sixty-four distinct rule IDs ship, most of them asked in several languages -- 117
 rules in all. Roughly:
 
 - **A name against the thing it names.** A function, method, binding, type,
@@ -185,7 +185,7 @@ covers the exit code that will stop you committing while offline.
 
 ## What ships
 
-103 rules under `rules/<language>/<id>/`, and the files you point it at decide
+117 rules under `rules/<language>/<id>/`, and the files you point it at decide
 which run. Nothing to select.
 
 | point it at | what runs |
@@ -197,12 +197,13 @@ which run. Nothing to select.
 | `.vibe` | `vibe/` — 2, with the [vibe-lang parser](docs/reference.md#vibe-lang) |
 | `.sh` `.bash` `.zsh` | `shell/` — 8: what a script does to the machine that its reader cannot see |
 | `.md` `.mdx` | `markdown/` — 13: 11 writing rules and 2 agent-instruction rules |
-| `package.json`, sqlc `.sql` | `json/` — 1, `text/` — 1 |
-| commits | `git/` — 2 |
+| `package.json` | `json/` — 1 |
+| sqlc queries and prepared architecture evidence | `text/` — 13 total, including 12 [design advisories](docs/advisories.md) |
+| commits | `git/` — 4 including 2 metric advisories |
 
 `typescript` and `rust` are first tier: every rule under them carries
 fixtures, expectations and an accepted baseline. The rest are calibrated to
-the same bar and not yet promised. [RULES.md](RULES.md) lists all 103 with
+the same bar and not yet promised. [RULES.md](RULES.md) lists all 117 with
 their question, cutoff and score on their own fixtures.
 
 Your own rule can target any language ast-grep parses — Java, Kotlin, Swift,

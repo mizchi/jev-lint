@@ -101,6 +101,8 @@ export interface Deps {
 export const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
+  jev-lint advisory-inputs <repository> <manifest.json> <new-directory>
+                                  collect versioned evidence for architecture advisories
   jev-lint introspect [directory] [--write] [--record <path>]
                                   use Jev to recommend initial rules from project metadata
   jev-lint introspect --replay <record.json>  validate recommendations in the current directory

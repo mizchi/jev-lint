@@ -61,6 +61,17 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
     if (target && opts.output) { log("choose --config or --output for the new configuration path"); return 2; }
     return cmdIntrospect({ ...opts, config: null, output: opts.output ?? target, introspectWrite: opts.introspectWrite || !opts.dryRun }, out, log, client);
   }
+  if (command === "advisory-inputs") {
+    if (opts.paths.length !== 3) { log("usage: jev-lint advisory-inputs <repository> <manifest.json> <new-directory>"); return 2; }
+    try {
+      const { generateInputs } = await import("../../advisory/inputs.mjs");
+      out(JSON.stringify(generateInputs(opts.paths[0], opts.paths[1], opts.paths[2])));
+      return 0;
+    } catch (err) {
+      log(`advisory-inputs: ${err instanceof Error ? err.message : String(err)}`);
+      return 2;
+    }
+  }
   if (command === "init") return cmdInit(opts, out, log);
   if (command === "docs") return cmdDocs(opts, out, log, client);
   if (command === "introspect") return cmdIntrospect(opts, out, log, client);

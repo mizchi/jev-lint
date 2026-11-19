@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T04:07:41.099Z",
+  "model": "jev-1.14.0",
+  "suite": "text/kernighan",
+  "rules": [
+    {
+      "id": "kernighan",
+      "draft": "e0ca28f51acc",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "kernighan",
+        "file": "rules/text/kernighan/fixtures/3.surface",
+        "line": 1,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "kernighan",
+        "file": "rules/text/kernighan/fixtures/1.surface",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "kernighan",
+        "file": "rules/text/kernighan/fixtures/2.surface",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "kernighan",
+        "file": "rules/text/kernighan/fixtures/1.surface",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.84,
+        "confidence": null
+      },
+      {
+        "rule": "kernighan",
+        "file": "rules/text/kernighan/fixtures/3.surface",
+        "line": 1,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "kernighan",
+        "file": "rules/text/kernighan/fixtures/2.surface",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "kernighan",
+        "file": "rules/text/kernighan/fixtures/1.surface",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "kernighan",
+        "file": "rules/text/kernighan/fixtures/2.surface",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "kernighan",
+        "file": "rules/text/kernighan/fixtures/3.surface",
+        "line": 1,
+        "endLine": 10,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 5649,
+    "usd": 0.00023725800000000004,
+    "ms": 171
+  }
+}

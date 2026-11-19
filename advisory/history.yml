@@ -1,0 +1,3 @@
+rules:
+  git/goodhart: on
+  git/campbell: on

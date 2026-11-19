@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/expiry-a.ccp",
+      "kind": "false-negative-risk",
+      "reason": "Two independent trial policy changes must agree for badge and billing."
+    },
+    {
+      "file": "fixtures/expiry-b.ccp",
+      "kind": "false-positive-risk",
+      "reason": "A coordinated release updates metadata only."
+    },
+    {
+      "file": "fixtures/expiry-c.ccp",
+      "kind": "unrelated",
+      "reason": "A logging prefix leaves the contract and the relationships unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/expiry-b.ccp",
+      "variant": "fixtures/expiry-c.ccp"
+    }
+  ]
+}

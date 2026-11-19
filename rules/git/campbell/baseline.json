@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T04:07:42.466Z",
+  "model": "jev-1.14.0",
+  "suite": "git/campbell",
+  "rules": [
+    {
+      "id": "campbell",
+      "draft": "1f2ede6a8064",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "campbell",
+        "file": "rules/git/campbell/fixtures/2",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "campbell",
+        "file": "rules/git/campbell/fixtures/1",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "campbell",
+        "file": "rules/git/campbell/fixtures/3",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "campbell",
+        "file": "rules/git/campbell/fixtures/1",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "campbell",
+        "file": "rules/git/campbell/fixtures/2",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "campbell",
+        "file": "rules/git/campbell/fixtures/3",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "campbell",
+        "file": "rules/git/campbell/fixtures/1",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "campbell",
+        "file": "rules/git/campbell/fixtures/2",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "campbell",
+        "file": "rules/git/campbell/fixtures/3",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 6408,
+    "usd": 0.000269136,
+    "ms": 185
+  }
+}

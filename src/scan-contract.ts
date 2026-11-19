@@ -8,6 +8,8 @@ export interface ScanCandidateV1 {
   id: string;
   rule: { id: string; digest: string };
   source: { path: string; startLine: number; endLine: number; contentHash: string; matchStartByte?: number; matchEndByte?: number };
+  category?: "advisory";
+  nextCheck?: string;
   claim: string;
   evidence: string;
   disposition: "reported" | "below-threshold" | "retracted" | "missing";
@@ -67,6 +69,9 @@ export function parseScanResult(raw: unknown): ScanResultV1 {
       || !count(candidate.source.endLine) || candidate.source.endLine < candidate.source.startLine || !hash(candidate.source.contentHash)
       || typeof candidate.claim !== "string" || typeof candidate.evidence !== "string" || digest(candidate.evidence) !== candidate.source.contentHash
       || !(candidate.contextHash === null || hash(candidate.contextHash)) || !["reported", "below-threshold", "retracted", "missing"].includes(String(candidate.disposition))) return fail();
+    if ((candidate.category !== undefined && candidate.category !== "advisory")
+      || (candidate.nextCheck !== undefined && (typeof candidate.nextCheck !== "string" || !candidate.nextCheck.trim()))
+      || ((candidate.category || candidate.nextCheck) && candidate.disposition !== "reported")) return fail();
     ids.add(candidate.id);
     if ((candidate.source.matchStartByte !== undefined || candidate.source.matchEndByte !== undefined)
       && (!count(candidate.source.matchStartByte) || !count(candidate.source.matchEndByte) || candidate.source.matchEndByte < candidate.source.matchStartByte)) return fail();

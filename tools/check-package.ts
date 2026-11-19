@@ -22,7 +22,8 @@ try {
   const workflow = parse(readFileSync(join(cwd, ".github/workflows/release.yml"), "utf8"));
   const publish = workflow.jobs.publish.steps.find((step: { name?: string }) => step.name === "Publish the tested tarball through npm OIDC");
   assert.equal(typeof publish?.run, "string", "the release workflow must publish the tested tarball");
-  execFileSync("bash", ["-e", "-c", `${publish.run} --dry-run`], { cwd: publisher, encoding: "utf8", timeout: 30000,
+  // Simulate publishing this exact tarball even when its version is already on npm.
+  execFileSync("bash", ["-e", "-c", `${publish.run} --dry-run --force`], { cwd: publisher, encoding: "utf8", timeout: 30000,
     env: { ...env, PACKAGE_FILE: pack.filename, DIST_TAG: "latest", NPM_CONFIG_DRY_RUN: "true", NPM_CONFIG_IGNORE_SCRIPTS: "true" }, stdio: ["ignore", "pipe", "pipe"] });
   const consumer = join(scratch, "consumer"); mkdirSync(consumer);
   writeFileSync(join(consumer, "package.json"), JSON.stringify({ name: "jev-lint-consumer", private: true, type: "module" }));
@@ -46,6 +47,9 @@ const cli = (args, status = 0) => {
 };
 const rules = cli(['rules', '--no-config', '--json']);
 assert.deepEqual(rules.errors, []); assert.equal(rules.rules.length, ${ruleCount});
+const advisories = rules.rules.filter(r => r.category === 'advisory');
+assert.equal(advisories.length, 14); assert.ok(advisories.every(r => r.nextCheck?.trim()));
+assert.ok(existsSync('node_modules/jev-lint/advisory/idealis.json'));
 const plan = cli(['check', 'src', '--no-config', '--cache', 'none', '-R', 'node_modules/jev-lint/rules/typescript/fn-name-promises', '--dry-run', '--json']);
 assert.ok(plan.subjects > 0); assert.equal(plan.dryRun, true);
 const startup = cli(['init', '--introspect', '--dry-run', '--json']);

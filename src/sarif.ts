@@ -24,9 +24,10 @@ export function artifactSarif(raw: ReviewArtifact) {
   const artifact = parseReviewArtifact(raw);
   const results: SarifResult[] = artifact.observations.filter((o) => o.state !== "clean").map((o) => {
     const primary = o.evidence.find((e) => e.role === "target" && e.ref === artifact.sourceSha) ?? o.evidence.find((e) => e.ref === artifact.sourceSha);
-    return { ruleId: o.ruleId, level: o.state === "finding" ? "warning" : "note", message: { text: o.message },
+    return { ruleId: o.ruleId, level: o.state === "finding" && !o.category ? "warning" : "note",
+      message: { text: o.message + (o.nextCheck ? `\nNext check: ${o.nextCheck}` : "") },
       locations: primary ? [{ physicalLocation: physical(primary) }] : [], partialFingerprints: { "jevLintContinuity/v1": o.key },
-      properties: { candidateId: o.id, state: o.state, fingerprint: o.fingerprint },
+      properties: { category: o.category, nextCheck: o.nextCheck, candidateId: o.id, state: o.state, fingerprint: o.fingerprint },
       relatedLocations: o.evidence.filter((e) => e !== primary).map((e, i) => ({ id: i + 1, message: { text: `${e.role}: ${e.path}@${e.ref}` },
         ...(e.ref === artifact.sourceSha ? { physicalLocation: physical(e) } : { logicalLocations: [{ name: e.path, fullyQualifiedName: `${artifact.repository}@${e.ref}:${e.path}:${e.startLine}`, kind: "module" }] }),
         properties: { role: e.role, ref: e.ref, startLine: e.startLine, endLine: e.endLine },
@@ -40,8 +41,9 @@ export function formatSarif(result: ReportInput): string {
   const results: SarifResult[] = result.findings.filter((f) => f.messageId !== "missing").map((f) => {
     if (f.commit || f.change) throw new Error("commit subjects require JSON rather than physical SARIF file locations");
     if (!Number.isSafeInteger(f.line) || f.line < 1 || !Number.isSafeInteger(f.endLine) || f.endLine < f.line) throw new Error("SARIF requires valid source ranges");
-    return { ruleId: f.ruleKey ?? f.rule, level: f.severity === "error" ? "error" : f.severity === "warning" ? "warning" : "note",
-      message: { text: f.message ?? f.ask ?? f.rule }, locations: [{ physicalLocation: physical({ path: f.file, startLine: f.line, endLine: f.endLine }) }] };
+    return { ruleId: f.ruleKey ?? f.rule, level: f.category === "advisory" ? "note" : f.severity === "error" ? "error" : f.severity === "warning" ? "warning" : "note",
+      message: { text: (f.message ?? f.ask ?? f.rule) + (f.nextCheck ? `\nNext check: ${f.nextCheck}` : "") },
+      ...(f.category || f.nextCheck ? { properties: { category: f.category, nextCheck: f.nextCheck } } : {}), locations: [{ physicalLocation: physical({ path: f.file, startLine: f.line, endLine: f.endLine }) }] };
   });
   const complete = !result.dryRun && !result.errors?.length && result.stats.missing === 0 && !result.batches?.some((b) => b.degraded) && !result.unpaired?.subjects && !result.undeclared?.length
     && !result.commits?.noInstructionDoc && !result.all.some((f) => !!f.cut);

@@ -53,3 +53,15 @@ test("acceptance: cache data, malformed counts, missing deployment identities an
   assert.throws(() => acceptFindings(reviewScan(scanArtifact(), { scopeId: scope.scopeId })), /revision/);
   assert.throws(() => compareAcceptedFindings(reviewScan(scanArtifact(), { ...scope, scopeId: "other" }), baseline), /scope/);
 });
+
+test("new advisory observations stay visible without consuming an acceptance or failing comparison", () => {
+  const scan = scanArtifact();
+  Object.assign(scan.candidates[0], { category: "advisory", nextCheck: "Inspect the caller." });
+  const review = reviewScan(scan, scope);
+  assert.equal(review.observations[0].nextCheck, "Inspect the caller.");
+  const baseline = acceptFindings(review);
+  assert.equal(baseline.entries.length, 0);
+  const result = compareAcceptedFindings(review, baseline);
+  assert.equal(result.observations[0].disposition, "advisory");
+  assert.equal(result.exitCode, 0);
+});

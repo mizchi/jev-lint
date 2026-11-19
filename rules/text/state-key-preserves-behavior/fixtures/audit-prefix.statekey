@@ -1,0 +1,17 @@
+Revision 1111111111111111111111111111111111111111
+Contract: return true if any reachable state is a fault.
+const seeds = [{slot:1, mode:'read'}, {slot:1, mode:'write'}];
+const key = s => s.slot;
+const next = s => { log('job', s.mode); return s.slot === 1 ? [{slot:2, mode:'fault'}] : []; };
+function faulty() {
+  const seen = new Set(), queue = [...seeds];
+  while (queue.length) {
+    const s = queue.shift();
+    if (s.mode === 'fault') return true;
+    const k = key(s);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    queue.push(...next(s));
+  }
+  return false;
+}

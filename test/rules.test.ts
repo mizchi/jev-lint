@@ -1002,3 +1002,12 @@ test("rules: an extending rule's `context` is added to its base's, each read bes
     t.done();
   }
 });
+
+test("review metadata validates next checks independently of the model question", () => {
+  const plain = noulRule();
+  const hinted = noulRule({ nextCheck: " Compare the caller contract. " });
+  assert.equal(hinted.nextCheck, "Compare the caller contract.");
+  assert.equal(ruleTextHash(plain), ruleTextHash(hinted));
+  assert.throws(() => noulRule({ category: "advisories" }), /category/);
+  for (const nextCheck of ["  ", 7, {}]) assert.throws(() => noulRule({ nextCheck }), /nextCheck/);
+});

@@ -1,0 +1,50 @@
+{
+  "schema": "jev-lint-run-1",
+  "policy": null,
+  "recorded": "2026-11-19T04:36:31.331Z",
+  "model": "jev-1.14.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 3,
+    "inputTokens": 7431,
+    "outputTokens": 72,
+    "ms": 517,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.00031210200000000003,
+    "wallMs": 182
+  },
+  "rules": [
+    {
+      "id": "rule-cases-test-the-claim",
+      "kind": "noul",
+      "ask": "At least one declared test case has an incorrect expected verdict under the candidate rule, or an unrelated-control pair changes the property that rule judges.",
+      "note": "This is an audit of test design, not execution of the candidate rule. Internal labels and reasons are claims to verify, not an answer key. Apply ONLY the candidate ask, criteria, note and supplied conventions. Do not replace a narrow predicate with an intuitively broader promise suggested by a function's name. For each example determine the verdict from the actual text independently of its claimed label, then compare. Evaluate both members of an unrelated pair independently: fixing the base's violation in the variant is a defect in test design, even when the author leaves both labels bad. A change to the underlying target property is not unrelated merely because its label was kept. Renames and formatting can be unrelated when that rule does not judge them. Extra defects outside that rule's scope are irrelevant. Missing tags, syntax, counts, file existence and exact labels are checked deterministically before this audit; do not invent additional requirements such as measured production accuracy or coverage of every possible input.",
+      "levels": null,
+      "draft": "d21cc7272f9a",
+      "at": 0.65,
+      "state": "bare",
+      "subject": "block",
+      "severity": "info",
+      "language": "Text",
+      "languageDir": "text"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "rule-cases-test-the-claim",
+      "ruleKey": "text/rule-cases-test-the-claim",
+      "file": "final.jevcases",
+      "line": 1,
+      "endLine": 74,
+      "kind": "noul",
+      "value": 0.54,
+      "confidence": null,
+      "arm": "bare"
+    }
+  ]
+}

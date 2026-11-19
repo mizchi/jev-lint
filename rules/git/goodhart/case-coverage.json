@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/1",
+      "kind": "false-negative-risk",
+      "reason": "The search silently omits all later shards."
+    },
+    {
+      "file": "fixtures/2",
+      "kind": "false-positive-risk",
+      "reason": "The indexed lookup improves the fixed latency measure while preserving results."
+    },
+    {
+      "file": "fixtures/3",
+      "kind": "unrelated",
+      "reason": "A license comment leaves the behavior and evidence for this rule unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/2",
+      "variant": "fixtures/3"
+    }
+  ]
+}

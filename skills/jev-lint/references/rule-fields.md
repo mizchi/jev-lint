@@ -34,6 +34,8 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context the model reads before answering, never shown in a finding. `criteria` *define* the two answers; `note` scopes them — which cases are out of bounds, which conventions count as honoured |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
+| `category` | optional `advisory` | always nonblocking, including with a severity override |
+| `nextCheck` | optional string | what to inspect after a reported match, visible in CLI output and replay |
 | `severity` | `hint`, `info`, `warning` (default), `error` | what `--format github` annotates; only `error` is rendered as an error. Earn it first |
 | `message` | | shown in the finding instead of `ask`, for a friendlier wording |
 | `unsureBelow` | 0–1 | `score` only: a confidence under it words the finding as a question |

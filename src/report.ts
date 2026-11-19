@@ -71,7 +71,7 @@ export function formatPretty(
     out.push(c.bold(commit ? `${shortRef(file)}  "${commit.subject}"` : change ? `${shortRef(file)}  ${change.summary}` : file));
     for (const f of list.sort((a, b) => a.line - b.line)) {
       const loc = `${f.line}`.padStart(5);
-      const tag = (f.messageId ? TAG[f.messageId]?.(c) : null) ?? String(f.messageId);
+      const tag = f.category === "advisory" ? c.cyan("advisory") : (f.messageId ? TAG[f.messageId]?.(c) : null) ?? String(f.messageId);
       const what = f.message ?? f.ask;
       const num =
         f.kind === "score"
@@ -82,6 +82,7 @@ export function formatPretty(
       out.push(
         `         ${c.dim(`${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  arm ${f.arm}${repro}`)}`,
       );
+      if (f.nextCheck) out.push(`         Next check: ${f.nextCheck}`);
       if (f.explanation) {
         out.push(`         ${c.dim(`why: ${f.explanation.choice} (${f.explanation.confidence.toFixed(2)})`)}`);
       }
@@ -247,7 +248,7 @@ export function formatPretty(
   }
 
   const bits = [
-    `${stats.reported} finding(s)`,
+    `${stats.reported} finding(s)${stats.advisories ? ` (${stats.advisories} advisory)` : ""}`,
     `${stats.subjects} subject(s)`,
     `${result.cachedCount ?? 0} cached`,
   ];
@@ -384,6 +385,8 @@ export function formatJson(result: ReportInput): string {
   const row = (f: Finding) => ({
     rule: f.rule,
     severity: f.severity,
+    category: f.category,
+    nextCheck: f.nextCheck,
     messageId: f.messageId,
     file: f.file,
     line: f.line,
@@ -449,8 +452,8 @@ export function formatJson(result: ReportInput): string {
 export function formatGithub(result: ReportInput): string {
   const out: string[] = [];
   for (const f of result.findings) {
-    const level = f.severity === "error" ? "error" : f.messageId === "unsure" ? "notice" : "warning";
-    const title = `${f.rule}${f.messageId === "unsure" ? " (unsure)" : ""}`;
+    const level = f.category === "advisory" ? "notice" : f.severity === "error" ? "error" : f.messageId === "unsure" ? "notice" : "warning";
+    const title = `${f.rule}${f.category === "advisory" ? " (advisory)" : ""}${f.messageId === "unsure" ? " (unsure)" : ""}`;
     const num = f.kind === "score" ? `${f.value!.toFixed(2)}/${f.scale ?? 3}` : f.value!.toFixed(2);
     const why = f.explanation ? `; why: ${f.explanation.choice}` : "";
     const where = f.commit
@@ -466,7 +469,7 @@ export function formatGithub(result: ReportInput): string {
     const cites = f.violates?.length
       ? `; cites ${f.violates.map((v) => `${v.file}:${v.line} (${v.value.toFixed(2)}) ${flattenDirective(v.body)}`).join(" | ")}`
       : "";
-    const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}${cut}${cites}]`;
+    const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}${cut}${cites}]${f.nextCheck ? ` Next check: ${f.nextCheck}` : ""}`;
     out.push(
       `::${level} file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(title)}::${escape(body)}`,
     );

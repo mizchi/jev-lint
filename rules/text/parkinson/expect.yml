@@ -1,0 +1,16 @@
+default: clean
+fixtures/1.surface:
+  - line: 1
+    window: 0
+    label: bad
+    reason: Two identical Sets are maintained in lockstep.
+fixtures/2.surface:
+  - line: 1
+    window: 0
+    label: clean
+    reason: The two sets have different owners and lifetimes.
+fixtures/3.surface:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A license comment leaves the behavior and evidence for this rule unchanged.

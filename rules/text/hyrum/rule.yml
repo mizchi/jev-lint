@@ -1,0 +1,23 @@
+id: hyrum
+language: Text
+extensions:
+  - surface
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.7  # Retained in three-pass separation gap: defects 0.96–0.97, clean max 0.05, max spread 0.01.
+ask: Does a listed public binding expose an implementation-only control or
+  representation that clients can come to depend on?
+criteria:
+  "true": A binding or its publicly reachable member exposes a live internal
+    table, test reset, or hook explicitly reserved for implementation
+    bookkeeping; connect the evidence to the named public path.
+  "false": Documented extension points, snapshots, private members, and an
+    internal module export absent from the public binding list are insufficient.
+category: advisory
+nextCheck: Import the suspected hook or backing value through the listed public
+  path as a client. Call the ordinary API before and after invoking the hook or
+  changing the value. If another caller sees a reset counter, changed notice or
+  altered lookup, check whether the public contract actually promises that
+  shared effect. A detached snapshot or an unreachable export dismisses it.

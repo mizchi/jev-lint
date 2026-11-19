@@ -11,6 +11,7 @@
     "docs/internal"
   ],
   "files": {
+    "advisories": { "path": "docs/advisories.md", "role": "document" },
     "facts": {
       "path": "docs/project-facts.md",
       "role": "reference"
@@ -113,6 +114,13 @@
     }
   },
   "comparisons": [
+    {
+      "id": "advisory-reporting-contract",
+      "topic": "Advisory findings remain visible without blocking CI",
+      "mode": "semantic",
+      "reference": { "source": "reference", "contains": "| `category` | optional `advisory` |" },
+      "target": { "source": "advisories", "heading": "Architecture advisories" }
+    },
     {
       "id": "catalog-readme",
       "topic": "Current total shipped rule count and per-language counts",

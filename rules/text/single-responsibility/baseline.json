@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T04:07:40.240Z",
+  "model": "jev-1.14.0",
+  "suite": "text/single-responsibility",
+  "rules": [
+    {
+      "id": "single-responsibility",
+      "draft": "4cf50ecc934a",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "single-responsibility",
+        "file": "rules/text/single-responsibility/fixtures/2.surface",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "single-responsibility",
+        "file": "rules/text/single-responsibility/fixtures/1.surface",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "single-responsibility",
+        "file": "rules/text/single-responsibility/fixtures/3.surface",
+        "line": 1,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "single-responsibility",
+        "file": "rules/text/single-responsibility/fixtures/2.surface",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "single-responsibility",
+        "file": "rules/text/single-responsibility/fixtures/1.surface",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "single-responsibility",
+        "file": "rules/text/single-responsibility/fixtures/3.surface",
+        "line": 1,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "single-responsibility",
+        "file": "rules/text/single-responsibility/fixtures/3.surface",
+        "line": 1,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "single-responsibility",
+        "file": "rules/text/single-responsibility/fixtures/1.surface",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "single-responsibility",
+        "file": "rules/text/single-responsibility/fixtures/2.surface",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 5898,
+    "usd": 0.000247716,
+    "ms": 212
+  }
+}

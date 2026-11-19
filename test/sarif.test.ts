@@ -23,3 +23,17 @@ test("sarif: commit subjects are not misrepresented as physical source files in 
   finding.commit = { subject: "Change" };
   assert.throws(() => formatSarif(result), /commit subjects/);
 });
+
+test("advisories preserve the next check as a SARIF note for both CLI findings and scan artifacts", () => {
+  const nextCheck = "Trace the return import.";
+  const f = decide(subjectOf({ rule: noulRule({ category: "advisory", nextCheck, severity: "error" }) }), { kind: "noul", value: 1, confidence: null });
+  const minimal = { findings:[f], all:[f], review:[], stats:{subjects:1,reported:1,missing:0,unsure:0,review:0,byRule:{},byFile:{}} };
+  const scan = scanArtifact();
+  Object.assign(scan.candidates[0], {category:"advisory",nextCheck});
+  for (const report of [JSON.parse(formatSarif(minimal)), artifactSarif(reviewScan(scan,{scopeId:"example"}))]) {
+    const row = report.runs[0].results[0];
+    assert.equal(row.level, "note");
+    assert.equal(row.properties.nextCheck, nextCheck);
+    assert.ok(row.message.text.includes(nextCheck));
+  }
+});

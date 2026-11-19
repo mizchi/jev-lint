@@ -1,0 +1,12 @@
+id: next-check-actionable
+language: Text
+extensions: [hintreview]
+subject: block
+kind: noul
+state: bare
+severity: info
+threshold: 0.70  # Experiment: positive means actionable, including checks that can dismiss a false alarm.
+ask: Does the proposed next check give a reviewer a specific investigation relevant to this evidence and an observable distinction that could confirm or dismiss the reported concern?
+criteria:
+  "true": The instruction identifies what to compare, trace or exercise, and what difference matters. It may direct the reviewer to a contract or caller outside the excerpt; its existence or result must remain open to inspection.
+  "false": Restating the concern, asking to review the code, prescribing a fix without verification or proposing an unrelated check gives no discriminating observation.

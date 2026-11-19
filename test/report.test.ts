@@ -316,3 +316,18 @@ test("report: formatJson reports violates verbatim, not a rendering", () => {
   const parsed = JSON.parse(formatJson({ findings: [finding], review: [], stats: gate([]).stats } as never));
   assert.deepEqual(parsed.findings[0].violates, violates);
 });
+
+test("review instructions appear in terminal, JSON and GitHub notices only on reported matches", () => {
+  const nextCheck = "Inspect both implementations with one permitted input.";
+  const subject = subjectOf({ rule: noulRule({ category: "advisory", nextCheck, at: 0.6, severity: "error" }) });
+  const result = gate([{ subject, answer: { kind: "noul", value: 0.8, confidence: null } }]);
+  const pretty = formatPretty(result, { color: false });
+  assert.match(pretty, /advisory/);
+  assert.ok(pretty.includes(nextCheck));
+  assert.equal(JSON.parse(formatJson(result)).findings[0].nextCheck, nextCheck);
+  const annotation = formatGithub(result);
+  assert.match(annotation, /::notice /);
+  assert.ok(annotation.includes(nextCheck));
+  const clean = gate([{ subject, answer: { kind: "noul", value: 0.1, confidence: null } }]);
+  assert.ok(!formatPretty(clean, { color: false }).includes(nextCheck));
+});

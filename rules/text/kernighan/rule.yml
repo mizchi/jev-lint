@@ -1,0 +1,23 @@
+id: kernighan
+language: Text
+extensions:
+  - surface
+  - impl
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.7  # Retained in three-pass separation gap: defects 0.84–0.85, clean max 0.06, max spread 0.01.
+ask: Is a failure path difficult to reconstruct because the implementation
+  erases causal evidence or relies on an unexplained order-dependent state
+  transition?
+criteria:
+  "true": Trace the concrete failure sequence and the lost cause or hidden
+    invariant. No comment or test shown explains that sequence.
+  "false": The error preserves the causal chain or the visible tests or comments
+    explain the delicate transition. File length, missing test excerpts or a
+    cropped body are insufficient.
+category: advisory
+nextCheck: Trigger each failure path separately. Check whether its error, trace
+  or existing test distinguishes the failing operation and preserves the
+  original cause.

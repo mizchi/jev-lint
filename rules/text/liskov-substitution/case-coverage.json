@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/batches-a.lsp",
+      "kind": "false-negative-risk",
+      "reason": "Both sinks implement save but an empty flush now throws."
+    },
+    {
+      "file": "fixtures/batches-b.lsp",
+      "kind": "false-positive-risk",
+      "reason": "Both results satisfy the stated ordering contract."
+    },
+    {
+      "file": "fixtures/batches-c.lsp",
+      "kind": "unrelated",
+      "reason": "A logging prefix leaves the contract and the relationships unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/batches-b.lsp",
+      "variant": "fixtures/batches-c.lsp"
+    }
+  ]
+}

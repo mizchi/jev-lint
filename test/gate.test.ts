@@ -181,3 +181,17 @@ test("gate: --fail-on decides which findings turn the exit code, and none is a v
   assert.equal(blocks([...findings, at("error")], "error"), true);
   assert.equal(blocks([], null), false);
 });
+
+test("advisory findings carry next checks only when reported and cannot block by severity", () => {
+  const nextCheck = "Replay the permitted input against each backend.";
+  const subject = subjectOf({ rule: noulRule({ category: "advisory", severity: "error", nextCheck, at: 0.6 }) });
+  const high = decide(subject, { kind: "noul", value: 0.8, confidence: null });
+  assert.equal(high.reported, true);
+  assert.equal(high.category, "advisory");
+  assert.equal(high.nextCheck, nextCheck);
+  assert.equal(blocks([high], null), false);
+  assert.equal(blocks([high], "hint"), false);
+  assert.equal(blocks([high, { ...high, category: undefined }], "error"), true);
+  assert.equal(decide(subject, null).nextCheck, undefined);
+  assert.equal(decide(subject, { kind: "noul", value: 0.5, confidence: null }, { loose: 1 }).nextCheck, undefined);
+});

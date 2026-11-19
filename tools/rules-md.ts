@@ -144,12 +144,14 @@ export function renderRulesMd(rulesRoot: string, repoRoot: string): string {
         `threshold ${fmt(rule.at)}`,
         ...(rule.loose !== null ? [`loose ${fmt(rule.loose)}`] : []),
         `severity \`${rule.severity}\``,
+        ...(rule.category ? [`category \`${rule.category}\``] : []),
         `languages ${rule.languages.join(", ")}`,
         ...(rule.explain ? [`explain ${Object.keys(rule.explain).join(" / ")}`] : []),
         ...(rule.split ? [`split \`${rule.split}\``] : []),
         ...(rule.extensions ? [`extensions ${rule.extensions.join(", ")}`] : []),
       ];
       out.push(`- ${bits.join(" · ")}`);
+      if (rule.nextCheck) out.push(`- Next check: ${rule.nextCheck}`);
       const proof = r.score
         ? `${r.fixtures} fixture${r.fixtures === 1 ? "" : "s"}, ${r.defects} defect${r.defects === 1 ? "" : "s"}, ${r.cleans} labelled clean${r.cleans === 1 ? "" : "s"}; ` +
           `at the shipped cutoff P ${fmt(r.score.precision)} R ${fmt(r.score.recall)} (tp ${r.score.tp}, fp ${r.score.fp}, fn ${r.score.fn}), ` +
