@@ -31,3 +31,9 @@ fixtures/mixed-clients.apiworkflow:
   - {"line": 1, "window": 0, "label": "clean", "reason": "The guide imports the TypeScript functions from valid entries. The adjacent Rust and CLI examples describe other clients."}
 fixtures/mixed-clients-wrong-entry.apiworkflow:
   - {"line": 1, "window": 0, "label": "bad", "reason": "The required parseFiniteModel import now points to host, which does not export it."}
+fixtures/facade-reexport.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Both entries export unpack, so the documented facade suffices for the whole round trip."}
+fixtures/round-trip-explicit-source.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The guide directs the reader to the correct entry for each required operation."}
+fixtures/corsa-separate-tasks.apiworkflow:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The second Corsa entry supplies a separate documented operation; each name is associated with its actual provider."}

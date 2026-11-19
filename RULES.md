@@ -766,7 +766,7 @@ The cutoff (`threshold`) where the rule exists in that language; blank where it 
 
 - kind `noul` · subject `block` · state `bare` · threshold 0.68 · severity `info` · category `advisory` · languages Text · extensions apiworkflow
 - Next check: Recreate the guide's smallest caller example using the published package and the documented imports. Identify the first step requiring a different path. Check whether the guide already explains that handoff, then decide whether to change the guide or re-export the operation.
-- 16 fixtures, 8 defects, 8 labelled cleans; at the shipped cutoff P 1.00 R 1.00 (tp 8, fp 0, fn 0), 0 flips over 7 passes, baseline 2026-11-19
+- 19 fixtures, 8 defects, 11 labelled cleans; at the shipped cutoff P 1.00 R 1.00 (tp 8, fp 0, fn 0), 0 flips over 7 passes, baseline 2026-11-19
 - [`rules/text/entry-layout-obscures-workflow/rule.yml`](rules/text/entry-layout-obscures-workflow/rule.yml)
 
 ### `text/export-has-no-public-role`

@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "7ceb7724ee394b427064ca332b980b52c72303afb6fb265c0a63991eb7d42e6d",
+  "snapshotDigest": "dd8c5217821d443910a9e5f884b716b9a2f3de3abacc005a9499bd521a4b023a",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -32,10 +32,10 @@
       "contextHash": "3dae9c1515bb6f2524a76d250ba1743827dc8b657ba2f08852d0078d311b16c5",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.98,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -50,8 +50,8 @@
         "path": "docs/project-facts.md",
         "startLine": 9,
         "endLine": 24,
-        "quote": "## Rule catalog\n\nThe current catalog contains 121 rules across 12 language directories, with 68 distinct rule IDs. 101 rules reach precision and recall 1.00 on their own accepted fixtures. There are 766 labelled defects and 1230 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 17 rules\n- typescript: 23 rules\n- vibe: 2 rules",
-        "contentHash": "f26aa2fa9eaa1b6c374f0191aebe27b62d7ce6a7da286d230ed702f1c1912581"
+        "quote": "## Rule catalog\n\nThe current catalog contains 121 rules across 12 language directories, with 68 distinct rule IDs. 101 rules reach precision and recall 1.00 on their own accepted fixtures. There are 766 labelled defects and 1233 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 17 rules\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "eddb8320ff571513b5a868ad903063dccc53335a6e2378d630ea6ee214b6024d"
       },
       "target": {
         "source": "readme",
@@ -62,16 +62,16 @@
         "contentHash": "63bd03ba4ec8b9529092055787dc32fd9611d56d77d49a099b08e1f938962df0"
       },
       "context": [],
-      "candidateId": "b86f12b62210bf4089104fddda01901399f9abf57310a36ca7a1193464a2ba4a",
-      "contextHash": "8443fdd80ae739dabf25a234d369e097946746d71588f2bc0a6e04667cfb4500",
+      "candidateId": "61959cfb7231ddd2301de06d4c489710368b5f8d76735b3499c7c1f60a815fee",
+      "contextHash": "6518dc176facff389c50dca167b48bb6669e3079bb381240f5450c898fca53ae",
       "judgment": {
         "choice": "supports",
         "confidence": 0.81,
         "probabilities": {
           "supports": 0.86,
-          "contradicts": 0.13,
+          "contradicts": 0.12,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -84,8 +84,8 @@
         "path": "docs/project-facts.md",
         "startLine": 9,
         "endLine": 24,
-        "quote": "## Rule catalog\n\nThe current catalog contains 121 rules across 12 language directories, with 68 distinct rule IDs. 101 rules reach precision and recall 1.00 on their own accepted fixtures. There are 766 labelled defects and 1230 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 17 rules\n- typescript: 23 rules\n- vibe: 2 rules",
-        "contentHash": "f26aa2fa9eaa1b6c374f0191aebe27b62d7ce6a7da286d230ed702f1c1912581"
+        "quote": "## Rule catalog\n\nThe current catalog contains 121 rules across 12 language directories, with 68 distinct rule IDs. 101 rules reach precision and recall 1.00 on their own accepted fixtures. There are 766 labelled defects and 1233 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 17 rules\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "eddb8320ff571513b5a868ad903063dccc53335a6e2378d630ea6ee214b6024d"
       },
       "target": {
         "source": "readme-ja",
@@ -96,14 +96,14 @@
         "contentHash": "ae7e8e31383e318a5f9a1e193a03a4082c421aeeb22e41048f91cc6827a8ccd7"
       },
       "context": [],
-      "candidateId": "9bc1f9c46f8f2d6e737cbf89ccb5002aa7e88154a415a7ec822dd9179e9b0be0",
-      "contextHash": "c4e2c3e272fb33f05a524fd070b7f9147fa02f24b306ebdfc98821be4e33220e",
+      "candidateId": "8bbd21974befd3c98354f44c813b4f2572696337d5b23f1e475984749141567a",
+      "contextHash": "f51c91a2b48faa70b42c9cb482704ec8bd585fe3219df16c74ec2d8696db0d2e",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.85,
+        "confidence": 0.8,
         "probabilities": {
-          "supports": 0.89,
-          "contradicts": 0.1,
+          "supports": 0.85,
+          "contradicts": 0.14,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -118,8 +118,8 @@
         "path": "docs/project-facts.md",
         "startLine": 9,
         "endLine": 24,
-        "quote": "## Rule catalog\n\nThe current catalog contains 121 rules across 12 language directories, with 68 distinct rule IDs. 101 rules reach precision and recall 1.00 on their own accepted fixtures. There are 766 labelled defects and 1230 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 17 rules\n- typescript: 23 rules\n- vibe: 2 rules",
-        "contentHash": "f26aa2fa9eaa1b6c374f0191aebe27b62d7ce6a7da286d230ed702f1c1912581"
+        "quote": "## Rule catalog\n\nThe current catalog contains 121 rules across 12 language directories, with 68 distinct rule IDs. 101 rules reach precision and recall 1.00 on their own accepted fixtures. There are 766 labelled defects and 1233 labelled cleans. These are fixture measurements, not production accuracy.\n\n- git: 4 rules\n- go: 9 rules\n- javascript: 1 rule\n- json: 1 rule\n- markdown: 13 rules\n- moonbit: 20 rules\n- python: 14 rules\n- rust: 9 rules\n- shell: 8 rules\n- text: 17 rules\n- typescript: 23 rules\n- vibe: 2 rules",
+        "contentHash": "eddb8320ff571513b5a868ad903063dccc53335a6e2378d630ea6ee214b6024d"
       },
       "target": {
         "source": "reference",
@@ -130,16 +130,16 @@
         "contentHash": "ab635e279461b0e24fedfe2412fec984b7910f585ecc2471cde16178887488be"
       },
       "context": [],
-      "candidateId": "7256f44fb39483b70b59a90d5fb75bca18322344327515f91391ba63c262937a",
-      "contextHash": "12c766139f8689896bf39aaa2fcff66d440bbe93be8e9a7fa5fe8ed416d4182c",
+      "candidateId": "21964d589749e32eeba92d3e247dfc545738108f01edf391ec4314927a2a05fc",
+      "contextHash": "7d79d2807f2fc46d61f793d849234bdebb2227eb7f65c44ffad98eccffff8223",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.95,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.96,
-          "contradicts": 0.02,
+          "supports": 0.98,
+          "contradicts": 0.01,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -270,12 +270,12 @@
       "contextHash": "c00d588e7806bbb50ce017b80fc9ce9f45ed56bca3c6b89d1fb9304e5a9a0c30",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.92,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.11,
+          "supports": 0.94,
+          "contradicts": 0.06,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -304,10 +304,10 @@
       "contextHash": "e5941a0a8d9cf3e6f201cea332d78057f31639194346cf3f731cd5cac803e924",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.87,
+        "confidence": 0.88,
         "probabilities": {
-          "supports": 0.9,
-          "contradicts": 0.06,
+          "supports": 0.91,
+          "contradicts": 0.05,
           "unrelated": 0,
           "insufficient_context": 0.04
         }
@@ -338,10 +338,10 @@
       "contextHash": "07495441926fa597e342fd615b9889328aeb9dd93abac75f85ac2db76d2eba83",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.96,
         "probabilities": {
-          "supports": 0.95,
-          "contradicts": 0.05,
+          "supports": 0.97,
+          "contradicts": 0.03,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -372,10 +372,10 @@
       "contextHash": "3cad91cb720b9c9de6928d42af3f434477aea58378967cbc0484f5c147395a2c",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.96,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.97,
+          "contradicts": 0.03,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -406,10 +406,10 @@
       "contextHash": "34895e1a2c71125e06f90bca2e8118061c10ff361383334dde808e5b04cc7760",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.83,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.87,
-          "contradicts": 0.11,
+          "supports": 0.88,
+          "contradicts": 0.1,
           "unrelated": 0,
           "insufficient_context": 0.02
         }
@@ -440,10 +440,10 @@
       "contextHash": "9b927ce6ce3ccd0d034e8afee8439d0cbdd9186a35694ebff1c2b3e575e55efd",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 1,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 1,
+          "contradicts": 0,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -508,10 +508,10 @@
       "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.75,
+        "confidence": 0.68,
         "probabilities": {
-          "supports": 0.81,
-          "contradicts": 0.18,
+          "supports": 0.76,
+          "contradicts": 0.23,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -542,10 +542,10 @@
       "contextHash": "8cecf2bfcf88789455d7eafa78a1b126bee955d21dc05f16fa0edb8326788196",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.83,
+        "confidence": 0.8,
         "probabilities": {
-          "supports": 0.87,
-          "contradicts": 0.13,
+          "supports": 0.85,
+          "contradicts": 0.15,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -576,11 +576,11 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.92,
         "probabilities": {
-          "supports": 0.93,
+          "supports": 0.94,
           "contradicts": 0.04,
-          "unrelated": 0.01,
+          "unrelated": 0,
           "insufficient_context": 0.02
         }
       }
@@ -610,12 +610,12 @@
       "contextHash": "d1acc67b489fffe17b2e80b045f35be0a9d3bd1660f156f7a6e52e3b975f27a6",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.89,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.92,
+          "supports": 0.93,
           "contradicts": 0.06,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -712,12 +712,12 @@
       "contextHash": "35839030f7dde62d95b10faf10a0b81c8ae5c13efa2c9cd97f722dfbbb0eb1aa",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.85,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.89,
-          "contradicts": 0.09,
+          "supports": 0.93,
+          "contradicts": 0.06,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -746,10 +746,10 @@
       "contextHash": "5b3e6e3d6e9313b46b5d867319a9d0ff3eca623aedd3906c8e3275fab0251ea8",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.85,
+        "confidence": 0.8,
         "probabilities": {
-          "supports": 0.89,
-          "contradicts": 0.1,
+          "supports": 0.85,
+          "contradicts": 0.14,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -814,12 +814,12 @@
       "contextHash": "2186cd8f8e963d27e4f6eae436a488676c25c3d022daf9d460a5a1f7e5c71598",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.83,
         "probabilities": {
-          "supports": 0.93,
-          "contradicts": 0.07,
+          "supports": 0.87,
+          "contradicts": 0.12,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.01
         }
       }
     },
@@ -891,10 +891,10 @@
       "contextHash": "604fcb8a9c1e317a8a6d49fc2439cd2b3f5c68d1e8a8bf26c48cb3203d30fff9",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.47,
+        "confidence": 0.44,
         "probabilities": {
-          "supports": 0.6,
-          "contradicts": 0.39,
+          "supports": 0.58,
+          "contradicts": 0.41,
           "unrelated": 0,
           "insufficient_context": 0.01
         }

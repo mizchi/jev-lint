@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Round trip
+To encode a record use pack from archive. To recover it use unpack from archive/compat.
+
+Reviewed import paths and their exports (other paths were not inspected):
+archive: pack
+archive/compat: unpack

@@ -80,6 +80,21 @@
       "file": "fixtures/mixed-clients-wrong-entry.apiworkflow",
       "kind": "false-negative-risk",
       "reason": "The required parseFiniteModel import now points to host, which does not export it."
+    },
+    {
+      "file": "fixtures/facade-reexport.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "Both entries export unpack, so the documented facade suffices for the whole round trip."
+    },
+    {
+      "file": "fixtures/round-trip-explicit-source.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The guide directs the reader to the correct entry for each required operation."
+    },
+    {
+      "file": "fixtures/corsa-separate-tasks.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The second Corsa entry supplies a separate documented operation; each name is associated with its actual provider."
     }
   ],
   "independencePairs": [
