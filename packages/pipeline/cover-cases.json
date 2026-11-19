@@ -1,0 +1,20 @@
+{
+  "development": [
+    {"required":["parse","print","roundtrip"],"limit":1,"suites":[{"id":"lexer","covers":["parse"]},{"id":"compiler","covers":["parse","print","roundtrip"]}]},
+    {"required":["login","logout","session","audit"],"limit":2,"suites":[{"id":"minimal","covers":["login"]},{"id":"auth","covers":["login","logout","session"]},{"id":"log","covers":["audit"]}]},
+    {"required":["insert","query","delete","vacuum"],"limit":2,"suites":[{"id":"insert-only","covers":["insert"]},{"id":"crud","covers":["insert","query","delete"]},{"id":"cleanup","covers":["vacuum"]}]}
+  ],
+  "test": [
+    {"id":"ui-release","groups":[
+      {"required":["focus","click","scroll"],"limit":1,"suites":[{"id":"keyboard","covers":["focus"]},{"id":"browser","covers":["focus","click","scroll"]}]},
+      {"required":["stamp","sign"],"limit":2,"suites":[{"id":"metadata","covers":["stamp"]},{"id":"signature","covers":["sign"]}]}
+    ]},
+    {"id":"storage-release","groups":[
+      {"required":["read","write","sync","list","unmount","mount"],"limit":2,"suites":[{"id":"broad","covers":["read","write","sync","list"]},{"id":"disk","covers":["read","write","unmount"]},{"id":"volume","covers":["sync","list","mount"]}]},
+      {"required":["version"],"limit":1,"suites":[{"id":"smoke","covers":["version"]}]}
+    ]},
+    {"id":"transport-release","groups":[
+      {"required":["dial","send","receive","close"],"limit":2,"suites":[{"id":"connect","covers":["dial"]},{"id":"transport","covers":["dial","send","receive"]},{"id":"shutdown","covers":["close"]}]}
+    ]}
+  ]
+}

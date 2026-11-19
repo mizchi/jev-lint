@@ -1,0 +1,16 @@
+[
+  {"id":"speaker","pattern":"agreement","catalog":"hardware","description":"Ships a powered desktop speaker with a USB cable.","expected":"hardware","basis":"Warehouse dispatches a speaker."},
+  {"id":"editor","pattern":"agreement","catalog":"software","description":"One-year download license for the vector editor.","expected":"software","basis":"Fulfillment sends a license key."},
+  {"id":"amp","pattern":"stale-catalog","catalog":"software","description":"A physical headphone amplifier with a metal enclosure and power supply.","expected":"hardware","basis":"The catalog still carries the retired plug-in SKU's category."},
+  {"id":"mix","pattern":"stale-catalog","catalog":"hardware","description":"Downloadable mixing-console emulator for macOS.","expected":"software","basis":"Only the emulator installer is delivered."},
+  {"id":"pedal","pattern":"misleading-copy","catalog":"hardware","description":"A downloadable virtual effects pedal for guitar tracks.","expected":"hardware","basis":"The order ships a physical pedal. The description was copied from its virtual edition."},
+  {"id":"cad","pattern":"misleading-copy","catalog":"software","description":"A boxed metal drafting compass with spare leads.","expected":"software","basis":"The purchased entitlement is the CAD application. The listing describes a different product."},
+  {"id":"switch","pattern":"catalog-abstains","catalog":"abstain","description":"Eight-port desktop Ethernet switch with an included power adapter.","expected":"hardware","basis":"Shipping manifest lists a network switch."},
+  {"id":"font","pattern":"catalog-abstains","catalog":"abstain","description":"Download this font editing application and activate with a license code.","expected":"software","basis":"The purchase grants application access."},
+  {"id":"dial","pattern":"missing-copy","catalog":"hardware","description":"","expected":"hardware","basis":"Packing list specifies one rotary controller."},
+  {"id":"addon","pattern":"missing-copy","catalog":"abstain","description":"","expected":"software","basis":"The entitlement ledger records a software add-on, though both public inputs are empty."},
+  {"id":"studio","pattern":"mixed-bundle","catalog":"hardware","description":"One inseparable bundle containing a MIDI keyboard and a perpetual music software license, both equal parts of the purchase.","expected":"review","basis":"The routing policy requires manual review for mixed bundles with no primary category."},
+  {"id":"lab","pattern":"mixed-bundle","catalog":"software","description":"Sold together as two equal products: a physical lab probe and a paid data-analysis application.","expected":"review","basis":"Neither component is primary on the invoice."},
+  {"id":"drive","pattern":"shared-error","catalog":"hardware","description":"Portable solid-state drive with aluminum enclosure and a USB cable.","expected":"software","basis":"A shared stale feed describes the physical drive, while fulfillment delivers the backup utility."},
+  {"id":"keys","pattern":"shared-error","catalog":"software","description":"Download the on-screen keyboard application from the customer portal.","expected":"hardware","basis":"Both fields describe an old product, while this order ships a mechanical keyboard."}
+]

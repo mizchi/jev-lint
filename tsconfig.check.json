@@ -8,7 +8,7 @@
     "noEmit": true,
     "rootDir": "."
   },
-  "include": ["src", "test", "tools", "packages/skill-to-decision/*.ts"],
+  "include": ["src", "test", "tools", "packages/skill-to-decision/*.ts", "packages/pipeline/*.ts"],
   // Matcher fixtures, not programs: they exist to be parsed, not to compile.
   "exclude": ["test/fixtures"]
 }

@@ -1,0 +1,18 @@
+[
+  {"id":"s01","text":"Could you send a PDF of the receipt for last month?","expected":false},
+  {"id":"s02","text":"The extra charge has already been reversed. Both sides confirm the balance is correct.","expected":false},
+  {"id":"s03","text":"The pending authorization disappeared. Only one settled payment remains.","expected":false},
+  {"id":"s04","text":"Two seats were purchased separately, with one correct charge for each seat.","expected":false},
+  {"id":"s05","text":"I placed a single order on Tuesday. Both debits have settled and I am still waiting for one to be returned.","expected":true},
+  {"id":"s06","text":"The delivery arrived late. Can I change my shipping address for next time?","expected":false},
+  {"id":"s07","text":"Can you explain the difference between the monthly plan and the annual plan?","expected":false},
+  {"id":"s08","text":"We sent a second copy of the invoice by email. There was only one payment.","expected":false},
+  {"id":"s09","text":"I see a pending authorization alongside the posted charge. The bank says the hold will expire.","expected":false},
+  {"id":"s10","text":"Two identical purchases were intentional. Please update the recipient name.","expected":false},
+  {"id":"s11","text":"We cancelled the renewal before any money was taken.","expected":false},
+  {"id":"s12","text":"I accidentally opened two support cases. You can close this one.","expected":false},
+  {"id":"s13","text":"We paid twice for a single shipment. The refund was promised but our ledger still shows both payments.","expected":true},
+  {"id":"s14","text":"An old duplicate billing issue was fixed last week. Today I need to update our tax ID.","expected":false},
+  {"id":"s15","text":"The invoice total is higher because tax was added. No second debit occurred.","expected":false},
+  {"id":"s16","text":"A repeated debit was refunded in full and the credit has posted.","expected":false}
+]
