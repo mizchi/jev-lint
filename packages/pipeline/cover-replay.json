@@ -1,0 +1,75 @@
+{
+  "contract": "ci/select-cover@1",
+  "model": "gpt-5.5-2026-04-23",
+  "receipts": {
+    "a766d9094aadbcad770b229d60413e08e97c247b1395c12fb8be9a797022a12a": {
+      "selected": [
+        "compiler"
+      ],
+      "inputTokens": 113,
+      "outputTokens": 43,
+      "ms": 4612
+    },
+    "f716617f715ec92de0bbf509c81a9faefd7ba9f74ba984ad95c51b2fad06e8fd": {
+      "selected": [
+        "auth",
+        "log"
+      ],
+      "inputTokens": 122,
+      "outputTokens": 61,
+      "ms": 2014
+    },
+    "e34734eff909e31339dcf1445c6bedb548883faa3bfa1b92126b0a0490acf196": {
+      "selected": [
+        "crud",
+        "cleanup"
+      ],
+      "inputTokens": 125,
+      "outputTokens": 54,
+      "ms": 2332
+    },
+    "1da7ee945939aa0247a6f9582d9b53f865fcc5ee44248d995ecf18afc8efa97d": {
+      "selected": [
+        "browser"
+      ],
+      "inputTokens": 111,
+      "outputTokens": 50,
+      "ms": 1780
+    },
+    "c06c96303a72ced6bde719dc1e8703be52c4d33c059a87dbade733492b3b5f64": {
+      "selected": [
+        "metadata",
+        "signature"
+      ],
+      "inputTokens": 105,
+      "outputTokens": 46,
+      "ms": 1616
+    },
+    "ff04d1edd4cf92e34aa440760ac4dfe65b06ccc8df665889c1e1453c52aa524b": {
+      "selected": [
+        "disk",
+        "volume"
+      ],
+      "inputTokens": 139,
+      "outputTokens": 111,
+      "ms": 2401
+    },
+    "e6041d32fd1a041ad81aed6e84020f0daf9826d540f4a9b24e7fb7faeafdc1f2": {
+      "selected": [
+        "smoke"
+      ],
+      "inputTokens": 95,
+      "outputTokens": 42,
+      "ms": 1917
+    },
+    "d04b0e9bf287bb13be7084f565706bb0100b3e2af8673f2a603bd00e9fb1709b": {
+      "selected": [
+        "transport",
+        "shutdown"
+      ],
+      "inputTokens": 122,
+      "outputTokens": 59,
+      "ms": 1893
+    }
+  }
+}

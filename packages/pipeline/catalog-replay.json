@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "fingerprint": "97aaf9cd9826b28e03f0c8a1afe03e7b88a565181da4c4fbb3d8471761b6b1cd",
+  "model": "jev-1.14.0",
+  "recordedAt": "2026-11-19T14:34:23.908Z",
+  "usdPerMillionInputTokens": 0.042,
+  "answers": {
+    "speaker": {
+      "label": "hardware",
+      "tokens": 381,
+      "ms": 270
+    },
+    "editor": {
+      "label": "software",
+      "tokens": 379,
+      "ms": 176
+    },
+    "amp": {
+      "label": "hardware",
+      "tokens": 382,
+      "ms": 147
+    },
+    "mix": {
+      "label": "software",
+      "tokens": 382,
+      "ms": 192
+    },
+    "pedal": {
+      "label": "software",
+      "tokens": 379,
+      "ms": 136
+    },
+    "cad": {
+      "label": "hardware",
+      "tokens": 379,
+      "ms": 144
+    },
+    "switch": {
+      "label": "hardware",
+      "tokens": 381,
+      "ms": 243
+    },
+    "font": {
+      "label": "software",
+      "tokens": 382,
+      "ms": 135
+    },
+    "studio": {
+      "label": "abstain",
+      "tokens": 393,
+      "ms": 167
+    },
+    "lab": {
+      "label": "abstain",
+      "tokens": 388,
+      "ms": 223
+    },
+    "drive": {
+      "label": "hardware",
+      "tokens": 382,
+      "ms": 152
+    },
+    "keys": {
+      "label": "software",
+      "tokens": 381,
+      "ms": 153
+    }
+  }
+}

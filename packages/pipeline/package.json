@@ -1,0 +1,6 @@
+{
+  "name": "@jev-lint/pipeline-experiment",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" }
+}

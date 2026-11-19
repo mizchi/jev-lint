@@ -87,3 +87,18 @@ public-api-corpus repositories output:
 
 skill-to-decision cases out:
     node packages/skill-to-decision/cli.ts {{quote(cases)}} {{quote(out)}}
+
+pipeline *args:
+    node packages/pipeline/experiment.ts {{args}}
+
+pipeline-inspect *args:
+    node packages/pipeline/inspect.ts {{args}}
+
+pipeline-route *args:
+    node packages/pipeline/catalog.ts {{args}}
+
+pipeline-route-eval *args:
+    node packages/pipeline/eval-catalog.ts {{args}}
+
+pipeline-repeat-eval *args:
+    node packages/pipeline/eval-repeated.ts {{args}}
