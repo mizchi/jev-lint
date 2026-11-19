@@ -1,0 +1,215 @@
+{
+  "split": "develop",
+  "threshold": 0.7,
+  "model": "jev-1.14.0",
+  "draft": "4a51bb37daaa",
+  "spent": {
+    "calls": 33,
+    "inputTokens": 27630,
+    "usd": 0.00116046,
+    "ms": 404
+  },
+  "correct": 11,
+  "total": 14,
+  "semanticCorrect": 9,
+  "semanticTotal": 11,
+  "flips": 0,
+  "routeErrors": [
+    "dev-period-space",
+    "dev-missing-artifact"
+  ],
+  "results": [
+    {
+      "id": "commit-dev-pass",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "values": [
+        0.04,
+        0.05,
+        0.05
+      ],
+      "mean": 0.04666666666666667,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "commit-dev-fail",
+      "expected": "fail",
+      "action": "retain",
+      "staticVerdict": "fail",
+      "values": [],
+      "mean": null,
+      "predicted": "fail",
+      "flip": false
+    },
+    {
+      "id": "jev-dev-set",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "values": [
+        0.16,
+        0.04,
+        0.09
+      ],
+      "mean": 0.09666666666666668,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "jev-dev-explain",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "values": [
+        0.03,
+        0.03,
+        0.03
+      ],
+      "mean": 0.03,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "jev-dev-prevents",
+      "expected": "fail",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "values": [
+        0.84,
+        0.83,
+        0.83
+      ],
+      "mean": 0.8333333333333334,
+      "predicted": "fail",
+      "flip": false
+    },
+    {
+      "id": "jev-dev-documented",
+      "expected": "fail",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "values": [
+        0.98,
+        0.97,
+        0.97
+      ],
+      "mean": 0.9733333333333333,
+      "predicted": "fail",
+      "flip": false
+    },
+    {
+      "id": "dev-period-space",
+      "expected": "fail",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "retain",
+      "values": [
+        0.03,
+        0.03,
+        0.03
+      ],
+      "mean": 0.03,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "dev-noun",
+      "expected": "fail",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.66,
+        0.65,
+        0.61
+      ],
+      "mean": 0.64,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "dev-progressive",
+      "expected": "fail",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.93,
+        0.89,
+        0.94
+      ],
+      "mean": 0.9199999999999999,
+      "predicted": "fail",
+      "flip": false
+    },
+    {
+      "id": "dev-base-with-gerund",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.09,
+        0.13,
+        0.08
+      ],
+      "mean": 0.09999999999999999,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "dev-negated",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.02,
+        0.02,
+        0.03
+      ],
+      "mean": 0.023333333333333334,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "dev-breaking-scope",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.03,
+        0.03,
+        0.03
+      ],
+      "mean": 0.03,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "dev-missing-artifact",
+      "expected": "unknown",
+      "action": "retain",
+      "staticVerdict": "not-applicable",
+      "expectedAction": "observe",
+      "values": [],
+      "mean": null,
+      "predicted": "not-applicable",
+      "flip": false
+    },
+    {
+      "id": "dev-no-english",
+      "expected": "unknown",
+      "action": "observe",
+      "staticVerdict": "unknown",
+      "expectedAction": "observe",
+      "values": [],
+      "mean": null,
+      "predicted": "unknown",
+      "flip": false
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "split": "evaluation",
+  "threshold": 0.395,
+  "model": "jev-1.14.0",
+  "draft": "4a51bb37daaa",
+  "spent": {
+    "calls": 24,
+    "inputTokens": 20217,
+    "usd": 0.000849114,
+    "ms": 207
+  },
+  "correct": 14,
+  "total": 14,
+  "semanticCorrect": 8,
+  "semanticTotal": 8,
+  "flips": 0,
+  "routeErrors": [],
+  "results": [
+    {
+      "id": "commit-eval-avoid",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "values": [
+        0.02,
+        0.03,
+        0.04
+      ],
+      "mean": 0.03,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "commit-eval-long",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "values": [
+        0.04,
+        0.04,
+        0.05
+      ],
+      "mean": 0.043333333333333335,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "commit-eval-past",
+      "expected": "fail",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "values": [
+        0.97,
+        0.97,
+        0.97
+      ],
+      "mean": 0.9700000000000001,
+      "predicted": "fail",
+      "flip": false
+    },
+    {
+      "id": "commit-eval-case",
+      "expected": "fail",
+      "action": "retain",
+      "staticVerdict": "fail",
+      "values": [],
+      "mean": null,
+      "predicted": "fail",
+      "flip": false
+    },
+    {
+      "id": "commit-eval-incomplete",
+      "expected": "unknown",
+      "action": "observe",
+      "staticVerdict": "unknown",
+      "values": [],
+      "mean": null,
+      "predicted": "unknown",
+      "flip": false
+    },
+    {
+      "id": "commit-eval-other",
+      "expected": "not-applicable",
+      "action": "retain",
+      "staticVerdict": "not-applicable",
+      "values": [],
+      "mean": null,
+      "predicted": "not-applicable",
+      "flip": false
+    },
+    {
+      "id": "eval-tab-after-period",
+      "expected": "fail",
+      "action": "retain",
+      "staticVerdict": "fail",
+      "expectedAction": "retain",
+      "values": [],
+      "mean": null,
+      "predicted": "fail",
+      "flip": false
+    },
+    {
+      "id": "eval-noun-compound",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.08,
+        0.12,
+        0.1
+      ],
+      "mean": 0.10000000000000002,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "eval-explicit-agent",
+      "expected": "fail",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.85,
+        0.84,
+        0.84
+      ],
+      "mean": 0.8433333333333333,
+      "predicted": "fail",
+      "flip": false
+    },
+    {
+      "id": "eval-state",
+      "expected": "fail",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.77,
+        0.9,
+        0.9
+      ],
+      "mean": 0.8566666666666666,
+      "predicted": "fail",
+      "flip": false
+    },
+    {
+      "id": "eval-verb-quote",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.02,
+        0.02,
+        0.02
+      ],
+      "mean": 0.02,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "eval-body-control",
+      "expected": "pass",
+      "action": "judge",
+      "staticVerdict": "unknown",
+      "expectedAction": "judge",
+      "values": [
+        0.04,
+        0.04,
+        0.05
+      ],
+      "mean": 0.043333333333333335,
+      "predicted": "pass",
+      "flip": false
+    },
+    {
+      "id": "eval-no-message",
+      "expected": "unknown",
+      "action": "observe",
+      "staticVerdict": "unknown",
+      "expectedAction": "observe",
+      "values": [],
+      "mean": null,
+      "predicted": "unknown",
+      "flip": false
+    },
+    {
+      "id": "eval-release-note",
+      "expected": "not-applicable",
+      "action": "retain",
+      "staticVerdict": "not-applicable",
+      "expectedAction": "retain",
+      "values": [],
+      "mean": null,
+      "predicted": "not-applicable",
+      "flip": false
+    }
+  ]
+}

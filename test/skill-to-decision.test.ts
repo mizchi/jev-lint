@@ -26,6 +26,15 @@ test("skill-to-decision keeps missing evidence and oversized subjects out of Jev
   assert.equal(routeCommit(input).action, "observe");
 });
 
+test("skill-to-decision treats blank scope as missing and checks punctuation before trailing whitespace", () => {
+  const input = structuredClone(cases[0].input);
+  assert.equal(routeCommit({ ...input, context: { ...input.context, artifact: "  " } }).action, "observe");
+  input.data.message = "fix: guard the index.  \r\n\r\nTests pass.";
+  assert.equal(routeCommit(input).verdict, "fail");
+  input.data.message = "fix: guard the index  \r\n\r\nTests pass.";
+  assert.equal(routeCommit(input).action, "judge");
+});
+
 test("skill-to-decision isolates labels from subjects and rejects split contamination", () => {
   const altered = structuredClone(cases);
   altered[0].expected = { verdict: "fail", reason: "A PRIVATE LABEL" };

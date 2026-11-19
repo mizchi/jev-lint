@@ -27,3 +27,5 @@ The CLI writes these routes to `decisions.json`. The `develop/` and `evaluation/
 The example selects twelve original cases from the rulepipe experiment's `benchmarks/skill-expansion.json` and `benchmarks/jev-calibration.json`. The regression reference comes from `experiments/jev/skills-01/manifest.json` and its two archived eval plans. It preserves the original Jev rule ID, `rulepipe-commit-imperative`, and the proposed rubric's uncalibrated threshold, 0.7.
 
 Run `pnpm test skill-to-decision` to compare route decisions and SHA-256 hashes for the emitted YAML and fixtures, then execute the repository's real Jev CLI. The test uses the historical relative directory layout because the path contributes to the token estimate.
+
+The [commit voice evaluation](../../experiments/skill-to-decision/commit-voice-01/README.md) includes a fresh three-pass model run, boundary cases, the development-fitted cutoff, and instructions to rerun both stages.

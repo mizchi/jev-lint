@@ -19,13 +19,13 @@ const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 
 export function routeCommit(input: CommitObservation): Route {
   const { artifact, messageComplete, locale } = input.context ?? {};
-  if (typeof artifact !== "string" || !artifact.length) return observe("Artifact scope is missing.");
+  if (typeof artifact !== "string" || !artifact.trim()) return observe("Artifact scope is missing.");
   if (artifact !== "commit-message") return { action: "retain", verdict: "not-applicable", reason: "Outside commit-message scope." };
   const message = input.data?.message;
   if (messageComplete !== true || typeof message !== "string" || !message.trim()) return observe("Complete commit message is missing.");
   if (locale !== "en") return observe("The English language contract is missing.");
 
-  const header = message.split(/\r?\n/, 1)[0];
+  const header = message.split(/\r?\n/, 1)[0].trimEnd();
   const subject = /^[A-Za-z][A-Za-z0-9-]*(?:\([^\r\n()]+\))?!?: (\S[^\r\n]*)$/.exec(header)?.[1];
   if (!subject || !/^[a-z]/.test(subject) || subject.endsWith(".")) {
     return { action: "retain", verdict: "fail", reason: "The header violates the subject shape." };
