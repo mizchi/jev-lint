@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "888f26b2a3bd2e9361b854ca8096d75a6122686d56be19f3b26c88a67c5c1d7e",
+  "snapshotDigest": "dc0d6e1166db9b6ff1670a56555f6d595893f01bb248c60a2cbc39dae17f1e73",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -32,12 +32,12 @@
       "contextHash": "7f6b85ff7878f43be4a210f5ca0c40a99de683d90f043fc71af17606661e4527",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.55,
+        "confidence": 0.59,
         "probabilities": {
-          "supports": 0.66,
-          "contradicts": 0.29,
+          "supports": 0.69,
+          "contradicts": 0.25,
           "unrelated": 0,
-          "insufficient_context": 0.05
+          "insufficient_context": 0.06
         }
       }
     },
@@ -66,10 +66,10 @@
       "contextHash": "c7094897bf0a1fd0a88e6a980d435e6e01bde088efdd3fafadf8946597556124",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.53,
+        "confidence": 0.48,
         "probabilities": {
-          "supports": 0.65,
-          "contradicts": 0.33,
+          "supports": 0.61,
+          "contradicts": 0.37,
           "unrelated": 0,
           "insufficient_context": 0.02
         }
@@ -100,10 +100,10 @@
       "contextHash": "9ce60b04ee368915f33ee76f075dd73416bebe1510052270dde75e449e5abf73",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.95,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.96,
+          "contradicts": 0.04,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -134,10 +134,10 @@
       "contextHash": "0501a820a69b7f5f459ee537fa7f1b1158edeb3ee83976ff21511ce63362ab77",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.98,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -168,10 +168,10 @@
       "contextHash": "19bb1c66fd61a7eef09e036523713a59956ac926a4420de77b9858b4b4796a62",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.83,
+        "confidence": 0.8,
         "probabilities": {
-          "supports": 0.87,
-          "contradicts": 0.12,
+          "supports": 0.85,
+          "contradicts": 0.14,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -202,10 +202,10 @@
       "contextHash": "b6113d4c04eae46a306c4459b916d5ec09d89b3b6c8df5436eca4f6629de1525",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.69,
+        "confidence": 0.72,
         "probabilities": {
-          "supports": 0.77,
-          "contradicts": 0.22,
+          "supports": 0.79,
+          "contradicts": 0.2,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -236,12 +236,12 @@
       "contextHash": "944fad0ae761ad59604c0c9a77c9ce6f6343d34bcb4bbb1e991e1579b523b29e",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.95,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.96,
+          "contradicts": 0.02,
           "unrelated": 0,
-          "insufficient_context": 0
+          "insufficient_context": 0.02
         }
       }
     },
@@ -270,10 +270,10 @@
       "contextHash": "b7e5d2e6c011686b8788851d499dd8f5ec328fcf58c5e828b1e4a4addd5e6744",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -304,10 +304,10 @@
       "contextHash": "9b064c58ae9c255ec3d82da5e38fdb35e582523eb3177a506389ee269a737d1c",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.73,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.8,
-          "contradicts": 0.19,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -338,10 +338,10 @@
       "contextHash": "dab8fac3f325064ed0c004ba4deb09cc44a1122f3fcf6393b6fd929008e96e2a",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.81,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.86,
-          "contradicts": 0.13,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -372,12 +372,12 @@
       "contextHash": "3e41357edf900b8121e9593115b44043e8ce99220a0da7b447fb6442a5e619d1",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.85,
+        "confidence": 0.92,
         "probabilities": {
-          "supports": 0.89,
-          "contradicts": 0.1,
+          "supports": 0.94,
+          "contradicts": 0.06,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -406,12 +406,12 @@
       "contextHash": "01de7408893be79dee3d5075e1546cf6676bb74d814b694f803d3ccb62374996",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.89,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.92,
-          "contradicts": 0.06,
+          "supports": 0.93,
+          "contradicts": 0.04,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.03
         }
       }
     },
@@ -440,10 +440,10 @@
       "contextHash": "07495441926fa597e342fd615b9889328aeb9dd93abac75f85ac2db76d2eba83",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.96,
+        "confidence": 0.95,
         "probabilities": {
-          "supports": 0.97,
-          "contradicts": 0.03,
+          "supports": 0.96,
+          "contradicts": 0.04,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -474,10 +474,10 @@
       "contextHash": "3cad91cb720b9c9de6928d42af3f434477aea58378967cbc0484f5c147395a2c",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.96,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.97,
+          "contradicts": 0.03,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -508,12 +508,12 @@
       "contextHash": "acb0f4b2c5e83eba862a08ebcd873812a4e709d158acf8210f02ee9bd2b68656",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.88,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.1,
+          "supports": 0.91,
+          "contradicts": 0.08,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -678,12 +678,12 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.91,
+        "confidence": 0.93,
         "probabilities": {
-          "supports": 0.93,
-          "contradicts": 0.04,
+          "supports": 0.95,
+          "contradicts": 0.03,
           "unrelated": 0.01,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -715,9 +715,9 @@
         "confidence": 0.91,
         "probabilities": {
           "supports": 0.93,
-          "contradicts": 0.06,
+          "contradicts": 0.05,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -814,12 +814,12 @@
       "contextHash": "45bf78a4a381d3300f945212600737f169ce1dab6fc4a8342ab8c9d4a2769f2d",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.93,
+        "confidence": 0.95,
         "probabilities": {
-          "supports": 0.95,
+          "supports": 0.96,
           "contradicts": 0.04,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -848,10 +848,10 @@
       "contextHash": "df6f5c3bc024f553d1c2e2838f60e67b6b462fa19ed6d5d0f4f1a4d459724422",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.83,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.87,
-          "contradicts": 0.12,
+          "supports": 0.93,
+          "contradicts": 0.06,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -882,10 +882,10 @@
       "contextHash": "38c0e94fa369c5e957dc741b3766bef64a2de778ec94a57df7473f2c4770edea",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.99,
+        "confidence": 0.97,
         "probabilities": {
-          "supports": 0.99,
-          "contradicts": 0.01,
+          "supports": 0.98,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -916,12 +916,12 @@
       "contextHash": "a099ee62e4b16b6b032e4ddbd95289e5c1ca882252151d04a591bea5e96541a1",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.88,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.91,
-          "contradicts": 0.08,
+          "supports": 0.93,
+          "contradicts": 0.07,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -993,10 +993,10 @@
       "contextHash": "604fcb8a9c1e317a8a6d49fc2439cd2b3f5c68d1e8a8bf26c48cb3203d30fff9",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.51,
+        "confidence": 0.52,
         "probabilities": {
-          "supports": 0.63,
-          "contradicts": 0.36,
+          "supports": 0.64,
+          "contradicts": 0.35,
           "unrelated": 0,
           "insufficient_context": 0.01
         }

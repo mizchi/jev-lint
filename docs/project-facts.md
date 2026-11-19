@@ -4,7 +4,7 @@
 
 ## Package identity
 
-The package is `jev-lint` at version `0.9.0`.
+The package is `jev-lint` at version `0.9.1`.
 
 ## Rule catalog
 
