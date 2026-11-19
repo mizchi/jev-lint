@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/1-ledger.ts.apisurface",
+      "kind": "false-negative-risk",
+      "reason": "Internal cursor controls coexist with the ordinary ledger API."
+    },
+    {
+      "file": "fixtures/2-units.ts.apisurface",
+      "kind": "false-positive-risk",
+      "reason": "Each conversion has a distinct dimension, direction or unit."
+    },
+    {
+      "file": "fixtures/3-read.ts.apisurface",
+      "kind": "false-positive-risk",
+      "reason": "Streaming has different memory and backpressure guarantees."
+    },
+    {
+      "file": "fixtures/4-codec.apisurface",
+      "kind": "false-positive-risk",
+      "reason": "Encoding directions and wire formats are distinct caller tasks."
+    },
+    {
+      "file": "fixtures/5-queue.apisurface",
+      "kind": "false-negative-risk",
+      "reason": "Queue aliases and the test reset expand the same ordinary operation."
+    },
+    {
+      "file": "fixtures/6-catalog.ts.apisurface",
+      "kind": "false-negative-risk",
+      "reason": "A two-binding catalog exposes its live backing map."
+    },
+    {
+      "file": "fixtures/7-read.ts.apisurface",
+      "kind": "unrelated",
+      "reason": "A private buffer helper leaves both public reading contracts intact."
+    },
+    {
+      "file": "fixtures/8-loader.ts.apisurface",
+      "kind": "false-positive-risk",
+      "reason": "The default and named loader refer to the same declaration."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/3-read.ts.apisurface",
+      "variant": "fixtures/7-read.ts.apisurface"
+    }
+  ]
+}

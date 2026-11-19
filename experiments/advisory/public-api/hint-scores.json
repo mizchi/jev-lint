@@ -1,0 +1,127 @@
+{
+  "schema": "jev-lint-run-1",
+  "policy": null,
+  "recorded": "2026-11-19T04:57:12.803Z",
+  "model": "jev-1.14.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 24,
+    "inputTokens": 29946,
+    "outputTokens": 576,
+    "ms": 5997,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.0012577320000000001,
+    "wallMs": 285
+  },
+  "rules": [
+    {
+      "id": "next-check-actionable",
+      "kind": "noul",
+      "ask": "Does the proposed next check give a reviewer a specific investigation relevant to this evidence and an observable distinction that could confirm or dismiss the reported concern?",
+      "note": null,
+      "levels": null,
+      "draft": "b082aaf13b52",
+      "at": 0.7,
+      "state": "bare",
+      "subject": "block",
+      "severity": "info",
+      "language": "Text",
+      "languageDir": null
+    }
+  ],
+  "answers": [
+    {
+      "rule": "next-check-actionable",
+      "ruleKey": "next-check-actionable",
+      "file": "ledger-generic.hintreview",
+      "line": 1,
+      "endLine": 11,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "next-check-actionable",
+      "ruleKey": "next-check-actionable",
+      "file": "ledger-specific.hintreview",
+      "line": 1,
+      "endLine": 11,
+      "kind": "noul",
+      "value": 0.9133333333333334,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "next-check-actionable",
+      "ruleKey": "next-check-actionable",
+      "file": "crater-1-index.d.ts.apisurface-generic.hintreview",
+      "line": 1,
+      "endLine": 71,
+      "kind": "noul",
+      "value": 0.02666666666666667,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "next-check-actionable",
+      "ruleKey": "next-check-actionable",
+      "file": "crater-2-wasm.d.ts.apisurface-generic.hintreview",
+      "line": 1,
+      "endLine": 10,
+      "kind": "noul",
+      "value": 0.03,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "next-check-actionable",
+      "ruleKey": "next-check-actionable",
+      "file": "crater-2-wasm.d.ts.apisurface-specific.hintreview",
+      "line": 1,
+      "endLine": 10,
+      "kind": "noul",
+      "value": 0.9333333333333332,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "next-check-actionable",
+      "ruleKey": "next-check-actionable",
+      "file": "queue-specific.hintreview",
+      "line": 1,
+      "endLine": 12,
+      "kind": "noul",
+      "value": 0.9466666666666667,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "next-check-actionable",
+      "ruleKey": "next-check-actionable",
+      "file": "crater-1-index.d.ts.apisurface-specific.hintreview",
+      "line": 1,
+      "endLine": 71,
+      "kind": "noul",
+      "value": 0.9133333333333334,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "next-check-actionable",
+      "ruleKey": "next-check-actionable",
+      "file": "queue-generic.hintreview",
+      "line": 1,
+      "endLine": 12,
+      "kind": "noul",
+      "value": 0.03666666666666667,
+      "confidence": null,
+      "arm": "bare"
+    }
+  ]
+}

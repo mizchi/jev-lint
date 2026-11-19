@@ -101,6 +101,8 @@ export interface Deps {
 export const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
+  jev-lint public-api-inputs <new-directory> <entry.ts|go-package>...
+                                  extract public names and signatures for the surface score
   jev-lint advisory-inputs <repository> <manifest.json> <new-directory>
                                   collect versioned evidence for architecture advisories
   jev-lint introspect [directory] [--write] [--record <path>]

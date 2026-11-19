@@ -27,6 +27,7 @@ const files = [
   "report",
   "audit",
   "scan-contract",
+  "public-api",
   "review-artifact",
   "acceptance",
   "sarif",

@@ -1,0 +1,4 @@
+Surface: TypeScript entry read.ts
+Public names: 2
+readBytes — (path: string) => Promise<Uint8Array> — Reads a detached copy of the bytes.
+streamBytes — (path: string) => AsyncIterable<Uint8Array> — Streams chunks under caller-controlled backpressure.

@@ -81,3 +81,6 @@ advisory-replay:
 
 advisory-teacher output:
     node experiments/advisory/teacher.mjs {{quote(output)}}
+
+public-api-corpus repositories output:
+    bash experiments/advisory/public-api/collect.sh {{quote(repositories)}} {{quote(output)}}

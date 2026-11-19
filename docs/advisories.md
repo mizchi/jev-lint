@@ -14,7 +14,7 @@ Any rule can supply `nextCheck`, a nonempty instruction for the reviewer. Report
 | `common-closure` | Patches on both sides of a package boundary from different commits | Check which behavior would diverge if one side were reverted in each commit. |
 | `acyclic-dependencies` | Directed package cycle, import kinds, definitions and uses | Trace the return edge and whether a responsibility move actually removes the dependency. |
 
-The other eight advisories use module evidence or a Git range. Their shipped configurations are `advisory/modules.yml` and `advisory/history.yml`.
+Eight advisories use module evidence or a Git range. Their shipped configurations are `advisory/modules.yml` and `advisory/history.yml`.
 
 | Rule | Next investigation |
 | --- | --- |
@@ -28,6 +28,21 @@ The other eight advisories use module evidence or a Git range. Their shipped con
 | `git/campbell` | Apply both denominators to the same raw events and inspect the omitted cases. |
 
 Run the module configuration on `.surface` files containing the module's public bindings and source, and `.impl` files for internal modules. The evidence format used in the experiment is shown in the shipped Text fixtures. Run the Git configuration directly in a checkout, for example `jev-lint commits HEAD~20..HEAD --config "$tool/advisory/history.yml"`.
+
+## Public API surface score
+
+Use one public TypeScript entry point or one Go package as the unit of comparison. Select entry points from the library's published exports, including public subpaths you want to assess. The collector accepts source TypeScript, TSX and declaration files. For Go, supply the importable package directory.
+
+```sh
+jev-lint public-api-inputs api-review src/index.ts src/codec.ts adapters/go
+jev-lint run text/public-api-surface api-review --no-config --record api-scores.json
+```
+
+The first command writes to a new directory, reports the input path for every inventory and needs no API key. The second scores each inventory on a 0–4 scale. High scores indicate overlapping caller choices or exposed implementation details. The inventories contain counts and signatures. The run record includes scores below the advisory cutoff. Compare two candidate names at a consumer call site before changing either one.
+
+The TypeScript extractor uses ast-grep export statements and the classic TypeScript checker from the tooling installation to resolve the selected entry's exports, including star re-exports and aliases. Install the dependencies needed to resolve that entry. The count includes types and values, counts an overloaded name once and identifies aliases. For Go, the Go toolchain selects files for the active build environment and ast-grep extracts package-level declarations and exported methods on exported receivers. Struct fields and interface methods provide context within their type. Promoted methods, methods on private result types and the full transitive API of returned objects are outside this inventory. The counts use each language's visibility conventions.
+
+Long signatures are abbreviated. TypeScript class and interface member names are retained when their signatures are abbreviated. The text runner marks inputs exceeding its 48,000-character limit as truncated. Review the full inventory alongside a score from a truncated input. Fixture calibration and the checks on crater, vlmkit and idealis are recorded in [the public API evaluation](../experiments/advisory/public-api/README.md).
 
 ## Visited state keys
 

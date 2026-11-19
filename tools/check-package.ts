@@ -38,7 +38,7 @@ try {
   writeFileSync(join(consumer, "smoke.mjs"), `
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { readFileSync, existsSync, writeFileSync } from 'node:fs';
+import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 for (const name of ${JSON.stringify(modules)}) await import(name);
 const cli = (args, status = 0) => {
   const result = spawnSync(process.execPath, ['node_modules/jev-lint/dist/cli.js', ...args], { encoding: 'utf8' });
@@ -48,8 +48,14 @@ const cli = (args, status = 0) => {
 const rules = cli(['rules', '--no-config', '--json']);
 assert.deepEqual(rules.errors, []); assert.equal(rules.rules.length, ${ruleCount});
 const advisories = rules.rules.filter(r => r.category === 'advisory');
-assert.equal(advisories.length, 14); assert.ok(advisories.every(r => r.nextCheck?.trim()));
+assert.equal(advisories.length, 15); assert.ok(advisories.every(r => r.nextCheck?.trim()));
 assert.ok(existsSync('node_modules/jev-lint/advisory/idealis.json'));
+mkdirSync('codec');
+writeFileSync('codec/api.go', 'package codec\\nfunc Encode() {}');
+const [surface] = cli(['public-api-inputs', 'api-review', 'codec']);
+assert.equal(surface.count, 1);
+assert.match(readFileSync('api-review/' + surface.file, 'utf8'), /func Encode/);
+assert.equal(cli(['run', 'text/public-api-surface', 'api-review', '--no-config', '--dry-run', '--json']).subjects, 1);
 const plan = cli(['check', 'src', '--no-config', '--cache', 'none', '-R', 'node_modules/jev-lint/rules/typescript/fn-name-promises', '--dry-run', '--json']);
 assert.ok(plan.subjects > 0); assert.equal(plan.dryRun, true);
 const startup = cli(['init', '--introspect', '--dry-run', '--json']);

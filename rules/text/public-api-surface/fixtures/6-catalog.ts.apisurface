@@ -1,0 +1,4 @@
+Surface: TypeScript entry catalog.ts
+Public names: 2
+titleTable — () => Map<string, string> — Live table behind titles(); callers mutate it directly to change the catalog.
+titles — () => readonly string[] — Returns a snapshot of available titles.

@@ -1,0 +1,17 @@
+Surface: TypeScript entry units.ts
+Public names: 15
+Duration — Duration { readonly seconds: number }
+Length — Length { readonly meters: number }
+Mass — Mass { readonly kilograms: number }
+fromFeet — (feet: number) => Length
+fromKilograms — (kilograms: number) => Mass
+fromMeters — (meters: number) => Length
+fromMinutes — (minutes: number) => Duration
+fromPounds — (pounds: number) => Mass
+fromSeconds — (seconds: number) => Duration
+toFeet — (length: Length) => number
+toKilograms — (mass: Mass) => number
+toMeters — (length: Length) => number
+toMinutes — (duration: Duration) => number
+toPounds — (mass: Mass) => number
+toSeconds — (duration: Duration) => number

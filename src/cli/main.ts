@@ -61,6 +61,18 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
     if (target && opts.output) { log("choose --config or --output for the new configuration path"); return 2; }
     return cmdIntrospect({ ...opts, config: null, output: opts.output ?? target, introspectWrite: opts.introspectWrite || !opts.dryRun }, out, log, client);
   }
+  if (command === "public-api-inputs") {
+    if (opts.paths.length < 2) { log("usage: jev-lint public-api-inputs <new-directory> <entry.ts|go-package>..."); return 2; }
+    try {
+      const { publicApiInputs } = await import("../../advisory/public-api.mjs");
+      const { astGrepBin } = await import("../scan.ts");
+      out(JSON.stringify(await publicApiInputs(opts.paths[0], opts.paths.slice(1), astGrepBin())));
+      return 0;
+    } catch (err) {
+      log(`public-api-inputs: ${err instanceof Error ? err.message : String(err)}`);
+      return 2;
+    }
+  }
   if (command === "advisory-inputs") {
     if (opts.paths.length !== 3) { log("usage: jev-lint advisory-inputs <repository> <manifest.json> <new-directory>"); return 2; }
     try {

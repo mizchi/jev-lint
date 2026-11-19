@@ -74,10 +74,10 @@
             "key": "typescript/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.96,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.97,
-                "defer": 0.03,
+                "enable": 0.98,
+                "defer": 0.02,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -163,10 +163,10 @@
             "key": "typescript/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.89,
+              "confidence": 0.88,
               "probabilities": {
-                "enable": 0.92,
-                "defer": 0.08,
+                "enable": 0.91,
+                "defer": 0.09,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -252,10 +252,10 @@
             "key": "rust/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.87,
+              "confidence": 0.91,
               "probabilities": {
-                "enable": 0.9,
-                "defer": 0.1,
+                "enable": 0.93,
+                "defer": 0.07,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -341,10 +341,10 @@
             "key": "python/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.87,
+              "confidence": 0.85,
               "probabilities": {
-                "enable": 0.9,
-                "defer": 0.1,
+                "enable": 0.89,
+                "defer": 0.11,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -791,10 +791,10 @@
             "key": "typescript/safe-name-is-safe",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.91,
+              "confidence": 0.93,
               "probabilities": {
-                "enable": 0.07,
-                "defer": 0.93,
+                "enable": 0.05,
+                "defer": 0.95,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -974,10 +974,10 @@
             "key": "typescript/tests-cover-failure-paths",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.99,
+              "confidence": 1,
               "probabilities": {
-                "enable": 0.01,
-                "defer": 0.99,
+                "enable": 0,
+                "defer": 1,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -1419,12 +1419,12 @@
             "key": "markdown/agent-instructions-conflict",
             "judgment": {
               "choice": "enable",
-              "confidence": 1,
+              "confidence": 0.99,
               "probabilities": {
-                "enable": 1,
+                "enable": 0.99,
                 "defer": 0,
                 "skip": 0,
-                "insufficient_context": 0
+                "insufficient_context": 0.01
               }
             }
           }
@@ -1508,12 +1508,12 @@
             "key": "markdown/agent-instruction-is-unclear",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.93,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.95,
+                "enable": 0.97,
                 "defer": 0.01,
-                "skip": 0.03,
-                "insufficient_context": 0.01
+                "skip": 0.02,
+                "insufficient_context": 0
               }
             }
           }
@@ -1781,10 +1781,10 @@
             "key": "git/commit-message-describes-diff",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.93,
+              "confidence": 0.89,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.95,
+                "enable": 0.06,
+                "defer": 0.92,
                 "skip": 0,
                 "insufficient_context": 0.02
               }
@@ -1874,9 +1874,9 @@
               "choice": "defer",
               "confidence": 0.88,
               "probabilities": {
-                "enable": 0.08,
+                "enable": 0.09,
                 "defer": 0.91,
-                "skip": 0.01,
+                "skip": 0,
                 "insufficient_context": 0
               }
             }
@@ -1966,10 +1966,10 @@
             "key": "typescript/test-name-describes-code",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.65,
+              "confidence": 0.75,
               "probabilities": {
-                "enable": 0.26,
-                "defer": 0.74,
+                "enable": 0.19,
+                "defer": 0.81,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -2072,10 +2072,10 @@
             "key": "typescript/test-mocks-subject",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.97,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.98,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -2170,10 +2170,10 @@
             "key": "typescript/snapshot-only-behaviour-claim",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -2259,10 +2259,10 @@
             "key": "typescript/method-name-promises",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.91,
+              "confidence": 0.92,
               "probabilities": {
-                "enable": 0.07,
-                "defer": 0.93,
+                "enable": 0.06,
+                "defer": 0.94,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -2442,10 +2442,10 @@
             "key": "typescript/describe-names-subject",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.99,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.01,
-                "defer": 0.99,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -2531,10 +2531,10 @@
             "key": "typescript/module-name-describes-contents",
             "judgment": {
               "choice": "defer",
-              "confidence": 1,
+              "confidence": 0.99,
               "probabilities": {
-                "enable": 0,
-                "defer": 1,
+                "enable": 0.01,
+                "defer": 0.99,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -2887,11 +2887,11 @@
             "key": "shell/runs-downloaded-code",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.97,
+              "confidence": 0.93,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.98,
-                "skip": 0,
+                "enable": 0.04,
+                "defer": 0.95,
+                "skip": 0.01,
                 "insufficient_context": 0
               }
             }
@@ -2976,12 +2976,12 @@
             "key": "text/query-name-describes-sql",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.89,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.07,
+                "defer": 0.92,
                 "skip": 0,
-                "insufficient_context": 0
+                "insufficient_context": 0.01
               }
             }
           }
@@ -3162,12 +3162,12 @@
             "key": "json/script-name-does",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.96,
+              "confidence": 0.95,
               "probabilities": {
                 "enable": 0.01,
-                "defer": 0.97,
+                "defer": 0.96,
                 "skip": 0,
-                "insufficient_context": 0.02
+                "insufficient_context": 0.03
               }
             }
           }
@@ -3202,7 +3202,7 @@
         "schema": "jev-lint-introspection-1",
         "input": {
           "schema": "jev-lint-introspection-input-1",
-          "catalogDigest": "5087bed04d1a950cd7ee8c439102e0a2c278a30a92650c09f81cc69699ea377d",
+          "catalogDigest": "7b57e674a36a5b20c2190a42eb836256057d2b30ee9a958a21262909484766fd",
           "files": [
             {
               "path": "AGENTS.md",
@@ -3766,9 +3766,9 @@
             }
           ],
           "issues": [],
-          "snapshotDigest": "743d067a1426e176736e6db695a584bd0ae42b98eb7820912ecf98562cd71bb8"
+          "snapshotDigest": "e5ab64437c582d6f1e057f7073f6db4a0a9f39fa5d24664b77b1b246fed44de1"
         },
-        "snapshotDigest": "743d067a1426e176736e6db695a584bd0ae42b98eb7820912ecf98562cd71bb8",
+        "snapshotDigest": "e5ab64437c582d6f1e057f7073f6db4a0a9f39fa5d24664b77b1b246fed44de1",
         "questionDigest": "9127576bd99b2d5fd0c240f9b36b97a419d044a2c795775be6d050bf02a50e40",
         "model": "jev-1.14.0",
         "snapshotChanged": false,
@@ -3779,12 +3779,12 @@
             "key": "json/script-name-does",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.92,
+              "confidence": 0.91,
               "probabilities": {
                 "enable": 0.03,
-                "defer": 0.94,
+                "defer": 0.93,
                 "skip": 0,
-                "insufficient_context": 0.03
+                "insufficient_context": 0.04
               }
             }
           },
@@ -3818,12 +3818,12 @@
             "key": "markdown/document-abandons-a-question",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.41,
+              "confidence": 0.61,
               "probabilities": {
-                "enable": 0.07,
-                "defer": 0.36,
-                "skip": 0.56,
-                "insufficient_context": 0.01
+                "enable": 0.05,
+                "defer": 0.24,
+                "skip": 0.71,
+                "insufficient_context": 0
               }
             }
           },
@@ -3831,11 +3831,11 @@
             "key": "markdown/document-is-filler",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.53,
+              "confidence": 0.73,
               "probabilities": {
-                "enable": 0.05,
-                "defer": 0.3,
-                "skip": 0.65,
+                "enable": 0.04,
+                "defer": 0.16,
+                "skip": 0.8,
                 "insufficient_context": 0
               }
             }
@@ -3844,11 +3844,11 @@
             "key": "markdown/document-is-formulaic",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.83,
+              "confidence": 0.73,
               "probabilities": {
                 "enable": 0.01,
-                "defer": 0.12,
-                "skip": 0.87,
+                "defer": 0.19,
+                "skip": 0.8,
                 "insufficient_context": 0
               }
             }
@@ -3870,11 +3870,11 @@
             "key": "markdown/document-is-incoherent",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.84,
+              "confidence": 0.87,
               "probabilities": {
                 "enable": 0.02,
-                "defer": 0.1,
-                "skip": 0.88,
+                "defer": 0.08,
+                "skip": 0.9,
                 "insufficient_context": 0
               }
             }
@@ -3883,11 +3883,11 @@
             "key": "markdown/document-is-padded",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.67,
+              "confidence": 0.53,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.21,
-                "skip": 0.75,
+                "enable": 0.05,
+                "defer": 0.3,
+                "skip": 0.65,
                 "insufficient_context": 0
               }
             }
@@ -3896,11 +3896,11 @@
             "key": "markdown/document-is-slop",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.83,
+              "confidence": 0.79,
               "probabilities": {
                 "enable": 0.03,
-                "defer": 0.1,
-                "skip": 0.87,
+                "defer": 0.13,
+                "skip": 0.84,
                 "insufficient_context": 0
               }
             }
@@ -3909,11 +3909,11 @@
             "key": "markdown/document-is-vague",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.72,
+              "confidence": 0.67,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.19,
-                "skip": 0.79,
+                "enable": 0.03,
+                "defer": 0.22,
+                "skip": 0.75,
                 "insufficient_context": 0
               }
             }
@@ -3935,11 +3935,11 @@
             "key": "markdown/section-ends-with-a-preview",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.61,
+              "confidence": 0.57,
               "probabilities": {
-                "enable": 0.06,
-                "defer": 0.23,
-                "skip": 0.71,
+                "enable": 0.05,
+                "defer": 0.27,
+                "skip": 0.68,
                 "insufficient_context": 0
               }
             }
@@ -3948,11 +3948,11 @@
             "key": "markdown/section-opens-with-an-agenda",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.84,
+              "confidence": 0.85,
               "probabilities": {
                 "enable": 0.02,
-                "defer": 0.1,
-                "skip": 0.88,
+                "defer": 0.09,
+                "skip": 0.89,
                 "insufficient_context": 0
               }
             }
@@ -3961,10 +3961,10 @@
             "key": "typescript/catch-hides-failure",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -3974,12 +3974,12 @@
             "key": "typescript/class-shape-shows-its-role",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.88,
+              "confidence": 0.81,
               "probabilities": {
-                "enable": 0.09,
-                "defer": 0.91,
-                "skip": 0,
-                "insufficient_context": 0
+                "enable": 0.12,
+                "defer": 0.86,
+                "skip": 0.01,
+                "insufficient_context": 0.01
               }
             }
           },
@@ -3987,10 +3987,10 @@
             "key": "typescript/comment-describes-block",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4000,10 +4000,10 @@
             "key": "typescript/comment-describes-declaration",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.96,
+              "confidence": 0.95,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.97,
+                "enable": 0.04,
+                "defer": 0.96,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4026,10 +4026,10 @@
             "key": "typescript/doc-errors-match-body",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.87,
+              "confidence": 0.85,
               "probabilities": {
-                "enable": 0.1,
-                "defer": 0.9,
+                "enable": 0.11,
+                "defer": 0.89,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4052,10 +4052,10 @@
             "key": "typescript/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.96,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.97,
-                "defer": 0.03,
+                "enable": 0.98,
+                "defer": 0.02,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4104,10 +4104,10 @@
             "key": "typescript/method-name-promises",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.89,
+              "confidence": 0.79,
               "probabilities": {
-                "enable": 0.08,
-                "defer": 0.92,
+                "enable": 0.16,
+                "defer": 0.84,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4143,10 +4143,10 @@
             "key": "typescript/pure-name-is-pure",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.93,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.05,
+                "defer": 0.95,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4156,10 +4156,10 @@
             "key": "typescript/safe-name-is-safe",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.81,
+              "confidence": 0.77,
               "probabilities": {
-                "enable": 0.14,
-                "defer": 0.86,
+                "enable": 0.17,
+                "defer": 0.83,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4182,10 +4182,10 @@
             "key": "typescript/test-mocks-subject",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.96,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.97,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4195,10 +4195,10 @@
             "key": "typescript/test-name-describes-code",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.85,
+              "confidence": 0.76,
               "probabilities": {
-                "enable": 0.11,
-                "defer": 0.89,
+                "enable": 0.18,
+                "defer": 0.82,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4247,10 +4247,10 @@
             "key": "typescript/var-name-describes-value",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.85,
+              "confidence": 0.83,
               "probabilities": {
-                "enable": 0.11,
-                "defer": 0.89,
+                "enable": 0.13,
+                "defer": 0.87,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4425,10 +4425,10 @@
             "key": "typescript/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.89,
+              "confidence": 0.8,
               "probabilities": {
-                "enable": 0.92,
-                "defer": 0.08,
+                "enable": 0.85,
+                "defer": 0.15,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4514,10 +4514,10 @@
             "key": "rust/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.93,
+              "confidence": 0.91,
               "probabilities": {
-                "enable": 0.95,
-                "defer": 0.05,
+                "enable": 0.93,
+                "defer": 0.07,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -4697,10 +4697,10 @@
             "key": "typescript/test-name-verifies-claim",
             "judgment": {
               "choice": "enable",
-              "confidence": 1,
+              "confidence": 0.99,
               "probabilities": {
-                "enable": 1,
-                "defer": 0,
+                "enable": 0.99,
+                "defer": 0.01,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -5053,10 +5053,10 @@
             "key": "typescript/safe-name-is-safe",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.93,
+              "confidence": 0.91,
               "probabilities": {
-                "enable": 0.05,
-                "defer": 0.95,
+                "enable": 0.07,
+                "defer": 0.93,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -5142,10 +5142,10 @@
             "key": "typescript/pure-name-is-pure",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.99,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.01,
-                "defer": 0.99,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -5236,10 +5236,10 @@
             "key": "typescript/tests-cover-failure-paths",
             "judgment": {
               "choice": "defer",
-              "confidence": 1,
+              "confidence": 0.99,
               "probabilities": {
-                "enable": 0,
-                "defer": 1,
+                "enable": 0.01,
+                "defer": 0.99,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -5325,10 +5325,10 @@
             "key": "typescript/var-name-describes-value",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.97,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.98,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -5592,11 +5592,11 @@
             "key": "markdown/document-lacks-firsthand-evidence",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.92,
+              "confidence": 0.93,
               "probabilities": {
                 "enable": 0.01,
-                "defer": 0.05,
-                "skip": 0.94,
+                "defer": 0.04,
+                "skip": 0.95,
                 "insufficient_context": 0
               }
             }
@@ -5681,12 +5681,12 @@
             "key": "markdown/agent-instructions-conflict",
             "judgment": {
               "choice": "enable",
-              "confidence": 1,
+              "confidence": 0.99,
               "probabilities": {
-                "enable": 1,
+                "enable": 0.99,
                 "defer": 0,
                 "skip": 0,
-                "insufficient_context": 0
+                "insufficient_context": 0.01
               }
             }
           }
@@ -6043,12 +6043,12 @@
             "key": "git/commit-message-describes-diff",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.88,
+              "confidence": 0.92,
               "probabilities": {
-                "enable": 0.07,
-                "defer": 0.91,
+                "enable": 0.05,
+                "defer": 0.94,
                 "skip": 0,
-                "insufficient_context": 0.02
+                "insufficient_context": 0.01
               }
             }
           }
@@ -6134,10 +6134,10 @@
             "key": "git/diff-follows-instructions",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.89,
+              "confidence": 0.91,
               "probabilities": {
-                "enable": 0.07,
-                "defer": 0.92,
+                "enable": 0.06,
+                "defer": 0.93,
                 "skip": 0.01,
                 "insufficient_context": 0
               }
@@ -6228,10 +6228,10 @@
             "key": "typescript/test-name-describes-code",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.67,
+              "confidence": 0.83,
               "probabilities": {
-                "enable": 0.25,
-                "defer": 0.75,
+                "enable": 0.13,
+                "defer": 0.87,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -6334,10 +6334,10 @@
             "key": "typescript/test-mocks-subject",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -6521,10 +6521,10 @@
             "key": "typescript/method-name-promises",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.93,
+              "confidence": 0.91,
               "probabilities": {
-                "enable": 0.05,
-                "defer": 0.95,
+                "enable": 0.07,
+                "defer": 0.93,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -6610,10 +6610,10 @@
             "key": "typescript/type-name-describes-shape",
             "judgment": {
               "choice": "defer",
-              "confidence": 1,
+              "confidence": 0.99,
               "probabilities": {
-                "enable": 0,
-                "defer": 1,
+                "enable": 0.01,
+                "defer": 0.99,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -7149,12 +7149,12 @@
             "key": "shell/runs-downloaded-code",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.97,
+              "confidence": 0.95,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.98,
+                "enable": 0.03,
+                "defer": 0.96,
                 "skip": 0,
-                "insufficient_context": 0
+                "insufficient_context": 0.01
               }
             }
           }
@@ -7238,10 +7238,10 @@
             "key": "text/query-name-describes-sql",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.92,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.06,
+                "defer": 0.94,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -7424,12 +7424,12 @@
             "key": "json/script-name-does",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.96,
+              "confidence": 0.95,
               "probabilities": {
                 "enable": 0.01,
-                "defer": 0.97,
+                "defer": 0.96,
                 "skip": 0,
-                "insufficient_context": 0.02
+                "insufficient_context": 0.03
               }
             }
           }
@@ -7464,7 +7464,7 @@
         "schema": "jev-lint-introspection-1",
         "input": {
           "schema": "jev-lint-introspection-input-1",
-          "catalogDigest": "5087bed04d1a950cd7ee8c439102e0a2c278a30a92650c09f81cc69699ea377d",
+          "catalogDigest": "7b57e674a36a5b20c2190a42eb836256057d2b30ee9a958a21262909484766fd",
           "files": [
             {
               "path": "AGENTS.md",
@@ -8028,9 +8028,9 @@
             }
           ],
           "issues": [],
-          "snapshotDigest": "743d067a1426e176736e6db695a584bd0ae42b98eb7820912ecf98562cd71bb8"
+          "snapshotDigest": "e5ab64437c582d6f1e057f7073f6db4a0a9f39fa5d24664b77b1b246fed44de1"
         },
-        "snapshotDigest": "743d067a1426e176736e6db695a584bd0ae42b98eb7820912ecf98562cd71bb8",
+        "snapshotDigest": "e5ab64437c582d6f1e057f7073f6db4a0a9f39fa5d24664b77b1b246fed44de1",
         "questionDigest": "9127576bd99b2d5fd0c240f9b36b97a419d044a2c795775be6d050bf02a50e40",
         "model": "jev-1.14.0",
         "snapshotChanged": false,
@@ -8041,10 +8041,10 @@
             "key": "json/script-name-does",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.93,
+              "confidence": 0.91,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.95,
+                "enable": 0.04,
+                "defer": 0.93,
                 "skip": 0,
                 "insufficient_context": 0.03
               }
@@ -8054,11 +8054,11 @@
             "key": "markdown/agent-instruction-is-unclear",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.95,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.96,
+                "enable": 0.97,
                 "defer": 0.01,
-                "skip": 0.03,
+                "skip": 0.02,
                 "insufficient_context": 0
               }
             }
@@ -8080,11 +8080,11 @@
             "key": "markdown/document-abandons-a-question",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.51,
+              "confidence": 0.55,
               "probabilities": {
-                "enable": 0.07,
-                "defer": 0.29,
-                "skip": 0.63,
+                "enable": 0.06,
+                "defer": 0.27,
+                "skip": 0.66,
                 "insufficient_context": 0.01
               }
             }
@@ -8093,11 +8093,11 @@
             "key": "markdown/document-is-filler",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.77,
+              "confidence": 0.63,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.15,
-                "skip": 0.83,
+                "enable": 0.05,
+                "defer": 0.23,
+                "skip": 0.72,
                 "insufficient_context": 0
               }
             }
@@ -8106,11 +8106,11 @@
             "key": "markdown/document-is-formulaic",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.79,
+              "confidence": 0.8,
               "probabilities": {
                 "enable": 0.02,
-                "defer": 0.14,
-                "skip": 0.84,
+                "defer": 0.13,
+                "skip": 0.85,
                 "insufficient_context": 0
               }
             }
@@ -8119,11 +8119,11 @@
             "key": "markdown/document-is-generic",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.77,
+              "confidence": 0.8,
               "probabilities": {
                 "enable": 0.02,
-                "defer": 0.15,
-                "skip": 0.83,
+                "defer": 0.13,
+                "skip": 0.85,
                 "insufficient_context": 0
               }
             }
@@ -8132,11 +8132,11 @@
             "key": "markdown/document-is-incoherent",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.85,
+              "confidence": 0.84,
               "probabilities": {
-                "enable": 0.01,
+                "enable": 0.02,
                 "defer": 0.1,
-                "skip": 0.89,
+                "skip": 0.88,
                 "insufficient_context": 0
               }
             }
@@ -8145,11 +8145,11 @@
             "key": "markdown/document-is-padded",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.6,
+              "confidence": 0.61,
               "probabilities": {
-                "enable": 0.06,
-                "defer": 0.24,
-                "skip": 0.7,
+                "enable": 0.04,
+                "defer": 0.25,
+                "skip": 0.71,
                 "insufficient_context": 0
               }
             }
@@ -8158,11 +8158,11 @@
             "key": "markdown/document-is-slop",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.87,
+              "confidence": 0.81,
               "probabilities": {
                 "enable": 0.02,
-                "defer": 0.08,
-                "skip": 0.9,
+                "defer": 0.12,
+                "skip": 0.86,
                 "insufficient_context": 0
               }
             }
@@ -8171,11 +8171,11 @@
             "key": "markdown/document-is-vague",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.57,
+              "confidence": 0.69,
               "probabilities": {
-                "enable": 0.06,
-                "defer": 0.26,
-                "skip": 0.68,
+                "enable": 0.04,
+                "defer": 0.19,
+                "skip": 0.77,
                 "insufficient_context": 0
               }
             }
@@ -8184,11 +8184,11 @@
             "key": "markdown/document-lacks-firsthand-evidence",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.91,
+              "confidence": 0.81,
               "probabilities": {
-                "enable": 0.01,
-                "defer": 0.06,
-                "skip": 0.93,
+                "enable": 0.02,
+                "defer": 0.12,
+                "skip": 0.86,
                 "insufficient_context": 0
               }
             }
@@ -8197,11 +8197,11 @@
             "key": "markdown/section-ends-with-a-preview",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.49,
+              "confidence": 0.64,
               "probabilities": {
-                "enable": 0.07,
-                "defer": 0.31,
-                "skip": 0.62,
+                "enable": 0.05,
+                "defer": 0.22,
+                "skip": 0.73,
                 "insufficient_context": 0
               }
             }
@@ -8210,11 +8210,11 @@
             "key": "markdown/section-opens-with-an-agenda",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.87,
+              "confidence": 0.88,
               "probabilities": {
-                "enable": 0.01,
-                "defer": 0.09,
-                "skip": 0.9,
+                "enable": 0.02,
+                "defer": 0.07,
+                "skip": 0.91,
                 "insufficient_context": 0
               }
             }
@@ -8223,10 +8223,10 @@
             "key": "typescript/catch-hides-failure",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8236,11 +8236,11 @@
             "key": "typescript/class-shape-shows-its-role",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.87,
+              "confidence": 0.84,
               "probabilities": {
-                "enable": 0.1,
-                "defer": 0.9,
-                "skip": 0,
+                "enable": 0.11,
+                "defer": 0.88,
+                "skip": 0.01,
                 "insufficient_context": 0
               }
             }
@@ -8249,10 +8249,10 @@
             "key": "typescript/comment-describes-block",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.96,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.97,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8275,10 +8275,10 @@
             "key": "typescript/describe-names-subject",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8288,10 +8288,10 @@
             "key": "typescript/doc-errors-match-body",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.85,
+              "confidence": 0.93,
               "probabilities": {
-                "enable": 0.11,
-                "defer": 0.89,
+                "enable": 0.05,
+                "defer": 0.95,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8301,10 +8301,10 @@
             "key": "typescript/error-message-matches-condition",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.89,
+              "confidence": 0.87,
               "probabilities": {
-                "enable": 0.08,
-                "defer": 0.92,
+                "enable": 0.1,
+                "defer": 0.9,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8314,10 +8314,10 @@
             "key": "typescript/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.99,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.99,
-                "defer": 0.01,
+                "enable": 0.98,
+                "defer": 0.02,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8327,10 +8327,10 @@
             "key": "typescript/idempotent-name",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.99,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.01,
-                "defer": 0.99,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8366,10 +8366,10 @@
             "key": "typescript/method-name-promises",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.81,
+              "confidence": 0.73,
               "probabilities": {
-                "enable": 0.14,
-                "defer": 0.86,
+                "enable": 0.2,
+                "defer": 0.8,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8418,10 +8418,10 @@
             "key": "typescript/safe-name-is-safe",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.83,
+              "confidence": 0.81,
               "probabilities": {
-                "enable": 0.13,
-                "defer": 0.87,
+                "enable": 0.14,
+                "defer": 0.86,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8431,10 +8431,10 @@
             "key": "typescript/snapshot-only-behaviour-claim",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.96,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.97,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8457,10 +8457,10 @@
             "key": "typescript/test-name-describes-code",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.65,
+              "confidence": 0.83,
               "probabilities": {
-                "enable": 0.26,
-                "defer": 0.74,
+                "enable": 0.13,
+                "defer": 0.87,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8496,10 +8496,10 @@
             "key": "typescript/type-name-describes-shape",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.97,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.98,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8509,10 +8509,10 @@
             "key": "typescript/var-name-describes-value",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.85,
+              "confidence": 0.8,
               "probabilities": {
-                "enable": 0.11,
-                "defer": 0.89,
+                "enable": 0.15,
+                "defer": 0.85,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8687,10 +8687,10 @@
             "key": "typescript/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.85,
+              "confidence": 0.84,
               "probabilities": {
-                "enable": 0.89,
-                "defer": 0.11,
+                "enable": 0.88,
+                "defer": 0.12,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8776,10 +8776,10 @@
             "key": "rust/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.87,
+              "confidence": 0.88,
               "probabilities": {
-                "enable": 0.9,
-                "defer": 0.1,
+                "enable": 0.91,
+                "defer": 0.09,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8865,10 +8865,10 @@
             "key": "python/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.88,
+              "confidence": 0.89,
               "probabilities": {
-                "enable": 0.91,
-                "defer": 0.09,
+                "enable": 0.92,
+                "defer": 0.08,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -8959,10 +8959,10 @@
             "key": "typescript/test-name-verifies-claim",
             "judgment": {
               "choice": "enable",
-              "confidence": 1,
+              "confidence": 0.99,
               "probabilities": {
-                "enable": 1,
-                "defer": 0,
+                "enable": 0.99,
+                "defer": 0.01,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -9315,10 +9315,10 @@
             "key": "typescript/safe-name-is-safe",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.93,
+              "confidence": 0.89,
               "probabilities": {
-                "enable": 0.05,
-                "defer": 0.95,
+                "enable": 0.08,
+                "defer": 0.92,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -9943,12 +9943,12 @@
             "key": "markdown/agent-instructions-conflict",
             "judgment": {
               "choice": "enable",
-              "confidence": 1,
+              "confidence": 0.99,
               "probabilities": {
-                "enable": 1,
+                "enable": 0.99,
                 "defer": 0,
                 "skip": 0,
-                "insufficient_context": 0
+                "insufficient_context": 0.01
               }
             }
           }
@@ -10036,8 +10036,8 @@
               "probabilities": {
                 "enable": 0.95,
                 "defer": 0.01,
-                "skip": 0.04,
-                "insufficient_context": 0
+                "skip": 0.03,
+                "insufficient_context": 0.01
               }
             }
           }
@@ -10307,10 +10307,10 @@
               "choice": "defer",
               "confidence": 0.91,
               "probabilities": {
-                "enable": 0.06,
+                "enable": 0.05,
                 "defer": 0.93,
                 "skip": 0,
-                "insufficient_context": 0.01
+                "insufficient_context": 0.02
               }
             }
           }
@@ -10396,11 +10396,11 @@
             "key": "git/diff-follows-instructions",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.92,
+              "confidence": 0.88,
               "probabilities": {
-                "enable": 0.06,
-                "defer": 0.94,
-                "skip": 0,
+                "enable": 0.08,
+                "defer": 0.91,
+                "skip": 0.01,
                 "insufficient_context": 0
               }
             }
@@ -10490,10 +10490,10 @@
             "key": "typescript/test-name-describes-code",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.77,
+              "confidence": 0.72,
               "probabilities": {
-                "enable": 0.17,
-                "defer": 0.83,
+                "enable": 0.21,
+                "defer": 0.79,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -10596,10 +10596,10 @@
             "key": "typescript/test-mocks-subject",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.96,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.97,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -10694,10 +10694,10 @@
             "key": "typescript/snapshot-only-behaviour-claim",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.97,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.98,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -10783,10 +10783,10 @@
             "key": "typescript/method-name-promises",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.93,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.05,
+                "defer": 0.95,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -10872,10 +10872,10 @@
             "key": "typescript/type-name-describes-shape",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.99,
+              "confidence": 1,
               "probabilities": {
-                "enable": 0.01,
-                "defer": 0.99,
+                "enable": 0,
+                "defer": 1,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -10966,10 +10966,10 @@
             "key": "typescript/describe-names-subject",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.99,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.01,
-                "defer": 0.99,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -11144,10 +11144,10 @@
             "key": "typescript/error-message-matches-condition",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.96,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.97,
+                "enable": 0.02,
+                "defer": 0.98,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -11411,10 +11411,10 @@
             "key": "shell/runs-downloaded-code",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.97,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.98,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -11500,10 +11500,10 @@
             "key": "text/query-name-describes-sql",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.93,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.05,
+                "defer": 0.95,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -11726,7 +11726,7 @@
         "schema": "jev-lint-introspection-1",
         "input": {
           "schema": "jev-lint-introspection-input-1",
-          "catalogDigest": "5087bed04d1a950cd7ee8c439102e0a2c278a30a92650c09f81cc69699ea377d",
+          "catalogDigest": "7b57e674a36a5b20c2190a42eb836256057d2b30ee9a958a21262909484766fd",
           "files": [
             {
               "path": "AGENTS.md",
@@ -12290,9 +12290,9 @@
             }
           ],
           "issues": [],
-          "snapshotDigest": "743d067a1426e176736e6db695a584bd0ae42b98eb7820912ecf98562cd71bb8"
+          "snapshotDigest": "e5ab64437c582d6f1e057f7073f6db4a0a9f39fa5d24664b77b1b246fed44de1"
         },
-        "snapshotDigest": "743d067a1426e176736e6db695a584bd0ae42b98eb7820912ecf98562cd71bb8",
+        "snapshotDigest": "e5ab64437c582d6f1e057f7073f6db4a0a9f39fa5d24664b77b1b246fed44de1",
         "questionDigest": "9127576bd99b2d5fd0c240f9b36b97a419d044a2c795775be6d050bf02a50e40",
         "model": "jev-1.14.0",
         "snapshotChanged": false,
@@ -12303,12 +12303,12 @@
             "key": "json/script-name-does",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.92,
+              "confidence": 0.93,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.94,
+                "enable": 0.02,
+                "defer": 0.95,
                 "skip": 0,
-                "insufficient_context": 0.02
+                "insufficient_context": 0.03
               }
             }
           },
@@ -12342,12 +12342,12 @@
             "key": "markdown/document-abandons-a-question",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.59,
+              "confidence": 0.52,
               "probabilities": {
-                "enable": 0.05,
-                "defer": 0.26,
-                "skip": 0.69,
-                "insufficient_context": 0
+                "enable": 0.06,
+                "defer": 0.29,
+                "skip": 0.64,
+                "insufficient_context": 0.01
               }
             }
           },
@@ -12355,11 +12355,11 @@
             "key": "markdown/document-is-filler",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.71,
+              "confidence": 0.72,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.19,
-                "skip": 0.78,
+                "enable": 0.04,
+                "defer": 0.17,
+                "skip": 0.79,
                 "insufficient_context": 0
               }
             }
@@ -12368,11 +12368,11 @@
             "key": "markdown/document-is-formulaic",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.81,
+              "confidence": 0.87,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.12,
-                "skip": 0.86,
+                "enable": 0.01,
+                "defer": 0.09,
+                "skip": 0.9,
                 "insufficient_context": 0
               }
             }
@@ -12381,11 +12381,11 @@
             "key": "markdown/document-is-generic",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.84,
+              "confidence": 0.81,
               "probabilities": {
                 "enable": 0.01,
-                "defer": 0.11,
-                "skip": 0.88,
+                "defer": 0.13,
+                "skip": 0.86,
                 "insufficient_context": 0
               }
             }
@@ -12394,11 +12394,11 @@
             "key": "markdown/document-is-incoherent",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.8,
+              "confidence": 0.83,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.13,
-                "skip": 0.85,
+                "enable": 0.01,
+                "defer": 0.12,
+                "skip": 0.87,
                 "insufficient_context": 0
               }
             }
@@ -12407,11 +12407,11 @@
             "key": "markdown/document-is-padded",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.67,
+              "confidence": 0.72,
               "probabilities": {
                 "enable": 0.04,
-                "defer": 0.21,
-                "skip": 0.75,
+                "defer": 0.17,
+                "skip": 0.79,
                 "insufficient_context": 0
               }
             }
@@ -12420,11 +12420,11 @@
             "key": "markdown/document-is-slop",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.76,
+              "confidence": 0.72,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.15,
-                "skip": 0.82,
+                "enable": 0.04,
+                "defer": 0.17,
+                "skip": 0.79,
                 "insufficient_context": 0
               }
             }
@@ -12433,11 +12433,11 @@
             "key": "markdown/document-is-vague",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.63,
+              "confidence": 0.53,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.24,
-                "skip": 0.72,
+                "enable": 0.06,
+                "defer": 0.29,
+                "skip": 0.65,
                 "insufficient_context": 0
               }
             }
@@ -12446,11 +12446,11 @@
             "key": "markdown/document-lacks-firsthand-evidence",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.91,
+              "confidence": 0.87,
               "probabilities": {
-                "enable": 0.01,
-                "defer": 0.06,
-                "skip": 0.93,
+                "enable": 0.02,
+                "defer": 0.08,
+                "skip": 0.9,
                 "insufficient_context": 0
               }
             }
@@ -12459,11 +12459,11 @@
             "key": "markdown/section-ends-with-a-preview",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.63,
+              "confidence": 0.53,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.24,
-                "skip": 0.72,
+                "enable": 0.06,
+                "defer": 0.29,
+                "skip": 0.65,
                 "insufficient_context": 0
               }
             }
@@ -12472,11 +12472,11 @@
             "key": "markdown/section-opens-with-an-agenda",
             "judgment": {
               "choice": "skip",
-              "confidence": 0.88,
+              "confidence": 0.85,
               "probabilities": {
                 "enable": 0.02,
-                "defer": 0.07,
-                "skip": 0.91,
+                "defer": 0.09,
+                "skip": 0.89,
                 "insufficient_context": 0
               }
             }
@@ -12485,10 +12485,10 @@
             "key": "typescript/catch-hides-failure",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12498,11 +12498,11 @@
             "key": "typescript/class-shape-shows-its-role",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.85,
+              "confidence": 0.83,
               "probabilities": {
-                "enable": 0.11,
-                "defer": 0.89,
-                "skip": 0,
+                "enable": 0.12,
+                "defer": 0.87,
+                "skip": 0.01,
                 "insufficient_context": 0
               }
             }
@@ -12524,10 +12524,10 @@
             "key": "typescript/comment-describes-declaration",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.95,
+              "confidence": 0.96,
               "probabilities": {
-                "enable": 0.04,
-                "defer": 0.96,
+                "enable": 0.03,
+                "defer": 0.97,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12563,10 +12563,10 @@
             "key": "typescript/error-message-matches-condition",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.91,
+              "confidence": 0.92,
               "probabilities": {
-                "enable": 0.07,
-                "defer": 0.93,
+                "enable": 0.06,
+                "defer": 0.94,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12576,10 +12576,10 @@
             "key": "typescript/fn-name-promises",
             "judgment": {
               "choice": "enable",
-              "confidence": 0.96,
+              "confidence": 0.97,
               "probabilities": {
-                "enable": 0.97,
-                "defer": 0.03,
+                "enable": 0.98,
+                "defer": 0.02,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12589,10 +12589,10 @@
             "key": "typescript/idempotent-name",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.97,
+              "confidence": 0.99,
               "probabilities": {
-                "enable": 0.02,
-                "defer": 0.98,
+                "enable": 0.01,
+                "defer": 0.99,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12628,10 +12628,10 @@
             "key": "typescript/method-name-promises",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.8,
+              "confidence": 0.87,
               "probabilities": {
-                "enable": 0.15,
-                "defer": 0.85,
+                "enable": 0.1,
+                "defer": 0.9,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12639,19 +12639,6 @@
           },
           {
             "key": "typescript/module-name-describes-contents",
-            "judgment": {
-              "choice": "defer",
-              "confidence": 0.97,
-              "probabilities": {
-                "enable": 0.02,
-                "defer": 0.98,
-                "skip": 0,
-                "insufficient_context": 0
-              }
-            }
-          },
-          {
-            "key": "typescript/module-naming-consistent",
             "judgment": {
               "choice": "defer",
               "confidence": 0.99,
@@ -12664,13 +12651,26 @@
             }
           },
           {
+            "key": "typescript/module-naming-consistent",
+            "judgment": {
+              "choice": "defer",
+              "confidence": 0.97,
+              "probabilities": {
+                "enable": 0.02,
+                "defer": 0.98,
+                "skip": 0,
+                "insufficient_context": 0
+              }
+            }
+          },
+          {
             "key": "typescript/pure-name-is-pure",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.96,
+              "confidence": 0.95,
               "probabilities": {
-                "enable": 0.03,
-                "defer": 0.97,
+                "enable": 0.04,
+                "defer": 0.96,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12680,10 +12680,10 @@
             "key": "typescript/safe-name-is-safe",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.81,
+              "confidence": 0.83,
               "probabilities": {
-                "enable": 0.14,
-                "defer": 0.86,
+                "enable": 0.13,
+                "defer": 0.87,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12719,10 +12719,10 @@
             "key": "typescript/test-name-describes-code",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.6,
+              "confidence": 0.59,
               "probabilities": {
-                "enable": 0.3,
-                "defer": 0.7,
+                "enable": 0.31,
+                "defer": 0.69,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12771,10 +12771,10 @@
             "key": "typescript/var-name-describes-value",
             "judgment": {
               "choice": "defer",
-              "confidence": 0.81,
+              "confidence": 0.88,
               "probabilities": {
-                "enable": 0.14,
-                "defer": 0.86,
+                "enable": 0.09,
+                "defer": 0.91,
                 "skip": 0,
                 "insufficient_context": 0
               }
@@ -12811,7 +12811,7 @@
     "calls": 108,
     "inputTokens": 224433,
     "outputTokens": 11484,
-    "ms": 17929,
+    "ms": 17856,
     "retried": 0,
     "rateLimited": 0,
     "tokensPerSecond": 200000,

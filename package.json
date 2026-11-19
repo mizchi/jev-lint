@@ -109,7 +109,7 @@
     "skills:sync": "node --experimental-strip-types tools/sync-skills.ts",
     "skills:check": "node --experimental-strip-types tools/sync-skills.ts --check",
     "eval": "node --experimental-strip-types src/cli.ts eval --repeat 3",
-    "eval:advisories": "node --test experiments/advisory/state-key/collector.test.mjs && node experiments/advisory/verify.mjs && node experiments/advisory/module-hints.mjs --verify && node experiments/advisory/teacher.mjs --verify",
+    "eval:advisories": "node --test experiments/advisory/state-key/collector.test.mjs && node experiments/advisory/verify.mjs && node experiments/advisory/module-hints.mjs --verify && node experiments/advisory/teacher.mjs --verify && node experiments/advisory/public-api/hints.mjs --verify",
     "eval:replay": "node --experimental-strip-types src/cli.ts eval --replay",
     "eval:adoption": "node --experimental-strip-types tools/eval-adoption.ts",
     "eval:clef": "node --experimental-strip-types tools/compare-models.ts",
