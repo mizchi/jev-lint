@@ -75,3 +75,6 @@ clef-eval *args:
 
 clef-replay *args:
     pnpm run eval:clef --replay {{args}}
+
+skill-to-decision cases out:
+    node packages/skill-to-decision/cli.ts {{quote(cases)}} {{quote(out)}}

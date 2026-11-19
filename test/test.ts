@@ -22,6 +22,7 @@ import { report } from "./harness.ts";
 const files = [
   "harness",
   "rules",
+  "skill-to-decision",
   "questions",
   "state",
   "report",

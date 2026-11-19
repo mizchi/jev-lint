@@ -1,0 +1,82 @@
+{
+  "files": {
+    "develop/text/rulepipe-commit-imperative/rule.yml": "05c06d6b3cd769ba5e625571ab630bd854c9989fe9b795b1813b3cf3b0089877",
+    "evaluation/text/rulepipe-commit-imperative/rule.yml": "05c06d6b3cd769ba5e625571ab630bd854c9989fe9b795b1813b3cf3b0089877",
+    "develop/text/rulepipe-commit-imperative/fixtures/d22a4dcd5906fa30fc088b98428bc89c03564187e462ec270baac041bbcb7192.commitmsg": "63bf90fabebffeaf531da5df684c141ece88b495d8d520af3992005a54d946b3",
+    "evaluation/text/rulepipe-commit-imperative/fixtures/111241aa05e47202a18a95c611f7971a28d23244c0dca64c13d79920c054ad50.commitmsg": "4c74294cf6738aa2985afcc732086b37779662b93875a0c05d3add62535c0948",
+    "evaluation/text/rulepipe-commit-imperative/fixtures/7565003c2678b243e97fc5ef6f19d6834e770716d7670adac651f81555a4a79b.commitmsg": "dbd60113b052bc74e2cb6ce832fb044d25286be2af47ff8a7de2deae10930003",
+    "evaluation/text/rulepipe-commit-imperative/fixtures/947d4c0c1ef39e6bd4c05dc41d9965898074daaa99f36ea488f809da1f1b9404.commitmsg": "a3d81a9d0498ba33e68cca003fcf715a6e89cc575335e258bbadaaf572c5eddd",
+    "develop/text/rulepipe-commit-imperative/fixtures/f8dbb8e464fe59ad2febeda7a3c995fef000ca1e5d72c3162c323fd156c1780b.commitmsg": "1a9212c2692ecbe4615d785e69c66c0ac3972e30849ca6f271dd76c376251839",
+    "develop/text/rulepipe-commit-imperative/fixtures/347cacaf9d813a920ede15e682881530ff736b7547f0c173686f97d2e6693e7d.commitmsg": "fcb2e4a5606d417a6041182e7751ebcefad53d038cd5b525d5a0c10183371c02",
+    "develop/text/rulepipe-commit-imperative/fixtures/4d4228f1b9ecef17b219591b1ec68eb706e5c0f4bd1dfbc802fb68b8aa0eb6b7.commitmsg": "24912ab42c01a06a6af1fcb8eea0aa128363abbded4de097aa91128242271386",
+    "develop/text/rulepipe-commit-imperative/fixtures/b72cb0ce87fd701c67ceef5556473c26f91c92cf0d67a3fe04cf6d783e1ab643.commitmsg": "e1e23c2af611ec6e4b35fc15cc9de67217b409c9bd336852ae0dd46cbc0ef228",
+    "develop/text/rulepipe-commit-imperative/expect.yml": "95f011b1a0ac53df6631741944ecd8018fa405dde1341c4fc34842476200d3e5",
+    "evaluation/text/rulepipe-commit-imperative/expect.yml": "cd4af04a2b4ce47e5d1f504041ca2606cb3833ff54fa271dba249907198945e1"
+  },
+  "routes": {
+    "commit-dev-pass": [
+      "judge",
+      "unknown"
+    ],
+    "commit-dev-fail": [
+      "retain",
+      "fail"
+    ],
+    "commit-eval-avoid": [
+      "judge",
+      "unknown"
+    ],
+    "commit-eval-long": [
+      "judge",
+      "unknown"
+    ],
+    "commit-eval-past": [
+      "judge",
+      "unknown"
+    ],
+    "commit-eval-case": [
+      "retain",
+      "fail"
+    ],
+    "commit-eval-incomplete": [
+      "observe",
+      "unknown"
+    ],
+    "commit-eval-other": [
+      "retain",
+      "not-applicable"
+    ],
+    "jev-dev-set": [
+      "judge",
+      "unknown"
+    ],
+    "jev-dev-explain": [
+      "judge",
+      "unknown"
+    ],
+    "jev-dev-prevents": [
+      "judge",
+      "unknown"
+    ],
+    "jev-dev-documented": [
+      "judge",
+      "unknown"
+    ]
+  },
+  "plans": {
+    "develop": {
+      "subjects": 5,
+      "requests": 15,
+      "tokens": 8964,
+      "usd": 0.000376488,
+      "repeat": 3
+    },
+    "evaluation": {
+      "subjects": 3,
+      "requests": 9,
+      "tokens": 5400,
+      "usd": 0.00022680000000000004,
+      "repeat": 3
+    }
+  }
+}
