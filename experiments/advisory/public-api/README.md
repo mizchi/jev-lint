@@ -50,7 +50,7 @@ export JEV_LINT_MODEL=jev-1.14.0 TYPESAFE_BASE_URL=https://api.typesafe.ai
 
 ## Follow-up instructions
 
-The two reported crater surfaces, two surface fixtures and one defect fixture for each binding rule received the shipped next check and a generic review instruction. Across three passes of the existing actionability rubric, mean scores were 0.84–0.95 for the specific instruction and 0.02–0.05 for the generic control. These judgments measure the instruction's specificity. A consumer test is still needed to determine whether narrowing the API preserves its contract.
+The two reported crater surfaces, two surface fixtures, one defect fixture for each binding rule and the workflow with an undocumented import change received the shipped next check and a generic review instruction. Across three passes of the existing actionability rubric, mean scores were 0.85–0.95 for the specific instruction and 0.02–0.05 for the generic control. These judgments measure the instruction's specificity. A consumer test is still needed to determine whether narrowing the API preserves its contract.
 
 ```sh
 node experiments/advisory/public-api/hints.mjs "$out/surfaces" "$out/hints"
@@ -74,4 +74,21 @@ out=$(mktemp -d)
 (cd "$out" && shasum -a 256 -c "$tool/experiments/advisory/public-api/bindings.sha256")
 (cd "$out" && node "$tool/src/cli.ts" check . --config "$tool/advisory/public-api.yml" --cache none --retry 3 --record run.json --summary)
 node src/cli.ts replay experiments/advisory/public-api/binding-scores.json --summary
+```
+
+## Entry layout and guide workflows
+
+The workflow baseline has fourteen labelled guides. Its five fresh passes classified all seven misplaced operations and all seven controls correctly at the fitted cutoff of 0.39. The collector test reproduces the root and moved fixtures from two actual TypeScript barrels. It also reproduces the Go receiver-method control. Other cases cover a type-only export, a destination provided in a migration table, optional steps and an unreviewed subpath.
+
+A separate run used three sections of idealis's guide and four published TS import paths at revision `d147550c80d814e23f5d76f8ded25e30bf190da4`. The mixed TS/Rust section was flagged on three of five passes (mean 0.392). Inspection found that the three portable functions and the finite-model parser are exported at the precise paths shown, and the Wasm asset has its own package export. This is a false positive for the documented TypeScript import route. The model-artifact and host sections stayed below the cutoff.
+
+```sh
+tool=$PWD
+out=$(mktemp -d)
+mkdir "$out/source"
+git -C ../idealis archive d147550c80d814e23f5d76f8ded25e30bf190da4 src docs/using-models.md tsconfig.json package.json | tar -x -C "$out/source"
+cp experiments/advisory/public-api/idealis-layout.json "$out/source/layout.json"
+node src/cli.ts public-api-inputs "$out/review" --api-layout "$out/source/layout.json"
+(cd "$out/review" && shasum -a 256 -c "$tool/experiments/advisory/public-api/workflows.sha256")
+node src/cli.ts replay experiments/advisory/public-api/workflow-scores.json --no-config --summary
 ```

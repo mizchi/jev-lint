@@ -81,17 +81,19 @@ export function typescriptSurface(entry, scan) {
   const checker = program.getTypeChecker()
   const source = program.getSourceFile(entry)
   if (!source || !ts.isExternalModule(source)) throw new Error('expected a TypeScript module: ' + entry)
-  const visited = new Set()
+  const modules = new Map()
   function exportedNames(file) {
     const mod = checker.getSymbolAtLocation(file)
     const exports = checker.getExportsOfModule(mod)
-    if (visited.has(file)) return exports
-    visited.add(file)
+    if (modules.has(file)) return exports
+    const inherited = new Set()
+    const valueStars = []
+    const names = new Set()
+    modules.set(file, { names, valueStars, symbols: new Map(exports.map(s => [s.name, s])) })
     const matched = scan(file.fileName.endsWith('.tsx') ? 'Tsx' : 'TypeScript', file.text, {
       export: { kind: 'export_statement' },
     })
     const starts = new Set(matched.map(m => m.range.byteOffset.start))
-    const names = new Set()
     function addName(name) {
       if (ts.isBindingPattern(name)) {
         for (const part of name.elements) if (ts.isBindingElement(part)) addName(part.name)
@@ -113,7 +115,8 @@ export function typescriptSurface(entry, scan) {
         else {
           const child = imported?.declarations?.find(ts.isSourceFile)
           if (!child) throw new Error('cannot enumerate re-export ' + stmt.getText(file))
-          for (const symbol of exportedNames(child)) if (symbol.name !== 'default') names.add(symbol.name)
+          if (!stmt.isTypeOnly) valueStars.push(child)
+          for (const symbol of exportedNames(child)) if (symbol.name !== 'default') inherited.add(symbol.name)
         }
       } else if (ts.isExportAssignment(stmt) || stmt.modifiers?.some(m => m.kind === ts.SyntaxKind.DefaultKeyword)) {
         if (stmt.isExportEquals) throw new Error('export = entry points are unsupported: ' + entry)
@@ -124,19 +127,33 @@ export function typescriptSurface(entry, scan) {
     }
     const errors = [...program.getSyntacticDiagnostics(file), ...program.getSemanticDiagnostics(file).filter(d => d.code === 2308)]
     if (errors.length) throw new Error(ts.flattenDiagnosticMessageText(errors[0].messageText, '\n'))
-    const missing = exports.find(s => !names.has(s.name))
+    const missing = exports.find(s => !names.has(s.name) && !inherited.has(s.name))
     if (missing) throw new Error('cannot account for export ' + missing.name + ' in ' + file.fileName)
-    return exports.filter(s => names.has(s.name))
+    return exports
+  }
+  // For a star re-export the checker can return the original value symbol,
+  // even when the only route to it crosses an "export type *" declaration.
+  function hasValueRoute(file, name, visited) {
+    if (visited.has(file)) return false
+    visited.add(file)
+    const { names, symbols, valueStars } = modules.get(file)
+    if (names.has(name)) {
+      const binding = symbols.get(name)
+      return Boolean(binding && targetOf(checker, binding).flags & ts.SymbolFlags.Value) &&
+        !checker.getTypeOnlyAliasDeclaration(binding)
+    }
+    return valueStars.some(child => hasValueRoute(child, name, visited))
   }
   const bindingsByName = []
   for (const [symbol, bindings] of Map.groupBy(exportedNames(source), s => targetOf(checker, s))) {
     const primary = bindings.find(s => s.name === symbol.name) ?? bindings.find(s => s.name !== 'default') ?? bindings[0]
     const binding = describe(checker, primary, source)
-    bindingsByName.push({ ...binding, doc: [reExportDocs(primary), binding.doc].filter(Boolean).join('\n') })
+    const typeOnly = b => !hasValueRoute(source, b.name, new Set())
+    bindingsByName.push({ ...binding, typeOnly: typeOnly(primary), doc: [reExportDocs(primary), binding.doc].filter(Boolean).join('\n') })
     for (const alias of bindings) {
       if (alias === primary) continue
       const row = alias.name + ' — alias of ' + primary.name
-      bindingsByName.push({ name: alias.name, alias: primary.name, row, signature: row + '\nTarget: ' + binding.signature, doc: [reExportDocs(alias), binding.doc].filter(Boolean).join('\n') })
+      bindingsByName.push({ name: alias.name, alias: primary.name, typeOnly: typeOnly(alias), row, signature: row + '\nTarget: ' + binding.signature, doc: [reExportDocs(alias), binding.doc].filter(Boolean).join('\n') })
     }
   }
   const leading = ts.getLeadingCommentRanges(source.text, 0) ?? []

@@ -62,11 +62,19 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
     return cmdIntrospect({ ...opts, config: null, output: opts.output ?? target, introspectWrite: opts.introspectWrite || !opts.dryRun }, out, log, client);
   }
   if (command === "public-api-inputs") {
-    if (opts.paths.length < 2) { log("usage: jev-lint public-api-inputs <new-directory> <entry.ts|go-package>..."); return 2; }
+    if (opts.apiLayout ? opts.paths.length !== 1 : opts.paths.length < 2) {
+      log("usage: jev-lint public-api-inputs <new-directory> (--api-layout layout.json | <entry.ts|go-package>...)");
+      return 2;
+    }
     try {
-      const { publicApiInputs } = await import("../../advisory/public-api.mjs");
       const { astGrepBin } = await import("../scan.ts");
-      out(JSON.stringify(await publicApiInputs(opts.paths[0], opts.paths.slice(1), astGrepBin(), opts.apiDoc)));
+      if (opts.apiLayout) {
+        const { publicApiLayoutInputs } = await import("../public-api-layout.ts");
+        out(JSON.stringify(await publicApiLayoutInputs(opts.paths[0], opts.apiLayout, astGrepBin(), opts.apiDoc)));
+      } else {
+        const { publicApiInputs } = await import("../../advisory/public-api.mjs");
+        out(JSON.stringify(await publicApiInputs(opts.paths[0], opts.paths.slice(1), astGrepBin(), opts.apiDoc)));
+      }
       return 0;
     } catch (err) {
       log(`public-api-inputs: ${err instanceof Error ? err.message : String(err)}`);

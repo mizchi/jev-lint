@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Plugin setup
+Import createPlugin from store/plugins and register it with your application.
+
+Reviewed import paths and their exports (other paths were not inspected):
+store: type Session
+store/runtime: Session

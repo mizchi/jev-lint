@@ -35,6 +35,20 @@ for (const recorded of bindings.rules) {
   const fixture = policy.id === 'api-use-is-unclear' ? 'generic' : 'cursor'
   cases.push([policy.id, join(dir, 'fixtures', fixture + '.apibinding'), policy])
 }
+const workflowDir = join(ruleDir, '../entry-layout-obscures-workflow')
+const [workflow] = loadRules(workflowDir).rules
+const workflows = JSON.parse(readFileSync(join(here, 'workflow-scores.json'), 'utf8'))
+const workflowInputs = readFileSync(join(here, 'workflows.sha256'), 'utf8').trim().split('\n').map(line => line.slice(66))
+assert.equal(workflows.rules.length, 1)
+assert.equal(workflows.rules[0].draft, ruleTextHash(workflow))
+assert.equal(workflows.rules[0].nextCheck, workflow.nextCheck)
+assert.equal(workflows.rules[0].at, workflow.at)
+assert.deepEqual(workflows.answers.map(row => row.file).sort(), workflowInputs.sort())
+for (const row of workflows.answers) {
+  assert.equal(row.rule, workflow.id)
+  assert.ok(Number.isFinite(row.value) && row.value >= 0 && row.value <= 1)
+}
+cases.push([workflow.id, join(workflowDir, 'fixtures/moved.apiworkflow'), workflow])
 if (surfaces === '--verify') {
   const hints = JSON.parse(readFileSync(join(here, 'hint-scores.json'), 'utf8'))
   const [judge] = loadRules(join(here, '../hint-review.yml')).rules

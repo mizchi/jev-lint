@@ -48,10 +48,15 @@ const cli = (args, status = 0) => {
 const rules = cli(['rules', '--no-config', '--json']);
 assert.deepEqual(rules.errors, []); assert.equal(rules.rules.length, ${ruleCount});
 const advisories = rules.rules.filter(r => r.category === 'advisory');
-assert.equal(advisories.length, 17); assert.ok(advisories.every(r => r.nextCheck?.trim()));
+assert.equal(advisories.length, 18); assert.ok(advisories.every(r => r.nextCheck?.trim()));
 assert.ok(existsSync('node_modules/jev-lint/advisory/idealis.json'));
 mkdirSync('codec');
 writeFileSync('codec/api.go', 'package codec\\nfunc Encode() {}');
+writeFileSync('workflow.md', 'Use codec.Encode for the byte stream.');
+writeFileSync('layout.json', JSON.stringify({ entries: { 'example.org/codec': 'codec' }, workflows: [{ guide: 'workflow.md' }] }));
+const layout = cli(['public-api-inputs', 'layout-review', '--api-layout', 'layout.json']);
+assert.equal(layout.workflows.length, 1);
+assert.equal(cli(['check', 'layout-review', '--config', 'node_modules/jev-lint/advisory/public-api.yml', '--dry-run', '--json']).subjects, 4);
 const [surface] = cli(['public-api-inputs', 'api-review', 'codec']);
 assert.equal(surface.count, 1);
 assert.equal(surface.aliases, 0);

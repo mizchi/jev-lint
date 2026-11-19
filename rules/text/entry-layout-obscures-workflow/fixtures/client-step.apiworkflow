@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Preview
+Use open and mapPixels from canvas. Pass the result to draw, a callback supplied by the application.
+
+Reviewed import paths and their exports (other paths were not inspected):
+canvas: mapPixels, open
+canvas/filters: blur

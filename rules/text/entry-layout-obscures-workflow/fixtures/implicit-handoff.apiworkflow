@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Save an edit
+Start with open and mapPixels in canvas. To save the result, pass the edited frame to the package function commit(frame).
+
+Reviewed import paths and their exports (other paths were not inspected):
+canvas: mapPixels, open
+canvas/filters: blur, commit

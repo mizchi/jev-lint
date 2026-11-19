@@ -19,7 +19,7 @@ function relatedSignatures(entries) {
   return peers
 }
 
-export async function publicApiInputs(out, targets, binary, guide) {
+export async function collectPublicApi(targets, binary) {
   // Scan stdin so a target repository cannot supply ast-grep configuration.
   function scan(language, source, rules) {
     const spec = Object.entries(rules).map(([id, rule]) => JSON.stringify({ id, language, rule })).join('\n---\n')
@@ -30,7 +30,6 @@ export async function publicApiInputs(out, targets, binary, guide) {
     return JSON.parse(result.stdout)
   }
 
-  const guideText = guide ? readFileSync(guide, 'utf8') : ''
   const outputs = []
   for (const target of targets) {
     const path = resolve(target)
@@ -61,6 +60,11 @@ export async function publicApiInputs(out, targets, binary, guide) {
     }
     outputs.push({ inventory, entries, label: surface.label, packageDoc: surface.packageDoc, body })
   }
+  return outputs
+}
+
+export function writePublicApiInputs(out, outputs, guide, workflows = []) {
+  const guideText = guide ? readFileSync(guide, 'utf8') : ''
   mkdirSync(out)
   for (const {inventory, entries, label, packageDoc, body} of outputs) {
     writeFileSync(join(out, inventory.file), body)
@@ -82,5 +86,11 @@ export async function publicApiInputs(out, targets, binary, guide) {
       writeFileSync(join(dir, name), heading.join('\n') + '\n')
     })
   }
+  for (const { file, text } of workflows) writeFileSync(join(out, file), text)
   return outputs.map(o => o.inventory)
+}
+
+export async function publicApiInputs(out, targets, binary, guide) {
+  const outputs = await collectPublicApi(targets, binary)
+  return writePublicApiInputs(out, outputs, guide)
 }

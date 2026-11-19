@@ -6,7 +6,7 @@ import { parseDocumentManifest, documentSnapshotDigest, type DocumentManifest, t
 
 export interface DocumentPlanOptions { cwd?: string; maxComparisons?: number; maxExcerptChars?: number }
 
-function select(content: string, selector: DocumentSelector): { startLine: number; endLine: number; quote: string } {
+export function selectDocumentExcerpt(content: string, selector: Pick<DocumentSelector, "heading" | "contains">): { startLine: number; endLine: number; quote: string } {
   const lines = content.split("\n"), headings: Array<{ line: number; level: number; name: string }> = [];
   let fence: { marker: string; size: number } | null = null;
   for (const [i, line] of lines.entries()) {
@@ -56,7 +56,7 @@ export function prepareDocuments(raw: DocumentManifest, { cwd = process.cwd(), m
   const read = (selector: DocumentSelector): DocumentExcerpt => {
     const source = manifest.files[selector.source], content = contents.get(selector.source);
     if (content === undefined) throw new Error("source-unavailable");
-    const selected = select(content, selector);
+    const selected = selectDocumentExcerpt(content, selector);
     if (selected.quote.length > maxExcerptChars) throw new Error("excerpt-budget");
     return { source: selector.source, path: source.path, ...selected, contentHash: relationDigest(selected.quote) };
   };

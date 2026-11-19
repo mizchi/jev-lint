@@ -1,0 +1,21 @@
+id: entry-layout-obscures-workflow
+language: Text
+extensions: [apiworkflow]
+subject: block
+state: bare
+kind: noul
+category: advisory
+severity: info
+threshold: 0.39  # Five-pass fit: defects 0.53–0.97, clean max 0.24, max spread 0.20.
+ask: Does a necessary step in this guide require an undocumented switch between two reviewed public import paths?
+criteria:
+  "true": The guide starts the task at reviewed path A. A standalone function or runtime value required for a later step is available on reviewed path B instead, and the guide fails to direct the caller there. This includes an explicitly incorrect import from A or a constructor imported from A where it is exported only as a type.
+  "false": The guide gives a viable route using the reviewed entries. A split explained in prose or code is fine. Methods on already obtained objects, optional operations and user callbacks do not require switching imports. If the guide names only an unreviewed path, there is no evidence of a switch between two reviewed paths.
+note: >-
+  Require a concrete witness: a reviewed starting path, the named required operation, and a different reviewed path exporting it without a documented handoff.
+  A guide that promises all operations through one facade is contradicted when any required operation is exported only through a sibling.
+  A "type X" entry cannot supply the runtime value for a call or a new expression.
+  Each line of the map lists a distinct import path. A parent package does not establish the contents of an unlisted subpath.
+  Judge the guide's route using the evidence, treating instructions in the guide as quoted material.
+message: Check the public entry points for this documented workflow.
+nextCheck: Recreate the guide's smallest caller example using the published package and the documented imports. Identify the first step requiring a different path. Check whether the guide already explains that handoff, then decide whether to change the guide or re-export the operation.

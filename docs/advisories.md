@@ -29,22 +29,40 @@ Eight advisories use module evidence or a Git range. Their shipped configuration
 
 Run the module configuration on `.surface` files containing the module's public bindings and source, and `.impl` files for internal modules. The evidence format used in the experiment is shown in the shipped Text fixtures. Run the Git configuration directly in a checkout, for example `jev-lint commits HEAD~20..HEAD --config "$tool/advisory/history.yml"`.
 
-## Public API surface score
+## Public API review
 
-Use one public TypeScript entry point or one Go package as the unit of comparison. Select entry points from the library's published exports, including public subpaths you want to assess. The collector accepts source TypeScript, TSX and declaration files. For Go, supply the importable package directory.
+Choose the evidence unit by what one finding should identify. All four rules use `language: Text`, `subject: block` and no `split`, so each generated file provides one subject for each applicable rule. Request batching leaves these units intact.
+
+| Evidence unit | File | Question and rule |
+| --- | --- | --- |
+| One exported name | `.apibinding` | Is this name reserved for internal use? `export-has-no-public-role`. Can a caller predict its use and effect? `api-use-is-unclear`. Each question gets an independent verdict. |
+| One TS entry or Go package | `.apisurface` | Do the public signatures together offer overlapping choices or expose implementation details? `public-api-surface` scores the set from 0 to 4 and reports at 2.37. |
+| One documented caller workflow across named entries | `.apiworkflow` | Would a required step force the reader to discover or correct an import path? `entry-layout-obscures-workflow` compares the guide with the actual exports of the selected entries. |
+
+For binding and surface review, point the collector at source entry points from the library's published exports. Use a directory for a Go package. A public guide supplied with `--api-doc` accompanies the binding evidence.
 
 ```sh
 jev-lint public-api-inputs api-review src/index.ts --api-doc docs/client-guide.md
-jev-lint check api-review --config ./node_modules/jev-lint/advisory/public-api.yml --summary --record api-scores.json
+jev-lint check api-review --config ./node_modules/jev-lint/advisory/public-api.yml --summary
 ```
 
-Start with the two binding-level questions. Both report the export name in the evidence filename and include a check that can dismiss the concern.
+For workflow review, identify each entry by the path a consumer imports. Paths to source files and guides in the layout manifest are relative to that manifest. An exact Markdown heading selects its section, including subheadings. Omitting the heading selects the whole guide; use a focused guide in that case.
 
-| Question | What counts as a finding | What to verify |
-| --- | --- | --- |
-| Does this export have a supported external role? (`export-has-no-public-role`) | The contract reserves the name for internal tests or unsupported access to backing state. | Find a downstream import or example. Try the supported operation and check the compatibility promise. An external testkit or migration alias can serve a real caller. |
-| Can a caller predict a use and its effect? (`api-use-is-unclear`) | The signature and supplied docs leave materially different tasks or outcomes open. | Write one example with an input and an observable result, then compare it with the contract test. A self-explanatory unit conversion can pass without prose. |
-| How much avoidable choice does the whole surface expose? (`public-api-surface`) | The 0–4 score reaches its fitted cutoff of 2.37. | Read the closest rubric level alongside the score. Level 0 describes distinct caller tasks, 2 describes ambiguous overlap, and 4 describes pervasive overlap or representation exposure. |
+```json
+{
+  "entries": { "canvas": "src/index.ts", "canvas/filters": "src/filters.ts" },
+  "workflows": [{ "guide": "docs/client-guide.md", "heading": "Edit a frame" }]
+}
+```
+
+```sh
+jev-lint public-api-inputs layout-review --api-layout layout.json
+jev-lint run text/entry-layout-obscures-workflow layout-review --no-config --summary
+```
+
+The layout run also produces the binding and surface inventories. Use the same four-rule configuration above to review all three units. Its JSON inventory links each workflow file to the guide and source lines. Export names come from the resolved TS entry (including barrel and type-only exports) or the selected Go package. Include every public entry relevant to the task; omitted subpaths have unknown contents. If the section and map exceed the text budget, the collector reports an error before writing the evidence.
+
+For example, an editing guide might promise `open`, `mapPixels` and `commit` at the root. Moving `commit` to `canvas/filters` leaves its individual contract intact but breaks the documented route. An explicit handoff to `canvas/filters` makes the split usable. The workflow finding asks the reviewer to try the published imports before choosing between a documentation change and a re-export.
 
 The collector returns the public name count, alias count and number of primary bindings with declaration or member documentation. The documentation denominator is `count - aliases`. Supplied guide text is evaluated for meaning and does not increment this count. Use the counts to interpret the sample. The report's `--summary` gives flagged/answered separately for each question and counts unanswered subjects separately. Findings remain advisory.
 

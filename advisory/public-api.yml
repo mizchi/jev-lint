@@ -2,3 +2,4 @@ rules:
   text/public-api-surface: on
   text/export-has-no-public-role: on
   text/api-use-is-unclear: on
+  text/entry-layout-obscures-workflow: on

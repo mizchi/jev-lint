@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Round trip
+Write current records through the archive facade. To read existing records back, use unpack from that same facade. A compatibility package is also available for older formats.
+
+Reviewed import paths and their exports (other paths were not inspected):
+archive: pack
+archive/compat: unpack

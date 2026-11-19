@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/root.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "All three editing operations are exported by the promised root."
+    },
+    {
+      "file": "fixtures/moved.apiworkflow",
+      "kind": "false-negative-risk",
+      "reason": "Commit moved to the filters entry while the guide still promises the root for the whole edit."
+    },
+    {
+      "file": "fixtures/handoff.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The caller can complete the workflow using the explicitly documented handoff."
+    },
+    {
+      "file": "fixtures/optional.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The preview can finish without committing."
+    },
+    {
+      "file": "fixtures/wrong-facade.apiworkflow",
+      "kind": "false-negative-risk",
+      "reason": "The inverse operation lives on compat with no documented handoff."
+    },
+    {
+      "file": "fixtures/go-split.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The documented constructor package and receiver method work together."
+    },
+    {
+      "file": "fixtures/go-missing.apiworkflow",
+      "kind": "false-negative-risk",
+      "reason": "The constructor required from the main package is available only under wire."
+    },
+    {
+      "file": "fixtures/type-only.apiworkflow",
+      "kind": "false-negative-risk",
+      "reason": "The documented entry exports only the type and the constructor is on runtime."
+    },
+    {
+      "file": "fixtures/unlisted.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The selected map gives no evidence about the plugins entry."
+    },
+    {
+      "file": "fixtures/client-step.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The guide explicitly assigns rendering to the application."
+    },
+    {
+      "file": "fixtures/implicit-handoff.apiworkflow",
+      "kind": "false-negative-risk",
+      "reason": "The guide starts the caller at the root and omits the separate import needed for the required final step."
+    },
+    {
+      "file": "fixtures/moved-variant.apiworkflow",
+      "kind": "unrelated",
+      "reason": "Changing frame size leaves the documented entry mismatch intact."
+    },
+    {
+      "file": "fixtures/migration-index.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The handoff is in the guide\u2019s entry reference rather than its prose."
+    },
+    {
+      "file": "fixtures/migration-overview.apiworkflow",
+      "kind": "false-negative-risk",
+      "reason": "Mentioning a compatibility package does not correct the explicit instruction to import unpack from the facade."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/moved.apiworkflow",
+      "variant": "fixtures/moved-variant.apiworkflow"
+    }
+  ]
+}
