@@ -8,6 +8,10 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ## Unreleased
 
+## 0.9.1 — 2026-11-20
+
+- Add an experimental decision pipeline for inspecting package manifests and replaying recorded evaluations. Run the inspector and the LangGraph example from the tagged repository checkout. The pipeline is a private experiment.
+
 ## 0.9.0 — 2026-11-19
 
 - Commandless startup and `auto` now ask for confirmation. In an unconfigured Git project, they select starter rules from up to 64 tracked filenames, print the proposed YAML, then lint up to three files within a 32 KiB source budget. Use `check` to run a full check directly.
