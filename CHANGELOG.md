@@ -8,6 +8,12 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ## Unreleased
 
+## 0.8.1 — 2026-11-19
+
+- Add advisory rules for library design and public API review, with hints about what to inspect next. Public API reviews cover TypeScript, Go and Rust and can focus on documented workflows across entry points.
+- Show which member of a grouped Rust import a guide places in the wrong module and where the reviewed rustdoc lists it. Rustdoc workflows also recognize untagged Rust examples.
+- Enforce the text budget when the first line of a source block exceeds it.
+
 ## 0.8.0 — 2026-11-15
 
 ### Changed

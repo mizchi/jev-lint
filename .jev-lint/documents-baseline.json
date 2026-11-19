@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "5a7afda9b24ece161362b81c47d5b8a104934637cd40ce1a09bc7cb8d5e57f29",
+  "snapshotDigest": "233dcc4d7333526265698cf5d18aeaa6fb61a59237dd5cdcf87b9b79e1578c15",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -32,12 +32,12 @@
       "contextHash": "8541b78214bc19b2b274649f7f98ae121eca5ed67e09969af12ab437ff54e53a",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.96,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.97,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -66,12 +66,12 @@
       "contextHash": "23a7e04e577f02389fa87c48dfca7d85cfcce5acb3d03a36b15c65198d48f181",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.73,
+        "confidence": 0.72,
         "probabilities": {
-          "supports": 0.8,
+          "supports": 0.79,
           "contradicts": 0.18,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.03
         }
       }
     },
@@ -100,10 +100,10 @@
       "contextHash": "53afe11352e1ef9acdd938505376aa8731bf4d693acdb99b141ad910a80997bc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.71,
+        "confidence": 0.76,
         "probabilities": {
-          "supports": 0.78,
-          "contradicts": 0.21,
+          "supports": 0.82,
+          "contradicts": 0.17,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -236,10 +236,10 @@
       "contextHash": "0e7bf0f4ceb0c0a0544ea22fe24c5f58373b23a644b37fe5a0a73c8193937fe2",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.81,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.86,
-          "contradicts": 0.13,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -270,10 +270,10 @@
       "contextHash": "c00d588e7806bbb50ce017b80fc9ce9f45ed56bca3c6b89d1fb9304e5a9a0c30",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.89,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.92,
-          "contradicts": 0.08,
+          "supports": 0.89,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -307,9 +307,9 @@
         "confidence": 0.92,
         "probabilities": {
           "supports": 0.94,
-          "contradicts": 0.04,
+          "contradicts": 0.03,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.03
         }
       }
     },
@@ -372,10 +372,10 @@
       "contextHash": "3cad91cb720b9c9de6928d42af3f434477aea58378967cbc0484f5c147395a2c",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -406,12 +406,12 @@
       "contextHash": "34895e1a2c71125e06f90bca2e8118061c10ff361383334dde808e5b04cc7760",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.81,
+        "confidence": 0.87,
         "probabilities": {
-          "supports": 0.86,
-          "contradicts": 0.12,
+          "supports": 0.9,
+          "contradicts": 0.09,
           "unrelated": 0,
-          "insufficient_context": 0.02
+          "insufficient_context": 0.01
         }
       }
     },
@@ -508,10 +508,10 @@
       "contextHash": "eae3d0d22e8a56fc9ee15b44463b10183a978d890b1606ef7a0f434a65aceacc",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.68,
+        "confidence": 0.69,
         "probabilities": {
-          "supports": 0.76,
-          "contradicts": 0.23,
+          "supports": 0.77,
+          "contradicts": 0.22,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -542,10 +542,10 @@
       "contextHash": "8cecf2bfcf88789455d7eafa78a1b126bee955d21dc05f16fa0edb8326788196",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.87,
+        "confidence": 0.83,
         "probabilities": {
-          "supports": 0.9,
-          "contradicts": 0.1,
+          "supports": 0.87,
+          "contradicts": 0.13,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -576,12 +576,12 @@
       "contextHash": "fb066825473969cb202a5c9cfa6f059c9fb0d5ca44b29c3f975d1e1a427a2026",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.95,
+        "confidence": 0.93,
         "probabilities": {
-          "supports": 0.96,
+          "supports": 0.95,
           "contradicts": 0.03,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -610,10 +610,10 @@
       "contextHash": "d1acc67b489fffe17b2e80b045f35be0a9d3bd1660f156f7a6e52e3b975f27a6",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.92,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.94,
-          "contradicts": 0.05,
+          "supports": 0.93,
+          "contradicts": 0.06,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -746,10 +746,10 @@
       "contextHash": "5b3e6e3d6e9313b46b5d867319a9d0ff3eca623aedd3906c8e3275fab0251ea8",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.87,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.11,
+          "supports": 0.9,
+          "contradicts": 0.09,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -780,10 +780,10 @@
       "contextHash": "38c0e94fa369c5e957dc741b3766bef64a2de778ec94a57df7473f2c4770edea",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.99,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.02,
+          "supports": 0.99,
+          "contradicts": 0.01,
           "unrelated": 0,
           "insufficient_context": 0
         }
@@ -814,12 +814,12 @@
       "contextHash": "2186cd8f8e963d27e4f6eae436a488676c25c3d022daf9d460a5a1f7e5c71598",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.87,
+        "confidence": 0.88,
         "probabilities": {
-          "supports": 0.9,
+          "supports": 0.91,
           "contradicts": 0.09,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0
         }
       }
     },
@@ -891,10 +891,10 @@
       "contextHash": "604fcb8a9c1e317a8a6d49fc2439cd2b3f5c68d1e8a8bf26c48cb3203d30fff9",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.49,
+        "confidence": 0.57,
         "probabilities": {
-          "supports": 0.62,
-          "contradicts": 0.37,
+          "supports": 0.68,
+          "contradicts": 0.31,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
