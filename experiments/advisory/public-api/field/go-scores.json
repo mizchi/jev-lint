@@ -1,0 +1,162 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T07:38:47.377Z",
+  "model": "jev-1.14.0",
+  "suite": "go",
+  "rules": [
+    {
+      "id": "entry-layout-obscures-workflow",
+      "draft": "fa510dace70d",
+      "at": 0.68
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.26,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.36,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.45,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.47,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.31,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "go/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 62,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 14,
+    "inputTokens": 58212,
+    "usd": 0.0024449040000000003,
+    "ms": 248
+  }
+}

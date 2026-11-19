@@ -1,0 +1,5 @@
+default: clean
+fixtures/original.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "memory.NewStorage supplies the storage to git.Clone. Head and Log are receiver methods on the returned Repository."}
+fixtures/wrong.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The edited example calls git.NewStorage. The reviewed storage/memory package supplies that constructor."}

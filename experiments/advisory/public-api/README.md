@@ -127,19 +127,19 @@ For fresh judgments run `node "$tool/src/cli.ts" eval suite --repeat 7` from eit
 
 ### Frozen-rule evaluation on sqlike, uneffect and luna.mbt
 
-We first selected four guide sections with concrete TypeScript imports in each repository and changed one import declaration per repository as a control. We then added one section without a named import per repository and a fourth control that changes the provider named in uneffect prose. We froze each batch before scoring. All three repositories were new to this evaluation. The shipped rule at jev-lint commit `bef17e8`, its evidence collector and its 0.68 cutoff stayed fixed. We checked the original routes against the package entry points and source exports.
+We first selected four guide sections with concrete TypeScript imports in each repository and changed one import declaration per repository as a control. We then added one section without a named import per repository and a fourth control that changes the provider named in uneffect prose. We froze each batch before scoring. All three repositories were new to this evaluation. The first evaluation used the collector at `bef17e8`. The table below uses the revised prose lookup with the same rule and 0.68 cutoff. We checked the original routes against the package entry points and source exports.
 
 | Repository | Reviewed entries | Original guide sections | Highest original mean | Wrong TS import mean | Wrong prose path mean |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| sqlike | 6 | 5 | 0.200 | 0.963 | — |
-| uneffect | 4 | 5 | 0.090 | 0.970 | 0.134 |
-| luna.mbt (TypeScript packages) | 4 | 5 | 0.077 | 0.963 | — |
+| sqlike | 6 | 5 | 0.217 | 0.963 | — |
+| uneffect | 4 | 5 | 0.060 | 0.973 | 0.951 |
+| luna.mbt (TypeScript packages) | 4 | 5 | 0.071 | 0.959 | — |
 
 The 15 original sections stayed below cutoff on all 105 judgments. All three TypeScript controls were flagged on all seven passes. The edits moved `openDatabase` from sqlike to litestream, `openCorsaApiFrontend` from the stable Corsa API to the experimental checker, and the two SSR functions from the wcssr server entry to its client entry.
 
 Three additional prose fixtures cover expected negatives in the shipped rule. Starting from the same failing archive example, either re-exporting `unpack` at the promised facade or naming its actual provider in the guide makes the route valid. A third guide names separate Corsa providers for symbol queries and checker exports. The seven-pass run at the shipped cutoff classified all eleven clean and eight defect fixtures correctly on every pass. The external expectations also label the original guide paired with each of the four wrong-path controls.
 
-The uneffect prose control makes the **same wrong path claim about the same symbol** in another real section, by changing the opening sentence of “Stable Corsa semantic-query boundary”. The public entry map contains the correct provider. The following paragraph discusses loading the stable module, but never corrects the claim about where the symbol is exported. The collector adds exact name lookups for static named imports in fenced code. This prose claim went to the model with the entry map and no such lookup. It was missed in all seven passes (0.10–0.17). Its mean falls below a valid sqlike transport guide (0.20), so the observed means cannot be separated by a single cutoff. The experiment tests documented TS entry points. The four deliberately altered examples do not establish recall on naturally occurring defects.
+The uneffect prose control makes the **same wrong path claim about the same symbol** in another real section, by changing the opening sentence of “Stable Corsa semantic-query boundary”. The public entry map contains the correct provider. The following paragraph discusses loading the stable module, but never corrects the claim about where the symbol is exported. The original collector missed the incorrect prose claim in all seven passes (mean 0.134). With the explicit name/provider lookup the same control scores 0.95–0.96 and the original scores 0.06 on every pass. Input digests changed for exactly these two cases. All 15 original guides and four labelled defects now match their labels on every pass. The [original scores](https://github.com/mizchi/jev-lint/blob/34b820c/experiments/advisory/public-api/external/scores.json) remain available for comparison.
 
 The external corpus includes source revisions, guide selectors and mutation text in [corpus.json](external/corpus.json), with the 133 judgments in [scores.json](external/scores.json). From the jev-lint checkout, use a directory containing clones named `sqlike`, `uneffect` and `luna.mbt` with the pinned commits available. The collector creates isolated snapshots under a fresh output directory.
 
@@ -153,4 +153,37 @@ cp "$data/scores.json" "$out/suite/baseline.json"
 (cd "$out" && node "$tool/src/cli.ts" eval suite --replay)
 ```
 
-For fresh judgments, run `node "$tool/src/cli.ts" eval suite --repeat 7` from the output directory with `TYPESAFE_API_KEY` and `JEV_LINT_MODEL=jev-1.14.0`. The saved seven-pass run used 730,814 input tokens and cost about $0.031. Replay reproduces the single false negative. A fresh live evaluation can exit nonzero on that labelled miss.
+For fresh judgments, run `node "$tool/src/cli.ts" eval suite --repeat 7` from the output directory with `TYPESAFE_API_KEY` and `JEV_LINT_MODEL=jev-1.14.0`. The saved seven-pass run used 731,682 input tokens and cost about $0.031. Offline replay reproduces the classifications and exits 1 with the drift diagnostic `blind`: the explicitly labelled cases sit too far from the cutoff to detect small changes in behavior. The shipped fixture suite separately exercises that boundary.
+
+### Historical correction and Go guide
+
+We froze the collector after the uneffect fix and used `jev-1.14.0` and the shipped cutoff of 0.68 for both evaluations.
+
+| Evidence | Seven-pass range | Expected | Flagged passes |
+| --- | ---: | --- | ---: |
+| Drizzle, original guide | 0.97–0.97 | Wrong provider | 7/7 |
+| Drizzle, corrected guide | 0.03–0.04 | Valid | 0/7 |
+| go-git, original README | 0.26–0.38 | Valid | 0/7 |
+| go-git, changed constructor qualifier | 0.36–0.53 | Wrong provider | 0/7 |
+
+**Drizzle.** The “integer” section imported both `int` and `singlestoreTable` from `drizzle-orm/mysql-core`. The latter requires the SingleStore entry. The maintainers changed the import path in March 2025. We used the exact guide from the parent and corrected commits with the same npm distribution, 0.41.0, the latest stable release at the time. Full signature extraction from these declarations exceeded the default Node heap. For this name-level test the collector takes declaration inventories projected from the published type entry points, with runtime value availability checked against the companion ESM modules. The script verifies the tarball digest before loading it in an environment without the API key. The projected entries carry names and type/value distinctions only. [Maintainer correction](https://github.com/drizzle-team/drizzle-orm-docs/commit/676a70890402bdbcab311ae0e57e193303b97cbf) · [Recorded scores](field/drizzle-scores.json)
+
+**Go.** The “In-memory example” passes `memory.NewStorage()` to `git.Clone`, then calls `r.Head()` and `r.Log()` on the returned repository. We reviewed the root, storage/memory and plumbing/object packages. The control changes only `memory.NewStorage()` to `git.NewStorage()`. The real guide uses package qualifiers without an import block. Both versions received low scores despite the constructor appearing only in the storage package. This is a false negative on a controlled edit. [Pinned README](https://github.com/go-git/go-git/blob/75f3ca83333c62fa9603b8b4f6b339bd3e9ec9f4/README.md#in-memory-example) · [Recorded scores](field/go-scores.json)
+
+To recreate the inputs, start in this checkout with local clones of `drizzle-team/drizzle-orm-docs` and `go-git/go-git` containing the pinned commits:
+
+```sh
+tool=$PWD
+data="$tool/experiments/advisory/public-api/field"
+tmp=$(mktemp -d)
+npm pack drizzle-orm@0.41.0 --ignore-scripts --pack-destination "$tmp"
+bash "$data/collect.sh" "$HOME/ghq/github.com/drizzle-team/drizzle-orm-docs" "$HOME/ghq/github.com/go-git/go-git" "$tmp/drizzle-orm-0.41.0.tgz" "$tmp/review"
+cd "$tmp/review"
+shasum -a 256 -c "$data/inputs.sha256"
+for group in drizzle go; do
+  cp "$data/$group-scores.json" "$group/baseline.json"
+  node "$tool/src/cli.ts" eval "$group" --replay
+done
+```
+
+A live evaluation uses `eval "$group" --repeat 7`. The Go defect retains its positive label so the missed case remains visible.

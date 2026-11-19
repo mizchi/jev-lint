@@ -6,3 +6,8 @@ For a checker fact export, use `exportCorsaCheckerFacts` from `@mizchi/uneffect/
 Reviewed import paths and their exports (other paths were not inspected):
 @mizchi/uneffect/corsa/api: openCorsaApiFrontend
 @mizchi/uneffect/experimental/corsa: exportCorsaCheckerFacts
+
+Provider lookup for explicit names and paths in the guide:
+Every checked name is listed at its documented provider.
+openCorsaApiFrontend from @mizchi/uneffect/corsa/api: exported here
+exportCorsaCheckerFacts from @mizchi/uneffect/experimental/corsa: exported here

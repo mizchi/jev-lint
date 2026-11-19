@@ -24,3 +24,17 @@ test("guide-imports parses TS assertions and JSX using the fence language", () =
   assert.match(lookup, /first from pkg: exported here/);
   assert.match(lookup, /second from pkg: exported here/);
 });
+
+test("guide-imports checks a provider named in prose against reviewed entries", () => {
+  const entries = new Map([["pkg/api", new Map([["open", false]])], ["pkg/tools", new Map<string, boolean>()]]);
+  const lookup = (path: string) => guideImportLookup("`open` from `" + path + "` opens a project.", entries);
+  assert.match(lookup("pkg/api"), /open from pkg\/api: exported here/);
+  assert.match(lookup("pkg/tools"), /open from pkg\/tools: absent here; exported by pkg\/api/);
+  assert.equal(lookup("external"), "");
+});
+
+test("guide-imports leaves quoted code examples out of prose lookups", () => {
+  const lines = ["~~~md", "`foo` from `pkg`", "~~~", "```js", "// `foo` from `pkg`", "```", "``example: `foo` from `pkg```"];
+  lines.push("`foo` ``(as in the old docs)`` from `pkg`");
+  assert.equal(guideImportLookup(lines.join("\n"), new Map([["pkg", new Map()]])), "");
+});
