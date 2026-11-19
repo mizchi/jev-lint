@@ -15,22 +15,20 @@ for group in drizzle go; do
   cp "$tool/rules/text/entry-layout-obscures-workflow/rule.yml" "$out/$group/rule.yml"
 done
 
-# Expand only the names needed by the workflow input, keeping the full published entry inventories.
+# Read the two published declaration entry points directly.
 expected=59a3c861f92440762c874ef706792140c3e966bf567b002db3da19a5cac05785
 actual=$(shasum -a 256 < "$tarball")
 [[ ${actual%% *} == "$expected" ]]
-mkdir "$out/names"
 tar -xzf "$tarball" -C "$out"
-env -i PATH="$PATH" node "$here/drizzle-entry-names.mjs" "$out/package" "$out/names"
 for side in before after; do
   rev=676a70890402bdbcab311ae0e57e193303b97cbf
   if [[ $side == before ]]; then rev=e4b7f0c30b10bf7a0f2f8ccd3b126d23f8cd9af6; fi
   mkdir "$out/$side"
   git -C "$docs" show "$rev:src/content/docs/column-types/singlestore.mdx" > "$out/$side/guide.mdx"
   cat > "$out/$side/layout.json" <<'JSON'
-{"entries":{"drizzle-orm/mysql-core":"../names/mysql-core.ts","drizzle-orm/singlestore-core":"../names/singlestore-core.ts"},"workflows":[{"guide":"guide.mdx","heading":"integer"}]}
+{"entries":{"drizzle-orm/mysql-core":"../package/mysql-core/index.d.ts","drizzle-orm/singlestore-core":"../package/singlestore-core/index.d.ts"},"workflows":[{"guide":"guide.mdx","heading":"integer"}]}
 JSON
-  node "$tool/src/cli.ts" public-api-inputs "$out/input-$side" --api-layout "$out/$side/layout.json" > "$out/$side-inventory.json"
+  node "$tool/src/cli.ts" public-api-inputs "$out/input-$side" --workflows-only --api-layout "$out/$side/layout.json" > "$out/$side-inventory.json"
   cp "$out/input-$side/"*.apiworkflow "$out/drizzle/fixtures/$side.apiworkflow"
 done
 

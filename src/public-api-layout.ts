@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
-import { collectPublicApi, writePublicApiInputs } from "../advisory/public-api.mjs";
+import { collectPublicApi, collectPublicNames, writePublicApiInputs } from "../advisory/public-api.mjs";
 import { selectDocumentExcerpt } from "./document-input.ts";
 import { goGuideLookups } from "./go-guide-imports.ts";
+import { rustGuideLookup } from "./rust-guide-imports.ts";
 import { MAX_BLOCK_CHARS } from "./text.ts";
 
 function object(value: unknown): value is Record<string, unknown> {
@@ -13,7 +14,7 @@ function nonempty(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-export async function publicApiLayoutInputs(out: string, manifest: string, binary: string, bindingGuide?: string | null) {
+export async function publicApiLayoutInputs(out: string, manifest: string, binary: string, bindingGuide?: string | null, workflowsOnly = false) {
   const layout: unknown = JSON.parse(readFileSync(manifest, "utf8"));
   if (!object(layout) || !object(layout.entries) || !Object.keys(layout.entries).length ||
       !Array.isArray(layout.workflows) || !layout.workflows.length) {
@@ -37,7 +38,9 @@ export async function publicApiLayoutInputs(out: string, manifest: string, binar
       throw new Error(`${item.guide}${heading ? " / " + heading : ""}: ${(error as Error).message}`);
     }
   });
-  const surfaces = await collectPublicApi(entries.map(entry => resolve(root, entry.source)), binary);
+  const sources = entries.map(entry => resolve(root, entry.source));
+  const detailed = workflowsOnly ? undefined : await collectPublicApi(sources, binary);
+  const surfaces = detailed ?? await collectPublicNames(sources, binary);
   const entryMap = surfaces.map((surface, i) => {
     const names = surface.entries.map(binding => (binding.typeOnly ? "type " : "") + binding.name +
       (binding.alias ? " (alias of " + binding.alias + ")" : "")).sort();
@@ -49,6 +52,8 @@ export async function publicApiLayoutInputs(out: string, manifest: string, binar
       tsEntries.set(entries[i].publicPath, new Map(surface.entries.map(binding => [binding.name, !!binding.typeOnly])));
     }
   }
+  const rustEntries = new Map(surfaces.flatMap((surface, i) => surface.language === "rust"
+    ? [[entries[i].publicPath, new Set(surface.entries.map(binding => binding.name))] as const] : []));
   const lookup = tsEntries.size ? (await import("./guide-imports.ts")).guideImportLookup : undefined;
   const goPackages = surfaces.flatMap((surface, i) => surface.packageName
     ? [{ path: entries[i].publicPath, name: surface.packageName, exports: new Set(surface.entries.map(entry => entry.name)) }]
@@ -57,14 +62,18 @@ export async function publicApiLayoutInputs(out: string, manifest: string, binar
   const workflows = guides.map(({ guide, heading, startLine, endLine, quote }, index) => {
     const title = Array.from(heading ?? basename(guide)).slice(0, 48).join("").replace(/[^\p{L}\p{N}_-]+/gu, "-");
     const file = `workflow-${index + 1}-${title}.apiworkflow`;
-    const text = `Guide: ${guide}:${startLine}-${endLine}\n${quote}\n\nReviewed import paths and their exports (other paths were not inspected):\n${entryMap}\n` + (lookup?.(quote, tsEntries) ?? "") + (goLookups[index] ?? "");
+    const text = `Guide: ${guide}:${startLine}-${endLine}\n${quote}\n\nReviewed import paths and their exports (other paths were not inspected):\n${entryMap}\n` + (lookup?.(quote, tsEntries) ?? "") + (goLookups[index] ?? "") +
+      (rustEntries.size ? rustGuideLookup(quote, rustEntries, binary) : "");
     // A missing export is meaningful only when the model receives the entire selected map.
     if (text.length > MAX_BLOCK_CHARS) throw new Error(`${file} exceeds the text budget; narrow the guide section or selected entry map`);
     return { file, guide, heading, startLine, endLine, text };
   });
-  const inventories = writePublicApiInputs(out, surfaces, bindingGuide, workflows);
+  const inventories = writePublicApiInputs(out, detailed ?? [], bindingGuide, workflows);
+  const records = entries.map(({ source, publicPath }, i) => ({
+    ...(inventories[i] ?? { count: surfaces[i].entries.length }), target: source, publicPath,
+  }));
   return {
-    entries: inventories.map((inventory, i) => ({ ...inventory, target: entries[i].source, publicPath: entries[i].publicPath })),
+    entries: records,
     workflows: workflows.map(({ text, ...info }) => info),
   };
 }

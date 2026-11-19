@@ -30,12 +30,14 @@ const encloses = (parent, child) => offset(parent).start <= offset(child).start 
 const compact = text => text.replace(/\s+/g, ' ').trim()
 const clipped = text => text.length <= 220 ? text : text.slice(0, 219) + '…'
 
-export function goSurface(sources, scan) {
+const nameRules = Object.fromEntries(['package', 'type', 'alias', 'var', 'const', 'func', 'method', 'error'].map(id => [id, rules[id]]))
+
+export function goSurface(sources, scan, namesOnly = false) {
   const bindings = new Map()
   const packages = new Set()
   const packageDocs = new Set()
   for (const source of sources) {
-    const hits = Map.groupBy(scan('Go', source, rules), hit => hit.ruleId)
+    const hits = Map.groupBy(scan('Go', source, namesOnly ? nameRules : rules), hit => hit.ruleId)
     const lines = source.split('\n')
     const comments = new Map((hits.get('comment') ?? [])
       .filter(c => /^\s*(?:\/\/|\/\*)/.test(lines[c.range.start.line]))
@@ -63,6 +65,10 @@ export function goSurface(sources, scan) {
     for (const t of [...hits.get('type') ?? [], ...hits.get('alias') ?? []]) {
       const { NAME, TYPE } = t.metaVariables.single
       if (!isPublic(NAME.text)) continue
+      if (namesOnly) {
+        bindings.set(NAME.text, { name: NAME.text })
+        continue
+      }
       const memberDocs = []
       let shape = compact(TYPE.text)
       if (/^(?:struct|interface)\s*\{/.test(shape)) {
@@ -94,6 +100,10 @@ export function goSurface(sources, scan) {
     for (const kind of ['var', 'const']) {
       for (const hit of hits.get(kind) ?? []) {
         if (!isPublic(hit.text)) continue
+        if (namesOnly) {
+          bindings.set(hit.text, { name: hit.text })
+          continue
+        }
         const annotation = (hits.get('annotation') ?? []).find(spec => encloses(spec, hit))
         const type = annotation?.metaVariables.single.TYPE.text
         add(hit.text, kind + ' ' + hit.text + (type ? ' ' + clipped(compact(type)) : ''), hit)
@@ -105,9 +115,13 @@ export function goSurface(sources, scan) {
       if (!isPublic(NAME.text)) continue
       const receiver = RECEIVER?.text.replace(/\[[\s\S]*\]/, '').match(/([\p{L}_][\p{L}\p{N}_]*)\s*\)$/u)?.[1]
       if (RECEIVER && (!receiver || !isPublic(receiver))) continue
+      const name = (receiver ? receiver + '.' : '') + NAME.text
+      if (namesOnly) {
+        bindings.set(name, { name })
+        continue
+      }
       const body = (hits.get('body') ?? []).find(block => encloses(hit, block))
       const signature = bytes.subarray(offset(NAME).end, body ? offset(body).start : offset(hit).end).toString()
-      const name = (receiver ? receiver + '.' : '') + NAME.text
       add(name, 'func ' + name + compact(signature), hit, 'func ' + name + clipped(compact(signature)))
     }
   }

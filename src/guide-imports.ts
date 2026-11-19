@@ -1,3 +1,4 @@
+import { lookupProvider } from "./provider-lookup.ts";
 import { guideBlocks } from "./guide-blocks.ts";
 import ts from "../advisory/compiler.mjs";
 
@@ -36,19 +37,18 @@ export function guideImportLookup(guide: string, entries: Map<string, Map<string
   let hasUnprovidedName = false;
   let includesProse = false;
   for (const { name, path, prose } of guideReferences(guide)) {
-    const names = entries.get(path);
-    if (!names) continue;
+    const provider = lookupProvider(entries, path, name);
+    if (provider.kind === "unreviewed") continue;
     includesProse ||= prose;
     const subject = name + " from " + path;
-    const typeOnly = names.get(name);
-    if (typeOnly !== undefined) {
-      rows.add(subject + (typeOnly ? ": exported here as type only" : ": exported here"));
+    if (provider.kind === "here") {
+      rows.add(subject + (entries.get(path)?.get(name) ? ": exported here as type only" : ": exported here"));
+    } else if (provider.kind === "elsewhere") {
+      rows.add(subject + ": absent here; exported by " + provider.paths.join(", "));
+      missing.add(subject);
     } else {
-      const other = [...entries].filter(([, exports]) => exports.has(name)).map(([entry]) => entry);
-      const row = subject + (other.length ? ": absent here; exported by " + other.join(", ") : ": absent from all reviewed entries");
-      rows.add(row);
-      if (other.length) missing.add(subject);
-      else hasUnprovidedName = true;
+      rows.add(subject + ": absent from all reviewed entries");
+      hasUnprovidedName = true;
     }
   }
   if (!rows.size) return "";

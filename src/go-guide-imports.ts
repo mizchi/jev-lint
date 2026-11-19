@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { lookupProvider } from "./provider-lookup.ts";
 import { guideBlocks } from "./guide-blocks.ts";
 
 interface Package {
@@ -38,12 +39,15 @@ export function goGuideLookups(guides: string[], packages: Package[]): string[] 
     let hasMissingName = false;
     for (const { Path: path, Qualifier: qualifier, Name: name, Inferred: inferred } of selectors) {
       const subject = qualifier + "." + name;
+      const provider = lookupProvider(byPath, path, name);
+      if (provider.kind === "unreviewed") continue;
       let status = "exported here";
-      if (!byPath.get(path)!.has(name)) {
+      if (provider.kind === "elsewhere") {
+        status = "absent here; exported by " + provider.paths.join(", ");
+        misplaced.add(subject);
+      } else if (provider.kind === "absent") {
+        status = "absent from all reviewed packages";
         hasMissingName = true;
-        const others = packages.filter(pkg => pkg.exports.has(name)).map(pkg => pkg.path);
-        status = others.length ? "absent here; exported by " + others.join(", ") : "absent from all reviewed packages";
-        if (others.length) misplaced.add(subject);
       }
       const source = inferred ? "matched package name" : "explicit import";
       rows.add(subject + " from " + path + " (" + source + "): " + status);

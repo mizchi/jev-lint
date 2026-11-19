@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process'
 import { mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { basename, extname, join, resolve } from 'node:path'
+import { rustSurface } from './public-api-rust.mjs'
 import { goSurface } from './public-api-go.mjs'
 
 // This is lexical context for a reader. A name match is not a usage count.
@@ -19,23 +20,25 @@ function relatedSignatures(entries) {
   return peers
 }
 
-export async function collectPublicApi(targets, binary) {
-  // Scan stdin so a target repository cannot supply ast-grep configuration.
-  function scan(language, source, rules) {
-    const spec = Object.entries(rules).map(([id, rule]) => JSON.stringify({ id, language, rule })).join('\n---\n')
-    const result = spawnSync(binary, ['scan', '--stdin', '--inline-rules', spec, '--json=compact'], {
-      input: source, encoding: 'utf8', maxBuffer: 128 * 1024 * 1024,
-    })
-    if (result.error || result.status !== 0) throw result.error ?? new Error(result.stderr.trim() || 'ast-grep failed')
-    return JSON.parse(result.stdout)
-  }
+// Scan stdin so a target repository cannot supply ast-grep configuration.
+export function scanPublicSource(binary, language, source, rules) {
+  const spec = Object.entries(rules).map(([id, rule]) => JSON.stringify({ id, language, rule })).join('\n---\n')
+  const result = spawnSync(binary, ['scan', '--stdin', '--inline-rules', spec, '--json=compact'], {
+    input: source, encoding: 'utf8', maxBuffer: 128 * 1024 * 1024,
+  })
+  if (result.error || result.status !== 0) throw result.error ?? new Error(result.stderr.trim() || 'ast-grep failed')
+  return JSON.parse(result.stdout)
+}
 
+async function collect(targets, binary, namesOnly) {
+  const scan = (lang, source, rules) => scanPublicSource(binary, lang, source, rules)
   const outputs = []
   for (const target of targets) {
     const path = resolve(target)
     let surface
-    const isGo = statSync(path).isDirectory()
-    if (isGo) {
+    let language
+    if (statSync(path).isDirectory()) {
+      language = 'go'
       // go list selects the active platform and build tags without loading dependencies.
       const list = spawnSync('go', ['list', '-find', '-json', '.'], {
         cwd: path, encoding: 'utf8', env: { ...process.env, GO111MODULE: 'off', GOWORK: 'off', GOTOOLCHAIN: 'local' },
@@ -43,14 +46,23 @@ export async function collectPublicApi(targets, binary) {
       if (list.error || list.status !== 0) throw list.error ?? new Error(list.stderr.trim())
       const pkg = JSON.parse(list.stdout)
       const files = [...pkg.GoFiles ?? [], ...pkg.CgoFiles ?? []].sort()
-      surface = goSurface(files.map(name => readFileSync(join(path, name), 'utf8')), scan)
+      surface = goSurface(files.map(name => readFileSync(join(path, name), 'utf8')), scan, namesOnly)
     } else if (/^\.(?:[cm]?ts|tsx)$/.test(extname(path))) {
+      language = 'typescript'
       const { typescriptSurface } = await import('./public-api-typescript.mjs')
-      surface = typescriptSurface(path, scan)
+      surface = typescriptSurface(path, scan, namesOnly)
+    } else if (['index.html', 'Cargo.toml'].includes(basename(path)) || extname(path) === '.rs') {
+      language = 'rust'
+      surface = rustSurface(path, namesOnly)
     } else {
-      throw new Error('expected a TypeScript entry point or a Go package directory: ' + target)
+      throw new Error('expected a TypeScript entry point, Go package directory, Rust library crate or rustdoc module index.html: ' + target)
     }
     const entries = surface.bindings
+    const common = { entries, packageName: surface.packageName, language }
+    if (namesOnly) {
+      outputs.push(common)
+      continue
+    }
     const rows = entries.map(entry => entry.row).sort()
     const body = ['Surface: ' + surface.label, 'Public names: ' + rows.length, ...rows].join('\n') + '\n'
     const stem = (outputs.length + 1) + '-' + basename(path)
@@ -59,10 +71,13 @@ export async function collectPublicApi(targets, binary) {
       aliases: entries.filter(e => e.alias).length, documented: entries.filter(e => !e.alias && e.doc).length,
       bindings: join('bindings', stem),
     }
-    outputs.push({ inventory, entries, packageName: surface.packageName, language: isGo ? 'go' : 'typescript', label: surface.label, packageDoc: surface.packageDoc, body })
+    outputs.push({ inventory, ...common, label: surface.label, packageDoc: surface.packageDoc, body })
   }
   return outputs
 }
+
+export const collectPublicApi = (targets, binary) => collect(targets, binary, false)
+export const collectPublicNames = (targets, binary) => collect(targets, binary, true)
 
 export function writePublicApiInputs(out, outputs, guide, workflows = []) {
   const guideText = guide ? readFileSync(guide, 'utf8') : ''

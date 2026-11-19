@@ -60,6 +60,7 @@ export interface Options {
   /** `--message-file`: read after parsing, so the parser reads nothing. */
   messageFile: string | null;
   apiDoc: string | null;
+  workflowsOnly: boolean;
   apiLayout: string | null;
   accept: boolean;
   acceptLast: boolean;
@@ -103,8 +104,8 @@ export interface Deps {
 export const USAGE = `jev-lint -- lint rules written as sentences, judged by a model
 
 usage:
-  jev-lint public-api-inputs <new-directory> --api-layout layout.json [--api-doc binding-guide.md]
-  jev-lint public-api-inputs <new-directory> <entry.ts|go-package>... [--api-doc guide.md]
+  jev-lint public-api-inputs <new-directory> --api-layout layout.json [--workflows-only | --api-doc binding-guide.md]
+  jev-lint public-api-inputs <new-directory> <entry.ts|go-package|Cargo.toml|rustdoc/index.html>... [--api-doc guide.md]
                                   extract public names and signatures for the surface score
   jev-lint advisory-inputs <repository> <manifest.json> <new-directory>
                                   collect versioned evidence for architecture advisories
@@ -304,6 +305,7 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
     message: null,
     messageFile: null,
     apiDoc: null,
+    workflowsOnly: false,
     apiLayout: null,
     accept: false,
     acceptLast: false,
@@ -430,6 +432,7 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
         opts.message = need(i, a);
         i += 1;
         break;
+      case "--workflows-only": opts.workflowsOnly = true; break;
       case "--api-layout": opts.apiLayout = need(i++, a); break;
       case "--api-doc": opts.apiDoc = need(i++, a); break;
       case "--message-file":

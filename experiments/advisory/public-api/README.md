@@ -168,7 +168,7 @@ All three pairs use `jev-1.14.0` with the shipped cutoff of 0.68. The Drizzle in
 | chi, original README | 0.08–0.11 | Valid | 0/7 |
 | chi, changed middleware qualifier | 0.83–0.86 | Wrong provider | 7/7 |
 
-**Drizzle.** The “integer” section imported both `int` and `singlestoreTable` from `drizzle-orm/mysql-core`. The latter requires the SingleStore entry. The maintainers changed the import path in March 2025. We used the exact guide from the parent and corrected commits with the same npm distribution, 0.41.0, the latest stable release at the time. Full signature extraction from these declarations exceeded the default Node heap. For this name-level test the collector takes declaration inventories projected from the published type entry points, with runtime value availability checked against the companion ESM modules. The script verifies the tarball digest before loading it in an environment without the API key. The projected entries carry names and type/value distinctions only. [Maintainer correction](https://github.com/drizzle-team/drizzle-orm-docs/commit/676a70890402bdbcab311ae0e57e193303b97cbf) · [Recorded scores](field/drizzle-scores.json)
+**Drizzle.** The “integer” section imported both `int` and `singlestoreTable` from `drizzle-orm/mysql-core`. The latter requires the SingleStore entry. The maintainers changed the import path in March 2025. We used the exact guide from the parent and corrected commits with the same npm distribution, 0.41.0, the latest stable release at the time. Full signature extraction from these declarations exceeded the default Node heap. The initial experiment projected the names into synthetic declarations. The field script now verifies the tarball and runs `--workflows-only` directly on its two published `index.d.ts` files. It reads 292 MySQL and 267 SingleStore names without loading package code or expanding ORM signatures. Both workflow digests match the original records. [Maintainer correction](https://github.com/drizzle-team/drizzle-orm-docs/commit/676a70890402bdbcab311ae0e57e193303b97cbf) · [Recorded scores](field/drizzle-scores.json)
 
 **go-git.** The “In-memory example” passes `memory.NewStorage()` to `git.Clone`, then calls `r.Head()` and `r.Log()` on the returned repository. We reviewed the root, storage/memory and plumbing/object packages. The control changes only `memory.NewStorage()` to `git.NewStorage()`. The real guide uses package qualifiers without an import block. Before selector lookup, every pass missed the control (0.36–0.53). The revised input resolves the declared package names, lists storage/memory as the provider of the misplaced constructor and omits calls on the local receiver. [Previous scores](https://github.com/mizchi/jev-lint/blob/a8829ca/experiments/advisory/public-api/field/go-scores.json) · [Pinned README](https://github.com/go-git/go-git/blob/75f3ca83333c62fa9603b8b4f6b339bd3e9ec9f4/README.md#in-memory-example) · [Recorded scores](field/go-scores.json)
 
@@ -192,3 +192,27 @@ done
 ```
 
 A live evaluation uses `eval "$group" --repeat 7`. The shipped workflow suite also pairs a misplaced Go constructor with a valid guide that names its provider. All 21 cases (12 clean and nine defects) matched their labels on every one of seven passes.
+
+### Rust module and import evaluation
+
+The Rust field pair uses the public “Usage” section of bytes 1.12.1, its std feature and rustdoc 1.98.0. The original imports four names from the crate root. One path change moves `BytesMut` into `bytes::buf`, which does not document it. The two module indices list six and nine public names respectively. The original projection listed lookup results only and missed the edit on all seven passes (0.12–0.20). The final evidence expands nested imports and gives the documented and available use paths. At the existing 0.68 cutoff the original scored 0.06–0.08 and the edit 0.71–0.79 in a fresh 21-pass run. This pair was used during development. In an earlier seven-pass run on the final evidence, the edit ranged from 0.63 to 0.76, with three misses. Treat single judgments near the cutoff accordingly. [Initial scores](field/bytes-scores-initial.json) · [Final scores](field/bytes-scores.json)
+
+A full review of the original two Rust modules produced two surfaces, 15 bindings and one workflow. All four advisories answered their 33 subjects on three passes with zero mean-score findings. These inputs have no human defect labels. [Full review scores](field/bytes-full-scores.json)
+
+The shipped suite separately pairs a working Rust decoder call with the same call imported from the wrong module. All 23 labelled fixtures (13 clean, ten defects) matched their labels on all seven passes. The model, rubric and cutoff are unchanged.
+
+To reproduce the field pair, start from the jev-lint checkout with the published `bytes-1.12.1.crate` archive. The script verifies the archive digest and uses stable rustdoc. Use rustdoc 1.98.0 to reproduce the original toolchain.
+
+```sh
+tool=$PWD
+data="$tool/experiments/advisory/public-api/field"
+out=$(mktemp -d)/review
+bash "$data/bytes.sh" /path/to/bytes-1.12.1.crate "$out"
+cd "$out"
+shasum -a 256 -c "$data/bytes-inputs.sha256"
+cp "$data/bytes-scores.json" bytes/baseline.json
+node "$tool/src/cli.ts" eval bytes --replay
+node "$tool/src/cli.ts" public-api-inputs full --api-layout original/layout.json
+(cd full && shasum -a 256 -c "$data/bytes-full.sha256")
+node "$tool/src/cli.ts" replay "$data/bytes-full-scores.json" --no-config --summary
+```
