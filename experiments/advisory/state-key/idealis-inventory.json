@@ -1,0 +1,228 @@
+{
+  "schema": 1,
+  "repository": "mizchi/idealis",
+  "revision": "d147550c80d814e23f5d76f8ded25e30bf190da4",
+  "files": 28,
+  "packages": [
+    "@mizchi/idealis"
+  ],
+  "commits": [
+    "d147550c80d814e23f5d76f8ded25e30bf190da4",
+    "fbf0d66485673d69b41f50b7dada8eea43c9889f",
+    "d3954cf3d4fb0a3376cb323b2462dc605e75d8a8",
+    "b08813b7378b706eb9fe646950b130972e20c205",
+    "a733d37d1cfa74918029ca1e174eb2935966aaba",
+    "04946491d8adf1b208e0929ab76546156913920e",
+    "489504bfd6a2ad388566ac5fd1141f0f8ff4b9de",
+    "9e1e20d9def45fa4797cf63356ff7c94906fc2e6",
+    "54751deb097cb7e337c3750e8d8ff45316166ede",
+    "87e45c2e720a09617e186413ac1a616b6332db09",
+    "31956790021a9bdb0c2922463ce0ab807f594232",
+    "c96c0f5bcfa9b439aeed6329c79324606eac89fe",
+    "989feb4223e173f3427776189c6bea04bccd8bed",
+    "b0e9c0bac7732a50dea3ae79f06952bd3a75c83a",
+    "2e059e9e72333e8665ac34ca9abd0b2efa6a8b95",
+    "6d6d724a38c272e7d144aaef82024af62fb85679",
+    "f2598f36819a576d5fdc29c065c1895cba4f6805",
+    "87d0c1a9b0394fc979a50ecc62d909aad773df00",
+    "23e8d91392b69bec8a89788572fc432aafe52136",
+    "317f8a18d83d36cdd5a00aebeacce721942c7cf0"
+  ],
+  "consumers": [
+    {
+      "contract": "src/contracts.ts:6-13",
+      "name": "Model",
+      "members": [
+        "name",
+        "initial",
+        "actions",
+        "step",
+        "key",
+        "invariants"
+      ],
+      "clients": [
+        {
+          "file": "src/checker.ts",
+          "called": [
+            "actions",
+            "initial",
+            "key",
+            "step"
+          ]
+        },
+        {
+          "file": "src/conformance.ts",
+          "called": [
+            "initial",
+            "key",
+            "step"
+          ]
+        },
+        {
+          "file": "src/finite.ts",
+          "called": [
+            "actions",
+            "initial",
+            "key",
+            "step"
+          ]
+        },
+        {
+          "file": "src/history.ts",
+          "called": [
+            "initial",
+            "step"
+          ]
+        },
+        {
+          "file": "src/portable-wasm.ts",
+          "called": [
+            "initial",
+            "key",
+            "step"
+          ]
+        },
+        {
+          "file": "src/compose.ts",
+          "called": [
+            "actions",
+            "initial",
+            "key",
+            "step"
+          ]
+        }
+      ]
+    },
+    {
+      "contract": "src/trace.ts:56-59",
+      "name": "TraceGuards",
+      "members": [
+        "action",
+        "observation"
+      ],
+      "clients": [
+        {
+          "file": "src/trace.ts",
+          "called": [
+            "action",
+            "observation"
+          ]
+        }
+      ]
+    },
+    {
+      "contract": "src/contracts.ts:21-25",
+      "name": "Driver",
+      "members": [
+        "reset",
+        "step",
+        "dispose"
+      ],
+      "clients": [
+        {
+          "file": "src/conformance.ts",
+          "called": [
+            "dispose",
+            "reset",
+            "step"
+          ]
+        },
+        {
+          "file": "src/portable-wasm.ts",
+          "called": [
+            "dispose",
+            "reset",
+            "step"
+          ]
+        }
+      ]
+    },
+    {
+      "contract": "src/contracts.ts:207-209",
+      "name": "PortableCore",
+      "members": [
+        "request"
+      ],
+      "clients": [
+        {
+          "file": "src/safety.ts",
+          "called": [
+            "request"
+          ]
+        },
+        {
+          "file": "src/portable-wasm.ts",
+          "called": [
+            "request"
+          ]
+        },
+        {
+          "file": "src/tla-source.ts",
+          "called": [
+            "request"
+          ]
+        }
+      ]
+    },
+    {
+      "contract": "src/contracts.ts:306-309",
+      "name": "VerificationBackend",
+      "members": [
+        "descriptor",
+        "check"
+      ],
+      "clients": [
+        {
+          "file": "src/backend.ts",
+          "called": [
+            "check"
+          ]
+        }
+      ]
+    },
+    {
+      "contract": "src/tla.ts:11-19",
+      "name": "TlaMapping",
+      "members": [
+        "name",
+        "observation",
+        "action"
+      ],
+      "clients": [
+        {
+          "file": "src/tla.ts",
+          "called": [
+            "action",
+            "observation"
+          ]
+        }
+      ]
+    }
+  ],
+  "cycles": [],
+  "candidates": [
+    {
+      "file": "600c675f46ff96ede050331b.statekey",
+      "rule": "state-key-preserves-behavior",
+      "id": "Model.key@src/compose.ts:97-101",
+      "revision": "d147550c80d814e23f5d76f8ded25e30bf190da4",
+      "sha256": "0f7dd1f187d600515dc524eb73fa3c5d43ef6378f980f9a83090888a0187c91d"
+    },
+    {
+      "file": "a0df1aa502ce9b4fe5b8adf3.statekey",
+      "rule": "state-key-preserves-behavior",
+      "id": "Model.key@src/finite.ts:224-224",
+      "revision": "d147550c80d814e23f5d76f8ded25e30bf190da4",
+      "sha256": "81d13d543962315946874aaf6ce7e3d5ac3dcddcfb7603d1d8e9f4347d9d717d"
+    }
+  ],
+  "insufficient": [
+    {
+      "id": "src/contracts.ts#Model",
+      "rule": "liskov-substitution",
+      "missing": [
+        "documented contract"
+      ]
+    }
+  ]
+}

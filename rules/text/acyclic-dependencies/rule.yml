@@ -1,0 +1,25 @@
+id: acyclic-dependencies
+language: Text
+extensions:
+  - adp
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.63  # Three-pass fixture fit: defects 0.85–0.87, clean max 0.4, maximum within-case spread 0.10.
+ask: Does this verified package cycle contain a dependency on a separable
+  responsibility whose relocation would remove a specific edge of the shown
+  cycle?
+criteria:
+  "true": Identify the directed edge and the concrete responsibility imported
+    across it. Explain from its definition and uses how moving the
+    responsibility or passing a narrower operation removes the need for that
+    edge.
+  "false": A cycle witness by itself, a test harness intentionally exercising the
+    production stack, or a proposed move that still requires the same edge or
+    merely renames it is insufficient.
+category: advisory
+nextCheck: Follow the return import in the cycle witness. Check whether it runs
+  in production, then move or inject the referenced responsibility on paper and
+  trace whether the same dependency remains.
+split: ^Revision [0-9a-f]{40}$

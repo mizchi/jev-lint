@@ -95,7 +95,7 @@ answers.
 | `--loose [n]` | also list the band under each cutoff — at or over the rule's `loose:` floor, else half its cutoff — for a reader, closest to the cutoff first, at most n. Never a finding: not counted, never fails, and costs no request — see [A second line for a reader](#a-second-line-for-a-reader) |
 | `--explain-schedule` | print the axis chosen per rule, and why |
 | `--base <ref>` / `--staged` | what `review` diffs against: the merge base with `ref`, or the index (what a commit will contain: no untracked files, no unstaged edits) |
-| `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any finding |
+| `--fail-on <severity>` | exit 1 only for a finding at or above `hint`, `info`, `warning`, `error`; default: any non-advisory finding |
 | `init --pre-commit` | write a hook running `review --staged --fail-on error` and `commits --staged --fail-on error`; both use `hooks.precommit` when present. Refuses to overwrite an existing hook body without `--force` |
 | `run <rule> [paths...]` | `check` with one rule: prefer `lang/<id>` (one language); a bare shipped id selects every language that has it. An unknown id names the nearest. `--file <rules.yml>` uses that file's rules instead — all of them, or the one `<rule>` names in it. Every `check` flag applies |
 | `commits [range]` | judge each non-merge commit with the git rules: a `subject: commit` rule judges the message against the diff, a `subject: change` rule judges the change against the `AGENTS.md` in that commit's own tree (falling back to `CLAUDE.md` if absent; a commit whose tree holds neither produces no change subject, and the run says how many); the range is a positional (`main..HEAD`), else `--base <ref>`, else `@{upstream}..HEAD`. Findings are `<sha>:1`, named by short sha and subject line in every format. `--retry`, `--loose`, `--explain` and the cache apply; the cache keys on message and diff together |
@@ -192,13 +192,7 @@ left out. The flag replaces the config's list rather than adding to it.
 
 ### Reading a long report: `--summary`
 
-`--summary` adds two lines after the findings: the count by rule, and by
-file with the subjects judged there, densest first. On a whole tree the
-list reads by its clusters -- eight `catch-hides-failure` findings that
-were one idiom in six modules, sixteen `tests-cover-failure-paths` that
-were one test file too big to excerpt -- and the two lines are where they
-show. `--format json` carries the same as `stats.byRule` and
-`stats.byFile`.
+With `--summary`, each rule shows findings over answered subjects, including rules with zero findings. A separate unanswered count identifies gaps. The file summary shows files with findings, ordered by findings per subject. JSON exposes finding counts in `stats.byRule` and per-file subject and finding counts in `stats.byFile`. For a reported score with a custom rubric, the terminal and JSON also include the nearest level's description.
 
 ### Silencing a finding
 
@@ -290,6 +284,8 @@ A jev-lint rule is an ast-grep rule plus `ask:`.
 | `state` | `bare`, `local`, `paired`, `located` (default), `graph`, `full` | what the model also sees |
 | `note` | | context for the model only |
 | `axis` | `file` or `rule` | pin the batching axis; the scheduler will not overrule it |
+| `category` | optional `advisory` | findings are reported and excluded from the CI gate |
+| `nextCheck` | optional nonempty string | follow-up for a reported finding, preserved on replay |
 | `severity` | `hint`, `info`, `warning` (default), `error` | `error` fails a build; earn it first |
 | `levels` | `score` only | the rule's own ordered rubric, clean to worst, two or more strings, in place of the shared four-level scale; `threshold` then runs 0..levels-1 and a finding's level is numbered. The `rules/markdown/` rules are five-level rubrics from JevSlop |
 | `explain` | | a mapping of label → description, two or more. With `--explain`, each of this rule's **findings** is asked a follow-up `choice` — which label best names why the statement holds — and the label is printed on the finding. Never part of the verdict question; adding it retires no cached verdict |
@@ -612,7 +608,7 @@ baselines — is [RULES.md](../RULES.md), written by `tools/rules-md.ts`
 (`npm run rules:md`; `npm run rules:md:check` fails when it is stale, and
 so does `npm test`). What follows is the prose.
 
-103 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
+121 rules under `rules/<lang>/<id>/`, each with its fixtures beside it,
 grouped here by what they ask. Which languages each exists in:
 
 | rule | typescript | rust | python | go | other |

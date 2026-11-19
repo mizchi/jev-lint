@@ -1,0 +1,15 @@
+id: state-key-preserves-behavior
+language: Text
+extensions: [statekey]
+subject: block
+split: ^Revision [0-9a-f]{40}$
+state: bare
+kind: noul
+category: advisory
+severity: info
+threshold: 0.84  # Three-pass fit: defects 0.95, clean max 0.73, largest within-case spread 0.15.
+ask: Can two allowed states with the same visited key produce different future behavior that the explorer must preserve?
+criteria:
+  "true": Identify which values can vary independently with the key fixed. Check what later expansion does with them. An allowed caller callback receiving the full state may select different actions or check different properties on those values. A retained value may also change a subsequent observable result.
+  "false": If the other values are fixed functions of the key, there is no such pair. Logging differences alone do not change exploration. Return false when no route from a differing value to an exploration result is shown.
+nextCheck: Construct two reachable states with the same key. Explore them in both orders and compare enabled actions, subsequent observations and property results. Repeat with the distinguishing field in the key.

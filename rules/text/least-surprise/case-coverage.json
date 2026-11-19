@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/1.surface",
+      "kind": "false-negative-risk",
+      "reason": "Peek consumes the very item its contract preserves."
+    },
+    {
+      "file": "fixtures/2.surface",
+      "kind": "false-positive-risk",
+      "reason": "A caller receives a separately mutable Set exactly as promised."
+    },
+    {
+      "file": "fixtures/3.surface",
+      "kind": "unrelated",
+      "reason": "A license comment leaves the behavior and evidence for this rule unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/2.surface",
+      "variant": "fixtures/3.surface"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+id: single-responsibility
+language: Text
+extensions:
+  - surface
+  - impl
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.7  # Retained in three-pass separation gap: defects 0.70–0.76, clean max 0.12, max spread 0.06.
+ask: Does this module implement two independently changeable policies for
+  unrelated consumers?
+criteria:
+  "true": Identify both policies and the concrete reason each changes
+    independently, such as currency conversion and analytics retention.
+  "false": Parsing, validating and serializing one format can form one
+    responsibility. Re-exporting symbols, implementing one adapter, or file
+    length alone is insufficient.
+category: advisory
+nextCheck: Trace a caller and a reason for change for each policy. Check whether
+  either policy can change while the other caller retains exactly the same
+  contract.

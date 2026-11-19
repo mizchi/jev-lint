@@ -1,0 +1,16 @@
+default: clean
+fixtures/expiry-a.ccp:
+  - line: 1
+    window: 0
+    label: bad
+    reason: Two independent trial policy changes must agree for badge and billing.
+fixtures/expiry-b.ccp:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A coordinated release updates metadata only.
+fixtures/expiry-c.ccp:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A logging prefix leaves the contract and the relationships unchanged.

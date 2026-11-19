@@ -35,7 +35,7 @@ examples/cart.ts
 
 ## 何を捕まえるか
 
-50 の異なるルールIDが出荷されていて、その多くは複数言語で聞かれる（合わせて 103 ルール）。おおまかには:
+68 の異なるルールIDが出荷されていて、その多くは複数言語で聞かれる（合わせて 121 ルール）。おおまかには:
 
 - **名前と、その名前が指すもの。** 関数、メソッド、束縛、型、クラス、trait、モジュール。npm script とそれが走らせるコマンド。sqlc のクエリ名とその SQL。カートの保存もしてしまう `applyDiscount`、文字列が束縛された `isAdmin`。
 - **名前が含意する保証。** `safe*` は安全か、`pure*` は純粋か、冪等を名乗る関数は冪等か、Go の `MustX` は名前が約束する失敗で panic するか。
@@ -132,7 +132,7 @@ finding 一つ、またはファイル一つを黙らせるには、どのコメ
 
 ## 何が同梱されるか
 
-`rules/<language>/<id>/` の下に 103 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。
+`rules/<language>/<id>/` の下に 121 ルール。どれが走るかは渡したファイルが決める。選ぶものはない。
 
 | 渡すもの | 走るもの |
 | --- | --- |
@@ -143,10 +143,13 @@ finding 一つ、またはファイル一つを黙らせるには、どのコメ
 | `.vibe` | `vibe/` — 2。[vibe-lang パーサ](docs/reference.md#vibe-lang)で走る |
 | `.sh` `.bash` `.zsh` | `shell/` — 8。スクリプトが読み手に見えない形でマシンに何をするか |
 | `.md` `.mdx` | `markdown/` — 13。文章ルール11個とエージェント指示ルール2個 |
-| `package.json`、sqlc の `.sql` | `json/` — 1、`text/` — 1 |
-| コミット | `git/` — 2 |
+| `package.json` | `json/` — 1個 |
+| sqlc クエリ、モジュール・設計の検査用入力 | `text/` — 計17個。うち16個が[設計アドバイザリー](docs/advisories.md) |
+| コミット | `git/` — 4個。うち2個は指標のアドバイザリー |
 
-`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 103 個全部の問い、cutoff、自分の fixtures での成績がある。
+公開 API は、個々の export、1 つの入口の署名一覧、複数の入口を使うガイドの利用例の 3 単位で評価する。[ルールの使い分けと設定例](docs/advisories.md#public-api-review)。
+
+`typescript` と `rust` が第一級で、その下の全ルールが fixtures、expectations、受理済み baseline を持つ。残りは同じ基準で較正済みだが、まだ約束はしていない。[RULES.md](RULES.md) に 121 個全部の問い、cutoff、自分の fixtures での成績がある。
 
 自作ルールは ast-grep が解析するどの言語にも書ける (Java、Kotlin、Swift、C、C++、C#、Ruby、PHP、Lua、Dart、Scala、Elixir、Haskell、Solidity、HTML、CSS、YAML)。自分でコンパイルした grammar も使える。
 

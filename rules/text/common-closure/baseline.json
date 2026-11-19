@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T03:55:20.987Z",
+  "model": "jev-1.14.0",
+  "suite": "text/common-closure",
+  "rules": [
+    {
+      "id": "common-closure",
+      "draft": "598315b8d0f6",
+      "at": 0.68
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "common-closure",
+        "file": "rules/text/common-closure/fixtures/expiry-a.ccp",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "common-closure",
+        "file": "rules/text/common-closure/fixtures/expiry-b.ccp",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      },
+      {
+        "rule": "common-closure",
+        "file": "rules/text/common-closure/fixtures/expiry-c.ccp",
+        "line": 1,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "common-closure",
+        "file": "rules/text/common-closure/fixtures/expiry-a.ccp",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "common-closure",
+        "file": "rules/text/common-closure/fixtures/expiry-b.ccp",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.39,
+        "confidence": null
+      },
+      {
+        "rule": "common-closure",
+        "file": "rules/text/common-closure/fixtures/expiry-c.ccp",
+        "line": 1,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.44,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "common-closure",
+        "file": "rules/text/common-closure/fixtures/expiry-b.ccp",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "common-closure",
+        "file": "rules/text/common-closure/fixtures/expiry-a.ccp",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "common-closure",
+        "file": "rules/text/common-closure/fixtures/expiry-c.ccp",
+        "line": 1,
+        "endLine": 12,
+        "kind": "noul",
+        "value": 0.4,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 6441,
+    "usd": 0.000270522,
+    "ms": 223
+  }
+}

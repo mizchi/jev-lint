@@ -1,0 +1,5 @@
+Surface: Go package api
+Public binding: ResetClock
+Signature: func ResetClock(t Time)
+Declaration documentation:
+For plugin authors testing a clock integration. Future reads from this test clock return t.

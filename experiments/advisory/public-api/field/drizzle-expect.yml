@@ -1,0 +1,5 @@
+default: clean
+fixtures/before.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The mysql-core entry exports int but not the required singlestoreTable function. The latter comes from singlestore-core."}
+fixtures/after.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "The corrected SingleStore entry exports both names."}

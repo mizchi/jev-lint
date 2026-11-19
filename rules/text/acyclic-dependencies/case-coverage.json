@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/currency-a.adp",
+      "kind": "false-negative-risk",
+      "reason": "The leaf currency definition is the sole payments-to-orders dependency."
+    },
+    {
+      "file": "fixtures/currency-b.adp",
+      "kind": "false-positive-risk",
+      "reason": "The return edge exercises the consumer in an integration test."
+    },
+    {
+      "file": "fixtures/currency-c.adp",
+      "kind": "unrelated",
+      "reason": "A logging prefix leaves the contract and the relationships unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/currency-b.adp",
+      "variant": "fixtures/currency-c.adp"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/archive-a.isp",
+      "kind": "false-negative-risk",
+      "reason": "Rendering requires a purge implementation from a read-only archive."
+    },
+    {
+      "file": "fixtures/archive-b.isp",
+      "kind": "false-positive-risk",
+      "reason": "An optional capability imposes no purge stub on archives."
+    },
+    {
+      "file": "fixtures/archive-c.isp",
+      "kind": "unrelated",
+      "reason": "A logging prefix leaves the contract and the relationships unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/archive-b.isp",
+      "variant": "fixtures/archive-c.isp"
+    }
+  ]
+}

@@ -1,0 +1,1233 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T07:35:29.712Z",
+  "model": "jev-1.14.0",
+  "suite": "suite",
+  "rules": [
+    {
+      "id": "entry-layout-obscures-workflow",
+      "draft": "fa510dace70d",
+      "at": 0.68
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 125,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.29,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 125,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 125,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.14,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 125,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.16,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 125,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 125,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.98,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 34,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 31,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/luna.mbt-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 37,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 46,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 32,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 42,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 30,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-3.apiworkflow",
+        "line": 1,
+        "endLine": 88,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-1.apiworkflow",
+        "line": 1,
+        "endLine": 107,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-control-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/sqlike-guide-4.apiworkflow",
+        "line": 1,
+        "endLine": 28,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-5.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/uneffect-guide-2.apiworkflow",
+        "line": 1,
+        "endLine": 125,
+        "kind": "noul",
+        "value": 0.02,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 133,
+    "inputTokens": 731682,
+    "usd": 0.030730644000000005,
+    "ms": 878
+  }
+}

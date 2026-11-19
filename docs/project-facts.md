@@ -8,9 +8,9 @@ The package is `jev-lint` at version `0.8.0`.
 
 ## Rule catalog
 
-The current catalog contains 103 rules across 12 language directories, with 50 distinct rule IDs. 83 rules reach precision and recall 1.00 on their own accepted fixtures. There are 728 labelled defects and 1167 labelled cleans. These are fixture measurements, not production accuracy.
+The current catalog contains 121 rules across 12 language directories, with 68 distinct rule IDs. 101 rules reach precision and recall 1.00 on their own accepted fixtures. There are 767 labelled defects and 1234 labelled cleans. These are fixture measurements, not production accuracy.
 
-- git: 2 rules
+- git: 4 rules
 - go: 9 rules
 - javascript: 1 rule
 - json: 1 rule
@@ -19,7 +19,7 @@ The current catalog contains 103 rules across 12 language directories, with 50 d
 - python: 14 rules
 - rust: 9 rules
 - shell: 8 rules
-- text: 1 rule
+- text: 17 rules
 - typescript: 23 rules
 - vibe: 2 rules
 
@@ -42,7 +42,7 @@ ONLY these exact rule IDs qualify for the core starter: fn-name-promises with el
 The local CI command is `npm run ci`. Its complete package script is:
 
 ```sh
-npm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay
+npm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:advisories && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay
 ```
 
 ## Package contents
@@ -75,6 +75,8 @@ The published files include:
 
 - `dist`
 - `rules/**/rule.yml`
+- `advisory`
+- `docs/advisories.md`
 - `rules/README.md`
 - `README.md`
 - `SECURITY.md`

@@ -1,0 +1,22 @@
+id: least-privilege
+language: Text
+extensions:
+  - surface
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.7  # Retained in three-pass separation gap: defects 0.72–0.75, clean max 0.07, max spread 0.03.
+ask: Does a listed public binding grant a collaborator capabilities beyond those
+  needed by its declared job?
+criteria:
+  "true": The public API hands a callback or peer a live writable resource,
+    credential or control object, while the visible contract and implementation
+    need only a narrower value or operation.
+  "false": The collaborator needs the granted control for its documented job,
+    receives a copy or a narrow interface, or the capability transfer is not
+    visible.
+category: advisory
+nextCheck: List the operations the collaborator actually invokes. Replace its
+  argument with just those operations and check whether the documented job still
+  works while the extra authority becomes unreachable.

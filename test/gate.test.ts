@@ -38,7 +38,7 @@ test("gate: the stats count findings and subjects per file, and --summary prints
   const plain = formatPretty(g, { color: false });
   assert.doesNotMatch(plain, /by rule/);
   const summary = formatPretty(g, { color: false, summary: true });
-  assert.match(summary, /by rule: {2}r 2 · s 1/);
+  assert.match(summary, /by rule \(flagged\/answered\): {2}r 2\/4 · s 1\/1/);
   assert.match(summary, /by file: {2}src\/b\.ts 1\/1 · src\/a\.ts 2\/3/, "densest first, findings over subjects, files with none left out");
   assert.doesNotMatch(summary, /src\/c\.ts/);
 });
@@ -180,4 +180,30 @@ test("gate: --fail-on decides which findings turn the exit code, and none is a v
   assert.equal(blocks(findings, "error"), false, "a pre-commit hook can ask to block on `error` only");
   assert.equal(blocks([...findings, at("error")], "error"), true);
   assert.equal(blocks([], null), false);
+});
+
+test("advisory findings carry next checks only when reported and cannot block by severity", () => {
+  const nextCheck = "Replay the permitted input against each backend.";
+  const subject = subjectOf({ rule: noulRule({ category: "advisory", severity: "error", nextCheck, at: 0.6 }) });
+  const high = decide(subject, { kind: "noul", value: 0.8, confidence: null });
+  assert.equal(high.reported, true);
+  assert.equal(high.category, "advisory");
+  assert.equal(high.nextCheck, nextCheck);
+  assert.equal(blocks([high], null), false);
+  assert.equal(blocks([high], "hint"), false);
+  assert.equal(blocks([high, { ...high, category: undefined }], "error"), true);
+  assert.equal(decide(subject, null).nextCheck, undefined);
+  assert.equal(decide(subject, { kind: "noul", value: 0.5, confidence: null }, { loose: 1 }).nextCheck, undefined);
+});
+
+test("gate: custom score includes the nearest rubric anchor in the finding", () => {
+  const rule = scoreRule({ at: 1, levels: ["Distinct contracts", "Possible overlap", "Same task and guarantee"] });
+  const finding = decide(subjectOf({ rule }), { value: 1.8, confidence: 0.92, kind: "score" });
+  assert.equal(finding.levelDescription, "Same task and guarantee");
+});
+
+test("summary retains clean rules and separates unanswered subjects from the denominator", () => {
+  const subject = subjectOf({ rule: noulRule({ id: "role", at: 0.5 }) });
+  const result = gate([{ subject, answer: { kind: "noul", value: 0.1, confidence: null } }, { subject, answer: null }]);
+  assert.match(formatPretty(result, { color: false, summary: true }), /role 0\/1 \(1 unanswered\)/);
 });

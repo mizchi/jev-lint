@@ -7,6 +7,7 @@ export interface ReviewScope { scopeId: string; modelRevision?: string }
 export interface ReviewEvidence { path: string; ref: string; startLine: number; endLine: number; quote: string; role: "specification" | "target" | "context" }
 export interface ReviewObservation {
   id: string; key: string; fingerprint: string | null; ruleId: string; message: string;
+  category?: "advisory"; nextCheck?: string;
   state: "finding" | "clean" | "unassessed"; evidence: ReviewEvidence[];
 }
 export interface ReviewArtifact {
@@ -27,6 +28,7 @@ export function reviewScan(raw: unknown, scope: ReviewScope): ReviewArtifact {
   return assemble(scan, scan, scope, scan.candidates.map((c) => ({ id: c.id, key: digest({ repository: scan.repository, rule: c.rule.id, path: c.source.path, evidence: c.evidence }),
     fingerprint: c.contextHash === null ? null : digest({ context: c.contextHash, rule: c.rule, policy: scan.policy, engine: scan.engine, modelRevision: scope.modelRevision ?? null,
       judgment: c.judgment && { kind: c.judgment.kind, maximum: c.judgment.maximum, threshold: c.judgment.threshold } }),
+    ...(c.category ? { category: c.category } : {}), ...(c.nextCheck ? { nextCheck: c.nextCheck } : {}),
     ruleId: c.rule.id, message: c.claim, state: c.disposition === "missing" || c.contextHash === null ? "unassessed" : c.disposition === "reported" ? "finding" : "clean",
     evidence: [{ path: c.source.path, ref: scan.sourceSha, startLine: c.source.startLine, endLine: c.source.endLine, quote: c.evidence, role: "target" }],
   })));
@@ -57,6 +59,8 @@ export function parseReviewArtifact(raw: unknown): ReviewArtifact {
     if (!object(o) || !hash(o.id) || ids.has(o.id) || !hash(o.key) || !(hash(o.fingerprint) || o.fingerprint === null)
       || !text(o.ruleId, 256) || !text(o.message, 16000) || !["finding", "clean", "unassessed"].includes(String(o.state))
       || o.state !== "unassessed" && o.fingerprint === null || !Array.isArray(o.evidence) || !o.evidence.length || o.evidence.length > 60) return fail();
+    if ((o.category !== undefined && o.category !== "advisory")
+      || (o.nextCheck !== undefined && (typeof o.nextCheck !== "string" || !o.nextCheck.trim()))) return fail();
     ids.add(o.id);
     for (const e of o.evidence) if (!object(e) || !relationPath(e.path) || typeof e.ref !== "string" || !/^[a-f0-9]{40}$/.test(e.ref)
       || !Number.isSafeInteger(e.startLine) || !Number.isSafeInteger(e.endLine) || Number(e.startLine) < 1 || Number(e.endLine) < Number(e.startLine)

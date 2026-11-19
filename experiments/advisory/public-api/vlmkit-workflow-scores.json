@@ -1,0 +1,288 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T07:10:38.319Z",
+  "model": "jev-1.14.0",
+  "suite": "suite",
+  "rules": [
+    {
+      "id": "entry-layout-obscures-workflow",
+      "draft": "fa510dace70d",
+      "at": 0.68
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-guide.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.63,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-guide.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-guide.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.59,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-guide.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.28,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-guide.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.57,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-guide.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.25,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-guide.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.64,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-guide.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-guide.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-guide.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-guide.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.6,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-guide.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.24,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-guide.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.47,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/core-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-wrong-import.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "suite/fixtures/capture-guide.apiworkflow",
+        "line": 1,
+        "endLine": 36,
+        "kind": "noul",
+        "value": 0.23,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 28,
+    "inputTokens": 82705,
+    "usd": 0.0034736100000000002,
+    "ms": 398
+  }
+}

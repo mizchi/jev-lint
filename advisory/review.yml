@@ -1,0 +1,7 @@
+rules:
+  text/liskov-substitution: on
+  text/interface-segregation: on
+  text/parnas-information-hiding: on
+  text/common-closure: on
+  text/acyclic-dependencies: on
+  text/state-key-preserves-behavior: on

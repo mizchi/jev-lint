@@ -1,0 +1,17 @@
+default: clean
+fixtures/1:
+  - line: 1
+    window: 0
+    label: bad
+    reason: The search silently omits all later shards.
+fixtures/2:
+  - line: 1
+    window: 0
+    label: clean
+    reason: The indexed lookup improves the fixed latency measure while preserving
+      results.
+fixtures/3:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A license comment leaves the behavior and evidence for this rule unchanged.

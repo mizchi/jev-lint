@@ -1,0 +1,23 @@
+id: liskov-substitution
+language: Text
+extensions:
+  - lsp
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.53  # Three-pass fixture fit: defects 0.96–0.96, clean max 0.1, maximum within-case spread 0.02.
+ask: Can a caller following the shared contract observe a broken guarantee when
+  it substitutes the shown implementation?
+criteria:
+  "true": Trace a concrete permitted input or sequence through the replacement and
+    name the promised result, invariant or failure behavior that breaks. A
+    stronger precondition also breaks the guarantee.
+  "false": Results may vary within the shared contract. Documented capability
+    boundaries, unspecified ordering, timing differences without a timing
+    guarantee and missing contract evidence do not establish a counterexample.
+category: advisory
+nextCheck: Replay the same contract-valid input on both implementations. Compare
+  the promised result or error, including the documented environment and any
+  allowed variation.
+split: ^Revision [0-9a-f]{40}$

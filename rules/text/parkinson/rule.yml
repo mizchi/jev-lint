@@ -1,0 +1,23 @@
+id: parkinson
+language: Text
+extensions:
+  - surface
+  - impl
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.7  # Retained in three-pass separation gap: defects 0.91–0.91, clean max 0.07, max spread 0.02.
+ask: Does the module maintain duplicate machinery for the same behavior with no
+  distinct requirement visible in the source?
+criteria:
+  "true": Identify two implementations or synchronized representations serving the
+    same operation with the same lifecycle, whose maintenance work would
+    disappear if one were shared.
+  "false": Separate platforms, externally required formats, fast paths, or
+    independent lifetimes explain the duplication. Size and unverifiable
+    staffing costs alone give no evidence.
+category: advisory
+nextCheck: Compare the two implementations on the same inputs and inspect their
+  update sites. Identify a distinct format, performance constraint or lifetime
+  that requires the second copy before proposing to merge them.

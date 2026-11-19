@@ -1,0 +1,298 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T06:41:00.483Z",
+  "model": "jev-1.14.0",
+  "suite": "text/public-api-surface",
+  "rules": [
+    {
+      "id": "public-api-surface",
+      "draft": "c4fe1cb1c4f1",
+      "at": 2.37
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/1-ledger.ts.apisurface",
+        "line": 1,
+        "endLine": 6,
+        "kind": "score",
+        "value": 3.05,
+        "confidence": 0.87
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/3-read.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 0.42,
+        "confidence": 0.64
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/7-read.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 0.42,
+        "confidence": 0.64
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/6-catalog.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 2.86,
+        "confidence": 0.69
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/5-queue.apisurface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "score",
+        "value": 3.7,
+        "confidence": 0.75
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/4-codec.apisurface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "score",
+        "value": 0.6,
+        "confidence": 0.5
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/10-pixels.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 2.99,
+        "confidence": 0.91
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/2-units.ts.apisurface",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.45,
+        "confidence": 0.62
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/9-pixels.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 1.08,
+        "confidence": 0.09
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/8-loader.ts.apisurface",
+        "line": 1,
+        "endLine": 5,
+        "kind": "score",
+        "value": 1.98,
+        "confidence": 0.14
+      }
+    ],
+    [
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/4-codec.apisurface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "score",
+        "value": 0.5,
+        "confidence": 0.57
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/6-catalog.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 2.84,
+        "confidence": 0.73
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/10-pixels.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 2.99,
+        "confidence": 0.92
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/2-units.ts.apisurface",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.46,
+        "confidence": 0.64
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/5-queue.apisurface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "score",
+        "value": 3.73,
+        "confidence": 0.77
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/3-read.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 0.41,
+        "confidence": 0.64
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/7-read.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 0.41,
+        "confidence": 0.64
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/1-ledger.ts.apisurface",
+        "line": 1,
+        "endLine": 6,
+        "kind": "score",
+        "value": 3.03,
+        "confidence": 0.87
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/9-pixels.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 1.16,
+        "confidence": 0.03
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/8-loader.ts.apisurface",
+        "line": 1,
+        "endLine": 5,
+        "kind": "score",
+        "value": 1.98,
+        "confidence": 0.14
+      }
+    ],
+    [
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/9-pixels.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 1.14,
+        "confidence": 0.03
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/6-catalog.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 2.68,
+        "confidence": 0.59
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/1-ledger.ts.apisurface",
+        "line": 1,
+        "endLine": 6,
+        "kind": "score",
+        "value": 3.05,
+        "confidence": 0.87
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/3-read.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 0.5,
+        "confidence": 0.57
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/7-read.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 0.5,
+        "confidence": 0.57
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/10-pixels.ts.apisurface",
+        "line": 1,
+        "endLine": 4,
+        "kind": "score",
+        "value": 2.97,
+        "confidence": 0.92
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/4-codec.apisurface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "score",
+        "value": 0.54,
+        "confidence": 0.52
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/8-loader.ts.apisurface",
+        "line": 1,
+        "endLine": 5,
+        "kind": "score",
+        "value": 2.08,
+        "confidence": 0.21
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/2-units.ts.apisurface",
+        "line": 1,
+        "endLine": 17,
+        "kind": "score",
+        "value": 0.45,
+        "confidence": 0.64
+      },
+      {
+        "rule": "public-api-surface",
+        "file": "rules/text/public-api-surface/fixtures/5-queue.apisurface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "score",
+        "value": 3.7,
+        "confidence": 0.75
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 27,
+    "inputTokens": 22755,
+    "usd": 0.0009557100000000001,
+    "ms": 286
+  }
+}

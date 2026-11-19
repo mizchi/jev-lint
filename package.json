@@ -75,6 +75,8 @@
   "files": [
     "dist",
     "rules/**/rule.yml",
+    "advisory",
+    "docs/advisories.md",
     "rules/README.md",
     "README.md",
     "SECURITY.md",
@@ -107,13 +109,14 @@
     "skills:sync": "node --experimental-strip-types tools/sync-skills.ts",
     "skills:check": "node --experimental-strip-types tools/sync-skills.ts --check",
     "eval": "node --experimental-strip-types src/cli.ts eval --repeat 3",
+    "eval:advisories": "node --test experiments/advisory/state-key/collector.test.mjs && node experiments/advisory/verify.mjs && node experiments/advisory/module-hints.mjs --verify && node experiments/advisory/teacher.mjs --verify && node experiments/advisory/public-api/hints.mjs --verify",
     "eval:replay": "node --experimental-strip-types src/cli.ts eval --replay",
     "eval:adoption": "node --experimental-strip-types tools/eval-adoption.ts",
     "eval:clef": "node --experimental-strip-types tools/compare-models.ts",
     "arms": "node --experimental-strip-types tools/arms.ts --repeat 2",
     "grouping": "node --experimental-strip-types tools/grouping.ts --repeat 2",
     "dry": "node --experimental-strip-types src/cli.ts check --dry-run --cache none",
-    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay",
+    "ci": "npm run skills:check && npm run typecheck && npm test && npm run build && npm run release:check && npm run eval:replay && npm run eval:advisories && npm run eval:adoption && npm run docs:facts:check && npm run eval:documents && npm run eval:introspection && npm run docs:replay",
     "prepack": "npm run clean && npm run build",
     "release:check": "node --experimental-strip-types tools/release.ts",
     "test:package": "node --experimental-strip-types tools/check-package.ts",
@@ -124,14 +127,17 @@
     "docs:replay": "node --experimental-strip-types src/cli.ts docs --replay .jev-lint/documents-baseline.json",
     "eval:documents": "node --experimental-strip-types tools/eval-documents.ts --replay experiments/documents/iteration-01.json",
     "introspect": "node --experimental-strip-types src/cli.ts introspect",
-    "eval:introspection": "node --experimental-strip-types tools/eval-introspection.ts --corpus experiments/introspection/extended --replay experiments/introspection/extended/iteration-01.json"
+    "eval:introspection": "node --experimental-strip-types tools/eval-introspection.ts --corpus experiments/introspection/extended --replay experiments/introspection/extended/advisory-catalog.json"
   },
   "dependencies": {
     "@ast-grep/cli": "^0.45.3",
     "yaml": "^2.9.1"
   },
+  "peerDependencies": { "typescript": ">=5.9 <7" },
+  "peerDependenciesMeta": { "typescript": { "optional": true } },
   "devDependencies": {
     "@types/node": "^26.6.2",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "typescript-classic": "npm:typescript@5.9.3"
   }
 }

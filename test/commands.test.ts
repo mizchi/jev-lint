@@ -91,7 +91,7 @@ await testAsync("commands: check reports the finding, exits 1, and --fail-on / -
     // The pretty report, with the summary.
     const pretty = await cli(["check", src, ...base, "--summary"]);
     assert.match(pretty.out, /src\/a\.ts\n\s+5\s+flag/);
-    assert.match(pretty.out, /by rule:\s+name-lies 1/);
+    assert.match(pretty.out, /by rule \(flagged\/answered\):\s+name-lies 1/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

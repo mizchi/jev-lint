@@ -1,0 +1,11 @@
+default: clean
+fixtures/queue.statekey:
+  - { line: 1, window: 0, label: bad, reason: "The write seed is pruned before its fault successor is enqueued." }
+fixtures/audit-log.statekey:
+  - { line: 1, window: 0, label: clean, reason: "Mode changes the log but never changes successors or safety." }
+fixtures/audit-prefix.statekey:
+  - { line: 1, window: 0, label: clean, reason: "Changing the log prefix preserves the same reachable faults." }
+fixtures/folded.statekey:
+  - { line: 1, window: 0, label: clean, reason: "The offset is fully determined by the page at every reachable node." }
+fixtures/delayed.statekey:
+  - { line: 1, window: 0, label: bad, reason: "The carried approval status still determines a later flush result." }

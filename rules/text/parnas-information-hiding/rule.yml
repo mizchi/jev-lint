@@ -1,0 +1,27 @@
+id: parnas-information-hiding
+language: Text
+extensions:
+  - parnas
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.59  # Three-pass fixture fit: defects 0.95–0.96, clean max 0.23, maximum within-case spread 0.04.
+ask: Does a consumer encode knowledge of a changeable internal design decision
+  such that replacing the representation while preserving the intended operation
+  would force that consumer to change?
+criteria:
+  "true": Identify the internal representation decision, the consuming expression
+    that depends on its layout or encoding, and a plausible representation
+    change that breaks the expression. A concrete consumer can be inside the
+    repository.
+  "false": An explicitly shared wire format, a stable data schema meant for
+    consumers, an opaque accessor or the existence of an unused public binding
+    alone does not establish this coupling.
+category: advisory
+nextCheck: >-
+  Look up the consumer-facing type that declares the accessed keys or operations.
+  If it promises those exact names and meanings, dismiss the layout warning.
+  Otherwise substitute an accessor for the backing object and identify which
+  consumer expression would break while the documented behavior stays the same.
+split: ^Revision [0-9a-f]{40}$

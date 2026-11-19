@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Open a session
+Import Session from store and instantiate it with new Session().
+
+Reviewed import paths and their exports (other paths were not inspected):
+store: type Session
+store/runtime: Session

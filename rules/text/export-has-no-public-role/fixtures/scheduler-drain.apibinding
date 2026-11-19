@@ -1,0 +1,5 @@
+Surface: Go package store
+Public binding: DrainQueue
+Signature: func DrainQueue(gate Gate) error
+Declaration documentation:
+Drains the pending write queue for the built-in scheduler. Applications should normally await flush() instead.

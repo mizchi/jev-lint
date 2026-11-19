@@ -1,0 +1,21 @@
+default: clean
+fixtures/1-ledger.ts.apisurface:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "Internal cursor controls coexist with the ordinary ledger API."}
+fixtures/2-units.ts.apisurface:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Each conversion has a distinct dimension, direction or unit."}
+fixtures/3-read.ts.apisurface:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Streaming has different memory and backpressure guarantees."}
+fixtures/4-codec.apisurface:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "Encoding directions and wire formats are distinct caller tasks."}
+fixtures/5-queue.apisurface:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "Queue aliases and the test reset expand the same ordinary operation."}
+fixtures/6-catalog.ts.apisurface:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "A two-binding catalog exposes its live backing map."}
+fixtures/7-read.ts.apisurface:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "A private buffer helper leaves both public reading contracts intact."}
+fixtures/8-loader.ts.apisurface:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "The default and named loader refer to the same declaration."}
+fixtures/9-pixels.ts.apisurface:
+  - {"line": 1, "window": 0, "label": "clean", "reason": "A detached copy and a scoped write-through view support different plugin needs."}
+fixtures/10-pixels.ts.apisurface:
+  - {"line": 1, "window": 0, "label": "bad", "reason": "The second binding exposes an unsupported renderer scratch buffer behind the snapshot API."}

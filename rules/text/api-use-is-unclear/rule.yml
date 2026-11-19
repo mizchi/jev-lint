@@ -1,0 +1,15 @@
+id: api-use-is-unclear
+language: Text
+extensions: [apibinding]
+subject: block
+state: bare
+kind: noul
+category: advisory
+severity: info
+threshold: 0.58  # Three-pass fit: defects 0.83–0.95, clean max 0.33, max spread 0.10.
+ask: Would a caller have to guess the intended task or an observable outcome that materially changes how to use this binding?
+criteria:
+  "true": After reading the public name, signature and supplied documentation, there are materially different plausible tasks or outcomes, such as inspect versus mutate, a live view versus a snapshot, or retry versus drop. The evidence leaves the caller unable to choose how to use the binding.
+  "false": A caller can describe a concrete use and its ordinary result or effect. A descriptive signature may suffice without prose. A guide, example or alias target can supply the missing distinction. Ignore hypothetical edge cases and the decision to keep a binding public.
+message: The caller's task or the observable outcome is unclear.
+nextCheck: Using only the public signature and docs, write one caller example with an input and an expected result or side effect. Compare it with the contract test. Add the missing distinction to the public name, type, or example.

@@ -1,0 +1,5 @@
+Surface: Go package api
+Public binding: Apply
+Signature: func Apply(data []byte) bool
+Declaration documentation:
+Applies the data.

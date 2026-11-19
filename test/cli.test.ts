@@ -181,7 +181,7 @@ await testAsync("cli: the targets of `commits` come from the positional, --base,
   // rule until `diff-follows-instructions` joined it, and a test that
   // encodes the count breaks on the next one too.
   const commitRules = loadRules([join(realpathSync("."), "rules", "git")]).rules.filter((r) => r.subject === "commit");
-  assert.equal(commitRules.length, 1, "one shipped rule judges a commit message");
+  assert.ok(commitRules.some(r => r.id === "commit-message-describes-diff"));
   const withBase = parseArgs(["--base", "main"], { color: false });
   withBase.paths = ["src"]; // as the config would fill it
   const t1 = await resolveTargets("commits", commitRules, withBase, undefined, out, log);

@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T03:55:20.454Z",
+  "model": "jev-1.14.0",
+  "suite": "text/liskov-substitution",
+  "rules": [
+    {
+      "id": "liskov-substitution",
+      "draft": "d29d5da0f887",
+      "at": 0.53
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "liskov-substitution",
+        "file": "rules/text/liskov-substitution/fixtures/batches-c.lsp",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "liskov-substitution",
+        "file": "rules/text/liskov-substitution/fixtures/batches-a.lsp",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "liskov-substitution",
+        "file": "rules/text/liskov-substitution/fixtures/batches-b.lsp",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.1,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "liskov-substitution",
+        "file": "rules/text/liskov-substitution/fixtures/batches-a.lsp",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "liskov-substitution",
+        "file": "rules/text/liskov-substitution/fixtures/batches-b.lsp",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "liskov-substitution",
+        "file": "rules/text/liskov-substitution/fixtures/batches-c.lsp",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "liskov-substitution",
+        "file": "rules/text/liskov-substitution/fixtures/batches-c.lsp",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      },
+      {
+        "rule": "liskov-substitution",
+        "file": "rules/text/liskov-substitution/fixtures/batches-a.lsp",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "liskov-substitution",
+        "file": "rules/text/liskov-substitution/fixtures/batches-b.lsp",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 6084,
+    "usd": 0.00025552800000000004,
+    "ms": 286
+  }
+}

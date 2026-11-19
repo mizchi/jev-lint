@@ -1,0 +1,5 @@
+Revision 1111111111111111111111111111111111111111
+Contract: explore every reachable terminal observation.
+Both allowed initial envelopes carry node 3. The first payload is approved, the second is declined. The shared key returns only the node.
+On advance, the machine carries the payload unchanged to node 4. At node 4, flush returns that payload's approval status.
+The explorer queues only the first envelope per node key, expands it, and returns the set of terminal observations.

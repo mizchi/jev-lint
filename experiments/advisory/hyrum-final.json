@@ -1,0 +1,63 @@
+{
+  "schema": "jev-lint-run-1",
+  "policy": null,
+  "recorded": "2026-11-19T04:11:33.012Z",
+  "model": "jev-1.14.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 2,
+    "inputTokens": 3552,
+    "outputTokens": 48,
+    "ms": 394,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.00014918400000000001,
+    "wallMs": 202
+  },
+  "rules": [
+    {
+      "id": "hyrum",
+      "kind": "noul",
+      "ask": "Does a listed public binding expose an implementation-only control or representation that clients can come to depend on?",
+      "note": null,
+      "levels": null,
+      "draft": "ce83346ef8fb",
+      "at": 0.7,
+      "state": "bare",
+      "subject": "block",
+      "severity": "info",
+      "category": "advisory",
+      "nextCheck": "Import the suspected hook or backing value through the listed public path as a client. Call the ordinary API before and after invoking the hook or changing the value. If another caller sees a reset counter, changed notice or altered lookup, check whether the public contract actually promises that shared effect. A detached snapshot or an unreachable export dismisses it.",
+      "language": "Text",
+      "languageDir": "text"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "hyrum",
+      "ruleKey": "text/hyrum",
+      "file": "auth-state.ts.surface",
+      "line": 1,
+      "endLine": 205,
+      "kind": "noul",
+      "value": 0.68,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "hyrum",
+      "ruleKey": "text/hyrum",
+      "file": "perf_js.mbt.surface",
+      "line": 1,
+      "endLine": 29,
+      "kind": "noul",
+      "value": 0.72,
+      "confidence": null,
+      "arm": "bare"
+    }
+  ]
+}

@@ -76,5 +76,14 @@ clef-eval *args:
 clef-replay *args:
     pnpm run eval:clef --replay {{args}}
 
+advisory-replay:
+    pnpm run eval:advisories
+
+advisory-teacher output:
+    node experiments/advisory/teacher.mjs {{quote(output)}}
+
+public-api-corpus repositories output:
+    bash experiments/advisory/public-api/collect.sh {{quote(repositories)}} {{quote(output)}}
+
 skill-to-decision cases out:
     node packages/skill-to-decision/cli.ts {{quote(cases)}} {{quote(out)}}

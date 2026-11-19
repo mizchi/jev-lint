@@ -1,0 +1,16 @@
+default: clean
+fixtures/archive-a.isp:
+  - line: 1
+    window: 0
+    label: bad
+    reason: Rendering requires a purge implementation from a read-only archive.
+fixtures/archive-b.isp:
+  - line: 1
+    window: 0
+    label: clean
+    reason: An optional capability imposes no purge stub on archives.
+fixtures/archive-c.isp:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A logging prefix leaves the contract and the relationships unchanged.

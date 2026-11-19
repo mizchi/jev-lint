@@ -1,0 +1,16 @@
+default: clean
+fixtures/1.surface:
+  - line: 1
+    window: 0
+    label: bad
+    reason: Peek consumes the very item its contract preserves.
+fixtures/2.surface:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A caller receives a separately mutable Set exactly as promised.
+fixtures/3.surface:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A license comment leaves the behavior and evidence for this rule unchanged.

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/1.surface",
+      "kind": "false-negative-risk",
+      "reason": "A title formatter receives eraseAll and setPrice."
+    },
+    {
+      "file": "fixtures/2.surface",
+      "kind": "false-positive-risk",
+      "reason": "Reader offers exactly the single operation that decoding requires."
+    },
+    {
+      "file": "fixtures/3.surface",
+      "kind": "unrelated",
+      "reason": "A license comment leaves the behavior and evidence for this rule unchanged."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/2.surface",
+      "variant": "fixtures/3.surface"
+    }
+  ]
+}

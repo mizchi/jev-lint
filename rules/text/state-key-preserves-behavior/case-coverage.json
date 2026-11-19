@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "file": "fixtures/queue.statekey",
+      "kind": "false-negative-risk",
+      "reason": "The write seed is pruned before its fault successor is enqueued."
+    },
+    {
+      "file": "fixtures/audit-log.statekey",
+      "kind": "false-positive-risk",
+      "reason": "Mode changes the log but never changes successors or safety."
+    },
+    {
+      "file": "fixtures/audit-prefix.statekey",
+      "kind": "unrelated",
+      "reason": "Changing the log prefix preserves the same reachable faults."
+    },
+    {
+      "file": "fixtures/folded.statekey",
+      "kind": "false-positive-risk",
+      "reason": "The offset is fully determined by the page at every reachable node."
+    },
+    {
+      "file": "fixtures/delayed.statekey",
+      "kind": "false-negative-risk",
+      "reason": "The carried approval status still determines a later flush result."
+    }
+  ],
+  "independencePairs": [
+    {
+      "base": "fixtures/audit-log.statekey",
+      "variant": "fixtures/audit-prefix.statekey"
+    }
+  ]
+}

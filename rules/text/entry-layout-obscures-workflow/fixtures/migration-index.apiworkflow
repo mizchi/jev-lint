@@ -1,0 +1,11 @@
+Guide: guide.md:1-6
+# Round trip
+Read current archives with archive. To recover old records use unpack. The entry reference below lists the decoding API.
+
+| Operation | Public entry |
+| --- | --- |
+| unpack | archive/compat |
+
+Reviewed import paths and their exports (other paths were not inspected):
+archive: pack
+archive/compat: unpack

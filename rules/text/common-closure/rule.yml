@@ -1,0 +1,23 @@
+id: common-closure
+language: Text
+extensions:
+  - ccp
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.68  # Three-pass fixture fit: defects 0.86–0.92, clean max 0.49, maximum within-case spread 0.15.
+ask: Do separate changes repeatedly require these packages to update independent
+  copies of the same policy in lockstep?
+criteria:
+  "true": Point to the same decision in both package patches in distinct commits
+    and show which behavior would become inconsistent if one of the edits were
+    omitted.
+  "false": Co-occurrence alone, a release sweep, formatting, a migration applied
+    once, or independent changes to different policies do not establish repeated
+    synchronization.
+category: advisory
+nextCheck: Read the two package patches side by side in each cited commit.
+  Identify the behavior that would diverge if one side were reverted, and check
+  whether it recurs outside release or formatting changes.
+split: ^Revision [0-9a-f]{40}$

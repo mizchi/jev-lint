@@ -1,0 +1,7 @@
+Surface: Go package api
+Public binding: Apply
+Signature: func Apply(data []byte) bool
+Declaration documentation:
+Applies the data.
+Public guide (guide.md):
+To change the active schema, call Apply with its encoded replacement. True means it was installed. False leaves the previous schema active.

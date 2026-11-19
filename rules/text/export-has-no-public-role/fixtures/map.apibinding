@@ -1,0 +1,5 @@
+Surface: TypeScript entry index.ts
+Public binding: unsafeTable
+Signature: unsafeTable — () => Map<Key, Row>
+Declaration documentation:
+Unsupported test-only handle to the live map behind lookup. Mutating it changes subsequent lookups.

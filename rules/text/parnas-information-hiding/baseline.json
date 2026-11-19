@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T03:55:20.758Z",
+  "model": "jev-1.14.0",
+  "suite": "text/parnas-information-hiding",
+  "rules": [
+    {
+      "id": "parnas-information-hiding",
+      "draft": "534d4fe3368a",
+      "at": 0.59
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "parnas-information-hiding",
+        "file": "rules/text/parnas-information-hiding/fixtures/slots-a.parnas",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "parnas-information-hiding",
+        "file": "rules/text/parnas-information-hiding/fixtures/slots-c.parnas",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "parnas-information-hiding",
+        "file": "rules/text/parnas-information-hiding/fixtures/slots-b.parnas",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "parnas-information-hiding",
+        "file": "rules/text/parnas-information-hiding/fixtures/slots-b.parnas",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.13,
+        "confidence": null
+      },
+      {
+        "rule": "parnas-information-hiding",
+        "file": "rules/text/parnas-information-hiding/fixtures/slots-c.parnas",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.19,
+        "confidence": null
+      },
+      {
+        "rule": "parnas-information-hiding",
+        "file": "rules/text/parnas-information-hiding/fixtures/slots-a.parnas",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "parnas-information-hiding",
+        "file": "rules/text/parnas-information-hiding/fixtures/slots-a.parnas",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "parnas-information-hiding",
+        "file": "rules/text/parnas-information-hiding/fixtures/slots-b.parnas",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "parnas-information-hiding",
+        "file": "rules/text/parnas-information-hiding/fixtures/slots-c.parnas",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 6273,
+    "usd": 0.000263466,
+    "ms": 148
+  }
+}

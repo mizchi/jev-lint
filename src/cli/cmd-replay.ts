@@ -28,7 +28,9 @@ export function cmdReplay(opts: Options, out: Log, log: Log): number {
     return 2;
   }
   if (!Array.isArray(record.rules) || !Array.isArray(record.answers)
-    || record.rules.some((rule: any) => !rule || typeof rule.id !== "string")) {
+    || record.rules.some((rule: any) => !rule || typeof rule.id !== "string"
+      || (rule.category !== undefined && rule.category !== "advisory")
+      || (rule.nextCheck !== undefined && (typeof rule.nextCheck !== "string" || !rule.nextCheck.trim())))) {
     log(`${path}: invalid rules or answers in run record`);
     return 2;
   }

@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T04:07:40.755Z",
+  "model": "jev-1.14.0",
+  "suite": "text/hyrum",
+  "rules": [
+    {
+      "id": "hyrum",
+      "draft": "ce83346ef8fb",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "hyrum",
+        "file": "rules/text/hyrum/fixtures/1.surface",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "hyrum",
+        "file": "rules/text/hyrum/fixtures/2.surface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "hyrum",
+        "file": "rules/text/hyrum/fixtures/3.surface",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "hyrum",
+        "file": "rules/text/hyrum/fixtures/1.surface",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "hyrum",
+        "file": "rules/text/hyrum/fixtures/2.surface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "hyrum",
+        "file": "rules/text/hyrum/fixtures/3.surface",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "hyrum",
+        "file": "rules/text/hyrum/fixtures/1.surface",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "hyrum",
+        "file": "rules/text/hyrum/fixtures/2.surface",
+        "line": 1,
+        "endLine": 7,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      },
+      {
+        "rule": "hyrum",
+        "file": "rules/text/hyrum/fixtures/3.surface",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 5544,
+    "usd": 0.00023284800000000002,
+    "ms": 205
+  }
+}

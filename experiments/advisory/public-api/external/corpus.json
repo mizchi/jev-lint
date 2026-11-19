@@ -1,0 +1,123 @@
+{
+  "sqlike": {
+    "revision": "670d52f2fe55169b2afdaa371cd3091bb60737b1",
+    "entries": {
+      "@mizchi/sqlike": "npm/sqlike/index.ts",
+      "@mizchi/litestream": "npm/litestream/index.ts",
+      "@mizchi/sqlike/drizzle": "npm/sqlike/drizzle.ts",
+      "@mizchi/sqlike/drizzle/node": "npm/sqlike/drizzle-node.ts",
+      "@mizchi/sqlike/compiler": "npm/sqlike/compiler.ts",
+      "@mizchi/sqlike/defined": "npm/sqlike/defined.ts"
+    },
+    "workflows": [
+      {
+        "guide": "docs/sync.md",
+        "heading": "ローカル編集から正本へ送る"
+      },
+      {
+        "guide": "docs/drizzle.md",
+        "heading": "Migration"
+      },
+      {
+        "guide": "docs/prepared.md",
+        "heading": "ビルド時にcatalogを作る"
+      },
+      {
+        "guide": "docs/prepared.md",
+        "heading": "ブラウザで開く"
+      },
+      {
+        "guide": "docs/sync.md",
+        "heading": "Transportを差し替える"
+      }
+    ],
+    "controls": [
+      {
+        "workflow": 1,
+        "from": "import { openDatabase } from '@mizchi/sqlike'",
+        "to": "import { openDatabase } from '@mizchi/litestream'"
+      }
+    ]
+  },
+  "uneffect": {
+    "revision": "dcf41a5395993d6bd375405235427f0a82c72717",
+    "entries": {
+      "@mizchi/uneffect": "src/api/public.ts",
+      "@mizchi/uneffect/corsa/api": "src/frontends/corsa/corsa-api-frontend.ts",
+      "@mizchi/uneffect/experimental/corsa": "src/api/corsa-experimental.ts",
+      "@mizchi/uneffect/experimental": "src/api/experimental.ts"
+    },
+    "workflows": [
+      {
+        "guide": "docs/native-integration.md",
+        "heading": "Stable direct Corsa semantic-query API"
+      },
+      {
+        "guide": "docs/native-integration.md",
+        "heading": "Checker-backed exporter prototype"
+      },
+      {
+        "guide": "docs/public-api.md",
+        "heading": "Stable temporal facade"
+      },
+      {
+        "guide": "docs/public-api.md",
+        "heading": "Temporal ownership and resource API placement"
+      },
+      {
+        "guide": "docs/public-api.md",
+        "heading": "Stable Corsa semantic-query boundary"
+      }
+    ],
+    "controls": [
+      {
+        "workflow": 1,
+        "from": "import { openCorsaApiFrontend } from \"@mizchi/uneffect/corsa/api\"",
+        "to": "import { openCorsaApiFrontend } from \"@mizchi/uneffect/experimental/corsa\""
+      },
+      {
+        "workflow": 5,
+        "from": "`openCorsaApiFrontend` from `@mizchi/uneffect/corsa/api`",
+        "to": "`openCorsaApiFrontend` from `@mizchi/uneffect/experimental/corsa`"
+      }
+    ]
+  },
+  "luna.mbt": {
+    "revision": "a99ddbd29b8fd245aa477e82b5cfb0df43ac21c1",
+    "entries": {
+      "@luna_ui/wcssr": "js/wcssr/src/index.ts",
+      "@luna_ui/wcssr/client": "js/wcssr/src/client-entry.ts",
+      "@luna_ui/wcssr/server": "js/wcssr/src/server-entry.ts",
+      "@luna_ui/luna-loader/hydration": "js/loader/src/hydration.ts"
+    },
+    "workflows": [
+      {
+        "guide": "js/wcssr/README.md",
+        "heading": "サーバーサイド (SSR)"
+      },
+      {
+        "guide": "js/wcssr/README.md",
+        "heading": "コンポーネント定義"
+      },
+      {
+        "guide": "js/wcssr/README.md",
+        "heading": "クライアントサイド (Hydration)"
+      },
+      {
+        "guide": "js/loader/src/hydration.md",
+        "heading": "createHydrator"
+      },
+      {
+        "guide": "js/loader/src/hydration.md",
+        "heading": "Event Handling"
+      }
+    ],
+    "controls": [
+      {
+        "workflow": 1,
+        "from": "import { createSSRRenderer, renderDocument } from '@luna_ui/wcssr/server'",
+        "to": "import { createSSRRenderer, renderDocument } from '@luna_ui/wcssr/client'"
+      }
+    ]
+  }
+}

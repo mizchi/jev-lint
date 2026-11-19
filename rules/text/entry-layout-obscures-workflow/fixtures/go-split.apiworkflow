@@ -1,0 +1,7 @@
+Guide: guide.md:1-2
+# Decode
+Construct a decoder with wire.NewDecoder from example.org/codec/wire. Call Read on the returned codec.Decoder to consume the first record.
+
+Reviewed import paths and their exports (other paths were not inspected):
+example.org/codec: Decoder, Decoder.Read
+example.org/codec/wire: NewDecoder

@@ -1,0 +1,20 @@
+id: campbell
+language: Git
+subject: commit
+state: bare
+kind: noul
+severity: info
+threshold: 0.7  # Retained in three-pass separation gap: defects 0.95–0.96, clean max 0.11, max spread 0.01.
+ask: Does this change present a gated or reported metric as comparable while
+  changing its collection or denominator to omit unfavorable cases?
+criteria:
+  "true": Identify the reported measure, the selective exclusion or
+    reclassification introduced in the diff, and the unchanged claim or gate
+    that now benefits from it.
+  "false": Disclosed rebaselining, removing out-of-scope inputs with a documented
+    rationale, or improving the product with a fixed measurement method is
+    insufficient.
+category: advisory
+nextCheck: Recompute the reported metric on the old and new denominators using
+  the same raw events. Check which cases disappeared and whether the dashboard
+  or gate discloses that population change.

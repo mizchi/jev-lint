@@ -1,0 +1,16 @@
+default: clean
+fixtures/slots-a.parnas:
+  - line: 1
+    window: 0
+    label: bad
+    reason: The panel encodes the owner's private stride and offset.
+fixtures/slots-b.parnas:
+  - line: 1
+    window: 0
+    label: clean
+    reason: The consumer knows only the operation.
+fixtures/slots-c.parnas:
+  - line: 1
+    window: 0
+    label: clean
+    reason: A logging prefix leaves the contract and the relationships unchanged.

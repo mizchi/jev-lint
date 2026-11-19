@@ -1,0 +1,5 @@
+Surface: Go package api
+Public binding: Step
+Signature: func Step(x int) int
+Declaration documentation:
+(none supplied)

@@ -1,0 +1,4 @@
+Revision 1111111111111111111111111111111111111111
+Contract: explore every reachable output.
+The only initial node has page 0 and offset 0. On advance, page increases by 1 and offset becomes 100 times the new page. No other transitions exist.
+The key is page. The checker discards seen pages before emitting the offset. The output depends on offset.

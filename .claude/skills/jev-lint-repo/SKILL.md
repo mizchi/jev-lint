@@ -26,7 +26,7 @@ and excludes `test/fixtures/`, which holds planted defects for the cookbook.
 ## CI
 
 `npm run ci` runs `skills:check`, `typecheck`, `npm test`, `build`,
-`release:check`, `eval:replay`, `eval:adoption`, `docs:facts:check`,
+`release:check`, `eval:replay`, `eval:advisories`, `eval:adoption`, `docs:facts:check`,
 `eval:documents`, `eval:introspection` and finally `docs:replay`, in that order.
 The final stage checks the committed documentation record against current
 sources and questions. All stages are offline and need no API key.

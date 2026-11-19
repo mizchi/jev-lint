@@ -1,0 +1,22 @@
+id: least-surprise
+language: Text
+extensions:
+  - surface
+subject: block
+state: bare
+kind: noul
+severity: info
+threshold: 0.7  # Retained in three-pass separation gap: defects 0.98–0.98, clean max 0.06, max spread 0.01.
+ask: Does a listed public binding perform an observable effect that contradicts
+  the promise in its public name or documentation?
+criteria:
+  "true": Identify the promise and a contradicting effect such as consuming a
+    value in a peek operation, mutating caller data in a copy operation, or
+    returning a different unit.
+  "false": An internal cache preserving the promised behavior, explicitly
+    documented mutation or an unfamiliar but consistent convention honors the
+    contract.
+category: advisory
+nextCheck: Exercise the named operation twice on the same input. Compare the
+  observed return values, units and caller-visible state with the promise in its
+  public documentation.

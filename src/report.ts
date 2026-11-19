@@ -71,7 +71,7 @@ export function formatPretty(
     out.push(c.bold(commit ? `${shortRef(file)}  "${commit.subject}"` : change ? `${shortRef(file)}  ${change.summary}` : file));
     for (const f of list.sort((a, b) => a.line - b.line)) {
       const loc = `${f.line}`.padStart(5);
-      const tag = (f.messageId ? TAG[f.messageId]?.(c) : null) ?? String(f.messageId);
+      const tag = f.category === "advisory" ? c.cyan("advisory") : (f.messageId ? TAG[f.messageId]?.(c) : null) ?? String(f.messageId);
       const what = f.message ?? f.ask;
       const num =
         f.kind === "score"
@@ -82,6 +82,8 @@ export function formatPretty(
       out.push(
         `         ${c.dim(`${f.rule}  ${num}  cutoff ${f.at.toFixed(2)}  arm ${f.arm}${repro}`)}`,
       );
+      if (f.levelDescription) out.push(`         Nearest rubric level: ${f.levelDescription}`);
+      if (f.nextCheck) out.push(`         Next check: ${f.nextCheck}`);
       if (f.explanation) {
         out.push(`         ${c.dim(`why: ${f.explanation.choice} (${f.explanation.confidence.toFixed(2)})`)}`);
       }
@@ -124,13 +126,23 @@ export function formatPretty(
   // tree the list is read by its clusters -- one idiom repeated across
   // modules, one file too big for its reviewer -- and this is where they
   // show. Files with nothing reported are left out.
-  if (summary && findings.length > 0) {
-    const rules = Object.entries(stats.byRule).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-    out.push(c.bold("by rule:  ") + rules.map(([r, n]) => `${r} ${n}`).join(" · "));
+  if (summary && result.all.length > 0) {
+    const counts = new Map<string, { flagged: number; answered: number; missing: number }>();
+    for (const row of result.all) {
+      const key = row.ruleKey ?? row.rule;
+      const count = counts.get(key) ?? { flagged: 0, answered: 0, missing: 0 };
+      if (row.value === null) count.missing += 1;
+      else count.answered += 1;
+      if (row.reported) count.flagged += 1;
+      counts.set(key, count);
+    }
+    const rules = [...counts].sort(([a, x], [b, y]) => y.flagged - x.flagged || a.localeCompare(b));
+    out.push(c.bold("by rule (flagged/answered):  ") + rules.map(([key, n]) =>
+      `${key} ${n.flagged}/${n.answered}${n.missing ? ` (${n.missing} unanswered)` : ""}`).join(" · "));
     const files = Object.entries(stats.byFile ?? {})
       .filter(([, n]) => n.findings > 0)
       .sort((a, b) => b[1].findings / b[1].subjects - a[1].findings / a[1].subjects || b[1].findings - a[1].findings || a[0].localeCompare(b[0]));
-    out.push(c.bold("by file:  ") + files.map(([f, n]) => `${f} ${n.findings}/${n.subjects}`).join(" · "));
+    if (files.length) out.push(c.bold("by file:  ") + files.map(([f, n]) => `${f} ${n.findings}/${n.subjects}`).join(" · "));
     out.push("");
   }
 
@@ -247,7 +259,7 @@ export function formatPretty(
   }
 
   const bits = [
-    `${stats.reported} finding(s)`,
+    `${stats.reported} finding(s)${stats.advisories ? ` (${stats.advisories} advisory)` : ""}`,
     `${stats.subjects} subject(s)`,
     `${result.cachedCount ?? 0} cached`,
   ];
@@ -384,6 +396,8 @@ export function formatJson(result: ReportInput): string {
   const row = (f: Finding) => ({
     rule: f.rule,
     severity: f.severity,
+    category: f.category,
+    nextCheck: f.nextCheck,
     messageId: f.messageId,
     file: f.file,
     line: f.line,
@@ -395,6 +409,7 @@ export function formatJson(result: ReportInput): string {
     margin: round(f.margin),
     kind: f.kind,
     level: f.level ?? null,
+    levelDescription: f.levelDescription,
     arm: f.arm,
     passes: f.passes ?? null,
     message: f.message ?? f.ask,
@@ -449,8 +464,8 @@ export function formatJson(result: ReportInput): string {
 export function formatGithub(result: ReportInput): string {
   const out: string[] = [];
   for (const f of result.findings) {
-    const level = f.severity === "error" ? "error" : f.messageId === "unsure" ? "notice" : "warning";
-    const title = `${f.rule}${f.messageId === "unsure" ? " (unsure)" : ""}`;
+    const level = f.category === "advisory" ? "notice" : f.severity === "error" ? "error" : f.messageId === "unsure" ? "notice" : "warning";
+    const title = `${f.rule}${f.category === "advisory" ? " (advisory)" : ""}${f.messageId === "unsure" ? " (unsure)" : ""}`;
     const num = f.kind === "score" ? `${f.value!.toFixed(2)}/${f.scale ?? 3}` : f.value!.toFixed(2);
     const why = f.explanation ? `; why: ${f.explanation.choice}` : "";
     const where = f.commit
@@ -466,7 +481,7 @@ export function formatGithub(result: ReportInput): string {
     const cites = f.violates?.length
       ? `; cites ${f.violates.map((v) => `${v.file}:${v.line} (${v.value.toFixed(2)}) ${flattenDirective(v.body)}`).join(" | ")}`
       : "";
-    const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}${cut}${cites}]`;
+    const body = `${where}${f.message ?? f.ask} [${num}, cutoff ${f.at.toFixed(2)}${why}${cut}${cites}]${f.nextCheck ? ` Next check: ${f.nextCheck}` : ""}`;
     out.push(
       `::${level} file=${f.file},line=${f.line},endLine=${f.endLine},title=${escape(title)}::${escape(body)}`,
     );

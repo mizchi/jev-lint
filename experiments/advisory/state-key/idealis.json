@@ -1,0 +1,63 @@
+{
+  "schema": "jev-lint-run-1",
+  "policy": null,
+  "recorded": "2026-11-19T04:36:31.759Z",
+  "model": "jev-1.14.0",
+  "arm": null,
+  "cutoffs": {},
+  "unsureBelow": null,
+  "spent": {
+    "calls": 6,
+    "inputTokens": 15432,
+    "outputTokens": 144,
+    "ms": 1397,
+    "retried": 0,
+    "rateLimited": 0,
+    "tokensPerSecond": 200000,
+    "splits": 0,
+    "usd": 0.000648144,
+    "wallMs": 247
+  },
+  "rules": [
+    {
+      "id": "state-key-preserves-behavior",
+      "kind": "noul",
+      "ask": "Can two allowed states with the same visited key produce different future behavior that the explorer must preserve?",
+      "note": null,
+      "levels": null,
+      "draft": "d81212440d14",
+      "at": 0.84,
+      "state": "bare",
+      "subject": "block",
+      "severity": "info",
+      "category": "advisory",
+      "nextCheck": "Construct two reachable states with the same key. Explore them in both orders and compare enabled actions, subsequent observations and property results. Repeat with the distinguishing field in the key.",
+      "language": "Text",
+      "languageDir": "text"
+    }
+  ],
+  "answers": [
+    {
+      "rule": "state-key-preserves-behavior",
+      "ruleKey": "text/state-key-preserves-behavior",
+      "file": "600c675f46ff96ede050331b.statekey",
+      "line": 1,
+      "endLine": 233,
+      "kind": "noul",
+      "value": 0.9366666666666666,
+      "confidence": null,
+      "arm": "bare"
+    },
+    {
+      "rule": "state-key-preserves-behavior",
+      "ruleKey": "text/state-key-preserves-behavior",
+      "file": "a0df1aa502ce9b4fe5b8adf3.statekey",
+      "line": 1,
+      "endLine": 141,
+      "kind": "noul",
+      "value": 0.7000000000000001,
+      "confidence": null,
+      "arm": "bare"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+Surface: TypeScript entry ledger.ts
+Public names: 4
+LedgerEntry — LedgerEntry { readonly id: string; readonly cents: number }
+forceInternalAppendCursor — (position: number) => void — Rewinds the process-wide append cursor used by listEntries; test setup only.
+listEntries — () => readonly LedgerEntry[] — Returns a detached copy of committed entries.
+mutableAppendCursorBackingMap — Map<string, LedgerEntry> — Live backing map used by the append cursor. Mutations bypass ledger validation.

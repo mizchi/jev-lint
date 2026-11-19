@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T03:55:20.606Z",
+  "model": "jev-1.14.0",
+  "suite": "text/interface-segregation",
+  "rules": [
+    {
+      "id": "interface-segregation",
+      "draft": "7b769f0bbe68",
+      "at": 0.49
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "interface-segregation",
+        "file": "rules/text/interface-segregation/fixtures/archive-a.isp",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "interface-segregation",
+        "file": "rules/text/interface-segregation/fixtures/archive-c.isp",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "interface-segregation",
+        "file": "rules/text/interface-segregation/fixtures/archive-b.isp",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "interface-segregation",
+        "file": "rules/text/interface-segregation/fixtures/archive-c.isp",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "interface-segregation",
+        "file": "rules/text/interface-segregation/fixtures/archive-b.isp",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "interface-segregation",
+        "file": "rules/text/interface-segregation/fixtures/archive-a.isp",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "interface-segregation",
+        "file": "rules/text/interface-segregation/fixtures/archive-b.isp",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "interface-segregation",
+        "file": "rules/text/interface-segregation/fixtures/archive-a.isp",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.92,
+        "confidence": null
+      },
+      {
+        "rule": "interface-segregation",
+        "file": "rules/text/interface-segregation/fixtures/archive-c.isp",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 6132,
+    "usd": 0.000257544,
+    "ms": 147
+  }
+}

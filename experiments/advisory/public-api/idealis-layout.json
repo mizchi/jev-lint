@@ -1,0 +1,13 @@
+{
+  "entries": {
+    "@mizchi/idealis": "src/index.ts",
+    "@mizchi/idealis/finite": "src/finite.ts",
+    "@mizchi/idealis/portable": "src/portable.ts",
+    "@mizchi/idealis/host": "src/host.ts"
+  },
+  "workflows": [
+    { "guide": "docs/using-models.md", "heading": "モデルを artifact にする" },
+    { "guide": "docs/using-models.md", "heading": "TS / Rust から同じモデルを使う" },
+    { "guide": "docs/using-models.md", "heading": "時計・通信・永続化を注入する" }
+  ]
+}

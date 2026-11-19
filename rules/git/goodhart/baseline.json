@@ -1,0 +1,109 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T04:07:41.802Z",
+  "model": "jev-1.14.0",
+  "suite": "git/goodhart",
+  "rules": [
+    {
+      "id": "goodhart",
+      "draft": "96a13fbaf9e1",
+      "at": 0.7
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "goodhart",
+        "file": "rules/git/goodhart/fixtures/2",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "goodhart",
+        "file": "rules/git/goodhart/fixtures/3",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "goodhart",
+        "file": "rules/git/goodhart/fixtures/1",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "goodhart",
+        "file": "rules/git/goodhart/fixtures/1",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.97,
+        "confidence": null
+      },
+      {
+        "rule": "goodhart",
+        "file": "rules/git/goodhart/fixtures/2",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.03,
+        "confidence": null
+      },
+      {
+        "rule": "goodhart",
+        "file": "rules/git/goodhart/fixtures/3",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "goodhart",
+        "file": "rules/git/goodhart/fixtures/1",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.96,
+        "confidence": null
+      },
+      {
+        "rule": "goodhart",
+        "file": "rules/git/goodhart/fixtures/3",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.04,
+        "confidence": null
+      },
+      {
+        "rule": "goodhart",
+        "file": "rules/git/goodhart/fixtures/2",
+        "line": 1,
+        "endLine": 1,
+        "kind": "noul",
+        "value": 0.05,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 9,
+    "inputTokens": 6216,
+    "usd": 0.000261072,
+    "ms": 205
+  }
+}

@@ -1,0 +1,7 @@
+Surface: Go package queue
+Public names: 5
+func Enqueue(job string) error
+func EnqueueAlias(job string) error
+func EnqueueAliasV2(job string) error
+func ResetInternalHeapForTests()
+var MutableInternalPendingHeap []string

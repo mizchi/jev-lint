@@ -1,0 +1,17 @@
+default: clean
+fixtures/sqlike-control-1.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The sync example now imports openDatabase from litestream. The sqlike root exports the required constructor function."}
+fixtures/uneffect-control-1.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The experimental checker exporter does not export openCorsaApiFrontend. The stable corsa/api entry provides it."}
+fixtures/luna.mbt-control-1.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The client entry lacks createSSRRenderer and renderDocument, which the server entry exports."}
+fixtures/uneffect-control-5.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The prose now names the experimental checker as the provider of openCorsaApiFrontend. Only corsa/api in this map supplies it."}
+fixtures/uneffect-guide-5.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "The original prose assigns openCorsaApiFrontend to corsa/api. The separate migration advice explicitly concerns checker exporters."}
+fixtures/sqlike-guide-1.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "openDatabase comes from sqlike, and the example imports the three sync operations from litestream."}
+fixtures/uneffect-guide-1.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "The code imports openCorsaApiFrontend from its documented stable entry and calls methods on the returned frontend."}
+fixtures/luna.mbt-guide-1.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "The server entry supplies both createSSRRenderer and renderDocument for the SSR example."}
