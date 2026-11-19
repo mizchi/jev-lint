@@ -6,15 +6,25 @@
 
 ## Git の追跡ファイルで試す
 
-Node 24+ があれば、Git リポジトリで試せる。`OPENROUTER_API_KEY` に [OpenRouter のキー](https://openrouter.ai/keys)を設定して、次の1行を実行する。
+最初の lint を実行するには、Node.js 24 以上、Git の作業ツリー、**`OPENROUTER_API_KEY` または `TYPESAFE_API_KEY` のどちらか一方**が必要です。使うサービスに合わせて、次のどちらかを実行してください。
+
+**OpenRouter の無料モデルで試す場合**　無料の Decider を使う場合も、OpenRouter のアカウントと API キーが必要です。[OpenRouter のキーを発行する](https://openrouter.ai/keys)
 
 ```sh
+export OPENROUTER_API_KEY='<your-openrouter-key>'
 npx -y jev-lint --model openrouter:perplexity/pplx-decider-v1.3:free
 ```
 
-設定がなければ、CLI は最初に一度だけ確認する。承認すると、`git ls-files` で取得した追跡ファイル名から初期ルールを選び、設定案を YAML で表示して、そのまま少量の lint を実行する。ルール選択も lint も無料の Decider を使う。選択に使うのは最大64件、パス名の合計は8 KiB。lint の対象は最大3ファイル、1ファイル16 KiB、合計32 KiB まで。設定の保存は任意。`npx -y jev-lint --dry-run` ならキーなしで対象を確認できる。
+**TypeSafe の Jev で試す場合**　同梱ルールの閾値は Jev で較正しているため、継続利用や CI にはこちらを推奨します。両方のキーを設定済みの場合は、`unset OPENROUTER_API_KEY` で TypeSafe に直接接続できます。[TypeSafe のキーを発行する](https://console.typesafe.ai/keys)
 
-**継続利用や CI には、`TYPESAFE_API_KEY` を設定して Jev を使うことを強く推奨する。** 同梱ルールの判定閾値は Jev で較正している。[TypeSafe のキー](https://console.typesafe.ai/keys)を設定すれば、`npx -y jev-lint` で実行できる。両方のキーがある場合は、`OPENROUTER_API_KEY` を環境から外すと TypeSafe に直接接続する。既存の設定があれば、そこに指定したファイルとルールを使う。
+```sh
+export TYPESAFE_API_KEY='<your-typesafe-key>'
+npx -y jev-lint
+```
+
+キーがなくても、`npx -y jev-lint --dry-run` で対象ファイルとルール候補をオフラインで確認できます。
+
+設定ファイルがなければ、CLI は最初に一度だけ確認します。承認すると、最大64件の追跡ファイル名（パスの合計8 KiB）から初期ルールを選び、設定案を YAML で表示して、最大3ファイル（各16 KiB、合計32 KiB）を lint します。OpenRouter の無料モデルを選んだ場合は、ルール選択にも lint にも Decider を使います。YAML の保存は任意です。既存の設定があれば、そこに指定したファイルとルールを使います。
 
 ## 検出例
 
