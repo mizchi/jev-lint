@@ -124,3 +124,31 @@ done
 ```
 
 For fresh judgments run `node "$tool/src/cli.ts" eval suite --repeat 7` from either generated group directory with `TYPESAFE_API_KEY` set and `JEV_LINT_MODEL=jev-1.14.0`.
+
+### Frozen-rule evaluation on sqlike, uneffect and luna.mbt
+
+We first selected four guide sections with concrete TypeScript imports in each repository and changed one import declaration per repository as a control. We then added one section without a named import per repository and a fourth control that changes the provider named in uneffect prose. We froze each batch before scoring. All three repositories were new to this evaluation. The shipped rule at jev-lint commit `bef17e8`, its evidence collector and its 0.68 cutoff stayed fixed. We checked the original routes against the package entry points and source exports.
+
+| Repository | Reviewed entries | Original guide sections | Highest original mean | Wrong TS import mean | Wrong prose path mean |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| sqlike | 6 | 5 | 0.200 | 0.963 | — |
+| uneffect | 4 | 5 | 0.090 | 0.970 | 0.134 |
+| luna.mbt (TypeScript packages) | 4 | 5 | 0.077 | 0.963 | — |
+
+The 15 original sections stayed below cutoff on all 105 judgments. All three TypeScript controls were flagged on all seven passes. The edits moved `openDatabase` from sqlike to litestream, `openCorsaApiFrontend` from the stable Corsa API to the experimental checker, and the two SSR functions from the wcssr server entry to its client entry.
+
+The uneffect prose control makes the **same wrong path claim about the same symbol** in another real section, by changing the opening sentence of “Stable Corsa semantic-query boundary”. The public entry map contains the correct provider. The following paragraph discusses loading the stable module, but never corrects the claim about where the symbol is exported. The collector adds exact name lookups for static named imports in fenced code. This prose claim went to the model with the entry map and no such lookup. It was missed in all seven passes (0.10–0.17). Its mean falls below a valid sqlike transport guide (0.20), so the observed means cannot be separated by a single cutoff. The experiment tests documented TS entry points. The four deliberately altered examples do not establish recall on naturally occurring defects.
+
+The external corpus includes source revisions, guide selectors and mutation text in [corpus.json](external/corpus.json), with the 133 judgments in [scores.json](external/scores.json). From the jev-lint checkout, use a directory containing clones named `sqlike`, `uneffect` and `luna.mbt` with the pinned commits available. The collector creates isolated snapshots under a fresh output directory.
+
+```sh
+tool=$PWD
+data="$tool/experiments/advisory/public-api/external"
+out=$(mktemp -d)/review
+node "$data/collect.mjs" "$HOME/ghq/github.com/mizchi" "$out"
+(cd "$out/suite/fixtures" && shasum -a 256 -c "$data/inputs.sha256")
+cp "$data/scores.json" "$out/suite/baseline.json"
+(cd "$out" && node "$tool/src/cli.ts" eval suite --replay)
+```
+
+For fresh judgments, run `node "$tool/src/cli.ts" eval suite --repeat 7` from the output directory with `TYPESAFE_API_KEY` and `JEV_LINT_MODEL=jev-1.14.0`. The saved seven-pass run used 730,814 input tokens and cost about $0.031. Replay reproduces the single false negative. A fresh live evaluation can exit nonzero on that labelled miss.
