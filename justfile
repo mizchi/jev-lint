@@ -84,3 +84,6 @@ advisory-teacher output:
 
 public-api-corpus repositories output:
     bash experiments/advisory/public-api/collect.sh {{quote(repositories)}} {{quote(output)}}
+
+skill-to-decision cases out:
+    node packages/skill-to-decision/cli.ts {{quote(cases)}} {{quote(out)}}

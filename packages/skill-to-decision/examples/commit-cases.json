@@ -1,0 +1,242 @@
+[
+  {
+    "id": "commit-dev-pass",
+    "split": "develop",
+    "family": "commit-dev-imperative",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix(parser): reject empty tokens"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "小文字の命令形でperiodなし。"
+    }
+  },
+  {
+    "id": "commit-dev-fail",
+    "split": "develop",
+    "family": "commit-dev-shape",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix(parser): Added empty token checks."
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "小文字開始とperiodなしの構造条件に違反。"
+    }
+  },
+  {
+    "id": "commit-eval-avoid",
+    "split": "evaluation",
+    "family": "commit-avoid",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix(cache): avoid writing stale entries"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "avoidは命令形。"
+    }
+  },
+  {
+    "id": "commit-eval-long",
+    "split": "evaluation",
+    "family": "commit-soft-budget",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "refactor(parser): rename the temporary buffer used while reading each incoming message"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "命令形。50文字は目標であり超過だけでは失格にしない。"
+    }
+  },
+  {
+    "id": "commit-eval-past",
+    "split": "evaluation",
+    "family": "commit-past-tense",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "feat(search): added paging to results"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "addedという過去形の報告。"
+    }
+  },
+  {
+    "id": "commit-eval-case",
+    "split": "evaluation",
+    "family": "commit-uppercase",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix(auth): Reject expired sessions"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "subjectが大文字で開始する。"
+    }
+  },
+  {
+    "id": "commit-eval-incomplete",
+    "split": "evaluation",
+    "family": "commit-missing",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": ""
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": false
+      }
+    },
+    "expected": {
+      "verdict": "unknown",
+      "reason": "メッセージを取得していない。"
+    }
+  },
+  {
+    "id": "commit-eval-other",
+    "split": "evaluation",
+    "family": "commit-changelog",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "## Fixed\n\n- Avoid stale entries."
+      },
+      "context": {
+        "artifact": "changelog-document",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "not-applicable",
+      "reason": "commit headerではなくCHANGELOG本文。"
+    }
+  },
+  {
+    "id": "jev-dev-set",
+    "split": "develop",
+    "family": "jev-dev-base-set",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix(cache): set the expiration before storing an entry"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "setはこの主語のない指示では命令形。"
+    }
+  },
+  {
+    "id": "jev-dev-explain",
+    "split": "develop",
+    "family": "jev-dev-base-explain",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "docs(api): explain how callers cancel a request"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "explainという命令形。"
+    }
+  },
+  {
+    "id": "jev-dev-prevents",
+    "split": "develop",
+    "family": "jev-dev-third-person",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix(cache): prevents expired entries from being returned"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "preventsという三人称の報告。"
+    }
+  },
+  {
+    "id": "jev-dev-documented",
+    "split": "develop",
+    "family": "jev-dev-past-document",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "docs(api): documented request cancellation"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "documentedという過去形。"
+    }
+  }
+]

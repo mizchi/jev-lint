@@ -1,0 +1,338 @@
+[
+  {
+    "id": "dev-period-space",
+    "split": "develop",
+    "family": "dev-period-space",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix: guard the index.  "
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "Whitespace after terminal punctuation does not remove the final period."
+    },
+    "expectedAction": "retain"
+  },
+  {
+    "id": "dev-noun",
+    "split": "develop",
+    "family": "dev-noun",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "feat: a faster cache lookup"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "A noun phrase names the result without instructing a change."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "dev-progressive",
+    "split": "develop",
+    "family": "dev-progressive",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "chore: removing unused timers"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "A participial report does not issue an instruction."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "dev-base-with-gerund",
+    "split": "develop",
+    "family": "dev-base-with-gerund",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix: stop returning empty pages"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "The imperative verb stop takes a gerund complement."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "dev-negated",
+    "split": "develop",
+    "family": "dev-negated",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "docs: do not advertise the old endpoint"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "A negative imperative still directs an action."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "dev-breaking-scope",
+    "split": "develop",
+    "family": "dev-breaking-scope",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "feat(api)!: return pages in creation order"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "The breaking marker belongs to the header and the subject is imperative."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "dev-missing-artifact",
+    "split": "develop",
+    "family": "dev-missing-artifact",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "feat: add a tooltip"
+      },
+      "context": {
+        "artifact": "  ",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "unknown",
+      "reason": "Whitespace alone does not identify an artifact."
+    },
+    "expectedAction": "observe"
+  },
+  {
+    "id": "dev-no-english",
+    "split": "develop",
+    "family": "dev-no-english",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix: corriger le cache"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "fr",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "unknown",
+      "reason": "A complete message in another language is outside the language contract."
+    },
+    "expectedAction": "observe"
+  },
+  {
+    "id": "eval-tab-after-period",
+    "split": "evaluation",
+    "family": "eval-tab-after-period",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix(core): bounds-check the offset.\t"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "A trailing tab leaves the sentence-final period intact."
+    },
+    "expectedAction": "retain"
+  },
+  {
+    "id": "eval-noun-compound",
+    "split": "evaluation",
+    "family": "eval-noun-compound",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "perf: lower latency for cold starts"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "Lower takes latency as its object and directs an action."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "eval-explicit-agent",
+    "split": "evaluation",
+    "family": "eval-explicit-agent",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "test: this patch exercises the slow path"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "An explicit subject describes what the patch does."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "eval-state",
+    "split": "evaluation",
+    "family": "eval-state",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix: existing handles are now valid"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "fail",
+      "reason": "The clause states a result rather than instructing an action."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "eval-verb-quote",
+    "split": "evaluation",
+    "family": "eval-verb-quote",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "docs: explain why “removed” appears in the log"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "The quoted past-tense word is not the main verb."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "eval-body-control",
+    "split": "evaluation",
+    "family": "eval-body-control",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "docs(api): describe option precedence\r\n\r\nFixed the defaults in a previous change."
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "pass",
+      "reason": "Only the first line determines voice."
+    },
+    "expectedAction": "judge"
+  },
+  {
+    "id": "eval-no-message",
+    "split": "evaluation",
+    "family": "eval-no-message",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix(api): return a partial"
+      },
+      "context": {
+        "artifact": "commit-message",
+        "locale": "en",
+        "messageComplete": false
+      }
+    },
+    "expected": {
+      "verdict": "unknown",
+      "reason": "The complete header cannot be observed."
+    },
+    "expectedAction": "observe"
+  },
+  {
+    "id": "eval-release-note",
+    "split": "evaluation",
+    "family": "eval-release-note",
+    "input": {
+      "format": "structured",
+      "data": {
+        "message": "fix: return the missing count"
+      },
+      "context": {
+        "artifact": "release-note",
+        "locale": "en",
+        "messageComplete": true
+      }
+    },
+    "expected": {
+      "verdict": "not-applicable",
+      "reason": "A release note can quote a header without becoming a commit."
+    },
+    "expectedAction": "retain"
+  }
+]
