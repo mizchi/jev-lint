@@ -105,6 +105,16 @@
       "file": "fixtures/go-selector-codec.apiworkflow",
       "kind": "false-negative-risk",
       "reason": "The example requests NewDecoder from codec, while only the reviewed wire package supplies it."
+    },
+    {
+      "file": "fixtures/rust-decode-working.apiworkflow",
+      "kind": "false-positive-risk",
+      "reason": "The guide imports decode from the module that supplies it."
+    },
+    {
+      "file": "fixtures/rust-decode-wrong.apiworkflow",
+      "kind": "false-negative-risk",
+      "reason": "The call requires decode, which is documented only at codec::wire."
     }
   ],
   "independencePairs": [

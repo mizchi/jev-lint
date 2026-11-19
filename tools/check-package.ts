@@ -58,6 +58,15 @@ const layout = cli(['public-api-inputs', 'layout-review', '--api-layout', 'layou
 assert.equal(layout.workflows.length, 1);
 assert.ok(readFileSync('layout-review/' + layout.workflows[0].file, 'utf8').includes('codec.Encode from example.org/codec (matched package name): exported here'));
 assert.equal(cli(['check', 'layout-review', '--config', 'node_modules/jev-lint/advisory/public-api.yml', '--dry-run', '--json']).subjects, 4);
+writeFileSync('crate.rs', '/// Read one record.\\npub fn read() {}');
+const rustdoc = spawnSync('rustdoc', ['--edition=2021', '--crate-name', 'records', 'crate.rs', '-o', 'rustdoc'], { encoding: 'utf8' });
+assert.equal(rustdoc.status, 0, rustdoc.stderr);
+writeFileSync('rust.md', '~~~rust\\nuse records::read;\\n~~~');
+writeFileSync('rust-layout.json', JSON.stringify({ entries: { records: 'rustdoc/records/index.html' }, workflows: [{ guide: 'rust.md' }] }));
+const rust = cli(['public-api-inputs', 'rust-review', '--api-layout', 'rust-layout.json', '--workflows-only']);
+assert.equal(rust.entries[0].count, 1);
+assert.ok(readFileSync('rust-review/' + rust.workflows[0].file, 'utf8').includes('read from records: exported here'));
+assert.equal(existsSync('rust-review/bindings'), false);
 const [surface] = cli(['public-api-inputs', 'api-review', 'codec']);
 assert.equal(surface.count, 1);
 assert.equal(surface.aliases, 0);

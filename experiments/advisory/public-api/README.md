@@ -168,7 +168,7 @@ All three pairs use `jev-1.14.0` with the shipped cutoff of 0.68. The Drizzle in
 | chi, original README | 0.08–0.11 | Valid | 0/7 |
 | chi, changed middleware qualifier | 0.83–0.86 | Wrong provider | 7/7 |
 
-**Drizzle.** The “integer” section imported both `int` and `singlestoreTable` from `drizzle-orm/mysql-core`. The latter requires the SingleStore entry. The maintainers changed the import path in March 2025. We used the exact guide from the parent and corrected commits with the same npm distribution, 0.41.0, the latest stable release at the time. Full signature extraction from these declarations exceeded the default Node heap. For this name-level test the collector takes declaration inventories projected from the published type entry points, with runtime value availability checked against the companion ESM modules. The script verifies the tarball digest before loading it in an environment without the API key. The projected entries carry names and type/value distinctions only. [Maintainer correction](https://github.com/drizzle-team/drizzle-orm-docs/commit/676a70890402bdbcab311ae0e57e193303b97cbf) · [Recorded scores](field/drizzle-scores.json)
+**Drizzle.** The “integer” section imported both `int` and `singlestoreTable` from `drizzle-orm/mysql-core`. The latter requires the SingleStore entry. The maintainers changed the import path in March 2025. We used the exact guide from the parent and corrected commits with the same npm distribution, 0.41.0, the latest stable release at the time. Full signature extraction from these declarations exceeded the default Node heap. The initial experiment projected the names into synthetic declarations. The field script now verifies the tarball and runs `--workflows-only` directly on its two published `index.d.ts` files. It reads 292 MySQL and 267 SingleStore names without loading package code or expanding ORM signatures. Both workflow digests match the original records. [Maintainer correction](https://github.com/drizzle-team/drizzle-orm-docs/commit/676a70890402bdbcab311ae0e57e193303b97cbf) · [Recorded scores](field/drizzle-scores.json)
 
 **go-git.** The “In-memory example” passes `memory.NewStorage()` to `git.Clone`, then calls `r.Head()` and `r.Log()` on the returned repository. We reviewed the root, storage/memory and plumbing/object packages. The control changes only `memory.NewStorage()` to `git.NewStorage()`. The real guide uses package qualifiers without an import block. Before selector lookup, every pass missed the control (0.36–0.53). The revised input resolves the declared package names, lists storage/memory as the provider of the misplaced constructor and omits calls on the local receiver. [Previous scores](https://github.com/mizchi/jev-lint/blob/a8829ca/experiments/advisory/public-api/field/go-scores.json) · [Pinned README](https://github.com/go-git/go-git/blob/75f3ca83333c62fa9603b8b4f6b339bd3e9ec9f4/README.md#in-memory-example) · [Recorded scores](field/go-scores.json)
 
@@ -192,3 +192,92 @@ done
 ```
 
 A live evaluation uses `eval "$group" --repeat 7`. The shipped workflow suite also pairs a misplaced Go constructor with a valid guide that names its provider. All 21 cases (12 clean and nine defects) matched their labels on every one of seven passes.
+
+### Rust module and import evaluation
+
+The Rust field pair uses the public “Usage” section of bytes 1.12.1, its std feature and rustdoc 1.98.0. The original imports four names from the crate root. One path change moves `BytesMut` into `bytes::buf`, which does not document it. The two module indices list six and nine public names respectively. The original projection listed lookup results only and missed the edit on all seven passes (0.12–0.20). The final evidence expands nested imports and gives the documented and available use paths. At the existing 0.68 cutoff the original scored 0.06–0.08 and the edit 0.71–0.79 in a fresh 21-pass run. This pair was used during development. In an earlier seven-pass run on the final evidence, the edit ranged from 0.63 to 0.76, with three misses. Treat single judgments near the cutoff accordingly. [Initial scores](field/bytes-scores-initial.json) · [Final scores](field/bytes-scores.json)
+
+A full review of the original two Rust modules produced two surfaces, 15 bindings and one workflow. All four advisories answered their 33 subjects on three passes with zero mean-score findings. These inputs have no human defect labels. [Full review scores](field/bytes-full-scores.json)
+
+The shipped suite separately pairs a working Rust decoder call with the same call imported from the wrong module. All 23 labelled fixtures (13 clean, ten defects) matched their labels on all seven passes. The model, rubric and cutoff are unchanged.
+
+To reproduce this historical field pair, start from the jev-lint checkout at `2210d60` with the published `bytes-1.12.1.crate` archive. The script verifies the archive digest and uses stable rustdoc. Use rustdoc 1.98.0 to reproduce the original toolchain.
+
+```sh
+tool=$PWD
+data="$tool/experiments/advisory/public-api/field"
+out=$(mktemp -d)/review
+bash "$data/bytes.sh" /path/to/bytes-1.12.1.crate "$out"
+cd "$out"
+shasum -a 256 -c "$data/bytes-inputs.sha256"
+cp "$data/bytes-scores.json" bytes/baseline.json
+node "$tool/src/cli.ts" eval bytes --replay
+node "$tool/src/cli.ts" public-api-inputs full --api-layout original/layout.json
+(cd full && shasum -a 256 -c "$data/bytes-full.sha256")
+node "$tool/src/cli.ts" replay "$data/bytes-full-scores.json" --no-config --summary
+```
+
+#### Rustdoc fence comparison and independent check
+
+At the unchanged 0.68 cutoff and model `jev-1.14.0`, three fresh batches of seven on the existing bytes inputs flagged the edit 7/7 in each batch (0.69–0.79 overall) and the original 0/7 in each batch (0.05–0.09). The first two batches each had a positive score just 0.01 above cutoff. The earlier three misses on the same edit still matter. [Batch 1](field/rust-repeat/bytes-1.json) · [Batch 2](field/rust-repeat/bytes-2.json) · [Batch 3](field/rust-repeat/bytes-3.json)
+
+Two new published examples use untagged code fences, the normal Rust default in rustdoc. We froze the examples, changed one import path per example and type-checked both versions against the pinned libraries. Both originals compiled; both edits yielded E0432. We ran the collector on each pair with the original fences and with only the opening language tag made explicit. Counts are flagged passes out of seven.
+
+| Edited path | Ordinary Markdown, untagged | Ordinary Markdown, tagged Rust | Rustdoc mode, untagged | Rustdoc mode, tagged Rust |
+| --- | ---: | ---: | ---: | ---: |
+| memchr 2.7.6, move `memchr3_iter` from root to `memmem` | 0/7 | 7/7 | 7/7 | 7/7 |
+| base64 0.22.1, move `DecoderReader` from `read` to `write` | 0/7 | 7/7 | 7/7 | 7/7 |
+
+All originals scored below cutoff in every condition. Adding the explicit workflow format fixes the untagged evidence gap. After freezing that change, we tried the original untagged WaitGroup example from crossbeam-utils 0.8.21 and changed `sync::WaitGroup` to `thread::WaitGroup`. The latter name exists privately, so rustc rejects the consumer import with E0603. Rustdoc mode scored the original 0.05 in all seven passes and flagged the edit in all seven (0.88–0.93). This is one independent pair. The memchr and base64 pairs were used to diagnose the collector. [Markdown judgments](field/rust-repeat/markdown-scores.json) · [Rustdoc judgments](field/rust-repeat/rustdoc-scores.json) · [Independent pair](field/rust-repeat/holdout-scores.json)
+
+To replay this fence comparison, use jev-lint at `2210d60`, Rust 1.98.0 and a directory containing the published archives named `memchr-2.7.6.crate`, `base64-0.22.1.crate` and `crossbeam-utils-0.8.21.crate`. The generator checks each archive digest and the compiler result for each label before creating the evaluation inputs.
+
+```sh
+tool=$PWD
+data="$tool/experiments/advisory/public-api/field"
+out=$(mktemp -d)
+for run in markdown rustdoc holdout; do
+  format=$run
+  group=diagnosis
+  if [ "$run" = holdout ]; then format=rustdoc; group=holdout; fi
+  node "$data/rust-doctests.mjs" /path/to/archives "$out/$run" "$format" "$group"
+  (cd "$out/$run" && shasum -a 256 -c "$data/rust-repeat/$run.sha256" &&
+    cp "$data/rust-repeat/$run-scores.json" doctests/baseline.json &&
+    node "$tool/src/cli.ts" eval doctests --replay)
+done
+```
+
+The Markdown record reproduces the two misses. For the bytes batches, use the existing bytes reproduction above, substituting each `rust-repeat/bytes-{1,2,3}.json` record for the baseline.
+
+#### Grouped Rust imports
+
+The previous bytes runs occasionally missed a misplaced import inside a group. We kept the rule, model (`jev-1.14.0`) and cutoff (0.68) fixed. Before tuning, we set a stopping condition for this pair. Three consecutive batches of seven had to classify both inputs correctly on every pass, with every score at least 0.10 from the cutoff. That condition measures repeatability on this example. The number of independent guide examples is much smaller than the number of judgments.
+
+The first implemented variant retained all successful sibling lookups. It classified the pair correctly on 21 passes but the edited example went as low as 0.72. The final collector quotes the grouped declaration, expands the misplaced member to a standalone import, and shows where rustdoc lists that name. It omits redundant success rows in the affected group. The clean bytes input kept its previous digest. [Development variants and scores](field/rust-convergence/development.json)
+
+| Published example | Passes per version | Original scores | One-path edit scores |
+| --- | ---: | ---: | ---: |
+| bytes 1.12.1, batch 1 | 7 | 0.06–0.07 | 0.79–0.84 |
+| bytes 1.12.1, batch 2 | 7 | 0.06–0.08 | 0.79–0.84 |
+| bytes 1.12.1, batch 3 | 7 | 0.07–0.08 | 0.82–0.86 |
+| aho-corasick 1.1.3, held out | 7 | 0.03–0.04 | 0.92–0.95 |
+
+We selected aho-corasick’s basic searching example before tuning and scored it after freezing the collector. The published import brings `PatternID` in from the crate root. Moving it to `dfa::PatternID` makes rustc report E0603. We also regenerated the memchr, base64 and crossbeam-utils inputs and reran the shipped 23-case suite. Every individual judgment matched its label. [Recorded judgments and fixture digests](field/rust-convergence)
+
+To reproduce with Rust 1.98.0, set `archives` to a directory containing the five pinned crate archives named above. The doctest generator verifies the archives and compiler labels. Each eval baseline contains the raw scores from all seven passes. The check below reads each individual score and enforces the bytes margin. The general eval replay also checks sensitivity to small threshold changes and reports the memchr/base64 diagnosis corpus as blind because both classes are far from the cutoff. To obtain new judgments, run `jev-lint eval bytes --repeat 7` or `jev-lint eval doctests --repeat 7` from the generated suite’s parent and pass its `last.json` to the same check.
+
+```sh
+tool=$PWD
+data="$tool/experiments/advisory/public-api/field"
+records="$data/rust-convergence"
+out=$(mktemp -d)
+bash "$data/bytes.sh" "$archives/bytes-1.12.1.crate" "$out/pair"
+(cd "$out/pair" && shasum -a 256 -c "$records/bytes.sha256")
+node "$records/check.mjs" "$out/pair/bytes" "$records"/bytes-*.json
+for group in grouped diagnosis holdout; do
+  node "$data/rust-doctests.mjs" "$archives" "$out/$group" rustdoc "$group"
+  (cd "$out/$group" && shasum -a 256 -c "$records/$group.sha256")
+  node "$records/check.mjs" "$out/$group/doctests" "$records/$group-scores.json"
+done
+node "$records/check.mjs" "$tool/rules/text/entry-layout-obscures-workflow" "$records/shipped-scores.json"
+```

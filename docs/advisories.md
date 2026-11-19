@@ -36,7 +36,7 @@ Choose the evidence unit by what one finding should identify. All four rules use
 | Evidence unit | File | Question and rule |
 | --- | --- | --- |
 | One exported name | `.apibinding` | Is this name reserved for internal use? `export-has-no-public-role`. Can a caller predict its use and effect? `api-use-is-unclear`. Each question gets an independent verdict. |
-| One TS entry or Go package | `.apisurface` | Do the public signatures together offer overlapping choices or expose implementation details? `public-api-surface` scores the set from 0 to 4 and reports at 2.37. |
+| One TS entry, Go package or Rust module | `.apisurface` | Do the public signatures together offer overlapping choices or expose implementation details? `public-api-surface` scores the set from 0 to 4 and reports at 2.37. |
 | One documented caller workflow across named entries | `.apiworkflow` | Would a required step force the reader to discover or correct an import path? `entry-layout-obscures-workflow` compares the guide with the actual exports of the selected entries. |
 
 For binding and surface review, point the collector at source entry points from the library's published exports. Use a directory for a Go package. A public guide supplied with `--api-doc` accompanies the binding evidence.
@@ -60,11 +60,26 @@ jev-lint public-api-inputs layout-review --api-layout layout.json
 jev-lint run text/entry-layout-obscures-workflow layout-review --no-config --summary
 ```
 
-The layout run also produces the binding and surface inventories. Use the same four-rule configuration above to review all three units. Its JSON inventory links each workflow file to the guide and source lines. Export names come from the resolved TS entry (including barrel and type-only exports) or the selected Go package. Include every public entry relevant to the task; omitted subpaths have unknown contents. If the section and map exceed the text budget, the collector reports an error before writing the evidence.
+The layout run also produces the binding and surface inventories. Use the same four-rule configuration above to review all three units. Its JSON inventory links each workflow file to the guide and source lines. Export names come from the resolved TS entry (including barrel and type-only exports), the selected Go package or the selected Rust module. Include every public entry relevant to the task; omitted subpaths have unknown contents. If the section and map exceed the text budget, the collector reports an error before writing the evidence.
 
 In fenced JavaScript and TypeScript examples the collector checks static named imports against the reviewed TypeScript entries. Each lookup uses the exported name before a local alias and records type-only exports. A missing name lists any reviewed entries that supply it. Names absent from every reviewed entry cannot establish that switching entries would fix the guide. In prose the collector also checks same-line provider references written as `` `name` from `package/path` ``. Other phrasing, namespace imports and dynamic imports go to the model with the entry map.
 
+For a guide-only review, add `--workflows-only` to `public-api-inputs --api-layout`. It writes the same workflow evidence and returns each entry’s public name count. It skips binding files, surface files and detailed signature expansion. The default still writes all three kinds of evidence.
+
 For fenced Go examples, the collector parses each snippet and checks package-qualified names against the selected packages. An explicit import resolves by path, including aliases. In an excerpt without imports, a qualifier can match a unique declared package name among the reviewed entries, such as `git` for a path ending in `/v6`. The evidence labels that match as inferred. A local receiver such as `r` in `r.Head()`, an ambiguous package name or an unparseable snippet contributes no lookup. Each fence has its own scope. The collector does not compile the examples.
+
+For Rust, build public HTML documentation for the features and target that callers use. The collector reads these artifacts with Python 3.9+ and its standard library. For example:
+
+```sh
+cargo doc --manifest-path my-crate/Cargo.toml --no-deps
+jev-lint public-api-inputs api-review my-crate/Cargo.toml
+```
+
+A library manifest or crate root (`src/lib.rs`) selects its prebuilt module index using Cargo metadata. For a submodule, a cross-target build, or docs built in a custom output directory, pass its `index.html` directly. In a layout, map consumer paths such as `bytes` and `bytes::buf` to their respective indices. Regenerate public docs after changing the source, features or target. The inventory covers items exposed in the supplied rustdoc, including inlined re-exports. The alias count includes explicit renames retained by rustdoc; an inlined item can lose its original name. A struct’s inherent methods provide signature context. Hidden items, unbuilt features and trait implementation methods are outside this inventory. An unexpanded wildcard re-export in the index is an error because the package cannot be enumerated from that page.
+
+In fenced Rust snippets, ast-grep selects explicit `use` declarations. The collector expands nested use trees, checks the original name before an alias, and identifies other reviewed modules documenting a misplaced import. Glob imports and calls on local values supply no named import. Unqualified paths shadowed by a local module or imported alias in that fence are skipped.
+
+For Markdown extracted from rustdoc, set `"guideFormat": "rustdoc"` on the workflow alongside `guide` and the optional `heading`. This enables import lookup in untagged fences and runnable Rust examples with attributes such as `no_run`. Hidden setup lines participate in name resolution but supply no visible import evidence. The lookup skips `ignore`, `compile_fail` and other-language examples. Ordinary Markdown workflows continue to require a Rust language tag.
 
 For example, an editing guide might promise `open`, `mapPixels` and `commit` at the root. Moving `commit` to `canvas/filters` leaves its individual contract intact but breaks the documented route. An explicit handoff to `canvas/filters` makes the split usable. The workflow finding asks the reviewer to try the published imports before choosing between a documentation change and a re-export.
 

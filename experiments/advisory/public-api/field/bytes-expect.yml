@@ -1,0 +1,5 @@
+default: clean
+fixtures/original.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "All four named imports are documented at the crate root."}
+fixtures/wrong.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The edited use tree imports BytesMut from bytes::buf. Only the reviewed crate root supplies it."}

@@ -171,3 +171,50 @@ await testAsync("public-api-layout resolves Go package selectors without guessin
     assert.equal(unknown, "");
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+await testAsync("public-api-layout workflows-only keeps the evidence and omits detailed artifacts", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-api-fast-"));
+  try {
+    writeFileSync(join(dir, "source.ts"), "export class Writer {}");
+    writeFileSync(join(dir, "index.ts"), "export type * from './source.js';");
+    writeFileSync(join(dir, "guide.md"), "~~~ts\nimport { Writer } from 'writer';\n~~~");
+    const layout = join(dir, "layout.json");
+    writeFileSync(layout, JSON.stringify({ entries: { writer: "index.ts" }, workflows: [{ guide: "guide.md" }] }));
+    const inputs: string[] = [];
+    for (const mode of ["full", "fast"]) {
+      const out = join(dir, mode);
+      let json = "";
+      const args = ["public-api-inputs", out, "--api-layout", layout];
+      if (mode === "fast") args.push("--workflows-only");
+      assert.equal(await main(args, { out: s => { json = s; } }), 0);
+      const inventory = JSON.parse(json);
+      inputs.push(readFileSync(join(out, inventory.workflows[0].file), "utf8"));
+      assert.equal(existsSync(join(out, "bindings")), mode === "full");
+      assert.equal(inventory.entries[0].count, 1);
+    }
+    assert.equal(inputs[0], inputs[1]);
+    assert.match(inputs[1], /Writer from writer: exported here as type only/);
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+await testAsync("public-api-layout workflows-only rejects ambiguous and unresolved star exports", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-api-fast-error-"));
+  try {
+    writeFileSync(join(dir, "one.ts"), "export const call = 1;");
+    writeFileSync(join(dir, "two.ts"), "export const call = 2;");
+    writeFileSync(join(dir, "guide.md"), "Use call.");
+    const layout = join(dir, "layout.json");
+    writeFileSync(layout, JSON.stringify({ entries: { lib: "index.ts" }, workflows: [{ guide: "guide.md" }] }));
+    const out = join(dir, "review");
+    for (const [source, error] of [
+      ["export * from './one.js'; export * from './two.js';", /ambiguous star re-export/],
+      ["export * from './absent.js';", /unresolved re-export/],
+    ] as const) {
+      writeFileSync(join(dir, "index.ts"), source);
+      const logs: string[] = [];
+      assert.equal(await main(["public-api-inputs", out, "--api-layout", layout, "--workflows-only"], { log: s => logs.push(s) }), 2);
+      assert.match(logs.join(" "), error);
+      assert.equal(existsSync(out), false);
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});

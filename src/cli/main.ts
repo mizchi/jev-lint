@@ -61,16 +61,20 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
     if (target && opts.output) { log("choose --config or --output for the new configuration path"); return 2; }
     return cmdIntrospect({ ...opts, config: null, output: opts.output ?? target, introspectWrite: opts.introspectWrite || !opts.dryRun }, out, log, client);
   }
+  if (opts.workflowsOnly && (command !== "public-api-inputs" || !opts.apiLayout || opts.apiDoc)) {
+    log("--workflows-only requires public-api-inputs --api-layout and cannot take --api-doc");
+    return 2;
+  }
   if (command === "public-api-inputs") {
     if (opts.apiLayout ? opts.paths.length !== 1 : opts.paths.length < 2) {
-      log("usage: jev-lint public-api-inputs <new-directory> (--api-layout layout.json | <entry.ts|go-package>...)");
+      log("usage: jev-lint public-api-inputs <new-directory> (--api-layout layout.json | <entry.ts|go-package|Cargo.toml|rustdoc/index.html>...)");
       return 2;
     }
     try {
       const { astGrepBin } = await import("../scan.ts");
       if (opts.apiLayout) {
         const { publicApiLayoutInputs } = await import("../public-api-layout.ts");
-        out(JSON.stringify(await publicApiLayoutInputs(opts.paths[0], opts.apiLayout, astGrepBin(), opts.apiDoc)));
+        out(JSON.stringify(await publicApiLayoutInputs(opts.paths[0], opts.apiLayout, astGrepBin(), opts.apiDoc, opts.workflowsOnly)));
       } else {
         const { publicApiInputs } = await import("../../advisory/public-api.mjs");
         out(JSON.stringify(await publicApiInputs(opts.paths[0], opts.paths.slice(1), astGrepBin(), opts.apiDoc)));

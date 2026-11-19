@@ -1,0 +1,162 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-11-19T08:32:21.766Z",
+  "model": "jev-1.14.0",
+  "suite": "bytes",
+  "rules": [
+    {
+      "id": "entry-layout-obscures-workflow",
+      "draft": "fa510dace70d",
+      "at": 0.68
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.74,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.09,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.07,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.06,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.75,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/original.apiworkflow",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.08,
+        "confidence": null
+      },
+      {
+        "rule": "entry-layout-obscures-workflow",
+        "file": "bytes/fixtures/wrong.apiworkflow",
+        "line": 1,
+        "endLine": 27,
+        "kind": "noul",
+        "value": 0.69,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 14,
+    "inputTokens": 14000,
+    "usd": 0.0005880000000000001,
+    "ms": 241
+  }
+}

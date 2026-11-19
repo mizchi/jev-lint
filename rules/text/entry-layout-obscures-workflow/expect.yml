@@ -41,3 +41,7 @@ fixtures/go-selector-wire.apiworkflow:
   - {"line": 1, "window": 0, "label": "clean", "reason": "wire supplies the named constructor and Read is a method on its result."}
 fixtures/go-selector-codec.apiworkflow:
   - {"line": 1, "window": 0, "label": "bad", "reason": "The example requests NewDecoder from codec, while only the reviewed wire package supplies it."}
+fixtures/rust-decode-working.apiworkflow:
+  - {line: 1, window: 0, label: clean, reason: "The guide imports decode from the module that supplies it."}
+fixtures/rust-decode-wrong.apiworkflow:
+  - {line: 1, window: 0, label: bad, reason: "The call requires decode, which is documented only at codec::wire."}

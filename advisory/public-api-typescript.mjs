@@ -76,7 +76,7 @@ function describe(checker, binding, source) {
   }
 }
 
-export function typescriptSurface(entry, scan) {
+function exportGroups(entry, scan, namesOnly) {
   const program = ts.createProgram([entry], optionsFor(entry))
   const checker = program.getTypeChecker()
   const source = program.getSourceFile(entry)
@@ -87,6 +87,8 @@ export function typescriptSurface(entry, scan) {
     const exports = checker.getExportsOfModule(mod)
     if (modules.has(file)) return exports
     const inherited = new Set()
+    const starSymbols = new Map()
+    const conflicts = new Set()
     const valueStars = []
     const names = new Set()
     modules.set(file, { names, valueStars, symbols: new Map(exports.map(s => [s.name, s])) })
@@ -116,7 +118,13 @@ export function typescriptSurface(entry, scan) {
           const child = imported?.declarations?.find(ts.isSourceFile)
           if (!child) throw new Error('cannot enumerate re-export ' + stmt.getText(file))
           if (!stmt.isTypeOnly) valueStars.push(child)
-          for (const symbol of exportedNames(child)) if (symbol.name !== 'default') inherited.add(symbol.name)
+          for (const symbol of exportedNames(child)) {
+            if (symbol.name === 'default') continue
+            const target = targetOf(checker, symbol)
+            if (inherited.has(symbol.name) && starSymbols.get(symbol.name) !== target) conflicts.add(symbol.name)
+            inherited.add(symbol.name)
+            starSymbols.set(symbol.name, target)
+          }
         }
       } else if (ts.isExportAssignment(stmt) || stmt.modifiers?.some(m => m.kind === ts.SyntaxKind.DefaultKeyword)) {
         if (stmt.isExportEquals) throw new Error('export = entry points are unsupported: ' + entry)
@@ -125,7 +133,15 @@ export function typescriptSurface(entry, scan) {
         for (const decl of stmt.declarationList.declarations) addName(decl.name)
       } else if (stmt.name) names.add(stmt.name.text)
     }
-    const errors = [...program.getSyntacticDiagnostics(file), ...program.getSemanticDiagnostics(file).filter(d => d.code === 2308)]
+    const errors = program.getSyntacticDiagnostics(file)
+    if (namesOnly) {
+      // Full semantic diagnostics instantiate unrelated types in large declaration packages.
+      const conflict = [...conflicts].find(name => !names.has(name))
+      if (conflict) throw new Error('ambiguous star re-export ' + conflict + ' in ' + file.fileName)
+    } else {
+      const ambiguity = program.getSemanticDiagnostics(file).find(d => d.code === 2308)
+      if (ambiguity) throw new Error(ts.flattenDiagnosticMessageText(ambiguity.messageText, '\n'))
+    }
     if (errors.length) throw new Error(ts.flattenDiagnosticMessageText(errors[0].messageText, '\n'))
     const missing = exports.find(s => !names.has(s.name) && !inherited.has(s.name))
     if (missing) throw new Error('cannot account for export ' + missing.name + ' in ' + file.fileName)
@@ -144,16 +160,28 @@ export function typescriptSurface(entry, scan) {
     }
     return valueStars.some(child => hasValueRoute(child, name, visited))
   }
-  const bindingsByName = []
+  const groups = []
   for (const [symbol, bindings] of Map.groupBy(exportedNames(source), s => targetOf(checker, s))) {
     const primary = bindings.find(s => s.name === symbol.name) ?? bindings.find(s => s.name !== 'default') ?? bindings[0]
-    const binding = describe(checker, primary, source)
-    const typeOnly = b => !hasValueRoute(source, b.name, new Set())
-    bindingsByName.push({ ...binding, typeOnly: typeOnly(primary), doc: [reExportDocs(primary), binding.doc].filter(Boolean).join('\n') })
-    for (const alias of bindings) {
-      if (alias === primary) continue
+    if (!symbol.declarations?.length) throw new Error('unresolved export ' + primary.name + ' in ' + source.fileName)
+    groups.push([primary, ...bindings.filter(b => b !== primary)].map(binding => ({
+      binding, name: binding.name, typeOnly: !hasValueRoute(source, binding.name, new Set()),
+      ...(binding !== primary && { alias: primary.name }),
+    })))
+  }
+  return { checker, source, groups }
+}
+
+export function typescriptSurface(entry, scan, namesOnly = false) {
+  const { checker, source, groups } = exportGroups(entry, scan, namesOnly)
+  if (namesOnly) return { bindings: groups.flat().map(({ binding, ...name }) => name) }
+  const bindingsByName = []
+  for (const [primary, ...aliases] of groups) {
+    const detail = describe(checker, primary.binding, source)
+    bindingsByName.push({ ...detail, typeOnly: primary.typeOnly, doc: [reExportDocs(primary.binding), detail.doc].filter(Boolean).join('\n') })
+    for (const { binding, ...alias } of aliases) {
       const row = alias.name + ' — alias of ' + primary.name
-      bindingsByName.push({ name: alias.name, alias: primary.name, typeOnly: typeOnly(alias), row, signature: row + '\nTarget: ' + binding.signature, doc: [reExportDocs(alias), binding.doc].filter(Boolean).join('\n') })
+      bindingsByName.push({ ...alias, row, signature: row + '\nTarget: ' + detail.signature, doc: [reExportDocs(binding), detail.doc].filter(Boolean).join('\n') })
     }
   }
   const leading = ts.getLeadingCommentRanges(source.text, 0) ?? []

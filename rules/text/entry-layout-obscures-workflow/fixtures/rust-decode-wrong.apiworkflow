@@ -1,0 +1,19 @@
+Guide: guide.md:1-8
+# Decode a record
+Open the record and decode it to recover its value.
+
+~~~rust
+use codec::open;
+use codec::decode;
+let value = decode(open());
+~~~
+
+Reviewed import paths and their exports (other paths were not inspected):
+codec: open, wire
+codec::wire: decode
+
+Rust use lookup:
+To reproduce this use declaration against the reviewed modules, the caller must change the import for decode from codec to codec::wire. Documented: `use codec::decode;`. Available: `use codec::wire::decode;`.
+Rust resolves every named use import before compiling the example, including imports of structs and traits. Availability is scoped to the supplied rustdoc build.
+open from codec: exported here
+decode from codec: absent here; exported by codec::wire
