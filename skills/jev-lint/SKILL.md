@@ -148,7 +148,7 @@ packs and the project's own `.jev-lint/rules/`; a config with no `rules:`
 runs nothing. Unknown keys are errors. A `-R` run inside a repository that
 has a config still merges that config — its `rules:`, its `files:` — so pass
 **`--no-config`** when testing a rule in isolation, and **`--cache none`** so
-no earlier verdict is reused (the cache is `.jev-lint/baseline.json`; `-c
+no earlier verdict is reused (the cache is the ledger directory `.jev-lint/verdicts/`; `-c
 <path>` names another).
 
 `hooks.precommit` can select a separate rule set for `review --staged` and

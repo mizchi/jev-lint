@@ -336,12 +336,17 @@ canonical terminology.
 
 ```sh
 jev-lint docs --dry-run
-jev-lint docs --record .jev-lint/documents-baseline.json
-jev-lint docs --replay .jev-lint/documents-baseline.json
+jev-lint docs
+jev-lint docs --replay
 ```
 
 The manifest is `.jev-lint/documents.json`; `--document-manifest` selects another.
-Replay is offline and rejects changed sources or questions. Contradictions exit 1;
+Answers go to the judgment ledger `.jev-lint/judgments/` (`--ledger` selects another):
+a run reuses every answer whose compared excerpts are unchanged and adds one file
+for what it newly asked, so branches merge without conflicts. `--resample` asks again.
+Replay is offline; a comparison the ledger has not answered is `unrecorded`.
+`jev-lint ledger compact --document-manifest <path>` folds the ledger into one file of
+the manifest's live answers; run it on the main branch. Contradictions exit 1;
 incomplete or stale assessments exit 3. The report remains `UNREVIEWED`.
 See the [self-check guide](docs/self-check.md) for scope, budgets and evaluation.
 

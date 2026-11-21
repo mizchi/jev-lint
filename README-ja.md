@@ -255,12 +255,17 @@ npx skills add mizchi/jev-lint --skill jev-lint
 
 ```sh
 jev-lint docs --dry-run
-jev-lint docs --record .jev-lint/documents-baseline.json
-jev-lint docs --replay .jev-lint/documents-baseline.json
+jev-lint docs
+jev-lint docs --replay
 ```
 
 定義ファイルは `.jev-lint/documents.json`。`--document-manifest` で別のものを指定できる。
-再生には通信が不要で、出典や質問が変わっていれば拒否する。不一致は終了コード1、
+判定は判定台帳 `.jev-lint/judgments/` に保存する（`--ledger` で変更できる）。
+比較した抜粋が変わっていない判定は再利用し、新たに問い合わせた分だけを1ファイルとして追加するので、
+ブランチ同士のマージで衝突しない。`--resample` で問い直す。
+再生には通信が不要で、台帳にない比較は `unrecorded` になる。
+`jev-lint ledger compact --document-manifest <path>` は、定義ファイルに残っている比較の判定だけを
+1ファイルにまとめる。main ブランチで実行する。不一致は終了コード1、
 未評価・古い記録は3になる。結果の品質判定は `UNREVIEWED` のまま。
 対象範囲、予算、評価方法は[自己検査ガイド](docs/self-check.md)にある。
 

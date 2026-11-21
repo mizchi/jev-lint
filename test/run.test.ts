@@ -1,4 +1,5 @@
 import { strict as assert } from "node:assert";
+import { Cache } from "../src/cache.ts";
 import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, sep } from "node:path";
@@ -295,12 +296,12 @@ await testAsync("run: score validation follows each rule's rubric before caching
   try {
     writeFileSync(join(dir, "a.ts"), "export function f() {}\n");
     const rule = scoreRule({ rule: { kind: "function_declaration" }, levels: ["none", "mild", "moderate", "strong", "certain"], at: 3.5 });
-    const cachePath = join(dir, "cache.json");
+    const cachePath = join(dir, "cache");
     const valid = await run({ rules: [rule], paths: ["a.ts"], cwd: dir, cachePath, client: fakeClient(() => 4) });
     assert.equal(valid.findings[0]!.value, 4, "a custom rubric can exceed the shared 0-3 scale");
     const invalid = await run({ rules: [rule], paths: ["a.ts"], cwd: dir, cachePath, force: true, client: fakeClient(() => 5) });
     assert.equal(invalid.stats.missing, 1);
-    const cached = Object.values(JSON.parse(readFileSync(cachePath, "utf8")).entries) as Array<{ value: number }>;
+    const cached = [...Cache.load(cachePath).entries.values()];
     assert.deepEqual(cached.map((entry) => entry.value), [4], "the malformed answer never replaces a usable cached verdict");
   } finally {
     rmSync(dir, { recursive: true, force: true });

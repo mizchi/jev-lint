@@ -11,6 +11,25 @@ import { DEFAULT_CACHE_PATH, OLD_CACHE_PATH } from "../cache.ts";
 import { applyConfig, findConfig, loadConfig, modelWithKeyEnv, type Config } from "../config.ts";
 import type { Log, Options } from "./args.ts";
 import { modelCachePath, modelSpec } from "../model.ts";
+import { describeMigration, legacyCacheDir, legacyCacheFileFor, migrateLegacyFile } from "../legacy-ledger.ts";
+
+/**
+ * TEMPORARY (until LEGACY_MIGRATION.removeIn): the 0.9 cache was one `.json`
+ * file. A setting that still names one is read as the directory it became,
+ * and a legacy file found where the ledger now lives is converted and removed.
+ * A dry run reports what it would migrate and writes nothing.
+ */
+function migrateCacheSetting(path: string, dryRun: boolean, log: Log): string {
+  const asDir = legacyCacheDir(path);
+  const dir = asDir ?? path;
+  if (asDir) log(`cache: ${path} names a 0.9 single-file cache; since 0.10 the cache is a ledger directory, so ${dir} is used. Point \`cache:\` at the directory`);
+  const legacy = asDir ? path : legacyCacheFileFor(dir);
+  if (existsSync(legacy)) {
+    const result = migrateLegacyFile(legacy, { to: dir, dryRun });
+    log(dryRun && result.kind === "cache" ? `would ${describeMigration(result).replace(/^migrated/, "migrate")}` : describeMigration(result));
+  }
+  return dir;
+}
 
 export interface Context {
   config: Config;
@@ -65,6 +84,7 @@ export function resolveContext(opts: Options, rest: string[], log: Log): Context
   let cachePath: string | null;
   try { modelSpec(opts.model, opts.baseUrl); cachePath = modelCachePath(opts.cache === "none" ? null : resolve(baseDir, opts.cache), opts.model); }
   catch (error) { log(`model error: ${(error as Error).message}`); return null; }
+  if (cachePath) cachePath = migrateCacheSetting(cachePath, opts.dryRun, log);
   return { config, configPath, baseDir, argPaths, cachePath };
 }
 

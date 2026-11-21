@@ -21,6 +21,10 @@ export interface Options {
   initIntrospect: boolean;
   introspectWrite: boolean;
   documentManifest: string | null;
+  /** docs: the judgment ledger directory. */
+  ledger: string | null;
+  /** docs: ask every comparison even when the ledger answers it. */
+  resample: boolean;
   artifact: string | null; acceptedBaseline: string | null; output: string | null; scopeId: string | null;
   relationInput: string | null; relationOptions: string | null; explainScope: boolean;
   policyRef: string | null;
@@ -119,9 +123,13 @@ usage:
   jev-lint introspect --replay <record.json>  validate recommendations in the current directory
   jev-lint init --introspect [directory] [--dry-run]
                                   create a new config using Jev's starter recommendations
-  jev-lint docs [--document-manifest <path>] [--record <path>]
-                                  compare documentation claims and terminology
-  jev-lint docs --replay <record.json> validate answers against the current document snapshot
+  jev-lint docs [--document-manifest <path>] [--ledger <dir>] [--resample]
+                                  compare documentation claims and terminology; recorded answers are reused
+  jev-lint docs --replay [--ledger <dir>]  report from the ledger alone, no requests
+  jev-lint ledger migrate [files...] [--dry-run]
+                                  convert 0.9 single-file caches and document records into ledgers
+  jev-lint ledger compact [--ledger <dir>] [--document-manifest <path>]
+                                  fold a ledger into one file; with a manifest, keep only its live answers
   jev-lint baseline write|compare|prune --artifact <scan.json> --baseline <accepted.json>
                                   --scope-id <id> --model-revision <deployment>
   jev-lint report --artifact <scan.json> --sarif   export an existing artifact, no requests
@@ -286,6 +294,8 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
     initIntrospect: false,
     introspectWrite: false,
     documentManifest: null,
+    ledger: null,
+    resample: false,
     artifact: null, acceptedBaseline: null, output: null, scopeId: null, relationInput: null, relationOptions: null, explainScope: false,
     policyRef: null,
     repository: null, runId: null, namespace: null, sourceSha: null, maxCandidates: null, modelRevision: null,
@@ -476,6 +486,8 @@ export function parseArgs(argv: string[], { color }: { color: boolean }): Option
         break;
       case "--artifact": opts.artifact = need(i++, a); break;
       case "--document-manifest": opts.documentManifest = need(i++, a); break;
+      case "--ledger": opts.ledger = need(i++, a); break;
+      case "--resample": opts.resample = true; break;
       case "--write": opts.introspectWrite = true; break;
       case "--introspect": opts.initIntrospect = true; break;
       case "--baseline": opts.acceptedBaseline = need(i++, a); break;

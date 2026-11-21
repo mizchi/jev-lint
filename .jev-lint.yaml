@@ -134,4 +134,4 @@ hooks:
       git/commit-message-describes-diff: on
       git/diff-follows-instructions: on
 # The verdict cache, committed: a run over the same commit answers from it.
-# cache: .jev-lint/baseline.json
+# cache: .jev-lint/verdicts

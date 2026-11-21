@@ -7,7 +7,7 @@ source excerpts. It does not rewrite documentation or grant approval.
 ```sh
 just docs-facts
 source ~/.profile
-just docs-check --record .jev-lint/documents-baseline.json
+just docs-check
 just docs-replay
 ```
 

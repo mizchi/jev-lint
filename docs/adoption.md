@@ -2,7 +2,7 @@
 
 These operations do not call a model or turn screening into a quality PASS.
 The accepted-findings ledger is separate from the verdict cache at
-`.jev-lint/baseline.json` and from calibrated rule fixture baselines.
+`.jev-lint/verdicts/` and from calibrated rule fixture baselines.
 
 ## Accepted findings
 

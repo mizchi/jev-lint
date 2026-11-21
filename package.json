@@ -126,7 +126,7 @@
     "docs:facts": "node --experimental-strip-types tools/docs-facts.ts",
     "docs:facts:check": "node --experimental-strip-types tools/docs-facts.ts --check",
     "docs:check": "node --experimental-strip-types src/cli.ts docs",
-    "docs:replay": "node --experimental-strip-types src/cli.ts docs --replay .jev-lint/documents-baseline.json",
+    "docs:replay": "node --experimental-strip-types src/cli.ts docs --replay",
     "eval:documents": "node --experimental-strip-types tools/eval-documents.ts --replay experiments/documents/iteration-01.json",
     "introspect": "node --experimental-strip-types src/cli.ts introspect",
     "eval:introspection": "node --experimental-strip-types tools/eval-introspection.ts --corpus experiments/introspection/extended --replay experiments/introspection/extended/advisory-catalog.json"

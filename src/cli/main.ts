@@ -22,6 +22,7 @@ import { cmdScope } from "./cmd-scope.ts";
 import { doctor } from "../doctor.ts";
 import { resolveTargets } from "./targets.ts";
 import { cmdDocs } from "./cmd-docs.ts";
+import { cmdLedger } from "./cmd-ledger.ts";
 import { cmdIntrospect } from "./cmd-introspect.ts";
 import { cmdAuto } from "./cmd-auto.ts";
 import { confirmExecution } from "./confirm.ts";
@@ -108,6 +109,7 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   const context = resolveContext(opts, rest, log);
   if (!context) return 2;
   const { config, configPath, baseDir, argPaths, cachePath } = context;
+  if (command === "ledger") return cmdLedger({ ...opts, paths: argPaths }, out, log, { baseDir, cachePath });
   if (command === "auto") return cmdAuto(opts, context, out, log, client, deps.confirm);
   if (command === "doctor") {
     const selected = loadOrDie(opts, log, baseDir, configPath !== null); if (!selected) return 2;

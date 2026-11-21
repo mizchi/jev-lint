@@ -8,6 +8,37 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ## Unreleased
 
+### Breaking: recorded answers move to judgment ledgers
+
+The verdict cache and documentation records were single JSON files rewritten
+whole on every run. Two branches that both learned something rewrote the same
+file and could not be merged, and `docs` re-asked every comparison whenever
+any registered source changed, so unchanged comparisons came back with new
+probabilities. Both stores are now judgment ledgers: directories of
+append-only, content-keyed files that Git merges as a union.
+
+- The verdict cache is `.jev-lint/verdicts/` (was `.jev-lint/baseline.json`).
+  A warm run writes nothing; a run that learns adds one file of what it learned.
+- `docs` stores answers in `.jev-lint/judgments/` (`--ledger` selects another)
+  and reuses every answer whose compared excerpts are unchanged. Line numbers
+  and the rest of each file no longer retire an answer. `--resample` asks again.
+  `docs --replay` reports from the ledger with no request; an unanswered
+  comparison is `unrecorded` and exits 3.
+- `--record <file>` and `--replay <file>` for `docs` are deprecated, and
+  `cache:` names a directory.
+- New `jev-lint ledger compact` folds a ledger into one file. With
+  `--document-manifest` it keeps only the live answers, and refuses an
+  incomplete snapshot. New `jev-lint ledger migrate` converts 0.9 stores.
+- Library: `scanDocuments` takes `ledger` and `resample`; new `replayDocuments`,
+  `loadDocumentLedger` and `documentJudgmentKey`. Reports gain
+  `coverage.reused` and the error code `unrecorded`.
+
+**Automatic migration until 0.13.0.** 0.10–0.12 convert a 0.9 cache or a
+document record they find, verify every answer reads back, and remove the old
+file; a `cache:` ending in `.json` is read as its directory. Commit the new
+directories with the removal. 0.13.0 removes the migrator; migrate before
+upgrading past 0.12. See [Upgrading from 0.9](docs/reference.md#upgrading-from-09).
+
 ## 0.9.1 — 2026-11-20
 
 - Add an experimental decision pipeline for inspecting package manifests and replaying recorded evaluations. Run the inspector and the LangGraph example from the tagged repository checkout. The pipeline is a private experiment.

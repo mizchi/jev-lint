@@ -39,8 +39,8 @@
  *     not in a build-artifact directory.
  */
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync, mkdirSync, renameSync } from "node:fs";
-import { dirname } from "node:path";
+import { statSync } from "node:fs";
+import { Ledger } from "./ledger.ts";
 import { ruleTextHash } from "./rules.ts";
 import type { Answer, Batch, CacheEntry, Grouping, Rule, RuleKind, StateArm, Subject } from "./types.ts";
 
@@ -51,7 +51,7 @@ export function strictVerdictKey(batch: Batch, subject: Subject, scope: StrictCa
     state: batch.state, payload: batch.questions, subject: subject.id })).digest("hex");
 }
 
-export const DEFAULT_CACHE_PATH = ".jev-lint/baseline.json";
+export const DEFAULT_CACHE_PATH = ".jev-lint/verdicts";
 /** Where 0.4 kept it; found, it is named and not read. */
 export const OLD_CACHE_PATH = ".jev-lint-cache.json";
 
@@ -136,52 +136,50 @@ export function verdictKey(
     .slice(0, 24);
 }
 
+export const readCacheEntry = (raw: unknown): CacheEntry | null => {
+  const e = raw as Partial<CacheEntry> | null;
+  return e && typeof e === "object" && typeof e.value === "number" && Number.isFinite(e.value) && typeof e.kind === "string" ? (e as CacheEntry) : null;
+};
+
+/**
+ * The verdict cache over a {@link Ledger} directory. Since 0.10 the cache is a
+ * directory of append-only files rather than one file rewritten whole: a run
+ * that answers from it writes nothing, and a run that learns writes one new
+ * file holding only what it learned, so branches merge without conflicts.
+ */
 export class Cache {
   /** null disables persistence entirely; the cache then only dedupes in memory. */
   path: string | null;
   entries: Map<string, CacheEntry>;
-  meta: Record<string, unknown>;
   hits: number;
   misses: number;
   writes: number;
   loadError: string | null;
+  private ledger: Ledger<CacheEntry> | null;
 
   constructor(path: string | null = DEFAULT_CACHE_PATH) {
     this.path = path;
     this.entries = new Map();
-    this.meta = { schema: CACHE_SCHEMA };
     this.hits = 0;
     this.misses = 0;
     this.writes = 0;
     this.loadError = null;
+    this.ledger = null;
   }
 
   static load(path: string = DEFAULT_CACHE_PATH): Cache {
     const cache = new Cache(path);
     try {
-      const raw = JSON.parse(readFileSync(path, "utf8")) as {
-        schema?: string;
-        entries?: Record<string, CacheEntry>;
-      };
-      // A cache written by a different question schema is not upgradeable: the
-      // verdicts answered questions that no longer exist. Dropping it is the
-      // only honest option.
-      if (raw?.schema !== CACHE_SCHEMA) {
-        const n = Object.keys(raw?.entries ?? {}).length;
-        cache.loadError = raw?.schema
-          ? `cache at ${path} was written for schema ${raw.schema}, this build is ${CACHE_SCHEMA}: its ${n} verdict(s) answer questions keyed another way and are dropped; the next warm run rewrites it`
-          : null;
+      if (statSync(path).isFile()) {
+        cache.loadError = `cache at ${path} is a single file, the form before 0.10; it is not read. Run \`jev-lint ledger migrate ${path}\` to carry its verdicts into a ledger directory`;
+        cache.path = null;
         return cache;
       }
-      for (const [k, v] of Object.entries(raw.entries ?? {})) {
-        if (v && typeof v.value === "number") cache.entries.set(k, v);
-      }
-      cache.meta = { ...raw, entries: undefined };
-    } catch (err: unknown) {
-      if ((err as NodeJS.ErrnoException)?.code !== "ENOENT") {
-        cache.loadError = `cache at ${path} unreadable (${String(err).slice(0, 120)}); ignoring it`;
-      }
-    }
+    } catch { /* missing: an empty ledger */ }
+    const ledger = Ledger.load(path, CACHE_SCHEMA, readCacheEntry);
+    cache.ledger = ledger;
+    for (const e of ledger.entries()) cache.entries.set(e.key, e.value);
+    if (ledger.loadErrors.length) cache.loadError = ledger.loadErrors.slice(0, 3).join("; ");
     return cache;
   }
 
@@ -204,34 +202,33 @@ export class Cache {
 
   set(key: string, answer: Answer | null, provenance: Partial<CacheEntry> = {}): void {
     if (!answer || typeof answer.value !== "number") return;
-    this.entries.set(key, {
+    const at = new Date().toISOString();
+    const entry: CacheEntry = {
       value: answer.value,
       confidence: answer.confidence ?? null,
       kind: answer.kind,
       // Provenance is for humans reading the file and for `jev-lint gaps`;
       // nothing keys on it.
       ...provenance,
-      at: new Date().toISOString(),
-    });
+      at,
+    };
+    this.entries.set(key, entry);
+    this.pending.set(key, entry);
     this.writes += 1;
   }
 
-  save({ model = null, extra = {} }: { model?: string | null; extra?: Record<string, unknown> } = {}): boolean {
-    const payload = {
-      schema: CACHE_SCHEMA,
-      model,
-      written: new Date().toISOString(),
-      ...extra,
-      entries: Object.fromEntries(this.entries),
-    };
+  private readonly pending = new Map<string, CacheEntry>();
+
+  /** Append what this run learned as one ledger file. True when nothing failed, including when there was nothing to write. */
+  save({ model = null }: { model?: string | null } = {}): boolean {
     if (!this.path) return false;
     try {
-      mkdirSync(dirname(this.path), { recursive: true });
-      // Write-then-rename, so an interrupted save cannot leave a half-written
-      // cache that the next run would report as a schema error.
-      const tmp = `${this.path}.tmp`;
-      writeFileSync(tmp, `${JSON.stringify(payload, null, 2)}\n`);
-      renameSync(tmp, this.path);
+      const ledger = this.ledger ?? Ledger.load(this.path, CACHE_SCHEMA, readCacheEntry);
+      this.ledger = ledger;
+      // A key the ledger cannot hold is one lost verdict, not a lost save.
+      for (const [key, entry] of this.pending) { try { ledger.put(key, entry, entry.at); } catch { /* skipped */ } }
+      ledger.flush({ model });
+      this.pending.clear();
       return true;
     } catch (err: unknown) {
       this.loadError = `could not write cache to ${this.path} (${String(err).slice(0, 120)})`;
@@ -239,13 +236,14 @@ export class Cache {
     }
   }
 
-  /** Drop entries no live key refers to. Returns how many went. */
+  /** Drop entries no live key refers to, in memory. Returns how many went. `jev-lint ledger compact` prunes on disk. */
   prune(liveKeys: Iterable<string>): number {
     const live = new Set(liveKeys);
     let dropped = 0;
     for (const k of [...this.entries.keys()]) {
       if (!live.has(k)) {
         this.entries.delete(k);
+        this.pending.delete(k);
         dropped += 1;
       }
     }

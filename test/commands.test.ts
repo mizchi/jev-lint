@@ -666,7 +666,7 @@ await testAsync("commands: since 0.5 a config picks its rules by id, .jev-lint/r
     writeFileSync(join(dir, ".jev-lint-cache.json"), "{}");
     const cached = await cli(["check"]);
     assert.equal(cached.code, 1, cached.log);
-    assert.ok(existsSync(join(dir, ".jev-lint", "baseline.json")), "the cache at its 0.5 path");
+    assert.ok(existsSync(join(dir, ".jev-lint", "verdicts")), "the cache at its 0.10 path, a ledger directory");
     assert.match(cached.log, /\.jev-lint-cache\.json is 0\.4's cache/);
     // `run <id>` still reaches the project's rule, config or not.
     const one = await cli(["run", "body-short", "src", "--cache", "none", "--json", "--at", "body-short=0.5"]);
