@@ -45,3 +45,16 @@ await testAsync("cmd-artifact: live check SARIF and file preflight keep stdout m
     assert.equal(await main([...args, "--sarif", "--dry-run"], deps), 2);
   } finally { process.chdir(previous); rmSync(cwd, { recursive: true, force: true }); }
 });
+
+await testAsync("cmd-artifact: accepted findings are never written into a judgment ledger", async () => {
+  const cwd = mkdtempSync(join(tmpdir(), "jev-baseline-cli-")), previous = process.cwd();
+  try {
+    process.chdir(cwd);
+    writeFileSync("scan.json", JSON.stringify(scanArtifact()));
+    const deps = { out: () => {}, log: () => {} };
+    for (const target of [".jev-lint/verdicts/accepted.json", ".jev-lint/judgments/accepted.json", ".jev-lint/baseline.json"]) {
+      assert.equal(await main(["baseline", "write", "--artifact", "scan.json", "--baseline", target, "--scope-id", "service", "--model-revision", "deployment-001", "--no-config"], deps), 2, target);
+      assert.ok(!existsSync(target), target);
+    }
+  } finally { process.chdir(previous); rmSync(cwd, { recursive: true, force: true }); }
+});

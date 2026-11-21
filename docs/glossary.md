@@ -5,8 +5,9 @@ or older release can describe different behavior without contradicting them.
 
 ## Baselines and caches
 
-A verdict cache stores reusable model answers. The ordinary CLI cache is
-`.jev-lint/baseline.json`; the strict audit cache also binds the entire request,
+A verdict cache stores reusable model answers. The ordinary CLI cache is the
+judgment ledger directory `.jev-lint/verdicts/` (append-only, content-keyed
+files; see `jev-lint ledger`); the strict audit cache also binds the entire request,
 tenant, repository, endpoint, model deployment and selected policy. Cache reuse
 is not an owner approval or a quality verdict. The relation API has no persistent
 verdict cache.
@@ -20,9 +21,12 @@ An accepted-findings baseline is a separate ledger, normally
 changed model, policy or context requires rechecking. Missing or unobserved
 subjects are not evidence of resolution. Acceptance never skips a model request.
 
-The documentation record `.jev-lint/documents-baseline.json` contains recorded
-comparisons for a content-digested documentation snapshot. Replay validates the
-current snapshot and question identity; it does not produce a fresh model answer.
+The documentation judgment ledger `.jev-lint/judgments/` holds one recorded
+answer per compared excerpt pair, question and model. A run reuses an answer
+whose excerpts are unchanged and appends what it newly asked; replay reports from
+the ledger alone and marks unanswered comparisons `unrecorded`. Neither is a fresh
+model answer or a quality verdict. A judgment ledger is not the accepted-findings
+ledger: it records what the model said, not what a person accepted.
 
 The Japanese terms 回答キャッシュ, ルール評価のbaseline, 指摘の受入台帳 and 文書比較の記録
 name these respective concepts. Different translations are acceptable when the

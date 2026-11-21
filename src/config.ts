@@ -439,11 +439,12 @@ ${ruleKeys.map((key) => `  ${key}: on`).join("\n")}
 #     extensions: [mbt]
 #     expandoChar: _
 
-# The verdict cache, keyed on each rule and each subject, meant to be
-# committed: a run over the same commit answers from it, and CI can lint
-# from it with no API key. \`none\` disables it. Treat it as trusted input:
-# anything that can edit it can silence a rule or invent a finding.
-# cache: .jev-lint/baseline.json
+# The verdict cache, a ledger directory keyed on each rule and each subject,
+# meant to be committed: a run over the same commit answers from it, CI can
+# lint from it with no API key, and branches that add verdicts merge without
+# conflicts. \`none\` disables it. Treat it as trusted input: anything that
+# can add a file to it can silence a rule or invent a finding.
+# cache: .jev-lint/verdicts
 
 # The model, and the endpoint it is asked at. Point \`baseUrl\` at a proxy or a
 # self-hosted deployment to move the whole tool off the default service.

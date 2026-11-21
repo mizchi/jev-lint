@@ -1,5 +1,5 @@
 import { strict as assert } from "node:assert";
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from "node:fs";
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Cache, verdictKey, contextKey } from "../src/cache.ts";
@@ -105,31 +105,25 @@ test("cache: a key covers the draft, the arm and the axis, but not the threshold
   assert.equal(verdictKey(r, "located", "TEXT", "file", null), verdictKey(r, "located", "TEXT"));
 });
 
-test("cache: a missing, unreadable, malformed or stale file means no verdict, never a throw", () => {
+test("cache: a missing, malformed or legacy store means no verdict, never a throw", () => {
   const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
   try {
-    const fromMissingFile = Cache.load(join(dir, "nope.json"));
-    assert.equal(fromMissingFile.get("k", "score"), null);
+    const fromMissing = Cache.load(join(dir, "nope"));
+    assert.equal(fromMissing.get("k", "score"), null);
+    assert.equal(fromMissing.loadError, null, "a ledger not yet written is empty, not an error");
 
-    writeFileSync(join(dir, "bad.json"), "{not json");
-    const fromMalformedFile = Cache.load(join(dir, "bad.json"));
-    assert.equal(fromMalformedFile.get("k", "score"), null);
-    assert.ok(fromMalformedFile.loadError);
+    mkdirSync(join(dir, "broken"));
+    writeFileSync(join(dir, "broken", "20260101T000000000Z-00000000.jsonl"), "{not json\n");
+    const fromMalformed = Cache.load(join(dir, "broken"));
+    assert.equal(fromMalformed.get("k", "score"), null);
+    assert.ok(fromMalformed.loadError);
 
-    writeFileSync(join(dir, "old.json"), JSON.stringify({ schema: "ancient", entries: { k: { value: 3 } } }));
-    const fromStaleSchema = Cache.load(join(dir, "old.json"));
-    assert.equal(fromStaleSchema.get("k", "score"), null);
-    assert.ok(fromStaleSchema.loadError);
-    // A cache from before the key changed shape (0.3.0 wrote `jev-lint-2`)
-    // is dropped with a line that says how many verdicts went and why,
-    // rather than missing on every entry and keeping them all.
-    writeFileSync(join(dir, "v2.json"), JSON.stringify({ schema: "jev-lint-2", entries: { a: { value: 1, kind: "noul" }, b: { value: 2, kind: "noul" } } }));
-    const fromV2 = Cache.load(join(dir, "v2.json"));
-    assert.match(fromV2.loadError ?? "", /jev-lint-2.*2 verdict\(s\).*dropped/);
-
-    // A directory is unreadable as a file.
-    mkdirSync(join(dir, "adir"));
-    assert.equal(Cache.load(join(dir, "adir")).get("k", "score"), null);
+    // A 0.9 single-file cache handed to the ledger is named, not read: the
+    // CLI migrates it before this point, so reaching here means it did not.
+    writeFileSync(join(dir, "baseline.json"), JSON.stringify({ schema: "jev-lint-cache-4", entries: { k: { value: 3, kind: "score" } } }));
+    const fromLegacy = Cache.load(join(dir, "baseline.json"));
+    assert.equal(fromLegacy.get("k", "score"), null);
+    assert.match(fromLegacy.loadError ?? "", /ledger migrate/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -142,10 +136,10 @@ test("cache: an entry of the wrong kind is a miss, not a wrong answer", () => {
   assert.deepEqual(c.get("k", "noul"), { value: 0.8, confidence: null, kind: "noul" });
 });
 
-test("cache: a round trip through disk preserves verdicts, and prune drops orphans", () => {
+test("cache: a round trip through the ledger preserves verdicts, and prune drops orphans", () => {
   const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
   try {
-    const path = join(dir, "c.json");
+    const path = join(dir, "verdicts");
     const c = new Cache(path);
     c.set("keep", { value: 2.5, confidence: 0.7, kind: "score" }, { rule: "r" });
     c.set("drop", { value: 1.0, confidence: 0.4, kind: "score" }, { rule: "r" });
@@ -156,6 +150,28 @@ test("cache: a round trip through disk preserves verdicts, and prune drops orpha
     assert.deepEqual(back.get("keep", "score"), { value: 2.5, confidence: 0.7, kind: "score" });
     assert.equal(back.prune(["keep"]), 1);
     assert.equal(back.entries.size, 1);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("cache: a warm run writes nothing, and a run that learns writes only what it learned", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-lint-test-"));
+  try {
+    const path = join(dir, "verdicts");
+    const first = new Cache(path);
+    first.set("a", { value: 1, confidence: null, kind: "score" });
+    first.save();
+    const warm = Cache.load(path);
+    assert.ok(warm.get("a", "score"));
+    assert.equal(warm.save(), true);
+    assert.equal(readdirSync(path).length, 1, "answering from the ledger adds no file");
+    const learning = Cache.load(path);
+    learning.set("b", { value: 2, confidence: null, kind: "score" });
+    learning.save();
+    const added = readdirSync(path).sort().map((n) => readFileSync(join(path, n), "utf8"));
+    assert.equal(added.length, 2);
+    assert.ok(!added[1].includes('"a"') && added[1].includes('"b"'), "the new file holds only the new verdict");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

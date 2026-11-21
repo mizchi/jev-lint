@@ -29,7 +29,7 @@ docs-check *args:
     node --experimental-strip-types src/cli.ts docs {{args}}
 
 docs-replay:
-    node --experimental-strip-types src/cli.ts docs --replay .jev-lint/documents-baseline.json
+    node --experimental-strip-types src/cli.ts docs --replay
 
 docs-eval *args:
     node --experimental-strip-types tools/eval-documents.ts {{args}}

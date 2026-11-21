@@ -185,8 +185,9 @@ two or three rules that produced false positives with
 ```
 
 Review mode judges only the lines the diff touched. The cache,
-`.jev-lint/baseline.json`, is meant to be committed: reviewers see the
-verdicts you saw and CI re-gates without a key; treat it as trusted input
+the ledger directory `.jev-lint/verdicts/`, is meant to be committed:
+reviewers see the verdicts you saw and CI re-gates without a key, and two
+branches that each add verdicts merge without a conflict; treat it as trusted input
 in review, since anything that edits it can silence a rule.
 
 Locally, `jev-lint init --pre-commit` writes a hook that runs

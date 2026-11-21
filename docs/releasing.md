@@ -39,7 +39,7 @@ just docs-facts
 just release-check
 just package-check
 source ~/.profile
-just docs-check --record .jev-lint/documents-baseline.json
+just docs-check
 just ci
 ```
 

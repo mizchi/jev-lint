@@ -41,17 +41,17 @@ async function cli(args: string[], confirm?: Confirm) {
 
 await testAsync("cmd-model: switching native models never reuses another model's or Jev's verdict cache", async () => {
   await project(async (requests) => {
-    const args = ["run", "typescript/fn-name-promises", "src", "--no-config", "--cache", "cache.json", "--json"];
+    const args = ["run", "typescript/fn-name-promises", "src", "--no-config", "--cache", "cache", "--json"];
     const a = "openrouter:liquid/d1.2", b = "openrouter:liquid/d1.2-ultra";
     assert.equal((await cli([...args, "--model", a])).code, 0);
-    assert.equal(requests.length, 1); assert.ok(existsSync(modelCachePath(join(process.cwd(), "cache.json"), a)!));
+    assert.equal(requests.length, 1); assert.ok(existsSync(modelCachePath(join(process.cwd(), "cache"), a)!));
     const cached = await cli([...args, "--model", a]); assert.equal(cached.code, 0); assert.equal(requests.length, 1);
     assert.equal((await cli([...args, "--model", b])).code, 0); assert.equal(requests.length, 2);
     assert.equal((await cli(args, async () => "approved")).code, 0);
-    assert.ok(existsSync(modelCachePath(join(process.cwd(), "cache.json"), "openrouter:typesafe/jev-1.14")!));
+    assert.ok(existsSync(modelCachePath(join(process.cwd(), "cache"), "openrouter:typesafe/jev-1.14")!));
     assert.equal((await cli([...args, "--model", "openrouter:typesafe/jev-1.14"])).code, 0);
     delete process.env.OPENROUTER_API_KEY;
-    assert.equal((await cli(args)).code, 0); assert.ok(existsSync("cache.json"));
+    assert.equal((await cli(args)).code, 0); assert.ok(existsSync("cache"));
     assert.deepEqual(requests, ["liquid/d1.2", "liquid/d1.2-ultra", "typesafe/jev-1.14", "jev-1.14.0"]);
   });
 });

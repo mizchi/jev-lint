@@ -64,9 +64,9 @@ sources and questions. All stages are offline and need no API key.
   (five arms, two passes, about twenty cents). Re-run it after changing a matcher or splitting a rule; the
   shipped `state:` choices are measurements, not preferences.
 - `just docs-facts` regenerates current catalog, runtime, model and CI facts.
-  `just docs-check --record .jev-lint/documents-baseline.json` refreshes the
-  semantic documentation comparisons; `just docs-replay` validates that record
-  offline. Refresh after changing a registered source or comparison selector.
+  `just docs-check` refreshes the semantic documentation comparisons, asking
+  only what the judgment ledger `.jev-lint/judgments/` cannot answer;
+  `just docs-replay` reports from the ledger offline. Refresh after changing a registered source or comparison selector.
 - `just introspect --dry-run` inventories metadata without requests; `--write`
   asks Jev to select starter rules and exclusively creates a new config.
   `just introspection-eval` runs the frozen selection corpus. CI replays the

@@ -1,5 +1,5 @@
 import { readFileSync, mkdirSync, writeFileSync, renameSync, rmSync, existsSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { resolve, dirname, sep } from "node:path";
 import { randomUUID } from "node:crypto";
 import { reviewScan, reviewRelations } from "../review-artifact.ts";
 import { parseRelationInput } from "../relation-contract.ts";
@@ -38,7 +38,8 @@ export function cmdArtifact(command: "baseline" | "report", opts: Options, out: 
     if (opts.paths.length !== 1 || !["write", "compare", "prune"].includes(action)) throw new Error("baseline needs write, compare or prune");
     if (!opts.acceptedBaseline) throw new Error("--baseline is required");
     const target = resolve(opts.acceptedBaseline);
-    if (target === resolve(".jev-lint/baseline.json") || /\/rules\/[^/]+\/[^/]+\/baseline\.json$/.test(target)) throw new Error("accepted findings must not overwrite verdict caches or rule baselines");
+    const inLedger = [".jev-lint/verdicts", ".jev-lint/judgments"].some((dir) => target.startsWith(`${resolve(dir)}${sep}`) || target === resolve(dir));
+    if (inLedger || target === resolve(".jev-lint/baseline.json") || /\/rules\/[^/]+\/[^/]+\/baseline\.json$/.test(target)) throw new Error("accepted findings must not overwrite verdict caches, judgment ledgers or rule baselines");
     if (action !== "compare" && review.status !== "complete") { out(JSON.stringify({ status: review.status, qualityVerdict: "UNREVIEWED", error: "incomplete review cannot change an acceptance baseline" })); return 3; }
     if (action === "write") {
       if (existsSync(target)) parseAcceptedFindings(read(target));

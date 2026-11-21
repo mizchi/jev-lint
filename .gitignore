@@ -1,10 +1,12 @@
 node_modules/
 .env
-# The verdict cache. jev-lint's default is to commit it, so CI lints without
-# an API key and reviewers see the verdicts you did; this repository changes
-# its source on most commits and would carry a megabyte of churn each time,
-# so it pays the warm pass instead. Whichever you pick, treat it as trusted
-# input -- anything that can edit it can silence a rule.
+# The verdict cache, a ledger directory. jev-lint's default is to commit it,
+# so CI lints without an API key and reviewers see the verdicts you did; this
+# repository changes its source on most commits and would add a ledger file
+# each time, so it pays the warm pass instead. Whichever you pick, treat it as
+# trusted input -- anything that can add a file to it can silence a rule.
+.jev-lint/verdicts/
+# The 0.9 single-file cache, until a run migrates it.
 .jev-lint/baseline.json
 
 # Built tree-sitter parsers: a megabyte each, and platform-specific.

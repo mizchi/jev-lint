@@ -290,7 +290,7 @@ A suppressed subject is never sent, so it also saves its tokens. Every run
 prints how many were skipped, and calls out a suppression naming a rule id
 that does not exist.
 
-**Keep the cache.** `.jev-lint/baseline.json` by default. A subject whose
+**Keep the cache.** `.jev-lint/verdicts/` by default. A subject whose
 text and rule have not changed is not re-asked, which is most of a second
 commit touching the same file. Do not commit it; it is a cache, not a
 baseline of accepted findings.

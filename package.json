@@ -1,6 +1,6 @@
 {
   "name": "jev-lint",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "A natural-language linter: ast-grep picks the code, a sentence you write is the rule, and Jev returns the verdict",
   "keywords": [
     "lint",
@@ -22,7 +22,9 @@
   },
   "homepage": "https://github.com/mizchi/jev-lint#readme",
   "type": "module",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=24"
   },
@@ -32,18 +34,54 @@
   "main": "./dist/run.js",
   "types": "./dist/run.d.ts",
   "exports": {
-    "./acceptance": { "types": "./dist/acceptance.d.ts", "default": "./dist/acceptance.js" },
-    "./review-artifact": { "types": "./dist/review-artifact.d.ts", "default": "./dist/review-artifact.js" },
-    "./sarif": { "types": "./dist/sarif.d.ts", "default": "./dist/sarif.js" },
-    "./scope": { "types": "./dist/scope.d.ts", "default": "./dist/scope.js" },
-    "./doctor": { "types": "./dist/doctor.d.ts", "default": "./dist/doctor.js" },
-    "./relations": { "types": "./dist/relations.d.ts", "default": "./dist/relations.js" },
-    "./relation-contract": { "types": "./dist/relation-contract.d.ts", "default": "./dist/relation-contract.js" },
-    "./audit": { "types": "./dist/audit-run.d.ts", "default": "./dist/audit-run.js" },
-    "./scan-contract": { "types": "./dist/scan-contract.d.ts", "default": "./dist/scan-contract.js" },
-    "./adversarial": { "types": "./dist/adversarial.d.ts", "default": "./dist/adversarial.js" },
-    "./client": { "types": "./dist/jev.d.ts", "default": "./dist/jev.js" },
-    "./request-control": { "types": "./dist/request-control.d.ts", "default": "./dist/request-control.js" },
+    "./acceptance": {
+      "types": "./dist/acceptance.d.ts",
+      "default": "./dist/acceptance.js"
+    },
+    "./review-artifact": {
+      "types": "./dist/review-artifact.d.ts",
+      "default": "./dist/review-artifact.js"
+    },
+    "./sarif": {
+      "types": "./dist/sarif.d.ts",
+      "default": "./dist/sarif.js"
+    },
+    "./scope": {
+      "types": "./dist/scope.d.ts",
+      "default": "./dist/scope.js"
+    },
+    "./doctor": {
+      "types": "./dist/doctor.d.ts",
+      "default": "./dist/doctor.js"
+    },
+    "./relations": {
+      "types": "./dist/relations.d.ts",
+      "default": "./dist/relations.js"
+    },
+    "./relation-contract": {
+      "types": "./dist/relation-contract.d.ts",
+      "default": "./dist/relation-contract.js"
+    },
+    "./audit": {
+      "types": "./dist/audit-run.d.ts",
+      "default": "./dist/audit-run.js"
+    },
+    "./scan-contract": {
+      "types": "./dist/scan-contract.d.ts",
+      "default": "./dist/scan-contract.js"
+    },
+    "./adversarial": {
+      "types": "./dist/adversarial.d.ts",
+      "default": "./dist/adversarial.js"
+    },
+    "./client": {
+      "types": "./dist/jev.d.ts",
+      "default": "./dist/jev.js"
+    },
+    "./request-control": {
+      "types": "./dist/request-control.d.ts",
+      "default": "./dist/request-control.js"
+    },
     ".": {
       "types": "./dist/run.d.ts",
       "default": "./dist/run.js"
@@ -69,8 +107,14 @@
       "default": "./dist/report.js"
     },
     "./package.json": "./package.json",
-    "./documents": { "types": "./dist/documents.d.ts", "default": "./dist/documents.js" },
-    "./introspection": { "types": "./dist/introspection.d.ts", "default": "./dist/introspection.js" }
+    "./documents": {
+      "types": "./dist/documents.d.ts",
+      "default": "./dist/documents.js"
+    },
+    "./introspection": {
+      "types": "./dist/introspection.d.ts",
+      "default": "./dist/introspection.js"
+    }
   },
   "files": [
     "dist",
@@ -126,7 +170,7 @@
     "docs:facts": "node --experimental-strip-types tools/docs-facts.ts",
     "docs:facts:check": "node --experimental-strip-types tools/docs-facts.ts --check",
     "docs:check": "node --experimental-strip-types src/cli.ts docs",
-    "docs:replay": "node --experimental-strip-types src/cli.ts docs --replay .jev-lint/documents-baseline.json",
+    "docs:replay": "node --experimental-strip-types src/cli.ts docs --replay",
     "eval:documents": "node --experimental-strip-types tools/eval-documents.ts --replay experiments/documents/iteration-01.json",
     "introspect": "node --experimental-strip-types src/cli.ts introspect",
     "eval:introspection": "node --experimental-strip-types tools/eval-introspection.ts --corpus experiments/introspection/extended --replay experiments/introspection/extended/advisory-catalog.json"
@@ -135,8 +179,14 @@
     "@ast-grep/cli": "^0.45.3",
     "yaml": "^2.9.1"
   },
-  "peerDependencies": { "typescript": ">=5.9 <7" },
-  "peerDependenciesMeta": { "typescript": { "optional": true } },
+  "peerDependencies": {
+    "typescript": ">=5.9 <7"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@types/node": "^26.6.2",
     "typescript": "^7.0.2",

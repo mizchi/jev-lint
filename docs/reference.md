@@ -117,7 +117,7 @@ answers.
 | `--document-manifest <path>` | `docs`: explicit source registry and comparison selectors; see [document self-check](self-check.md) |
 | `-R, --rules <path>` | rule file or directory, repeatable, loaded in place of the packaged packs and `.jev-lint/rules/` for this run |
 | `-r, --retry <n>` | ask everything n times and decide on the mean (default 1) — see [Asking more than once](#asking-more-than-once) |
-| `-c, --cache <path>` | verdict cache (default `.jev-lint/baseline.json`, relative to the config's directory; `none` to disable) |
+| `-c, --cache <path>` | verdict cache, a ledger directory (default `.jev-lint/verdicts`, relative to the config's directory; `none` to disable) |
 | `--threshold <rule=n>` | override one cutoff, repeatable; `--at` is a deprecated alias that warns |
 | `--unsure-below <n>` | confidence under which a finding is worded as a question |
 | `--arm <name>` | override every rule's state arm: `bare`, `local`, `located`, `graph`, `full` |
@@ -1253,7 +1253,7 @@ hooks:
     extends: true               # inherit rules: above, then override by id
     rules:
       git/diff-follows-instructions: on
-cache: .jev-lint/baseline.json  # the default; `none` disables
+cache: .jev-lint/verdicts      # the default; `none` disables
 ```
 
 A namespaced rule is normally named by `lang/id`, which selects one language.
@@ -1364,10 +1364,13 @@ required for `.vibe` files, as with MoonBit. See
 [the dogfood report](internal/dogfood-vibe-lang-2026-09-24.md) for the measured
 coverage and current blind spots.
 
-The verdict cache is `.jev-lint/baseline.json`, relative to the config's
-directory, and is meant to be committed: a run over the same commit answers
-from it, and CI lints from it with no API key. It is trusted input --
-anything that can edit it can silence a rule or invent a finding.
+The verdict cache is the ledger directory `.jev-lint/verdicts/`, relative to
+the config's directory, and is meant to be committed: a run over the same
+commit answers from it, and CI lints from it with no API key. It is trusted
+input -- anything that can add a file to it can silence a rule or invent a
+finding. A run that answers from it writes nothing; a run that learns adds one
+file of what it learned, so two branches that both learned something merge
+without a conflict. See [Judgment ledgers](#judgment-ledgers).
 
 `JEV_LINT_CACHE` selects a verdict cache for the current environment. The
 priority is `--cache` / `-c`, then a non-empty `JEV_LINT_CACHE`, then the
@@ -1389,6 +1392,70 @@ insert `.openrouter-<hash>` before the selected cache filename's extension.
 That hash includes the fixed native endpoint and requested model, and separates
 them from Jev caches. It does not attest to an immutable provider revision.
 `eval` and `calibrate` bypass the verdict cache regardless of this setting.
+
+## Judgment ledgers
+
+The verdict cache (`.jev-lint/verdicts/`) and the documentation judgments
+(`.jev-lint/judgments/`) are judgment ledgers: directories of append-only
+files, each `<UTC time>-<random>.jsonl`, a header line and then one entry per
+line sorted by key.
+
+- **Keys are content-addressed.** A verdict is keyed on the rule draft, arm,
+  grouping and subject (as since 0.5); a document judgment on the comparison's
+  id, topic and mode, the content of each excerpt, the question and the model.
+  Line numbers and the rest of each file are not in the key, so an edit
+  elsewhere retires no answer.
+- **A recorded answer is reused, not re-rolled.** The model is not
+  deterministic; asking an unchanged question again would only move the
+  probabilities. `docs --resample` asks again on purpose.
+- **Nothing derived is stored.** Coverage, status and counts are recomputed
+  from the current inputs on every read.
+- **The latest answer of a key wins**, by its recorded time. Merging two
+  branches is the union of their files and needs no resolution.
+- **Reading never fails a run.** A malformed line, a foreign schema or an
+  unreadable file is a miss, reported on stderr.
+
+`jev-lint ledger compact` folds a ledger's files into one. With
+`--document-manifest`, only the answers that manifest still asks for are
+kept, and an incomplete snapshot (a missing source or selector) refuses to
+compact rather than drop answers it cannot see. Without a manifest, the
+verdict cache loses only duplicates. Run it on the main branch: it removes
+only the files it read, and entries keep their time, so a branch that adds a
+file meanwhile still merges cleanly. `--dry-run` prints the counts.
+
+## Upgrading from 0.9
+
+0.10 replaces the single-file stores with judgment ledgers.
+
+| 0.9 | 0.10 |
+| --- | --- |
+| `.jev-lint/baseline.json` (`jev-lint-cache-4`) | `.jev-lint/verdicts/` |
+| `.jev-lint/baseline.openrouter-<id>.json` | `.jev-lint/verdicts.openrouter-<id>/` |
+| `cache: path/to/file.json` | `cache: path/to/file` (a directory) |
+| `docs --record <file>.json` | `docs [--ledger <dir>]`, default `.jev-lint/judgments/` |
+| `docs --replay <file>.json` | `docs --replay [--ledger <dir>]` |
+
+Until 0.13.0, 0.10–0.12 migrate on their own: a run that finds a 0.9 cache
+converts it into the ledger and removes it after reading every verdict back, a
+`cache:` setting ending in `.json` is read as the directory it became, and a
+0.9 record named by `--record` or `--replay` is converted into the directory
+of the same name without `.record.json`. `jev-lint ledger migrate [files...]`
+does the same on request; with no files it finds every 0.9 store under
+`.jev-lint/` by its schema, and `--dry-run` reports without writing. Commit
+the new directories and the removal of the old files together.
+
+A 0.9 document record has no time, so its answers are dated 1970 and lose to
+any answer recorded since. Its keys use the model the record names; under a
+different model the answers are not reused. A cache of an older schema than
+`jev-lint-cache-4` is left alone, as before. From 0.13.0 the 0.9 stores are
+not read; migrate with 0.12 or earlier.
+
+The library API: `scanDocuments` takes `ledger` and `resample`,
+`replayDocuments(input, ledger)` reports offline, and `loadDocumentLedger(dir)`
+opens a ledger. `parseDocumentReport` still validates a report kept as
+evidence but is no longer the store. `coverage.reused` counts answers from the
+ledger, and an error code `unrecorded` marks a comparison the ledger did not
+answer.
 
 ## Upgrading from 0.4
 

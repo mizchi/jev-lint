@@ -22,9 +22,9 @@ export interface DocumentReport {
   schema: "jev-lint-documents-1"; snapshotDigest: string; questionDigest: string; model: string | null; snapshotChanged: boolean;
   status: "complete" | "partial" | "failed"; qualityVerdict: "UNREVIEWED";
   candidates: DocumentCandidate[];
-  coverage: { expected: number; selected: number; answered: number; missing: number; contradictions: number; unassessed: number; deferred: number; issues: number; unboundDocuments: number };
+  coverage: { expected: number; selected: number; answered: number; reused: number; missing: number; contradictions: number; unassessed: number; deferred: number; issues: number; unboundDocuments: number };
   usage: { requests: number; inputTokens: number; usd: number };
-  errors: Array<{ comparisonId: string; code: "request-failed" | "unusable-answer" }>;
+  errors: Array<{ comparisonId: string; code: "request-failed" | "unusable-answer" | "unrecorded" }>;
 }
 
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === "object" && !Array.isArray(v);
