@@ -130,7 +130,8 @@ await testAsync("cmd-ledger: an explicit migrate is not pre-empted by the automa
   await inProject(async (cwd, cli) => {
     mkdirSync(join(cwd, ".jev-lint"), { recursive: true });
     writeFileSync(join(cwd, ".jev-lint", "baseline.json"), JSON.stringify({ schema: "jev-lint-cache-4", entries: { aaaaaaaaaaaaaaaaaaaaaaaa: { value: 1, kind: "noul" } } }));
-    const result = await cli(["ledger", "migrate", ".jev-lint/baseline.json", "--ledger", "archive"]);
+    // Options before the action as well as after it.
+    const result = await cli(["ledger", "--ledger", "archive", "migrate", ".jev-lint/baseline.json"]);
     assert.equal(result.code, 0, result.log);
     assert.ok(Cache.load(join(cwd, "archive")).get("aaaaaaaaaaaaaaaaaaaaaaaa", "noul"));
     assert.ok(!existsSync(join(cwd, ".jev-lint", "verdicts")), "the default destination received nothing");

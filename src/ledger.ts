@@ -124,7 +124,9 @@ export class Ledger<V> {
   /** Record an answer; it reaches disk on `flush`. */
   put(key: string, value: V, at: string = new Date().toISOString()): void {
     if (!KEY.test(key) || !isTime(at)) throw new Error(`invalid ledger entry ${key.slice(0, 40)}`);
-    this.pending.set(key, { key, at, value });
+    // Two answers of one key before a flush: keep the newer; on equal times, the last written.
+    const current = this.pending.get(key);
+    if (!current || Date.parse(at) >= Date.parse(current.at)) this.pending.set(key, { key, at, value });
   }
 
   private write(entries: Array<LedgerEntry<V>>, extra: Partial<LedgerHeader>): string {

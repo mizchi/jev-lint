@@ -124,3 +124,11 @@ test("ledger: times compare as instants, and an older pending answer never displ
     l.put("k", 4); assert.equal(l.get("k"), 4, "a newer pending answer still wins");
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test("ledger: two pending answers of one key keep the newer, and equal times keep the last written", () => {
+  const l = Ledger.load(join(tmpdir(), "jev-ledger-none"), "t", num);
+  l.put("k", 3, "2026-01-03T00:00:00.000Z"); l.put("k", 2, "2026-01-02T00:00:00.000Z");
+  assert.equal(l.get("k"), 3);
+  l.put("k", 4, "2026-01-03T00:00:00.000Z");
+  assert.equal(l.get("k"), 4);
+});
