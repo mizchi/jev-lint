@@ -8,6 +8,8 @@ change are in [docs/internal/findings.md](docs/internal/findings.md).
 
 ## Unreleased
 
+## 0.10.0 — 2026-11-22
+
 ### Breaking: recorded answers move to judgment ledgers
 
 The verdict cache and documentation records were single JSON files rewritten
