@@ -90,7 +90,8 @@ function finish<V>(kind: "cache" | "documents", file: string, dir: string, ledge
   const keys = ledger.keys();
   const migrated = ledger.pendingCount;
   if (dryRun) return { kind, from: file, to: dir, migrated, skipped, removed: false };
-  ledger.flush({ model, migratedFrom: basename(file) });
+  try { ledger.flush({ model, migratedFrom: basename(file) }); }
+  catch (err) { return { kind, from: file, to: dir, migrated, skipped, removed: false, reason: `could not write ${dir} (${String(err).slice(0, 120)}); the legacy file is kept` }; }
   const back = reload();
   const lost = keys.filter((k) => !back.has(k));
   if (lost.length) return { kind, from: file, to: dir, migrated, skipped, removed: false, reason: `${lost.length} converted entr${lost.length === 1 ? "y" : "ies"} did not read back; the legacy file is kept` };

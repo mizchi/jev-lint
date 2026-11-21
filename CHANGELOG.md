@@ -22,8 +22,10 @@ append-only, content-keyed files that Git merges as a union.
 - The verdict cache is `.jev-lint/verdicts/` (was `.jev-lint/baseline.json`).
   A warm run writes nothing; a run that learns adds one file of what it learned.
 - `docs` stores answers in `.jev-lint/judgments/` (`--ledger` selects another)
-  and reuses every answer whose compared excerpts are unchanged. Line numbers
-  and the rest of each file no longer retire an answer. `--resample` asks again.
+  and reuses an answer when the comparison's id, topic and mode, the content
+  of its excerpts, the question and the model are all unchanged. Line numbers
+  and the rest of each file no longer retire an answer; a different model or
+  question does. `--resample` asks again.
   `docs --replay` reports from the ledger with no request; an unanswered
   comparison is `unrecorded` and exits 3.
 - `--record <file>` and `--replay <file>` for `docs` are deprecated, and

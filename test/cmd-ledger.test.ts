@@ -1,5 +1,5 @@
 import { strict as assert } from "node:assert";
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { main } from "../src/cli/main.ts";
@@ -37,10 +37,13 @@ await testAsync("cmd-ledger: migrate finds every 0.9 store under .jev-lint, and 
     writeFileSync(record, JSON.stringify(await scanDocuments(prepareDocuments(manifest, { cwd }), { client: answering("contradicts") })));
     writeFileSync(join(cwd, ".jev-lint", "checklists", "core.manifest.json"), JSON.stringify(manifest));
 
+    const tree = () => readdirSync(cwd, { recursive: true, withFileTypes: true }).filter((e) => e.isFile())
+      .map((e) => { const p = join(e.parentPath, e.name); return `${p}\0${readFileSync(p, "utf8")}`; }).sort();
+    const before = tree();
     const dry = await cli(["ledger", "migrate", "--dry-run", "--json"]);
     assert.equal(dry.code, 0, dry.log);
     assert.equal(JSON.parse(dry.out).results.length, 2, "the manifest is not a store and is not listed");
-    assert.ok(existsSync(record) && existsSync(join(cwd, ".jev-lint", "baseline.json")));
+    assert.deepEqual(tree(), before, "a dry run neither removes a source nor creates a destination");
 
     const done = await cli(["ledger", "migrate", "--json"]);
     assert.equal(done.code, 0, done.log);
@@ -91,5 +94,45 @@ await testAsync("cmd-ledger: compact without a manifest folds the verdict cache 
     assert.equal(JSON.parse(result.out).kept, 2);
     assert.equal(readdirSync(path).length, 1);
     assert.equal(Cache.load(path).get("aaaaaaaaaaaaaaaaaaaaaaaa", "noul")?.value, 2);
+  });
+});
+
+await testAsync("cmd-ledger: replay and compaction key OpenRouter answers by the model id the scan recorded", async () => {
+  await inProject(async (cwd) => {
+    const routed = new Jev({ apiKey: "fixture", model: "typesafe/jev-1.14", fetch: async () => Response.json({ model: "typesafe/jev-1.14", answers: { q0000: {
+      type: "choice", choice: "supports", confidence: 1, probabilities: { supports: 1, contradicts: 0, unrelated: 0, insufficient_context: 0 } } } }) });
+    const dir = join(cwd, ".jev-lint", "judgments"), ledger = loadDocumentLedger(dir);
+    await scanDocuments(prepareDocuments(manifest, { cwd }), { client: routed, ledger }); ledger.flush();
+    const before = process.env.OPENROUTER_API_KEY;
+    process.env.OPENROUTER_API_KEY = "fixture";
+    try {
+      let out = "";
+      const deps = { out: (s: string) => { out += s; }, log: () => {} };
+      assert.equal(await main(["docs", "--document-manifest", "manifest.json", "--replay", "--model", "openrouter:typesafe/jev-1.14", "--json"], deps), 0, out);
+      out = ""; assert.equal(await main(["ledger", "compact", "--document-manifest", "manifest.json", "--model", "openrouter:typesafe/jev-1.14", "--dry-run", "--json"], deps), 0);
+      assert.equal(JSON.parse(out).kept, 1, "the live answer is not dropped as dead");
+    } finally { if (before === undefined) delete process.env.OPENROUTER_API_KEY; else process.env.OPENROUTER_API_KEY = before; }
+  });
+});
+
+await testAsync("cmd-ledger: compaction refuses a manifest that leaves a document without a comparison", async () => {
+  await inProject(async (cwd, cli) => {
+    assert.equal((await cli(["docs", "--document-manifest", "manifest.json", "--yes"])).code, 1);
+    const unbound = structuredClone(manifest); unbound.files.c = { path: "c.md", role: "document" };
+    writeFileSync(join(cwd, "c.md"), "Another guide."); writeFileSync(join(cwd, "unbound.json"), JSON.stringify(unbound));
+    const before = readdirSync(join(cwd, ".jev-lint", "judgments"));
+    assert.equal((await cli(["ledger", "compact", "--document-manifest", "unbound.json"])).code, 3);
+    assert.deepEqual(readdirSync(join(cwd, ".jev-lint", "judgments")), before);
+  });
+});
+
+await testAsync("cmd-ledger: an explicit migrate is not pre-empted by the automatic one", async () => {
+  await inProject(async (cwd, cli) => {
+    mkdirSync(join(cwd, ".jev-lint"), { recursive: true });
+    writeFileSync(join(cwd, ".jev-lint", "baseline.json"), JSON.stringify({ schema: "jev-lint-cache-4", entries: { aaaaaaaaaaaaaaaaaaaaaaaa: { value: 1, kind: "noul" } } }));
+    const result = await cli(["ledger", "migrate", ".jev-lint/baseline.json", "--ledger", "archive"]);
+    assert.equal(result.code, 0, result.log);
+    assert.ok(Cache.load(join(cwd, "archive")).get("aaaaaaaaaaaaaaaaaaaaaaaa", "noul"));
+    assert.ok(!existsSync(join(cwd, ".jev-lint", "verdicts")), "the default destination received nothing");
   });
 });

@@ -15,6 +15,10 @@ export function modelSpec(requested: string | null = null, baseUrl: string | nul
   return { provider: "openrouter", model: id, implicitOpenRouter: !model.startsWith("openrouter:"), inputUsdPerMillion: OPENROUTER_MODELS[id as OpenRouterModel].inputUsdPerMillion,
     keyAvailable: !!routerKey, setup: OPENROUTER_KEY_SETUP };
 }
+/** The model id a client created for `requested` reports as its `model`: what recorded answers are keyed on. */
+export function answeringModel(requested: string | null = null, baseUrl: string | null = null): string {
+  return modelSpec(requested, baseUrl).model;
+}
 export function createModelClient(options: JevOptions = {}): AskClient {
   const requested = options.model ?? process.env.JEV_LINT_MODEL ?? DEFAULT_MODEL;
   // An explicit direct-client credential must never follow an ambient OpenRouter key.

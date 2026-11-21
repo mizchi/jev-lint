@@ -85,3 +85,33 @@ await testAsync("legacy-ledger: a 0.9 document record answers the same compariso
     assert.equal(replayDocuments(input, loadDocumentLedger(join(cwd, "docs")), { model: "jev-1.14.0" }).candidates[0].judgment?.choice, "supports");
   } finally { rmSync(cwd, { recursive: true, force: true }); }
 });
+
+await testAsync("legacy-ledger: migrating a record into a ledger that already answers the comparison keeps the fresh answer", async () => {
+  const cwd = mkdtempSync(join(tmpdir(), "jev-legacy-docs-"));
+  try {
+    writeFileSync(join(cwd, "a.md"), "Node 24 is required."); writeFileSync(join(cwd, "b.md"), "Node 22 is required.");
+    const manifest: DocumentManifest = { schema: "jev-lint-documents-manifest-1", files: { a: { path: "a.md", role: "reference" }, b: { path: "b.md", role: "document" } }, comparisons: [{ id: "runtime", topic: "Node floor", mode: "semantic", reference: { source: "a" }, target: { source: "b" } }] };
+    const input = prepareDocuments(manifest, { cwd });
+    const answer = (choice: string) => new Jev({ apiKey: "fixture", model: "jev-1.14.0", fetch: async () => Response.json({ model: "jev-1.14.0", answers: { q0000: { type: "choice", choice, confidence: 1, probabilities: { supports: 0, contradicts: 0, unrelated: 0, insufficient_context: 0, [choice]: 1 } } } }) });
+    const dir = join(cwd, "docs");
+    const fresh = loadDocumentLedger(dir);
+    await scanDocuments(input, { client: answer("supports"), ledger: fresh }); fresh.flush();
+    const record = join(cwd, "docs.record.json");
+    writeFileSync(record, JSON.stringify(await scanDocuments(input, { client: answer("contradicts") })));
+    const result = migrateLegacyFile(record);
+    assert.equal(result.migrated, 1); assert.equal(result.removed, true);
+    assert.equal(replayDocuments(input, loadDocumentLedger(dir), { model: "jev-1.14.0" }).candidates[0].judgment?.choice, "supports");
+  } finally { rmSync(cwd, { recursive: true, force: true }); }
+});
+
+test("legacy-ledger: a destination that cannot be written keeps the legacy file and reports instead of throwing", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-legacy-"));
+  try {
+    const file = join(dir, "baseline.json");
+    writeFileSync(file, JSON.stringify({ schema: "jev-lint-cache-4", entries: { aaaaaaaaaaaaaaaaaaaaaaaa: { value: 1, kind: "noul" } } }));
+    writeFileSync(join(dir, "verdicts"), "a file where the ledger directory would go");
+    const result = migrateLegacyFile(file);
+    assert.equal(result.removed, false); assert.match(result.reason ?? "", /could not write/);
+    assert.ok(existsSync(file));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});

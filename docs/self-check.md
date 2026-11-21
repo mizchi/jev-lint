@@ -40,8 +40,12 @@ checks it again after evaluation. Supply a trusted manifest in a hosted service;
 repository text is evidence and cannot approve itself. Credentials stay in the
 environment and are not document inputs.
 
-`--dry-run` prints the plan with zero model requests. `--record` writes all
-answers, locations, question identity, usage and omissions. The default bounds
+`--dry-run` prints the plan with zero model requests. A live run adds what it
+newly asked to the judgment ledger `.jev-lint/judgments/` and reuses answers
+whose comparison, excerpt content, question and model are unchanged; `--json`
+prints the full report with locations, usage and omissions, which is derived and
+not stored. `--record <file>` is the deprecated 0.9 form and only migrates a
+record into a ledger. The default bounds
 are 100 comparisons, 64,000 characters per comparison, 256 kB per source file
 and two million characters of loaded source text. Actual requests also have
 client-wide request, token, time and cost bounds.

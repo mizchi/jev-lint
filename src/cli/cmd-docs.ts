@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve, sep } from "node:path";
-import { createModelClient } from "../model.ts";
+import { answeringModel, createModelClient } from "../model.ts";
 import type { AskClient } from "../jev.ts";
 import { prepareDocuments, scanDocuments, replayDocuments, loadDocumentLedger, parseDocumentManifest, documentExitCode, DEFAULT_DOCUMENT_LEDGER, type DocumentReport } from "../documents.ts";
 import { describeMigration, legacyRecordDir, migrateLegacyFile } from "../legacy-ledger.ts";
@@ -37,6 +37,8 @@ export async function cmdDocs(opts: Options, out: Log, log: Log, client: AskClie
     const inside = (path: string) => { const p = resolve(path); return p === ledgerDir || p.startsWith(`${ledgerDir}${sep}`); };
     // Checked before any migration writes: the ledger must not hold its own inputs.
     if (input.sources.some((s) => inside(s.path)) || inside(manifestPath)) throw new Error("the judgment ledger must not hold its own inputs");
+    // Migration removes the legacy file, so it must not be one of the inputs either.
+    if (legacyFile && [manifestPath, ...input.sources.map((s) => s.path)].some((p) => resolve(p) === resolve(legacyFile))) throw new Error("a document record must not overwrite its inputs");
     const legacy = legacyLedger(opts, log);
     if (legacy.error) throw new Error(legacy.error);
     const dir = resolve(legacy.ledger ?? DEFAULT_DOCUMENT_LEDGER);
@@ -48,7 +50,8 @@ export async function cmdDocs(opts: Options, out: Log, log: Log, client: AskClie
     for (const error of ledger.loadErrors) log(`docs: ${error}`);
     let report: DocumentReport;
     if (opts.replay) {
-      report = replayDocuments(input, ledger, { model: standaloneModel(opts, process.cwd()) ?? client?.model });
+      // Keyed on the id the scanning client reported, e.g. `typesafe/jev-1.14` for `openrouter:typesafe/jev-1.14`.
+      report = replayDocuments(input, ledger, { model: client ? client.model : answeringModel(standaloneModel(opts, process.cwd()), opts.baseUrl) });
     } else {
       opts.model = standaloneModel(opts, process.cwd());
       const stopped = await confirmExecution(opts, client, out, log, confirm);

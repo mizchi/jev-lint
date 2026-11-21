@@ -106,7 +106,7 @@ export async function main(argv: string[], deps: Deps = {}): Promise<number> {
   if (command === "baseline" || command === "report") return cmdArtifact(command, opts, out, log);
   if (opts.format === "sarif" && (opts.dryRun || !["auto", "check", "review", "run", "scan", "replay"].includes(command))) { log("SARIF supports auto, check, review, scan and replay results; use JSON for plans"); return 2; }
 
-  const context = resolveContext(opts, rest, log);
+  const context = resolveContext(opts, rest, log, { migrate: !(command === "ledger" && rest[0] === "migrate") });
   if (!context) return 2;
   const { config, configPath, baseDir, argPaths, cachePath } = context;
   if (command === "ledger") return cmdLedger({ ...opts, paths: argPaths }, out, log, { baseDir, cachePath });

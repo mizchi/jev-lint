@@ -100,18 +100,26 @@ export class Ledger<V> {
 
   private accept(key: string, next: Resolved<V>): void {
     const current = this.resolved.get(key);
-    // Later `at` wins; on a tie the later file does, and files are read in name order.
-    if (!current || next.at > current.at || (next.at === current.at && next.file >= current.file)) this.resolved.set(key, next);
+    // The later instant wins -- parsed, so an offset time orders by when it
+    // was, not by its text; on a tie the later file does, and files are read
+    // in name order.
+    const order = current ? Date.parse(next.at) - Date.parse(current.at) : 1;
+    if (order > 0 || (order === 0 && next.file >= current!.file)) this.resolved.set(key, next);
   }
 
-  get(key: string): V | null { return this.pending.get(key)?.value ?? this.resolved.get(key)?.value ?? null; }
+  /** The winning entry of a key: a pending answer wins only when it is not older than the stored one. */
+  private winner(key: string): LedgerEntry<V> | null {
+    const pending = this.pending.get(key), stored = this.resolved.get(key);
+    if (pending && (!stored || Date.parse(pending.at) >= Date.parse(stored.at))) return pending;
+    return stored ? { key, at: stored.at, value: stored.value } : null;
+  }
+
+  get(key: string): V | null { return this.winner(key)?.value ?? null; }
   has(key: string): boolean { return this.pending.has(key) || this.resolved.has(key); }
   get size(): number { return new Set([...this.resolved.keys(), ...this.pending.keys()]).size; }
   get pendingCount(): number { return this.pending.size; }
   keys(): string[] { return [...new Set([...this.resolved.keys(), ...this.pending.keys()])].sort(); }
-  entries(): Array<LedgerEntry<V>> {
-    return this.keys().map((key) => this.pending.get(key) ?? { key, at: this.resolved.get(key)!.at, value: this.resolved.get(key)!.value });
-  }
+  entries(): Array<LedgerEntry<V>> { return this.keys().map((key) => this.winner(key)!); }
 
   /** Record an answer; it reaches disk on `flush`. */
   put(key: string, value: V, at: string = new Date().toISOString()): void {

@@ -19,14 +19,17 @@ import { describeMigration, legacyCacheDir, legacyCacheFileFor, migrateLegacyFil
  * and a legacy file found where the ledger now lives is converted and removed.
  * A dry run reports what it would migrate and writes nothing.
  */
-function migrateCacheSetting(path: string, dryRun: boolean, log: Log): string {
+function migrateCacheSetting(path: string, dryRun: boolean, log: Log, announce = true): string {
   const asDir = legacyCacheDir(path);
   const dir = asDir ?? path;
   if (asDir) log(`cache: ${path} names a 0.9 single-file cache; since 0.10 the cache is a ledger directory, so ${dir} is used. Point \`cache:\` at the directory`);
   const legacy = asDir ? path : legacyCacheFileFor(dir);
-  if (existsSync(legacy)) {
-    const result = migrateLegacyFile(legacy, { to: dir, dryRun });
-    log(dryRun && result.kind === "cache" ? `would ${describeMigration(result).replace(/^migrated/, "migrate")}` : describeMigration(result));
+  // `ledger migrate` owns its sources and destinations; it gets no automatic migration first.
+  if (announce && existsSync(legacy)) {
+    try {
+      const result = migrateLegacyFile(legacy, { to: dir, dryRun });
+      log(dryRun && result.kind === "cache" ? `would ${describeMigration(result).replace(/^migrated/, "migrate")}` : describeMigration(result));
+    } catch (err) { log(`cache: could not migrate ${legacy} (${String(err).slice(0, 120)}); it is kept and not read`); }
   }
   return dir;
 }
@@ -42,7 +45,7 @@ export interface Context {
 }
 
 /** Null when the configuration is unusable, after saying why; `main` then exits 2. */
-export function resolveContext(opts: Options, rest: string[], log: Log): Context | null {
+export function resolveContext(opts: Options, rest: string[], log: Log, { migrate = true }: { migrate?: boolean } = {}): Context | null {
   // Parsed defaults cannot reveal which flags were passed. Both the config
   // and the cache environment override must preserve explicit CLI choices.
   const explicit = new Set(rest.filter((a) => a.startsWith("-")));
@@ -84,7 +87,7 @@ export function resolveContext(opts: Options, rest: string[], log: Log): Context
   let cachePath: string | null;
   try { modelSpec(opts.model, opts.baseUrl); cachePath = modelCachePath(opts.cache === "none" ? null : resolve(baseDir, opts.cache), opts.model); }
   catch (error) { log(`model error: ${(error as Error).message}`); return null; }
-  if (cachePath) cachePath = migrateCacheSetting(cachePath, opts.dryRun, log);
+  if (cachePath) cachePath = migrateCacheSetting(cachePath, opts.dryRun, log, migrate);
   return { config, configPath, baseDir, argPaths, cachePath };
 }
 

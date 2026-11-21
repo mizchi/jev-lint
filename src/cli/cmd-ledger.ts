@@ -10,7 +10,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { CACHE_SCHEMA, readCacheEntry } from "../cache.ts";
-import { DEFAULT_MODEL } from "../jev.ts";
+import { answeringModel } from "../model.ts";
 import { DEFAULT_DOCUMENT_LEDGER, DOCUMENT_QUESTION, documentJudgmentKey, loadDocumentLedger, parseDocumentManifest, prepareDocuments } from "../documents.ts";
 import { relationDigest } from "../relation-contract.ts";
 import { prepareQuestion } from "../relation-questions.ts";
@@ -55,11 +55,12 @@ export function cmdLedger(opts: Options, out: Log, log: Log, { baseDir, cachePat
       let summary: Record<string, unknown>;
       if (opts.documentManifest) {
         const input = prepareDocuments(parseDocumentManifest(JSON.parse(readFileSync(resolve(opts.documentManifest), "utf8"))));
-        if (input.issues.length || input.deferred.length) {
-          log(`ledger: ${input.issues.length} issue(s) and ${input.deferred.length} deferred comparison(s) in the snapshot; their answers would be dropped as dead, so nothing was compacted`);
+        if (input.issues.length || input.deferred.length || input.unboundDocuments.length) {
+          log(`ledger: ${input.issues.length} issue(s), ${input.deferred.length} deferred comparison(s) and ${input.unboundDocuments.length} document(s) without a comparison in the snapshot; their answers would be dropped as dead, so nothing was compacted`);
           return 3;
         }
-        const model = standaloneModel(opts, process.cwd()) ?? process.env.JEV_LINT_MODEL ?? DEFAULT_MODEL;
+        // The id the scanning client keyed its answers on, not the requested string.
+        const model = answeringModel(standaloneModel(opts, process.cwd()), opts.baseUrl);
         const questionDigest = relationDigest({ q0000: prepareQuestion(DOCUMENT_QUESTION) });
         const live = new Set(input.comparisons.map((c) => documentJudgmentKey(c, questionDigest, model)));
         summary = run(loadDocumentLedger(resolve(opts.ledger ?? DEFAULT_DOCUMENT_LEDGER)), live, opts.dryRun);

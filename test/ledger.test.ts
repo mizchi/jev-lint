@@ -101,3 +101,26 @@ test("ledger: file names sort chronologically and stay unique within one millise
   try { mkdirSync(join(dir, "nested")); assert.equal(Ledger.load(dir, "t", num).loadErrors.length, 0); }
   finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test("ledger: times compare as instants, and an older pending answer never displaces a newer stored one", () => {
+  const dir = temp();
+  try {
+    writeFileSync(join(dir, "20260101T000000000Z-00000000.jsonl"), [
+      JSON.stringify({ schema: LEDGER_SCHEMA, namespace: "t" }),
+      JSON.stringify({ key: "k", at: "2026-01-01T00:30:00.000Z", value: 1 }),
+    ].join("\n"));
+    writeFileSync(join(dir, "20260101T000000001Z-00000000.jsonl"), [
+      JSON.stringify({ schema: LEDGER_SCHEMA, namespace: "t" }),
+      // 00:00 UTC: earlier, although its text sorts after the entry above.
+      JSON.stringify({ key: "k", at: "2026-01-01T01:00:00+01:00", value: 2 }),
+    ].join("\n"));
+    const l = Ledger.load(dir, "t", num);
+    assert.equal(l.get("k"), 1);
+    l.put("k", 3, "2025-12-31T00:00:00.000Z");
+    assert.equal(l.get("k"), 1, "an older answer recorded now does not win");
+    assert.deepEqual(l.entries().map((e) => e.value), [1]);
+    l.compact();
+    assert.equal(Ledger.load(dir, "t", num).get("k"), 1, "compaction keeps the newer answer");
+    l.put("k", 4); assert.equal(l.get("k"), 4, "a newer pending answer still wins");
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
